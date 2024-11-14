@@ -40,7 +40,6 @@ use crate::{
                     Postgresql,
                     UserBy2,
                     UserRegistrationTokenBy1,
-                    UserRegistrationTokenInsert1,
                     UserRegistrationTokenUpdate1,
                     UserRegistrationTokenUpdate2,
                     UserRegistrationTokenUpdate3,
@@ -69,7 +68,10 @@ use dedicated_crate::{
     unified_report::UnifiedReport,
     void::Void,
 };
-use std::future::Future;
+use std::{
+    borrow::Cow,
+    future::Future,
+};
 pub struct UserAuthorization_RegisterByFirstStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep> {
     type Incoming = Incoming;
@@ -208,17 +210,18 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         )
                     }
                     Option::None => {
-                        let user_registration_token = Repository::<Postgresql<UserRegistrationToken<'_>>>::create_1(
+                        let user_registration_token = UserRegistrationToken::new(
+                            Cow::Borrowed(incoming.user__email.as_str()),
+                            Cow::Borrowed(incoming.user_device__id.as_str()),
+                            Generator::<UserRegistrationToken_Value>::generate(),
+                            0,
+                            false,
+                            Generator::<UserRegistrationToken_ExpiresAt>::generate()?,
+                            Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?,
+                        );
+                        Repository::<Postgresql<UserRegistrationToken<'_>>>::create_1(
                             &postgresql_database_2_client,
-                            UserRegistrationTokenInsert1 {
-                                user__email: incoming.user__email.as_str(),
-                                user_device__id: incoming.user_device__id.as_str(),
-                                user_registration_token__value: Generator::<UserRegistrationToken_Value>::generate(),
-                                user_registration_token__wrong_enter_tries_quantity: 0,
-                                user_registration_token__is_approved: false,
-                                user_registration_token__expires_at: Generator::<UserRegistrationToken_ExpiresAt>::generate()?,
-                                user_registration_token__can_be_resent_from: Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?,
-                            },
+                            &user_registration_token,
                         )
                         .await?;
                         (

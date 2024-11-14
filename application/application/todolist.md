@@ -182,6 +182,3 @@ Update-  Нужно ли проверять количество вернувш�
 
 
 Generator::<UserAccessRefreshToken_ExpiresAt>::generate() - передавать now
-
-
-Repository::<Postgresql<UserAccessRefreshToken<'_>>>::create_1(   - в подобные вставлять сразу ентити.

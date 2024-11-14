@@ -23,16 +23,13 @@ use crate::{
 };
 use deadpool_postgres::Client;
 use dedicated_crate::void::Void;
-use std::{
-    borrow::Cow,
-    future::Future,
-};
+use std::future::Future;
 use tokio_postgres::types::Type;
 impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
     pub fn create_1<'a, 'b>(
         database_2_client: &'a Client,
-        insert_1: Insert1<'b>,
-    ) -> impl Future<Output = Result<UserAuthorizationToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
+        user_authorization_token: &'a UserAuthorizationToken<'b>,
+    ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -54,27 +51,27 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
             prepared_statemant_parameter_storage
                 .add(
-                    &insert_1.user__id,
+                    &user_authorization_token.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.user_device__id,
+                    &user_authorization_token.user_device__id,
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.user_authorization_token__value,
+                    &user_authorization_token.value,
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.user_authorization_token__wrong_enter_tries_quantity,
+                    &user_authorization_token.wrong_enter_tries_quantity,
                     Type::INT2,
                 )
                 .add(
-                    &insert_1.user_authorization_token__expires_at,
+                    &user_authorization_token.expires_at,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.user_authorization_token__can_be_resent_from,
+                    &user_authorization_token.can_be_resent_from,
                     Type::INT8,
                 );
             let statement = database_2_client
@@ -101,16 +98,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                         file!(),
                     ),
                 )?;
-            return Result::Ok(
-                UserAuthorizationToken::new(
-                    insert_1.user__id,
-                    Cow::Borrowed(insert_1.user_device__id),
-                    insert_1.user_authorization_token__value,
-                    insert_1.user_authorization_token__wrong_enter_tries_quantity,
-                    insert_1.user_authorization_token__expires_at,
-                    insert_1.user_authorization_token__can_be_resent_from,
-                ),
-            );
+            return Result::Ok(());
         };
     }
     pub fn delete_1<'a>(database_2_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -636,14 +624,6 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             );
         };
     }
-}
-pub struct Insert1<'a> {
-    pub user__id: i64,
-    pub user_device__id: &'a str,
-    pub user_authorization_token__value: String,
-    pub user_authorization_token__wrong_enter_tries_quantity: i16,
-    pub user_authorization_token__expires_at: i64,
-    pub user_authorization_token__can_be_resent_from: i64,
 }
 pub struct Update1<'a> {
     pub user_authorization_token__value: &'a str,

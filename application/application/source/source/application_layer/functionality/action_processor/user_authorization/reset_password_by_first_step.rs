@@ -40,7 +40,6 @@ use crate::{
                     Postgresql,
                     UserBy2,
                     UserResetPasswordTokenBy1,
-                    UserResetPasswordTokenInsert1,
                     UserResetPasswordTokenUpdate1,
                     UserResetPasswordTokenUpdate2,
                     UserResetPasswordTokenUpdate3,
@@ -69,7 +68,10 @@ use dedicated_crate::{
     unified_report::UnifiedReport,
     void::Void,
 };
-use std::future::Future;
+use std::{
+    borrow::Cow,
+    future::Future,
+};
 pub struct UserAuthorization_ResetPasswordByFirstStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirstStep> {
     type Incoming = Incoming;
@@ -211,17 +213,18 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                         )
                     }
                     Option::None => {
-                        let user_reset_password_token = Repository::<Postgresql<UserResetPasswordToken<'_>>>::create_1(
+                        let user_reset_password_token = UserResetPasswordToken::new(
+                            user_.id,
+                            Cow::Borrowed(incoming.user_device__id.as_str()),
+                            Generator::<UserResetPasswordToken_Value>::generate(),
+                            0,
+                            false,
+                            Generator::<UserResetPasswordToken_ExpiresAt>::generate()?,
+                            Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?,
+                        );
+                        Repository::<Postgresql<UserResetPasswordToken<'_>>>::create_1(
                             &postgresql_database_2_client,
-                            UserResetPasswordTokenInsert1 {
-                                user__id: user_.id,
-                                user_device__id: incoming.user_device__id.as_str(),
-                                user_reset_password_token__value: Generator::<UserResetPasswordToken_Value>::generate(),
-                                user_reset_password_token__wrong_enter_tries_quantity: 0,
-                                user_reset_password_token__is_approved: false,
-                                user_reset_password_token__expires_at: Generator::<UserResetPasswordToken_ExpiresAt>::generate()?,
-                                user_reset_password_token__can_be_resent_from: Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?,
-                            },
+                            &user_reset_password_token,
                         )
                         .await?;
                         (

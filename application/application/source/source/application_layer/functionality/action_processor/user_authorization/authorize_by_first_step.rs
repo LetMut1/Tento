@@ -42,7 +42,6 @@ use crate::{
                 postgresql::{
                     Postgresql,
                     UserAuthorizationTokenBy1,
-                    UserAuthorizationTokenInsert1,
                     UserAuthorizationTokenUpdate1,
                     UserAuthorizationTokenUpdate2,
                     UserAuthorizationTokenUpdate3,
@@ -74,7 +73,10 @@ use dedicated_crate::{
     unified_report::UnifiedReport,
     void::Void,
 };
-use std::future::Future;
+use std::{
+    borrow::Cow,
+    future::Future
+};
 pub struct UserAuthorization_AuthorizeByFirstStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep> {
     type Incoming = Incoming;
@@ -283,16 +285,17 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                         )
                     }
                     Option::None => {
-                        let user_authorization_token = Repository::<Postgresql<UserAuthorizationToken<'_>>>::create_1(
+                        let user_authorization_token = UserAuthorizationToken::new(
+                            user__id,
+                            Cow::Borrowed(incoming.user_device__id.as_str()),
+                            Generator::<UserAuthorizationToken_Value>::generate(),
+                            0,
+                            Generator::<UserAuthorizationToken_ExpiresAt>::generate()?,
+                            Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?,
+                        );
+                        Repository::<Postgresql<UserAuthorizationToken<'_>>>::create_1(
                             &postgresql_database_2_client,
-                            UserAuthorizationTokenInsert1 {
-                                user__id,
-                                user_device__id: incoming.user_device__id.as_str(),
-                                user_authorization_token__value: Generator::<UserAuthorizationToken_Value>::generate(),
-                                user_authorization_token__wrong_enter_tries_quantity: 0,
-                                user_authorization_token__expires_at: Generator::<UserAuthorizationToken_ExpiresAt>::generate()?,
-                                user_authorization_token__can_be_resent_from: Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?,
-                            },
+                            &user_authorization_token,
                         )
                         .await?;
                         (

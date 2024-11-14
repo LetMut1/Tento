@@ -24,7 +24,7 @@ use dedicated_crate::{
 use std::future::Future;
 use tokio_postgres::types::Type;
 impl Repository<Postgresql<ChannelOuterLink>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<ChannelOuterLink, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_client: &'a Client, channel_outer_link: &'a ChannelOuterLink) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -42,19 +42,19 @@ impl Repository<Postgresql<ChannelOuterLink>> {
             let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
             prepared_statemant_parameter_storage
                 .add(
-                    &insert_1.channel_outer_link__from,
+                    &channel_outer_link.from,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.channel_outer_link__alias,
+                    &channel_outer_link.alias,
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.channel_outer_link__address,
+                    &channel_outer_link.address,
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.channel_outer_link__created_at,
+                    &channel_outer_link.created_at,
                     Type::INT8,
                 );
             let statement = database_1_client
@@ -81,13 +81,7 @@ impl Repository<Postgresql<ChannelOuterLink>> {
                         file!(),
                     ),
                 )?;
-            let channel_outer_link = ChannelOuterLink::new(
-                insert_1.channel_outer_link__from,
-                insert_1.channel_outer_link__alias,
-                insert_1.channel_outer_link__address,
-                insert_1.channel_outer_link__created_at,
-            );
-            return Result::Ok(channel_outer_link);
+            return Result::Ok(());
         };
     }
     pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1, limit: i16) -> impl Future<Output = Result<Vec<ChannelOuterLink1>, AggregateError>> + Send + Capture<&'a Void> {
@@ -159,12 +153,6 @@ impl Repository<Postgresql<ChannelOuterLink>> {
             return Result::Ok(channel_outer_link_registry);
         };
     }
-}
-pub struct Insert1 {
-    pub channel_outer_link__from: i64,
-    pub channel_outer_link__alias: String,
-    pub channel_outer_link__address: String,
-    pub channel_outer_link__created_at: i64,
 }
 pub struct By1 {
     pub channel_outer_link__from: i64,

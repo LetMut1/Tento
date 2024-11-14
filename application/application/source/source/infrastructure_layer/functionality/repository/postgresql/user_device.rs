@@ -23,7 +23,6 @@ use tokio_postgres::types::Type;
 impl Repository<Postgresql<UserDevice>> {
     pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
             let query = "\
                 INSERT INTO \
                     public.user_device AS ud (\
@@ -36,6 +35,7 @@ impl Repository<Postgresql<UserDevice>> {
                 ON CONFLICT ON CONSTRAINT \
                     user_device2 \
                 DO NOTHING;";
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
             prepared_statemant_parameter_storage
                 .add(
                     &insert_1.user_device__id,

@@ -29,7 +29,6 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
         user_access_refresh_token: &'a UserAccessRefreshToken<'b>,
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let user_access_token__id = user_access_refresh_token.user_access_token__id.as_ref();
             let query = "\
                 INSERT INTO \
                     public.user_access_refresh_token AS uart (\
@@ -58,7 +57,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                     Type::TEXT,
                 )
                 .add(
-                    &user_access_token__id,
+                    &user_access_refresh_token.user_access_token__id,
                     Type::TEXT,
                 )
                 .add(

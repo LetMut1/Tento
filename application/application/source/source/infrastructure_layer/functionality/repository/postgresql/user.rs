@@ -110,7 +110,6 @@ impl Repository<Postgresql<User<'_>>> {
     }
     pub fn create_2<'a, 'b>(database_1_client: &'a Client, user: &'a User<'b>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let user__nickname = user.nickname.as_ref();
             let query = "\
                 INSERT INTO \
                     public.user_ AS u (\
@@ -137,7 +136,7 @@ impl Repository<Postgresql<User<'_>>> {
                     Type::TEXT,
                 )
                 .add(
-                    &user__nickname,
+                    &user.nickname,
                     Type::TEXT,
                 )
                 .add(

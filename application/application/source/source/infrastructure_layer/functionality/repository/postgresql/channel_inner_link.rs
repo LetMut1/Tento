@@ -24,7 +24,7 @@ use dedicated_crate::{
 use std::future::Future;
 use tokio_postgres::types::Type;
 impl Repository<Postgresql<ChannelInnerLink>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<ChannelInnerLink, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_client: &'a Client, channel_inner_link: &'a ChannelInnerLink) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -40,15 +40,15 @@ impl Repository<Postgresql<ChannelInnerLink>> {
             let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
             prepared_statemant_parameter_storage
                 .add(
-                    &insert_1.channel_inner_link__from,
+                    &channel_inner_link.from,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.channel_inner_link__to,
+                    &channel_inner_link.to,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.channel_inner_link__created_at,
+                    &channel_inner_link.created_at,
                     Type::INT8,
                 );
             let statement = database_1_client
@@ -75,13 +75,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
                         file!(),
                     ),
                 )?;
-            return Result::Ok(
-                ChannelInnerLink::new(
-                    insert_1.channel_inner_link__from,
-                    insert_1.channel_inner_link__to,
-                    insert_1.channel_inner_link__created_at,
-                ),
-            );
+            return Result::Ok(());
         };
     }
     pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1, limit: i16) -> impl Future<Output = Result<Vec<ChannelInnerLink1>, AggregateError>> + Send + Capture<&'a Void> {
@@ -146,11 +140,6 @@ impl Repository<Postgresql<ChannelInnerLink>> {
             return Result::Ok(channel_inner_link_registry);
         };
     }
-}
-pub struct Insert1 {
-    pub channel_inner_link__from: i64,
-    pub channel_inner_link__to: i64,
-    pub channel_inner_link__created_at: i64,
 }
 pub struct By1 {
     pub channel_inner_link__from: i64,
