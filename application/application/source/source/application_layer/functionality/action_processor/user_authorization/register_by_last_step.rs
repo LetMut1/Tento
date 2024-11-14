@@ -43,7 +43,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                OptionConverter,
                 ResultConverter,
             },
             capture::Capture,
@@ -57,7 +56,6 @@ use crate::{
                     UserBy3,
                     UserDeviceInsert1,
                     UserRegistrationTokenBy1,
-                    UserRegistrationTokenUpdate4,
                     Resolver as Resolver_,
                     Transaction,
                     IsolationLevel,
@@ -220,18 +218,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_IsNotApproved));
                 }
                 if user_registration_token.value != incoming.user_registration_token__value {
-                    user_registration_token.wrong_enter_tries_quantity = user_registration_token.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?;
+                    if user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
+                        user_registration_token.wrong_enter_tries_quantity += 1;
+                    }
                     if user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                         Repository::<Postgresql<UserRegistrationToken<'_>>>::update_4(
                             &postgresql_database_2_client,
-                            UserRegistrationTokenUpdate4 {
-                                user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
-                            },
                             UserRegistrationTokenBy1 {
                                 user__email: incoming.user__email.as_str(),
                                 user_device__id: incoming.user_device__id.as_str(),

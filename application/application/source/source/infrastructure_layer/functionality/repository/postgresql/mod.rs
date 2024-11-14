@@ -41,7 +41,6 @@ pub use self::{
         Update1 as UserAuthorizationTokenUpdate1,
         Update2 as UserAuthorizationTokenUpdate2,
         Update3 as UserAuthorizationTokenUpdate3,
-        Update4 as UserAuthorizationTokenUpdate4,
     },
     user_device::Insert1 as UserDeviceInsert1,
     user_registration_token::{
@@ -49,7 +48,6 @@ pub use self::{
         Update1 as UserRegistrationTokenUpdate1,
         Update2 as UserRegistrationTokenUpdate2,
         Update3 as UserRegistrationTokenUpdate3,
-        Update4 as UserRegistrationTokenUpdate4,
         Update5 as UserRegistrationTokenUpdate5,
     },
     user_reset_password_token::{
@@ -57,7 +55,6 @@ pub use self::{
         Update1 as UserResetPasswordTokenUpdate1,
         Update2 as UserResetPasswordTokenUpdate2,
         Update3 as UserResetPasswordTokenUpdate3,
-        Update4 as UserResetPasswordTokenUpdate4,
         Update5 as UserResetPasswordTokenUpdate5,
     },
 };

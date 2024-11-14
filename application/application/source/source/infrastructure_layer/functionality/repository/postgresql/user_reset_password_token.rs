@@ -356,25 +356,18 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn update_4<'a>(database_2_client: &'a Client, update_4: Update4, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn update_4<'a>(database_2_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 UPDATE ONLY \
                     public.user_reset_password_token AS urpt \
-                SET (\
-                    wrong_enter_tries_quantity\
-                ) = ROW(\
-                    $1\
-                ) \
+                SET \
+                    wrong_enter_tries_quantity = wrong_enter_tries_quantity + 1 \
                 WHERE \
-                    urpt.user__id = $2 \
-                    AND urpt.user_device__id = $3;";
+                    urpt.user__id = $1 \
+                    AND urpt.user_device__id = $2;";
             let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
             prepared_statemant_parameter_storage
-                .add(
-                    &update_4.user_reset_password_token__wrong_enter_tries_quantity,
-                    Type::INT2,
-                )
                 .add(
                     &by_1.user__id,
                     Type::INT8,
@@ -733,9 +726,6 @@ pub struct Update3<'a> {
     pub user_reset_password_token__wrong_enter_tries_quantity: i16,
     pub user_reset_password_token__is_approved: bool,
     pub user_reset_password_token__expires_at: i64,
-}
-pub struct Update4 {
-    pub user_reset_password_token__wrong_enter_tries_quantity: i16,
 }
 pub struct Update5 {
     pub user_reset_password_token__is_approved: bool,

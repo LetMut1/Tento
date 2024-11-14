@@ -29,7 +29,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                OptionConverter,
                 ResultConverter,
             },
             capture::Capture,
@@ -41,7 +40,6 @@ use crate::{
                     UserAccessRefreshTokenBy1,
                     UserBy3,
                     UserResetPasswordTokenBy1,
-                    UserResetPasswordTokenUpdate4,
                     UserUpdate1,
                 },
                 Repository,
@@ -155,18 +153,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_IsNotApproved));
             }
             if user_reset_password_token.value != incoming.user_reset_password_token__value {
-                user_reset_password_token.wrong_enter_tries_quantity = user_reset_password_token.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+                if user_reset_password_token.wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
+                    user_reset_password_token.wrong_enter_tries_quantity += 1;
+                }
                 if user_reset_password_token.wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                     Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_4(
                         &postgresql_database_2_client,
-                        UserResetPasswordTokenUpdate4 {
-                            user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token.wrong_enter_tries_quantity,
-                        },
                         UserResetPasswordTokenBy1 {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),

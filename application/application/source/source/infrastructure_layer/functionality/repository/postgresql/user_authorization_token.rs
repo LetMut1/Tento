@@ -338,25 +338,18 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn update_4<'a>(database_2_client: &'a Client, update_4: Update4, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn update_4<'a>(database_2_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 UPDATE ONLY \
                     public.user_authorization_token AS uat \
-                SET (\
-                    wrong_enter_tries_quantity\
-                ) = ROW(\
-                    $1\
-                ) \
+                SET \
+                    wrong_enter_tries_quantity = wrong_enter_tries_quantity + 1 \
                 WHERE \
-                    uat.user__id = $2 \
-                    AND uat.user_device__id = $3;";
+                    uat.user__id = $1 \
+                    AND uat.user_device__id = $2;";
             let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
             prepared_statemant_parameter_storage
-                .add(
-                    &update_4.user_authorization_token__wrong_enter_tries_quantity,
-                    Type::INT2,
-                )
                 .add(
                     &by_1.user__id,
                     Type::INT8,
@@ -638,9 +631,6 @@ pub struct Update2<'a> {
 }
 pub struct Update3 {
     pub user_authorization_token__can_be_resent_from: i64,
-}
-pub struct Update4 {
-    pub user_authorization_token__wrong_enter_tries_quantity: i16,
 }
 pub struct By1<'a> {
     pub user__id: i64,

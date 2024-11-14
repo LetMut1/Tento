@@ -41,7 +41,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                OptionConverter,
                 ResultConverter,
             },
             capture::Capture,
@@ -56,7 +55,6 @@ use crate::{
                     UserAccessRefreshTokenBy2,
                     UserAccessRefreshTokenUpdate1,
                     UserAuthorizationTokenBy1,
-                    UserAuthorizationTokenUpdate4,
                     UserBy3,
                     UserDeviceInsert1,
                 },
@@ -161,18 +159,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_AlreadyExpired));
             }
             if user_authorization_token_.value != incoming.user_authorization_token__value {
-                user_authorization_token_.wrong_enter_tries_quantity = user_authorization_token_.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+                if user_authorization_token_.wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
+                    user_authorization_token_.wrong_enter_tries_quantity += 1;
+                }
                 if user_authorization_token_.wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
                     Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_4(
                         &postgresql_database_2_client,
-                        UserAuthorizationTokenUpdate4 {
-                            user_authorization_token__wrong_enter_tries_quantity: user_authorization_token_.wrong_enter_tries_quantity,
-                        },
                         UserAuthorizationTokenBy1 {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),
