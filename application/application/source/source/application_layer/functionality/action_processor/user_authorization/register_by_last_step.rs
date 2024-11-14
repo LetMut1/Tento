@@ -16,7 +16,6 @@ use crate::{
                 UserAccessRefreshToken,
                 UserAccessRefreshToken_ExpiresAt,
                 UserAccessRefreshToken_ObfuscationValue,
-                UserAccessRefreshToken_UpdatedAt,
             },
             user_access_token::{
                 UserAccessToken,
@@ -67,7 +66,6 @@ use crate::{
             },
             service::{
                 resolver::{
-                    Expiration,
                     Resolver,
                     UnixTime,
                 },
@@ -185,6 +183,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_EmailAlreadyExist));
                 }
             }
+            let now = Resolver::<UnixTime>::get_now();
             {
                 let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                     Backtrace::new(
@@ -206,7 +205,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                         return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                     }
                 };
-                if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
+                if user_registration_token.expires_at <= now {
                     Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                         &postgresql_database_2_client,
                         UserRegistrationTokenBy1 {
@@ -276,21 +275,21 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 incoming.user__email,
                 Cow::Owned(incoming.user__nickname),
                 user__password_hash,
-                Resolver::<UnixTime>::get_now(),
+                now,
             );
             let user_access_token = UserAccessToken::new(
                 Generator::<UserAccessToken_Id>::generate(),
                 user.id,
                 incoming.user_device__id.as_str(),
-                Generator::<UserAccessToken_ExpiresAt>::generate()?,
+                Generator::<UserAccessToken_ExpiresAt>::generate(now)?,
             );
             let user_access_refresh_token = UserAccessRefreshToken::new(
                 user.id,
                 incoming.user_device__id.as_str(),
                 Cow::Borrowed(user_access_token.id.as_str()),
                 Generator::<UserAccessRefreshToken_ObfuscationValue>::generate(),
-                Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?,
-                Generator::<UserAccessRefreshToken_UpdatedAt>::generate()
+                Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?,
+                now,
             );
             let mut postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                 Backtrace::new(

@@ -37,7 +37,7 @@ use crate::{
                 Repository,
             },
             service::resolver::{
-                Expiration,
+                UnixTime,
                 Resolver,
             },
         },
@@ -112,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound));
                 }
             };
-            if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) {
+            if user_reset_password_token.expires_at <= Resolver::<UnixTime>::get_now() {
                 Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy1 {

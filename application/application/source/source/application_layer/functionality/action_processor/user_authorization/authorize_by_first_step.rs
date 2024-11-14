@@ -52,8 +52,8 @@ use crate::{
             },
             service::{
                 resolver::{
-                    Expiration,
                     Resolver,
+                    UnixTime,
                 },
                 spawner::{
                     Spawner,
@@ -195,6 +195,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             )?? {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword));
             }
+            let now = Resolver::<UnixTime>::get_now();
             let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
@@ -212,8 +213,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 .await?
                 {
                     Option::Some(mut user_authorization_token) => {
-                        let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(user_authorization_token.can_be_resent_from) {
-                            user_authorization_token.can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?;
+                        let (can_send_, need_to_update_1) = if user_authorization_token.can_be_resent_from <= now {
+                            user_authorization_token.can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?;
                             (
                                 true,
                                 true,
@@ -224,10 +225,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                 false,
                             )
                         };
-                        let need_to_update_2 = if Resolver::<Expiration>::is_expired(user_authorization_token.expires_at) {
+                        let need_to_update_2 = if user_authorization_token.expires_at <= now {
                             user_authorization_token.value = Generator::<UserAuthorizationToken_Value>::generate();
                             user_authorization_token.wrong_enter_tries_quantity = 0;
-                            user_authorization_token.expires_at = Generator::<UserAuthorizationToken_ExpiresAt>::generate()?;
+                            user_authorization_token.expires_at = Generator::<UserAuthorizationToken_ExpiresAt>::generate(now)?;
                             true
                         } else {
                             false
@@ -290,8 +291,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             Cow::Borrowed(incoming.user_device__id.as_str()),
                             Generator::<UserAuthorizationToken_Value>::generate(),
                             0,
-                            Generator::<UserAuthorizationToken_ExpiresAt>::generate()?,
-                            Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?,
+                            Generator::<UserAuthorizationToken_ExpiresAt>::generate(now)?,
+                            Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?,
                         );
                         Repository::<Postgresql<UserAuthorizationToken<'_>>>::create_1(
                             &postgresql_database_2_client,

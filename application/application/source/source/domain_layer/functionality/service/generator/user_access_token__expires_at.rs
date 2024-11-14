@@ -10,7 +10,7 @@ use crate::{
     },
 };
 impl Generator<UserAccessToken_ExpiresAt> {
-    pub fn generate() -> Result<i64, AggregateError> {
-        return Resolver::<UnixTime>::add_minutes_interval_from_now(UserAccessToken_ExpiresAt::QUANTITY_OF_MINUTES_FOR_EXPIRATION);
+    pub fn generate(now: i64) -> Result<i64, AggregateError> {
+        return Resolver::<UnixTime>::add_interval(UserAccessToken_ExpiresAt::QUANTITY_OF_SECONDS_FOR_EXPIRATION, now);
     }
 }

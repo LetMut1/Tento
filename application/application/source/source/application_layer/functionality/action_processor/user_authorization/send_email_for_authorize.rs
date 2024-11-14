@@ -43,8 +43,8 @@ use crate::{
             },
             service::{
                 resolver::{
-                    Expiration,
                     Resolver,
+                    UnixTime,
                 },
                 spawner::{
                     Spawner,
@@ -132,7 +132,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound));
                 }
             };
-            if Resolver::<Expiration>::is_expired(user_authorization_token.expires_at) {
+            let now = Resolver::<UnixTime>::get_now();
+            if user_authorization_token.expires_at <= now {
                 Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                     &postgresql_database_2_client,
                     UserAuthorizationTokenBy1 {
@@ -143,10 +144,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_AlreadyExpired));
             }
-            if !Resolver::<Expiration>::is_expired(user_authorization_token.can_be_resent_from) {
+            if user_authorization_token.can_be_resent_from > now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_TimeToResendHasNotCome));
             }
-            user_authorization_token.can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?;
+            user_authorization_token.can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?;
             Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_3(
                 &postgresql_database_2_client,
                 UserAuthorizationTokenUpdate3 {

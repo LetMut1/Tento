@@ -37,8 +37,8 @@ use crate::{
                 Repository,
             },
             service::resolver::{
-                Expiration,
                 Resolver,
+                UnixTime,
             },
         },
     },
@@ -112,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                 }
             };
-            if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
+            if user_registration_token.expires_at <= Resolver::<UnixTime>::get_now() {
                 Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy1 {

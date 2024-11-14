@@ -48,8 +48,8 @@ use crate::{
             },
             service::{
                 resolver::{
-                    Expiration,
                     Resolver,
+                    UnixTime,
                 },
                 spawner::{
                     Spawner,
@@ -117,6 +117,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_EmailAlreadyExist));
             }
+            let now = Resolver::<UnixTime>::get_now();
             let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
@@ -134,8 +135,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                 .await?
                 {
                     Option::Some(mut user_registration_token) => {
-                        let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(user_registration_token.can_be_resent_from) {
-                            user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
+                        let (can_send_, need_to_update_1) = if user_registration_token.can_be_resent_from <= now {
+                            user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
                             (
                                 true,
                                 true,
@@ -146,11 +147,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                 false,
                             )
                         };
-                        let need_to_update_2 = if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) || user_registration_token.is_approved {
+                        let need_to_update_2 = if user_registration_token.expires_at <= now || user_registration_token.is_approved {
                             user_registration_token.value = Generator::<UserRegistrationToken_Value>::generate();
                             user_registration_token.wrong_enter_tries_quantity = 0;
                             user_registration_token.is_approved = false;
-                            user_registration_token.expires_at = Generator::<UserRegistrationToken_ExpiresAt>::generate()?;
+                            user_registration_token.expires_at = Generator::<UserRegistrationToken_ExpiresAt>::generate(now)?;
                             true
                         } else {
                             false
@@ -216,8 +217,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             Generator::<UserRegistrationToken_Value>::generate(),
                             0,
                             false,
-                            Generator::<UserRegistrationToken_ExpiresAt>::generate()?,
-                            Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?,
+                            Generator::<UserRegistrationToken_ExpiresAt>::generate(now)?,
+                            Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?,
                         );
                         Repository::<Postgresql<UserRegistrationToken<'_>>>::create_1(
                             &postgresql_database_2_client,

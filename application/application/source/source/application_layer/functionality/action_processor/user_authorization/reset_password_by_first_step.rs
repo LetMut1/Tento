@@ -48,8 +48,8 @@ use crate::{
             },
             service::{
                 resolver::{
-                    Expiration,
                     Resolver,
+                    UnixTime,
                 },
                 spawner::{
                     Spawner,
@@ -120,6 +120,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
+            let now = Resolver::<UnixTime>::get_now();
             let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
@@ -137,8 +138,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                 .await?
                 {
                     Option::Some(mut user_reset_password_token) => {
-                        let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(user_reset_password_token.can_be_resent_from) {
-                            user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?;
+                        let (can_send_, need_to_update_1) = if user_reset_password_token.can_be_resent_from <= now {
+                            user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate(now)?;
                             (
                                 true,
                                 true,
@@ -149,11 +150,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                 false,
                             )
                         };
-                        let need_to_update_2 = if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) || user_reset_password_token.is_approved {
+                        let need_to_update_2 = if user_reset_password_token.expires_at <= now || user_reset_password_token.is_approved {
                             user_reset_password_token.value = Generator::<UserResetPasswordToken_Value>::generate();
                             user_reset_password_token.wrong_enter_tries_quantity = 0;
                             user_reset_password_token.is_approved = false;
-                            user_reset_password_token.expires_at = Generator::<UserResetPasswordToken_ExpiresAt>::generate()?;
+                            user_reset_password_token.expires_at = Generator::<UserResetPasswordToken_ExpiresAt>::generate(now)?;
                             true
                         } else {
                             false
@@ -219,8 +220,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                             Generator::<UserResetPasswordToken_Value>::generate(),
                             0,
                             false,
-                            Generator::<UserResetPasswordToken_ExpiresAt>::generate()?,
-                            Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?,
+                            Generator::<UserResetPasswordToken_ExpiresAt>::generate(now)?,
+                            Generator::<UserResetPasswordToken_CanBeResentFrom>::generate(now)?,
                         );
                         Repository::<Postgresql<UserResetPasswordToken<'_>>>::create_1(
                             &postgresql_database_2_client,

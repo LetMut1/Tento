@@ -9,9 +9,9 @@ impl WrongEnterTriesQuantity {
 pub struct IsApproved;
 pub struct ExpiresAt;
 impl ExpiresAt {
-    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 60 * 3;
+    pub const QUANTITY_OF_SECONDS_FOR_EXPIRATION: i64 = 60 * 60 * 24;
 }
 pub struct CanBeResentFrom;
 impl CanBeResentFrom {
-    pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i64 = 1;
+    pub const QUANTITY_OF_SECONDS_BEFORE_RESENDING: i64 = 60;
 }

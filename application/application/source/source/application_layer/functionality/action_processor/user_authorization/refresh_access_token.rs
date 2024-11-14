@@ -10,7 +10,6 @@ use crate::{
                 UserAccessRefreshToken,
                 UserAccessRefreshToken_ExpiresAt,
                 UserAccessRefreshToken_ObfuscationValue,
-                UserAccessRefreshToken_UpdatedAt,
             },
             user_access_token::{
                 UserAccessToken,
@@ -42,8 +41,8 @@ use crate::{
                 Repository,
             },
             service::resolver::{
-                Expiration,
                 Resolver,
+                UnixTime,
             },
         },
     },
@@ -110,7 +109,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                     ),
                 );
             }
-            if Resolver::<Expiration>::is_expired(user_access_refresh_token.expires_at) {
+            let now = Resolver::<UnixTime>::get_now();
+            if user_access_refresh_token.expires_at <= now {
                 Repository::<Postgresql<UserAccessRefreshToken<'_>>>::delete_1(
                     &postgresql_database_2_client,
                     UserAccessRefreshTokenBy2 {
@@ -125,12 +125,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 Generator::<UserAccessToken_Id>::generate(),
                 user_access_token.user__id,
                 user_access_token.user_device__id,
-                Generator::<UserAccessToken_ExpiresAt>::generate()?,
+                Generator::<UserAccessToken_ExpiresAt>::generate(now)?,
             );
             user_access_refresh_token.user_access_token__id = Cow::Borrowed(user_access_token_new.id.as_str());
             user_access_refresh_token.obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
-            user_access_refresh_token.expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
-            user_access_refresh_token.updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
+            user_access_refresh_token.expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
+            user_access_refresh_token.updated_at = now;
             Repository::<Postgresql<UserAccessRefreshToken<'_>>>::update_1(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenUpdate1 {

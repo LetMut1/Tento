@@ -10,8 +10,8 @@ use crate::{
             environment_configuration::PrivateKey,
         },
         functionality::service::resolver::{
-            Expiration,
             Resolver,
+            UnixTime,
         },
     },
 };
@@ -25,7 +25,7 @@ impl Extractor<UserAccessToken<'_>> {
             private_key,
             user_access_token_encoded,
         )?;
-        if Resolver::<Expiration>::is_expired(user_access_token.expires_at) {
+        if user_access_token.expires_at <= Resolver::<UnixTime>::get_now() {
             return Result::Ok(Extracted::UserAccessTokenAlreadyExpired);
         }
         return Result::Ok(

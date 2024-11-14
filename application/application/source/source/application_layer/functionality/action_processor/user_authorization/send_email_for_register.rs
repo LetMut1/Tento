@@ -39,8 +39,8 @@ use crate::{
             },
             service::{
                 resolver::{
-                    Expiration,
                     Resolver,
+                    UnixTime,
                 },
                 spawner::{
                     Spawner,
@@ -110,7 +110,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                 }
             };
-            if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
+            let now = Resolver::<UnixTime>::get_now();
+            if user_registration_token.expires_at <= now {
                 Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy1 {
@@ -124,10 +125,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             if user_registration_token.is_approved {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyApproved));
             }
-            if !Resolver::<Expiration>::is_expired(user_registration_token.can_be_resent_from) {
+            if user_registration_token.can_be_resent_from > now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_TimeToResendHasNotCome));
             }
-            user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
+            user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
             Repository::<Postgresql<UserRegistrationToken<'_>>>::update_2(
                 &postgresql_database_2_client,
                 UserRegistrationTokenUpdate2 {

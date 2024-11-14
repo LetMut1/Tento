@@ -43,8 +43,8 @@ use crate::{
             },
             service::{
                 resolver::{
-                    Expiration,
                     Resolver,
+                    UnixTime,
                 },
                 spawner::{
                     Spawner,
@@ -132,7 +132,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound));
                 }
             };
-            if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) {
+            let now = Resolver::<UnixTime>::get_now();
+            if user_reset_password_token.expires_at <= now {
                 Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy1 {
@@ -146,10 +147,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             if user_reset_password_token.is_approved {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyApproved));
             }
-            if !Resolver::<Expiration>::is_expired(user_reset_password_token.can_be_resent_from) {
+            if user_reset_password_token.can_be_resent_from > now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_TimeToResendHasNotCome));
             }
-            user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?;
+            user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate(now)?;
             Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_2(
                 &postgresql_database_2_client,
                 UserResetPasswordTokenUpdate2 {
