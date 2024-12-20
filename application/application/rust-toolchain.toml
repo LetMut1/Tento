@@ -1,0 +1,19 @@
+[toolchain]
+channel = "stable-x86_64-unknown-linux-gnu"
+targets = [
+    "aarch64-apple-ios-sim",
+    "aarch64-apple-ios",
+    "aarch64-linux-android",
+    "x86_64-linux-android",
+    "x86_64-unknown-linux-gnu"
+]
+profile = "minimal"
+
+[toolchain.stable-x86_64-unknown-linux-gnu]
+components = [
+    "clippy",
+    "rust-src"
+]
+
+[toolchain.nightly]
+components = ["rustfmt"]
