@@ -14,11 +14,11 @@ required-features = []
 [package]
 name = "client_server_data_serializer"
 version = "1.0.0"
-authors = ["Zimin Dmitriy <dimazimin96@yandex.ru>"]
+authors.workspace = true
 edition = "2021"
-rust-version = "1.80.0"
-resolver = "2"
+rust-version.workspace = true
 build = "./build.rs"
+
 
 [dependencies]
 bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, features = [], optional = false }
@@ -165,7 +165,3 @@ rpath = false
 [profile.release.build-override]
 opt-level = 3
 codegen-units = 1
-
-# TODO https://github.com/rust-lang/cargo/issues/6745#issuecomment-472667516
-# Remove after solving the problem and configure in normal way.
-[workspace]
