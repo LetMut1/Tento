@@ -17,10 +17,9 @@ authors = ["Zimin Dmitriy <dimazimin96@yandex.ru>"]
 rust-version = "1.80.0"
 
 [workspace.dependencies]
-
-
-
-
+bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, features = [], optional = false }
+dedicated_crate = { path = "./source/dedicated_crate", package = "dedicated_crate", version = "=1.0.0", default-features = true, features = [], optional = false }
+serde = { package = "serde", version = "=1.0.210", default-features = true, features = ["derive"], optional = false }
 
 [workspace.lints]
 

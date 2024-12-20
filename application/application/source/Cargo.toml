@@ -25,13 +25,13 @@ workspace = true
 [dependencies]
 argon2 = { package = "argon2", version = "=0.5.3", default-features = true, features = ["std"], optional = false }
 base64 = { package = "base64", version = "=0.22.1", default-features = true, features = [], optional = false }
-bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, features = [], optional = false }
+bitcode = { workspace = true }
 bytes = { package = "bytes", version = "=1.7.1", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "=0.4.38", default-features = true, features = [], optional = false }
 const_format = { package = "const_format", version = "=0.2.33", default-features = true, features = [], optional = true }
 deadpool = { package = "deadpool", version = "=0.12.1", default-features = true, features = ["rt_tokio_1"], optional = false }
 deadpool_postgres = { package = "deadpool-postgres", version = "=0.14.0", default-features = true, features = ["rt_tokio_1"], optional = false }
-dedicated_crate = { path = "./dedicated_crate", package = "dedicated_crate", version = "=1.0.0", default-features = true, features = [], optional = false }
+dedicated_crate = { workspace = true }
 hmac = { package = "hmac", version = "=0.12.1", default-features = true, features = [], optional = false }
 http = { package = "http", version = "=1.1.0", default-features = true, features = [], optional = false }
 http-body-util = { package = "http-body-util", version = "=0.1.2", default-features = true, features = [], optional = false }
@@ -42,7 +42,7 @@ matchit = { package = "matchit", version = "=0.8.4", default-features = true, fe
 num_integer = { package = "num-integer", version = "=0.1.46", default-features = true, features = [], optional = false }
 rand = { package = "rand", version = "=0.8.5", default-features = true, features = [], optional = false }
 regex = { package = "regex", version = "=1.10.6", default-features = true, features = [], optional = false }
-serde = { package = "serde", version = "=1.0.210", default-features = true, features = ["derive"], optional = false }
+serde = { workspace = true }
 serde_json = { package = "serde_json", version = "=1.0.128", default-features = true, features = [], optional = true }
 sha3 = { package = "sha3", version = "=0.10.8", default-features = true, features = [], optional = false }
 tokio = { package = "tokio", version = "=1.40.0", default-features = true, features = ["full"], optional = false }
