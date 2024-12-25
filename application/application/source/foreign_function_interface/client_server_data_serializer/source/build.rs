@@ -3,7 +3,6 @@ use cbindgen::{
     Language,
 };
 use std::{
-    env::var,
     error::Error,
     path::Path,
 };
@@ -29,14 +28,14 @@ impl Processor {
         let file_name = Uuid::new_v4().to_string();
         let file_path = format!(
             "{}/{}.txt",
-            var("OUT_DIR")?.as_str(),
+            std::env::var("OUT_DIR")?.as_str(),
             file_name.as_str(),
         );
         cargo_emit::rerun_if_changed!(file_path.as_str());
         return Result::Ok(());
     }
     fn create_c_bindings() -> Result<(), Box<dyn Error + 'static>> {
-        let crate_path = var("CARGO_MANIFEST_DIR")?;
+        let crate_path = std::env::var("CARGO_MANIFEST_DIR")?;
         let crate_path_ = Path::new(crate_path.as_str());
         let file_path = format!(
             "{}/../target_/c_bindings.h",
