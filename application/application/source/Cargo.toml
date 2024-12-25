@@ -1,5 +1,5 @@
 [[bin]]
-name = "core"
+name = "application"
 path = "./source/mod.rs"
 test = true
 doctest = true
@@ -11,7 +11,7 @@ edition = "2021"
 required-features = []
 
 [package]
-name = "core"
+name = "application"
 version = "1.0.0"
 authors.workspace = true
 rust-version.workspace = true
