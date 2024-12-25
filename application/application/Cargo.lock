@@ -109,42 +109,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "application"
-version = "1.0.0"
-dependencies = [
- "argon2",
- "base64",
- "bitcode",
- "bytes",
- "cargo-emit",
- "chrono",
- "const_format",
- "deadpool",
- "deadpool-postgres",
- "dedicated_crate",
- "hmac",
- "http",
- "http-body-util",
- "hyper",
- "hyper-util",
- "lettre",
- "matchit",
- "num-integer",
- "rand",
- "regex",
- "serde",
- "serde_json",
- "sha3",
- "tokio",
- "tokio-postgres",
- "toml",
- "tracing",
- "tracing-appender",
- "tracing-subscriber",
- "uuid",
-]
-
-[[package]]
 name = "argon2"
 version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -417,8 +381,37 @@ dependencies = [
 name = "core"
 version = "1.0.0"
 dependencies = [
- "application",
+ "argon2",
+ "base64",
+ "bitcode",
+ "bytes",
+ "cargo-emit",
+ "chrono",
  "clap",
+ "const_format",
+ "deadpool",
+ "deadpool-postgres",
+ "dedicated_crate",
+ "hmac",
+ "http",
+ "http-body-util",
+ "hyper",
+ "hyper-util",
+ "lettre",
+ "matchit",
+ "num-integer",
+ "rand",
+ "regex",
+ "serde",
+ "serde_json",
+ "sha3",
+ "tokio",
+ "tokio-postgres",
+ "toml",
+ "tracing",
+ "tracing-appender",
+ "tracing-subscriber",
+ "uuid",
 ]
 
 [[package]]

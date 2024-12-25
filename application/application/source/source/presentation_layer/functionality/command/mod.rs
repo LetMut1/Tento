@@ -1,29 +1,24 @@
-use application::{
-    AggregateError,
-    Backtrace,
-    CommandProcessor,
-    Common,
-    CreateFixtures,
-    Formatter,
-    OptionConverter,
-    RemoveIncompliteState,
-    RunServer,
+use crate::{
+    application_layer::functionality::command_processor::{
+        CommandProcessor,
+        CreateFixtures,
+        RemoveIncompliteState,
+        RunServer,
+    },
+    infrastructure_layer::data::aggregate_error::{
+        AggregateError,
+        Backtrace,
+        Common,
+        OptionConverter,
+    },
 };
 use clap::{
     Arg,
-    Command,
+    Command as Command_,
 };
-// The type is 'Result<(), ()>' but not '()' to return a success/error exit code but not only success exit code.
-fn main() -> Result<(), ()> {
-    if let Result::Err(aggregate_error) = Processor::process() {
-        println!("{}", Formatter::<AggregateError>::format(&aggregate_error));
-        return Result::Err(());
-    }
-    return Result::Ok(());
-}
-struct Processor;
-impl Processor {
-    fn process() -> Result<(), AggregateError> {
+pub struct Command;
+impl Command {
+    pub fn process() -> Result<(), AggregateError> {
         const COMMAND_RUN_SERVER: &'static str = "run_server";
         const COMMAND_CREATE_FIXTURES: &'static str = "create_fixtures";
         const COMMAND_REMOVE_INCOMPLITE_STATE: &'static str = "remove_incomplite_state";
@@ -32,9 +27,9 @@ impl Processor {
             .arg_required_else_help(true)
             .arg(Arg::new(ARGUMENT_ENVIRONMENT_FILE_DIRECTORY).required(true).long(ARGUMENT_ENVIRONMENT_FILE_DIRECTORY))
             .subcommand_required(true)
-            .subcommand(Command::new(COMMAND_RUN_SERVER))
-            .subcommand(Command::new(COMMAND_CREATE_FIXTURES))
-            .subcommand(Command::new(COMMAND_REMOVE_INCOMPLITE_STATE))
+            .subcommand(Command_::new(COMMAND_RUN_SERVER))
+            .subcommand(Command_::new(COMMAND_CREATE_FIXTURES))
+            .subcommand(Command_::new(COMMAND_REMOVE_INCOMPLITE_STATE))
             .get_matches();
         let environment_configuration_file_directory = arg_matches.get_one::<String>(ARGUMENT_ENVIRONMENT_FILE_DIRECTORY).into_logic_unreachable_state(
             Backtrace::new(

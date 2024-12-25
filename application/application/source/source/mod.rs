@@ -2,20 +2,16 @@ mod application_layer;
 mod domain_layer;
 mod infrastructure_layer;
 mod presentation_layer;
-pub use self::{
-    application_layer::functionality::command_processor::{
-        CommandProcessor,
-        CreateFixtures,
-        RemoveIncompliteState,
-        RunServer,
-    },
-    infrastructure_layer::{
-        data::aggregate_error::{
-            AggregateError,
-            Backtrace,
-            Common,
-            OptionConverter,
-        },
-        functionality::service::formatter::Formatter,
-    },
+use self::infrastructure_layer::{
+    data::aggregate_error::AggregateError,
+    functionality::service::formatter::Formatter,
 };
+use self::presentation_layer::functionality::command::Command;
+// The type is 'Result<(), ()>' but not '()' to return a success/error exit code but not only success exit code.
+fn main() -> Result<(), ()> {
+    if let Result::Err(aggregate_error) = Command::process() {
+        println!("{}", Formatter::<AggregateError>::format(&aggregate_error));
+        return Result::Err(());
+    }
+    return Result::Ok(());
+}

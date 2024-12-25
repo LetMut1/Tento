@@ -3,13 +3,11 @@ resolver = "2"
 members = [
     "./source",
     "./source/dedicated_crate",
-    "./source/source/presentation_layer/functionality/command/core",
     "./source/foreign_function_interface/client_server_data_serializer/source"
 ]
 default-members = [
     "./source",
     "./source/dedicated_crate",
-    "./source/source/presentation_layer/functionality/command/core",
 ]
 
 [workspace.package]

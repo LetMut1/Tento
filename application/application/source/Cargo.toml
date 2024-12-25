@@ -1,5 +1,5 @@
-[lib]
-name = "application"
+[[bin]]
+name = "core"
 path = "./source/mod.rs"
 test = true
 doctest = true
@@ -8,11 +8,10 @@ doc = true
 proc-macro = false
 harness = true
 edition = "2021"
-crate-type = ["lib"]
 required-features = []
 
 [package]
-name = "application"
+name = "core"
 version = "1.0.0"
 authors.workspace = true
 rust-version.workspace = true
@@ -28,6 +27,7 @@ base64 = { package = "base64", version = "=0.22.1", default-features = true, fea
 bitcode = { workspace = true }
 bytes = { package = "bytes", version = "=1.7.1", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "=0.4.38", default-features = true, features = [], optional = false }
+clap = { package = "clap", version = "=4.5.17", default-features = true, features = ["cargo"], optional = false }
 const_format = { package = "const_format", version = "=0.2.33", default-features = true, features = [], optional = true }
 deadpool = { package = "deadpool", version = "=0.12.1", default-features = true, features = ["rt_tokio_1"], optional = false }
 deadpool_postgres = { package = "deadpool-postgres", version = "=0.14.0", default-features = true, features = ["rt_tokio_1"], optional = false }
