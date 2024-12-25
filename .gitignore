@@ -1,7 +1,6 @@
-# Not important. For developer:
+# For developer:
 .vscode
-
-# Important. For application:
+# For application:
 00000000000000_diesel_initial_setup
 docker-compose.override.yaml
 environment.toml
