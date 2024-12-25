@@ -35,9 +35,9 @@ use tracing_subscriber::FmtSubscriber;
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
 pub struct RunServer;
 impl CommandProcessor<RunServer> {
-    pub fn process<'a>(environment_configuration_file_directory: &'a str) -> Result<(), AggregateError> {
+    pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
         let _worker_guard;
-        let environment_configuration = Self::initialize_environment(environment_configuration_file_directory)?;
+        let environment_configuration = Self::initialize_environment(environment_configuration_file_path)?;
         #[cfg(feature = "logging_to_file")]
         {
             _worker_guard = Self::initialize_logging_to_fileger(environment_configuration)?;

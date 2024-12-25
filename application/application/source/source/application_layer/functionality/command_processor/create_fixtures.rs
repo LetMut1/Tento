@@ -109,8 +109,8 @@ impl CommandProcessor<CreateFixtures> {
     const QUANTITY_OF_APPLICATION_USERS: u16 = 10_000;
     const QUANTITY_OF_CHANNELS: u8 = 5;
     const STUB: &'static str = "s_t_u_b";
-    pub fn process<'a>(environment_configuration_file_directory: &'a str) -> Result<(), AggregateError> {
-        let environment_configuration = Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_directory)?;
+    pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
+        let environment_configuration = Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path)?;
         let runtime = Self::initialize_runtime()?;
         runtime.block_on(Self::create_fixtures(&environment_configuration))?;
         return Result::Ok(());

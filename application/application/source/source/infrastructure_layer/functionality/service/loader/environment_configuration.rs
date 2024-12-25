@@ -32,21 +32,15 @@ use std::{
 };
 use tokio_postgres::config::Config;
 impl Loader<EnvironmentConfiguration> {
-    const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
-    pub fn load_from_file<'a>(environment_configuration_file_directory: &'a str) -> Result<EnvironmentConfiguration, AggregateError> {
-        let environment_file_path = format!(
-            "{}/{}",
-            environment_configuration_file_directory,
-            Self::ENVIRONMENT_FILE_NAME,
-        );
-        let environment_file_path_ = Path::new(environment_file_path.as_str());
-        let environment_file_data = if environment_file_path_.try_exists().into_runtime(
+    pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration, AggregateError> {
+        let environment_configuration_file_path_ = Path::new(environment_configuration_file_path);
+        let environment_file_data = if environment_configuration_file_path_.try_exists().into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
             ),
         )? {
-            std::fs::read_to_string(environment_file_path_).into_logic(
+            std::fs::read_to_string(environment_configuration_file_path_).into_logic(
                 Backtrace::new(
                     line!(),
                     file!(),

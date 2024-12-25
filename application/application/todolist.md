@@ -1,4 +1,4 @@
-cargo run --features=port_for_manual_test,logging_to_file --bin=application -- --environment_configuration_file_directory=/_tento/application/application/ run_server
+cargo run --features=port_for_manual_test,logging_to_file --bin=application -- --environment_configuration_file_path=/_tento/application/application/environment.toml run_server
 
 
 
