@@ -78,7 +78,7 @@ use std::{
     future::Future,
     sync::{
         atomic::{
-            AtomicU64,
+            AtomicI64,
             Ordering,
         },
         Arc,
@@ -91,7 +91,7 @@ use tokio::{
 };
 #[cfg(not(feature = "postgresql_connection_with_tls"))]
 use tokio_postgres::NoTls;
-static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
+static CONNECTION_QUANTITY: AtomicI64 = AtomicI64::new(0);
 pub struct HttpServer;
 impl HttpServer {
     pub fn run(environment_configuration: &'static EnvironmentConfiguration<RunServer>) -> impl Future<Output = Result<(), AggregateError>> + Send {
@@ -294,7 +294,7 @@ impl HttpServer {
                         return ();
                     };
                     let completion_by_timer_future = async {
-                        tokio::time::sleep(Duration::from_secs(30)).await;
+                        tokio::time::sleep(Duration::from_secs(90)).await;
                         return ();
                     };
                     let completion_by_connection_quantity_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(completion_by_connection_quantity_future);
@@ -306,7 +306,15 @@ impl HttpServer {
                     }
                     return Result::<_, AggregateError>::Ok(());
                 };
-                if let Result::Err(aggregate_error) = future.await {
+                if let Result::Err(aggregate_error) = Spawner::<TokioNonBlockingTask>::spawn_processed(future)
+                .await
+                .into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?
+                {
                     Logger::<AggregateError>::log(&aggregate_error);
                     tokio::time::sleep(Duration::from_secs(1)).await;
                     continue 'a;
@@ -954,11 +962,11 @@ impl HttpServer {
     {
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
-                const STEP: u64 = 1;
+                const STEP: i64 = 1;
                 CONNECTION_QUANTITY.fetch_add(
                     STEP,
                     Ordering::Relaxed,
-                ); // TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO нужно ли catch_unwind.
+                );
                 let result = serving_connection_future.await.into_runtime(
                     Backtrace::new(
                         line!(),
