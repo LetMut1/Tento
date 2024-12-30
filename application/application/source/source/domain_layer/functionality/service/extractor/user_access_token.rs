@@ -7,7 +7,7 @@ use crate::{
     infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
-            environment_configuration::PrivateKey,
+            environment_configuration::run_server::PrivateKey,
         },
         functionality::service::resolver::{
             Resolver,

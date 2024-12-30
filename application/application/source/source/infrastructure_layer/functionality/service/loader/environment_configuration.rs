@@ -7,22 +7,30 @@ use crate::infrastructure_layer::data::{
         ResultConverter,
     },
     environment_configuration::{
+        EnvironmentConfiguration,
+        Postgresql,
+        PostgresqlInner,
+    },
+    environment_configuration::run_server::{
         ApplicationServer,
         EmailServer,
         Encryption,
-        EnvironmentConfiguration,
-        EnvironmentConfigurationFile,
+        RunServer,
+        EnvironmentConfigurationFile as RunServerEnvironmentConfigurationFile,
         Http,
         HttpKeepalive,
         Logging,
-        Postgresql,
         PrivateKey,
-        Resource,
+        Resource as RunServerResource,
         Tcp,
         TcpKeepalive,
         Tls,
         TokioRuntime,
-        PostgresqlInner,
+    },
+    environment_configuration::create_fixtures::{
+        CreateFixtures,
+        EnvironmentConfigurationFile as CreateFixturesEnvironmentConfigurationFile,
+        Resource as CreateFixturesResource,
     },
 };
 use std::{
@@ -30,39 +38,11 @@ use std::{
     path::Path,
     str::FromStr,
 };
+use serde::Deserialize;
 use tokio_postgres::config::Config;
-impl Loader<EnvironmentConfiguration> {
-    pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration, AggregateError> {
-        let environment_configuration_file_path_ = Path::new(environment_configuration_file_path);
-        let environment_file_data = if environment_configuration_file_path_.try_exists().into_runtime(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )? {
-            std::fs::read_to_string(environment_configuration_file_path_).into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?
-        } else {
-            return Result::Err(
-                AggregateError::new_logic(
-                    "The environment.toml file does not exist.".into(),
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
-        let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).into_logic(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
+impl Loader<EnvironmentConfiguration<RunServer>> {
+    pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<RunServer>, AggregateError> {
+        let environment_configuration_file = load_from_file::<RunServerEnvironmentConfigurationFile>(environment_configuration_file_path)?;
         let mut application_server_tcp_socket_address_registry = environment_configuration_file.application_server.tcp.socket_address.value.to_socket_addrs().into_runtime(
             Backtrace::new(
                 line!(),
@@ -178,40 +158,116 @@ impl Loader<EnvironmentConfiguration> {
         };
         return Result::Ok(
             EnvironmentConfiguration {
-                tokio_runtime: TokioRuntime {
-                    maximum_blocking_threads_quantity: environment_configuration_file.tokio_runtime.maximum_blocking_threads_quantity.value,
-                    worker_threads_quantity: environment_configuration_file.tokio_runtime.worker_threads_quantity.value,
-                    worker_thread_stack_size: environment_configuration_file.tokio_runtime.worker_thread_stack_size.value,
-                },
-                application_server,
-                logging: Logging {
-                    directory_path: environment_configuration_file.logging.directory_path.value,
-                    file_name_prefix: environment_configuration_file.logging.file_name_prefix.value,
-                },
-                resource: Resource {
-                    postgresql: Postgresql {
-                        database_1: PostgresqlInner {
-                            configuration: postgreql_database_1_configuration,
-                            maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_1.maximum_connection_pool_size.value,
-                            connection_pool_waiting_timeout_duration: environment_configuration_file.resource.postgresql.database_1.connection_pool_waiting_timeout_duration.value,
+                subject: RunServer {
+                    tokio_runtime: TokioRuntime {
+                        maximum_blocking_threads_quantity: environment_configuration_file.tokio_runtime.maximum_blocking_threads_quantity.value,
+                        worker_threads_quantity: environment_configuration_file.tokio_runtime.worker_threads_quantity.value,
+                        worker_thread_stack_size: environment_configuration_file.tokio_runtime.worker_thread_stack_size.value,
+                    },
+                    application_server,
+                    logging: Logging {
+                        directory_path: environment_configuration_file.logging.directory_path.value,
+                        file_name_prefix: environment_configuration_file.logging.file_name_prefix.value,
+                    },
+                    resource: RunServerResource {
+                        postgresql: Postgresql {
+                            database_1: PostgresqlInner {
+                                configuration: postgreql_database_1_configuration,
+                                maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_1.maximum_connection_pool_size.value,
+                                connection_pool_waiting_timeout_duration: environment_configuration_file.resource.postgresql.database_1.connection_pool_waiting_timeout_duration.value,
+                            },
+                            database_2: PostgresqlInner {
+                                configuration: postgreql_database_2_configuration,
+                                maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_2.maximum_connection_pool_size.value,
+                                connection_pool_waiting_timeout_duration: environment_configuration_file.resource.postgresql.database_2.connection_pool_waiting_timeout_duration.value,
+                            },
                         },
-                        database_2: PostgresqlInner {
-                            configuration: postgreql_database_2_configuration,
-                            maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_2.maximum_connection_pool_size.value,
-                            connection_pool_waiting_timeout_duration: environment_configuration_file.resource.postgresql.database_2.connection_pool_waiting_timeout_duration.value,
+                        email_server: EmailServer {
+                            socket_address: email_server_tcp_socket_address,
                         },
                     },
-                    email_server: EmailServer {
-                        socket_address: email_server_tcp_socket_address,
-                    },
-                },
-                encryption: Encryption {
-                    private_key: PrivateKey {
-                        user_access_token: environment_configuration_file.encryption.private_key.user_access_token.value,
-                        user_access_refresh_token: environment_configuration_file.encryption.private_key.user_access_refresh_token.value,
+                    encryption: Encryption {
+                        private_key: PrivateKey {
+                            user_access_token: environment_configuration_file.encryption.private_key.user_access_token.value,
+                            user_access_refresh_token: environment_configuration_file.encryption.private_key.user_access_refresh_token.value,
+                        },
                     },
                 },
             },
         );
     }
+}
+impl Loader<EnvironmentConfiguration<CreateFixtures>> {
+    pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<CreateFixtures>, AggregateError> {
+        let environment_configuration_file = load_from_file::<CreateFixturesEnvironmentConfigurationFile>(environment_configuration_file_path)?;
+        let postgreql_database_1_configuration = Config::from_str(environment_configuration_file.resource.postgresql.database_1.url.value.as_str())
+        .into_logic(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
+        let postgreql_database_2_configuration = Config::from_str(environment_configuration_file.resource.postgresql.database_2.url.value.as_str())
+        .into_logic(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
+        return Result::Ok(
+            EnvironmentConfiguration {
+                subject: CreateFixtures {
+                    resource: CreateFixturesResource {
+                        postgresql: Postgresql {
+                            database_1: PostgresqlInner {
+                                configuration: postgreql_database_1_configuration,
+                                maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_1.maximum_connection_pool_size.value,
+                                connection_pool_waiting_timeout_duration: environment_configuration_file.resource.postgresql.database_1.connection_pool_waiting_timeout_duration.value,
+                            },
+                            database_2: PostgresqlInner {
+                                configuration: postgreql_database_2_configuration,
+                                maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_2.maximum_connection_pool_size.value,
+                                connection_pool_waiting_timeout_duration: environment_configuration_file.resource.postgresql.database_2.connection_pool_waiting_timeout_duration.value,
+                            },
+                        },
+                    },
+                },
+            },
+        );
+    }
+}
+pub fn load_from_file<'a, T>(environment_configuration_file_path: &'a str) -> Result<T, AggregateError>
+where
+    T: for<'de> Deserialize<'de>,
+{
+    let environment_configuration_file_path_ = Path::new(environment_configuration_file_path);
+    let environment_file_data = if environment_configuration_file_path_.try_exists().into_runtime(
+        Backtrace::new(
+            line!(),
+            file!(),
+        ),
+    )? {
+        std::fs::read_to_string(environment_configuration_file_path_).into_logic(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?
+    } else {
+        return Result::Err(
+            AggregateError::new_logic(
+                "The environment.toml file does not exist.".into(),
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            ),
+        );
+    };
+    return toml::from_str::<T>(environment_file_data.as_str()).into_logic(
+        Backtrace::new(
+            line!(),
+            file!(),
+        ),
+    );
 }

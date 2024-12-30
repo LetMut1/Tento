@@ -5,7 +5,7 @@ use crate::{
         data::{
             aggregate_error::AggregateError,
             capture::Capture,
-            environment_configuration::EmailServer,
+            environment_configuration::run_server::EmailServer,
         },
         functionality::service::sender::{
             Email,

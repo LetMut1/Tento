@@ -59,7 +59,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_CheckNameForExisting> {
     ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             match Extractor::<UserAccessToken<'_>>::extract(
-                &inner.environment_configuration.encryption.private_key,
+                &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_encoded,
             )? {
                 Extracted::UserAccessToken {

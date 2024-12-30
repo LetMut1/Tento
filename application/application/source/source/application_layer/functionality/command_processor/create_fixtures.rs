@@ -74,43 +74,10 @@ use tokio::runtime::{
     Runtime,
 };
 use tokio_postgres::NoTls;
-pub struct CreateFixtures;
+pub use crate::infrastructure_layer::data::environment_configuration::create_fixtures::CreateFixtures;
 impl CommandProcessor<CreateFixtures> {
-    const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";
-    const APPLICATION_USER__PASSWORD: &'static str = "passworD1";
-    const ASCII_CHARACTER_REGISTRY: [char; 26] = [
-        'a',
-        'b',
-        'c',
-        'd',
-        'e',
-        'f',
-        'g',
-        'h',
-        'i',
-        'j',
-        'k',
-        'l',
-        'm',
-        'n',
-        'o',
-        'p',
-        'q',
-        'r',
-        's',
-        't',
-        'u',
-        'v',
-        'w',
-        'x',
-        'y',
-        'z',
-    ];
-    const QUANTITY_OF_APPLICATION_USERS: u16 = 10_000;
-    const QUANTITY_OF_CHANNELS: u8 = 5;
-    const STUB: &'static str = "s_t_u_b";
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
-        let environment_configuration = Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path)?;
+        let environment_configuration = Loader::<EnvironmentConfiguration<CreateFixtures>>::load_from_file(environment_configuration_file_path)?;
         let runtime = Self::initialize_runtime()?;
         runtime.block_on(Self::create_fixtures(&environment_configuration))?;
         return Result::Ok(());
@@ -123,14 +90,47 @@ impl CommandProcessor<CreateFixtures> {
             ),
         );
     }
-    fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration<CreateFixtures>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+        const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";
+        const APPLICATION_USER__PASSWORD: &'static str = "passworD1";
+        const ASCII_CHARACTER_REGISTRY: [char; 26] = [
+            'a',
+            'b',
+            'c',
+            'd',
+            'e',
+            'f',
+            'g',
+            'h',
+            'i',
+            'j',
+            'k',
+            'l',
+            'm',
+            'n',
+            'o',
+            'p',
+            'q',
+            'r',
+            's',
+            't',
+            'u',
+            'v',
+            'w',
+            'x',
+            'y',
+            'z',
+        ];
+        const QUANTITY_OF_APPLICATION_USERS: u16 = 10_000;
+        const QUANTITY_OF_CHANNELS: u8 = 5;
+        const STUB: &'static str = "s_t_u_b";
         return async move {
             let postgresql_connection_pool_database_1 = Creator::<PostgresqlConnectionPool>::create(
-                &environment_configuration.resource.postgresql.database_1,
+                &environment_configuration.subject.resource.postgresql.database_1,
                 NoTls,
             )
             .await?;
-            let user__password = Self::APPLICATION_USER__PASSWORD.to_string();
+            let user__password = APPLICATION_USER__PASSWORD.to_string();
             let user__password_hash = Encoder::<User_Password>::encode(user__password.as_str())?;
             let postgresql_database_1_client = postgresql_connection_pool_database_1.get().await.into_runtime(
                 Backtrace::new(
@@ -138,10 +138,10 @@ impl CommandProcessor<CreateFixtures> {
                     file!(),
                 ),
             )?;
-            '_a: for _ in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
+            '_a: for _ in 1..=QUANTITY_OF_APPLICATION_USERS {
                 let mut user__nickname = String::new();
                 '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=User_Nickname::MAXIMUM_LENGTH) {
-                    let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
+                    let character = ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..ASCII_CHARACTER_REGISTRY.len())];
                     user__nickname = format!("{}{}", user__nickname.as_str(), character);
                 }
                 if !Validator::<User_Nickname>::is_valid(user__nickname.as_str()) {
@@ -204,7 +204,7 @@ impl CommandProcessor<CreateFixtures> {
                 let user_device__id = format!(
                     "{}_{}",
                     user.nickname.as_ref(),
-                    Self::APPLICATION_USER_DEVICE__ID_PART
+                    APPLICATION_USER_DEVICE__ID_PART
                 );
                 if !Validator::<UserDevice_Id>::is_valid(&user_device__id) {
                     return Result::Err(
@@ -224,10 +224,10 @@ impl CommandProcessor<CreateFixtures> {
                     },
                 )
                 .await?;
-                'b: for _ in 1..=Self::QUANTITY_OF_CHANNELS {
+                'b: for _ in 1..=QUANTITY_OF_CHANNELS {
                     let mut channel__name = String::new();
                     '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Name::MAXIMUM_LENGTH) {
-                        let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
+                        let character = ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..ASCII_CHARACTER_REGISTRY.len())];
                         channel__name = format!("{}{}", channel__name.as_str(), character,);
                     }
                     if !Validator::<Channel_Name>::is_valid(channel__name.as_str()) {
@@ -254,7 +254,7 @@ impl CommandProcessor<CreateFixtures> {
                     let channel__description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
                         let mut channel__description_ = String::new();
                         '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Description::MAXIMUM_LENGTH) {
-                            let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
+                            let character = ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..ASCII_CHARACTER_REGISTRY.len())];
                             channel__description_ = format!("{}{}", channel__description_.as_str(), character,);
                         }
                         if !Validator::<Channel_Description>::is_valid(channel__description_.as_str()) {
@@ -306,8 +306,8 @@ impl CommandProcessor<CreateFixtures> {
                                     channel__access_modifier: const { Channel_AccessModifier::Open as i16 },
                                     channel__visability_modifier: const { Channel_VisabilityModifier::Public as i16 },
                                     channel__orientation,
-                                    channel__cover_image_path: Option::Some(Self::STUB.to_string()),
-                                    channel__background_image_path: Option::Some(Self::STUB.to_string()),
+                                    channel__cover_image_path: Option::Some(STUB.to_string()),
+                                    channel__background_image_path: Option::Some(STUB.to_string()),
                                     channel__subscribers_quantity: 0,
                                     channel__marks_quantity: 0,
                                     channel__viewing_quantity: 0,

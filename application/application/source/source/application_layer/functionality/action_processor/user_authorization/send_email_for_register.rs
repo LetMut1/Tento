@@ -144,7 +144,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     EmailSender::<UserRegistrationToken<'_>>::repeatable_send(
-                        &environment_configuration.resource.email_server,
+                        &environment_configuration.subject.resource.email_server,
                         user_registration_token.value.as_str(),
                         incoming.user__email.as_str(),
                         incoming.user_device__id.as_str(),

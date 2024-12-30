@@ -60,7 +60,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
         const LIMIT: i16 = 100;
         return async move {
             let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
-                &inner.environment_configuration.encryption.private_key,
+                &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_encoded,
             )? {
                 Extracted::UserAccessToken {

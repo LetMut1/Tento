@@ -6,7 +6,7 @@ use crate::infrastructure_layer::data::aggregate_error::{
 };
 use crate::infrastructure_layer::data::{
     capture::Capture,
-    environment_configuration::EmailServer,
+    environment_configuration::run_server::EmailServer,
 };
 use dedicated_crate::void::Void;
 use std::future::Future;

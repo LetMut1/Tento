@@ -1,61 +1,8 @@
-mod environment_configuration_file;
-pub use self::environment_configuration_file::EnvironmentConfigurationFile;
-use std::net::SocketAddr;
+pub mod run_server;
+pub mod create_fixtures;
 use tokio_postgres::config::Config;
-pub struct EnvironmentConfiguration {
-    pub tokio_runtime: TokioRuntime,
-    pub application_server: ApplicationServer,
-    pub logging: Logging,
-    pub resource: Resource,
-    pub encryption: Encryption,
-}
-pub struct TokioRuntime {
-    pub maximum_blocking_threads_quantity: usize,
-    pub worker_threads_quantity: usize,
-    pub worker_thread_stack_size: usize,
-}
-pub struct ApplicationServer {
-    pub tcp: Tcp,
-    pub http: Http,
-}
-pub struct Tcp {
-    pub socket_address: SocketAddr,
-    pub nodelay: bool,
-    pub sleep_on_accept_errors: bool,
-    pub keepalive: TcpKeepalive,
-}
-pub struct TcpKeepalive {
-    pub duration: Option<u64>,
-    pub interval_duration: Option<u64>,
-    pub retries_quantity: Option<u32>,
-}
-pub struct Http {
-    pub adaptive_window: bool,
-    pub connection_window_size: u32,
-    pub stream_window_size: u32,
-    pub maximum_frame_size: u32,
-    pub maximum_sending_buffer_size: u32,
-    pub enable_connect_protocol: bool,
-    pub maximum_header_list_size: u32,
-    pub maximum_pending_accept_reset_streams: Option<usize>,
-    pub keepalive: Option<HttpKeepalive>,
-    pub tls: Option<Tls>,
-}
-pub struct HttpKeepalive {
-    pub interval_duration: u64,
-    pub timeout_duration: u64,
-}
-pub struct Tls {
-    pub certificate_crt_file_path: String,
-    pub certificate_key_file_path: String,
-}
-pub struct Logging {
-    pub directory_path: String,
-    pub file_name_prefix: String,
-}
-pub struct Resource {
-    pub postgresql: Postgresql,
-    pub email_server: EmailServer,
+pub struct EnvironmentConfiguration<S> {
+    pub subject: S,
 }
 pub struct Postgresql {
     pub database_1: PostgresqlInner,
@@ -66,13 +13,23 @@ pub struct PostgresqlInner {
     pub maximum_connection_pool_size: usize,
     pub connection_pool_waiting_timeout_duration: u64,
 }
-pub struct EmailServer {
-    pub socket_address: SocketAddr,
+#[derive(serde::Deserialize)]
+pub struct Postgresql_ {
+    pub database_1: PostgresqlInner_,
+    pub database_2: PostgresqlInner_,
 }
-pub struct Encryption {
-    pub private_key: PrivateKey,
+#[derive(serde::Deserialize)]
+pub struct PostgresqlInner_ {
+    pub url: Value<String>,
+    pub maximum_connection_pool_size: Value<usize>,
+    pub connection_pool_waiting_timeout_duration: Value<u64>,
 }
-pub struct PrivateKey {
-    pub user_access_token: String,
-    pub user_access_refresh_token: String,
+#[derive(serde::Deserialize)]
+pub struct Value<T> {
+    pub value: T,
+}
+#[derive(serde::Deserialize)]
+pub struct ValueExist<T> {
+    pub value: T,
+    pub is_exist: bool,
 }

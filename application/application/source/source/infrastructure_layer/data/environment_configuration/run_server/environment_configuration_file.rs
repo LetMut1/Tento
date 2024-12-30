@@ -1,3 +1,8 @@
+use crate::infrastructure_layer::data::environment_configuration::{
+    Value,
+    ValueExist,
+    Postgresql_,
+};
 #[derive(serde::Deserialize)]
 pub struct EnvironmentConfigurationFile {
     pub tokio_runtime: TokioRuntime,
@@ -62,19 +67,8 @@ pub struct Logging {
 }
 #[derive(serde::Deserialize)]
 pub struct Resource {
-    pub postgresql: Postgresql,
+    pub postgresql: Postgresql_,
     pub email_server: EmailServer,
-}
-#[derive(serde::Deserialize)]
-pub struct Postgresql {
-    pub database_1: PostgresqlInner,
-    pub database_2: PostgresqlInner,
-}
-#[derive(serde::Deserialize)]
-pub struct PostgresqlInner {
-    pub url: Value<String>,
-    pub maximum_connection_pool_size: Value<usize>,
-    pub connection_pool_waiting_timeout_duration: Value<u64>,
 }
 #[derive(serde::Deserialize)]
 pub struct EmailServer {
@@ -88,13 +82,4 @@ pub struct Encryption {
 pub struct PrivateKey {
     pub user_access_token: Value<String>,
     pub user_access_refresh_token: Value<String>,
-}
-#[derive(serde::Deserialize)]
-pub struct Value<T> {
-    pub value: T,
-}
-#[derive(serde::Deserialize)]
-pub struct ValueExist<T> {
-    pub value: T,
-    pub is_exist: bool,
 }

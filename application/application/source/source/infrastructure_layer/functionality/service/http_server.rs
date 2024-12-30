@@ -1,32 +1,35 @@
 #[cfg(not(feature = "postgresql_connection_with_tls"))]
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::{
-    application_layer::functionality::action_processor::{
-        ChannelSubscription_Create,
-        Channel_CheckLinkedNameForExisting,
-        Channel_CheckNameForExisting,
-        Channel_Create,
-        Channel_GetManyByNameInSubscriptions,
-        Channel_GetManyBySubscription,
-        Channel_GetManyPublicByName,
-        Channel_GetOneById,
-        Inner as ActionProcessorInner,
-        UserAuthorization_AuthorizeByFirstStep,
-        UserAuthorization_AuthorizeByLastStep,
-        UserAuthorization_CheckEmailForExisting,
-        UserAuthorization_CheckNicknameForExisting,
-        UserAuthorization_DeauthorizeFromAllDevices,
-        UserAuthorization_DeauthorizeFromOneDevice,
-        UserAuthorization_RefreshAccessToken,
-        UserAuthorization_RegisterByFirstStep,
-        UserAuthorization_RegisterByLastStep,
-        UserAuthorization_RegisterBySecondStep,
-        UserAuthorization_ResetPasswordByFirstStep,
-        UserAuthorization_ResetPasswordByLastStep,
-        UserAuthorization_ResetPasswordBySecondStep,
-        UserAuthorization_SendEmailForAuthorize,
-        UserAuthorization_SendEmailForRegister,
-        UserAuthorization_SendEmailForResetPassword,
+    application_layer::functionality::{
+        action_processor::{
+            ChannelSubscription_Create,
+            Channel_CheckLinkedNameForExisting,
+            Channel_CheckNameForExisting,
+            Channel_Create,
+            Channel_GetManyByNameInSubscriptions,
+            Channel_GetManyBySubscription,
+            Channel_GetManyPublicByName,
+            Channel_GetOneById,
+            Inner as ActionProcessorInner,
+            UserAuthorization_AuthorizeByFirstStep,
+            UserAuthorization_AuthorizeByLastStep,
+            UserAuthorization_CheckEmailForExisting,
+            UserAuthorization_CheckNicknameForExisting,
+            UserAuthorization_DeauthorizeFromAllDevices,
+            UserAuthorization_DeauthorizeFromOneDevice,
+            UserAuthorization_RefreshAccessToken,
+            UserAuthorization_RegisterByFirstStep,
+            UserAuthorization_RegisterByLastStep,
+            UserAuthorization_RegisterBySecondStep,
+            UserAuthorization_ResetPasswordByFirstStep,
+            UserAuthorization_ResetPasswordByLastStep,
+            UserAuthorization_ResetPasswordBySecondStep,
+            UserAuthorization_SendEmailForAuthorize,
+            UserAuthorization_SendEmailForRegister,
+            UserAuthorization_SendEmailForResetPassword,
+        },
+        command_processor::RunServer,
     },
     infrastructure_layer::{
         data::{
@@ -91,18 +94,18 @@ use tokio_postgres::NoTls;
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 pub struct HttpServer;
 impl HttpServer {
-    pub fn run(environment_configuration: &'static EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send {
+    pub fn run(environment_configuration: &'static EnvironmentConfiguration<RunServer>) -> impl Future<Output = Result<(), AggregateError>> + Send {
         return async move {
             #[cfg(feature = "port_for_manual_test")]
             let http1_socket_address = {
-                let mut http1_port_number = environment_configuration.application_server.tcp.socket_address.port();
+                let mut http1_port_number = environment_configuration.subject.application_server.tcp.socket_address.port();
                 if http1_port_number >= u16::MIN && http1_port_number < u16::MAX {
                     http1_port_number += 1;
                 } else {
                     http1_port_number -= 1;
                 };
                 SocketAddr::new(
-                    environment_configuration.application_server.tcp.socket_address.ip(),
+                    environment_configuration.subject.application_server.tcp.socket_address.ip(),
                     http1_port_number,
                 )
             };
@@ -125,12 +128,12 @@ impl HttpServer {
             #[cfg(not(feature = "postgresql_connection_with_tls"))]
             {
                 postgresql_connection_pool_database_1 = Creator::<PostgresqlConnectionPool>::create(
-                    &environment_configuration.resource.postgresql.database_1,
+                    &environment_configuration.subject.resource.postgresql.database_1,
                     NoTls,
                 )
                 .await?;
                 postgresql_connection_pool_database_2 = Creator::<PostgresqlConnectionPool>::create(
-                    &environment_configuration.resource.postgresql.database_2,
+                    &environment_configuration.subject.resource.postgresql.database_2,
                     NoTls,
                 )
                 .await?;
@@ -152,7 +155,7 @@ impl HttpServer {
                         file!(),
                     ),
                 )?;
-                let http2_tcp_listener = TcpListener::bind(&environment_configuration.application_server.tcp.socket_address).await.into_logic(
+                let http2_tcp_listener = TcpListener::bind(&environment_configuration.subject.application_server.tcp.socket_address).await.into_logic(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -164,17 +167,17 @@ impl HttpServer {
                     let mut http2_builder = Http2Builder::new(TokioExecutor::new()).max_local_error_reset_streams(Option::Some(128));
                     http2_builder
                         .auto_date_header(false)
-                        .max_header_list_size(environment_configuration.application_server.http.maximum_header_list_size)
-                        .adaptive_window(environment_configuration.application_server.http.adaptive_window)
-                        .initial_connection_window_size(Option::Some(environment_configuration.application_server.http.connection_window_size))
-                        .initial_stream_window_size(Option::Some(environment_configuration.application_server.http.stream_window_size))
+                        .max_header_list_size(environment_configuration.subject.application_server.http.maximum_header_list_size)
+                        .adaptive_window(environment_configuration.subject.application_server.http.adaptive_window)
+                        .initial_connection_window_size(Option::Some(environment_configuration.subject.application_server.http.connection_window_size))
+                        .initial_stream_window_size(Option::Some(environment_configuration.subject.application_server.http.stream_window_size))
                         .max_concurrent_streams(Option::None)
-                        .max_frame_size(Option::Some(environment_configuration.application_server.http.maximum_frame_size))
-                        .max_send_buf_size(environment_configuration.application_server.http.maximum_sending_buffer_size as usize);
-                    if environment_configuration.application_server.http.enable_connect_protocol {
+                        .max_frame_size(Option::Some(environment_configuration.subject.application_server.http.maximum_frame_size))
+                        .max_send_buf_size(environment_configuration.subject.application_server.http.maximum_sending_buffer_size as usize);
+                    if environment_configuration.subject.application_server.http.enable_connect_protocol {
                         http2_builder.enable_connect_protocol();
                     };
-                    match environment_configuration.application_server.http.keepalive {
+                    match environment_configuration.subject.application_server.http.keepalive {
                         Option::Some(ref keepalive) => {
                             http2_builder
                                 .keep_alive_interval(Option::Some(Duration::from_secs(keepalive.interval_duration)))
@@ -182,11 +185,11 @@ impl HttpServer {
                         }
                         Option::None => http2_builder.keep_alive_interval(Option::None),
                     };
-                    match environment_configuration.application_server.http.maximum_pending_accept_reset_streams {
+                    match environment_configuration.subject.application_server.http.maximum_pending_accept_reset_streams {
                         Option::Some(maximum_pending_accept_reset_streams) => http2_builder.max_pending_accept_reset_streams(Option::Some(maximum_pending_accept_reset_streams)),
                         Option::None => http2_builder.max_pending_accept_reset_streams(Option::None),
                     };
-                    if let Option::Some(ref _tls) = environment_configuration.application_server.http.tls {
+                    if let Option::Some(ref _tls) = environment_configuration.subject.application_server.http.tls {
                         todo!("// TODO ssl_protocolsTLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers HIGH:!aNULL:!MD5;")
                     }
                     'b: loop {
@@ -971,7 +974,11 @@ impl HttpServer {
         );
         return ();
     }
-    fn process_request(request: Request, environment_configuration: &'static EnvironmentConfiguration, cloned: Arc<Cloned>) -> impl Future<Output = Response> + Send {
+    fn process_request(
+        request: Request,
+        environment_configuration: &'static EnvironmentConfiguration<RunServer>,
+        cloned: Arc<Cloned>
+    ) -> impl Future<Output = Response> + Send {
         return async move {
             let (parts, mut incoming) = request.into_parts();
             let mut action_inner = ActionInner {

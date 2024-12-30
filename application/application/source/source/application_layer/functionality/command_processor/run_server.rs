@@ -31,9 +31,9 @@ use tracing_appender::rolling::{
     RollingFileAppender,
     Rotation,
 };
+pub use crate::infrastructure_layer::data::environment_configuration::run_server::RunServer;
 use tracing_subscriber::FmtSubscriber;
-static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
-pub struct RunServer;
+static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration<RunServer>> = OnceLock::new();
 impl CommandProcessor<RunServer> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
         let _worker_guard;
@@ -50,8 +50,10 @@ impl CommandProcessor<RunServer> {
         runtime.block_on(HttpServer::run(environment_configuration))?;
         return Result::Ok(());
     }
-    fn initialize_environment<'a>(environment_configuration_file_directory: &'a str) -> Result<&'static EnvironmentConfiguration, AggregateError> {
-        let environment_configuration = Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_directory)?;
+    fn initialize_environment<'a>(
+        environment_configuration_file_directory: &'a str,
+    ) -> Result<&'static EnvironmentConfiguration<RunServer>, AggregateError> {
+        let environment_configuration = Loader::<EnvironmentConfiguration<RunServer>>::load_from_file(environment_configuration_file_directory)?;
         return match ENVIRONMENT_CONFIGURATION.get() {
             Option::Some(environment_configuration__) => Result::Ok(environment_configuration__),
             Option::None => {
@@ -76,11 +78,13 @@ impl CommandProcessor<RunServer> {
         };
     }
     #[cfg(feature = "logging_to_file")]
-    fn initialize_logging_to_fileger<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<WorkerGuard, AggregateError> {
+    fn initialize_logging_to_fileger<'a>(
+        environment_configuration: &'a EnvironmentConfiguration<RunServer>,
+    ) -> Result<WorkerGuard, AggregateError> {
         let rolling_file_appender = RollingFileAppender::new(
             Rotation::DAILY,
-            environment_configuration.logging.directory_path.as_str(),
-            environment_configuration.logging.file_name_prefix.as_str(),
+            environment_configuration.subject.logging.directory_path.as_str(),
+            environment_configuration.subject.logging.file_name_prefix.as_str(),
         );
         let (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(rolling_file_appender);
         Self::initialize_tracing_subscriber(non_blocking)?;
@@ -110,10 +114,10 @@ impl CommandProcessor<RunServer> {
         )?;
         return Result::Ok(());
     }
-    fn initialize_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<Runtime, AggregateError> {
-        if environment_configuration.tokio_runtime.maximum_blocking_threads_quantity == 0
-            || environment_configuration.tokio_runtime.worker_threads_quantity == 0
-            || environment_configuration.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
+    fn initialize_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration<RunServer>) -> Result<Runtime, AggregateError> {
+        if environment_configuration.subject.tokio_runtime.maximum_blocking_threads_quantity == 0
+            || environment_configuration.subject.tokio_runtime.worker_threads_quantity == 0
+            || environment_configuration.subject.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
         {
             return Result::Err(
                 AggregateError::new_logic(
@@ -126,9 +130,9 @@ impl CommandProcessor<RunServer> {
             );
         }
         return RuntimeBuilder::new_multi_thread()
-            .max_blocking_threads(environment_configuration.tokio_runtime.maximum_blocking_threads_quantity)
-            .worker_threads(environment_configuration.tokio_runtime.worker_threads_quantity)
-            .thread_stack_size(environment_configuration.tokio_runtime.worker_thread_stack_size)
+            .max_blocking_threads(environment_configuration.subject.tokio_runtime.maximum_blocking_threads_quantity)
+            .worker_threads(environment_configuration.subject.tokio_runtime.worker_threads_quantity)
+            .thread_stack_size(environment_configuration.subject.tokio_runtime.worker_thread_stack_size)
             .enable_all()
             .build()
             .into_runtime(

@@ -312,7 +312,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 Spawner::<TokioNonBlockingTask>::spawn_into_background(
                     async move {
                         EmailSender::<UserAuthorizationToken<'_>>::repeatable_send(
-                            &environment_configuration.resource.email_server,
+                            &environment_configuration.subject.resource.email_server,
                             user_authorization_token__value.as_str(),
                             user__email.as_str(),
                             incoming.user_device__id.as_str(),

@@ -166,7 +166,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     EmailSender::<UserResetPasswordToken<'_>>::repeatable_send(
-                        &environment_configuration.resource.email_server,
+                        &environment_configuration.subject.resource.email_server,
                         user_reset_password_token.value.as_str(),
                         user.email.as_str(),
                         incoming.user_device__id.as_str(),

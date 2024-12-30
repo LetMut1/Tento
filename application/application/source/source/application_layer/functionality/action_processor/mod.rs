@@ -47,6 +47,7 @@ use std::{
     future::Future,
     marker::PhantomData,
 };
+use super::command_processor::RunServer;
 pub struct ActionProcessor<S> {
     _subject: PhantomData<S>,
 }
@@ -60,7 +61,7 @@ pub trait ActionProcessor_ {
     ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>;
 }
 pub struct Inner<'a> {
-    pub environment_configuration: &'static EnvironmentConfiguration,
+    pub environment_configuration: &'static EnvironmentConfiguration<RunServer>,
     pub postgresql_connection_pool_database_1: &'a PostgresqlConnectionPool,
     pub postgresql_connection_pool_database_2: &'a PostgresqlConnectionPool,
 }

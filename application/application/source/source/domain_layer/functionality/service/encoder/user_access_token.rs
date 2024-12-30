@@ -7,7 +7,7 @@ use crate::{
                 AggregateError,
                 Backtrace,
             },
-            environment_configuration::PrivateKey,
+            environment_configuration::run_server::PrivateKey,
         },
         functionality::service::{
             encoder::{
