@@ -95,6 +95,7 @@ static CONNECTION_QUANTITY: AtomicI64 = AtomicI64::new(0);
 pub struct HttpServer;
 impl HttpServer {
     pub fn run(environment_configuration: &'static EnvironmentConfiguration<RunServer>) -> impl Future<Output = Result<(), AggregateError>> + Send {
+        const QUANTITY_OF_SECONDS_TO_RERUN: u64 = 1;
         return async move {
             #[cfg(feature = "port_for_manual_test")]
             let http1_socket_address = {
@@ -256,14 +257,14 @@ impl HttpServer {
                                         ),
                                     )?;
                                     if http1_socket_address.port() == socket_address_port.port() {
-                                        Self::spawn_connection_serving(
+                                        Self::spawn_serving_connection(
                                             http1_builder.serve_connection(
                                                 TokioIo::new(tcp_stream_),
                                                 service_fn,
                                             ),
                                         );
                                     } else {
-                                        Self::spawn_connection_serving(
+                                        Self::spawn_serving_connection(
                                             http2_builder.serve_connection(
                                                 TokioIo::new(tcp_stream_),
                                                 service_fn,
@@ -306,20 +307,29 @@ impl HttpServer {
                     }
                     return Result::<_, AggregateError>::Ok(());
                 };
-                if let Result::Err(aggregate_error) = Spawner::<TokioNonBlockingTask>::spawn_processed(future)
+                match Spawner::<TokioNonBlockingTask>::spawn_processed(future)
                 .await
                 .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
-                )?
-                {
-                    Logger::<AggregateError>::log(&aggregate_error);
-                    tokio::time::sleep(Duration::from_secs(1)).await;
-                    continue 'a;
+                ) {
+                    Result::Ok(result) => {
+                        if let Result::Err(aggregate_error) = result {
+                            Logger::<AggregateError>::log(&aggregate_error);
+                            tokio::time::sleep(Duration::from_secs(QUANTITY_OF_SECONDS_TO_RERUN)).await;
+                            continue 'a;
+                        }
+                        break 'a;
+                    }
+                    Result::Err(aggregate_error) => {
+                        Logger::<AggregateError>::log(&aggregate_error);
+                        tokio::time::sleep(Duration::from_secs(QUANTITY_OF_SECONDS_TO_RERUN)).await;
+                        continue 'a;
+                    }
                 }
-                break 'a;
+
             }
             return Result::Ok(());
         };
@@ -955,7 +965,7 @@ impl HttpServer {
         }
         return Result::Ok(router);
     }
-    fn spawn_connection_serving<T, E>(serving_connection_future: T) -> ()
+    fn spawn_serving_connection<T, E>(serving_connection_future: T) -> ()
     where
         T: Future<Output = Result<(), E>> + Send + 'static,
         E: Error + Send + Sync + 'static,
