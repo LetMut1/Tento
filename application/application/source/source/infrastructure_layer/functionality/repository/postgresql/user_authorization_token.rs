@@ -1,6 +1,6 @@
 use super::{
     Postgresql,
-    PreparedStatementParameterStorage,
+    ParameterStorage,
 };
 use crate::{
     domain_layer::data::entity::user_authorization_token::{
@@ -48,8 +48,8 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                         $5,\
                         $6\
                     );";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &user_authorization_token.user__id,
                     Type::INT8,
@@ -77,7 +77,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -89,7 +89,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -109,8 +109,8 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 WHERE \
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &by_1.user__id,
                     Type::INT8,
@@ -122,7 +122,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -134,7 +134,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -165,8 +165,8 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 WHERE \
                     uat.user__id = $5 \
                     AND uat.user_device__id = $6;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &update_1.user_authorization_token__value,
                     Type::TEXT,
@@ -194,7 +194,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -206,7 +206,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -235,8 +235,8 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 WHERE \
                     uat.user__id = $4 \
                     AND uat.user_device__id = $5;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &update_2.user_authorization_token__value,
                     Type::TEXT,
@@ -260,7 +260,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -272,7 +272,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -297,8 +297,8 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 WHERE \
                     uat.user__id = $2 \
                     AND uat.user_device__id = $3;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &update_3.user_authorization_token__can_be_resent_from,
                     Type::INT8,
@@ -314,7 +314,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -326,7 +326,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -348,8 +348,8 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 WHERE \
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &by_1.user__id,
                     Type::INT8,
@@ -361,7 +361,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -373,7 +373,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -398,8 +398,8 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 WHERE \
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &by_1.user__id,
                     Type::INT8,
@@ -411,7 +411,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -423,7 +423,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let row_registry = database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -479,8 +479,8 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 WHERE \
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &by_1.user__id,
                     Type::INT8,
@@ -492,7 +492,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -504,7 +504,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let row_registry = database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -554,8 +554,8 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 WHERE \
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &by_1.user__id,
                     Type::INT8,
@@ -567,7 +567,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -579,7 +579,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let row_registry = database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

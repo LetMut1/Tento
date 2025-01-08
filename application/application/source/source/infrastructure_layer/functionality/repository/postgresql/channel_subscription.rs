@@ -1,6 +1,6 @@
 use super::{
     Postgresql,
-    PreparedStatementParameterStorage,
+    ParameterStorage,
 };
 use crate::{
     domain_layer::data::entity::channel_subscription::ChannelSubscription,
@@ -34,8 +34,8 @@ impl Repository<Postgresql<ChannelSubscription>> {
                         $2,\
                         $3\
                     );";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &channel_subscription.user__id,
                     Type::INT8,
@@ -51,7 +51,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -63,7 +63,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
             database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -85,8 +85,8 @@ impl Repository<Postgresql<ChannelSubscription>> {
                 WHERE \
                     cs.user__id = $1 \
                     AND cs.channel__id = $2;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &by_1.user__id,
                     Type::INT8,
@@ -98,7 +98,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -110,7 +110,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

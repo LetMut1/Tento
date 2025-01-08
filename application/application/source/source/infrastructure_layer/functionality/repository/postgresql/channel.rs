@@ -1,6 +1,6 @@
 use super::{
     Postgresql,
-    PreparedStatementParameterStorage,
+    ParameterStorage,
 };
 use crate::{
     domain_layer::data::entity::channel::Channel,
@@ -65,8 +65,8 @@ impl Repository<Postgresql<Channel<'_>>> {
             let channel__orientation = insert_1.channel__orientation.as_slice();
             let channel__cover_image_path = insert_1.channel__cover_image_path.as_ref();
             let channel__background_image_path = insert_1.channel__background_image_path.as_ref();
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &insert_1.channel__owner,
                     Type::INT8,
@@ -122,7 +122,7 @@ impl Repository<Postgresql<Channel<'_>>> {
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -134,7 +134,7 @@ impl Repository<Postgresql<Channel<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -177,15 +177,15 @@ impl Repository<Postgresql<Channel<'_>>> {
                     subscribers_quantity = subscribers_quantity + 1 \
                 WHERE \
                     c.id = $1;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage.add(
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage.add(
                 &by_1.channel__id,
                 Type::INT8,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -197,7 +197,7 @@ impl Repository<Postgresql<Channel<'_>>> {
             database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -230,15 +230,15 @@ impl Repository<Postgresql<Channel<'_>>> {
                     public.channel c \
                 WHERE \
                     c.id = $1;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage.add(
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage.add(
                 &by_1.channel__id,
                 Type::INT8,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -250,7 +250,7 @@ impl Repository<Postgresql<Channel<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -372,15 +372,15 @@ impl Repository<Postgresql<Channel<'_>>> {
                     public.channel c \
                 WHERE \
                     c.name = $1;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage.add(
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage.add(
                 &by_2.channel__name,
                 Type::TEXT,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -392,7 +392,7 @@ impl Repository<Postgresql<Channel<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -500,15 +500,15 @@ impl Repository<Postgresql<Channel<'_>>> {
                     public.channel c \
                 WHERE \
                     c.name = $1;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage.add(
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage.add(
                 &by_2.channel__name,
                 Type::TEXT,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -520,7 +520,7 @@ impl Repository<Postgresql<Channel<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -544,15 +544,15 @@ impl Repository<Postgresql<Channel<'_>>> {
                     public.channel c \
                 WHERE \
                     c.linked_name = $1;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage.add(
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage.add(
                 &by_3.channel__linked_name,
                 Type::TEXT,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -564,7 +564,7 @@ impl Repository<Postgresql<Channel<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

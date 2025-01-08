@@ -1,6 +1,6 @@
 use super::{
     Postgresql,
-    PreparedStatementParameterStorage,
+    ParameterStorage,
 };
 use crate::{
     domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken,
@@ -46,8 +46,8 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                         $5,\
                         $6\
                     );";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &user_access_refresh_token.user__id,
                     Type::INT8,
@@ -75,7 +75,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -87,7 +87,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -118,8 +118,8 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 WHERE \
                     uart.user__id = $5 \
                     AND uart.user_device__id = $6;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &update_1.user_access_token__id,
                     Type::TEXT,
@@ -147,7 +147,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -159,7 +159,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -179,8 +179,8 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             WHERE \
                 uart.user__id = $1 \
                 AND uart.user_device__id = $2;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &by_2.user__id,
                     Type::INT8,
@@ -192,7 +192,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -204,7 +204,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -223,15 +223,15 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                     public.user_access_refresh_token AS uart \
                 WHERE \
                     uart.user__id = $1;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage.add(
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage.add(
                 &by_1.user__id,
                 Type::INT8,
             );
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -243,7 +243,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -271,8 +271,8 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 WHERE \
                     uart.user__id = $1 \
                     AND uart.user_device__id = $2;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &by_2.user__id,
                     Type::INT8,
@@ -284,7 +284,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -296,7 +296,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             let row_registry = database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

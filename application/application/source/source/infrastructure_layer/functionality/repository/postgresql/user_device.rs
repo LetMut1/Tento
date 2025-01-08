@@ -1,6 +1,6 @@
 use super::{
     Postgresql,
-    PreparedStatementParameterStorage,
+    ParameterStorage,
 };
 use crate::{
     domain_layer::data::entity::user_device::UserDevice,
@@ -35,8 +35,8 @@ impl Repository<Postgresql<UserDevice>> {
                 ON CONFLICT ON CONSTRAINT \
                     user_device2 \
                 DO NOTHING;";
-            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
-            prepared_statemant_parameter_storage
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
                 .add(
                     &insert_1.user_device__id,
                     Type::TEXT,
@@ -48,7 +48,7 @@ impl Repository<Postgresql<UserDevice>> {
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -60,7 +60,7 @@ impl Repository<Postgresql<UserDevice>> {
             database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

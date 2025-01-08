@@ -74,15 +74,8 @@ use hyper_util::rt::{
 };
 use matchit::Router;
 use std::{
-    error::Error,
     future::Future,
-    sync::{
-        atomic::{
-            AtomicI64,
-            Ordering,
-        },
-        Arc,
-    },
+    sync::Arc,
     time::Duration,
 };
 use tokio::{
@@ -91,7 +84,6 @@ use tokio::{
 };
 #[cfg(not(feature = "postgresql_connection_with_tls"))]
 use tokio_postgres::NoTls;
-static CONNECTION_QUANTITY: AtomicI64 = AtomicI64::new(0);
 pub struct HttpServer;
 impl HttpServer {
     pub fn run(environment_configuration: &'static EnvironmentConfiguration<RunServer>) -> impl Future<Output = Result<(), AggregateError>> + Send {
@@ -257,54 +249,71 @@ impl HttpServer {
                                         ),
                                     )?;
                                     if http1_socket_address.port() == socket_address_port.port() {
-                                        Self::spawn_serving_connection(
-                                            http1_builder.serve_connection(
-                                                TokioIo::new(tcp_stream_),
-                                                service_fn,
-                                            ),
+                                        let serving_connection_future = http1_builder.serve_connection(
+                                            TokioIo::new(tcp_stream_),
+                                            service_fn,
+                                        );
+                                        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                                            async move {
+                                                return serving_connection_future.await.into_runtime(
+                                                    Backtrace::new(
+                                                        line!(),
+                                                        file!(),
+                                                    ),
+                                                );
+                                            },
                                         );
                                     } else {
-                                        Self::spawn_serving_connection(
-                                            http2_builder.serve_connection(
-                                                TokioIo::new(tcp_stream_),
-                                                service_fn,
-                                            ),
+                                        let serving_connection_future = http2_builder.serve_connection(
+                                            TokioIo::new(tcp_stream_),
+                                            service_fn,
+                                        );
+                                        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                                            async move {
+                                                return serving_connection_future.await.into_runtime(
+                                                    Backtrace::new(
+                                                        line!(),
+                                                        file!(),
+                                                    ),
+                                                );
+                                            },
                                         );
                                     };
                                 }
                                 #[cfg(not(feature = "port_for_manual_test"))]
-                                Self::spawn_connection_serving(
-                                    http2_builder.serve_connection(
+                                {
+                                    let serving_connection_future = http2_builder.serve_connection(
                                         TokioIo::new(tcp_stream_),
                                         service_fn,
-                                    ),
-                                );
+                                    );
+                                    Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                                        async move {
+                                            return serving_connection_future.await.into_runtime(
+                                                Backtrace::new(
+                                                    line!(),
+                                                    file!(),
+                                                ),
+                                            );
+                                        },
+                                    );
+                                }
                                 continue 'b;
                             },
                         }
                     }
-                    let completion_by_connection_quantity_future = async {
-                        'b: loop {
-                            if CONNECTION_QUANTITY.load(Ordering::Relaxed) != 0 {
-                                tokio::time::sleep(Duration::from_millis(100)).await;
-                                continue 'b;
+                    let completion_by_timer_future = async {
+                        print!("Remaining time in seconds before shutdown:");
+                        '_b: for seconds_quantity in 15..=1 {
+                            if seconds_quantity != 1 {
+                                print!(" {},", seconds_quantity);
                             } else {
-                                break 'b;
+                                print!("{}.", seconds_quantity);
                             }
+                            tokio::time::sleep(Duration::from_secs(1)).await;
                         }
                         return ();
                     };
-                    let completion_by_timer_future = async {
-                        tokio::time::sleep(Duration::from_secs(90)).await;
-                        return ();
-                    };
-                    let completion_by_connection_quantity_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(completion_by_connection_quantity_future);
-                    let completion_by_timer_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(completion_by_timer_future);
-                    tokio::select! {
-                        biased;
-                        _ = completion_by_connection_quantity_join_handle => {},
-                        _ = completion_by_timer_join_handle => {},
-                    }
+                    let _ = Spawner::<TokioNonBlockingTask>::spawn_processed(completion_by_timer_future).await;
                     return Result::<_, AggregateError>::Ok(());
                 };
                 match Spawner::<TokioNonBlockingTask>::spawn_processed(future)
@@ -964,33 +973,6 @@ impl HttpServer {
                 )?;
         }
         return Result::Ok(router);
-    }
-    fn spawn_serving_connection<T, E>(serving_connection_future: T) -> ()
-    where
-        T: Future<Output = Result<(), E>> + Send + 'static,
-        E: Error + Send + Sync + 'static,
-    {
-        Spawner::<TokioNonBlockingTask>::spawn_into_background(
-            async move {
-                const STEP: i64 = 1;
-                CONNECTION_QUANTITY.fetch_add(
-                    STEP,
-                    Ordering::Relaxed,
-                );
-                let result = serving_connection_future.await.into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-                CONNECTION_QUANTITY.fetch_sub(
-                    STEP,
-                    Ordering::Relaxed,
-                );
-                return result;
-            },
-        );
-        return ();
     }
     fn process_request(
         request: Request,

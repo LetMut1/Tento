@@ -77,11 +77,11 @@ use tokio_postgres::types::{
 pub struct Postgresql<E> {
     _entity: PhantomData<E>,
 }
-struct PreparedStatementParameterStorage<'a, 'b> {
+struct ParameterStorage<'a, 'b> {
     parameter_registry: Vec<&'a (dyn ToSql + Sync + 'b)>,
     parameter_type_registry: Vec<Type>,
 }
-impl<'a, 'b> PreparedStatementParameterStorage<'a, 'b> {
+impl<'a, 'b> ParameterStorage<'a, 'b> {
     pub fn new() -> Self {
         return Self {
             parameter_registry: vec![],
@@ -178,23 +178,23 @@ impl Resolver<Transaction<'_>> {
             );
         };
     }
-    pub fn commit<'a>(postgresql_transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn commit<'a>(transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            if let Result::Err(aggregate_error) = postgresql_transaction.client.simple_query("COMMIT;").await.into_runtime(
+            if let Result::Err(aggregate_error) = transaction.client.simple_query("COMMIT;").await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
             ) {
-                let _ = postgresql_transaction.client.simple_query("ROLLBACK;").await;
+                let _ = transaction.client.simple_query("ROLLBACK;").await;
                 return Result::Err(aggregate_error);
             }
             return Result::Ok(());
         };
     }
-    pub fn rollback<'a>(postgresql_transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn rollback<'a>(transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            postgresql_transaction.client.simple_query("ROLLBACK;").await.into_runtime(
+            transaction.client.simple_query("ROLLBACK;").await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
