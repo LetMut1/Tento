@@ -1,0 +1,36 @@
+[lib]
+name = "level_2"
+path = "./source/mod.rs"
+test = true
+doctest = true
+bench = true
+doc = true
+proc-macro = false
+harness = true
+edition = "2021"
+crate-type = ["staticlib"]
+required-features = []
+
+[package]
+name = "level_2"
+version = "1.0.0"
+authors.workspace = true
+edition = "2021"
+rust-version.workspace = true
+build = "./build.rs"
+
+[dependencies]
+bitcode = { workspace = true }
+dedicated_crate = { workspace = true }
+libc = { package = "libc", version = "=0.2.158", default-features = true, features = [], optional = false }
+
+[build-dependencies]
+cargo-emit = { package = "cargo-emit", version = "=0.2.1", default-features = true, features = [], optional = false }
+cbindgen = { package = "cbindgen", version = "=0.27.0", default-features = true, features = [], optional = false }
+uuid = { package = "uuid", version = "=1.10.0", default-features = true, features = ["v4"], optional = false }
+
+[features]
+default = []
+
+[lints]
+workspace = true

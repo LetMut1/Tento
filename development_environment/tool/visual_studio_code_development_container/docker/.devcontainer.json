@@ -18,7 +18,6 @@
 				},
 				"rust-analyzer.linkedProjects": [
 					"/_tento/application/application/Cargo.toml",
-					"/_tento/application/application/source/foreign_function_interface/client_server_data_serializer/source/Cargo.toml"
 				],
 				"rust-analyzer.updates.askBeforeDownload": false,
 				"rust-analyzer.cargo.allFeatures": true,
