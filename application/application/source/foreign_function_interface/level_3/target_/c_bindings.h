@@ -30,7 +30,7 @@ typedef enum E_Tag {
 
 typedef struct One_Body {
   char a;
-  char *b;
+  char *b_pointer_to_string;
 } One_Body;
 
 typedef struct Two_Body {

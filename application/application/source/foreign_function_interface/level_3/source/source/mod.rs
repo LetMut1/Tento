@@ -142,7 +142,7 @@ pub extern "C" fn is_d_one(d: *mut D) -> bool {
 pub enum E {
     One {
         a: c_char,
-        b: *mut c_char
+        b_pointer_to_string: *mut c_char
     },
     Two {
         a: bool,
@@ -154,7 +154,7 @@ pub extern "C" fn get_e__allocate_1() -> *mut E {
         Box::new(
             E::One {
                 a: 69,
-                b: CString::new("Nigger").unwrap().into_raw(),
+                b_pointer_to_string: CString::new("Nigger").unwrap().into_raw(),
             },
         ),
     );
@@ -177,10 +177,10 @@ pub extern "C" fn get_e__deallocate(e: *mut E) -> () {
     match *e {
         E::One {
             a,
-            b
+            b_pointer_to_string,
         } => {
             let _ = unsafe {
-                CString::from_raw(b)
+                CString::from_raw(b_pointer_to_string)
             };
         }
         _ => {}
@@ -195,12 +195,12 @@ pub extern "C" fn is_e_one_69_nigger(e: *mut E) -> bool {
     match *e {
         E::One {
             a,
-            b
+            b_pointer_to_string,
         } => {
-            let b_ = unsafe {
-                CStr::from_ptr(b).to_str().unwrap()
+            let b_pointer_to_string_ = unsafe {
+                CStr::from_ptr(b_pointer_to_string).to_str().unwrap()
             };
-            return a == 69 && b_ == "Nigger";
+            return a == 69 && b_pointer_to_string_ == "Nigger";
         }
         _ => {}
     }
