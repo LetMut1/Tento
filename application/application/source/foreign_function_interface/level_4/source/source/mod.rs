@@ -206,7 +206,7 @@ pub extern "C" fn get_e__deallocate(e: *mut E) -> () {
     };
     match *e {
         E::One {
-            a,
+            a: _,
             b_pointer_to_string,
         } => {
             let _ = unsafe {
