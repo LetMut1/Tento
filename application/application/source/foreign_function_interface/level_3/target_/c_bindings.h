@@ -9,8 +9,8 @@ typedef enum C {
 } C;
 
 typedef enum D {
-  One,
-  Two,
+  Three,
+  Four,
 } D;
 
 typedef struct A {
@@ -24,24 +24,24 @@ typedef struct B {
 } B;
 
 typedef enum E_Tag {
-  One,
-  Two,
+  Five,
+  Six,
 } E_Tag;
 
-typedef struct One_Body {
+typedef struct Five_Body {
   char a;
   char *b_pointer_to_string;
-} One_Body;
+} Five_Body;
 
-typedef struct Two_Body {
+typedef struct Six_Body {
   bool a;
-} Two_Body;
+} Six_Body;
 
 typedef struct E {
   E_Tag tag;
   union {
-    One_Body one;
-    Two_Body two;
+    Five_Body five;
+    Six_Body six;
   };
 } E;
 

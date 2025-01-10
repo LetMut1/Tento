@@ -112,15 +112,15 @@ pub extern "C" fn is_c_one(c: C) -> bool {
 #[repr(C)]
 #[derive(PartialEq, Eq)]
 pub enum D {
-    One,
-    Two,
+    Three,
+    Four,
 }
 #[no_mangle]
 pub extern "C" fn get_d__allocate(number: c_uchar) -> *mut D {
     let d = if number <= 127 {
-        D::One
+        D::Three
     } else {
-        D::Two
+        D::Four
     };
     return Box::into_raw(Box::new(d));
 }
@@ -136,15 +136,15 @@ pub extern "C" fn is_d_one(d: *mut D) -> bool {
     let d = unsafe {
         Box::from_raw(d)
     };
-    return d.as_ref() == &D::One;
+    return d.as_ref() == &D::Three;
 }
 #[repr(C)]
 pub enum E {
-    One {
+    Five {
         a: c_char,
         b_pointer_to_string: *mut c_char
     },
-    Two {
+    Six {
         a: bool,
     },
 }
@@ -152,7 +152,7 @@ pub enum E {
 pub extern "C" fn get_e__allocate_1() -> *mut E {
     return Box::into_raw(
         Box::new(
-            E::One {
+            E::Five {
                 a: 69,
                 b_pointer_to_string: CString::new("Nigger").unwrap().into_raw(),
             },
@@ -163,7 +163,7 @@ pub extern "C" fn get_e__allocate_1() -> *mut E {
 pub extern "C" fn get_e__allocate_2() -> *mut E {
     return Box::into_raw(
         Box::new(
-            E::Two {
+            E::Six {
                 a: true,
             },
         )
@@ -175,7 +175,7 @@ pub extern "C" fn get_e__deallocate(e: *mut E) -> () {
         Box::from_raw(e)
     };
     match *e {
-        E::One {
+        E::Five {
             a: _,
             b_pointer_to_string,
         } => {
@@ -193,7 +193,7 @@ pub extern "C" fn is_e_one_69_nigger(e: *mut E) -> bool {
         Box::from_raw(e)
     };
     match *e {
-        E::One {
+        E::Five {
             a,
             b_pointer_to_string,
         } => {
