@@ -2844,7 +2844,8 @@ mod test {
             let _single_thread_execution_guard = SINGLE_THREAD_EXECUTION_GUARD.lock()?;
             let region = Region::new(&GLOBAL_ALLOCATOR);
             functionality()?;
-            if region.change().bytes_allocated > 0 {
+            let statistics = region.change();
+            if statistics.bytes_allocated != statistics.bytes_deallocated {
                 return Result::Err(DEALLOCATION_ERROR.into());
             }
             return Result::Ok(());
@@ -2864,21 +2865,21 @@ mod test {
             };
             return single_thread_allocation_counting_wrapper(c_vector_clone_);
         }
-        // #[test]
-        // fn c_string_clone() -> Result<(), Box<dyn StdError + 'static>> {
-        //     let c_string_clone_ = || -> _ {
-        //         let c_string = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
-        //         {
-        //             let _ = c_string.clone_as_string()?;
-        //         }
-        //         if c_string.pointer.is_null() {
-        //             return Result::Err(ALLOCATION_ERROR.into());
-        //         }
-        //         Allocator::<CString>::deallocate(&c_string);
-        //         return Result::<_, Box<dyn StdError + 'static>>::Ok(());
-        //     };
-        //     return single_thread_allocation_counting_wrapper(c_string_clone_);
-        // }
+        #[test]
+        fn c_string_clone() -> Result<(), Box<dyn StdError + 'static>> {
+            let c_string_clone_ = || -> _ {
+                let c_string = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
+                {
+                    let _ = c_string.clone_as_string()?;
+                }
+                if c_string.pointer.is_null() {
+                    return Result::Err(ALLOCATION_ERROR.into());
+                }
+                Allocator::<CString>::deallocate(&c_string);
+                return Result::<_, Box<dyn StdError + 'static>>::Ok(());
+            };
+            return single_thread_allocation_counting_wrapper(c_string_clone_);
+        }
 
 
 
