@@ -405,9 +405,11 @@ struct Transformer<S> {
 struct ServerRequestData;
 struct ServerResponseData;
 impl Transformer<ServerResponseData> {
-    fn transform<F, O1, P1, O2, P2>(c_vector_of_bytes: CVector<c_uchar>, converter: F) -> CResult<CUnifiedReport<O2, P2>>
+    fn transform<O1, P1, O2, P2>(
+        c_vector_of_bytes: CVector<c_uchar>,
+        converter: impl FnOnce(UnifiedReport<O1, P1>) -> Result<CUnifiedReport<O2, P2>, Box<dyn StdError + 'static>>
+    ) -> CResult<CUnifiedReport<O2, P2>>
     where
-        F: FnOnce(UnifiedReport<O1, P1>) -> Result<CUnifiedReport<O2, P2>, Box<dyn StdError + 'static>>,
         O1: for<'a> Decode<'a>,
         P1: for<'a> Decode<'a>,
         O2: Default,
@@ -432,9 +434,11 @@ impl Transformer<ServerResponseData> {
     }
 }
 impl Transformer<ServerRequestData> {
-    fn transform<I1, F, I2>(incoming: I1, converter: F) -> CResult<CVector<c_uchar>>
+    fn transform<I1, I2>(
+        incoming: I1,
+        converter: impl for<'a> FnOnce(&'a I1) -> Result<I2, Box<dyn StdError + 'static>>
+    ) -> CResult<CVector<c_uchar>>
     where
-        F: for<'a> FnOnce(&'a I1) -> Result<I2, Box<dyn StdError + 'static>>,
         I2: Encode,
     {
         let incoming_ = match converter(&incoming) {
@@ -2834,55 +2838,32 @@ mod test {
         use std::sync::Mutex;
         use stats_alloc::Region;
         static SINGLE_THREAD_EXECUTION_GUARD: Mutex<()> = Mutex::new(());
-
-        #[test]
-        fn a() -> Result<(), Box<dyn StdError + 'static>> {
-            // let _ = SINGLE_THREAD_EXECUTION_GUARD.lock()?; DROP
-            // + impl FnOne
-
-            return Ok(());
+        fn single_thread_allocation_counting_wrapper(
+            functionality: impl FnOnce() -> Result<(), Box<dyn StdError + 'static>>,
+        ) -> Result<(), Box<dyn StdError + 'static>> {
+            let _single_thread_execution_guard = SINGLE_THREAD_EXECUTION_GUARD.lock()?;
+            let region = Region::new(&GLOBAL_ALLOCATOR);
+            functionality()?;
+            if region.change().bytes_allocated > 0 {
+                return Result::Err(DEALLOCATION_ERROR.into());
+            }
+            return Result::Ok(());
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // fn single_thread_allocation_counting_wrapper(
-        //     functionality: impl FnOnce() -> Result<(), Box<dyn StdError + 'static>>,
-        // ) -> Result<(), Box<dyn StdError + 'static>> {
-        //     // let _ = SINGLE_THREAD_EXECUTION_GUARD.lock()?;
-        //     // let region = Region::new(&GLOBAL_ALLOCATOR);
-        //     // functionality()?;
-        //     // if region.change().bytes_allocated > 0 {
-        //     //     return Result::Err(DEALLOCATION_ERROR.into());
-        //     // }
-        //     return Result::Ok(());
-        // }
-        // #[test]
-        // fn c_vector_clone() -> Result<(), Box<dyn StdError + 'static>> {
-        //     let c_vector_clone_ = || -> _ {
-        //         let c_vector = Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec());
-        //         {
-        //             let _ = c_vector.clone_as_vec()?;
-        //         }
-        //         if c_vector.pointer.is_null() {
-        //             return Result::Err(ALLOCATION_ERROR.into());
-        //         }
-        //         Allocator::<CVector<_>>::deallocate(&c_vector);
-        //         return Result::<_, Box<dyn StdError + 'static>>::Ok(());
-        //     };
-        //     return single_thread_allocation_counting_wrapper(c_vector_clone_);
-        // }
+        #[test]
+        fn c_vector_clone() -> Result<(), Box<dyn StdError + 'static>> {
+            let c_vector_clone_ = || -> _ {
+                let c_vector = Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec());
+                {
+                    let _ = c_vector.clone_as_vec()?;
+                }
+                if c_vector.pointer.is_null() {
+                    return Result::Err(ALLOCATION_ERROR.into());
+                }
+                Allocator::<CVector<_>>::deallocate(&c_vector);
+                return Result::<_, Box<dyn StdError + 'static>>::Ok(());
+            };
+            return single_thread_allocation_counting_wrapper(c_vector_clone_);
+        }
         // #[test]
         // fn c_string_clone() -> Result<(), Box<dyn StdError + 'static>> {
         //     let c_string_clone_ = || -> _ {

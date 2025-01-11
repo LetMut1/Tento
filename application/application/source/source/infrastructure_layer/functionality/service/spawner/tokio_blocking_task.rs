@@ -6,9 +6,10 @@ use crate::infrastructure_layer::{
 use tokio::task::JoinHandle;
 pub struct TokioBlockingTask;
 impl Spawner<TokioBlockingTask> {
-    pub fn spawn_into_background<F, T>(closure: F) -> ()
+    pub fn spawn_into_background<T>(
+        closure: impl FnOnce() -> Result<T, AggregateError> + Send + 'static,
+    ) -> ()
     where
-        F: FnOnce() -> Result<T, AggregateError> + Send + 'static,
         T: Send + 'static,
     {
         tokio::task::spawn_blocking(
@@ -20,9 +21,10 @@ impl Spawner<TokioBlockingTask> {
             },
         );
     }
-    pub fn spawn_processed<F, R>(closure: F) -> JoinHandle<R>
+    pub fn spawn_processed<R>(
+        closure: impl FnOnce() -> R + Send + 'static,
+    ) -> JoinHandle<R>
     where
-        F: FnOnce() -> R + Send + 'static,
         R: Send + 'static,
     {
         return tokio::task::spawn_blocking(closure);
