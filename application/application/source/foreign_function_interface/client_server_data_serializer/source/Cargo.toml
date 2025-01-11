@@ -25,9 +25,9 @@ dedicated_crate = { workspace = true }
 libc = { package = "libc", version = "=0.2.158", default-features = true, features = [], optional = false }
 
 [build-dependencies]
-cargo-emit = { package = "cargo-emit", version = "=0.2.1", default-features = true, features = [], optional = false }
+cargo-emit = { workspace = true }
 cbindgen = { package = "cbindgen", version = "=0.27.0", default-features = true, features = [], optional = false }
-uuid = { package = "uuid", version = "=1.10.0", default-features = true, features = ["v4"], optional = false }
+uuid = { workspace = true }
 
 [features]
 default = []
