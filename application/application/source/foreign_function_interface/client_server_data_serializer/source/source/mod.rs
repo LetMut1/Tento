@@ -2816,1325 +2816,1380 @@ pub extern "C" fn channel_subscription__create_deserialize_deallocate(c_result: 
 #[cfg(test)]
 mod test {
     use super::*;
+    use stats_alloc::{
+        StatsAlloc,
+        INSTRUMENTED_SYSTEM
+    };
+    use std::alloc::System;
+    const NOT_EMPTY_STRING_LITERAL: &'static str = "qwerty";
+    const NOT_EMPTY_ARRAY_LITERAL: [u8; 3] = [
+        0,
+        1,
+        2,
+    ];
+    #[global_allocator]
+    static GLOBAL_ALLOCATOR: &'static StatsAlloc<System> = &INSTRUMENTED_SYSTEM;
     mod deallocation {
         use super::*;
-        const NOT_EMPTY_STRING_LITERAL: &'static str = "qwerty";
-        const NOT_EMPTY_ARRAY_LITERAL: [u8; 3] = [
-            0,
-            1,
-            2,
-        ];
+        use std::sync::Mutex;
+        use stats_alloc::Region;
+        static SINGLE_THREAD_EXECUTION_GUARD: Mutex<()> = Mutex::new(());
+
         #[test]
-        fn c_vector_clone() -> Result<(), Box<dyn StdError + 'static>> {
-            let c_vector = Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec());
-            {
-                let _ = c_vector.clone_as_vec()?;
-            }
-            if c_vector.pointer.is_null() {
-                return Result::Err(ALLOCATION_ERROR.into());
-            }
-            Allocator::<CVector<_>>::deallocate(&c_vector);
-            return Result::Ok(());
+        fn a() -> Result<(), Box<dyn StdError + 'static>> {
+            // let _ = SINGLE_THREAD_EXECUTION_GUARD.lock()?; DROP
+            // + impl FnOne
+
+            return Ok(());
         }
-        #[test]
-        fn c_string_clone() -> Result<(), Box<dyn StdError + 'static>> {
-            let c_string = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
-            {
-                let _ = c_string.clone_as_string()?;
-            }
-            if c_string.pointer.is_null() {
-                return Result::Err(ALLOCATION_ERROR.into());
-            }
-            Allocator::<CString>::deallocate(&c_string);
-            return Result::Ok(());
-        }
-        mod server_response_data_deserialization {
-            use super::*;
-            fn run_by_template<'a, T, E>(
-                data: &'a T,
-                allocator: extern "C" fn(CVector<c_uchar>) -> CResult<E>,
-                deallocator: extern "C" fn(CResult<E>) -> (),
-            ) -> Result<(), Box<dyn StdError + 'static>>
-            where
-                T: Encode,
-            {
-                let c_vector = Allocator::<CVector<_>>::allocate(
-                    Serializer::serialize(data),
-                );
-                deallocator(allocator(c_vector));
-                Allocator::<CVector<_>>::deallocate(&c_vector);
-                return Result::Ok(());
-            }
-            // Needed to test all `unified_report::UnifiedReport` variants.
-            mod unified_report {
-                use super::*;
-                use dedicated_crate::action_processor_incoming_outcoming::{
-                    Channel1 as Channel1_,
-                    Channel2 as Channel2_,
-                    ChannelInnerLink1 as ChannelInnerLink1_,
-                    ChannelOuterLink1 as ChannelOuterLink1_,
-                    Common1 as Common1_,
-                };
-                #[test]
-                fn target_empty__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming_, UserAuthorization_AuthorizeByFirstStep_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__authorize_by_first_step__deserialize_allocate,
-                        user_authorization__authorize_by_first_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = UserAuthorization_AuthorizeByFirstStep_Outcoming_ {
-                        user__id: 0,
-                        verification_message_sent: false,
-                        user_authorization_token__can_be_resent_from: 0,
-                        user_authorization_token__wrong_enter_tries_quantity: 0,
-                        user_authorization_token__wrong_enter_tries_quantity_limit: 0,
-                    };
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming_, UserAuthorization_AuthorizeByFirstStep_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__authorize_by_first_step__deserialize_allocate,
-                        user_authorization__authorize_by_first_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let precedent = UserAuthorization_AuthorizeByFirstStep_Precedent_::User_WrongEmailOrNicknameOrPassword;
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming_, UserAuthorization_AuthorizeByFirstStep_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__authorize_by_first_step__deserialize_allocate,
-                        user_authorization__authorize_by_first_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_empty__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming_, UserAuthorization_AuthorizeByLastStep_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__authorize_by_last_step__deserialize_allocate,
-                        user_authorization__authorize_by_last_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = UserAuthorization_AuthorizeByLastStep_Outcoming_ {
-                        user_access_token_encoded: UserAccessTokenEncoded_ {
-                            serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
-                            encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
-                        },
-                        user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                    };
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming_, UserAuthorization_AuthorizeByLastStep_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__authorize_by_last_step__deserialize_allocate,
-                        user_authorization__authorize_by_last_step__deserialize_deallocate,
-                    );
-                }
-                fn _precedent__user_authorization__authorize_by_last_step(precedent: UserAuthorization_AuthorizeByLastStep_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming_, UserAuthorization_AuthorizeByLastStep_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__authorize_by_last_step__deserialize_allocate,
-                        user_authorization__authorize_by_last_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<UserAuthorization_AuthorizeByLastStep_Precedent_> = vec![];
-                    precedent_registry.push(UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_NotFound);
-                    precedent_registry.push(UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_AlreadyExpired);
-                    precedent_registry.push(
-                        UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_WrongValue {
-                            user_authorization_token__wrong_enter_tries_quantity: 0,
-                        },
-                    );
-                    precedent_registry.push(UserAuthorization_AuthorizeByLastStep_Precedent_::User_NotFound);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__user_authorization__authorize_by_last_step(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__user_authorization__check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<UserAuthorization_CheckEmailForExisting_Outcoming_, Void>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__check_email_for_existing__deserialize_allocate,
-                        user_authorization__check_email_for_existing__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = UserAuthorization_CheckEmailForExisting_Outcoming_ {
-                        result: false,
-                    };
-                    let unified_report = UnifiedReport::<UserAuthorization_CheckEmailForExisting_Outcoming_, Void>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__check_email_for_existing__deserialize_allocate,
-                        user_authorization__check_email_for_existing__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__user_authorization__check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__check_nickname_for_existing__deserialize_allocate,
-                        user_authorization__check_nickname_for_existing__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = UserAuthorization_CheckNicknameForExisting_Outcoming_ {
-                        result: false,
-                    };
-                    let unified_report = UnifiedReport::<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__check_nickname_for_existing__deserialize_allocate,
-                        user_authorization__check_nickname_for_existing__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__deauthorize_from_all_devices__deserialize_allocate,
-                        user_authorization__deauthorize_from_all_devices__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Result::Ok(());
-                }
-                fn _precedent__user_authorization__deauthorize_from_all_devices(
-                    precedent: UserAuthorization_DeauthorizeFromAllDevices_Precedent_,
-                ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__deauthorize_from_all_devices__deserialize_allocate,
-                        user_authorization__deauthorize_from_all_devices__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<UserAuthorization_DeauthorizeFromAllDevices_Precedent_> = vec![];
-                    precedent_registry.push(UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired);
-                    precedent_registry.push(UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__user_authorization__deauthorize_from_all_devices(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__deauthorize_from_one_device__deserialize_allocate,
-                        user_authorization__deauthorize_from_one_device__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Result::Ok(());
-                }
-                fn _precedent__user_authorization__deauthorize_from_one_device(
-                    precedent: UserAuthorization_DeauthorizeFromOneDevice_Precedent_,
-                ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__deauthorize_from_one_device__deserialize_allocate,
-                        user_authorization__deauthorize_from_one_device__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<UserAuthorization_DeauthorizeFromOneDevice_Precedent_> = vec![];
-                    precedent_registry.push(UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired);
-                    precedent_registry.push(UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__user_authorization__deauthorize_from_one_device(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming_, UserAuthorization_RefreshAccessToken_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__refresh_access_token__deserialize_allocate,
-                        user_authorization__refresh_access_token__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = UserAuthorization_RefreshAccessToken_Outcoming_ {
-                        user_access_token_encoded: UserAccessTokenEncoded_ {
-                            serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
-                            encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
-                        },
-                        user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                    };
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming_, UserAuthorization_RefreshAccessToken_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__refresh_access_token__deserialize_allocate,
-                        user_authorization__refresh_access_token__deserialize_deallocate,
-                    );
-                }
-                fn _precedent__user_authorization__refresh_access_token(precedent: UserAuthorization_RefreshAccessToken_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming_, UserAuthorization_RefreshAccessToken_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__refresh_access_token__deserialize_allocate,
-                        user_authorization__refresh_access_token__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<UserAuthorization_RefreshAccessToken_Precedent_> = vec![];
-                    precedent_registry.push(UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_NotFound);
-                    precedent_registry.push(UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_AlreadyExpired);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__user_authorization__refresh_access_token(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<UserAuthorization_RegisterByFirstStep_Outcoming_, UserAuthorization_RegisterByFirstStep_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__register_by_first_step__deserialize_allocate,
-                        user_authorization__register_by_first_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = UserAuthorization_RegisterByFirstStep_Outcoming_ {
-                        verification_message_sent: false,
-                        user_registration_token__can_be_resent_from: 0,
-                        user_registration_token__wrong_enter_tries_quantity: 0,
-                        user_registration_token__wrong_enter_tries_quantity_limit: 0,
-                    };
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_RegisterByFirstStep_Outcoming_, UserAuthorization_RegisterByFirstStep_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__register_by_first_step__deserialize_allocate,
-                        user_authorization__register_by_first_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let precedent = UserAuthorization_RegisterByFirstStep_Precedent_::User_EmailAlreadyExist;
-                    let unified_report = UnifiedReport::<UserAuthorization_RegisterByFirstStep_Outcoming_, UserAuthorization_RegisterByFirstStep_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__register_by_first_step__deserialize_allocate,
-                        user_authorization__register_by_first_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_empty__user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, UserAuthorization_RegisterBySecondStep_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__register_by_second_step__deserialize_allocate,
-                        user_authorization__register_by_second_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Result::Ok(());
-                }
-                fn _precedent__user_authorization__register_by_second_step(
-                    precedent: UserAuthorization_RegisterBySecondStep_Precedent_,
-                ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, UserAuthorization_RegisterBySecondStep_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__register_by_second_step__deserialize_allocate,
-                        user_authorization__register_by_second_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<UserAuthorization_RegisterBySecondStep_Precedent_> = vec![];
-                    precedent_registry.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_NotFound);
-                    precedent_registry.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyExpired);
-                    precedent_registry.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyApproved);
-                    precedent_registry.push(
-                        UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_WrongValue {
-                            user_registration_token__wrong_enter_tries_quantity: 0,
-                        },
-                    );
-                    '_a: for precedent in precedent_registry {
-                        _precedent__user_authorization__register_by_second_step(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming_, UserAuthorization_RegisterByLastStep_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__register_by_last_step__deserialize_allocate,
-                        user_authorization__register_by_last_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = UserAuthorization_RegisterByLastStep_Outcoming_ {
-                        user_access_token_encoded: UserAccessTokenEncoded_ {
-                            serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
-                            encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
-                        },
-                        user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                    };
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming_, UserAuthorization_RegisterByLastStep_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__register_by_last_step__deserialize_allocate,
-                        user_authorization__register_by_last_step__deserialize_deallocate,
-                    );
-                }
-                fn _precedent__user_authorization__register_by_last_step(precedent: UserAuthorization_RegisterByLastStep_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming_, UserAuthorization_RegisterByLastStep_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__register_by_last_step__deserialize_allocate,
-                        user_authorization__register_by_last_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<UserAuthorization_RegisterByLastStep_Precedent_> = vec![];
-                    precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::User_NicknameAlreadyExist);
-                    precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::User_EmailAlreadyExist);
-                    precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_NotFound);
-                    precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_AlreadyExpired);
-                    precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_IsNotApproved);
-                    precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_WrongValue);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__user_authorization__register_by_last_step(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_ResetPasswordByFirstStep_Outcoming_, UserAuthorization_ResetPasswordByFirstStep_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__reset_password_by_first_step__deserialize_allocate,
-                        user_authorization__reset_password_by_first_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = UserAuthorization_ResetPasswordByFirstStep_Outcoming_ {
-                        user__id: 0,
-                        verification_message_sent: false,
-                        user_reset_password_token__can_be_resent_from: 0,
-                        user_reset_password_token__wrong_enter_tries_quantity: 0,
-                        user_reset_password_token__wrong_enter_tries_quantity_limit: 0,
-                    };
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_ResetPasswordByFirstStep_Outcoming_, UserAuthorization_ResetPasswordByFirstStep_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__reset_password_by_first_step__deserialize_allocate,
-                        user_authorization__reset_password_by_first_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let precedent = UserAuthorization_ResetPasswordByFirstStep_Precedent_::User_NotFound;
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_ResetPasswordByFirstStep_Outcoming_, UserAuthorization_ResetPasswordByFirstStep_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__reset_password_by_first_step__deserialize_allocate,
-                        user_authorization__reset_password_by_first_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_empty__user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__reset_password_by_second_step__deserialize_allocate,
-                        user_authorization__reset_password_by_second_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Result::Ok(());
-                }
-                fn _precedent__user_authorization__reset_password_by_second_step(
-                    precedent: UserAuthorization_ResetPasswordBySecondStep_Precedent_,
-                ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__reset_password_by_second_step__deserialize_allocate,
-                        user_authorization__reset_password_by_second_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<UserAuthorization_ResetPasswordBySecondStep_Precedent_> = vec![];
-                    precedent_registry.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_NotFound);
-                    precedent_registry.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyExpired);
-                    precedent_registry.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyApproved);
-                    precedent_registry.push(
-                        UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_WrongValue {
-                            user_reset_password_token__wrong_enter_tries_quantity: 0,
-                        },
-                    );
-                    '_a: for precedent in precedent_registry {
-                        _precedent__user_authorization__reset_password_by_second_step(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__reset_password_by_last_step__deserialize_allocate,
-                        user_authorization__reset_password_by_last_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Result::Ok(());
-                }
-                fn _precedent__user_authorization__reset_password_by_last_step(
-                    precedent: UserAuthorization_ResetPasswordByLastStep_Precedent_,
-                ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__reset_password_by_last_step__deserialize_allocate,
-                        user_authorization__reset_password_by_last_step__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<UserAuthorization_ResetPasswordByLastStep_Precedent_> = vec![];
-                    precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::User_NotFound);
-                    precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_NotFound);
-                    precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_AlreadyExpired);
-                    precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_IsNotApproved);
-                    precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_WrongValue);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__user_authorization__reset_password_by_last_step(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<UserAuthorization_SendEmailForRegister_Outcoming_, UserAuthorization_SendEmailForRegister_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__send_email_for_register__deserialize_allocate,
-                        user_authorization__send_email_for_register__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = UserAuthorization_SendEmailForRegister_Outcoming_ {
-                        user_registration_token__can_be_resent_from: 0,
-                    };
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_SendEmailForRegister_Outcoming_, UserAuthorization_SendEmailForRegister_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__send_email_for_register__deserialize_allocate,
-                        user_authorization__send_email_for_register__deserialize_deallocate,
-                    );
-                }
-                fn _precedent__user_authorization__send_email_for_register(
-                    precedent: UserAuthorization_SendEmailForRegister_Precedent_,
-                ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_SendEmailForRegister_Outcoming_, UserAuthorization_SendEmailForRegister_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__send_email_for_register__deserialize_allocate,
-                        user_authorization__send_email_for_register__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<UserAuthorization_SendEmailForRegister_Precedent_> = vec![];
-                    precedent_registry.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_NotFound);
-                    precedent_registry.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyExpired);
-                    precedent_registry.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyApproved);
-                    precedent_registry.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_TimeToResendHasNotCome);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__user_authorization__send_email_for_register(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__send_email_for_authorize_deserialize_allocate,
-                        user_authorization__send_email_for_authorize_deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = UserAuthorization_SendEmailForAuthorize_Outcoming_ {
-                        user_authorization_token__can_be_resent_from: 0,
-                    };
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__send_email_for_authorize_deserialize_allocate,
-                        user_authorization__send_email_for_authorize_deserialize_deallocate,
-                    );
-                }
-                fn _precedent__user_authorization__send_email_for_authorize(
-                    precedent: UserAuthorization_SendEmailForAuthorize_Precedent_,
-                ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__send_email_for_authorize_deserialize_allocate,
-                        user_authorization__send_email_for_authorize_deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<UserAuthorization_SendEmailForAuthorize_Precedent_> = vec![];
-                    precedent_registry.push(UserAuthorization_SendEmailForAuthorize_Precedent_::User_NotFound);
-                    precedent_registry.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_NotFound);
-                    precedent_registry.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_AlreadyExpired);
-                    precedent_registry.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_TimeToResendHasNotCome);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__user_authorization__send_email_for_authorize(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_SendEmailForResetPassword_Outcoming_, UserAuthorization_SendEmailForResetPassword_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__send_email_for_reset_password__deserialize_allocate,
-                        user_authorization__send_email_for_reset_password__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = UserAuthorization_SendEmailForResetPassword_Outcoming_ {
-                        user_reset_password_token__can_be_resent_from: 0,
-                    };
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_SendEmailForResetPassword_Outcoming_, UserAuthorization_SendEmailForResetPassword_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__send_email_for_reset_password__deserialize_allocate,
-                        user_authorization__send_email_for_reset_password__deserialize_deallocate,
-                    );
-                }
-                fn _precedent__user_authorization__send_email_for_reset_password(
-                    precedent: UserAuthorization_SendEmailForResetPassword_Precedent_,
-                ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report =
-                        UnifiedReport::<UserAuthorization_SendEmailForResetPassword_Outcoming_, UserAuthorization_SendEmailForResetPassword_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        user_authorization__send_email_for_reset_password__deserialize_allocate,
-                        user_authorization__send_email_for_reset_password__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<UserAuthorization_SendEmailForResetPassword_Precedent_> = vec![];
-                    precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::User_NotFound);
-                    precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_NotFound);
-                    precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyExpired);
-                    precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyApproved);
-                    precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_TimeToResendHasNotCome);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__user_authorization__send_email_for_reset_password(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming_, Channel_GetManyByNameInSubscriptions_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        channel__get_many_by_name_in_subscriptions__deserialize_allocate,
-                        channel__get_many_by_name_in_subscriptions__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut common_registry: Vec<Common1_> = vec![];
-                    '_a: for _ in 1..=5 {
-                        let common_1 = Common1_ {
-                            channel: Channel1_ {
-                                channel__id: 0,
-                                channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                                channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                                channel__access_modifier: 0,
-                                channel__visability_modifier: 0,
-                                channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                                channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                            },
-                            is_user_subscribed: false,
-                        };
-                        common_registry.push(common_1);
-                    }
-                    let outcoming = Channel_GetManyByNameInSubscriptions_Outcoming_ {
-                        common_registry,
-                    };
-                    let unified_report =
-                        UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming_, Channel_GetManyByNameInSubscriptions_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        channel__get_many_by_name_in_subscriptions__deserialize_allocate,
-                        channel__get_many_by_name_in_subscriptions__deserialize_deallocate,
-                    );
-                }
-                fn _precedent__channel__get_many_by_name_in_subscriptions(precedent: Channel_GetManyByNameInSubscriptions_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming_, Channel_GetManyByNameInSubscriptions_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        channel__get_many_by_name_in_subscriptions__deserialize_allocate,
-                        channel__get_many_by_name_in_subscriptions__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<Channel_GetManyByNameInSubscriptions_Precedent_> = vec![];
-                    precedent_registry.push(Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired);
-                    precedent_registry.push(Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__channel__get_many_by_name_in_subscriptions(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming_, Channel_GetManyBySubscription_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        channel__get_many_by_subscription__deserialize_allocate,
-                        channel__get_many_by_subscription__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut common_registry: Vec<Common1_> = vec![];
-                    '_a: for _ in 1..=2 {
-                        let common_1 = Common1_ {
-                            channel: Channel1_ {
-                                channel__id: 0,
-                                channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                                channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                                channel__access_modifier: 0,
-                                channel__visability_modifier: 0,
-                                channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                                channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                            },
-                            is_user_subscribed: false,
-                        };
-                        common_registry.push(common_1);
-                    }
-                    let outcoming = Channel_GetManyBySubscription_Outcoming_ {
-                        common_registry,
-                    };
-                    let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming_, Channel_GetManyBySubscription_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        channel__get_many_by_subscription__deserialize_allocate,
-                        channel__get_many_by_subscription__deserialize_deallocate,
-                    );
-                }
-                fn _precedent__channel__get_many_by_subscription(precedent: Channel_GetManyBySubscription_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming_, Channel_GetManyBySubscription_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        channel__get_many_by_subscription__deserialize_allocate,
-                        channel__get_many_by_subscription__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<Channel_GetManyBySubscription_Precedent_> = vec![];
-                    precedent_registry.push(Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired);
-                    precedent_registry.push(Channel_GetManyBySubscription_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__channel__get_many_by_subscription(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        channel__get_many_public_by_name_deserialize_allocate,
-                        channel__get_many_public_by_name_deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut common_registry: Vec<Common1_> = vec![];
-                    '_a: for _ in 1..=5 {
-                        let common_1 = Common1_ {
-                            channel: Channel1_ {
-                                channel__id: 0,
-                                channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                                channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                                channel__access_modifier: 0,
-                                channel__visability_modifier: 0,
-                                channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                                channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                            },
-                            is_user_subscribed: false,
-                        };
-                        common_registry.push(common_1);
-                    }
-                    let outcoming = Channel_GetManyPublicByName_Outcoming_ {
-                        common_registry,
-                    };
-                    let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        channel__get_many_public_by_name_deserialize_allocate,
-                        channel__get_many_public_by_name_deserialize_deallocate,
-                    );
-                }
-                fn _precedent__channel__get_many_public_by_name(precedent: Channel_GetManyPublicByName_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        channel__get_many_public_by_name_deserialize_allocate,
-                        channel__get_many_public_by_name_deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<Channel_GetManyPublicByName_Precedent_> = vec![];
-                    precedent_registry.push(Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired);
-                    precedent_registry.push(Channel_GetManyPublicByName_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__channel__get_many_public_by_name(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        channel__get_one_by_id__deserialize_allocate,
-                        channel__get_one_by_id__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut channel_inner_link_registry: Vec<ChannelInnerLink1_> = vec![];
-                    '_a: for _ in 1..=5 {
-                        let channel_inner_link_1 = ChannelInnerLink1_ {
-                            channel_inner_link__to: 0,
-                        };
-                        channel_inner_link_registry.push(channel_inner_link_1);
-                    }
-                    let mut channel_outer_link_registry: Vec<ChannelOuterLink1_> = vec![];
-                    '_a: for _ in 1..=5 {
-                        let channel_outer_link_1 = ChannelOuterLink1_ {
-                            channel_outer_link__alias: NOT_EMPTY_STRING_LITERAL.to_string(),
-                            channel_outer_link__address: NOT_EMPTY_STRING_LITERAL.to_string(),
-                        };
-                        channel_outer_link_registry.push(channel_outer_link_1);
-                    }
-                    let channel_2 = Channel2_ {
-                        channel__owner: 0,
-                        channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                        channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                        channel__description: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                        channel__access_modifier: 0,
-                        channel__visability_modifier: 0,
-                        channel__orientation: vec![0, 0, 0],
-                        channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                        channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                        channel__subscribers_quantity: 0,
-                        channel__marks_quantity: 0,
-                        channel__viewing_quantity: 0,
-                    };
-                    let outcoming = Channel_GetOneById_Outcoming_ {
-                        channel: channel_2,
-                        channel_inner_link_registry,
-                        channel_outer_link_registry,
-                    };
-                    let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>::target_filled(outcoming);
-                    return run_by_template(
-                        &unified_report,
-                        channel__get_one_by_id__deserialize_allocate,
-                        channel__get_one_by_id__deserialize_deallocate,
-                    );
-                }
-                fn _precedent__channel__get_one_by_id(precedent: Channel_GetOneById_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        channel__get_one_by_id__deserialize_allocate,
-                        channel__get_one_by_id__deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<Channel_GetOneById_Precedent_> = vec![];
-                    precedent_registry.push(Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired);
-                    precedent_registry.push(Channel_GetOneById_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                    precedent_registry.push(Channel_GetOneById_Precedent_::Channel_NotFound);
-                    precedent_registry.push(Channel_GetOneById_Precedent_::Channel_IsClose);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__channel__get_one_by_id(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-                #[test]
-                fn target_empty__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, ChannelSubscription_Create_Precedent_>::target_empty();
-                    return run_by_template(
-                        &unified_report,
-                        channel_subscription__create_deserialize_allocate,
-                        channel_subscription__create_deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn target_filled__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Result::Ok(());
-                }
-                fn _precedent__channel_subscription__create(precedent: ChannelSubscription_Create_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, ChannelSubscription_Create_Precedent_>::precedent(precedent);
-                    return run_by_template(
-                        &unified_report,
-                        channel_subscription__create_deserialize_allocate,
-                        channel_subscription__create_deserialize_deallocate,
-                    );
-                }
-                #[test]
-                fn precedent__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<ChannelSubscription_Create_Precedent_> = vec![];
-                    precedent_registry.push(ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired);
-                    precedent_registry.push(ChannelSubscription_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                    precedent_registry.push(ChannelSubscription_Create_Precedent_::Channel_NotFound);
-                    precedent_registry.push(ChannelSubscription_Create_Precedent_::Channel_IsClose);
-                    precedent_registry.push(ChannelSubscription_Create_Precedent_::User_IsChannelOwner);
-                    '_a: for precedent in precedent_registry {
-                        _precedent__channel_subscription__create(precedent)?;
-                    }
-                    return Result::Ok(());
-                }
-            }
-        }
-        mod server_request_data_serialization {
-            use super::*;
-            fn run_by_template<I>(
-                incoming: I,
-                allocator: extern "C" fn(I) -> CResult<CVector<c_uchar>>,
-                deallocator: extern "C" fn(CResult<CVector<c_uchar>>) -> (),
-            ) -> Result<(), Box<dyn StdError + 'static>>
-            {
-                deallocator(allocator(incoming));
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_AuthorizeByFirstStep_Incoming {
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__email___or___user__nickname: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__password: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__authorize_by_first_step__serialize_allocate,
-                    user_authorization__authorize_by_first_step__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                Allocator::<CString>::deallocate(&incoming.user__email___or___user__nickname);
-                Allocator::<CString>::deallocate(&incoming.user__password);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_AuthorizeByLastStep_Incoming {
-                    user__id: 0,
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_authorization_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__authorize_by_last_step__serialize_allocate,
-                    user_authorization__authorize_by_last_step__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                Allocator::<CString>::deallocate(&incoming.user_authorization_token__value);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_CheckEmailForExisting_Incoming {
-                    user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__check_email_for_existing__serialize_allocate,
-                    user_authorization__check_email_for_existing__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user__email);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_CheckNicknameForExisting_Incoming {
-                    user__nickname: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__check_nickname_for_existing__serialize_allocate,
-                    user_authorization__check_nickname_for_existing__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user__nickname);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_DeauthorizeFromAllDevices_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                    },
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__deauthorize_from_all_devices__serialize_allocate,
-                    user_authorization__deauthorize_from_all_devices__serialize_deallocate,
-                )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_DeauthorizeFromOneDevice_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                    },
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__deauthorize_from_one_device__serialize_allocate,
-                    user_authorization__deauthorize_from_one_device__serialize_deallocate,
-                )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_RefreshAccessToken_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                    },
-                    user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec())),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__refresh_access_token__serialize_allocate,
-                    user_authorization__refresh_access_token__serialize_deallocate,
-                )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_refresh_token_encoded.0);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_RegisterByFirstStep_Incoming {
-                    user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__register_by_first_step__serialize_allocate,
-                    user_authorization__register_by_first_step__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user__email);
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_RegisterBySecondStep_Incoming {
-                    user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_registration_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__register_by_second_step__serialize_allocate,
-                    user_authorization__register_by_second_step__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user__email);
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                Allocator::<CString>::deallocate(&incoming.user_registration_token__value);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_RegisterByLastStep_Incoming {
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__nickname: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__password: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_registration_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__register_by_last_step__serialize_allocate,
-                    user_authorization__register_by_last_step__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                Allocator::<CString>::deallocate(&incoming.user__nickname);
-                Allocator::<CString>::deallocate(&incoming.user__password);
-                Allocator::<CString>::deallocate(&incoming.user__email);
-                Allocator::<CString>::deallocate(&incoming.user_registration_token__value);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_ResetPasswordByFirstStep_Incoming {
-                    user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__reset_password_by_first_step__serialize_allocate,
-                    user_authorization__reset_password_by_first_step__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user__email);
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_ResetPasswordBySecondStep_Incoming {
-                    user__id: 0,
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_reset_password_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__reset_password_by_second_step__serialize_allocate,
-                    user_authorization__reset_password_by_second_step__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                Allocator::<CString>::deallocate(&incoming.user_reset_password_token__value);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_ResetPasswordByLastStep_Incoming {
-                    user__id: 0,
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__password: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_reset_password_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__reset_password_by_last_step__serialize_allocate,
-                    user_authorization__reset_password_by_last_step__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                Allocator::<CString>::deallocate(&incoming.user__password);
-                Allocator::<CString>::deallocate(&incoming.user_reset_password_token__value);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_SendEmailForRegister_Incoming {
-                    user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__send_email_for_register__serialize_allocate,
-                    user_authorization__send_email_for_register__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user__email);
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_SendEmailForAuthorize_Incoming {
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__id: 0,
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__send_email_for_authorize__serialize_allocate,
-                    user_authorization__send_email_for_authorize__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                return Result::Ok(());
-            }
-            #[test]
-            fn user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = UserAuthorization_SendEmailForResetPassword_Incoming {
-                    user__id: 0,
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                };
-                run_by_template(
-                    incoming,
-                    user_authorization__send_email_for_reset_password__serialize_allocate,
-                    user_authorization__send_email_for_reset_password__serialize_deallocate,
-                )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                return Result::Ok(());
-            }
-            #[test]
-            fn channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = Channel_GetManyByNameInSubscriptions_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                    },
-                    channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    requery___channel__name: COption::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
-                    limit: 0,
-                };
-                run_by_template(
-                    incoming,
-                    channel__get_many_by_name_in_subscriptions__serialize_allocate,
-                    channel__get_many_by_name_in_subscriptions__serialize_deallocate,
-                )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
-                Allocator::<CString>::deallocate(&incoming.channel__name);
-                Allocator::<CString>::deallocate(&incoming.requery___channel__name.data);
-                return Result::Ok(());
-            }
-            #[test]
-            fn channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = Channel_GetManyBySubscription_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                    },
-                    requery___channel__id: COption::data(0),
-                    limit: 0,
-                };
-                run_by_template(
-                    incoming,
-                    channel__get_many_by_subscription__serialize_allocate,
-                    channel__get_many_by_subscription__serialize_deallocate,
-                )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
-                return Result::Ok(());
-            }
-            #[test]
-            fn channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = Channel_GetManyPublicByName_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                    },
-                    channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    requery___channel__name: COption::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
-                    limit: 0,
-                };
-                run_by_template(
-                    incoming,
-                    channel__get_many_public_by_name__serialize_allocate,
-                    channel__get_many_public_by_name__serialize_deallocate,
-                )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
-                Allocator::<CString>::deallocate(&incoming.channel__name);
-                Allocator::<CString>::deallocate(&incoming.requery___channel__name.data);
-                return Result::Ok(());
-            }
-            #[test]
-            fn channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = Channel_GetOneById_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                    },
-                    channel__id: 0,
-                };
-                run_by_template(
-                    incoming,
-                    channel__get_one_by_id__serialize_allocate,
-                    channel__get_one_by_id__serialize_deallocate,
-                )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
-                return Result::Ok(());
-            }
-            #[test]
-            fn channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ChannelSubscription_Create_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                    },
-                    channel__id: 0,
-                };
-                run_by_template(
-                    incoming,
-                    channel_subscription__create__serialize_allocate,
-                    channel_subscription__create__serialize_deallocate,
-                )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
-                return Result::Ok(());
-            }
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // fn single_thread_allocation_counting_wrapper(
+        //     functionality: impl FnOnce() -> Result<(), Box<dyn StdError + 'static>>,
+        // ) -> Result<(), Box<dyn StdError + 'static>> {
+        //     // let _ = SINGLE_THREAD_EXECUTION_GUARD.lock()?;
+        //     // let region = Region::new(&GLOBAL_ALLOCATOR);
+        //     // functionality()?;
+        //     // if region.change().bytes_allocated > 0 {
+        //     //     return Result::Err(DEALLOCATION_ERROR.into());
+        //     // }
+        //     return Result::Ok(());
+        // }
+        // #[test]
+        // fn c_vector_clone() -> Result<(), Box<dyn StdError + 'static>> {
+        //     let c_vector_clone_ = || -> _ {
+        //         let c_vector = Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec());
+        //         {
+        //             let _ = c_vector.clone_as_vec()?;
+        //         }
+        //         if c_vector.pointer.is_null() {
+        //             return Result::Err(ALLOCATION_ERROR.into());
+        //         }
+        //         Allocator::<CVector<_>>::deallocate(&c_vector);
+        //         return Result::<_, Box<dyn StdError + 'static>>::Ok(());
+        //     };
+        //     return single_thread_allocation_counting_wrapper(c_vector_clone_);
+        // }
+        // #[test]
+        // fn c_string_clone() -> Result<(), Box<dyn StdError + 'static>> {
+        //     let c_string_clone_ = || -> _ {
+        //         let c_string = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
+        //         {
+        //             let _ = c_string.clone_as_string()?;
+        //         }
+        //         if c_string.pointer.is_null() {
+        //             return Result::Err(ALLOCATION_ERROR.into());
+        //         }
+        //         Allocator::<CString>::deallocate(&c_string);
+        //         return Result::<_, Box<dyn StdError + 'static>>::Ok(());
+        //     };
+        //     return single_thread_allocation_counting_wrapper(c_string_clone_);
+        // }
+
+
+
+
+
+        // mod server_response_data_deserialization {
+        //     use super::*;
+        //     fn run_by_template<'a, T, E>(
+        //         data: &'a T,
+        //         allocator: extern "C" fn(CVector<c_uchar>) -> CResult<E>,
+        //         deallocator: extern "C" fn(CResult<E>) -> (),
+        //     ) -> Result<(), Box<dyn StdError + 'static>>
+        //     where
+        //         T: Encode,
+        //     {
+        //         let c_vector = Allocator::<CVector<_>>::allocate(
+        //             Serializer::serialize(data),
+        //         );
+        //         deallocator(allocator(c_vector));
+        //         Allocator::<CVector<_>>::deallocate(&c_vector);
+        //         return Result::Ok(());
+        //     }
+        //     // Needed to test all `dedicated_crate::unified_report::UnifiedReport` variants.
+        //     mod unified_report {
+        //         use super::*;
+        //         use dedicated_crate::action_processor_incoming_outcoming::{
+        //             Channel1 as Channel1_,
+        //             Channel2 as Channel2_,
+        //             ChannelInnerLink1 as ChannelInnerLink1_,
+        //             ChannelOuterLink1 as ChannelOuterLink1_,
+        //             Common1 as Common1_,
+        //         };
+        //         #[test]
+        //         fn target_empty__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming_, UserAuthorization_AuthorizeByFirstStep_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__authorize_by_first_step__deserialize_allocate,
+        //                 user_authorization__authorize_by_first_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let outcoming = UserAuthorization_AuthorizeByFirstStep_Outcoming_ {
+        //                 user__id: 0,
+        //                 verification_message_sent: false,
+        //                 user_authorization_token__can_be_resent_from: 0,
+        //                 user_authorization_token__wrong_enter_tries_quantity: 0,
+        //                 user_authorization_token__wrong_enter_tries_quantity_limit: 0,
+        //             };
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming_, UserAuthorization_AuthorizeByFirstStep_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__authorize_by_first_step__deserialize_allocate,
+        //                 user_authorization__authorize_by_first_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let precedent = UserAuthorization_AuthorizeByFirstStep_Precedent_::User_WrongEmailOrNicknameOrPassword;
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming_, UserAuthorization_AuthorizeByFirstStep_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__authorize_by_first_step__deserialize_allocate,
+        //                 user_authorization__authorize_by_first_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming_, UserAuthorization_AuthorizeByLastStep_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__authorize_by_last_step__deserialize_allocate,
+        //                 user_authorization__authorize_by_last_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let outcoming = UserAuthorization_AuthorizeByLastStep_Outcoming_ {
+        //                 user_access_token_encoded: UserAccessTokenEncoded_ {
+        //                     serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+        //                     encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+        //                 },
+        //                 user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //             };
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming_, UserAuthorization_AuthorizeByLastStep_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__authorize_by_last_step__deserialize_allocate,
+        //                 user_authorization__authorize_by_last_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         fn _precedent__user_authorization__authorize_by_last_step(precedent: UserAuthorization_AuthorizeByLastStep_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming_, UserAuthorization_AuthorizeByLastStep_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__authorize_by_last_step__deserialize_allocate,
+        //                 user_authorization__authorize_by_last_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<UserAuthorization_AuthorizeByLastStep_Precedent_> = vec![];
+        //             precedent_registry.push(UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_NotFound);
+        //             precedent_registry.push(UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_AlreadyExpired);
+        //             precedent_registry.push(
+        //                 UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_WrongValue {
+        //                     user_authorization_token__wrong_enter_tries_quantity: 0,
+        //                 },
+        //             );
+        //             precedent_registry.push(UserAuthorization_AuthorizeByLastStep_Precedent_::User_NotFound);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__user_authorization__authorize_by_last_step(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<UserAuthorization_CheckEmailForExisting_Outcoming_, Void>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__check_email_for_existing__deserialize_allocate,
+        //                 user_authorization__check_email_for_existing__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let outcoming = UserAuthorization_CheckEmailForExisting_Outcoming_ {
+        //                 result: false,
+        //             };
+        //             let unified_report = UnifiedReport::<UserAuthorization_CheckEmailForExisting_Outcoming_, Void>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__check_email_for_existing__deserialize_allocate,
+        //                 user_authorization__check_email_for_existing__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__check_nickname_for_existing__deserialize_allocate,
+        //                 user_authorization__check_nickname_for_existing__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let outcoming = UserAuthorization_CheckNicknameForExisting_Outcoming_ {
+        //                 result: false,
+        //             };
+        //             let unified_report = UnifiedReport::<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__check_nickname_for_existing__deserialize_allocate,
+        //                 user_authorization__check_nickname_for_existing__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__deauthorize_from_all_devices__deserialize_allocate,
+        //                 user_authorization__deauthorize_from_all_devices__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
+        //             return Result::Ok(());
+        //         }
+        //         fn _precedent__user_authorization__deauthorize_from_all_devices(
+        //             precedent: UserAuthorization_DeauthorizeFromAllDevices_Precedent_,
+        //         ) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__deauthorize_from_all_devices__deserialize_allocate,
+        //                 user_authorization__deauthorize_from_all_devices__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<UserAuthorization_DeauthorizeFromAllDevices_Precedent_> = vec![];
+        //             precedent_registry.push(UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired);
+        //             precedent_registry.push(UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__user_authorization__deauthorize_from_all_devices(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__deauthorize_from_one_device__deserialize_allocate,
+        //                 user_authorization__deauthorize_from_one_device__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
+        //             return Result::Ok(());
+        //         }
+        //         fn _precedent__user_authorization__deauthorize_from_one_device(
+        //             precedent: UserAuthorization_DeauthorizeFromOneDevice_Precedent_,
+        //         ) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__deauthorize_from_one_device__deserialize_allocate,
+        //                 user_authorization__deauthorize_from_one_device__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<UserAuthorization_DeauthorizeFromOneDevice_Precedent_> = vec![];
+        //             precedent_registry.push(UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired);
+        //             precedent_registry.push(UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__user_authorization__deauthorize_from_one_device(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming_, UserAuthorization_RefreshAccessToken_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__refresh_access_token__deserialize_allocate,
+        //                 user_authorization__refresh_access_token__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let outcoming = UserAuthorization_RefreshAccessToken_Outcoming_ {
+        //                 user_access_token_encoded: UserAccessTokenEncoded_ {
+        //                     serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+        //                     encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+        //                 },
+        //                 user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //             };
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming_, UserAuthorization_RefreshAccessToken_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__refresh_access_token__deserialize_allocate,
+        //                 user_authorization__refresh_access_token__deserialize_deallocate,
+        //             );
+        //         }
+        //         fn _precedent__user_authorization__refresh_access_token(precedent: UserAuthorization_RefreshAccessToken_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming_, UserAuthorization_RefreshAccessToken_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__refresh_access_token__deserialize_allocate,
+        //                 user_authorization__refresh_access_token__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<UserAuthorization_RefreshAccessToken_Precedent_> = vec![];
+        //             precedent_registry.push(UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_NotFound);
+        //             precedent_registry.push(UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_AlreadyExpired);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__user_authorization__refresh_access_token(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<UserAuthorization_RegisterByFirstStep_Outcoming_, UserAuthorization_RegisterByFirstStep_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__register_by_first_step__deserialize_allocate,
+        //                 user_authorization__register_by_first_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let outcoming = UserAuthorization_RegisterByFirstStep_Outcoming_ {
+        //                 verification_message_sent: false,
+        //                 user_registration_token__can_be_resent_from: 0,
+        //                 user_registration_token__wrong_enter_tries_quantity: 0,
+        //                 user_registration_token__wrong_enter_tries_quantity_limit: 0,
+        //             };
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_RegisterByFirstStep_Outcoming_, UserAuthorization_RegisterByFirstStep_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__register_by_first_step__deserialize_allocate,
+        //                 user_authorization__register_by_first_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let precedent = UserAuthorization_RegisterByFirstStep_Precedent_::User_EmailAlreadyExist;
+        //             let unified_report = UnifiedReport::<UserAuthorization_RegisterByFirstStep_Outcoming_, UserAuthorization_RegisterByFirstStep_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__register_by_first_step__deserialize_allocate,
+        //                 user_authorization__register_by_first_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Void, UserAuthorization_RegisterBySecondStep_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__register_by_second_step__deserialize_allocate,
+        //                 user_authorization__register_by_second_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             return Result::Ok(());
+        //         }
+        //         fn _precedent__user_authorization__register_by_second_step(
+        //             precedent: UserAuthorization_RegisterBySecondStep_Precedent_,
+        //         ) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Void, UserAuthorization_RegisterBySecondStep_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__register_by_second_step__deserialize_allocate,
+        //                 user_authorization__register_by_second_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<UserAuthorization_RegisterBySecondStep_Precedent_> = vec![];
+        //             precedent_registry.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_NotFound);
+        //             precedent_registry.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyExpired);
+        //             precedent_registry.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyApproved);
+        //             precedent_registry.push(
+        //                 UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_WrongValue {
+        //                     user_registration_token__wrong_enter_tries_quantity: 0,
+        //                 },
+        //             );
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__user_authorization__register_by_second_step(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming_, UserAuthorization_RegisterByLastStep_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__register_by_last_step__deserialize_allocate,
+        //                 user_authorization__register_by_last_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let outcoming = UserAuthorization_RegisterByLastStep_Outcoming_ {
+        //                 user_access_token_encoded: UserAccessTokenEncoded_ {
+        //                     serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+        //                     encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+        //                 },
+        //                 user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //             };
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming_, UserAuthorization_RegisterByLastStep_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__register_by_last_step__deserialize_allocate,
+        //                 user_authorization__register_by_last_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         fn _precedent__user_authorization__register_by_last_step(precedent: UserAuthorization_RegisterByLastStep_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming_, UserAuthorization_RegisterByLastStep_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__register_by_last_step__deserialize_allocate,
+        //                 user_authorization__register_by_last_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<UserAuthorization_RegisterByLastStep_Precedent_> = vec![];
+        //             precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::User_NicknameAlreadyExist);
+        //             precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::User_EmailAlreadyExist);
+        //             precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_NotFound);
+        //             precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_AlreadyExpired);
+        //             precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_IsNotApproved);
+        //             precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_WrongValue);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__user_authorization__register_by_last_step(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_ResetPasswordByFirstStep_Outcoming_, UserAuthorization_ResetPasswordByFirstStep_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__reset_password_by_first_step__deserialize_allocate,
+        //                 user_authorization__reset_password_by_first_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let outcoming = UserAuthorization_ResetPasswordByFirstStep_Outcoming_ {
+        //                 user__id: 0,
+        //                 verification_message_sent: false,
+        //                 user_reset_password_token__can_be_resent_from: 0,
+        //                 user_reset_password_token__wrong_enter_tries_quantity: 0,
+        //                 user_reset_password_token__wrong_enter_tries_quantity_limit: 0,
+        //             };
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_ResetPasswordByFirstStep_Outcoming_, UserAuthorization_ResetPasswordByFirstStep_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__reset_password_by_first_step__deserialize_allocate,
+        //                 user_authorization__reset_password_by_first_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let precedent = UserAuthorization_ResetPasswordByFirstStep_Precedent_::User_NotFound;
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_ResetPasswordByFirstStep_Outcoming_, UserAuthorization_ResetPasswordByFirstStep_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__reset_password_by_first_step__deserialize_allocate,
+        //                 user_authorization__reset_password_by_first_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__reset_password_by_second_step__deserialize_allocate,
+        //                 user_authorization__reset_password_by_second_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             return Result::Ok(());
+        //         }
+        //         fn _precedent__user_authorization__reset_password_by_second_step(
+        //             precedent: UserAuthorization_ResetPasswordBySecondStep_Precedent_,
+        //         ) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__reset_password_by_second_step__deserialize_allocate,
+        //                 user_authorization__reset_password_by_second_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<UserAuthorization_ResetPasswordBySecondStep_Precedent_> = vec![];
+        //             precedent_registry.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_NotFound);
+        //             precedent_registry.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyExpired);
+        //             precedent_registry.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyApproved);
+        //             precedent_registry.push(
+        //                 UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_WrongValue {
+        //                     user_reset_password_token__wrong_enter_tries_quantity: 0,
+        //                 },
+        //             );
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__user_authorization__reset_password_by_second_step(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__reset_password_by_last_step__deserialize_allocate,
+        //                 user_authorization__reset_password_by_last_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             return Result::Ok(());
+        //         }
+        //         fn _precedent__user_authorization__reset_password_by_last_step(
+        //             precedent: UserAuthorization_ResetPasswordByLastStep_Precedent_,
+        //         ) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__reset_password_by_last_step__deserialize_allocate,
+        //                 user_authorization__reset_password_by_last_step__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<UserAuthorization_ResetPasswordByLastStep_Precedent_> = vec![];
+        //             precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::User_NotFound);
+        //             precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_NotFound);
+        //             precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_AlreadyExpired);
+        //             precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_IsNotApproved);
+        //             precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_WrongValue);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__user_authorization__reset_password_by_last_step(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<UserAuthorization_SendEmailForRegister_Outcoming_, UserAuthorization_SendEmailForRegister_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__send_email_for_register__deserialize_allocate,
+        //                 user_authorization__send_email_for_register__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let outcoming = UserAuthorization_SendEmailForRegister_Outcoming_ {
+        //                 user_registration_token__can_be_resent_from: 0,
+        //             };
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_SendEmailForRegister_Outcoming_, UserAuthorization_SendEmailForRegister_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__send_email_for_register__deserialize_allocate,
+        //                 user_authorization__send_email_for_register__deserialize_deallocate,
+        //             );
+        //         }
+        //         fn _precedent__user_authorization__send_email_for_register(
+        //             precedent: UserAuthorization_SendEmailForRegister_Precedent_,
+        //         ) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_SendEmailForRegister_Outcoming_, UserAuthorization_SendEmailForRegister_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__send_email_for_register__deserialize_allocate,
+        //                 user_authorization__send_email_for_register__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<UserAuthorization_SendEmailForRegister_Precedent_> = vec![];
+        //             precedent_registry.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_NotFound);
+        //             precedent_registry.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyExpired);
+        //             precedent_registry.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyApproved);
+        //             precedent_registry.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_TimeToResendHasNotCome);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__user_authorization__send_email_for_register(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__send_email_for_authorize_deserialize_allocate,
+        //                 user_authorization__send_email_for_authorize_deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let outcoming = UserAuthorization_SendEmailForAuthorize_Outcoming_ {
+        //                 user_authorization_token__can_be_resent_from: 0,
+        //             };
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__send_email_for_authorize_deserialize_allocate,
+        //                 user_authorization__send_email_for_authorize_deserialize_deallocate,
+        //             );
+        //         }
+        //         fn _precedent__user_authorization__send_email_for_authorize(
+        //             precedent: UserAuthorization_SendEmailForAuthorize_Precedent_,
+        //         ) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__send_email_for_authorize_deserialize_allocate,
+        //                 user_authorization__send_email_for_authorize_deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<UserAuthorization_SendEmailForAuthorize_Precedent_> = vec![];
+        //             precedent_registry.push(UserAuthorization_SendEmailForAuthorize_Precedent_::User_NotFound);
+        //             precedent_registry.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_NotFound);
+        //             precedent_registry.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_AlreadyExpired);
+        //             precedent_registry.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_TimeToResendHasNotCome);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__user_authorization__send_email_for_authorize(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_SendEmailForResetPassword_Outcoming_, UserAuthorization_SendEmailForResetPassword_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__send_email_for_reset_password__deserialize_allocate,
+        //                 user_authorization__send_email_for_reset_password__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let outcoming = UserAuthorization_SendEmailForResetPassword_Outcoming_ {
+        //                 user_reset_password_token__can_be_resent_from: 0,
+        //             };
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_SendEmailForResetPassword_Outcoming_, UserAuthorization_SendEmailForResetPassword_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__send_email_for_reset_password__deserialize_allocate,
+        //                 user_authorization__send_email_for_reset_password__deserialize_deallocate,
+        //             );
+        //         }
+        //         fn _precedent__user_authorization__send_email_for_reset_password(
+        //             precedent: UserAuthorization_SendEmailForResetPassword_Precedent_,
+        //         ) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report =
+        //                 UnifiedReport::<UserAuthorization_SendEmailForResetPassword_Outcoming_, UserAuthorization_SendEmailForResetPassword_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 user_authorization__send_email_for_reset_password__deserialize_allocate,
+        //                 user_authorization__send_email_for_reset_password__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<UserAuthorization_SendEmailForResetPassword_Precedent_> = vec![];
+        //             precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::User_NotFound);
+        //             precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_NotFound);
+        //             precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyExpired);
+        //             precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyApproved);
+        //             precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_TimeToResendHasNotCome);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__user_authorization__send_email_for_reset_password(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming_, Channel_GetManyByNameInSubscriptions_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel__get_many_by_name_in_subscriptions__deserialize_allocate,
+        //                 channel__get_many_by_name_in_subscriptions__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut common_registry: Vec<Common1_> = vec![];
+        //             '_a: for _ in 1..=5 {
+        //                 let common_1 = Common1_ {
+        //                     channel: Channel1_ {
+        //                         channel__id: 0,
+        //                         channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
+        //                         channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
+        //                         channel__access_modifier: 0,
+        //                         channel__visability_modifier: 0,
+        //                         channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //                         channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //                     },
+        //                     is_user_subscribed: false,
+        //                 };
+        //                 common_registry.push(common_1);
+        //             }
+        //             let outcoming = Channel_GetManyByNameInSubscriptions_Outcoming_ {
+        //                 common_registry,
+        //             };
+        //             let unified_report =
+        //                 UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming_, Channel_GetManyByNameInSubscriptions_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel__get_many_by_name_in_subscriptions__deserialize_allocate,
+        //                 channel__get_many_by_name_in_subscriptions__deserialize_deallocate,
+        //             );
+        //         }
+        //         fn _precedent__channel__get_many_by_name_in_subscriptions(precedent: Channel_GetManyByNameInSubscriptions_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming_, Channel_GetManyByNameInSubscriptions_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel__get_many_by_name_in_subscriptions__deserialize_allocate,
+        //                 channel__get_many_by_name_in_subscriptions__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<Channel_GetManyByNameInSubscriptions_Precedent_> = vec![];
+        //             precedent_registry.push(Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired);
+        //             precedent_registry.push(Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__channel__get_many_by_name_in_subscriptions(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming_, Channel_GetManyBySubscription_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel__get_many_by_subscription__deserialize_allocate,
+        //                 channel__get_many_by_subscription__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut common_registry: Vec<Common1_> = vec![];
+        //             '_a: for _ in 1..=2 {
+        //                 let common_1 = Common1_ {
+        //                     channel: Channel1_ {
+        //                         channel__id: 0,
+        //                         channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
+        //                         channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
+        //                         channel__access_modifier: 0,
+        //                         channel__visability_modifier: 0,
+        //                         channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //                         channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //                     },
+        //                     is_user_subscribed: false,
+        //                 };
+        //                 common_registry.push(common_1);
+        //             }
+        //             let outcoming = Channel_GetManyBySubscription_Outcoming_ {
+        //                 common_registry,
+        //             };
+        //             let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming_, Channel_GetManyBySubscription_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel__get_many_by_subscription__deserialize_allocate,
+        //                 channel__get_many_by_subscription__deserialize_deallocate,
+        //             );
+        //         }
+        //         fn _precedent__channel__get_many_by_subscription(precedent: Channel_GetManyBySubscription_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming_, Channel_GetManyBySubscription_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel__get_many_by_subscription__deserialize_allocate,
+        //                 channel__get_many_by_subscription__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<Channel_GetManyBySubscription_Precedent_> = vec![];
+        //             precedent_registry.push(Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired);
+        //             precedent_registry.push(Channel_GetManyBySubscription_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__channel__get_many_by_subscription(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel__get_many_public_by_name_deserialize_allocate,
+        //                 channel__get_many_public_by_name_deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut common_registry: Vec<Common1_> = vec![];
+        //             '_a: for _ in 1..=5 {
+        //                 let common_1 = Common1_ {
+        //                     channel: Channel1_ {
+        //                         channel__id: 0,
+        //                         channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
+        //                         channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
+        //                         channel__access_modifier: 0,
+        //                         channel__visability_modifier: 0,
+        //                         channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //                         channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //                     },
+        //                     is_user_subscribed: false,
+        //                 };
+        //                 common_registry.push(common_1);
+        //             }
+        //             let outcoming = Channel_GetManyPublicByName_Outcoming_ {
+        //                 common_registry,
+        //             };
+        //             let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel__get_many_public_by_name_deserialize_allocate,
+        //                 channel__get_many_public_by_name_deserialize_deallocate,
+        //             );
+        //         }
+        //         fn _precedent__channel__get_many_public_by_name(precedent: Channel_GetManyPublicByName_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel__get_many_public_by_name_deserialize_allocate,
+        //                 channel__get_many_public_by_name_deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<Channel_GetManyPublicByName_Precedent_> = vec![];
+        //             precedent_registry.push(Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired);
+        //             precedent_registry.push(Channel_GetManyPublicByName_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__channel__get_many_public_by_name(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel__get_one_by_id__deserialize_allocate,
+        //                 channel__get_one_by_id__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut channel_inner_link_registry: Vec<ChannelInnerLink1_> = vec![];
+        //             '_a: for _ in 1..=5 {
+        //                 let channel_inner_link_1 = ChannelInnerLink1_ {
+        //                     channel_inner_link__to: 0,
+        //                 };
+        //                 channel_inner_link_registry.push(channel_inner_link_1);
+        //             }
+        //             let mut channel_outer_link_registry: Vec<ChannelOuterLink1_> = vec![];
+        //             '_a: for _ in 1..=5 {
+        //                 let channel_outer_link_1 = ChannelOuterLink1_ {
+        //                     channel_outer_link__alias: NOT_EMPTY_STRING_LITERAL.to_string(),
+        //                     channel_outer_link__address: NOT_EMPTY_STRING_LITERAL.to_string(),
+        //                 };
+        //                 channel_outer_link_registry.push(channel_outer_link_1);
+        //             }
+        //             let channel_2 = Channel2_ {
+        //                 channel__owner: 0,
+        //                 channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
+        //                 channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
+        //                 channel__description: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //                 channel__access_modifier: 0,
+        //                 channel__visability_modifier: 0,
+        //                 channel__orientation: vec![0, 0, 0],
+        //                 channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //                 channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //                 channel__subscribers_quantity: 0,
+        //                 channel__marks_quantity: 0,
+        //                 channel__viewing_quantity: 0,
+        //             };
+        //             let outcoming = Channel_GetOneById_Outcoming_ {
+        //                 channel: channel_2,
+        //                 channel_inner_link_registry,
+        //                 channel_outer_link_registry,
+        //             };
+        //             let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>::target_filled(outcoming);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel__get_one_by_id__deserialize_allocate,
+        //                 channel__get_one_by_id__deserialize_deallocate,
+        //             );
+        //         }
+        //         fn _precedent__channel__get_one_by_id(precedent: Channel_GetOneById_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel__get_one_by_id__deserialize_allocate,
+        //                 channel__get_one_by_id__deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<Channel_GetOneById_Precedent_> = vec![];
+        //             precedent_registry.push(Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired);
+        //             precedent_registry.push(Channel_GetOneById_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+        //             precedent_registry.push(Channel_GetOneById_Precedent_::Channel_NotFound);
+        //             precedent_registry.push(Channel_GetOneById_Precedent_::Channel_IsClose);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__channel__get_one_by_id(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //         #[test]
+        //         fn target_empty__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Void, ChannelSubscription_Create_Precedent_>::target_empty();
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel_subscription__create_deserialize_allocate,
+        //                 channel_subscription__create_deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn target_filled__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
+        //             return Result::Ok(());
+        //         }
+        //         fn _precedent__channel_subscription__create(precedent: ChannelSubscription_Create_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
+        //             let unified_report = UnifiedReport::<Void, ChannelSubscription_Create_Precedent_>::precedent(precedent);
+        //             return run_by_template(
+        //                 &unified_report,
+        //                 channel_subscription__create_deserialize_allocate,
+        //                 channel_subscription__create_deserialize_deallocate,
+        //             );
+        //         }
+        //         #[test]
+        //         fn precedent__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
+        //             let mut precedent_registry: Vec<ChannelSubscription_Create_Precedent_> = vec![];
+        //             precedent_registry.push(ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired);
+        //             precedent_registry.push(ChannelSubscription_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+        //             precedent_registry.push(ChannelSubscription_Create_Precedent_::Channel_NotFound);
+        //             precedent_registry.push(ChannelSubscription_Create_Precedent_::Channel_IsClose);
+        //             precedent_registry.push(ChannelSubscription_Create_Precedent_::User_IsChannelOwner);
+        //             '_a: for precedent in precedent_registry {
+        //                 _precedent__channel_subscription__create(precedent)?;
+        //             }
+        //             return Result::Ok(());
+        //         }
+        //     }
+        // }
+        // mod server_request_data_serialization {
+        //     use super::*;
+        //     fn run_by_template<I>(
+        //         incoming: I,
+        //         allocator: extern "C" fn(I) -> CResult<CVector<c_uchar>>,
+        //         deallocator: extern "C" fn(CResult<CVector<c_uchar>>) -> (),
+        //     ) -> Result<(), Box<dyn StdError + 'static>>
+        //     {
+        //         deallocator(allocator(incoming));
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_AuthorizeByFirstStep_Incoming {
+        //             user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user__email___or___user__nickname: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user__password: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__authorize_by_first_step__serialize_allocate,
+        //             user_authorization__authorize_by_first_step__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user_device__id);
+        //         Allocator::<CString>::deallocate(&incoming.user__email___or___user__nickname);
+        //         Allocator::<CString>::deallocate(&incoming.user__password);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_AuthorizeByLastStep_Incoming {
+        //             user__id: 0,
+        //             user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user_authorization_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__authorize_by_last_step__serialize_allocate,
+        //             user_authorization__authorize_by_last_step__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user_device__id);
+        //         Allocator::<CString>::deallocate(&incoming.user_authorization_token__value);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_CheckEmailForExisting_Incoming {
+        //             user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__check_email_for_existing__serialize_allocate,
+        //             user_authorization__check_email_for_existing__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user__email);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_CheckNicknameForExisting_Incoming {
+        //             user__nickname: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__check_nickname_for_existing__serialize_allocate,
+        //             user_authorization__check_nickname_for_existing__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user__nickname);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_DeauthorizeFromAllDevices_Incoming {
+        //             user_access_token_encoded: UserAccessTokenEncoded {
+        //                 serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //                 encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //             },
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__deauthorize_from_all_devices__serialize_allocate,
+        //             user_authorization__deauthorize_from_all_devices__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_DeauthorizeFromOneDevice_Incoming {
+        //             user_access_token_encoded: UserAccessTokenEncoded {
+        //                 serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //                 encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //             },
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__deauthorize_from_one_device__serialize_allocate,
+        //             user_authorization__deauthorize_from_one_device__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_RefreshAccessToken_Incoming {
+        //             user_access_token_encoded: UserAccessTokenEncoded {
+        //                 serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //                 encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //             },
+        //             user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec())),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__refresh_access_token__serialize_allocate,
+        //             user_authorization__refresh_access_token__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_refresh_token_encoded.0);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_RegisterByFirstStep_Incoming {
+        //             user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__register_by_first_step__serialize_allocate,
+        //             user_authorization__register_by_first_step__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user__email);
+        //         Allocator::<CString>::deallocate(&incoming.user_device__id);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_RegisterBySecondStep_Incoming {
+        //             user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user_registration_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__register_by_second_step__serialize_allocate,
+        //             user_authorization__register_by_second_step__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user__email);
+        //         Allocator::<CString>::deallocate(&incoming.user_device__id);
+        //         Allocator::<CString>::deallocate(&incoming.user_registration_token__value);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_RegisterByLastStep_Incoming {
+        //             user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user__nickname: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user__password: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user_registration_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__register_by_last_step__serialize_allocate,
+        //             user_authorization__register_by_last_step__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user_device__id);
+        //         Allocator::<CString>::deallocate(&incoming.user__nickname);
+        //         Allocator::<CString>::deallocate(&incoming.user__password);
+        //         Allocator::<CString>::deallocate(&incoming.user__email);
+        //         Allocator::<CString>::deallocate(&incoming.user_registration_token__value);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_ResetPasswordByFirstStep_Incoming {
+        //             user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__reset_password_by_first_step__serialize_allocate,
+        //             user_authorization__reset_password_by_first_step__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user__email);
+        //         Allocator::<CString>::deallocate(&incoming.user_device__id);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_ResetPasswordBySecondStep_Incoming {
+        //             user__id: 0,
+        //             user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user_reset_password_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__reset_password_by_second_step__serialize_allocate,
+        //             user_authorization__reset_password_by_second_step__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user_device__id);
+        //         Allocator::<CString>::deallocate(&incoming.user_reset_password_token__value);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_ResetPasswordByLastStep_Incoming {
+        //             user__id: 0,
+        //             user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user__password: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user_reset_password_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__reset_password_by_last_step__serialize_allocate,
+        //             user_authorization__reset_password_by_last_step__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user_device__id);
+        //         Allocator::<CString>::deallocate(&incoming.user__password);
+        //         Allocator::<CString>::deallocate(&incoming.user_reset_password_token__value);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_SendEmailForRegister_Incoming {
+        //             user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__send_email_for_register__serialize_allocate,
+        //             user_authorization__send_email_for_register__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user__email);
+        //         Allocator::<CString>::deallocate(&incoming.user_device__id);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_SendEmailForAuthorize_Incoming {
+        //             user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             user__id: 0,
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__send_email_for_authorize__serialize_allocate,
+        //             user_authorization__send_email_for_authorize__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user_device__id);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = UserAuthorization_SendEmailForResetPassword_Incoming {
+        //             user__id: 0,
+        //             user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             user_authorization__send_email_for_reset_password__serialize_allocate,
+        //             user_authorization__send_email_for_reset_password__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CString>::deallocate(&incoming.user_device__id);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = Channel_GetManyByNameInSubscriptions_Incoming {
+        //             user_access_token_encoded: UserAccessTokenEncoded {
+        //                 serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //                 encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //             },
+        //             channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             requery___channel__name: COption::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
+        //             limit: 0,
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             channel__get_many_by_name_in_subscriptions__serialize_allocate,
+        //             channel__get_many_by_name_in_subscriptions__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+        //         Allocator::<CString>::deallocate(&incoming.channel__name);
+        //         Allocator::<CString>::deallocate(&incoming.requery___channel__name.data);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = Channel_GetManyBySubscription_Incoming {
+        //             user_access_token_encoded: UserAccessTokenEncoded {
+        //                 serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //                 encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //             },
+        //             requery___channel__id: COption::data(0),
+        //             limit: 0,
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             channel__get_many_by_subscription__serialize_allocate,
+        //             channel__get_many_by_subscription__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = Channel_GetManyPublicByName_Incoming {
+        //             user_access_token_encoded: UserAccessTokenEncoded {
+        //                 serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //                 encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //             },
+        //             channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+        //             requery___channel__name: COption::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
+        //             limit: 0,
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             channel__get_many_public_by_name__serialize_allocate,
+        //             channel__get_many_public_by_name__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+        //         Allocator::<CString>::deallocate(&incoming.channel__name);
+        //         Allocator::<CString>::deallocate(&incoming.requery___channel__name.data);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = Channel_GetOneById_Incoming {
+        //             user_access_token_encoded: UserAccessTokenEncoded {
+        //                 serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //                 encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //             },
+        //             channel__id: 0,
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             channel__get_one_by_id__serialize_allocate,
+        //             channel__get_one_by_id__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+        //         return Result::Ok(());
+        //     }
+        //     #[test]
+        //     fn channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
+        //         let incoming = ChannelSubscription_Create_Incoming {
+        //             user_access_token_encoded: UserAccessTokenEncoded {
+        //                 serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //                 encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+        //             },
+        //             channel__id: 0,
+        //         };
+        //         run_by_template(
+        //             incoming,
+        //             channel_subscription__create__serialize_allocate,
+        //             channel_subscription__create__serialize_deallocate,
+        //         )?;
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
+        //         Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+        //         return Result::Ok(());
+        //     }
+        // }
     }
 }
