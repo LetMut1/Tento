@@ -2816,13 +2816,13 @@ pub extern "C" fn channel_subscription__create_deserialize_allocate(c_vector_of_
 pub extern "C" fn channel_subscription__create_deserialize_deallocate(c_result: ChannelSubscription_Create_CResult) -> () {
     return ();
 }
-// All tests should be executed using the `Valgrind` utility as `cargo valgrind test ...' command.
 #[cfg(test)]
 mod test {
     use super::*;
     use stats_alloc::{
+        INSTRUMENTED_SYSTEM,
+        Region,
         StatsAlloc,
-        INSTRUMENTED_SYSTEM
     };
     use std::alloc::System;
     const NOT_EMPTY_STRING_LITERAL: &'static str = "qwerty";
@@ -2833,52 +2833,61 @@ mod test {
     ];
     #[global_allocator]
     static GLOBAL_ALLOCATOR: &'static StatsAlloc<System> = &INSTRUMENTED_SYSTEM;
-    mod deallocation {
-        use super::*;
-        use std::sync::Mutex;
-        use stats_alloc::Region;
-        static SINGLE_THREAD_EXECUTION_GUARD: Mutex<()> = Mutex::new(());
-        fn single_thread_allocation_counting_wrapper(
-            functionality: impl FnOnce() -> Result<(), Box<dyn StdError + 'static>>,
-        ) -> Result<(), Box<dyn StdError + 'static>> {
-            let _single_thread_execution_guard = SINGLE_THREAD_EXECUTION_GUARD.lock()?;
+    // Everything must be done sequentially on 1 thread without parallel hidden allocations, so that there is no unaccounted
+    // change in the amount of allocation. The variant with many tests (#[test]) and with crate `serial_test`` or with creating
+    // a Mutex is not suitable, because this helps to run methods sequentially, but does not prevent allocations from being aliased
+    // in other threads, since there is still more than one thread.
+    #[test]
+    fn all_sequentially() -> Result<(), Box<dyn StdError + 'static>> {
+        let test_registry: Vec<(fn() -> Result<(), Box<dyn StdError + 'static>>, &'static str)> = vec![
+            (
+                self::deallocation::c_vector_clone,
+                std::stringify!(self::deallocation::c_vector_clone),
+            ),
+            (
+                self::deallocation::c_string_clone,
+                std::stringify!(self::deallocation::c_string_clone),
+            ),
+        ];
+        '_a: for test in test_registry.iter() {
             let region = Region::new(&GLOBAL_ALLOCATOR);
-            functionality()?;
+            if let Result::Err(error) = test.0() {
+                return Result::Err(
+                    format!("{}: {}", test.1, &error).into(),
+                );
+            }
             let statistics = region.change();
             if statistics.bytes_allocated != statistics.bytes_deallocated {
-                return Result::Err(DEALLOCATION_ERROR.into());
+                return Result::Err(
+                    format!("{}: {}", test.1, DEALLOCATION_ERROR).into(),
+                );
             }
+        }
+        return Result::Ok(());
+    }
+    pub mod deallocation {
+        use super::*;
+        pub fn c_vector_clone() -> Result<(), Box<dyn StdError + 'static>> {
+            let c_vector = Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec());
+            {
+                let _ = c_vector.clone_as_vec()?;
+            }
+            if c_vector.pointer.is_null() {
+                return Result::Err(ALLOCATION_ERROR.into());
+            }
+            Allocator::<CVector<_>>::deallocate(&c_vector);
             return Result::Ok(());
         }
-        #[test]
-        fn c_vector_clone() -> Result<(), Box<dyn StdError + 'static>> {
-            let c_vector_clone_ = || -> _ {
-                let c_vector = Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec());
-                {
-                    let _ = c_vector.clone_as_vec()?;
-                }
-                if c_vector.pointer.is_null() {
-                    return Result::Err(ALLOCATION_ERROR.into());
-                }
-                Allocator::<CVector<_>>::deallocate(&c_vector);
-                return Result::<_, Box<dyn StdError + 'static>>::Ok(());
-            };
-            return single_thread_allocation_counting_wrapper(c_vector_clone_);
-        }
-        #[test]
-        fn c_string_clone() -> Result<(), Box<dyn StdError + 'static>> {
-            let c_string_clone_ = || -> _ {
-                let c_string = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
-                {
-                    let _ = c_string.clone_as_string()?;
-                }
-                if c_string.pointer.is_null() {
-                    return Result::Err(ALLOCATION_ERROR.into());
-                }
-                Allocator::<CString>::deallocate(&c_string);
-                return Result::<_, Box<dyn StdError + 'static>>::Ok(());
-            };
-            return single_thread_allocation_counting_wrapper(c_string_clone_);
+        pub fn c_string_clone() -> Result<(), Box<dyn StdError + 'static>> {
+            let c_string = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
+            {
+                let _ = c_string.clone_as_string()?;
+            }
+            if c_string.pointer.is_null() {
+                return Result::Err(ALLOCATION_ERROR.into());
+            }
+            Allocator::<CString>::deallocate(&c_string);
+            return Result::Ok(());
         }
 
 

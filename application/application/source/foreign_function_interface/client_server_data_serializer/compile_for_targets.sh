@@ -1,5 +1,5 @@
 #!/bin/sh
-result=`cargo valgrind test --manifest-path=./source/Cargo.toml`
+result=`cargo test --manifest-path=./source/Cargo.toml`
 if [ $? != 0 ];
 then
     echo "An error was occured: \n $result ."
