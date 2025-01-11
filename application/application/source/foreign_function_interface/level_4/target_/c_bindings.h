@@ -3,16 +3,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef enum C {
-  One,
-  Two,
-} C;
-
-typedef enum D {
-  Three,
-  Four,
-} D;
-
 typedef struct A {
   unsigned char a;
   unsigned char b;
@@ -23,27 +13,10 @@ typedef struct B {
   unsigned char b;
 } B;
 
-typedef enum E_Tag {
-  Five,
-  Six,
-} E_Tag;
-
-typedef struct Five_Body {
-  char a;
-  char *b_pointer_to_string;
-} Five_Body;
-
-typedef struct Six_Body {
-  bool a;
-} Six_Body;
-
-typedef struct E {
-  E_Tag tag;
-  union {
-    Five_Body five;
-    Six_Body six;
-  };
-} E;
+typedef struct C {
+  unsigned char a;
+  char *string_pointer;
+} C;
 
 typedef struct CVector_c_uchar {
   unsigned char *pointer;
@@ -113,25 +86,15 @@ struct B *get_b__allocate(unsigned char a);
 
 void get_b__deallocate(struct B *b);
 
-unsigned short calculate_scd_sum(struct B *b);
+unsigned short calculate_b_sum(struct B *b);
 
-enum C get_c(unsigned char number);
+struct C *get_c__allocate(void);
 
-bool is_c_one(enum C c);
+void get_c__deallocate(struct C *c);
 
-enum D *get_d__allocate(unsigned char number);
+bool is_c__1_nigger(struct C *c);
 
-void get_d__deallocate(enum D *d);
-
-bool is_d_one(enum D *d);
-
-struct E *get_e__allocate_1(void);
-
-struct E *get_e__allocate_2(void);
-
-void get_e__deallocate(struct E *e);
-
-bool is_e_one_69_nigger(struct E *e);
+bool is_c__1_nigger___full_struct(struct C c);
 
 struct CResult_CVector_c_uchar *user_authorization__register_by_first_step__serialize_allocate(struct UserAuthorization_RegisterByFirstStep_Incoming *incoming);
 

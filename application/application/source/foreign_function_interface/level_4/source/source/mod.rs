@@ -115,126 +115,58 @@ pub extern "C" fn get_b__deallocate(b: *mut B) -> () {
     return ();
 }
 #[no_mangle]
-pub extern "C" fn calculate_scd_sum(b: *mut B) -> c_ushort {
+pub extern "C" fn calculate_b_sum(b: *mut B) -> c_ushort {
     let b = unsafe {
-        Box::from_raw(b)
+        &*b
     };
     return (b.a as u16) + (b.b as u16);
 }
 #[repr(C)]
-#[derive(PartialEq, Eq)]
-pub enum C {
-    One,
-    Two,
+pub struct C {
+    a: c_uchar,
+    string_pointer: *mut c_char,
 }
 #[no_mangle]
-pub extern "C" fn get_c(number: c_uchar) -> C {
-    return if number <= 127 {
-        C::One
-    } else {
-        C::Two
-    };
-}
-#[no_mangle]
-pub extern "C" fn is_c_one(c: C) -> bool {
-    return c == C::One;
-}
-#[repr(C)]
-#[derive(PartialEq, Eq)]
-pub enum D {
-    Three,
-    Four,
-}
-#[no_mangle]
-pub extern "C" fn get_d__allocate(number: c_uchar) -> *mut D {
-    let d = if number <= 127 {
-        D::Three
-    } else {
-        D::Four
-    };
-    return Box::into_raw(Box::new(d));
-}
-#[no_mangle]
-pub extern "C" fn get_d__deallocate(d: *mut D) -> () {
-    let _ = unsafe {
-        Box::from_raw(d)
-    };
-    return ();
-}
-#[no_mangle]
-pub extern "C" fn is_d_one(d: *mut D) -> bool {
-    let d = unsafe {
-        Box::from_raw(d)
-    };
-    return d.as_ref() == &D::Three;
-}
-#[repr(C)]
-pub enum E {
-    Five {
-        a: c_char,
-        b_pointer_to_string: *mut c_char
-    },
-    Six {
-        a: bool,
-    },
-}
-#[no_mangle]
-pub extern "C" fn get_e__allocate_1() -> *mut E {
+pub extern "C" fn get_c__allocate() -> *mut C {
     return Box::into_raw(
         Box::new(
-            E::Five {
-                a: 69,
-                b_pointer_to_string: CString_::new("Nigger").unwrap().into_raw(),
+            C {
+                a: 1,
+                string_pointer: CString_::new("Nigger").unwrap().into_raw(),
             },
         ),
     );
 }
 #[no_mangle]
-pub extern "C" fn get_e__allocate_2() -> *mut E {
-    return Box::into_raw(
-        Box::new(
-            E::Six {
-                a: true,
-            },
-        )
-    );
-}
-#[no_mangle]
-pub extern "C" fn get_e__deallocate(e: *mut E) -> () {
-    let e = unsafe {
-        Box::from_raw(e)
+pub extern "C" fn get_c__deallocate(c: *mut C) -> () {
+    let c = unsafe {
+        Box::from_raw(c)
     };
-    match *e {
-        E::Five {
-            a: _,
-            b_pointer_to_string,
-        } => {
-            let _ = unsafe {
-                CString_::from_raw(b_pointer_to_string)
-            };
-        }
-        _ => {}
-    }
+    let _ = unsafe {
+        CString_::from_raw(c.string_pointer)
+    };
     return ();
 }
 #[no_mangle]
-pub extern "C" fn is_e_one_69_nigger(e: *mut E) -> bool {
-    let e = unsafe {
-        Box::from_raw(e)
+pub extern "C" fn is_c__1_nigger(c: *mut C) -> bool {
+    let c = unsafe {
+        &*c
     };
-    match *e {
-        E::Five {
-            a,
-            b_pointer_to_string,
-        } => {
-            let b_pointer_to_string_ = unsafe {
-                CStr::from_ptr(b_pointer_to_string).to_str().unwrap()
-            };
-            return a == 69 && b_pointer_to_string_ == "Nigger";
-        }
-        _ => {}
+    let string = unsafe {
+        CStr::from_ptr(c.string_pointer)
     }
-    return true;
+    .to_str()
+    .unwrap();
+    return c.a == 1 && string == "Nigger";
+}
+#[no_mangle]
+pub extern "C" fn is_c__1_nigger___full_struct(c: C) -> bool {
+    let string = unsafe {
+        CStr::from_ptr(c.string_pointer)
+    }
+    .to_str()
+    .unwrap();
+    return c.a == 1 && string == "Nigger";
 }
 // level_3---------------------------------------------------------------------------------
 // level_4---------------------------------------------------------------------------------
