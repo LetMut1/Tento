@@ -601,7 +601,7 @@ pub extern "C" fn user_authorization__authorize_by_first_step__deserialize_alloc
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__authorize_by_first_step__deserialize_deallocate(c_result: UserAuthorization_AuthorizeByFirstStep_CResult) -> () {
+pub extern "C" fn user_authorization__authorize_by_first_step__deserialize_deallocate(_c_result: UserAuthorization_AuthorizeByFirstStep_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -798,7 +798,7 @@ pub extern "C" fn user_authorization__check_email_for_existing__deserialize_allo
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__check_email_for_existing__deserialize_deallocate(c_result: UserAuthorization_CheckEmailForExisting_CResult) -> () {
+pub extern "C" fn user_authorization__check_email_for_existing__deserialize_deallocate(_c_result: UserAuthorization_CheckEmailForExisting_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -866,7 +866,7 @@ pub extern "C" fn user_authorization__check_nickname_for_existing__deserialize_a
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__check_nickname_for_existing__deserialize_deallocate(c_result: UserAuthorization_CheckNicknameForExisting_CResult) -> () {
+pub extern "C" fn user_authorization__check_nickname_for_existing__deserialize_deallocate(_c_result: UserAuthorization_CheckNicknameForExisting_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -949,7 +949,7 @@ pub extern "C" fn user_authorization__deauthorize_from_all_devices__deserialize_
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__deauthorize_from_all_devices__deserialize_deallocate(c_result: UserAuthorization_DeauthorizeFromAllDevices_CResult) -> () {
+pub extern "C" fn user_authorization__deauthorize_from_all_devices__deserialize_deallocate(_c_result: UserAuthorization_DeauthorizeFromAllDevices_CResult) -> () {
     return ();
 }
 type UserAuthorization_DeauthorizeFromOneDevice_CResult = CResult<CUnifiedReport<CVoid, UserAuthorization_DeauthorizeFromOneDevice_Precedent>>;
@@ -1032,7 +1032,7 @@ pub extern "C" fn user_authorization__deauthorize_from_one_device__deserialize_a
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__deauthorize_from_one_device__deserialize_deallocate(c_result: UserAuthorization_DeauthorizeFromOneDevice_CResult) -> () {
+pub extern "C" fn user_authorization__deauthorize_from_one_device__deserialize_deallocate(_c_result: UserAuthorization_DeauthorizeFromOneDevice_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1226,7 +1226,7 @@ pub extern "C" fn user_authorization__register_by_first_step__deserialize_alloca
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_first_step__deserialize_deallocate(c_result: UserAuthorization_RegisterByFirstStep_CResult) -> () {
+pub extern "C" fn user_authorization__register_by_first_step__deserialize_deallocate(_c_result: UserAuthorization_RegisterByFirstStep_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1332,7 +1332,7 @@ pub extern "C" fn user_authorization__register_by_second_step__deserialize_alloc
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_second_step__deserialize_deallocate(c_result: UserAuthorization_RegisterBySecondStep_CResult) -> () {
+pub extern "C" fn user_authorization__register_by_second_step__deserialize_deallocate(_c_result: UserAuthorization_RegisterBySecondStep_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1565,7 +1565,7 @@ pub extern "C" fn user_authorization__reset_password_by_first_step__deserialize_
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_first_step__deserialize_deallocate(c_result: UserAuthorization_ResetPasswordByFirstStep_CResult) -> () {
+pub extern "C" fn user_authorization__reset_password_by_first_step__deserialize_deallocate(_c_result: UserAuthorization_ResetPasswordByFirstStep_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1672,7 +1672,7 @@ pub extern "C" fn user_authorization__reset_password_by_second_step__deserialize
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_second_step__deserialize_deallocate(c_result: UserAuthorization_ResetPasswordBySecondStep_CResult) -> () {
+pub extern "C" fn user_authorization__reset_password_by_second_step__deserialize_deallocate(_c_result: UserAuthorization_ResetPasswordBySecondStep_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1779,7 +1779,7 @@ pub extern "C" fn user_authorization__reset_password_by_last_step__deserialize_a
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_last_step__deserialize_deallocate(c_result: UserAuthorization_ResetPasswordByLastStep_CResult) -> () {
+pub extern "C" fn user_authorization__reset_password_by_last_step__deserialize_deallocate(_c_result: UserAuthorization_ResetPasswordByLastStep_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1889,7 +1889,7 @@ pub extern "C" fn user_authorization__send_email_for_register__deserialize_alloc
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_register__deserialize_deallocate(c_result: UserAuthorization_SendEmailForRegister_CResult) -> () {
+pub extern "C" fn user_authorization__send_email_for_register__deserialize_deallocate(_c_result: UserAuthorization_SendEmailForRegister_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -2120,7 +2120,7 @@ pub extern "C" fn user_authorization__send_email_for_reset_password__deserialize
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_reset_password__deserialize_deallocate(c_result: UserAuthorization_SendEmailForResetPassword_CResult) -> () {
+pub extern "C" fn user_authorization__send_email_for_reset_password__deserialize_deallocate(_c_result: UserAuthorization_SendEmailForResetPassword_CResult) -> () {
     return ();
 }
 #[repr(C)]
