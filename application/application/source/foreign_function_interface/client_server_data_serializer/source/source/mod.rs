@@ -3191,13 +3191,21 @@ mod test {
                 get_function_name(self::deallocation::server_request_data_serialization::channel_subscription__create),
             ),
         ];
+        // https://docs.rs/bitcode/0.6.3/src/bitcode/derive/mod.rs.html#68
+        // When the `bitcode::encode` method is first called for a specific type, an additional byte is allocated and
+        // is not deallocated until the program process completes. Accordingly, when the `bitcode::encode` method is called
+        // again, no additional byte occurs and it becomes possible to expect that the number of allocated bytes will be
+        // equal to the number of deallocated bytes.
         '_a: for test in test_registry.iter() {
-            let region = Region::new(&GLOBAL_ALLOCATOR);
             if let Result::Err(error) = test.0() {
                 return Result::Err(
                     format!("{}: {}", test.1, &error).into(),
                 );
             }
+        }
+        '_a: for test in test_registry.iter() {
+            let region = Region::new(&GLOBAL_ALLOCATOR);
+            let _ = test.0();
             let statistics = region.change();
             if statistics.bytes_allocated != statistics.bytes_deallocated {
                 return Result::Err(
