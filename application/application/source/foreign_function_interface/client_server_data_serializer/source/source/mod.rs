@@ -1937,7 +1937,7 @@ pub struct UserAuthorization_SendEmailForAuthorize_Precedent {
     pub user_authorization_token__time_to_resend_has_not_come: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_authorize_deserialize_allocate(
+pub extern "C" fn user_authorization__send_email_for_authorize__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_SendEmailForAuthorize_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>| -> Result<
@@ -2001,7 +2001,7 @@ pub extern "C" fn user_authorization__send_email_for_authorize_deserialize_alloc
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_authorize_deserialize_deallocate(c_result: UserAuthorization_SendEmailForAuthorize_CResult) -> () {
+pub extern "C" fn user_authorization__send_email_for_authorize__deserialize_deallocate(_c_result: UserAuthorization_SendEmailForAuthorize_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -2456,7 +2456,7 @@ pub struct Channel_GetManyPublicByName_Precedent {
     pub user_access_token__in_user_access_token_black_list: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_public_by_name_deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyPublicByName_CResult {
+pub extern "C" fn channel__get_many_public_by_name__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyPublicByName_CResult {
     let converter = move |unified_report: UnifiedReport<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>| -> Result<
         CUnifiedReport<Channel_GetManyPublicByName_Outcoming, Channel_GetManyPublicByName_Precedent>,
         Box<dyn StdError + 'static>,
@@ -2530,7 +2530,7 @@ pub extern "C" fn channel__get_many_public_by_name_deserialize_allocate(c_vector
     );
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_public_by_name_deserialize_deallocate(c_result: Channel_GetManyPublicByName_CResult) -> () {
+pub extern "C" fn channel__get_many_public_by_name__deserialize_deallocate(c_result: Channel_GetManyPublicByName_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         let common_registry = c_result.data.target.filled.common_registry.as_slice_unchecked();
         for common_1 in common_registry {
@@ -2755,7 +2755,7 @@ pub struct ChannelSubscription_Create_Precedent {
     pub user__is_channel__owner: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel_subscription__create_deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Create_CResult {
+pub extern "C" fn channel_subscription__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Create_CResult {
     let converter = move |unified_report: UnifiedReport<Void, ChannelSubscription_Create_Precedent_>| -> Result<CUnifiedReport<CVoid, ChannelSubscription_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2813,7 +2813,7 @@ pub extern "C" fn channel_subscription__create_deserialize_allocate(c_vector_of_
     );
 }
 #[no_mangle]
-pub extern "C" fn channel_subscription__create_deserialize_deallocate(c_result: ChannelSubscription_Create_CResult) -> () {
+pub extern "C" fn channel_subscription__create__deserialize_deallocate(_c_result: ChannelSubscription_Create_CResult) -> () {
     return ();
 }
 #[cfg(test)]
@@ -3744,8 +3744,8 @@ mod test {
                 let unified_report = UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>::target_empty();
                 return run_by_template(
                     &unified_report,
-                    user_authorization__send_email_for_authorize_deserialize_allocate,
-                    user_authorization__send_email_for_authorize_deserialize_deallocate,
+                    user_authorization__send_email_for_authorize__deserialize_allocate,
+                    user_authorization__send_email_for_authorize__deserialize_deallocate,
                 );
             }
             pub fn target_filled__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3756,8 +3756,8 @@ mod test {
                     UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
-                    user_authorization__send_email_for_authorize_deserialize_allocate,
-                    user_authorization__send_email_for_authorize_deserialize_deallocate,
+                    user_authorization__send_email_for_authorize__deserialize_allocate,
+                    user_authorization__send_email_for_authorize__deserialize_deallocate,
                 );
             }
             fn _precedent__user_authorization__send_email_for_authorize(
@@ -3767,8 +3767,8 @@ mod test {
                     UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
-                    user_authorization__send_email_for_authorize_deserialize_allocate,
-                    user_authorization__send_email_for_authorize_deserialize_deallocate,
+                    user_authorization__send_email_for_authorize__deserialize_allocate,
+                    user_authorization__send_email_for_authorize__deserialize_deallocate,
                 );
             }
             pub fn precedent__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3935,8 +3935,8 @@ mod test {
                 let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>::target_empty();
                 return run_by_template(
                     &unified_report,
-                    channel__get_many_public_by_name_deserialize_allocate,
-                    channel__get_many_public_by_name_deserialize_deallocate,
+                    channel__get_many_public_by_name__deserialize_allocate,
+                    channel__get_many_public_by_name__deserialize_deallocate,
                 );
             }
             pub fn target_filled__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3962,16 +3962,16 @@ mod test {
                 let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
-                    channel__get_many_public_by_name_deserialize_allocate,
-                    channel__get_many_public_by_name_deserialize_deallocate,
+                    channel__get_many_public_by_name__deserialize_allocate,
+                    channel__get_many_public_by_name__deserialize_deallocate,
                 );
             }
             fn _precedent__channel__get_many_public_by_name(precedent: Channel_GetManyPublicByName_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
                 let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
-                    channel__get_many_public_by_name_deserialize_allocate,
-                    channel__get_many_public_by_name_deserialize_deallocate,
+                    channel__get_many_public_by_name__deserialize_allocate,
+                    channel__get_many_public_by_name__deserialize_deallocate,
                 );
             }
             pub fn precedent__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4056,8 +4056,8 @@ mod test {
                 let unified_report = UnifiedReport::<Void, ChannelSubscription_Create_Precedent_>::target_empty();
                 return run_by_template(
                     &unified_report,
-                    channel_subscription__create_deserialize_allocate,
-                    channel_subscription__create_deserialize_deallocate,
+                    channel_subscription__create__deserialize_allocate,
+                    channel_subscription__create__deserialize_deallocate,
                 );
             }
             pub fn target_filled__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4067,8 +4067,8 @@ mod test {
                 let unified_report = UnifiedReport::<Void, ChannelSubscription_Create_Precedent_>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
-                    channel_subscription__create_deserialize_allocate,
-                    channel_subscription__create_deserialize_deallocate,
+                    channel_subscription__create__deserialize_allocate,
+                    channel_subscription__create__deserialize_deallocate,
                 );
             }
             pub fn precedent__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
