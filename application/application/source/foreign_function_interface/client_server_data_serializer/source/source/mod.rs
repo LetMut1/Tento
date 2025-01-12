@@ -3209,7 +3209,13 @@ mod test {
             let statistics = region.change();
             if statistics.bytes_allocated != statistics.bytes_deallocated {
                 return Result::Err(
-                    format!("{}: {}", test.1, DEALLOCATION_ERROR).into(),
+                    format!(
+                        "{}: {}. bytes_allocated: {}, bytes_deallocated: {}",
+                        test.1,
+                        DEALLOCATION_ERROR,
+                        statistics.bytes_allocated,
+                        statistics.bytes_deallocated,
+                    ).into(),
                 );
             }
         }
