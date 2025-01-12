@@ -3210,11 +3210,10 @@ mod test {
             if statistics.bytes_allocated != statistics.bytes_deallocated {
                 return Result::Err(
                     format!(
-                        "{}: {}. bytes_allocated: {}, bytes_deallocated: {}",
+                        "{}: {} Undeallocated bytes: {}",
                         test.1,
                         DEALLOCATION_ERROR,
-                        statistics.bytes_allocated,
-                        statistics.bytes_deallocated,
+                        statistics.bytes_allocated - statistics.bytes_deallocated,
                     ).into(),
                 );
             }
