@@ -87,7 +87,6 @@ use tokio_postgres::NoTls;
 pub struct HttpServer;
 impl HttpServer {
     pub fn run(environment_configuration: &'static EnvironmentConfiguration<RunServer>) -> impl Future<Output = Result<(), AggregateError>> + Send {
-        const QUANTITY_OF_SECONDS_TO_RERUN: u64 = 1;
         return async move {
             #[cfg(feature = "port_for_manual_test")]
             let http1_socket_address = {
@@ -154,7 +153,7 @@ impl HttpServer {
                         file!(),
                     ),
                 )?;
-                let future = async move {
+                if let Result::Err(aggregate_error) = async move {
                     #[cfg(feature = "port_for_manual_test")]
                     let http1_builder = Http1Builder::new();
                     let mut http2_builder = Http2Builder::new(TokioExecutor::new()).max_local_error_reset_streams(Option::Some(128));
@@ -301,44 +300,24 @@ impl HttpServer {
                             },
                         }
                     }
-                    let completion_by_timer_future = async {
-                        print!("Remaining time in seconds before shutdown:");
-                        '_b: for seconds_quantity in 15..=1 {
-                            if seconds_quantity != 1 {
-                                print!(" {},", seconds_quantity);
-                            } else {
-                                print!("{}.", seconds_quantity);
-                            }
-                            tokio::time::sleep(Duration::from_secs(1)).await;
+                    print!("Remaining time in seconds before shutdown:");
+                    '_b: for seconds_quantity in 15..=1 {
+                        if seconds_quantity != 1 {
+                            print!(" {},", seconds_quantity);
+                        } else {
+                            print!("{}.", seconds_quantity);
                         }
-                        return ();
-                    };
-                    let _ = Spawner::<TokioNonBlockingTask>::spawn_processed(completion_by_timer_future).await;
+                        tokio::time::sleep(Duration::from_secs(1)).await;
+                    }
                     return Result::<_, AggregateError>::Ok(());
-                };
-                match Spawner::<TokioNonBlockingTask>::spawn_processed(future)
-                .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ) {
-                    Result::Ok(result) => {
-                        if let Result::Err(aggregate_error) = result {
-                            Logger::<AggregateError>::log(&aggregate_error);
-                            tokio::time::sleep(Duration::from_secs(QUANTITY_OF_SECONDS_TO_RERUN)).await;
-                            continue 'a;
-                        }
-                        break 'a;
-                    }
-                    Result::Err(aggregate_error) => {
-                        Logger::<AggregateError>::log(&aggregate_error);
-                        tokio::time::sleep(Duration::from_secs(QUANTITY_OF_SECONDS_TO_RERUN)).await;
-                        continue 'a;
-                    }
                 }
-
+                .await
+                {
+                    Logger::<AggregateError>::log(&aggregate_error);
+                    tokio::time::sleep(Duration::from_secs(1)).await;
+                    continue 'a;
+                }
+                break 'a;
             }
             return Result::Ok(());
         };
