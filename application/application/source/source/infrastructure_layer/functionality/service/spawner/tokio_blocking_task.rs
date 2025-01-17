@@ -20,6 +20,7 @@ impl Spawner<TokioBlockingTask> {
                 return ();
             },
         );
+        return ();
     }
     pub fn spawn_processed<R>(
         closure: impl FnOnce() -> R + Send + 'static,

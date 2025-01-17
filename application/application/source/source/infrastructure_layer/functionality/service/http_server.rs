@@ -103,14 +103,16 @@ impl HttpServer {
             };
             let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?;
             let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
-            let graceful_shutdown_signal_future = async move {
-                tokio::select! {
-                    _ = signal_interrupt_future => {},
-                    _ = signal_terminate_future => {},
+            let graceful_shutdown_signal_future_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(
+                async move {
+                    tokio::select! {
+                        _ = signal_interrupt_future => {},
+                        _ = signal_terminate_future => {},
+                    }
+                    return ();
                 }
-                return ();
-            };
-            let mut graceful_shutdown_signal_future_ = std::pin::pin!(graceful_shutdown_signal_future);
+            );
+            let mut graceful_shutdown_signal_future_join_handle_ = std::pin::pin!(graceful_shutdown_signal_future_join_handle);
             let postgresql_connection_pool_database_1;
             let postgresql_connection_pool_database_2;
             #[cfg(feature = "postgresql_connection_with_tls")]
@@ -139,7 +141,7 @@ impl HttpServer {
             );
             'a: loop {
                 let cloned_ = cloned.clone();
-                let mut graceful_shutdown_signal_future__ = graceful_shutdown_signal_future_.as_mut();
+                let mut graceful_shutdown_signal_future_join_handle__ = graceful_shutdown_signal_future_join_handle_.as_mut();
                 #[cfg(feature = "port_for_manual_test")]
                 let http1_tcp_listener = TcpListener::bind(&http1_socket_address).await.into_logic(
                     Backtrace::new(
@@ -200,7 +202,7 @@ impl HttpServer {
                         };
                         tokio::select! {
                             biased;
-                            _ = graceful_shutdown_signal_future__.as_mut() => {
+                            _ = graceful_shutdown_signal_future_join_handle__.as_mut() => {
                                 break 'b;
                             },
                             tcp_stream = tcp_accepting_future => {
