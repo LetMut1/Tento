@@ -1,5 +1,5 @@
 [toolchain]
-channel = "stable-x86_64-unknown-linux-gnu"
+channel = "1.80.0-x86_64-unknown-linux-gnu"
 targets = [
     "aarch64-apple-ios-sim",
     "aarch64-apple-ios",
@@ -10,7 +10,7 @@ targets = [
 ]
 profile = "minimal"
 
-[toolchain.stable-x86_64-unknown-linux-gnu]
+[toolchain.1.80.0-x86_64-unknown-linux-gnu]
 components = [
     "clippy",
     "rust-src"

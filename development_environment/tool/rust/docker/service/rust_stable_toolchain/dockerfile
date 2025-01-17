@@ -2,18 +2,18 @@ FROM rust:1.80.0
 RUN \
     mkdir -p /_tento
 RUN \
-    rustup default stable
+    rustup default 1.80.0-x86_64-unknown-linux-gnu
 RUN \
     rustup toolchain install nightly
 RUN \
-    rustup component add --toolchain=stable \
+    rustup component add --toolchain=1.80.0-x86_64-unknown-linux-gnu \
         clippy \
         rust-src
 RUN \
     rustup component add --toolchain=nightly-x86_64-unknown-linux-gnu \
         rustfmt
 RUN \
-    rustup target add --toolchain=stable \
+    rustup target add --toolchain=1.80.0-x86_64-unknown-linux-gnu \
         aarch64-apple-ios \
         aarch64-apple-ios-sim \
         aarch64-linux-android \
