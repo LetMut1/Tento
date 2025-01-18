@@ -455,10 +455,25 @@ impl Transformer<ServerRequestData> {
     }
 }
 #[repr(C)]
+pub struct UserAccessToken {
+    pub id: CString,
+    pub user__id: c_long,
+    pub user_device__id: CString,
+    pub expires_at: c_long,
+}
+#[repr(C)]
 #[derive(Default, Clone, Copy)]
 pub struct UserAccessTokenEncoded {
     pub serialized: CVector<c_uchar>,
     pub encoded: CVector<c_uchar>,
+}
+#[no_mangle]
+pub extern "C" fn user_access_token__deserialize_allocate(user_access_token_encoded: UserAccessTokenEncoded) -> UserAccessToken {
+    todo!()
+}
+#[no_mangle]
+pub extern "C" fn user_access_token__deserialize_deallocate() -> () {
+    todo!()
 }
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
