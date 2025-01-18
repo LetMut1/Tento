@@ -20,7 +20,7 @@ use crate::infrastructure_layer::{
     },
 };
 use deadpool_postgres::Client;
-use dedicated_crate::{
+use dedicated::{
     action_processor_incoming_outcoming::{
         Channel1,
         Common1,

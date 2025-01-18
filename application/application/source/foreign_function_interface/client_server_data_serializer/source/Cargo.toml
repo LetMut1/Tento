@@ -21,7 +21,7 @@ build = "./build.rs"
 
 [dependencies]
 bitcode = { workspace = true }
-dedicated_crate = { workspace = true }
+dedicated = { workspace = true }
 libc = { package = "libc", version = "=0.2.158", default-features = true, features = [], optional = false }
 
 [build-dependencies]

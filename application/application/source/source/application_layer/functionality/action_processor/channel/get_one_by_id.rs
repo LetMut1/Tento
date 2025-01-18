@@ -45,7 +45,7 @@ use crate::{
         },
     },
 };
-use dedicated_crate::{
+use dedicated::{
     action_processor_incoming_outcoming::{
         action_processor::channel::get_one_by_id::{
             Incoming,

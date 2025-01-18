@@ -39,7 +39,7 @@ use crate::infrastructure_layer::{
     },
     functionality::service::creator::PostgresqlConnectionPool,
 };
-use dedicated_crate::{
+use dedicated::{
     unified_report::UnifiedReport,
     void::Void,
 };

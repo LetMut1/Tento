@@ -32,7 +32,7 @@ use crate::{
     presentation_layer::functionality::action::Inner,
 };
 use bytes::Buf;
-use dedicated_crate::void::Void;
+use dedicated::void::Void;
 use http::request::Parts;
 use http_body_util::BodyExt;
 use std::future::Future;

@@ -31,7 +31,7 @@ clap = { package = "clap", version = "=4.5.17", default-features = true, feature
 const_format = { package = "const_format", version = "=0.2.33", default-features = true, features = [], optional = true }
 deadpool = { package = "deadpool", version = "=0.12.1", default-features = true, features = ["rt_tokio_1"], optional = false }
 deadpool_postgres = { package = "deadpool-postgres", version = "=0.14.0", default-features = true, features = ["rt_tokio_1"], optional = false }
-dedicated_crate = { workspace = true }
+dedicated = { workspace = true }
 hmac = { package = "hmac", version = "=0.12.1", default-features = true, features = [], optional = false }
 http = { package = "http", version = "=1.1.0", default-features = true, features = [], optional = false }
 http-body-util = { package = "http-body-util", version = "=0.1.2", default-features = true, features = [], optional = false }
@@ -62,7 +62,7 @@ default = []
 logging_to_file = []
 postgresql_connection_with_tls = []
 serde_for_manual_test = [
-    "dedicated_crate/serde_for_manual_test",
+    "dedicated/serde_for_manual_test",
 ]
 json_for_manual_test = [
     "dep:serde_json",

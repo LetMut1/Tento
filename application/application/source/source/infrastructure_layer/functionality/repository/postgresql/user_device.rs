@@ -17,7 +17,7 @@ use crate::{
     },
 };
 use deadpool_postgres::Client;
-use dedicated_crate::void::Void;
+use dedicated::void::Void;
 use std::future::Future;
 use tokio_postgres::types::Type;
 impl Repository<Postgresql<UserDevice>> {

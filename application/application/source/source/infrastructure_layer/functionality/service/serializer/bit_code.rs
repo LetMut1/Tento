@@ -9,7 +9,7 @@ use crate::infrastructure_layer::data::aggregate_error::{
     Backtrace,
     ResultConverter,
 };
-use dedicated_crate::bit_code_serializer::Serializer as Serializer_;
+use dedicated::bit_code_serializer::Serializer as Serializer_;
 pub struct BitCode;
 impl Serialize for Serializer<BitCode> {
     fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AggregateError>

@@ -67,7 +67,7 @@ use crate::infrastructure_layer::data::{
     capture::Capture,
 };
 use deadpool_postgres::Client;
-use dedicated_crate::void::Void;
+use dedicated::void::Void;
 use std::future::Future;
 use std::marker::PhantomData;
 use tokio_postgres::types::{

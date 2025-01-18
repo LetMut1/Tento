@@ -13,7 +13,7 @@ use crate::{
         },
     },
 };
-use dedicated_crate::void::Void;
+use dedicated::void::Void;
 use std::future::Future;
 impl EmailSender<UserAuthorizationToken<'_>> {
     pub fn repeatable_send<'a>(

@@ -19,7 +19,7 @@ use deadpool_postgres::{
     RecyclingMethod,
     Timeouts,
 };
-use dedicated_crate::void::Void;
+use dedicated::void::Void;
 use std::{
     future::Future,
     time::Duration,

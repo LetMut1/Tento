@@ -61,7 +61,7 @@ use crate::{
 };
 #[cfg(feature = "port_for_manual_test")]
 use core::net::SocketAddr;
-use dedicated_crate::void::Void;
+use dedicated::void::Void;
 #[cfg(feature = "port_for_manual_test")]
 use hyper::server::conn::http1::Builder as Http1Builder;
 use hyper::{

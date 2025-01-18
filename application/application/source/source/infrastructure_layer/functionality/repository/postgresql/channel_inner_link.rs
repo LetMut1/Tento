@@ -17,7 +17,7 @@ use crate::{
     },
 };
 use deadpool_postgres::Client;
-use dedicated_crate::{
+use dedicated::{
     action_processor_incoming_outcoming::ChannelInnerLink1,
     void::Void,
 };

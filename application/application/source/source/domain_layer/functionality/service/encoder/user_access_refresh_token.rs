@@ -19,7 +19,7 @@ use crate::{
         },
     },
 };
-use dedicated_crate::user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded;
+use dedicated::user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded;
 impl Encoder<UserAccessRefreshToken<'_>> {
     pub fn encode<'a>(
         private_key: &'static PrivateKey,

@@ -63,7 +63,7 @@ use crate::{
         },
     },
 };
-use dedicated_crate::void::Void;
+use dedicated::void::Void;
 use rand::{
     thread_rng,
     Rng,

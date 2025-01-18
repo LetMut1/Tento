@@ -38,7 +38,7 @@ use crate::{
         },
     },
 };
-use dedicated_crate::{
+use dedicated::{
     action_processor_incoming_outcoming::{
         action_processor::channel::get_many_public_by_name::{
             Incoming,

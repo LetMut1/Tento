@@ -8,7 +8,7 @@ use crate::infrastructure_layer::data::{
     capture::Capture,
     environment_configuration::run_server::EmailServer,
 };
-use dedicated_crate::void::Void;
+use dedicated::void::Void;
 use std::future::Future;
 // use lettre::{
 //     message::header::ContentType, transport::smtp::authentication::Credentials, AsyncSmtpTransport,

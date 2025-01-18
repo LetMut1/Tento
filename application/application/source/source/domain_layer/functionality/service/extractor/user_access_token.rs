@@ -15,7 +15,7 @@ use crate::{
         },
     },
 };
-use dedicated_crate::user_access_token_encoded::UserAccessTokenEncoded;
+use dedicated::user_access_token_encoded::UserAccessTokenEncoded;
 impl Extractor<UserAccessToken<'_>> {
     pub fn extract<'a>(
         private_key: &'static PrivateKey,

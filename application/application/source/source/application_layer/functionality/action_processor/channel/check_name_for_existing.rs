@@ -38,7 +38,7 @@ use crate::{
         },
     },
 };
-use dedicated_crate::{
+use dedicated::{
     action_processor_incoming_outcoming::action_processor::channel::check_name_for_existing::{
         Incoming,
         Outcoming,

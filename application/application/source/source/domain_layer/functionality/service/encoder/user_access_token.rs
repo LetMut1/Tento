@@ -22,7 +22,7 @@ use crate::{
         },
     },
 };
-use dedicated_crate::user_access_token_encoded::UserAccessTokenEncoded;
+use dedicated::user_access_token_encoded::UserAccessTokenEncoded;
 impl Encoder<UserAccessToken<'_>> {
     pub fn encode<'a>(
         private_key: &'static PrivateKey,

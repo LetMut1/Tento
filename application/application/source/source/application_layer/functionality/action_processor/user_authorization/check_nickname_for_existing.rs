@@ -29,7 +29,7 @@ use crate::{
         },
     },
 };
-use dedicated_crate::{
+use dedicated::{
     action_processor_incoming_outcoming::action_processor::user_authorization::check_nickname_for_existing::{
         Incoming,
         Outcoming,

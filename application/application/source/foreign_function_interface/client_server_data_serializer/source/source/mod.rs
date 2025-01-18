@@ -2,7 +2,7 @@ use bitcode::{
     Decode,
     Encode,
 };
-use dedicated_crate::{
+use dedicated::{
     action_processor_incoming_outcoming::action_processor::{
         channel::{
             get_many_by_name_in_subscriptions::{
@@ -3246,7 +3246,7 @@ mod test {
         }
         pub mod server_response_data_deserialization {
             use super::*;
-            use dedicated_crate::action_processor_incoming_outcoming::{
+            use dedicated::action_processor_incoming_outcoming::{
                 Channel1 as Channel1_,
                 Channel2 as Channel2_,
                 ChannelInnerLink1 as ChannelInnerLink1_,

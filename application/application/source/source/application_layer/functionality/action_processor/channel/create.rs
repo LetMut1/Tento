@@ -47,7 +47,7 @@ use crate::{
         },
     },
 };
-use dedicated_crate::{
+use dedicated::{
     action_processor_incoming_outcoming::action_processor::channel::create::{
         Incoming,
         Outcoming,

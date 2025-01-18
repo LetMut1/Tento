@@ -17,7 +17,7 @@ use crate::{
     },
 };
 use deadpool_postgres::Client;
-use dedicated_crate::void::Void;
+use dedicated::void::Void;
 use std::{
     borrow::Cow,
     future::Future,

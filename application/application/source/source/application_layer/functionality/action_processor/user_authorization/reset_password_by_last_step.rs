@@ -62,7 +62,7 @@ use crate::{
         },
     },
 };
-use dedicated_crate::{
+use dedicated::{
     action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_last_step::{
         Incoming,
         Precedent,

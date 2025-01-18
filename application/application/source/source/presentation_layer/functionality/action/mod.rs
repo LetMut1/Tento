@@ -25,7 +25,7 @@ use crate::{
         Processor,
     },
 };
-use dedicated_crate::void::Void;
+use dedicated::void::Void;
 use http::request::Parts;
 use hyper::body::Incoming;
 use std::{

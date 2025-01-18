@@ -122,7 +122,7 @@ dependencies = [
  "const_format",
  "deadpool",
  "deadpool-postgres",
- "dedicated_crate",
+ "dedicated",
  "hmac",
  "http",
  "http-body-util",
@@ -383,7 +383,7 @@ dependencies = [
  "bitcode",
  "cargo-emit",
  "cbindgen",
- "dedicated_crate",
+ "dedicated",
  "libc",
  "stats_alloc",
  "uuid",
@@ -490,7 +490,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "dedicated_crate"
+name = "dedicated"
 version = "1.0.0"
 dependencies = [
  "bitcode",
