@@ -20,4 +20,4 @@ diesel database reset --database-url=postgres://root:password@postgresql_databas
 
 
 
-cargo run --features=port_for_manual_test,logging_to_file --bin=application -- --environment_configuration_file_path=/_tento/application/core/source/environment/run_server.example.toml run_server
+cargo run --features=port_for_manual_test,logging_to_file --bin=core -- --environment_configuration_file_path=/_tento/application/core/source/environment/run_server.example.toml run_server
