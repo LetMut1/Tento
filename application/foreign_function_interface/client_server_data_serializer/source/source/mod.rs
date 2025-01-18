@@ -107,6 +107,7 @@ use dedicated::{
         },
     },
     bit_code_serializer::Serializer,
+    entity::user_access_token::UserAccessToken as UserAccessToken_,
     unified_report::{
         Data,
         UnifiedReport,
@@ -123,15 +124,12 @@ use libc::{
     size_t,
 };
 use std::{
-    boxed::Box,
-    default::Default,
     error::Error as StdError,
     ffi::{
         CStr,
         CString as CString_,
     },
     marker::PhantomData,
-    result::Result,
 };
 // TODO -------------------------------------------------------------------------------------------------------------------------------------------
 // TODO-------------------------------------------------------------------------------------------------------------------------------------------
@@ -356,7 +354,7 @@ impl Allocator<CString> {
             pointer: unsafe { CString_::from_vec_unchecked(string.into_bytes()) }.into_raw(),
         };
     }
-    fn deallocate<'a>(c_string: &'a CString) -> () {
+    fn deallocate(c_string: CString) -> () {
         if c_string.pointer.is_null() {
             return ();
         }
@@ -377,7 +375,7 @@ impl<T> Allocator<CVector<T>> {
         std::mem::forget(boxed_slice);
         return c_vector;
     }
-    fn deallocate<'a>(c_vector: &'a CVector<T>) -> () {
+    fn deallocate(c_vector: CVector<T>) -> () {
         if c_vector.pointer.is_null() {
             return ();
         }
@@ -394,7 +392,7 @@ impl<T> Allocator<CVector<T>> {
 impl Allocator<CResult<CVector<c_uchar>>> {
     fn deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
         if c_result.is_data {
-            Allocator::<CVector<_>>::deallocate(&c_result.data);
+            Allocator::<CVector<_>>::deallocate(c_result.data);
         }
         return ();
     }
@@ -449,12 +447,13 @@ impl Transformer<ServerRequestData> {
         };
         return CResult::data(
             Allocator::<CVector<_>>::allocate(
-                Serializer::serialize(&incoming_)
-            )
+                Serializer::serialize(&incoming_),
+            ),
         );
     }
 }
 #[repr(C)]
+#[derive(Default)]
 pub struct UserAccessToken {
     pub id: CString,
     pub user__id: c_long,
@@ -468,12 +467,33 @@ pub struct UserAccessTokenEncoded {
     pub encoded: CVector<c_uchar>,
 }
 #[no_mangle]
-pub extern "C" fn user_access_token__deserialize_allocate(user_access_token_encoded: UserAccessTokenEncoded) -> UserAccessToken {
-    todo!()
+pub extern "C" fn user_access_token__deserialize_allocate(user_access_token_encoded_serialized: CVector<c_uchar>) -> CResult<UserAccessToken> {
+    let transformer = move |user_access_token_encoded_serialized: CVector<c_uchar>| -> Result<UserAccessToken, Box<dyn StdError + 'static>> {
+        let user_access_token_encoded_serialized_ = user_access_token_encoded_serialized.clone_as_vec()?;
+        let user_access_token = Serializer::deserialize::<'_, UserAccessToken_<'_>>(
+            user_access_token_encoded_serialized_.as_slice(),
+        )?;
+        return Ok(
+            UserAccessToken {
+                id: Allocator::<CString>::allocate(user_access_token.id),
+                user__id: user_access_token.user__id,
+                user_device__id: Allocator::<CString>::allocate(user_access_token.user_device__id.to_string()),
+                expires_at: user_access_token.expires_at,
+            },
+        );
+    };
+    return match transformer(user_access_token_encoded_serialized) {
+        Result::Ok(user_acces_token) => CResult::data(user_acces_token),
+        Result::Err(_) => CResult::error(),
+    };
 }
 #[no_mangle]
-pub extern "C" fn user_access_token__deserialize_deallocate() -> () {
-    todo!()
+pub extern "C" fn user_access_token__deserialize_deallocate(c_result: CResult<UserAccessToken>) -> () {
+    if c_result.is_data  {
+        Allocator::<CString>::deallocate(c_result.data.id);
+        Allocator::<CString>::deallocate(c_result.data.user_device__id);
+    }
+    return ();
 }
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
@@ -742,9 +762,9 @@ pub extern "C" fn user_authorization__authorize_by_last_step__deserialize_alloca
 #[no_mangle]
 pub extern "C" fn user_authorization__authorize_by_last_step__deserialize_deallocate(c_result: UserAuthorization_AuthorizeByLastStep_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.user_access_token_encoded.serialized);
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.user_access_token_encoded.encoded);
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.user_access_refresh_token_encoded.0);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.serialized);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.encoded);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_refresh_token_encoded.0);
     }
     return ();
 }
@@ -1149,9 +1169,9 @@ pub extern "C" fn user_authorization__refresh_access_token__deserialize_allocate
 #[no_mangle]
 pub extern "C" fn user_authorization__refresh_access_token__deserialize_deallocate(c_result: UserAuthorization_RefreshAccessToken_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.user_access_token_encoded.serialized);
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.user_access_token_encoded.encoded);
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.user_access_refresh_token_encoded.0);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.serialized);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.encoded);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_refresh_token_encoded.0);
     }
     return ();
 }
@@ -1480,9 +1500,9 @@ pub extern "C" fn user_authorization__register_by_last_step__deserialize_allocat
 #[no_mangle]
 pub extern "C" fn user_authorization__register_by_last_step__deserialize_deallocate(c_result: UserAuthorization_RegisterByLastStep_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.user_access_token_encoded.serialized);
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.user_access_token_encoded.encoded);
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.user_access_refresh_token_encoded.0);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.serialized);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.encoded);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_refresh_token_encoded.0);
     }
     return ();
 }
@@ -2267,16 +2287,16 @@ pub extern "C" fn channel__get_many_by_name_in_subscriptions__deserialize_deallo
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         let common_registry = c_result.data.target.filled.common_registry.as_slice_unchecked();
         for common in common_registry {
-            Allocator::<CString>::deallocate(&common.channel.channel__name);
-            Allocator::<CString>::deallocate(&common.channel.channel__linked_name);
+            Allocator::<CString>::deallocate(common.channel.channel__name);
+            Allocator::<CString>::deallocate(common.channel.channel__linked_name);
             if common.channel.channel__background_image_path.is_data {
-                Allocator::<CString>::deallocate(&common.channel.channel__background_image_path.data);
+                Allocator::<CString>::deallocate(common.channel.channel__background_image_path.data);
             }
             if common.channel.channel__cover_image_path.is_data {
-                Allocator::<CString>::deallocate(&common.channel.channel__cover_image_path.data);
+                Allocator::<CString>::deallocate(common.channel.channel__cover_image_path.data);
             }
         }
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.common_registry);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.common_registry);
     }
     return ();
 }
@@ -2407,16 +2427,16 @@ pub extern "C" fn channel__get_many_by_subscription__deserialize_deallocate(c_re
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         let common_registry = c_result.data.target.filled.common_registry.as_slice_unchecked();
         for common in common_registry {
-            Allocator::<CString>::deallocate(&common.channel.channel__name);
-            Allocator::<CString>::deallocate(&common.channel.channel__linked_name);
+            Allocator::<CString>::deallocate(common.channel.channel__name);
+            Allocator::<CString>::deallocate(common.channel.channel__linked_name);
             if common.channel.channel__background_image_path.is_data {
-                Allocator::<CString>::deallocate(&common.channel.channel__background_image_path.data);
+                Allocator::<CString>::deallocate(common.channel.channel__background_image_path.data);
             }
             if common.channel.channel__cover_image_path.is_data {
-                Allocator::<CString>::deallocate(&common.channel.channel__cover_image_path.data);
+                Allocator::<CString>::deallocate(common.channel.channel__cover_image_path.data);
             }
         }
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.common_registry);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.common_registry);
     }
     return ();
 }
@@ -2549,16 +2569,16 @@ pub extern "C" fn channel__get_many_public_by_name__deserialize_deallocate(c_res
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         let common_registry = c_result.data.target.filled.common_registry.as_slice_unchecked();
         for common_1 in common_registry {
-            Allocator::<CString>::deallocate(&common_1.channel.channel__name);
-            Allocator::<CString>::deallocate(&common_1.channel.channel__linked_name);
+            Allocator::<CString>::deallocate(common_1.channel.channel__name);
+            Allocator::<CString>::deallocate(common_1.channel.channel__linked_name);
             if common_1.channel.channel__background_image_path.is_data {
-                Allocator::<CString>::deallocate(&common_1.channel.channel__background_image_path.data);
+                Allocator::<CString>::deallocate(common_1.channel.channel__background_image_path.data);
             }
             if common_1.channel.channel__cover_image_path.is_data {
-                Allocator::<CString>::deallocate(&common_1.channel.channel__cover_image_path.data);
+                Allocator::<CString>::deallocate(common_1.channel.channel__cover_image_path.data);
             }
         }
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.common_registry);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.common_registry);
     }
     return ();
 }
@@ -2708,25 +2728,25 @@ pub extern "C" fn channel__get_one_by_id__deserialize_allocate(c_vector_of_bytes
 #[no_mangle]
 pub extern "C" fn channel__get_one_by_id__deserialize_deallocate(c_result: Channel_GetOneById_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        Allocator::<CString>::deallocate(&c_result.data.target.filled.channel.channel__name);
-        Allocator::<CString>::deallocate(&c_result.data.target.filled.channel.channel__linked_name);
+        Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__name);
+        Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__linked_name);
         if c_result.data.target.filled.channel.channel__description.is_data {
-            Allocator::<CString>::deallocate(&c_result.data.target.filled.channel.channel__description.data);
+            Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__description.data);
         }
         if c_result.data.target.filled.channel.channel__background_image_path.is_data {
-            Allocator::<CString>::deallocate(&c_result.data.target.filled.channel.channel__background_image_path.data);
+            Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__background_image_path.data);
         }
         if c_result.data.target.filled.channel.channel__cover_image_path.is_data {
-            Allocator::<CString>::deallocate(&c_result.data.target.filled.channel.channel__cover_image_path.data);
+            Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__cover_image_path.data);
         }
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.channel.channel__orientation);
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.channel_inner_link_registry);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel.channel__orientation);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_inner_link_registry);
         let channel_outer_link_registry = c_result.data.target.filled.channel_outer_link_registry.as_slice_unchecked();
         for channel_outer_link_1 in channel_outer_link_registry {
-            Allocator::<CString>::deallocate(&channel_outer_link_1.channel_outer_link__alias);
-            Allocator::<CString>::deallocate(&channel_outer_link_1.channel_outer_link__address);
+            Allocator::<CString>::deallocate(channel_outer_link_1.channel_outer_link__alias);
+            Allocator::<CString>::deallocate(channel_outer_link_1.channel_outer_link__address);
         }
-        Allocator::<CVector<_>>::deallocate(&c_result.data.target.filled.channel_outer_link_registry);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_outer_link_registry);
     }
     return ();
 }
@@ -2868,6 +2888,10 @@ mod test {
             (
                 self::deallocation::c_string_clone,
                 get_function_name(self::deallocation::c_string_clone),
+            ),
+            (
+                self::deallocation::user_access_token__deserialize,
+                get_function_name(self::deallocation::user_access_token__deserialize),
             ),
             (
                 self::deallocation::server_response_data_deserialization::target_empty__user_authorization__authorize_by_first_step,
@@ -3245,7 +3269,7 @@ mod test {
             if c_vector.pointer.is_null() {
                 return Result::Err(ALLOCATION_ERROR.into());
             }
-            Allocator::<CVector<_>>::deallocate(&c_vector);
+            Allocator::<CVector<_>>::deallocate(c_vector);
             return Result::Ok(());
         }
         pub fn c_string_clone() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3256,8 +3280,25 @@ mod test {
             if c_string.pointer.is_null() {
                 return Result::Err(ALLOCATION_ERROR.into());
             }
-            Allocator::<CString>::deallocate(&c_string);
+            Allocator::<CString>::deallocate(c_string);
             return Result::Ok(());
+        }
+        pub fn user_access_token__deserialize() -> Result<(), Box<dyn StdError + 'static>> {
+            let c_vector = Allocator::<CVector<_>>::allocate(
+                Serializer::serialize(
+                    &UserAccessToken_::new(
+                        NOT_EMPTY_STRING_LITERAL.to_string(),
+                        0,
+                        NOT_EMPTY_STRING_LITERAL,
+                        0
+                    ),
+                ),
+            );
+            user_access_token__deserialize_deallocate(
+                user_access_token__deserialize_allocate(c_vector),
+            );
+            Allocator::<CVector<_>>::deallocate(c_vector);
+            return Ok(());
         }
         pub mod server_response_data_deserialization {
             use super::*;
@@ -3280,7 +3321,7 @@ mod test {
                     Serializer::serialize(data),
                 );
                 deallocator(allocator(c_vector));
-                Allocator::<CVector<_>>::deallocate(&c_vector);
+                Allocator::<CVector<_>>::deallocate(c_vector);
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4134,9 +4175,9 @@ mod test {
                     user_authorization__authorize_by_first_step__serialize_allocate,
                     user_authorization__authorize_by_first_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                Allocator::<CString>::deallocate(&incoming.user__email___or___user__nickname);
-                Allocator::<CString>::deallocate(&incoming.user__password);
+                Allocator::<CString>::deallocate(incoming.user_device__id);
+                Allocator::<CString>::deallocate(incoming.user__email___or___user__nickname);
+                Allocator::<CString>::deallocate(incoming.user__password);
                 return Result::Ok(());
             }
             pub fn user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4150,8 +4191,8 @@ mod test {
                     user_authorization__authorize_by_last_step__serialize_allocate,
                     user_authorization__authorize_by_last_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                Allocator::<CString>::deallocate(&incoming.user_authorization_token__value);
+                Allocator::<CString>::deallocate(incoming.user_device__id);
+                Allocator::<CString>::deallocate(incoming.user_authorization_token__value);
                 return Result::Ok(());
             }
             pub fn user_authorization__check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4163,7 +4204,7 @@ mod test {
                     user_authorization__check_email_for_existing__serialize_allocate,
                     user_authorization__check_email_for_existing__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user__email);
+                Allocator::<CString>::deallocate(incoming.user__email);
                 return Result::Ok(());
             }
             pub fn user_authorization__check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4175,7 +4216,7 @@ mod test {
                     user_authorization__check_nickname_for_existing__serialize_allocate,
                     user_authorization__check_nickname_for_existing__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user__nickname);
+                Allocator::<CString>::deallocate(incoming.user__nickname);
                 return Result::Ok(());
             }
             pub fn user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4190,8 +4231,8 @@ mod test {
                     user_authorization__deauthorize_from_all_devices__serialize_allocate,
                     user_authorization__deauthorize_from_all_devices__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
                 return Result::Ok(());
             }
             pub fn user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4206,8 +4247,8 @@ mod test {
                     user_authorization__deauthorize_from_one_device__serialize_allocate,
                     user_authorization__deauthorize_from_one_device__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
                 return Result::Ok(());
             }
             pub fn user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4223,9 +4264,9 @@ mod test {
                     user_authorization__refresh_access_token__serialize_allocate,
                     user_authorization__refresh_access_token__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_refresh_token_encoded.0);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_refresh_token_encoded.0);
                 return Result::Ok(());
             }
             pub fn user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4238,8 +4279,8 @@ mod test {
                     user_authorization__register_by_first_step__serialize_allocate,
                     user_authorization__register_by_first_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user__email);
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
+                Allocator::<CString>::deallocate(incoming.user__email);
+                Allocator::<CString>::deallocate(incoming.user_device__id);
                 return Result::Ok(());
             }
             pub fn user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4253,9 +4294,9 @@ mod test {
                     user_authorization__register_by_second_step__serialize_allocate,
                     user_authorization__register_by_second_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user__email);
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                Allocator::<CString>::deallocate(&incoming.user_registration_token__value);
+                Allocator::<CString>::deallocate(incoming.user__email);
+                Allocator::<CString>::deallocate(incoming.user_device__id);
+                Allocator::<CString>::deallocate(incoming.user_registration_token__value);
                 return Result::Ok(());
             }
             pub fn user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4271,11 +4312,11 @@ mod test {
                     user_authorization__register_by_last_step__serialize_allocate,
                     user_authorization__register_by_last_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                Allocator::<CString>::deallocate(&incoming.user__nickname);
-                Allocator::<CString>::deallocate(&incoming.user__password);
-                Allocator::<CString>::deallocate(&incoming.user__email);
-                Allocator::<CString>::deallocate(&incoming.user_registration_token__value);
+                Allocator::<CString>::deallocate(incoming.user_device__id);
+                Allocator::<CString>::deallocate(incoming.user__nickname);
+                Allocator::<CString>::deallocate(incoming.user__password);
+                Allocator::<CString>::deallocate(incoming.user__email);
+                Allocator::<CString>::deallocate(incoming.user_registration_token__value);
                 return Result::Ok(());
             }
             pub fn user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4288,8 +4329,8 @@ mod test {
                     user_authorization__reset_password_by_first_step__serialize_allocate,
                     user_authorization__reset_password_by_first_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user__email);
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
+                Allocator::<CString>::deallocate(incoming.user__email);
+                Allocator::<CString>::deallocate(incoming.user_device__id);
                 return Result::Ok(());
             }
             pub fn user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4303,8 +4344,8 @@ mod test {
                     user_authorization__reset_password_by_second_step__serialize_allocate,
                     user_authorization__reset_password_by_second_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                Allocator::<CString>::deallocate(&incoming.user_reset_password_token__value);
+                Allocator::<CString>::deallocate(incoming.user_device__id);
+                Allocator::<CString>::deallocate(incoming.user_reset_password_token__value);
                 return Result::Ok(());
             }
             pub fn user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4319,9 +4360,9 @@ mod test {
                     user_authorization__reset_password_by_last_step__serialize_allocate,
                     user_authorization__reset_password_by_last_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
-                Allocator::<CString>::deallocate(&incoming.user__password);
-                Allocator::<CString>::deallocate(&incoming.user_reset_password_token__value);
+                Allocator::<CString>::deallocate(incoming.user_device__id);
+                Allocator::<CString>::deallocate(incoming.user__password);
+                Allocator::<CString>::deallocate(incoming.user_reset_password_token__value);
                 return Result::Ok(());
             }
             pub fn user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4334,8 +4375,8 @@ mod test {
                     user_authorization__send_email_for_register__serialize_allocate,
                     user_authorization__send_email_for_register__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user__email);
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
+                Allocator::<CString>::deallocate(incoming.user__email);
+                Allocator::<CString>::deallocate(incoming.user_device__id);
                 return Result::Ok(());
             }
             pub fn user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4348,7 +4389,7 @@ mod test {
                     user_authorization__send_email_for_authorize__serialize_allocate,
                     user_authorization__send_email_for_authorize__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
+                Allocator::<CString>::deallocate(incoming.user_device__id);
                 return Result::Ok(());
             }
             pub fn user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4361,7 +4402,7 @@ mod test {
                     user_authorization__send_email_for_reset_password__serialize_allocate,
                     user_authorization__send_email_for_reset_password__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(&incoming.user_device__id);
+                Allocator::<CString>::deallocate(incoming.user_device__id);
                 return Result::Ok(());
             }
             pub fn channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4379,10 +4420,10 @@ mod test {
                     channel__get_many_by_name_in_subscriptions__serialize_allocate,
                     channel__get_many_by_name_in_subscriptions__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
-                Allocator::<CString>::deallocate(&incoming.channel__name);
-                Allocator::<CString>::deallocate(&incoming.requery___channel__name.data);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
+                Allocator::<CString>::deallocate(incoming.channel__name);
+                Allocator::<CString>::deallocate(incoming.requery___channel__name.data);
                 return Result::Ok(());
             }
             pub fn channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4399,8 +4440,8 @@ mod test {
                     channel__get_many_by_subscription__serialize_allocate,
                     channel__get_many_by_subscription__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
                 return Result::Ok(());
             }
             pub fn channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4418,10 +4459,10 @@ mod test {
                     channel__get_many_public_by_name__serialize_allocate,
                     channel__get_many_public_by_name__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
-                Allocator::<CString>::deallocate(&incoming.channel__name);
-                Allocator::<CString>::deallocate(&incoming.requery___channel__name.data);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
+                Allocator::<CString>::deallocate(incoming.channel__name);
+                Allocator::<CString>::deallocate(incoming.requery___channel__name.data);
                 return Result::Ok(());
             }
             pub fn channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4437,8 +4478,8 @@ mod test {
                     channel__get_one_by_id__serialize_allocate,
                     channel__get_one_by_id__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
                 return Result::Ok(());
             }
             pub fn channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4454,8 +4495,8 @@ mod test {
                     channel_subscription__create__serialize_allocate,
                     channel_subscription__create__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(&incoming.user_access_token_encoded.encoded);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
                 return Result::Ok(());
             }
         }
