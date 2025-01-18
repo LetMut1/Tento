@@ -129,16 +129,11 @@ pub struct Context<T> {
     pub subject: T,
     pub error: Box<dyn StdError + Send + Sync + 'static>,
 }
-macro_rules! result_converter_trait {
-    ($name:ident) => {
-        pub trait $name<T> {
-            fn into_indefinite_argument(self, backtrace: Backtrace) -> Result<T, AggregateError>;
-            fn into_logic(self, backtrace: Backtrace) -> Result<T, AggregateError>;
-            fn into_runtime(self, backtrace: Backtrace) -> Result<T, AggregateError>;
-        }
-    };
+pub trait ResultConverter<T> {
+    fn into_indefinite_argument(self, backtrace: Backtrace) -> Result<T, AggregateError>;
+    fn into_logic(self, backtrace: Backtrace) -> Result<T, AggregateError>;
+    fn into_runtime(self, backtrace: Backtrace) -> Result<T, AggregateError>;
 }
-result_converter_trait!(ResultConverter);
 impl<E, T> ResultConverter<T> for Result<T, E>
 where
     E: StdError + Send + Sync + 'static,
@@ -168,39 +163,6 @@ where
             move |error: _| -> _ {
                 return AggregateError::new_runtime(
                     error.into(),
-                    backtrace,
-                );
-            },
-        );
-    }
-}
-result_converter_trait!(ResultConverter_);
-impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
-    fn into_indefinite_argument(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.map_err(
-            move |error: _| -> _ {
-                return AggregateError::new_indefinite_argument(
-                    error,
-                    backtrace,
-                );
-            },
-        );
-    }
-    fn into_logic(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.map_err(
-            move |error: _| -> _ {
-                return AggregateError::new_logic(
-                    error,
-                    backtrace,
-                );
-            },
-        );
-    }
-    fn into_runtime(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.map_err(
-            move |error: _| -> _ {
-                return AggregateError::new_runtime(
-                    error,
                     backtrace,
                 );
             },
