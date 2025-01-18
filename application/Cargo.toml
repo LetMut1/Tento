@@ -1,13 +1,14 @@
 [workspace]
 resolver = "2"
 members = [
-    "./source",
-    "./source/dedicated",
-    "./source/foreign_function_interface/client_server_data_serializer/source"
+    "./core/source",
+    "./dedicated",
+    "./foreign_function_interface/client_server_data_serializer/source",
 ]
 default-members = [
-    "./source",
-    "./source/dedicated",
+    "./core/source",
+    "./dedicated",
+    "./foreign_function_interface/client_server_data_serializer/source",
 ]
 
 [workspace.package]
@@ -16,7 +17,7 @@ rust-version = "1.80.0"
 
 [workspace.dependencies]
 bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, features = [], optional = false }
-dedicated = { path = "./source/dedicated", package = "dedicated", version = "=1.0.0", default-features = true, features = [], optional = false }
+dedicated = { path = "./dedicated", package = "dedicated", version = "=1.0.0", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "=1.0.210", default-features = true, features = ["derive"], optional = false }
 uuid = { package = "uuid", version = "=1.10.0", default-features = true, features = ["v4"], optional = false }
 cargo-emit = { package = "cargo-emit", version = "=0.2.1", default-features = true, features = [], optional = false }

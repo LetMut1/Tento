@@ -17,7 +17,7 @@
 					"**/target/**": true
 				},
 				"rust-analyzer.linkedProjects": [
-					"/_tento/application/application/Cargo.toml"
+					"/_tento/application/Cargo.toml"
 				],
 				"rust-analyzer.updates.askBeforeDownload": false,
 				"rust-analyzer.cargo.allFeatures": true,

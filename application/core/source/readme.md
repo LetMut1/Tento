@@ -12,6 +12,12 @@
 ```
 ### Development local environment
 ```
-diesel database reset --database-url=postgres://root:password@postgresql_database_1/tento --migration-dir=/_tento/application/migration/postgresql/database_1/
-diesel database reset --database-url=postgres://root:password@postgresql_database_2/tento --migration-dir=/_tento/application/migration/postgresql/database_2/
+diesel database reset --database-url=postgres://root:password@postgresql_database_1/tento --migration-dir=/_tento/application/core/migration/postgresql/database_1/
+diesel database reset --database-url=postgres://root:password@postgresql_database_2/tento --migration-dir=/_tento/application/core/migration/postgresql/database_2/
 ```
+
+
+
+
+
+cargo run --features=port_for_manual_test,logging_to_file --bin=application -- --environment_configuration_file_path=/_tento/application/core/source/environment/run_server.example.toml run_server

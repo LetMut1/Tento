@@ -16,7 +16,7 @@ version = "1.0.0"
 authors.workspace = true
 rust-version.workspace = true
 edition = "2021"
-build = "./build.rs"
+build = "./source/build.rs"
 
 [lints]
 workspace = true
