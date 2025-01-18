@@ -24,6 +24,11 @@ typedef struct CVector_c_uchar {
   size_t length;
 } CVector_c_uchar;
 
+typedef struct UserAccessTokenEncoded {
+  struct CVector_c_uchar serialized;
+  struct CVector_c_uchar encoded;
+} UserAccessTokenEncoded;
+
 typedef struct CResult_CVector_c_uchar {
   struct CVector_c_uchar data;
   bool is_data;
@@ -70,11 +75,6 @@ typedef struct UserAuthorization_AuthorizeByLastStep_Incoming {
   struct CString user_device__id;
   struct CString user_authorization_token__value;
 } UserAuthorization_AuthorizeByLastStep_Incoming;
-
-typedef struct UserAccessTokenEncoded {
-  struct CVector_c_uchar serialized;
-  struct CVector_c_uchar encoded;
-} UserAccessTokenEncoded;
 
 typedef struct UserAccessRefreshTokenEncoded {
   struct CVector_c_uchar _0;
@@ -787,7 +787,7 @@ typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Create_Preceden
 
 typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent ChannelSubscription_Create_CResult;
 
-struct CResult_UserAccessToken user_access_token__deserialize_allocate(struct CVector_c_uchar user_access_token_encoded_serialized);
+struct CResult_UserAccessToken user_access_token__deserialize_allocate(struct UserAccessTokenEncoded user_access_token_encoded);
 
 void user_access_token__deserialize_deallocate(struct CResult_UserAccessToken c_result);
 

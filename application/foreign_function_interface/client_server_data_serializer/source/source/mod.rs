@@ -467,7 +467,7 @@ pub struct UserAccessTokenEncoded {
     pub encoded: CVector<c_uchar>,
 }
 #[no_mangle]
-pub extern "C" fn user_access_token__deserialize_allocate(user_access_token_encoded_serialized: CVector<c_uchar>) -> CResult<UserAccessToken> {
+pub extern "C" fn user_access_token__deserialize_allocate(user_access_token_encoded: UserAccessTokenEncoded) -> CResult<UserAccessToken> {
     let transformer = move |user_access_token_encoded_serialized: CVector<c_uchar>| -> Result<UserAccessToken, Box<dyn StdError + 'static>> {
         let user_access_token_encoded_serialized_ = user_access_token_encoded_serialized.clone_as_vec()?;
         let user_access_token = Serializer::deserialize::<'_, UserAccessToken_<'_>>(
@@ -482,7 +482,7 @@ pub extern "C" fn user_access_token__deserialize_allocate(user_access_token_enco
             },
         );
     };
-    return match transformer(user_access_token_encoded_serialized) {
+    return match transformer(user_access_token_encoded.serialized) {
         Result::Ok(user_acces_token) => CResult::data(user_acces_token),
         Result::Err(_) => CResult::error(),
     };
@@ -3284,20 +3284,23 @@ mod test {
             return Result::Ok(());
         }
         pub fn user_access_token__deserialize() -> Result<(), Box<dyn StdError + 'static>> {
-            let c_vector = Allocator::<CVector<_>>::allocate(
-                Serializer::serialize(
-                    &UserAccessToken_::new(
-                        NOT_EMPTY_STRING_LITERAL.to_string(),
-                        0,
-                        NOT_EMPTY_STRING_LITERAL,
-                        0
+            let user_acces_token_encoded = UserAccessTokenEncoded {
+                serialized: Allocator::<CVector<_>>::allocate(
+                    Serializer::serialize(
+                        &UserAccessToken_::new(
+                            NOT_EMPTY_STRING_LITERAL.to_string(),
+                            0,
+                            NOT_EMPTY_STRING_LITERAL,
+                            0
+                        ),
                     ),
                 ),
-            );
+                ..Default::default()
+            };
             user_access_token__deserialize_deallocate(
-                user_access_token__deserialize_allocate(c_vector),
+                user_access_token__deserialize_allocate(user_acces_token_encoded),
             );
-            Allocator::<CVector<_>>::deallocate(c_vector);
+            Allocator::<CVector<_>>::deallocate(user_acces_token_encoded.serialized);
             return Ok(());
         }
         pub mod server_response_data_deserialization {
