@@ -3,7 +3,6 @@ use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
     Common,
-    OptionConverter,
     ResultConverter,
 };
 use argon2::{
@@ -78,12 +77,7 @@ impl Encoder<Argon2Id> {
                         ),
                     );
                 }
-                ARGON2.get().into_logic_value_does_not_exist(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )
+                crate::option_into_logic_value_does_not_exist!(ARGON2.get())
             }
         };
     }

@@ -1,8 +1,4 @@
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    OptionConverter,
-};
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use num_integer::Integer;
 use std::fmt::Display;
 pub struct Counter<T>
@@ -37,12 +33,7 @@ impl Counter<u8> {
 }
 impl Counter_ for Counter<u8> {
     fn get_next_value<'a>(&'a mut self) -> Result<impl Integer + Display, AggregateError> {
-        self.value = self.value.checked_add(self.step_size).into_logic_out_of_range(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
+        self.value = crate::option_return_logic_out_of_range!(self.value.checked_add(self.step_size));
         return Result::Ok(self.value);
     }
     fn get_next_value_unchecked<'a>(&'a mut self) -> impl Integer + Display {

@@ -5,7 +5,6 @@ use crate::infrastructure_layer::{
             AggregateError,
             Backtrace,
             Common,
-            OptionConverter,
             ResultConverter,
         },
         environment_configuration::EnvironmentConfiguration,
@@ -68,12 +67,7 @@ impl CommandProcessor<RunServer> {
                         ),
                     );
                 }
-                ENVIRONMENT_CONFIGURATION.get().into_logic_value_does_not_exist(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )
+                crate::option_into_logic_value_does_not_exist!(ENVIRONMENT_CONFIGURATION.get())
             }
         };
     }

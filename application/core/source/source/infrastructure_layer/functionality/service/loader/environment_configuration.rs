@@ -3,7 +3,6 @@ use crate::infrastructure_layer::data::{
     aggregate_error::{
         AggregateError,
         Backtrace,
-        OptionConverter,
         ResultConverter,
     },
     environment_configuration::{
@@ -49,24 +48,14 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
                 file!(),
             ),
         )?;
-        let application_server_tcp_socket_address = application_server_tcp_socket_address_registry.next().into_logic_invalid_socket_address(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
+        let application_server_tcp_socket_address = crate::option_return_logic_invalid_socket_address!(application_server_tcp_socket_address_registry.next());
         let mut email_server_tcp_socket_address_registry = environment_configuration_file.resource.email_server.socket_address.value.to_socket_addrs().into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
             ),
         )?;
-        let email_server_tcp_socket_address = email_server_tcp_socket_address_registry.next().into_logic_invalid_socket_address(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
+        let email_server_tcp_socket_address = crate::option_return_logic_invalid_socket_address!(email_server_tcp_socket_address_registry.next());
         let postgreql_database_1_configuration = Config::from_str(environment_configuration_file.resource.postgresql.database_1.url.value.as_str())
         .into_logic(
             Backtrace::new(

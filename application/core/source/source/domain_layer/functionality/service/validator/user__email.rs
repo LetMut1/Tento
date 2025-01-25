@@ -5,7 +5,6 @@ use crate::{
         AggregateError,
         Backtrace,
         Common,
-        OptionConverter,
         ResultConverter,
     },
 };
@@ -38,12 +37,7 @@ impl Validator<User_Email> {
                         ),
                     );
                 }
-                REGULAR_EXPRESSION.get().into_logic_value_does_not_exist(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?
+                crate::option_return_logic_value_does_not_exist!(REGULAR_EXPRESSION.get())
             }
         };
         return Result::Ok(regular_expression.is_match(user__email) && user__email.chars().count() <= User_Email::MAXIMUM_LENGTH);

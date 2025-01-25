@@ -169,46 +169,6 @@ where
         );
     }
 }
-pub trait OptionConverter<T> {
-    fn into_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AggregateError>;
-    fn into_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AggregateError>;
-    fn into_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AggregateError>;
-    fn into_logic_invalid_socket_address(self, backtrace: Backtrace) -> Result<T, AggregateError>;
-}
-impl<T> OptionConverter<T> for Option<T> {
-    fn into_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.ok_or(
-            AggregateError::new_logic(
-                Common::UnreachableState.into(),
-                backtrace,
-            ),
-        );
-    }
-    fn into_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.ok_or(
-            AggregateError::new_logic(
-                Common::OutOfRange.into(),
-                backtrace,
-            ),
-        );
-    }
-    fn into_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.ok_or(
-            AggregateError::new_logic(
-                Common::ValueDoesNotExist.into(),
-                backtrace,
-            ),
-        );
-    }
-    fn into_logic_invalid_socket_address(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.ok_or(
-            AggregateError::new_logic(
-                Common::InvalidSocketAddress.into(),
-                backtrace,
-            ),
-        );
-    }
-}
 #[derive(Debug)]
 pub enum Common {
     InvalidSocketAddress,
@@ -349,7 +309,7 @@ macro_rules! option_return_logic_unreachable_state {
 }
 macro_rules! option_into_logic_unreachable_state {
     ($std_option:expr) => {
-        $std_result.ok_or(
+        $std_option.ok_or(
             crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
                 crate::infrastructure_layer::data::aggregate_error::Common::UnreachableState,
                 crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
@@ -380,7 +340,7 @@ macro_rules! option_return_logic_out_of_range {
 }
 macro_rules! option_into_logic_out_of_range {
     ($std_option:expr) => {
-        $std_result.ok_or(
+        $std_option.ok_or(
             crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
                 crate::infrastructure_layer::data::aggregate_error::Common::OutOfRange,
                 crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
@@ -411,7 +371,7 @@ macro_rules! option_return_logic_value_does_not_exist {
 }
 macro_rules! option_into_logic_value_does_not_exist {
     ($std_option:expr) => {
-        $std_result.ok_or(
+        $std_option.ok_or(
             crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
                 crate::infrastructure_layer::data::aggregate_error::Common::ValueDoesNotExist,
                 crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
@@ -442,7 +402,7 @@ macro_rules! option_return_logic_invalid_socket_address {
 }
 macro_rules! option_into_logic_invalid_socket_address {
     ($std_option:expr) => {
-        $std_result.ok_or(
+        $std_option.ok_or(
             crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
                 crate::infrastructure_layer::data::aggregate_error::Common::InvalidSocketAddress,
                 crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
