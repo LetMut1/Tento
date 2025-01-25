@@ -16,5 +16,5 @@ components = [
     "rust-src"
 ]
 
-[toolchain.nightly]
+[toolchain.nightly-x86_64-unknown-linux-gnu]
 components = ["rustfmt"]
