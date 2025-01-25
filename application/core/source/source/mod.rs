@@ -7,9 +7,7 @@ use self::infrastructure_layer::{
     functionality::service::formatter::Formatter,
 };
 pub(crate) use self::infrastructure_layer::data::aggregate_error::{
-    option_into_logic_invalid_socket_address,
     option_into_logic_out_of_range,
-    option_into_logic_unreachable_state,
     option_into_logic_value_does_not_exist,
     option_return_logic_invalid_socket_address,
     option_return_logic_out_of_range,

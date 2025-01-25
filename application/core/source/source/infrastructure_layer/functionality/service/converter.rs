@@ -1,8 +1,4 @@
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    ResultConverter,
-};
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use num_integer::Integer;
 use std::convert::TryFrom;
 pub struct Converter;
@@ -15,11 +11,6 @@ where
 }
 impl Convert<u16, i16> for Converter {
     fn convert(subject: u16) -> Result<i16, AggregateError> {
-        return i16::try_from(subject).into_logic(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        );
+        return crate::result_into_logic!(i16::try_from(subject));
     }
 }

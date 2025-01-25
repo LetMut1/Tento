@@ -32,7 +32,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                ResultConverter,
             },
             capture::Capture,
             environment_configuration::EnvironmentConfiguration,
@@ -83,11 +82,8 @@ impl CommandProcessor<CreateFixtures> {
         return Result::Ok(());
     }
     fn initialize_runtime() -> Result<Runtime, AggregateError> {
-        return Builder::new_current_thread().enable_all().build().into_runtime(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
+        return crate::result_into_runtime!(
+            Builder::new_current_thread().enable_all().build()
         );
     }
     fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration<CreateFixtures>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -132,12 +128,9 @@ impl CommandProcessor<CreateFixtures> {
             .await?;
             let user__password = APPLICATION_USER__PASSWORD.to_string();
             let user__password_hash = Encoder::<User_Password>::encode(user__password.as_str())?;
-            let postgresql_database_1_client = postgresql_connection_pool_database_1.get().await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
+            let postgresql_database_1_client = crate::result_return_runtime!(
+                postgresql_connection_pool_database_1.get().await
+            );
             '_a: for _ in 1..=QUANTITY_OF_APPLICATION_USERS {
                 let mut user__nickname = String::new();
                 '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=User_Nickname::MAXIMUM_LENGTH) {

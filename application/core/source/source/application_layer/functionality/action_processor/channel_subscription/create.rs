@@ -27,7 +27,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                ResultConverter,
             },
             capture::Capture,
         },
@@ -92,12 +91,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                     ),
                 );
             }
-            let mut postgresql_database_1_client = inner.postgresql_connection_pool_database_1.get().await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
+            let mut postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             let channel = match Repository::<Postgresql<Channel<'_>>>::find_1(
                 &postgresql_database_1_client,
                 ChannelBy1 {

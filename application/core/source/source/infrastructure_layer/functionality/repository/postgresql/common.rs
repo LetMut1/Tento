@@ -4,11 +4,7 @@ use super::{
 };
 use crate::infrastructure_layer::{
     data::{
-        aggregate_error::{
-            AggregateError,
-            Backtrace,
-            ResultConverter,
-        },
+        aggregate_error::AggregateError,
         capture::Capture,
     },
     functionality::{
@@ -94,83 +90,37 @@ impl Repository<Postgresql<Common1>> {
                 &limit,
                 Type::INT2,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             let mut common_registry: Vec<Common1> = vec![];
             if row_registry.is_empty() {
                 return Result::Ok(common_registry);
             }
             '_a: for row in row_registry.iter() {
                 let channel = Channel1 {
-                    channel__id: row.try_get::<'_, usize, i64>(0).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__name: row.try_get::<'_, usize, String>(1).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__linked_name: row.try_get::<'_, usize, String>(2).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__access_modifier: row.try_get::<'_, usize, i16>(3).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
+                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
+                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
+                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
                     channel__visability_modifier: by_1.channel__visability_modifier,
-                    channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(4).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__background_image_path: row.try_get::<'_, usize, Option<String>>(5).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
+                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(4)),
+                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
                 };
-                let is_user_subscribed = row
-                    .try_get::<'_, usize, Option<i64>>(6)
-                    .into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?
-                    .is_some();
+                let is_user_subscribed = crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)).is_some();
                 let common = Common1 {
                     channel,
                     is_user_subscribed,
@@ -238,78 +188,35 @@ impl Repository<Postgresql<Common1>> {
                 &limit,
                 Type::INT2,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             let mut common_registry: Vec<Common1> = vec![];
             if row_registry.is_empty() {
                 return Result::Ok(common_registry);
             }
             '_a: for row in row_registry.iter() {
                 let channel = Channel1 {
-                    channel__id: row.try_get::<'_, usize, i64>(0).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__name: row.try_get::<'_, usize, String>(1).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__linked_name: row.try_get::<'_, usize, String>(2).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__access_modifier: row.try_get::<'_, usize, i16>(3).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__visability_modifier: row.try_get::<'_, usize, i16>(4).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(5).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__background_image_path: row.try_get::<'_, usize, Option<String>>(6).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
+                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
+                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
+                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
+                    channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
+                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
+                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
                 };
                 let common = Common1 {
                     channel,
@@ -373,78 +280,35 @@ impl Repository<Postgresql<Common1>> {
                 &limit,
                 Type::INT2,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             let mut common_registry: Vec<Common1> = vec![];
             if row_registry.is_empty() {
                 return Result::Ok(common_registry);
             }
             '_a: for row in row_registry.iter() {
                 let channel = Channel1 {
-                    channel__id: row.try_get::<'_, usize, i64>(0).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__name: row.try_get::<'_, usize, String>(1).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__linked_name: row.try_get::<'_, usize, String>(2).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__access_modifier: row.try_get::<'_, usize, i16>(3).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__visability_modifier: row.try_get::<'_, usize, i16>(4).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(5).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel__background_image_path: row.try_get::<'_, usize, Option<String>>(6).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
+                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
+                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
+                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
+                    channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
+                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
+                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
                 };
                 let common = Common1 {
                     channel,

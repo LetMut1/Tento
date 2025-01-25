@@ -13,11 +13,7 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-                ResultConverter,
-            },
+            aggregate_error::AggregateError,
             capture::Capture,
         },
         functionality::repository::Repository,
@@ -68,38 +64,25 @@ impl Repository<Postgresql<User<'_>>> {
                     &insert_1.user__created_at,
                     Type::INT8,
                 );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(
                 User::new(
-                    row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
+                    crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
                     insert_1.user__email,
                     Cow::Owned(insert_1.user__nickname),
                     insert_1.user__password_hash,
@@ -147,30 +130,22 @@ impl Repository<Postgresql<User<'_>>> {
                     &user.created_at,
                     Type::INT8,
                 );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(());
         };
     }
@@ -198,30 +173,22 @@ impl Repository<Postgresql<User<'_>>> {
                     &by_3.user__id,
                     Type::INT8,
                 );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            database_1_client
+            );
+            crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(());
         };
     }
@@ -238,30 +205,22 @@ impl Repository<Postgresql<User<'_>>> {
                     &by_3.user__id,
                     Type::TEXT,
                 );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            database_1_client
+            );
+            crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(());
         };
     }
@@ -279,30 +238,22 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_1.user__nickname,
                 Type::TEXT,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(false);
             }
@@ -323,30 +274,22 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_2.user__email,
                 Type::TEXT,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(false);
             }
@@ -367,30 +310,22 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_3.user__id,
                 Type::INT8,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(false);
             }
@@ -414,61 +349,33 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_1.user__nickname,
                 Type::TEXT,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     User::new(
-                        row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, String>(1).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
                         Cow::Borrowed(by_1.user__nickname),
-                        row_registry[0].try_get::<'_, usize, String>(2).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i64>(3).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
                     ),
                 ),
             );
@@ -490,54 +397,31 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_1.user__nickname,
                 Type::TEXT,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     User_1 {
-                        id: row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        email: row_registry[0].try_get::<'_, usize, String>(1).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        password_hash: row_registry[0].try_get::<'_, usize, String>(2).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        id: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                        email: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
+                        password_hash: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
                     },
                 ),
             );
@@ -559,54 +443,31 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_2.user__email,
                 Type::TEXT,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     User_2 {
-                        id: row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        nickname: row_registry[0].try_get::<'_, usize, String>(1).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        password_hash: row_registry[0].try_get::<'_, usize, String>(2).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        id: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                        nickname: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
+                        password_hash: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
                     },
                 ),
             );
@@ -626,42 +487,29 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_2.user__email,
                 Type::TEXT,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     User_3 {
-                        id: row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        id: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
                     },
                 ),
             );
@@ -683,54 +531,31 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_3.user__id,
                 Type::INT8,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     User_4 {
-                        email: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        nickname: row_registry[0].try_get::<'_, usize, String>(1).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        password_hash: row_registry[0].try_get::<'_, usize, String>(2).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        email: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        nickname: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
+                        password_hash: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
                     },
                 ),
             );
@@ -750,42 +575,29 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_3.user__id,
                 Type::INT8,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     User_5 {
-                        email: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        email: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
                     },
                 ),
             );
@@ -795,37 +607,24 @@ impl Repository<Postgresql<User<'_>>> {
         return async move {
             let query = "\
                 SELECT nextval('public.user_1') AS n";
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     [].as_slice(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     [].as_slice(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(
-                row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?,
+                crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
             );
         };
     }

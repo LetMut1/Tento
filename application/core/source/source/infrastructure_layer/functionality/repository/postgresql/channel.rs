@@ -6,11 +6,7 @@ use crate::{
     domain_layer::data::entity::channel::Channel,
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-                ResultConverter,
-            },
+            aggregate_error::AggregateError,
             capture::Capture,
         },
         functionality::repository::Repository,
@@ -119,38 +115,25 @@ impl Repository<Postgresql<Channel<'_>>> {
                     &insert_1.channel__created_at,
                     Type::INT8,
                 );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(
                 Channel::new(
-                    row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
+                    crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
                     insert_1.channel__owner,
                     Cow::Owned(insert_1.channel__name),
                     insert_1.channel__linked_name,
@@ -182,30 +165,22 @@ impl Repository<Postgresql<Channel<'_>>> {
                 &by_1.channel__id,
                 Type::INT8,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            database_1_client
+            );
+            crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(());
         };
     }
@@ -235,30 +210,22 @@ impl Repository<Postgresql<Channel<'_>>> {
                 &by_1.channel__id,
                 Type::INT8,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(Option::None);
             }
@@ -266,86 +233,23 @@ impl Repository<Postgresql<Channel<'_>>> {
                 Option::Some(
                     Channel::new(
                         by_1.channel__id,
-                        row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
                         Cow::Owned(
-                            row_registry[0].try_get::<'_, usize, String>(1).into_logic(
-                                Backtrace::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            )?,
+                            crate::result_return_logic!(
+                                row_registry[0].try_get::<'_, usize, String>(1)
+                            ),
                         ),
-                        row_registry[0].try_get::<'_, usize, String>(2).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, Option<String>>(3).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i16>(4).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i16>(5).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, Vec<i16>>(6).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, Option<String>>(7).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, Option<String>>(8).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i64>(9).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i64>(10).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i64>(11).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i64>(12).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(3)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(4)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(5)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Vec<i16>>(6)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(7)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(8)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(9)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(10)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(11)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(12)),
                     ),
                 ),
             );
@@ -377,115 +281,42 @@ impl Repository<Postgresql<Channel<'_>>> {
                 &by_2.channel__name,
                 Type::TEXT,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     Channel::new(
-                        row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i64>(1).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(1)),
                         Cow::Borrowed(by_2.channel__name),
-                        row_registry[0].try_get::<'_, usize, String>(2).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, Option<String>>(3).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i16>(4).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i16>(5).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, Vec<i16>>(6).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, Option<String>>(7).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, Option<String>>(8).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i64>(9).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i64>(10).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i64>(11).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        row_registry[0].try_get::<'_, usize, i64>(12).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(3)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(4)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(5)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Vec<i16>>(6)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(7)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(8)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(9)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(10)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(11)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(12)),
                     ),
                 ),
             );
@@ -505,30 +336,22 @@ impl Repository<Postgresql<Channel<'_>>> {
                 &by_2.channel__name,
                 Type::TEXT,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(false);
             }
@@ -549,30 +372,22 @@ impl Repository<Postgresql<Channel<'_>>> {
                 &by_3.channel__linked_name,
                 Type::TEXT,
             );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(false);
             }

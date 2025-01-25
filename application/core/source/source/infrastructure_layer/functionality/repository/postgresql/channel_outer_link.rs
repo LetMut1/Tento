@@ -6,11 +6,7 @@ use crate::{
     domain_layer::data::entity::channel_outer_link::ChannelOuterLink,
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-                ResultConverter,
-            },
+            aggregate_error::AggregateError,
             capture::Capture,
         },
         functionality::repository::Repository,
@@ -57,30 +53,22 @@ impl Repository<Postgresql<ChannelOuterLink>> {
                     &channel_outer_link.created_at,
                     Type::INT8,
                 );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            database_1_client
+            );
+            crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(());
         };
     }
@@ -105,48 +93,30 @@ impl Repository<Postgresql<ChannelOuterLink>> {
                     &limit,
                     Type::INT2,
                 );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_1_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             let mut channel_outer_link_registry: Vec<ChannelOuterLink1> = vec![];
             if row_registry.is_empty() {
                 return Result::Ok(channel_outer_link_registry);
             }
             '_a: for row in row_registry.iter() {
                 let channel_outer_link = ChannelOuterLink1 {
-                    channel_outer_link__alias: row.try_get::<'_, usize, String>(0).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    channel_outer_link__address: row.try_get::<'_, usize, String>(1).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
+                    channel_outer_link__alias: crate::result_return_logic!(row.try_get::<'_, usize, String>(0)),
+                    channel_outer_link__address: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                 };
                 channel_outer_link_registry.push(channel_outer_link);
             }

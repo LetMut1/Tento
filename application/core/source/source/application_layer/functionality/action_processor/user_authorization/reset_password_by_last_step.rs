@@ -29,7 +29,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                ResultConverter,
             },
             capture::Capture,
         },
@@ -122,12 +121,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 );
             }
             {
-                let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+                let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
                 let mut user_reset_password_token = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_2(
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy1 {
@@ -183,12 +177,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 }
             }
             let mut user = match Repository::<Postgresql<User<'_>>>::find_5(
-                &inner.postgresql_connection_pool_database_1.get().await.into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?,
+                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy3 {
                     user__id: incoming.user__id,
                 },
@@ -215,29 +204,16 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 );
             }
             let user__password_hash___old = user.password_hash;
-            user.password_hash = Spawner::<TokioBlockingTask>::spawn_processed(
-                move || -> _ {
-                    return Encoder::<User_Password>::encode(incoming.user__password.as_str());
-                },
-            )
-            .await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )??;
-            let postgresql_database_1_client = inner.postgresql_connection_pool_database_1.get().await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
+            user.password_hash = crate::result_return_runtime!(
+                Spawner::<TokioBlockingTask>::spawn_processed(
+                    move || -> _ {
+                        return Encoder::<User_Password>::encode(incoming.user__password.as_str());
+                    },
+                )
+                .await
             )?;
-            let mut postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
+            let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
+            let mut postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_database_2_client,
                 IsolationLevel::ReadCommitted,

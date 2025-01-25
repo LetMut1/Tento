@@ -5,7 +5,6 @@ use crate::infrastructure_layer::{
             AggregateError,
             Backtrace,
             Common,
-            ResultConverter,
         },
         environment_configuration::EnvironmentConfiguration,
     },
@@ -100,12 +99,7 @@ impl CommandProcessor<RunServer> {
             .with_thread_names(false)
             .with_ansi(false)
             .finish();
-        tracing::subscriber::set_global_default(fmt_subscriber).into_logic(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
+        crate::result_return_logic!(tracing::subscriber::set_global_default(fmt_subscriber));
         return Result::Ok(());
     }
     fn initialize_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration<RunServer>) -> Result<Runtime, AggregateError> {
@@ -123,17 +117,13 @@ impl CommandProcessor<RunServer> {
                 ),
             );
         }
-        return RuntimeBuilder::new_multi_thread()
+        return crate::result_into_runtime!(
+            RuntimeBuilder::new_multi_thread()
             .max_blocking_threads(environment_configuration.subject.tokio_runtime.maximum_blocking_threads_quantity)
             .worker_threads(environment_configuration.subject.tokio_runtime.worker_threads_quantity)
             .thread_stack_size(environment_configuration.subject.tokio_runtime.worker_thread_stack_size)
             .enable_all()
             .build()
-            .into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            );
+        );
     }
 }

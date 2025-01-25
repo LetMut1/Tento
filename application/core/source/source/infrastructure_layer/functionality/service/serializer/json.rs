@@ -3,11 +3,7 @@ pub use self::json::Json;
 #[cfg(feature = "json_for_manual_test")]
 mod json {
     use crate::infrastructure_layer::{
-        data::aggregate_error::{
-            AggregateError,
-            Backtrace,
-            ResultConverter,
-        },
+        data::aggregate_error::AggregateError,
         functionality::service::serializer::{
             Deserialize_,
             Serialize,
@@ -21,23 +17,13 @@ mod json {
         where
             T: Serialize_,
         {
-            return serde_json::to_vec(subject).into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            );
+            return crate::result_into_logic!(serde_json::to_vec(subject));
         }
         fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AggregateError>
         where
             T: Deserialize_<'a>,
         {
-            return serde_json::from_slice::<'_, T>(data).into_indefinite_argument(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            );
+            return crate::result_into_indefinite_argument!(serde_json::from_slice::<'_, T>(data));
         }
     }
 }

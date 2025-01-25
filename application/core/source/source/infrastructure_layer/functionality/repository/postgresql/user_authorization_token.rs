@@ -11,11 +11,7 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-                ResultConverter,
-            },
+            aggregate_error::AggregateError,
             capture::Capture,
         },
         functionality::repository::Repository,
@@ -74,30 +70,22 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &user_authorization_token.can_be_resent_from,
                     Type::INT8,
                 );
-            let statement = database_2_client
+            let statement = crate::result_return_logic!(
+                database_2_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            database_2_client
+            );
+            crate::result_return_runtime!(
+                database_2_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(());
         };
     }
@@ -119,30 +107,22 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_client
+            let statement = crate::result_return_logic!(
+                database_2_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            database_2_client
+            );
+            crate::result_return_runtime!(
+                database_2_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(());
         };
     }
@@ -191,30 +171,22 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_client
+            let statement = crate::result_return_logic!(
+                database_2_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            database_2_client
+            );
+            crate::result_return_runtime!(
+                database_2_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(());
         };
     }
@@ -257,30 +229,22 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_client
+            let statement = crate::result_return_logic!(
+                database_2_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            database_2_client
+            );
+            crate::result_return_runtime!(
+                database_2_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(());
         };
     }
@@ -311,30 +275,22 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_client
+            let statement = crate::result_return_logic!(
+                database_2_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            database_2_client
+            );
+            crate::result_return_runtime!(
+                database_2_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(());
         };
     }
@@ -358,30 +314,22 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_client
+            let statement = crate::result_return_logic!(
+                database_2_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            database_2_client
+            );
+            crate::result_return_runtime!(
+                database_2_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(());
         };
     }
@@ -408,60 +356,32 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_client
+            let statement = crate::result_return_logic!(
+                database_2_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_2_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_2_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     UserAuthorizationToken_1 {
-                        value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        expires_at: row_registry[0].try_get::<'_, usize, i64>(2).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(3).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        value: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        wrong_enter_tries_quantity: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(1)),
+                        expires_at: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
+                        can_be_resent_from: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
                     },
                 ),
             );
@@ -489,54 +409,31 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_client
+            let statement = crate::result_return_logic!(
+                database_2_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_2_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_2_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     UserAuthorizationToken_2 {
-                        value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        expires_at: row_registry[0].try_get::<'_, usize, i64>(2).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        value: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        wrong_enter_tries_quantity: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(1)),
+                        expires_at: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
                     },
                 ),
             );
@@ -564,54 +461,31 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_client
+            let statement = crate::result_return_logic!(
+                database_2_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            let row_registry = database_2_client
+            );
+            let row_registry = crate::result_return_runtime!(
+                database_2_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             if row_registry.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     UserAuthorizationToken_3 {
-                        value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        expires_at: row_registry[0].try_get::<'_, usize, i64>(1).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(2).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        value: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        expires_at: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(1)),
+                        can_be_resent_from: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
                     },
                 ),
             );

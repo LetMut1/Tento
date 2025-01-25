@@ -5,7 +5,6 @@ use crate::{
         AggregateError,
         Backtrace,
         Common,
-        ResultConverter,
     },
 };
 use regex::Regex;
@@ -18,12 +17,9 @@ impl Validator<UserResetPasswordToken_Value> {
             Option::None => {
                 if REGULAR_EXPRESSION
                     .set(
-                        Regex::new(UserResetPasswordToken_Value::REGULAR_EXPRESSION).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        crate::result_return_logic!(
+                            Regex::new(UserResetPasswordToken_Value::REGULAR_EXPRESSION)
+                        ),
                     )
                     .is_err()
                 {

@@ -36,7 +36,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                ResultConverter,
             },
             control_type::{
                 Request,
@@ -143,18 +142,12 @@ impl HttpServer {
                 let cloned_ = cloned.clone();
                 let mut graceful_shutdown_signal_future_join_handle__ = graceful_shutdown_signal_future_join_handle_.as_mut();
                 #[cfg(feature = "port_for_manual_test")]
-                let http1_tcp_listener = TcpListener::bind(&http1_socket_address).await.into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-                let http2_tcp_listener = TcpListener::bind(&environment_configuration.subject.application_server.tcp.socket_address).await.into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+                let http1_tcp_listener = crate::result_return_logic!(
+                    TcpListener::bind(&http1_socket_address).await
+                );
+                let http2_tcp_listener = crate::result_return_logic!(
+                    TcpListener::bind(&environment_configuration.subject.application_server.tcp.socket_address).await
+                );
                 if let Result::Err(aggregate_error) = async move {
                     #[cfg(feature = "port_for_manual_test")]
                     let http1_builder = Http1Builder::new();
@@ -243,12 +236,7 @@ impl HttpServer {
                                 );
                                 #[cfg(feature = "port_for_manual_test")]
                                 {
-                                    let socket_address_port = tcp_stream_.local_addr().into_logic(
-                                        Backtrace::new(
-                                            line!(),
-                                            file!(),
-                                        ),
-                                    )?;
+                                    let socket_address_port = crate::result_return_logic!(tcp_stream_.local_addr());
                                     if http1_socket_address.port() == socket_address_port.port() {
                                         let serving_connection_future = http1_builder.serve_connection(
                                             TokioIo::new(tcp_stream_),
@@ -256,12 +244,7 @@ impl HttpServer {
                                         );
                                         Spawner::<TokioNonBlockingTask>::spawn_into_background(
                                             async move {
-                                                return serving_connection_future.await.into_runtime(
-                                                    Backtrace::new(
-                                                        line!(),
-                                                        file!(),
-                                                    ),
-                                                );
+                                                return crate::result_into_runtime!(serving_connection_future.await);
                                             },
                                         );
                                     } else {
@@ -271,12 +254,7 @@ impl HttpServer {
                                         );
                                         Spawner::<TokioNonBlockingTask>::spawn_into_background(
                                             async move {
-                                                return serving_connection_future.await.into_runtime(
-                                                    Backtrace::new(
-                                                        line!(),
-                                                        file!(),
-                                                    ),
-                                                );
+                                                return crate::result_into_runtime!(serving_connection_future.await);
                                             },
                                         );
                                     };
@@ -289,12 +267,7 @@ impl HttpServer {
                                     );
                                     Spawner::<TokioNonBlockingTask>::spawn_into_background(
                                         async move {
-                                            return serving_connection_future.await.into_runtime(
-                                                Backtrace::new(
-                                                    line!(),
-                                                    file!(),
-                                                ),
-                                            );
+                                            return crate::result_into_runtime!(serving_connection_future.await);
                                         },
                                     );
                                 }
@@ -326,632 +299,439 @@ impl HttpServer {
     }
     fn create_router() -> Result<Router<ActionRoute>, AggregateError> {
         let mut router = Router::<ActionRoute>::new();
-        router
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::CHECK_NICKNAME_FOR_EXISTING,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::CheckNicknameForExisting,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::CHECK_EMAIL_FOR_EXISTING,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::CheckEmailForExisting,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(router
+
             .insert(
                 UserAuthorization::REGISTER_BY_FIRST_STEP,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::RegisterByFirstStep,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::REGISTER_BY_SECOND_STEP,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::RegisterBySecondStep,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::REGISTER_BY_LAST_STEP,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::RegisterByLastStep,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::SEND_EMAIL_FOR_REGISTER,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::SendEmailForRegister,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::AUTHORIZE_BY_FIRST_STEP,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::AuthorizeByFirstStep,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::AUTHORIZE_BY_LAST_STEP,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::AuthorizeByLastStep,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::SendEmailForAuthorize,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::ResetPasswordByFirstStep,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::ResetPasswordBySecondStep,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::RESET_PASSWORD_BY_LAST_STEP,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::ResetPasswordByLastStep,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::SendEmailForResetPassword,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::REFRESH_ACCESS_TOKEN,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::RefreshAccessToken,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::DeauthorizeFromOneDevice,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES,
                 ActionRoute::UserAuthorization {
                     user_authorization: UserAuthorization::DeauthorizeFromAllDevices,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 Channel::GET_ONE_BY_ID,
                 ActionRoute::Channel {
                     channel: Channel::GetOneById,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
                 ActionRoute::Channel {
                     channel: Channel::GetManyByNameInSubscriptions,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 Channel::GET_MANY_BY_SUBSCRIPTION,
                 ActionRoute::Channel {
                     channel: Channel::GetManyBySubscription,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 Channel::GET_MANY_PUBLIC_BY_NAME,
                 ActionRoute::Channel {
                     channel: Channel::GetManyPublicByName,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 Channel::CREATE,
                 ActionRoute::Channel {
                     channel: Channel::Create,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 Channel::CHECK_NAME_FOR_EXISTING,
                 ActionRoute::Channel {
                     channel: Channel::CheckNameForExisting,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 Channel::CHECK_LINKED_NAME_FOR_EXISTING,
                 ActionRoute::Channel {
                     channel: Channel::CheckLinkedNameForExisting,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        router
+        );
+        crate::result_return_logic!(
+            router
             .insert(
                 ChannelSubscription::CREATE,
                 ActionRoute::ChannelSubscription {
                     channel_subscription: ChannelSubscription::Create,
                 },
             )
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
+        );
         #[cfg(feature = "action_for_manual_test")]
         {
-            router
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::CHECK_NICKNAME_FOR_EXISTING_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::CheckNicknameForExisting_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::CHECK_EMAIL_FOR_EXISTING_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::CheckEmailForExisting_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::REGISTER_BY_FIRST_STEP_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::RegisterByFirstStep_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::REGISTER_BY_SECOND_STEP_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::RegisterBySecondStep_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::REGISTER_BY_LAST_STEP_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::RegisterByLastStep_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::SEND_EMAIL_FOR_REGISTER_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::SendEmailForRegister_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::AUTHORIZE_BY_FIRST_STEP_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::AuthorizeByFirstStep_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::AUTHORIZE_BY_LAST_STEP_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::AuthorizeByLastStep_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::SendEmailForAuthorize_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::ResetPasswordByFirstStep_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::ResetPasswordBySecondStep_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::RESET_PASSWORD_BY_LAST_STEP_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::ResetPasswordByLastStep_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::SendEmailForResetPassword_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::REFRESH_ACCESS_TOKEN_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::RefreshAccessToken_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::DeauthorizeFromOneDevice_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES_,
                     ActionRoute::UserAuthorization {
                         user_authorization: UserAuthorization::DeauthorizeFromAllDevices_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     Channel::GET_ONE_BY_ID_,
                     ActionRoute::Channel {
                         channel: Channel::GetOneById_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_,
                     ActionRoute::Channel {
                         channel: Channel::GetManyByNameInSubscriptions_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     Channel::GET_MANY_BY_SUBSCRIPTION_,
                     ActionRoute::Channel {
                         channel: Channel::GetManyBySubscription_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     Channel::GET_MANY_PUBLIC_BY_NAME_,
                     ActionRoute::Channel {
                         channel: Channel::GetManyPublicByName_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     Channel::CREATE_,
                     ActionRoute::Channel {
                         channel: Channel::Create_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     Channel::CHECK_NAME_FOR_EXISTING_,
                     ActionRoute::Channel {
                         channel: Channel::CheckNameForExisting_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(router
                 .insert(
                     Channel::CHECK_LINKED_NAME_FOR_EXISTING_,
                     ActionRoute::Channel {
                         channel: Channel::CheckLinkedNameForExisting_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            router
+            );
+            crate::result_return_logic!(
+                router
                 .insert(
                     ChannelSubscription::CREATE_,
                     ActionRoute::ChannelSubscription {
                         channel_subscription: ChannelSubscription::Create_,
                     },
                 )
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
         }
         return Result::Ok(router);
     }
@@ -1395,12 +1175,9 @@ impl HttpServer {
         };
     }
     fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()> + Send, AggregateError> {
-        let mut signal = tokio::signal::unix::signal(signal_kind).into_logic(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
+        let mut signal = crate::result_return_logic!(
+            tokio::signal::unix::signal(signal_kind)
+        );
         let signal_future = async move {
             signal.recv().await;
             return ();

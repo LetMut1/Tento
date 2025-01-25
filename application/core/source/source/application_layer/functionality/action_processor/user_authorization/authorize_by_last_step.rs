@@ -41,7 +41,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                ResultConverter,
             },
             capture::Capture,
         },
@@ -126,12 +125,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     ),
                 );
             }
-            let mut postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
+            let mut postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let user_authorization_token = Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_2(
                 &postgresql_database_2_client,
                 UserAuthorizationTokenBy1 {
@@ -189,12 +183,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     ),
                 );
             }
-            let postgresql_database_1_client = inner.postgresql_connection_pool_database_1.get().await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
+            let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             if !Repository::<Postgresql<User<'_>>>::is_exist_3(
                 &postgresql_database_1_client,
                 UserBy3 {
@@ -300,12 +289,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     let user_device = Repository::<Postgresql<UserDevice>>::create_1(
-                        &postgresql_connection_pool_database_1.get().await.into_runtime(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
                         UserDeviceInsert1 {
                             user_device__id: incoming.user_device__id,
                             user__id: incoming.user__id,

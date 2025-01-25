@@ -129,46 +129,6 @@ pub struct Context<T> {
     pub subject: T,
     pub error: Box<dyn StdError + Send + Sync + 'static>,
 }
-pub trait ResultConverter<T> {
-    fn into_indefinite_argument(self, backtrace: Backtrace) -> Result<T, AggregateError>;
-    fn into_logic(self, backtrace: Backtrace) -> Result<T, AggregateError>;
-    fn into_runtime(self, backtrace: Backtrace) -> Result<T, AggregateError>;
-}
-impl<E, T> ResultConverter<T> for Result<T, E>
-where
-    E: StdError + Send + Sync + 'static,
-{
-    fn into_indefinite_argument(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.map_err(
-            move |error: _| -> _ {
-                return AggregateError::new_indefinite_argument(
-                    error.into(),
-                    backtrace,
-                );
-            },
-        );
-    }
-    fn into_logic(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.map_err(
-            move |error: _| -> _ {
-                return AggregateError::new_logic(
-                    error.into(),
-                    backtrace,
-                );
-            },
-        );
-    }
-    fn into_runtime(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.map_err(
-            move |error: _| -> _ {
-                return AggregateError::new_runtime(
-                    error.into(),
-                    backtrace,
-                );
-            },
-        );
-    }
-}
 #[derive(Debug)]
 pub enum Common {
     InvalidSocketAddress,
@@ -307,19 +267,6 @@ macro_rules! option_return_logic_unreachable_state {
         }
     };
 }
-macro_rules! option_into_logic_unreachable_state {
-    ($std_option:expr) => {
-        $std_option.ok_or(
-            crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
-                crate::infrastructure_layer::data::aggregate_error::Common::UnreachableState,
-                crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
-                    std::line!(),
-                    std::file!(),
-                ),
-            ),
-        )
-    };
-}
 macro_rules! option_return_logic_out_of_range {
     ($std_option:expr) => {
         match $std_option {
@@ -400,19 +347,6 @@ macro_rules! option_return_logic_invalid_socket_address {
         }
     };
 }
-macro_rules! option_into_logic_invalid_socket_address {
-    ($std_option:expr) => {
-        $std_option.ok_or(
-            crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
-                crate::infrastructure_layer::data::aggregate_error::Common::InvalidSocketAddress,
-                crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
-                    std::line!(),
-                    std::file!(),
-                ),
-            ),
-        )
-    };
-}
 pub(crate) use result_return_indefinite_argument;
 pub(crate) use result_into_indefinite_argument;
 pub(crate) use result_return_logic;
@@ -420,10 +354,8 @@ pub(crate) use result_into_logic;
 pub(crate) use result_return_runtime;
 pub(crate) use result_into_runtime;
 pub(crate) use option_return_logic_unreachable_state;
-pub(crate) use option_into_logic_unreachable_state;
 pub(crate) use option_return_logic_out_of_range;
 pub(crate) use option_into_logic_out_of_range;
 pub(crate) use option_return_logic_value_does_not_exist;
 pub(crate) use option_into_logic_value_does_not_exist;
 pub(crate) use option_return_logic_invalid_socket_address;
-pub(crate) use option_into_logic_invalid_socket_address;

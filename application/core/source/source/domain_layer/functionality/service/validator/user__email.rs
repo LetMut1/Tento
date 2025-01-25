@@ -5,7 +5,6 @@ use crate::{
         AggregateError,
         Backtrace,
         Common,
-        ResultConverter,
     },
 };
 use regex::Regex;
@@ -18,12 +17,9 @@ impl Validator<User_Email> {
             Option::None => {
                 if REGULAR_EXPRESSION
                     .set(
-                        Regex::new(User_Email::REGULAR_EXPRESSION).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        crate::result_return_logic!(
+                            Regex::new(User_Email::REGULAR_EXPRESSION)
+                        ),
                     )
                     .is_err()
                 {

@@ -10,7 +10,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                ResultConverter,
             },
             capture::Capture,
             control_type::Response,
@@ -71,18 +70,11 @@ impl Processor<ActionRound> {
                     );
                 }
                 let incoming = Serializer::<SS>::deserialize::<'_, <ActionProcessor<AP> as ActionProcessor_>::Incoming>(
-                    inner
-                        .incoming
-                        .collect()
-                        .await
-                        .into_runtime(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?
-                        .aggregate()
-                        .chunk(),
+                    crate::result_return_runtime!(
+                        inner.incoming.collect().await
+                    )
+                    .aggregate()
+                    .chunk(),
                 )?;
                 let unified_report = ActionProcessor::<AP>::process(
                     action_processor_inner,

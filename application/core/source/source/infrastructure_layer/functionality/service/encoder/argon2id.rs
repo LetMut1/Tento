@@ -3,7 +3,6 @@ use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
     Common,
-    ResultConverter,
 };
 use argon2::{
     password_hash::{
@@ -24,18 +23,14 @@ pub struct Argon2Id;
 impl Encoder<Argon2Id> {
     pub fn encode<'a>(data_for_encode: &'a [u8]) -> Result<String, AggregateError> {
         return Result::Ok(
-            Self::get()?
+            crate::result_return_indefinite_argument!(
+                Self::get()?
                 .hash_password(
                     data_for_encode,
                     &SaltString::generate(OsRng),
                 )
-                .into_indefinite_argument(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?
-                .to_string(),
+            )
+            .to_string(),
         );
     }
     pub fn is_valid<'a>(data_for_encode: &'a [u8], encoded_data: &'a str) -> Result<bool, AggregateError> {
@@ -43,12 +38,7 @@ impl Encoder<Argon2Id> {
             Self::get()?
                 .verify_password(
                     data_for_encode,
-                    &PasswordHash::new(encoded_data).into_indefinite_argument(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
+                    &crate::result_return_indefinite_argument!(PasswordHash::new(encoded_data)),
                 )
                 .is_ok(),
         );

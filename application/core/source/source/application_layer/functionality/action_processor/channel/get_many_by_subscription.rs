@@ -22,7 +22,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                ResultConverter,
             },
             capture::Capture,
         },
@@ -96,12 +95,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
                 );
             }
             let common_registry = Repository::<Postgresql<Common1>>::find_3(
-                &inner.postgresql_connection_pool_database_1.get().await.into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?,
+                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 CommonBy3 {
                     user__id: user_access_token.user__id,
                     requery___channel__id: incoming.requery___channel__id,

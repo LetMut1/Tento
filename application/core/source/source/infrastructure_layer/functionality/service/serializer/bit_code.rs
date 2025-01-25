@@ -4,11 +4,7 @@ use super::{
     Serialize_,
     Serializer,
 };
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    ResultConverter,
-};
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use dedicated::bit_code_serializer::Serializer as Serializer_;
 pub struct BitCode;
 impl Serialize for Serializer<BitCode> {
@@ -22,11 +18,6 @@ impl Serialize for Serializer<BitCode> {
     where
         T: Deserialize_<'a>,
     {
-        return Serializer_::deserialize::<'_, T>(data).into_indefinite_argument(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        );
+        return crate::result_into_indefinite_argument!(Serializer_::deserialize::<'_, T>(data));
     }
 }

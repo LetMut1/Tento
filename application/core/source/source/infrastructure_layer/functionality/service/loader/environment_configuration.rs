@@ -3,7 +3,6 @@ use crate::infrastructure_layer::data::{
     aggregate_error::{
         AggregateError,
         Backtrace,
-        ResultConverter,
     },
     environment_configuration::{
         EnvironmentConfiguration,
@@ -42,34 +41,20 @@ use tokio_postgres::config::Config;
 impl Loader<EnvironmentConfiguration<RunServer>> {
     pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<RunServer>, AggregateError> {
         let environment_configuration_file = load_from_file::<RunServerEnvironmentConfigurationFile>(environment_configuration_file_path)?;
-        let mut application_server_tcp_socket_address_registry = environment_configuration_file.application_server.tcp.socket_address.value.to_socket_addrs().into_runtime(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
+        let mut application_server_tcp_socket_address_registry = crate::result_return_runtime!(
+            environment_configuration_file.application_server.tcp.socket_address.value.to_socket_addrs()
+        );
         let application_server_tcp_socket_address = crate::option_return_logic_invalid_socket_address!(application_server_tcp_socket_address_registry.next());
-        let mut email_server_tcp_socket_address_registry = environment_configuration_file.resource.email_server.socket_address.value.to_socket_addrs().into_runtime(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
+        let mut email_server_tcp_socket_address_registry = crate::result_return_runtime!(
+            environment_configuration_file.resource.email_server.socket_address.value.to_socket_addrs()
+        );
         let email_server_tcp_socket_address = crate::option_return_logic_invalid_socket_address!(email_server_tcp_socket_address_registry.next());
-        let postgreql_database_1_configuration = Config::from_str(environment_configuration_file.resource.postgresql.database_1.url.value.as_str())
-        .into_logic(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
-        let postgreql_database_2_configuration = Config::from_str(environment_configuration_file.resource.postgresql.database_2.url.value.as_str())
-        .into_logic(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
+        let postgreql_database_1_configuration = crate::result_return_logic!(
+            Config::from_str(environment_configuration_file.resource.postgresql.database_1.url.value.as_str())
+        );
+        let postgreql_database_2_configuration = crate::result_return_logic!(
+            Config::from_str(environment_configuration_file.resource.postgresql.database_2.url.value.as_str())
+        );
         let application_server = {
             let tcp = {
                 let keepalive = {
@@ -189,20 +174,12 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
 impl Loader<EnvironmentConfiguration<CreateFixtures>> {
     pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<CreateFixtures>, AggregateError> {
         let environment_configuration_file = load_from_file::<CreateFixturesEnvironmentConfigurationFile>(environment_configuration_file_path)?;
-        let postgreql_database_1_configuration = Config::from_str(environment_configuration_file.resource.postgresql.database_1.url.value.as_str())
-        .into_logic(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
-        let postgreql_database_2_configuration = Config::from_str(environment_configuration_file.resource.postgresql.database_2.url.value.as_str())
-        .into_logic(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
+        let postgreql_database_1_configuration = crate::result_return_logic!(
+            Config::from_str(environment_configuration_file.resource.postgresql.database_1.url.value.as_str())
+        );
+        let postgreql_database_2_configuration = crate::result_return_logic!(
+            Config::from_str(environment_configuration_file.resource.postgresql.database_2.url.value.as_str())
+        );
         return Result::Ok(
             EnvironmentConfiguration {
                 subject: CreateFixtures {
@@ -230,18 +207,8 @@ where
     T: for<'de> Deserialize<'de>,
 {
     let environment_configuration_file_path_ = Path::new(environment_configuration_file_path);
-    let environment_file_data = if environment_configuration_file_path_.try_exists().into_runtime(
-        Backtrace::new(
-            line!(),
-            file!(),
-        ),
-    )? {
-        std::fs::read_to_string(environment_configuration_file_path_).into_logic(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?
+    let environment_file_data = if crate::result_return_runtime!(environment_configuration_file_path_.try_exists()) {
+        crate::result_return_logic!(std::fs::read_to_string(environment_configuration_file_path_))
     } else {
         return Result::Err(
             AggregateError::new_logic(
@@ -253,10 +220,5 @@ where
             ),
         );
     };
-    return toml::from_str::<T>(environment_file_data.as_str()).into_logic(
-        Backtrace::new(
-            line!(),
-            file!(),
-        ),
-    );
+    return crate::result_into_logic!(toml::from_str::<T>(environment_file_data.as_str()));
 }

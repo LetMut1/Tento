@@ -27,7 +27,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                ResultConverter,
             },
             capture::Capture,
         },
@@ -95,12 +94,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 );
             }
             let user = match Repository::<Postgresql<User<'_>>>::find_6(
-                &inner.postgresql_connection_pool_database_1.get().await.into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?,
+                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy3 {
                     user__id: incoming.user__id,
                 },
@@ -112,12 +106,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
-            let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
+            let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let mut user_reset_password_token = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_3(
                 &postgresql_database_2_client,
                 UserResetPasswordTokenBy1 {

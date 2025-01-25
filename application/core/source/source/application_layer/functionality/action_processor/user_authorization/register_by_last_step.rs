@@ -43,7 +43,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                ResultConverter,
             },
             capture::Capture,
         },
@@ -154,12 +153,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 );
             }
             {
-                let postgresql_database_1_client = inner.postgresql_connection_pool_database_1.get().await.into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+                let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
                 if Repository::<Postgresql<User<'_>>>::is_exist_1(
                     &postgresql_database_1_client,
                     UserBy1 {
@@ -183,12 +177,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             }
             let now = Resolver::<UnixTime>::get_now();
             {
-                let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+                let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
                 let mut user_registration_token = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_2(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy1 {
@@ -243,24 +232,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_WrongValue));
                 }
             }
-            let user__password_hash = Spawner::<TokioBlockingTask>::spawn_processed(
-                move || -> _ {
-                    return Encoder::<User_Password>::encode(incoming.user__password.as_str());
-                },
-            )
-            .await
-            .into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )??;
-            let postgresql_database_1_client = inner.postgresql_connection_pool_database_1.get().await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
+            let user__password_hash = crate::result_return_runtime!(
+                Spawner::<TokioBlockingTask>::spawn_processed(
+                    move || -> _ {
+                        return Encoder::<User_Password>::encode(incoming.user__password.as_str());
+                    },
+                )
+                .await
             )?;
+            let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             let user__id = Repository::<Postgresql<User<'_>>>::get_user_id(&postgresql_database_1_client).await?;
             let user = User::new(
                 user__id,
@@ -283,12 +263,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?,
                 now,
             );
-            let mut postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
+            let mut postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_database_2_client,
                 IsolationLevel::ReadCommitted,
@@ -346,12 +321,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     let user_device = Repository::<Postgresql<UserDevice>>::create_1(
-                        &postgresql_connection_pool_database_1.get().await.into_runtime(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
+                        &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
                         UserDeviceInsert1 {
                             user_device__id: incoming.user_device__id,
                             user__id,

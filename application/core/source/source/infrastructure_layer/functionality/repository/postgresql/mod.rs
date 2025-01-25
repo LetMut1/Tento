@@ -59,11 +59,7 @@ pub use self::{
     },
 };
 use crate::infrastructure_layer::data::{
-    aggregate_error::{
-        AggregateError,
-        Backtrace,
-        ResultConverter,
-    },
+    aggregate_error::AggregateError,
     capture::Capture,
 };
 use deadpool_postgres::Client;
@@ -162,11 +158,8 @@ impl Resolver<Transaction<'_>> {
                     }
                 }
             }
-            if let Result::Err(aggregate_error) = client.simple_query(query.as_str()).await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
+            if let Result::Err(aggregate_error) = crate::result_into_runtime!(
+                client.simple_query(query.as_str()).await
             ) {
                 let _ = client.simple_query("ROLLBACK;").await;
                 return Result::Err(aggregate_error);
@@ -180,11 +173,8 @@ impl Resolver<Transaction<'_>> {
     }
     pub fn commit<'a>(transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            if let Result::Err(aggregate_error) = transaction.client.simple_query("COMMIT;").await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
+            if let Result::Err(aggregate_error) = crate::result_into_runtime!(
+                transaction.client.simple_query("COMMIT;").await
             ) {
                 let _ = transaction.client.simple_query("ROLLBACK;").await;
                 return Result::Err(aggregate_error);
@@ -194,12 +184,7 @@ impl Resolver<Transaction<'_>> {
     }
     pub fn rollback<'a>(transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            transaction.client.simple_query("ROLLBACK;").await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
+            crate::result_return_runtime!(transaction.client.simple_query("ROLLBACK;").await);
             return Result::Ok(());
         };
     }

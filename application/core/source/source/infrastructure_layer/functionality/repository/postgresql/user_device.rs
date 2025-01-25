@@ -6,11 +6,7 @@ use crate::{
     domain_layer::data::entity::user_device::UserDevice,
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-                ResultConverter,
-            },
+            aggregate_error::AggregateError,
             capture::Capture,
         },
         functionality::repository::Repository,
@@ -45,30 +41,22 @@ impl Repository<Postgresql<UserDevice>> {
                     &insert_1.user__id,
                     Type::INT8,
                 );
-            let statement = database_1_client
+            let statement = crate::result_return_logic!(
+                database_1_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameter_type_registry(),
                 )
                 .await
-                .into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            database_1_client
+            );
+            crate::result_return_runtime!(
+                database_1_client
                 .query(
                     &statement,
                     parameter_storage.get_parameter_registry(),
                 )
                 .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            );
             return Result::Ok(
                 UserDevice::new(
                     insert_1.user_device__id,

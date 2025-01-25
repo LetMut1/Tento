@@ -1,9 +1,5 @@
 use super::Encoder;
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    ResultConverter,
-};
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use hmac::{
     Hmac,
     Mac,
@@ -33,12 +29,7 @@ impl Encoder<HmacSha3_512> {
         );
     }
     fn prepare_hmac<'a>(salt: &'a [u8], data_for_encode: &'a [u8]) -> Result<HmacSha3_512, AggregateError> {
-        let mut hmac = HmacSha3_512::new_from_slice(salt).into_logic(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
+        let mut hmac = crate::result_return_logic!(HmacSha3_512::new_from_slice(salt));
         hmac.update(data_for_encode);
         return Result::Ok(hmac);
     }
