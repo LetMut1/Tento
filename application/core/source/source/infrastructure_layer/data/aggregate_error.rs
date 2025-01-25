@@ -230,3 +230,136 @@ impl Display for Common {
     }
 }
 impl StdError for Common {}
+macro_rules! result_into_indefinite_argument {
+    ($std_result:expr) => {
+        match $std_result {
+            std::result::Result::Ok(value) => value,
+            std::result::Result::Err(error) => {
+                return std::result::Result::Err(
+                    crate::infrastructure_layer::data::aggregate_error::AggregateError::new_indefinite_argument(
+                        error.into(),
+                        crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                            std::line!(),
+                            std::file!(),
+                        ),
+                    ),
+                );
+            }
+        }
+    };
+}
+macro_rules! result_into_logic {
+    ($std_result:expr) => {
+        match $std_result {
+            std::result::Result::Ok(value) => value,
+            std::result::Result::Err(error) => {
+                return std::result::Result::Err(
+                    crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic(
+                        error.into(),
+                        crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                            std::line!(),
+                            std::file!(),
+                        ),
+                    ),
+                );
+            }
+        }
+    };
+}
+macro_rules! result_into_runtime {
+    ($std_result:expr) => {
+        match $std_result {
+            std::result::Result::Ok(value) => value,
+            std::result::Result::Err(error) => {
+                return std::result::Result::Err(
+                    crate::infrastructure_layer::data::aggregate_error::AggregateError::new_runtime(
+                        error.into(),
+                        crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                            std::line!(),
+                            std::file!(),
+                        ),
+                    ),
+                );
+            }
+        }
+    };
+}
+macro_rules! option_into_logic_unreachable_state {
+    ($std_option:expr) => {
+        match $std_option {
+            std::option::Option::Some(value) => value,
+            std::option::Option::None => {
+                return std::result::Result::Err(
+                    crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
+                        crate::infrastructure_layer::data::aggregate_error::Common::UnreachableState,
+                        crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                            std::line!(),
+                            std::file!(),
+                        ),
+                    ),
+                );
+            }
+        }
+    };
+}
+macro_rules! option_into_logic_out_of_range {
+    ($std_option:expr) => {
+        match $std_option {
+            std::option::Option::Some(value) => value,
+            std::option::Option::None => {
+                return std::result::Result::Err(
+                    crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
+                        crate::infrastructure_layer::data::aggregate_error::Common::OutOfRange,
+                        crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                            std::line!(),
+                            std::file!(),
+                        ),
+                    ),
+                );
+            }
+        }
+    };
+}
+macro_rules! option_into_logic_value_does_not_exist {
+    ($std_option:expr) => {
+        match $std_option {
+            std::option::Option::Some(value) => value,
+            std::option::Option::None => {
+                return std::result::Result::Err(
+                    crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
+                        crate::infrastructure_layer::data::aggregate_error::Common::ValueDoesNotExist,
+                        crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                            std::line!(),
+                            std::file!(),
+                        ),
+                    ),
+                );
+            }
+        }
+    };
+}
+macro_rules! option_into_logic_invalid_socket_address {
+    ($std_option:expr) => {
+        match $std_option {
+            std::option::Option::Some(value) => value,
+            std::option::Option::None => {
+                return std::result::Result::Err(
+                    crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
+                        crate::infrastructure_layer::data::aggregate_error::Common::InvalidSocketAddress,
+                        crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                            std::line!(),
+                            std::file!(),
+                        ),
+                    ),
+                );
+            }
+        }
+    };
+}
+pub(crate) use result_into_indefinite_argument;
+pub(crate) use result_into_logic;
+pub(crate) use result_into_runtime;
+pub(crate) use option_into_logic_unreachable_state;
+pub(crate) use option_into_logic_out_of_range;
+pub(crate) use option_into_logic_value_does_not_exist;
+pub(crate) use option_into_logic_invalid_socket_address;
