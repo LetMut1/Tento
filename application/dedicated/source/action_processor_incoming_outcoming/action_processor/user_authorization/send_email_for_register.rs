@@ -22,7 +22,7 @@ pub struct Incoming {
 pub struct Outcoming {
     pub user_registration_token__can_be_resent_from: i64,
 }
-crate::macro_rules::enum_from!(
+crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserRegistrationToken_NotFound,
         CommonPrecedent::UserRegistrationToken_AlreadyExpired,

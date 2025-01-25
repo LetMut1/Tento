@@ -13,7 +13,7 @@ use crate::{
 pub struct Incoming {
     pub user_access_token_encoded: UserAccessTokenEncoded,
 }
-crate::macro_rules::enum_from!(
+crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserAccessToken_AlreadyExpired,
         CommonPrecedent::UserAccessToken_InUserAccessTokenBlackList,

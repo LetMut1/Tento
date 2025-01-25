@@ -12,7 +12,7 @@ pub struct Incoming {
     pub user_device__id: String,
     pub user_reset_password_token__value: String,
 }
-crate::macro_rules::enum_from!(
+crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserResetPasswordToken_NotFound,
         CommonPrecedent::UserResetPasswordToken_AlreadyExpired,

@@ -28,7 +28,7 @@ pub struct Incoming {
 pub struct Outcoming {
     pub common_registry: Vec<Common1>,
 }
-crate::macro_rules::enum_from!(
+crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserAccessToken_AlreadyExpired,
         CommonPrecedent::UserAccessToken_InUserAccessTokenBlackList,

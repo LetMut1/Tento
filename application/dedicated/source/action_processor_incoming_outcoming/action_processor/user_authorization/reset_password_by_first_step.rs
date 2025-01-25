@@ -26,7 +26,7 @@ pub struct Outcoming {
     pub user_reset_password_token__wrong_enter_tries_quantity: i16,
     pub user_reset_password_token__wrong_enter_tries_quantity_limit: i16,
 }
-crate::macro_rules::enum_from!(
+crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::User_NotFound,
     }

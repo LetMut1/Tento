@@ -22,6 +22,11 @@ impl Serialize for Serializer<BitCode> {
     where
         T: Deserialize_<'a>,
     {
+        // let a = Result::<_, AggregateError>::Ok(());
+        // let b = aaa!(a);
+
+
+
         return Serializer_::deserialize::<'_, T>(data).into_indefinite_argument(
             Backtrace::new(
                 line!(),
@@ -30,3 +35,15 @@ impl Serialize for Serializer<BitCode> {
         );
     }
 }
+
+// macro_rules! aaa {
+//     ($result:expr) => {
+//         match $result {
+//             std::result::Result::Ok(value) => value,
+//             std::result::Result::Err(error) => {
+//                 panic!();
+//             }
+//         }
+//     };
+// }
+// pub(crate) use aaa;

@@ -22,7 +22,7 @@ pub struct Incoming {
 pub struct Outcoming {
     pub user_reset_password_token__can_be_resent_from: i64,
 }
-crate::macro_rules::enum_from!(
+crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::User_NotFound,
         CommonPrecedent::UserResetPasswordToken_NotFound,

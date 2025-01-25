@@ -28,7 +28,7 @@ pub struct Outcoming {
     pub user_access_token_encoded: UserAccessTokenEncoded,
     pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
-crate::macro_rules::enum_from!(
+crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserAuthorizationToken_NotFound,
         CommonPrecedent::UserAuthorizationToken_AlreadyExpired,

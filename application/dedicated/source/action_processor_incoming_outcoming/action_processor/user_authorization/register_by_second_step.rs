@@ -12,7 +12,7 @@ pub struct Incoming {
     pub user_device__id: String,
     pub user_registration_token__value: String,
 }
-crate::macro_rules::enum_from!(
+crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserRegistrationToken_NotFound,
         CommonPrecedent::UserRegistrationToken_AlreadyExpired,
