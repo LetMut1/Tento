@@ -230,7 +230,7 @@ impl Display for Common {
     }
 }
 impl StdError for Common {}
-macro_rules! result_into_indefinite_argument {
+macro_rules! result_return_indefinite_argument {
     ($std_result:expr) => {
         match $std_result {
             std::result::Result::Ok(value) => value,
@@ -248,7 +248,22 @@ macro_rules! result_into_indefinite_argument {
         }
     };
 }
-macro_rules! result_into_logic {
+macro_rules! result_into_indefinite_argument {
+    ($std_result:expr) => {
+        $std_result.map_err(
+            move |error: _| -> _ {
+                return crate::infrastructure_layer::data::aggregate_error::AggregateError::new_indefinite_argument(
+                    error.into(),
+                    crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                        std::line!(),
+                        std::file!(),
+                    ),
+                );
+            },
+        )
+    };
+}
+macro_rules! result_return_logic {
     ($std_result:expr) => {
         match $std_result {
             std::result::Result::Ok(value) => value,
@@ -266,7 +281,22 @@ macro_rules! result_into_logic {
         }
     };
 }
-macro_rules! result_into_runtime {
+macro_rules! result_into_logic {
+    ($std_result:expr) => {
+        $std_result.map_err(
+            move |error: _| -> _ {
+                return crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic(
+                    error.into(),
+                    crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                        std::line!(),
+                        std::file!(),
+                    ),
+                );
+            },
+        )
+    };
+}
+macro_rules! result_return_runtime {
     ($std_result:expr) => {
         match $std_result {
             std::result::Result::Ok(value) => value,
@@ -284,7 +314,22 @@ macro_rules! result_into_runtime {
         }
     };
 }
-macro_rules! option_into_logic_unreachable_state {
+macro_rules! result_into_runtime {
+    ($std_result:expr) => {
+        $std_result.map_err(
+            move |error: _| -> _ {
+                return crate::infrastructure_layer::data::aggregate_error::AggregateError::new_runtime(
+                    error.into(),
+                    crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                        std::line!(),
+                        std::file!(),
+                    ),
+                );
+            },
+        )
+    };
+}
+macro_rules! option_return_logic_unreachable_state {
     ($std_option:expr) => {
         match $std_option {
             std::option::Option::Some(value) => value,
@@ -302,7 +347,20 @@ macro_rules! option_into_logic_unreachable_state {
         }
     };
 }
-macro_rules! option_into_logic_out_of_range {
+macro_rules! option_into_logic_unreachable_state {
+    ($std_option:expr) => {
+        $std_result.ok_or(
+            crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
+                crate::infrastructure_layer::data::aggregate_error::Common::UnreachableState,
+                crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                    std::line!(),
+                    std::file!(),
+                ),
+            ),
+        )
+    };
+}
+macro_rules! option_return_logic_out_of_range {
     ($std_option:expr) => {
         match $std_option {
             std::option::Option::Some(value) => value,
@@ -320,7 +378,20 @@ macro_rules! option_into_logic_out_of_range {
         }
     };
 }
-macro_rules! option_into_logic_value_does_not_exist {
+macro_rules! option_into_logic_out_of_range {
+    ($std_option:expr) => {
+        $std_result.ok_or(
+            crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
+                crate::infrastructure_layer::data::aggregate_error::Common::OutOfRange,
+                crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                    std::line!(),
+                    std::file!(),
+                ),
+            ),
+        )
+    };
+}
+macro_rules! option_return_logic_value_does_not_exist {
     ($std_option:expr) => {
         match $std_option {
             std::option::Option::Some(value) => value,
@@ -338,7 +409,20 @@ macro_rules! option_into_logic_value_does_not_exist {
         }
     };
 }
-macro_rules! option_into_logic_invalid_socket_address {
+macro_rules! option_into_logic_value_does_not_exist {
+    ($std_option:expr) => {
+        $std_result.ok_or(
+            crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
+                crate::infrastructure_layer::data::aggregate_error::Common::ValueDoesNotExist,
+                crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                    std::line!(),
+                    std::file!(),
+                ),
+            ),
+        )
+    };
+}
+macro_rules! option_return_logic_invalid_socket_address {
     ($std_option:expr) => {
         match $std_option {
             std::option::Option::Some(value) => value,
@@ -356,10 +440,30 @@ macro_rules! option_into_logic_invalid_socket_address {
         }
     };
 }
+macro_rules! option_into_logic_invalid_socket_address {
+    ($std_option:expr) => {
+        $std_result.ok_or(
+            crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic_(
+                crate::infrastructure_layer::data::aggregate_error::Common::InvalidSocketAddress,
+                crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                    std::line!(),
+                    std::file!(),
+                ),
+            ),
+        )
+    };
+}
+pub(crate) use result_return_indefinite_argument;
 pub(crate) use result_into_indefinite_argument;
+pub(crate) use result_return_logic;
 pub(crate) use result_into_logic;
+pub(crate) use result_return_runtime;
 pub(crate) use result_into_runtime;
+pub(crate) use option_return_logic_unreachable_state;
 pub(crate) use option_into_logic_unreachable_state;
+pub(crate) use option_return_logic_out_of_range;
 pub(crate) use option_into_logic_out_of_range;
+pub(crate) use option_return_logic_value_does_not_exist;
 pub(crate) use option_into_logic_value_does_not_exist;
+pub(crate) use option_return_logic_invalid_socket_address;
 pub(crate) use option_into_logic_invalid_socket_address;

@@ -6,6 +6,22 @@ use self::infrastructure_layer::{
     data::aggregate_error::AggregateError,
     functionality::service::formatter::Formatter,
 };
+pub(crate) use self::infrastructure_layer::data::aggregate_error::{
+    option_into_logic_invalid_socket_address,
+    option_into_logic_out_of_range,
+    option_into_logic_unreachable_state,
+    option_into_logic_value_does_not_exist,
+    option_return_logic_invalid_socket_address,
+    option_return_logic_out_of_range,
+    option_return_logic_unreachable_state,
+    option_return_logic_value_does_not_exist,
+    result_into_indefinite_argument,
+    result_into_logic,
+    result_into_runtime,
+    result_return_indefinite_argument,
+    result_return_logic,
+    result_return_runtime,
+};
 use self::presentation_layer::functionality::command::Command;
 // The type is 'Result<(), ()>' but not '()' to return a success/error exit code but not only success exit code.
 fn main() -> Result<(), ()> {
