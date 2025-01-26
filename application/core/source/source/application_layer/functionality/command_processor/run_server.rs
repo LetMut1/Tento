@@ -107,15 +107,7 @@ impl CommandProcessor<RunServer> {
             || environment_configuration.subject.tokio_runtime.worker_threads_quantity == 0
             || environment_configuration.subject.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
         {
-            return Result::Err(
-                AggregateError::new_logic(
-                    "Invalid Tokio runtime configuration.".into(),
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
+            return crate::new_logic!("Invalid Tokio runtime configuration.");
         }
         return crate::result_into_runtime!(
             RuntimeBuilder::new_multi_thread()

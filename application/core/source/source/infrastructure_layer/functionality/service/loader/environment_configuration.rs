@@ -1,9 +1,6 @@
 use super::Loader;
 use crate::infrastructure_layer::data::{
-    aggregate_error::{
-        AggregateError,
-        Backtrace,
-    },
+    aggregate_error::AggregateError,
     environment_configuration::{
         EnvironmentConfiguration,
         Postgresql,
@@ -210,15 +207,7 @@ where
     let environment_file_data = if crate::result_return_runtime!(environment_configuration_file_path_.try_exists()) {
         crate::result_return_logic!(std::fs::read_to_string(environment_configuration_file_path_))
     } else {
-        return Result::Err(
-            AggregateError::new_logic(
-                "The environment.toml file does not exist.".into(),
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            ),
-        );
+        return crate::new_logic!("The environment.toml file does not exist.");
     };
     return crate::result_into_logic!(toml::from_str::<T>(environment_file_data.as_str()));
 }

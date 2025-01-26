@@ -359,6 +359,19 @@ macro_rules! new_invalid_argument {
         )
     };
 }
+macro_rules! new_logic {
+    ($error:expr) => {
+        std::result::Result::Err(
+            crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic(
+                $error.into(),
+                crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+                    std::line!(),
+                    std::file!(),
+                ),
+            ),
+        )
+    };
+}
 pub(crate) use result_return_indefinite_argument;
 pub(crate) use result_into_indefinite_argument;
 pub(crate) use result_return_logic;
@@ -372,3 +385,4 @@ pub(crate) use option_return_logic_value_does_not_exist;
 pub(crate) use option_into_logic_value_does_not_exist;
 pub(crate) use option_return_logic_invalid_socket_address;
 pub(crate) use new_invalid_argument;
+pub(crate) use new_logic;

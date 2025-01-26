@@ -8,6 +8,7 @@ use self::infrastructure_layer::{
 };
 pub(crate) use self::infrastructure_layer::data::aggregate_error::{
     new_invalid_argument,
+    new_logic,
     option_into_logic_out_of_range,
     option_into_logic_value_does_not_exist,
     option_return_logic_invalid_socket_address,
