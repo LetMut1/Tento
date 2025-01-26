@@ -19,10 +19,7 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-            },
+            aggregate_error::AggregateError,
             capture::Capture,
         },
         functionality::repository::{
@@ -74,25 +71,11 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
             };
             if let Option::Some(requery___channel__id_) = incoming.requery___channel__id {
                 if !Validator::<Channel_Id>::is_valid(requery___channel__id_) {
-                    return Result::Err(
-                        AggregateError::new_invalid_argument(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    return crate::new_invalid_argument!();
                 }
             }
             if incoming.limit <= 0 || incoming.limit > LIMIT {
-                return Result::Err(
-                    AggregateError::new_invalid_argument(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return crate::new_invalid_argument!();
             }
             let common_registry = Repository::<Postgresql<Common1>>::find_3(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),

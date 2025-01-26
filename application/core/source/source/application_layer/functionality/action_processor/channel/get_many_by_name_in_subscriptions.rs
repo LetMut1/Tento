@@ -19,10 +19,7 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-            },
+            aggregate_error::AggregateError,
             capture::Capture,
         },
         functionality::repository::{
@@ -73,35 +70,14 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
                 }
             };
             if incoming.limit <= 0 || incoming.limit > LIMIT {
-                return Result::Err(
-                    AggregateError::new_invalid_argument(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return crate::new_invalid_argument!();
             }
             if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
-                return Result::Err(
-                    AggregateError::new_invalid_argument(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return crate::new_invalid_argument!();
             }
             if let Option::Some(ref requery___channel__name_) = incoming.requery___channel__name {
                 if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
-                    return Result::Err(
-                        AggregateError::new_invalid_argument(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    return crate::new_invalid_argument!();
                 }
             }
             let common_registry = Repository::<Postgresql<Common1>>::find_2(

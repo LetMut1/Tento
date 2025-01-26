@@ -22,10 +22,7 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-            },
+            aggregate_error::AggregateError,
             capture::Capture,
         },
         functionality::repository::{
@@ -72,14 +69,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_CheckNameForExisting> {
                 }
             };
             if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
-                return Result::Err(
-                    AggregateError::new_invalid_argument(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return crate::new_invalid_argument!();
             }
             let is_exist = Repository::<Postgresql<Channel<'_>>>::is_exist_1(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),

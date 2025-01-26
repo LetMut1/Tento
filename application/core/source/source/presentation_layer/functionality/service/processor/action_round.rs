@@ -7,10 +7,6 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-            },
             capture::Capture,
             control_type::Response,
             server_workflow_error::ServerWorkflowError,
@@ -58,16 +54,9 @@ impl Processor<ActionRound> {
         return async move {
             let request_path = inner.parts.uri.path().to_string();
             let request_method = inner.parts.method.clone();
-            let future = async move {
+            return match async move {
                 if !Validator::<Parts>::is_valid(inner.parts) {
-                    return Result::<Vec<u8>, AggregateError>::Err(
-                        AggregateError::new_invalid_argument(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    return crate::new_invalid_argument!();
                 }
                 let incoming = Serializer::<SS>::deserialize::<'_, <ActionProcessor<AP> as ActionProcessor_>::Incoming>(
                     crate::result_return_runtime!(
@@ -82,8 +71,9 @@ impl Processor<ActionRound> {
                 )
                 .await?;
                 return Serializer::<SD>::serialize(&unified_report);
-            };
-            return match future.await {
+            }
+            .await
+            {
                 Result::Ok(data) => {
                     let response = Creator::<Response>::create_ok(data);
                     Logger::<ActionRound>::log(

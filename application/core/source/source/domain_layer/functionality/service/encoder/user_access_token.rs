@@ -3,10 +3,7 @@ use crate::{
     domain_layer::data::entity::user_access_token::UserAccessToken,
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-            },
+            aggregate_error::AggregateError,
             environment_configuration::run_server::PrivateKey,
         },
         functionality::service::{
@@ -49,14 +46,7 @@ impl Encoder<UserAccessToken<'_>> {
             user_access_token_encoded.serialized.as_slice(),
             user_access_token_encoded.encoded.as_slice(),
         )? {
-            return Result::Err(
-                AggregateError::new_invalid_argument(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
+            return crate::new_invalid_argument!();
         }
         return Serializer::<BitCode>::deserialize::<'_, UserAccessToken<'a>>(user_access_token_encoded.serialized.as_slice());
     }

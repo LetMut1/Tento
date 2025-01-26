@@ -30,10 +30,7 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-            },
+            aggregate_error::AggregateError,
             capture::Capture,
         },
         functionality::{
@@ -87,24 +84,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
     ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             if !Validator::<User_Password>::is_valid_part_1(incoming.user__password.as_str()) {
-                return Result::Err(
-                    AggregateError::new_invalid_argument(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return crate::new_invalid_argument!();
             }
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
-                return Result::Err(
-                    AggregateError::new_invalid_argument(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return crate::new_invalid_argument!();
             }
             let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             let (user__id, user__email, user__nickname, user__password_hash) = if Validator::<User_Email>::is_valid(incoming.user__email___or___user__nickname.as_str())? {
@@ -149,14 +132,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                         user__.password_hash,
                     )
                 } else {
-                    return Result::Err(
-                        AggregateError::new_invalid_argument(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    return crate::new_invalid_argument!();
                 }
             };
             if !Validator::<User_Password>::is_valid_part_2(
@@ -164,14 +140,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 user__email.as_str(),
                 user__nickname.as_str(),
             ) {
-                return Result::Err(
-                    AggregateError::new_invalid_argument(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return crate::new_invalid_argument!();
             }
             let is_valid_join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
                 move || -> _ {

@@ -13,10 +13,7 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-            },
+            aggregate_error::AggregateError,
             capture::Capture,
         },
         functionality::repository::{
@@ -48,14 +45,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExis
     ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             if !Validator::<User_Nickname>::is_valid(incoming.user__nickname.as_str()) {
-                return Result::Err(
-                    AggregateError::new_invalid_argument(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return crate::new_invalid_argument!();
             }
             let is_exist = Repository::<Postgresql<User<'_>>>::is_exist_1(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
