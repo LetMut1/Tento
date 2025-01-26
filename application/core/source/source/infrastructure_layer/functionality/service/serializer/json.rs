@@ -17,13 +17,13 @@ mod json {
         where
             T: Serialize_,
         {
-            return crate::result_into_logic!(serde_json::to_vec(subject));
+            return crate::result_into_result_logic!(serde_json::to_vec(subject));
         }
         fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AggregateError>
         where
             T: Deserialize_<'a>,
         {
-            return crate::result_into_indefinite_argument!(serde_json::from_slice::<'_, T>(data));
+            return crate::result_into_result_indefinite_argument!(serde_json::from_slice::<'_, T>(data));
         }
     }
 }

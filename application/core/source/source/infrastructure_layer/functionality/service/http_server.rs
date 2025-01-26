@@ -33,10 +33,7 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            aggregate_error::{
-                AggregateError,
-                Backtrace,
-            },
+            aggregate_error::AggregateError,
             control_type::{
                 Request,
                 Response,
@@ -142,10 +139,10 @@ impl HttpServer {
                 let cloned_ = cloned.clone();
                 let mut graceful_shutdown_signal_future_join_handle__ = graceful_shutdown_signal_future_join_handle_.as_mut();
                 #[cfg(feature = "port_for_manual_test")]
-                let http1_tcp_listener = crate::result_return_logic!(
+                let http1_tcp_listener = crate::result_return_result_logic!(
                     TcpListener::bind(&http1_socket_address).await
                 );
-                let http2_tcp_listener = crate::result_return_logic!(
+                let http2_tcp_listener = crate::result_return_result_logic!(
                     TcpListener::bind(&environment_configuration.subject.application_server.tcp.socket_address).await
                 );
                 if let Result::Err(aggregate_error) = async move {
@@ -205,13 +202,7 @@ impl HttpServer {
                                         Spawner::<TokioNonBlockingTask>::spawn_into_background(
                                             async move {
                                                 Logger::<AggregateError>::log(
-                                                    &AggregateError::new_runtime(
-                                                        error.into(),
-                                                        Backtrace::new(
-                                                            line!(),
-                                                            file!(),
-                                                        ),
-                                                    )
+                                                    &crate::new_runtime!(error),
                                                 );
                                                 return Result::Ok(());
                                             }
@@ -236,7 +227,7 @@ impl HttpServer {
                                 );
                                 #[cfg(feature = "port_for_manual_test")]
                                 {
-                                    let socket_address_port = crate::result_return_logic!(tcp_stream_.local_addr());
+                                    let socket_address_port = crate::result_return_result_logic!(tcp_stream_.local_addr());
                                     if http1_socket_address.port() == socket_address_port.port() {
                                         let serving_connection_future = http1_builder.serve_connection(
                                             TokioIo::new(tcp_stream_),
@@ -244,7 +235,7 @@ impl HttpServer {
                                         );
                                         Spawner::<TokioNonBlockingTask>::spawn_into_background(
                                             async move {
-                                                return crate::result_into_runtime!(serving_connection_future.await);
+                                                return crate::result_into_result_runtime!(serving_connection_future.await);
                                             },
                                         );
                                     } else {
@@ -254,7 +245,7 @@ impl HttpServer {
                                         );
                                         Spawner::<TokioNonBlockingTask>::spawn_into_background(
                                             async move {
-                                                return crate::result_into_runtime!(serving_connection_future.await);
+                                                return crate::result_into_result_runtime!(serving_connection_future.await);
                                             },
                                         );
                                     };
@@ -267,7 +258,7 @@ impl HttpServer {
                                     );
                                     Spawner::<TokioNonBlockingTask>::spawn_into_background(
                                         async move {
-                                            return crate::result_into_runtime!(serving_connection_future.await);
+                                            return crate::result_into_result_runtime!(serving_connection_future.await);
                                         },
                                     );
                                 }
@@ -299,7 +290,7 @@ impl HttpServer {
     }
     fn create_router() -> Result<Router<ActionRoute>, AggregateError> {
         let mut router = Router::<ActionRoute>::new();
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::CHECK_NICKNAME_FOR_EXISTING,
@@ -308,7 +299,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::CHECK_EMAIL_FOR_EXISTING,
@@ -317,7 +308,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(router
+        crate::result_return_result_logic!(router
 
             .insert(
                 UserAuthorization::REGISTER_BY_FIRST_STEP,
@@ -326,7 +317,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::REGISTER_BY_SECOND_STEP,
@@ -335,7 +326,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::REGISTER_BY_LAST_STEP,
@@ -344,7 +335,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::SEND_EMAIL_FOR_REGISTER,
@@ -353,7 +344,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::AUTHORIZE_BY_FIRST_STEP,
@@ -362,7 +353,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::AUTHORIZE_BY_LAST_STEP,
@@ -371,7 +362,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE,
@@ -380,7 +371,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP,
@@ -389,7 +380,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP,
@@ -398,7 +389,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::RESET_PASSWORD_BY_LAST_STEP,
@@ -407,7 +398,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD,
@@ -416,7 +407,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::REFRESH_ACCESS_TOKEN,
@@ -425,7 +416,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE,
@@ -434,7 +425,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES,
@@ -443,7 +434,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 Channel::GET_ONE_BY_ID,
@@ -452,7 +443,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
@@ -461,7 +452,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 Channel::GET_MANY_BY_SUBSCRIPTION,
@@ -470,7 +461,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 Channel::GET_MANY_PUBLIC_BY_NAME,
@@ -479,7 +470,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 Channel::CREATE,
@@ -488,7 +479,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 Channel::CHECK_NAME_FOR_EXISTING,
@@ -497,7 +488,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 Channel::CHECK_LINKED_NAME_FOR_EXISTING,
@@ -506,7 +497,7 @@ impl HttpServer {
                 },
             )
         );
-        crate::result_return_logic!(
+        crate::result_return_result_logic!(
             router
             .insert(
                 ChannelSubscription::CREATE,
@@ -517,7 +508,7 @@ impl HttpServer {
         );
         #[cfg(feature = "action_for_manual_test")]
         {
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::CHECK_NICKNAME_FOR_EXISTING_,
@@ -526,7 +517,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::CHECK_EMAIL_FOR_EXISTING_,
@@ -535,7 +526,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::REGISTER_BY_FIRST_STEP_,
@@ -544,7 +535,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::REGISTER_BY_SECOND_STEP_,
@@ -553,7 +544,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::REGISTER_BY_LAST_STEP_,
@@ -562,7 +553,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::SEND_EMAIL_FOR_REGISTER_,
@@ -571,7 +562,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::AUTHORIZE_BY_FIRST_STEP_,
@@ -580,7 +571,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::AUTHORIZE_BY_LAST_STEP_,
@@ -589,7 +580,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE_,
@@ -598,7 +589,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP_,
@@ -607,7 +598,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP_,
@@ -616,7 +607,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::RESET_PASSWORD_BY_LAST_STEP_,
@@ -625,7 +616,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD_,
@@ -634,7 +625,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::REFRESH_ACCESS_TOKEN_,
@@ -643,7 +634,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE_,
@@ -652,7 +643,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES_,
@@ -661,7 +652,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     Channel::GET_ONE_BY_ID_,
@@ -670,7 +661,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_,
@@ -679,7 +670,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     Channel::GET_MANY_BY_SUBSCRIPTION_,
@@ -688,7 +679,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     Channel::GET_MANY_PUBLIC_BY_NAME_,
@@ -697,7 +688,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     Channel::CREATE_,
@@ -706,7 +697,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     Channel::CHECK_NAME_FOR_EXISTING_,
@@ -715,7 +706,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(router
+            crate::result_return_result_logic!(router
                 .insert(
                     Channel::CHECK_LINKED_NAME_FOR_EXISTING_,
                     ActionRoute::Channel {
@@ -723,7 +714,7 @@ impl HttpServer {
                     },
                 )
             );
-            crate::result_return_logic!(
+            crate::result_return_result_logic!(
                 router
                 .insert(
                     ChannelSubscription::CREATE_,
@@ -1175,7 +1166,7 @@ impl HttpServer {
         };
     }
     fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()> + Send, AggregateError> {
-        let mut signal = crate::result_return_logic!(
+        let mut signal = crate::result_return_result_logic!(
             tokio::signal::unix::signal(signal_kind)
         );
         let signal_future = async move {

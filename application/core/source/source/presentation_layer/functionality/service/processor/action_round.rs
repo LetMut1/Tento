@@ -56,10 +56,10 @@ impl Processor<ActionRound> {
             let request_method = inner.parts.method.clone();
             return match async move {
                 if !Validator::<Parts>::is_valid(inner.parts) {
-                    return crate::new_invalid_argument!();
+                    return Result::Err(crate::new_invalid_argument!());
                 }
                 let incoming = Serializer::<SS>::deserialize::<'_, <ActionProcessor<AP> as ActionProcessor_>::Incoming>(
-                    crate::result_return_runtime!(
+                    crate::result_return_result_runtime!(
                         inner.incoming.collect().await
                     )
                     .aggregate()

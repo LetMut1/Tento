@@ -79,13 +79,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
     ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             if !Validator::<User_Email>::is_valid(incoming.user__email.as_str())? {
-                return crate::new_invalid_argument!();
+                return Result::Err(crate::new_invalid_argument!());
             }
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
-                return crate::new_invalid_argument!();
+                return Result::Err(crate::new_invalid_argument!());
             }
             let user = Repository::<Postgresql<User<'_>>>::find_4(
-                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
+                &crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy2 {
                     user__email: incoming.user__email.as_str(),
                 },
@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                 }
             };
             let now = Resolver::<UnixTime>::get_now();
-            let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_database_2_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_reset_password_token__value, user_reset_password_token__can_be_resent_from, user_reset_password_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_1(
                     &postgresql_database_2_client,

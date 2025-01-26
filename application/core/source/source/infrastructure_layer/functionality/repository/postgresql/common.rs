@@ -90,7 +90,7 @@ impl Repository<Postgresql<Common1>> {
                 &limit,
                 Type::INT2,
             );
-            let statement = crate::result_return_logic!(
+            let statement = crate::result_return_result_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
@@ -98,7 +98,7 @@ impl Repository<Postgresql<Common1>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let row_registry = crate::result_return_result_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -112,15 +112,15 @@ impl Repository<Postgresql<Common1>> {
             }
             '_a: for row in row_registry.iter() {
                 let channel = Channel1 {
-                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
-                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
-                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
-                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
+                    channel__id: crate::result_return_result_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel__name: crate::result_return_result_logic!(row.try_get::<'_, usize, String>(1)),
+                    channel__linked_name: crate::result_return_result_logic!(row.try_get::<'_, usize, String>(2)),
+                    channel__access_modifier: crate::result_return_result_logic!(row.try_get::<'_, usize, i16>(3)),
                     channel__visability_modifier: by_1.channel__visability_modifier,
-                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(4)),
-                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
+                    channel__cover_image_path: crate::result_return_result_logic!(row.try_get::<'_, usize, Option<String>>(4)),
+                    channel__background_image_path: crate::result_return_result_logic!(row.try_get::<'_, usize, Option<String>>(5)),
                 };
-                let is_user_subscribed = crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)).is_some();
+                let is_user_subscribed = crate::result_return_result_logic!(row.try_get::<'_, usize, Option<i64>>(6)).is_some();
                 let common = Common1 {
                     channel,
                     is_user_subscribed,
@@ -188,7 +188,7 @@ impl Repository<Postgresql<Common1>> {
                 &limit,
                 Type::INT2,
             );
-            let statement = crate::result_return_logic!(
+            let statement = crate::result_return_result_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
@@ -196,7 +196,7 @@ impl Repository<Postgresql<Common1>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let row_registry = crate::result_return_result_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -210,13 +210,13 @@ impl Repository<Postgresql<Common1>> {
             }
             '_a: for row in row_registry.iter() {
                 let channel = Channel1 {
-                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
-                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
-                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
-                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
-                    channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
-                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
-                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
+                    channel__id: crate::result_return_result_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel__name: crate::result_return_result_logic!(row.try_get::<'_, usize, String>(1)),
+                    channel__linked_name: crate::result_return_result_logic!(row.try_get::<'_, usize, String>(2)),
+                    channel__access_modifier: crate::result_return_result_logic!(row.try_get::<'_, usize, i16>(3)),
+                    channel__visability_modifier: crate::result_return_result_logic!(row.try_get::<'_, usize, i16>(4)),
+                    channel__cover_image_path: crate::result_return_result_logic!(row.try_get::<'_, usize, Option<String>>(5)),
+                    channel__background_image_path: crate::result_return_result_logic!(row.try_get::<'_, usize, Option<String>>(6)),
                 };
                 let common = Common1 {
                     channel,
@@ -280,7 +280,7 @@ impl Repository<Postgresql<Common1>> {
                 &limit,
                 Type::INT2,
             );
-            let statement = crate::result_return_logic!(
+            let statement = crate::result_return_result_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
@@ -288,7 +288,7 @@ impl Repository<Postgresql<Common1>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let row_registry = crate::result_return_result_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -302,13 +302,13 @@ impl Repository<Postgresql<Common1>> {
             }
             '_a: for row in row_registry.iter() {
                 let channel = Channel1 {
-                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
-                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
-                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
-                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
-                    channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
-                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
-                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
+                    channel__id: crate::result_return_result_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel__name: crate::result_return_result_logic!(row.try_get::<'_, usize, String>(1)),
+                    channel__linked_name: crate::result_return_result_logic!(row.try_get::<'_, usize, String>(2)),
+                    channel__access_modifier: crate::result_return_result_logic!(row.try_get::<'_, usize, i16>(3)),
+                    channel__visability_modifier: crate::result_return_result_logic!(row.try_get::<'_, usize, i16>(4)),
+                    channel__cover_image_path: crate::result_return_result_logic!(row.try_get::<'_, usize, Option<String>>(5)),
+                    channel__background_image_path: crate::result_return_result_logic!(row.try_get::<'_, usize, Option<String>>(6)),
                 };
                 let common = Common1 {
                     channel,

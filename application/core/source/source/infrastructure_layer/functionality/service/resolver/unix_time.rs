@@ -7,6 +7,6 @@ impl Resolver<UnixTime> {
         return Utc::now().timestamp();
     }
     pub fn add_interval(quantity_of_seconds: i64, to: i64) -> Result<i64, AggregateError> {
-        return crate::option_into_logic_out_of_range!(to.checked_add(quantity_of_seconds));
+        return crate::option_into_result_logic_out_of_range!(to.checked_add(quantity_of_seconds));
     }
 }

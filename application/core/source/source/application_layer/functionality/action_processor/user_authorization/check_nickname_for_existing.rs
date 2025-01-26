@@ -45,10 +45,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExis
     ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             if !Validator::<User_Nickname>::is_valid(incoming.user__nickname.as_str()) {
-                return crate::new_invalid_argument!();
+                return Result::Err(crate::new_invalid_argument!());
             }
             let is_exist = Repository::<Postgresql<User<'_>>>::is_exist_1(
-                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
+                &crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy1 {
                     user__nickname: incoming.user__nickname.as_str(),
                 },

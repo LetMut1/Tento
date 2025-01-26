@@ -46,7 +46,7 @@ impl Encoder<UserAccessToken<'_>> {
             user_access_token_encoded.serialized.as_slice(),
             user_access_token_encoded.encoded.as_slice(),
         )? {
-            return crate::new_invalid_argument!();
+            return Result::Err(crate::new_invalid_argument!());
         }
         return Serializer::<BitCode>::deserialize::<'_, UserAccessToken<'a>>(user_access_token_encoded.serialized.as_slice());
     }

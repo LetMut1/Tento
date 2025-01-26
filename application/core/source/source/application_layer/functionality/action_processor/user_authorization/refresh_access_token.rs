@@ -70,7 +70,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_encoded,
             )?;
-            let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_database_2_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let mut user_access_refresh_token = match Repository::<Postgresql<UserAccessRefreshToken<'_>>>::find_1(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenBy2 {
@@ -91,7 +91,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 &incoming.user_access_refresh_token_encoded,
             )?;
             if !is_valid || user_access_token.id.as_str() != user_access_refresh_token.user_access_token__id.as_ref() {
-                return crate::new_invalid_argument!();
+                return Result::Err(crate::new_invalid_argument!());
             }
             let now = Resolver::<UnixTime>::get_now();
             if user_access_refresh_token.expires_at <= now {

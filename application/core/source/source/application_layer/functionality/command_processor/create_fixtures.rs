@@ -79,7 +79,7 @@ impl CommandProcessor<CreateFixtures> {
         return Result::Ok(());
     }
     fn initialize_runtime() -> Result<Runtime, AggregateError> {
-        return crate::result_into_runtime!(
+        return crate::result_into_result_runtime!(
             Builder::new_current_thread().enable_all().build()
         );
     }
@@ -125,7 +125,7 @@ impl CommandProcessor<CreateFixtures> {
             .await?;
             let user__password = APPLICATION_USER__PASSWORD.to_string();
             let user__password_hash = Encoder::<User_Password>::encode(user__password.as_str())?;
-            let postgresql_database_1_client = crate::result_return_runtime!(
+            let postgresql_database_1_client = crate::result_return_result_runtime!(
                 postgresql_connection_pool_database_1.get().await
             );
             '_a: for _ in 1..=QUANTITY_OF_APPLICATION_USERS {
@@ -135,18 +135,18 @@ impl CommandProcessor<CreateFixtures> {
                     user__nickname = format!("{}{}", user__nickname.as_str(), character);
                 }
                 if !Validator::<User_Nickname>::is_valid(user__nickname.as_str()) {
-                    return crate::new_invalid_argument!();
+                    return Result::Err(crate::new_invalid_argument!());
                 }
                 let user__email = format!("{}@fixture.com", user__nickname.as_str());
                 if !Validator::<User_Email>::is_valid(user__email.as_str())? {
-                    return crate::new_invalid_argument!();
+                    return Result::Err(crate::new_invalid_argument!());
                 }
                 if !Validator::<User_Password>::is_valid(
                     user__password.as_str(),
                     user__email.as_str(),
                     user__nickname.as_str(),
                 ) {
-                    return crate::new_invalid_argument!();
+                    return Result::Err(crate::new_invalid_argument!());
                 }
                 let user = match Repository::<Postgresql<User<'_>>>::find_1(
                     &postgresql_database_1_client,
@@ -176,7 +176,7 @@ impl CommandProcessor<CreateFixtures> {
                     APPLICATION_USER_DEVICE__ID_PART
                 );
                 if !Validator::<UserDevice_Id>::is_valid(&user_device__id) {
-                    return crate::new_invalid_argument!();
+                    return Result::Err(crate::new_invalid_argument!());
                 }
                 Repository::<Postgresql<UserDevice>>::create_1(
                     &postgresql_database_1_client,
@@ -193,11 +193,11 @@ impl CommandProcessor<CreateFixtures> {
                         channel__name = format!("{}{}", channel__name.as_str(), character,);
                     }
                     if !Validator::<Channel_Name>::is_valid(channel__name.as_str()) {
-                        return crate::new_invalid_argument!();
+                        return Result::Err(crate::new_invalid_argument!());
                     }
                     let channel__linked_name = channel__name.clone();
                     if !Validator::<Channel_LinkedName>::is_valid(channel__linked_name.as_str()) {
-                        return crate::new_invalid_argument!();
+                        return Result::Err(crate::new_invalid_argument!());
                     }
                     let channel__description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
                         let mut channel__description_ = String::new();
@@ -206,7 +206,7 @@ impl CommandProcessor<CreateFixtures> {
                             channel__description_ = format!("{}{}", channel__description_.as_str(), character,);
                         }
                         if !Validator::<Channel_Description>::is_valid(channel__description_.as_str()) {
-                            return crate::new_invalid_argument!();
+                            return Result::Err(crate::new_invalid_argument!());
                         }
                         Option::Some(channel__description_)
                     } else {
@@ -216,7 +216,7 @@ impl CommandProcessor<CreateFixtures> {
                         0, 1, 2,
                     ];
                     if !Validator::<Channel_Orientation>::is_valid(channel__orientation.as_slice()) {
-                        return crate::new_invalid_argument!();
+                        return Result::Err(crate::new_invalid_argument!());
                     }
                     let channel = Repository::<Postgresql<Channel<'_>>>::find_2(
                         &postgresql_database_1_client,

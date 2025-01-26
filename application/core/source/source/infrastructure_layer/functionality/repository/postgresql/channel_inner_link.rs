@@ -47,7 +47,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
                     &channel_inner_link.created_at,
                     Type::INT8,
                 );
-            let statement = crate::result_return_logic!(
+            let statement = crate::result_return_result_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -55,7 +55,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            crate::result_return_result_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -86,7 +86,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
                     &limit,
                     Type::INT2,
                 );
-            let statement = crate::result_return_logic!(
+            let statement = crate::result_return_result_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -94,7 +94,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let row_registry = crate::result_return_result_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -108,7 +108,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
             }
             '_a: for row in row_registry.iter() {
                 let channel_inner_link = ChannelInnerLink1 {
-                    channel_inner_link__to: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel_inner_link__to: crate::result_return_result_logic!(row.try_get::<'_, usize, i64>(0)),
                 };
                 channel_inner_link_registry.push(channel_inner_link);
             }

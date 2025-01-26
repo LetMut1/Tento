@@ -26,16 +26,16 @@ impl Command {
             .subcommand(Command_::new(COMMAND_CREATE_FIXTURES))
             .subcommand(Command_::new(COMMAND_REMOVE_INCOMPLITE_STATE))
             .get_matches();
-        let environment_configuration_file_path = crate::option_return_logic_unreachable_state!(
+        let environment_configuration_file_path = crate::option_return_result_logic_unreachable_state!(
             arg_matches.get_one::<String>(ARGUMENT_ENVIRONMENT_FILE_PATH)
         );
-        let subcommand_arg_matches = crate::option_return_logic_unreachable_state!(arg_matches.subcommand());
+        let subcommand_arg_matches = crate::option_return_result_logic_unreachable_state!(arg_matches.subcommand());
         return match subcommand_arg_matches {
             (COMMAND_RUN_SERVER, _) => CommandProcessor::<RunServer>::process(environment_configuration_file_path.as_str()),
             (COMMAND_CREATE_FIXTURES, _) => CommandProcessor::<CreateFixtures>::process(environment_configuration_file_path.as_str()),
             (COMMAND_REMOVE_INCOMPLITE_STATE, _) => CommandProcessor::<RemoveIncompliteState>::process(),
             _ => {
-               crate::new_logic_unreachable_state!()
+               Result::Err(crate::new_logic_unreachable_state!())
             }
         };
     }

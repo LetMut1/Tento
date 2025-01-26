@@ -93,15 +93,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
     ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             if !Validator::<User_Id>::is_valid(incoming.user__id) {
-                return crate::new_invalid_argument!();
+                return Result::Err(crate::new_invalid_argument!());
             }
             if !Validator::<UserAuthorizationToken_Value>::is_valid(incoming.user_authorization_token__value.as_str())? {
-                return crate::new_invalid_argument!();
+                return Result::Err(crate::new_invalid_argument!());
             }
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
-                return crate::new_invalid_argument!();
+                return Result::Err(crate::new_invalid_argument!());
             }
-            let mut postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let mut postgresql_database_2_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let user_authorization_token = Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_2(
                 &postgresql_database_2_client,
                 UserAuthorizationTokenBy1 {
@@ -159,7 +159,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     ),
                 );
             }
-            let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
+            let postgresql_database_1_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             if !Repository::<Postgresql<User<'_>>>::is_exist_3(
                 &postgresql_database_1_client,
                 UserBy3 {
@@ -265,7 +265,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     let user_device = Repository::<Postgresql<UserDevice>>::create_1(
-                        &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
+                        &crate::result_return_result_runtime!(postgresql_connection_pool_database_1.get().await),
                         UserDeviceInsert1 {
                             user_device__id: incoming.user_device__id,
                             user__id: incoming.user__id,

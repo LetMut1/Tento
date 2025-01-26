@@ -57,15 +57,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
     ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             if !Validator::<User_Email>::is_valid(incoming.user__email.as_str())? {
-                return crate::new_invalid_argument!();
+                return Result::Err(crate::new_invalid_argument!());
             }
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
-                return crate::new_invalid_argument!();
+                return Result::Err(crate::new_invalid_argument!());
             }
             if !Validator::<UserRegistrationToken_Value>::is_valid(incoming.user_registration_token__value.as_str())? {
-                return crate::new_invalid_argument!();
+                return Result::Err(crate::new_invalid_argument!());
             }
-            let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_database_2_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let mut user_registration_token = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_2(
                 &postgresql_database_2_client,
                 UserRegistrationTokenBy1 {

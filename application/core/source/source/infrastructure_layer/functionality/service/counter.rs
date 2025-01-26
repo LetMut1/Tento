@@ -33,7 +33,7 @@ impl Counter<u8> {
 }
 impl Counter_ for Counter<u8> {
     fn get_next_value<'a>(&'a mut self) -> Result<impl Integer + Display, AggregateError> {
-        self.value = crate::option_return_logic_out_of_range!(self.value.checked_add(self.step_size));
+        self.value = crate::option_return_result_logic_out_of_range!(self.value.checked_add(self.step_size));
         return Result::Ok(self.value);
     }
     fn get_next_value_unchecked<'a>(&'a mut self) -> impl Integer + Display {

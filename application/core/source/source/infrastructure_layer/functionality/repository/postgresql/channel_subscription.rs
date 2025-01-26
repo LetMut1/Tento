@@ -44,7 +44,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                     &channel_subscription.created_at,
                     Type::INT8,
                 );
-            let statement = crate::result_return_logic!(
+            let statement = crate::result_return_result_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -52,7 +52,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            crate::result_return_result_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -83,7 +83,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                     &by_1.channel__id,
                     Type::INT8,
                 );
-            let statement = crate::result_return_logic!(
+            let statement = crate::result_return_result_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -91,7 +91,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let row_registry = crate::result_return_result_runtime!(
                 database_1_client
                 .query(
                     &statement,

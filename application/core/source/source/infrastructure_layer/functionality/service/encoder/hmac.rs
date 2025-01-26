@@ -29,7 +29,7 @@ impl Encoder<HmacSha3_512> {
         );
     }
     fn prepare_hmac<'a>(salt: &'a [u8], data_for_encode: &'a [u8]) -> Result<HmacSha3_512, AggregateError> {
-        let mut hmac = crate::result_return_logic!(HmacSha3_512::new_from_slice(salt));
+        let mut hmac = crate::result_return_result_logic!(HmacSha3_512::new_from_slice(salt));
         hmac.update(data_for_encode);
         return Result::Ok(hmac);
     }

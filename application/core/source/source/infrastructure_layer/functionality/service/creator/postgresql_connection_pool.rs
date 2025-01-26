@@ -40,7 +40,7 @@ impl Creator<PostgresqlConnectionPool> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            return crate::result_into_runtime!(
+            return crate::result_into_result_runtime!(
                 PostgresqlConnectionPool::builder(
                     Manager::from_config(
                         postgresql_inner.configuration.clone(),
