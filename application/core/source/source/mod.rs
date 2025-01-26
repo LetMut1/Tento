@@ -1,3 +1,4 @@
+#![cfg(all(target_endian = "little", target_family = "unix"))]
 mod application_layer;
 mod domain_layer;
 mod infrastructure_layer;

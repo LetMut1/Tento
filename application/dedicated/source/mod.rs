@@ -1,3 +1,4 @@
+#![cfg(target_endian = "little")]
 pub mod action_processor_incoming_outcoming;
 pub mod bit_code_serializer;
 pub mod common_precedent;
