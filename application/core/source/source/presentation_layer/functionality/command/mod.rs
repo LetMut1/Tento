@@ -5,11 +5,7 @@ use crate::{
         RemoveIncompliteState,
         RunServer,
     },
-    infrastructure_layer::data::aggregate_error::{
-        AggregateError,
-        Backtrace,
-        Common,
-    },
+    infrastructure_layer::data::aggregate_error::AggregateError,
 };
 use clap::{
     Arg,
@@ -39,15 +35,7 @@ impl Command {
             (COMMAND_CREATE_FIXTURES, _) => CommandProcessor::<CreateFixtures>::process(environment_configuration_file_path.as_str()),
             (COMMAND_REMOVE_INCOMPLITE_STATE, _) => CommandProcessor::<RemoveIncompliteState>::process(),
             _ => {
-                Result::Err(
-                    AggregateError::new_logic_(
-                        Common::UnreachableState,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                )
+               crate::new_logic_unreachable_state!()
             }
         };
     }

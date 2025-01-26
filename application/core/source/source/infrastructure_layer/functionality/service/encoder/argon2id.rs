@@ -1,9 +1,5 @@
 use super::Encoder;
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    Common,
-};
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use argon2::{
     password_hash::{
         rand_core::OsRng,
@@ -57,15 +53,7 @@ impl Encoder<Argon2Id> {
                     )
                     .is_err()
                 {
-                    return Result::Err(
-                        AggregateError::new_logic_(
-                            Common::ValueAlreadyExist,
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    return crate::new_logic_value_already_exist!();
                 }
                 crate::option_into_logic_value_does_not_exist!(ARGON2.get())
             }

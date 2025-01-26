@@ -1,11 +1,7 @@
 use super::Validator;
 use crate::{
     domain_layer::data::entity::user_authorization_token::UserAuthorizationToken_Value,
-    infrastructure_layer::data::aggregate_error::{
-        AggregateError,
-        Backtrace,
-        Common,
-    },
+    infrastructure_layer::data::aggregate_error::AggregateError,
 };
 use regex::Regex;
 use std::sync::OnceLock;
@@ -23,15 +19,7 @@ impl Validator<UserAuthorizationToken_Value> {
                     )
                     .is_err()
                 {
-                    return Result::Err(
-                        AggregateError::new_logic_(
-                            Common::ValueAlreadyExist,
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    return crate::new_logic_value_already_exist!();
                 }
                 crate::option_return_logic_value_does_not_exist!(REGULAR_EXPRESSION.get())
             }

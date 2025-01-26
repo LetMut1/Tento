@@ -21,6 +21,8 @@ pub(crate) use self::infrastructure_layer::data::aggregate_error::{
     result_return_indefinite_argument,
     result_return_logic,
     result_return_runtime,
+    new_logic_value_already_exist,
+    new_logic_unreachable_state,
 };
 use self::presentation_layer::functionality::command::Command;
 // The type is 'Result<(), ()>' but not '()' to return a success/error exit code but not only success exit code.

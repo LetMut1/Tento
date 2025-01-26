@@ -1,11 +1,7 @@
 use super::CommandProcessor;
 use crate::infrastructure_layer::{
     data::{
-        aggregate_error::{
-            AggregateError,
-            Backtrace,
-            Common,
-        },
+        aggregate_error::AggregateError,
         environment_configuration::EnvironmentConfiguration,
     },
     functionality::service::{
@@ -56,15 +52,7 @@ impl CommandProcessor<RunServer> {
             Option::Some(environment_configuration__) => Result::Ok(environment_configuration__),
             Option::None => {
                 if ENVIRONMENT_CONFIGURATION.set(environment_configuration).is_err() {
-                    return Result::Err(
-                        AggregateError::new_logic_(
-                            Common::ValueAlreadyExist,
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    return crate::new_logic_value_already_exist!();
                 }
                 crate::option_into_logic_value_does_not_exist!(ENVIRONMENT_CONFIGURATION.get())
             }
