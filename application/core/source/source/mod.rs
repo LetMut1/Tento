@@ -7,10 +7,15 @@ use self::infrastructure_layer::{
     data::aggregate_error::AggregateError,
     functionality::service::formatter::Formatter,
 };
+#[allow(unused_imports)]
 pub(crate) use self::infrastructure_layer::data::aggregate_error::{
+    new_indefinite_argument,
     new_invalid_argument,
+    new_logic_invalid_socket_address,
+    new_logic_out_of_range,
     new_logic_unreachable_state,
     new_logic_value_already_exist,
+    new_logic_value_does_not_exist,
     new_logic,
     new_runtime,
     option_into_logic_out_of_range,
