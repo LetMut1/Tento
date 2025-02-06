@@ -83,7 +83,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             if !Validator::<Channel_LinkedName>::is_valid(incoming.channel__linked_name.as_str()) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let postgresql_database_1_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_1.get().await);
+            let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             if Repository::<Postgresql<Channel<'_>>>::is_exist_1(
                 &postgresql_database_1_client,
                 ChannelBy2 {

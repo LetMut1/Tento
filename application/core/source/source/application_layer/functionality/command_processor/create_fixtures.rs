@@ -79,7 +79,7 @@ impl CommandProcessor<CreateFixtures> {
         return Result::Ok(());
     }
     fn initialize_runtime() -> Result<Runtime, AggregateError> {
-        return crate::result_into_result_runtime!(
+        return crate::result_into_runtime!(
             Builder::new_current_thread().enable_all().build()
         );
     }
@@ -125,7 +125,7 @@ impl CommandProcessor<CreateFixtures> {
             .await?;
             let user__password = APPLICATION_USER__PASSWORD.to_string();
             let user__password_hash = Encoder::<User_Password>::encode(user__password.as_str())?;
-            let postgresql_database_1_client = crate::result_return_result_runtime!(
+            let postgresql_database_1_client = crate::result_return_runtime!(
                 postgresql_connection_pool_database_1.get().await
             );
             '_a: for _ in 1..=QUANTITY_OF_APPLICATION_USERS {

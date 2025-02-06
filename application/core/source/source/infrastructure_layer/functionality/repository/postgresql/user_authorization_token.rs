@@ -70,7 +70,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &user_authorization_token.can_be_resent_from,
                     Type::INT8,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -78,7 +78,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -107,7 +107,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -115,7 +115,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -171,7 +171,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -179,7 +179,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -229,7 +229,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -237,7 +237,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -275,7 +275,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -283,7 +283,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -314,7 +314,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -322,7 +322,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -356,7 +356,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -364,7 +364,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -378,10 +378,10 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(
                 Option::Some(
                     UserAuthorizationToken_1 {
-                        value: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
-                        wrong_enter_tries_quantity: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i16>(1)),
-                        expires_at: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
-                        can_be_resent_from: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
+                        value: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        wrong_enter_tries_quantity: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(1)),
+                        expires_at: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
+                        can_be_resent_from: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
                     },
                 ),
             );
@@ -409,7 +409,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -417,7 +417,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -431,9 +431,9 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(
                 Option::Some(
                     UserAuthorizationToken_2 {
-                        value: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
-                        wrong_enter_tries_quantity: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i16>(1)),
-                        expires_at: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
+                        value: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        wrong_enter_tries_quantity: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(1)),
+                        expires_at: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
                     },
                 ),
             );
@@ -461,7 +461,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -469,7 +469,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -483,9 +483,9 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(
                 Option::Some(
                     UserAuthorizationToken_3 {
-                        value: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
-                        expires_at: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(1)),
-                        can_be_resent_from: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
+                        value: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        expires_at: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(1)),
+                        can_be_resent_from: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
                     },
                 ),
             );

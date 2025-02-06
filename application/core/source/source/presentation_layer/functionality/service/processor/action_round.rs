@@ -59,7 +59,7 @@ impl Processor<ActionRound> {
                     return Result::Err(crate::new_invalid_argument!());
                 }
                 let incoming = Serializer::<SS>::deserialize::<'_, <ActionProcessor<AP> as ActionProcessor_>::Incoming>(
-                    crate::result_return_result_runtime!(
+                    crate::result_return_runtime!(
                         inner.incoming.collect().await
                     )
                     .aggregate()

@@ -115,7 +115,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                     &insert_1.channel__created_at,
                     Type::INT8,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -123,7 +123,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -133,7 +133,7 @@ impl Repository<Postgresql<Channel<'_>>> {
             );
             return Result::Ok(
                 Channel::new(
-                    crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                    crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
                     insert_1.channel__owner,
                     Cow::Owned(insert_1.channel__name),
                     insert_1.channel__linked_name,
@@ -165,7 +165,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                 &by_1.channel__id,
                 Type::INT8,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -173,7 +173,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -210,7 +210,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                 &by_1.channel__id,
                 Type::INT8,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -218,7 +218,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -233,23 +233,23 @@ impl Repository<Postgresql<Channel<'_>>> {
                 Option::Some(
                     Channel::new(
                         by_1.channel__id,
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
                         Cow::Owned(
-                            crate::result_return_result_logic!(
+                            crate::result_return_logic!(
                                 row_registry[0].try_get::<'_, usize, String>(1)
                             ),
                         ),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(3)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i16>(4)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i16>(5)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, Vec<i16>>(6)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(7)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(8)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(9)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(10)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(11)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(12)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(3)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(4)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(5)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Vec<i16>>(6)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(7)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(8)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(9)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(10)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(11)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(12)),
                     ),
                 ),
             );
@@ -281,7 +281,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                 &by_2.channel__name,
                 Type::TEXT,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -289,7 +289,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -303,20 +303,20 @@ impl Repository<Postgresql<Channel<'_>>> {
             return Result::Ok(
                 Option::Some(
                     Channel::new(
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(1)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(1)),
                         Cow::Borrowed(by_2.channel__name),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(3)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i16>(4)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i16>(5)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, Vec<i16>>(6)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(7)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(8)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(9)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(10)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(11)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(12)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(3)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(4)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(5)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Vec<i16>>(6)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(7)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(8)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(9)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(10)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(11)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(12)),
                     ),
                 ),
             );
@@ -336,7 +336,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                 &by_2.channel__name,
                 Type::TEXT,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -344,7 +344,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -372,7 +372,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                 &by_3.channel__linked_name,
                 Type::TEXT,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -380,7 +380,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,

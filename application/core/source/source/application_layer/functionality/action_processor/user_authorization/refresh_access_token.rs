@@ -70,7 +70,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_encoded,
             )?;
-            let postgresql_database_2_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let mut user_access_refresh_token = match Repository::<Postgresql<UserAccessRefreshToken<'_>>>::find_1(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenBy2 {

@@ -19,7 +19,7 @@ pub struct Argon2Id;
 impl Encoder<Argon2Id> {
     pub fn encode<'a>(data_for_encode: &'a [u8]) -> Result<String, AggregateError> {
         return Result::Ok(
-            crate::result_return_result_indefinite_argument!(
+            crate::result_return_indefinite_argument!(
                 Self::get()?
                 .hash_password(
                     data_for_encode,
@@ -34,7 +34,7 @@ impl Encoder<Argon2Id> {
             Self::get()?
                 .verify_password(
                     data_for_encode,
-                    &crate::result_return_result_indefinite_argument!(PasswordHash::new(encoded_data)),
+                    &crate::result_return_indefinite_argument!(PasswordHash::new(encoded_data)),
                 )
                 .is_ok(),
         );
@@ -55,7 +55,7 @@ impl Encoder<Argon2Id> {
                 {
                     return Result::Err(crate::new_logic_value_already_exist!());
                 }
-                crate::option_into_result_logic_value_does_not_exist!(ARGON2.get())
+                crate::option_into_logic_value_does_not_exist!(ARGON2.get())
             }
         };
     }

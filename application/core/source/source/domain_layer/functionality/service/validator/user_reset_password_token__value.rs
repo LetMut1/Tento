@@ -13,7 +13,7 @@ impl Validator<UserResetPasswordToken_Value> {
             Option::None => {
                 if REGULAR_EXPRESSION
                     .set(
-                        crate::result_return_result_logic!(
+                        crate::result_return_logic!(
                             Regex::new(UserResetPasswordToken_Value::REGULAR_EXPRESSION)
                         ),
                     )
@@ -21,7 +21,7 @@ impl Validator<UserResetPasswordToken_Value> {
                 {
                     return Result::Err(crate::new_logic_value_already_exist!());
                 }
-                crate::option_return_result_logic_value_does_not_exist!(REGULAR_EXPRESSION.get())
+                crate::option_return_logic_value_does_not_exist!(REGULAR_EXPRESSION.get())
             }
         };
         return Result::Ok(regular_expression.is_match(user_authorization_token__value));

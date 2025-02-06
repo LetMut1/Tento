@@ -158,7 +158,7 @@ impl Resolver<Transaction<'_>> {
                     }
                 }
             }
-            if let Result::Err(aggregate_error) = crate::result_into_result_runtime!(
+            if let Result::Err(aggregate_error) = crate::result_into_runtime!(
                 client.simple_query(query.as_str()).await
             ) {
                 let _ = client.simple_query("ROLLBACK;").await;
@@ -173,7 +173,7 @@ impl Resolver<Transaction<'_>> {
     }
     pub fn commit<'a>(transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            if let Result::Err(aggregate_error) = crate::result_into_result_runtime!(
+            if let Result::Err(aggregate_error) = crate::result_into_runtime!(
                 transaction.client.simple_query("COMMIT;").await
             ) {
                 let _ = transaction.client.simple_query("ROLLBACK;").await;
@@ -184,7 +184,7 @@ impl Resolver<Transaction<'_>> {
     }
     pub fn rollback<'a>(transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            crate::result_return_result_runtime!(transaction.client.simple_query("ROLLBACK;").await);
+            crate::result_return_runtime!(transaction.client.simple_query("ROLLBACK;").await);
             return Result::Ok(());
         };
     }

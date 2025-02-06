@@ -18,6 +18,6 @@ impl Serialize for Serializer<BitCode> {
     where
         T: Deserialize_<'a>,
     {
-        return crate::result_into_result_indefinite_argument!(Serializer_::deserialize::<'_, T>(data));
+        return crate::result_into_indefinite_argument!(Serializer_::deserialize::<'_, T>(data));
     }
 }

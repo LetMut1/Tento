@@ -54,7 +54,7 @@ impl CommandProcessor<RunServer> {
                 if ENVIRONMENT_CONFIGURATION.set(environment_configuration).is_err() {
                     return Result::Err(crate::new_logic_value_already_exist!());
                 }
-                crate::option_into_result_logic_value_does_not_exist!(ENVIRONMENT_CONFIGURATION.get())
+                crate::option_into_logic_value_does_not_exist!(ENVIRONMENT_CONFIGURATION.get())
             }
         };
     }
@@ -87,7 +87,7 @@ impl CommandProcessor<RunServer> {
             .with_thread_names(false)
             .with_ansi(false)
             .finish();
-        crate::result_return_result_logic!(tracing::subscriber::set_global_default(fmt_subscriber));
+        crate::result_return_logic!(tracing::subscriber::set_global_default(fmt_subscriber));
         return Result::Ok(());
     }
     fn initialize_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration<RunServer>) -> Result<Runtime, AggregateError> {
@@ -97,7 +97,7 @@ impl CommandProcessor<RunServer> {
         {
             return Result::Err(crate::new_logic!("Invalid Tokio runtime configuration."));
         }
-        return crate::result_into_result_runtime!(
+        return crate::result_into_runtime!(
             RuntimeBuilder::new_multi_thread()
             .max_blocking_threads(environment_configuration.subject.tokio_runtime.maximum_blocking_threads_quantity)
             .worker_threads(environment_configuration.subject.tokio_runtime.worker_threads_quantity)

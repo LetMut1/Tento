@@ -76,7 +76,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                     &user_reset_password_token.can_be_resent_from,
                     Type::INT8,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -84,7 +84,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -113,7 +113,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -121,7 +121,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -183,7 +183,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -191,7 +191,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -229,7 +229,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -237,7 +237,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -293,7 +293,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -301,7 +301,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -332,7 +332,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -340,7 +340,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -378,7 +378,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -386,7 +386,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -421,7 +421,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -429,7 +429,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -443,11 +443,11 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             return Result::Ok(
                 Option::Some(
                     UserResetPasswordToken_1 {
-                        value: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
-                        wrong_enter_tries_quantity: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i16>(1)),
-                        is_approved: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, bool>(2)),
-                        expires_at: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
-                        can_be_resent_from: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(4)),
+                        value: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        wrong_enter_tries_quantity: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(1)),
+                        is_approved: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, bool>(2)),
+                        expires_at: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
+                        can_be_resent_from: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(4)),
                     },
                 ),
             );
@@ -476,7 +476,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -484,7 +484,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -498,10 +498,10 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             return Result::Ok(
                 Option::Some(
                     UserResetPasswordToken_2 {
-                        value: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
-                        wrong_enter_tries_quantity: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i16>(1)),
-                        is_approved: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, bool>(2)),
-                        expires_at: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
+                        value: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        wrong_enter_tries_quantity: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(1)),
+                        is_approved: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, bool>(2)),
+                        expires_at: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
                     },
                 ),
             );
@@ -530,7 +530,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -538,7 +538,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -552,10 +552,10 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             return Result::Ok(
                 Option::Some(
                     UserResetPasswordToken_3 {
-                        value: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
-                        is_approved: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, bool>(1)),
-                        expires_at: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
-                        can_be_resent_from: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
+                        value: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        is_approved: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, bool>(1)),
+                        expires_at: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
+                        can_be_resent_from: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
                     },
                 ),
             );

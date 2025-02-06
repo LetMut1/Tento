@@ -11,6 +11,6 @@ where
 }
 impl Convert<u16, i16> for Converter {
     fn convert(subject: u16) -> Result<i16, AggregateError> {
-        return crate::result_into_result_logic!(i16::try_from(subject));
+        return crate::result_into_logic!(i16::try_from(subject));
     }
 }

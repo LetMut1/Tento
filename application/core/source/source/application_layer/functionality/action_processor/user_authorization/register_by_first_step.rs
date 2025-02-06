@@ -85,7 +85,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                 return Result::Err(crate::new_invalid_argument!());
             }
             if Repository::<Postgresql<User<'_>>>::is_exist_2(
-                &crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_1.get().await),
+                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy2 {
                     user__email: incoming.user__email.as_str(),
                 },
@@ -95,7 +95,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_EmailAlreadyExist));
             }
             let now = Resolver::<UnixTime>::get_now();
-            let postgresql_database_2_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_registration_token__value, user_registration_token__can_be_resent_from, user_registration_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_1(
                     &postgresql_database_2_client,

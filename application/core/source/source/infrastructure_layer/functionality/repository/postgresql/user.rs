@@ -64,7 +64,7 @@ impl Repository<Postgresql<User<'_>>> {
                     &insert_1.user__created_at,
                     Type::INT8,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -72,7 +72,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -82,7 +82,7 @@ impl Repository<Postgresql<User<'_>>> {
             );
             return Result::Ok(
                 User::new(
-                    crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                    crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
                     insert_1.user__email,
                     Cow::Owned(insert_1.user__nickname),
                     insert_1.user__password_hash,
@@ -130,7 +130,7 @@ impl Repository<Postgresql<User<'_>>> {
                     &user.created_at,
                     Type::INT8,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -138,7 +138,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -173,7 +173,7 @@ impl Repository<Postgresql<User<'_>>> {
                     &by_3.user__id,
                     Type::INT8,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -181,7 +181,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -205,7 +205,7 @@ impl Repository<Postgresql<User<'_>>> {
                     &by_3.user__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -213,7 +213,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -238,7 +238,7 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_1.user__nickname,
                 Type::TEXT,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -246,7 +246,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -274,7 +274,7 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_2.user__email,
                 Type::TEXT,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -282,7 +282,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -310,7 +310,7 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_3.user__id,
                 Type::INT8,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -318,7 +318,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -349,7 +349,7 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_1.user__nickname,
                 Type::TEXT,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -357,7 +357,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -371,11 +371,11 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(
                 Option::Some(
                     User::new(
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
                         Cow::Borrowed(by_1.user__nickname),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
                     ),
                 ),
             );
@@ -397,7 +397,7 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_1.user__nickname,
                 Type::TEXT,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -405,7 +405,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -419,9 +419,9 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(
                 Option::Some(
                     User_1 {
-                        id: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
-                        email: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
-                        password_hash: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
+                        id: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                        email: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
+                        password_hash: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
                     },
                 ),
             );
@@ -443,7 +443,7 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_2.user__email,
                 Type::TEXT,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -451,7 +451,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -465,9 +465,9 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(
                 Option::Some(
                     User_2 {
-                        id: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
-                        nickname: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
-                        password_hash: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
+                        id: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                        nickname: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
+                        password_hash: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
                     },
                 ),
             );
@@ -487,7 +487,7 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_2.user__email,
                 Type::TEXT,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -495,7 +495,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -509,7 +509,7 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(
                 Option::Some(
                     User_3 {
-                        id: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                        id: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
                     },
                 ),
             );
@@ -531,7 +531,7 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_3.user__id,
                 Type::INT8,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -539,7 +539,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -553,9 +553,9 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(
                 Option::Some(
                     User_4 {
-                        email: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
-                        nickname: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
-                        password_hash: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
+                        email: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        nickname: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
+                        password_hash: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
                     },
                 ),
             );
@@ -575,7 +575,7 @@ impl Repository<Postgresql<User<'_>>> {
                 &by_3.user__id,
                 Type::INT8,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -583,7 +583,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -597,7 +597,7 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(
                 Option::Some(
                     User_5 {
-                        email: crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        email: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
                     },
                 ),
             );
@@ -607,7 +607,7 @@ impl Repository<Postgresql<User<'_>>> {
         return async move {
             let query = "\
                 SELECT nextval('public.user_1') AS n";
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
@@ -615,7 +615,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -624,7 +624,7 @@ impl Repository<Postgresql<User<'_>>> {
                 .await
             );
             return Result::Ok(
-                crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
             );
         };
     }

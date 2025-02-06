@@ -77,7 +77,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 return Result::Err(crate::new_invalid_argument!());
             }
             let user = match Repository::<Postgresql<User<'_>>>::find_6(
-                &crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_1.get().await),
+                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy3 {
                     user__id: incoming.user__id,
                 },
@@ -89,7 +89,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
-            let postgresql_database_2_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let mut user_authorization_token = match Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_3(
                 &postgresql_database_2_client,
                 UserAuthorizationTokenBy1 {

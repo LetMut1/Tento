@@ -65,7 +65,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let postgresql_database_2_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let mut user_reset_password_token = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_2(
                 &postgresql_database_2_client,
                 UserResetPasswordTokenBy1 {

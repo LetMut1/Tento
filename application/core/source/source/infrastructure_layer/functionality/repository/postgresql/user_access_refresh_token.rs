@@ -68,7 +68,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                     &user_access_refresh_token.updated_at,
                     Type::INT8,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -76,7 +76,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -132,7 +132,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                     &by_2.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -140,7 +140,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -169,7 +169,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                     &by_2.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -177,7 +177,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -200,7 +200,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 &by_1.user__id,
                 Type::INT8,
             );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -208,7 +208,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 )
                 .await
             );
-            crate::result_return_result_runtime!(
+            crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -245,7 +245,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                     &by_2.user_device__id,
                     Type::TEXT,
                 );
-            let statement = crate::result_return_result_logic!(
+            let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
@@ -253,7 +253,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_result_runtime!(
+            let row_registry = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -270,11 +270,11 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                         by_2.user__id,
                         by_2.user_device__id,
                         Cow::Owned(
-                            crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                            crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
                         ),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
-                        crate::result_return_result_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
+                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
                     ),
                 ),
             );

@@ -81,7 +81,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let mut postgresql_database_1_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_1.get().await);
+            let mut postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             let channel = match Repository::<Postgresql<Channel<'_>>>::find_1(
                 &postgresql_database_1_client,
                 ChannelBy1 {

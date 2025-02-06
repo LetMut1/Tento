@@ -90,7 +90,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 return Result::Err(crate::new_invalid_argument!());
             }
             {
-                let postgresql_database_2_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+                let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
                 let mut user_reset_password_token = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_2(
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy1 {
@@ -146,7 +146,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 }
             }
             let mut user = match Repository::<Postgresql<User<'_>>>::find_5(
-                &crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_1.get().await),
+                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy3 {
                     user__id: incoming.user__id,
                 },
@@ -166,7 +166,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 return Result::Err(crate::new_invalid_argument!());
             }
             let user__password_hash___old = user.password_hash;
-            user.password_hash = crate::result_return_result_runtime!(
+            user.password_hash = crate::result_return_runtime!(
                 Spawner::<TokioBlockingTask>::spawn_processed(
                     move || -> _ {
                         return Encoder::<User_Password>::encode(incoming.user__password.as_str());
@@ -174,8 +174,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 )
                 .await
             )?;
-            let postgresql_database_1_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_1.get().await);
-            let mut postgresql_database_2_client = crate::result_return_result_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
+            let mut postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_database_2_client,
                 IsolationLevel::ReadCommitted,
