@@ -1,3 +1,8 @@
+#[cfg(not(feature = "postgresql_connection_with_tls"))]
+use {
+    crate::infrastructure_layer::functionality::service::creator::Creator,
+    tokio_postgres::NoTls,
+};
 use {
     crate::{
         application_layer::functionality::{
@@ -76,13 +81,8 @@ use {
 };
 #[cfg(feature = "port_for_manual_test")]
 use {
-    hyper::server::conn::http1::Builder as Http1Builder,
     core::net::SocketAddr,
-};
-#[cfg(not(feature = "postgresql_connection_with_tls"))]
-use {
-    crate::infrastructure_layer::functionality::service::creator::Creator,
-    tokio_postgres::NoTls,
+    hyper::server::conn::http1::Builder as Http1Builder,
 };
 pub struct HttpServer;
 impl HttpServer {
@@ -110,7 +110,7 @@ impl HttpServer {
                         _ = signal_terminate_future => {},
                     }
                     return ();
-                }
+                },
             );
             let mut graceful_shutdown_signal_future_join_handle_ = std::pin::pin!(graceful_shutdown_signal_future_join_handle);
             let postgresql_connection_pool_database_1;
@@ -730,11 +730,7 @@ impl HttpServer {
         }
         return Result::Ok(router);
     }
-    fn process_request(
-        request: Request,
-        environment_configuration: &'static EnvironmentConfiguration<RunServer>,
-        cloned: Arc<Cloned>
-    ) -> impl Future<Output = Response> + Send {
+    fn process_request(request: Request, environment_configuration: &'static EnvironmentConfiguration<RunServer>, cloned: Arc<Cloned>) -> impl Future<Output = Response> + Send {
         return async move {
             let (parts, mut incoming) = request.into_parts();
             let mut action_inner = ActionInner {

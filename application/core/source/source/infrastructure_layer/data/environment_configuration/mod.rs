@@ -1,5 +1,5 @@
-pub mod run_server;
 pub mod create_fixtures;
+pub mod run_server;
 use tokio_postgres::config::Config;
 pub struct EnvironmentConfiguration<S> {
     pub subject: S,

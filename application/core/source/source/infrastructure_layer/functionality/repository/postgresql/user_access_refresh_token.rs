@@ -1,14 +1,14 @@
 use {
+    super::{
+        ParameterStorage,
+        Postgresql,
+    },
     crate::{
         domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken,
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::repository::Repository,
         },
-    },
-    super::{
-        Postgresql,
-        ParameterStorage,
     },
     deadpool_postgres::Client,
     std::{
@@ -217,10 +217,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn find_1<'a, 'b>(
-        database_2_client: &'a Client,
-        by_2: By2<'b>,
-    ) -> impl Future<Output = Result<Option<UserAccessRefreshToken<'b>>, AggregateError>> + Send + use<'a, 'b> {
+    pub fn find_1<'a, 'b>(database_2_client: &'a Client, by_2: By2<'b>) -> impl Future<Output = Result<Option<UserAccessRefreshToken<'b>>, AggregateError>> + Send + use<'a, 'b> {
         return async move {
             let query = "\
                 SELECT \
@@ -267,9 +264,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                     UserAccessRefreshToken::new(
                         by_2.user__id,
                         by_2.user_device__id,
-                        Cow::Owned(
-                            crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
-                        ),
+                        Cow::Owned(crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0))),
                         crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
                         crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
                         crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),

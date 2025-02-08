@@ -1,4 +1,5 @@
 use {
+    super::Inner,
     crate::{
         infrastructure_layer::{
             data::control_type::Response,
@@ -13,7 +14,6 @@ use {
             service::processor::action_round::ActionRound,
         },
     },
-    super::Inner,
 };
 pub struct RouteNotFound;
 impl Action<RouteNotFound> {

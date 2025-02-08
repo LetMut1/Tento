@@ -1,14 +1,14 @@
 use {
+    super::{
+        ParameterStorage,
+        Postgresql,
+    },
     crate::{
         domain_layer::data::entity::user_device::UserDevice,
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::repository::Repository,
         },
-    },
-    super::{
-        Postgresql,
-        ParameterStorage,
     },
     deadpool_postgres::Client,
     std::future::Future,

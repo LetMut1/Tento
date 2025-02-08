@@ -36,9 +36,7 @@ impl Command {
             (COMMAND_RUN_SERVER, _) => CommandProcessor::<RunServer>::process(environment_configuration_file_path.as_str()),
             (COMMAND_CREATE_FIXTURES, _) => CommandProcessor::<CreateFixtures>::process(environment_configuration_file_path.as_str()),
             (COMMAND_REMOVE_INCOMPLITE_STATE, _) => CommandProcessor::<RemoveIncompliteState>::process(),
-            _ => {
-               Result::Err(crate::new_logic_unreachable_state!())
-            }
+            _ => Result::Err(crate::new_logic_unreachable_state!()),
         };
     }
 }

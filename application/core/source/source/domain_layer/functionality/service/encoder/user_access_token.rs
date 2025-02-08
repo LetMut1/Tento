@@ -1,4 +1,5 @@
 use {
+    super::Encoder,
     crate::{
         domain_layer::data::entity::user_access_token::UserAccessToken,
         infrastructure_layer::{
@@ -19,14 +20,10 @@ use {
             },
         },
     },
-    super::Encoder,
     dedicated::user_access_token_encoded::UserAccessTokenEncoded,
 };
 impl Encoder<UserAccessToken<'_>> {
-    pub fn encode<'a>(
-        private_key: &'static PrivateKey,
-        user_access_token: &'a UserAccessToken<'_>
-    ) -> Result<UserAccessTokenEncoded, AggregateError> {
+    pub fn encode<'a>(private_key: &'static PrivateKey, user_access_token: &'a UserAccessToken<'_>) -> Result<UserAccessTokenEncoded, AggregateError> {
         let user_access_token_serialized = Serializer::<BitCode>::serialize(user_access_token)?;
         let user_access_token_encoded = Encoder_::<HmacSha3_512>::encode(
             private_key.user_access_token.as_bytes(),
@@ -39,10 +36,7 @@ impl Encoder<UserAccessToken<'_>> {
             },
         );
     }
-    pub fn decode<'a>(
-        private_key: &'static PrivateKey,
-        user_access_token_encoded: &'a UserAccessTokenEncoded,
-    ) -> Result<UserAccessToken<'a>, AggregateError> {
+    pub fn decode<'a>(private_key: &'static PrivateKey, user_access_token_encoded: &'a UserAccessTokenEncoded) -> Result<UserAccessToken<'a>, AggregateError> {
         if !Encoder_::<HmacSha3_512>::is_valid(
             private_key.user_access_token.as_bytes(),
             user_access_token_encoded.serialized.as_slice(),

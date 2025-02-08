@@ -1,4 +1,5 @@
 use {
+    super::Generator,
     crate::{
         domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken_ExpiresAt,
         infrastructure_layer::{
@@ -9,10 +10,12 @@ use {
             },
         },
     },
-    super::Generator,
 };
 impl Generator<UserAccessRefreshToken_ExpiresAt> {
     pub fn generate(now: i64) -> Result<i64, AggregateError> {
-        return Resolver::<UnixTime>::add_interval(UserAccessRefreshToken_ExpiresAt::QUANTITY_OF_SECONDS_FOR_EXPIRATION, now);
+        return Resolver::<UnixTime>::add_interval(
+            UserAccessRefreshToken_ExpiresAt::QUANTITY_OF_SECONDS_FOR_EXPIRATION,
+            now,
+        );
     }
 }

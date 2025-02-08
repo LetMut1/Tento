@@ -42,10 +42,10 @@ use {
             functionality::{
                 repository::{
                     postgresql::{
+                        IsolationLevel,
                         Postgresql,
                         Resolver as Resolver_,
                         Transaction,
-                        IsolationLevel,
                         UserAccessRefreshTokenBy2,
                         UserAccessRefreshTokenUpdate1,
                         UserAuthorizationTokenBy1,
@@ -85,10 +85,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
-    fn process<'a>(
-        inner: &'a Inner<'_>,
-        incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
+    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             if !Validator::<User_Id>::is_valid(incoming.user__id) {
                 return Result::Err(crate::new_invalid_argument!());

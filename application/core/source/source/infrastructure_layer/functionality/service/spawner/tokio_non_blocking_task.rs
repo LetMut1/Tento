@@ -1,17 +1,15 @@
 use {
+    super::Spawner,
     crate::infrastructure_layer::{
         data::aggregate_error::AggregateError,
         functionality::service::logger::Logger,
     },
-    super::Spawner,
     std::future::Future,
     tokio::task::JoinHandle,
 };
 pub struct TokioNonBlockingTask;
 impl Spawner<TokioNonBlockingTask> {
-    pub fn spawn_into_background<T>(
-        future: impl Future<Output = Result<T, AggregateError>> + Send + 'static,
-    ) -> () {
+    pub fn spawn_into_background<T>(future: impl Future<Output = Result<T, AggregateError>> + Send + 'static) -> () {
         tokio::spawn(
             async move {
                 if let Result::Err(aggregate_error) = future.await {

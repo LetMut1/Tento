@@ -1,6 +1,10 @@
+pub use deadpool_postgres::Pool as PostgresqlConnectionPool;
 use {
     super::Creator,
-    crate::infrastructure_layer::data::aggregate_error::AggregateError,
+    crate::infrastructure_layer::data::{
+        aggregate_error::AggregateError,
+        environment_configuration::PostgresqlInner,
+    },
     deadpool::{
         managed::QueueMode,
         Runtime,
@@ -23,14 +27,9 @@ use {
         },
         Socket,
     },
-    crate::infrastructure_layer::data::environment_configuration::PostgresqlInner,
 };
-pub use deadpool_postgres::Pool as PostgresqlConnectionPool;
 impl Creator<PostgresqlConnectionPool> {
-    pub fn create<'a, T>(
-        postgresql_inner: &'a PostgresqlInner,
-        tls_type: T
-    ) -> impl Future<Output = Result<PostgresqlConnectionPool, AggregateError>> + Send + use<'a, T>
+    pub fn create<'a, T>(postgresql_inner: &'a PostgresqlInner, tls_type: T) -> impl Future<Output = Result<PostgresqlConnectionPool, AggregateError>> + Send + use<'a, T>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

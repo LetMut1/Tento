@@ -1,4 +1,5 @@
 use {
+    super::Generator,
     crate::{
         domain_layer::data::entity::user_authorization_token::UserAuthorizationToken_Value,
         infrastructure_layer::functionality::service::generator::{
@@ -6,7 +7,6 @@ use {
             NumberRow,
         },
     },
-    super::Generator,
 };
 impl Generator<UserAuthorizationToken_Value> {
     pub fn generate() -> String {

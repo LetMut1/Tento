@@ -1,4 +1,11 @@
+pub use crate::infrastructure_layer::data::environment_configuration::run_server::RunServer;
+#[cfg(feature = "logging_to_file")]
+use tracing_appender::rolling::{
+    RollingFileAppender,
+    Rotation,
+};
 use {
+    super::CommandProcessor,
     crate::infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
@@ -9,7 +16,6 @@ use {
             loader::Loader,
         },
     },
-    super::CommandProcessor,
     std::sync::OnceLock,
     tokio::runtime::{
         Builder as RuntimeBuilder,
@@ -23,12 +29,6 @@ use {
     },
     tracing_subscriber::FmtSubscriber,
 };
-#[cfg(feature = "logging_to_file")]
-use tracing_appender::rolling::{
-    RollingFileAppender,
-    Rotation,
-};
-pub use crate::infrastructure_layer::data::environment_configuration::run_server::RunServer;
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration<RunServer>> = OnceLock::new();
 impl CommandProcessor<RunServer> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
@@ -46,9 +46,7 @@ impl CommandProcessor<RunServer> {
         runtime.block_on(HttpServer::run(environment_configuration))?;
         return Result::Ok(());
     }
-    fn initialize_environment<'a>(
-        environment_configuration_file_directory: &'a str,
-    ) -> Result<&'static EnvironmentConfiguration<RunServer>, AggregateError> {
+    fn initialize_environment<'a>(environment_configuration_file_directory: &'a str) -> Result<&'static EnvironmentConfiguration<RunServer>, AggregateError> {
         let environment_configuration = Loader::<EnvironmentConfiguration<RunServer>>::load_from_file(environment_configuration_file_directory)?;
         return match ENVIRONMENT_CONFIGURATION.get() {
             Option::Some(environment_configuration__) => Result::Ok(environment_configuration__),
@@ -61,9 +59,7 @@ impl CommandProcessor<RunServer> {
         };
     }
     #[cfg(feature = "logging_to_file")]
-    fn initialize_logging_to_fileger<'a>(
-        environment_configuration: &'a EnvironmentConfiguration<RunServer>,
-    ) -> Result<WorkerGuard, AggregateError> {
+    fn initialize_logging_to_fileger<'a>(environment_configuration: &'a EnvironmentConfiguration<RunServer>) -> Result<WorkerGuard, AggregateError> {
         let rolling_file_appender = RollingFileAppender::new(
             Rotation::DAILY,
             environment_configuration.subject.logging.directory_path.as_str(),

@@ -19,7 +19,7 @@ use {
     std::{
         borrow::Cow,
         marker::PhantomData,
-    }
+    },
 };
 pub struct Channel<'a> {
     pub id: i64,

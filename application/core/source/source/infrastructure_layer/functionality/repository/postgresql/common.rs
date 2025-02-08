@@ -1,4 +1,8 @@
 use {
+    super::{
+        ParameterStorage,
+        Postgresql,
+    },
     crate::infrastructure_layer::{
         data::aggregate_error::AggregateError,
         functionality::{
@@ -8,10 +12,6 @@ use {
                 Counter_,
             },
         },
-    },
-    super::{
-        Postgresql,
-        ParameterStorage,
     },
     deadpool_postgres::Client,
     dedicated::action_processor_incoming_outcoming::{

@@ -30,14 +30,14 @@ use {
             functionality::{
                 repository::{
                     postgresql::{
+                        IsolationLevel,
                         Postgresql,
+                        Resolver as Resolver_,
+                        Transaction,
                         UserAccessRefreshTokenBy1,
                         UserBy3,
                         UserResetPasswordTokenBy1,
                         UserUpdate1,
-                        Resolver as Resolver_,
-                        Transaction,
-                        IsolationLevel,
                     },
                     Repository,
                 },
@@ -71,10 +71,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
     type Incoming = Incoming;
     type Outcoming = Void;
     type Precedent = Precedent;
-    fn process<'a>(
-        inner: &'a Inner<'_>,
-        incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
+    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             if !Validator::<UserResetPasswordToken_Value>::is_valid(incoming.user_reset_password_token__value.as_str())? {
                 return Result::Err(crate::new_invalid_argument!());
@@ -178,7 +175,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_database_2_client,
                 IsolationLevel::ReadCommitted,
-            ).await?;
+            )
+            .await?;
             if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken<'_>>>::delete_2(
                 transaction.get_client(),
                 UserAccessRefreshTokenBy1 {

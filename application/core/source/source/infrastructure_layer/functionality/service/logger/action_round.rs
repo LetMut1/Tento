@@ -1,4 +1,5 @@
 use {
+    super::Logger,
     crate::{
         infrastructure_layer::{
             data::{
@@ -21,7 +22,6 @@ use {
         },
         presentation_layer::functionality::service::processor::action_round::ActionRound,
     },
-    super::Logger,
 };
 impl Logger<ActionRound> {
     pub fn log(row_data: RowData) -> () {

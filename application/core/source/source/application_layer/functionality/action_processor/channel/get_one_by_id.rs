@@ -57,10 +57,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
-    fn process<'a>(
-        inner: &'a Inner<'_>,
-        incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
+    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,

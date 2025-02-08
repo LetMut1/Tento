@@ -1,7 +1,7 @@
 use {
     super::{
-        Postgresql,
         ParameterStorage,
+        Postgresql,
     },
     crate::{
         domain_layer::data::entity::channel_inner_link::ChannelInnerLink,

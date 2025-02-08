@@ -1,4 +1,6 @@
+pub use crate::infrastructure_layer::data::environment_configuration::create_fixtures::CreateFixtures;
 use {
+    super::CommandProcessor,
     crate::{
         domain_layer::{
             data::entity::{
@@ -58,7 +60,6 @@ use {
             },
         },
     },
-    super::CommandProcessor,
     rand::{
         thread_rng,
         Rng,
@@ -70,7 +71,6 @@ use {
     },
     tokio_postgres::NoTls,
 };
-pub use crate::infrastructure_layer::data::environment_configuration::create_fixtures::CreateFixtures;
 impl CommandProcessor<CreateFixtures> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
         let environment_configuration = Loader::<EnvironmentConfiguration<CreateFixtures>>::load_from_file(environment_configuration_file_path)?;

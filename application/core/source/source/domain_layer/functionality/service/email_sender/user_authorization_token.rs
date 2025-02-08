@@ -1,4 +1,5 @@
 use {
+    super::EmailSender,
     crate::{
         domain_layer::data::entity::user_authorization_token::UserAuthorizationToken,
         infrastructure_layer::{
@@ -12,7 +13,6 @@ use {
             },
         },
     },
-    super::EmailSender,
     std::future::Future,
 };
 impl EmailSender<UserAuthorizationToken<'_>> {

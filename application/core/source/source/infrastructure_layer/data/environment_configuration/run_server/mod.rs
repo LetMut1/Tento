@@ -1,8 +1,8 @@
 mod environment_configuration_file;
 pub use self::environment_configuration_file::EnvironmentConfigurationFile;
 use {
-    std::net::SocketAddr,
     super::Postgresql,
+    std::net::SocketAddr,
 };
 pub struct RunServer {
     pub tokio_runtime: TokioRuntime,

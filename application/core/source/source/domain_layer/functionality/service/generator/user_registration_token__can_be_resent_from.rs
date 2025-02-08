@@ -1,4 +1,5 @@
 use {
+    super::Generator,
     crate::{
         domain_layer::data::entity::user_registration_token::UserRegistrationToken_CanBeResentFrom,
         infrastructure_layer::{
@@ -9,10 +10,12 @@ use {
             },
         },
     },
-    super::Generator,
 };
 impl Generator<UserRegistrationToken_CanBeResentFrom> {
     pub fn generate(now: i64) -> Result<i64, AggregateError> {
-        return Resolver::<UnixTime>::add_interval(UserRegistrationToken_CanBeResentFrom::QUANTITY_OF_SECONDS_BEFORE_RESENDING, now);
+        return Resolver::<UnixTime>::add_interval(
+            UserRegistrationToken_CanBeResentFrom::QUANTITY_OF_SECONDS_BEFORE_RESENDING,
+            now,
+        );
     }
 }

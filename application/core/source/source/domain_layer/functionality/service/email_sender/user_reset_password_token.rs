@@ -1,4 +1,5 @@
 use {
+    super::EmailSender,
     crate::{
         domain_layer::data::entity::user_reset_password_token::UserResetPasswordToken,
         infrastructure_layer::{
@@ -12,7 +13,6 @@ use {
             },
         },
     },
-    super::EmailSender,
     std::future::Future,
 };
 impl EmailSender<UserResetPasswordToken<'_>> {

@@ -50,10 +50,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
     type Incoming = Incoming;
     type Outcoming = Void;
     type Precedent = Precedent;
-    fn process<'a>(
-        inner: &'a Inner<'_>,
-        incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
+    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             if !Validator::<User_Email>::is_valid(incoming.user__email.as_str())? {
                 return Result::Err(crate::new_invalid_argument!());

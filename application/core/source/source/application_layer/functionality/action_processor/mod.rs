@@ -32,6 +32,7 @@ pub use self::{
     },
 };
 use {
+    super::command_processor::RunServer,
     crate::infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
@@ -44,7 +45,6 @@ use {
         future::Future,
         marker::PhantomData,
     },
-    super::command_processor::RunServer,
 };
 pub struct ActionProcessor<S> {
     _subject: PhantomData<S>,
@@ -53,10 +53,7 @@ pub trait ActionProcessor_ {
     type Incoming;
     type Outcoming;
     type Precedent;
-    fn process<'a>(
-        inner: &'a Inner<'_>,
-        incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send;
+    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send;
 }
 pub struct Inner<'a> {
     pub environment_configuration: &'static EnvironmentConfiguration<RunServer>,

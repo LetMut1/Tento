@@ -1,16 +1,14 @@
 use {
+    super::Spawner,
     crate::infrastructure_layer::{
         data::aggregate_error::AggregateError,
         functionality::service::logger::Logger,
     },
-    super::Spawner,
     tokio::task::JoinHandle,
 };
 pub struct TokioBlockingTask;
 impl Spawner<TokioBlockingTask> {
-    pub fn spawn_into_background<T>(
-        closure: impl FnOnce() -> Result<T, AggregateError> + Send + 'static,
-    ) -> ()
+    pub fn spawn_into_background<T>(closure: impl FnOnce() -> Result<T, AggregateError> + Send + 'static) -> ()
     where
         T: Send + 'static,
     {
@@ -24,9 +22,7 @@ impl Spawner<TokioBlockingTask> {
         );
         return ();
     }
-    pub fn spawn_processed<R>(
-        closure: impl FnOnce() -> R + Send + 'static,
-    ) -> JoinHandle<R>
+    pub fn spawn_processed<R>(closure: impl FnOnce() -> R + Send + 'static) -> JoinHandle<R>
     where
         R: Send + 'static,
     {

@@ -1,4 +1,6 @@
 use {
+    super::Encoder,
+    crate::infrastructure_layer::data::aggregate_error::AggregateError,
     argon2::{
         password_hash::{
             rand_core::OsRng,
@@ -12,8 +14,6 @@ use {
         Params,
         Version,
     },
-    crate::infrastructure_layer::data::aggregate_error::AggregateError,
-    super::Encoder,
     std::sync::OnceLock,
 };
 static ARGON2: OnceLock<Argon2<'static>> = OnceLock::new();

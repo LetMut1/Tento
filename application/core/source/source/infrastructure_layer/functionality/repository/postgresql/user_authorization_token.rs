@@ -1,4 +1,8 @@
 use {
+    super::{
+        ParameterStorage,
+        Postgresql,
+    },
     crate::{
         domain_layer::data::entity::user_authorization_token::{
             UserAuthorizationToken,
@@ -10,10 +14,6 @@ use {
             data::aggregate_error::AggregateError,
             functionality::repository::Repository,
         },
-    },
-    super::{
-        Postgresql,
-        ParameterStorage,
     },
     deadpool_postgres::Client,
     std::future::Future,

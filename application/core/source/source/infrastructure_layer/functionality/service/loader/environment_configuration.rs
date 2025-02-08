@@ -1,40 +1,40 @@
 use {
+    super::Loader,
     crate::infrastructure_layer::data::{
         aggregate_error::AggregateError,
         environment_configuration::{
+            create_fixtures::{
+                CreateFixtures,
+                EnvironmentConfigurationFile as CreateFixturesEnvironmentConfigurationFile,
+                Resource as CreateFixturesResource,
+            },
+            run_server::{
+                ApplicationServer,
+                EmailServer,
+                Encryption,
+                EnvironmentConfigurationFile as RunServerEnvironmentConfigurationFile,
+                Http,
+                HttpKeepalive,
+                Logging,
+                PrivateKey,
+                Resource as RunServerResource,
+                RunServer,
+                Tcp,
+                TcpKeepalive,
+                Tls,
+                TokioRuntime,
+            },
             EnvironmentConfiguration,
             Postgresql,
             PostgresqlInner,
         },
-        environment_configuration::run_server::{
-            ApplicationServer,
-            EmailServer,
-            Encryption,
-            RunServer,
-            EnvironmentConfigurationFile as RunServerEnvironmentConfigurationFile,
-            Http,
-            HttpKeepalive,
-            Logging,
-            PrivateKey,
-            Resource as RunServerResource,
-            Tcp,
-            TcpKeepalive,
-            Tls,
-            TokioRuntime,
-        },
-        environment_configuration::create_fixtures::{
-            CreateFixtures,
-            EnvironmentConfigurationFile as CreateFixturesEnvironmentConfigurationFile,
-            Resource as CreateFixturesResource,
-        },
     },
-    super::Loader,
+    serde::Deserialize,
     std::{
         net::ToSocketAddrs,
         path::Path,
         str::FromStr,
     },
-    serde::Deserialize,
     tokio_postgres::config::Config,
 };
 impl Loader<EnvironmentConfiguration<RunServer>> {
@@ -147,12 +147,22 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
                             database_1: PostgresqlInner {
                                 configuration: postgreql_database_1_configuration,
                                 maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_1.maximum_connection_pool_size.value,
-                                connection_pool_waiting_timeout_duration: environment_configuration_file.resource.postgresql.database_1.connection_pool_waiting_timeout_duration.value,
+                                connection_pool_waiting_timeout_duration: environment_configuration_file
+                                    .resource
+                                    .postgresql
+                                    .database_1
+                                    .connection_pool_waiting_timeout_duration
+                                    .value,
                             },
                             database_2: PostgresqlInner {
                                 configuration: postgreql_database_2_configuration,
                                 maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_2.maximum_connection_pool_size.value,
-                                connection_pool_waiting_timeout_duration: environment_configuration_file.resource.postgresql.database_2.connection_pool_waiting_timeout_duration.value,
+                                connection_pool_waiting_timeout_duration: environment_configuration_file
+                                    .resource
+                                    .postgresql
+                                    .database_2
+                                    .connection_pool_waiting_timeout_duration
+                                    .value,
                             },
                         },
                         email_server: EmailServer {
@@ -187,12 +197,22 @@ impl Loader<EnvironmentConfiguration<CreateFixtures>> {
                             database_1: PostgresqlInner {
                                 configuration: postgreql_database_1_configuration,
                                 maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_1.maximum_connection_pool_size.value,
-                                connection_pool_waiting_timeout_duration: environment_configuration_file.resource.postgresql.database_1.connection_pool_waiting_timeout_duration.value,
+                                connection_pool_waiting_timeout_duration: environment_configuration_file
+                                    .resource
+                                    .postgresql
+                                    .database_1
+                                    .connection_pool_waiting_timeout_duration
+                                    .value,
                             },
                             database_2: PostgresqlInner {
                                 configuration: postgreql_database_2_configuration,
                                 maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_2.maximum_connection_pool_size.value,
-                                connection_pool_waiting_timeout_duration: environment_configuration_file.resource.postgresql.database_2.connection_pool_waiting_timeout_duration.value,
+                                connection_pool_waiting_timeout_duration: environment_configuration_file
+                                    .resource
+                                    .postgresql
+                                    .database_2
+                                    .connection_pool_waiting_timeout_duration
+                                    .value,
                             },
                         },
                     },

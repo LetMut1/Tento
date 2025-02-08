@@ -40,10 +40,7 @@ where
     <ActionProcessor<AP> as ActionProcessor_>::Outcoming: Serialize_,
     <ActionProcessor<AP> as ActionProcessor_>::Precedent: Serialize_,
 {
-    pub fn run<'a, 'b>(
-        inner: &'a mut Inner<'b>,
-        action_processor_inner: &'a ActionProcessorInner<'b>,
-    ) -> impl Future<Output = Response> + Send + use<'a, 'b, AP> {
+    pub fn run<'a, 'b>(inner: &'a mut Inner<'b>, action_processor_inner: &'a ActionProcessorInner<'b>) -> impl Future<Output = Response> + Send + use<'a, 'b, AP> {
         return Processor::<ActionRound>::process::<'_, '_, AP, BitCode, BitCode>(
             inner,
             action_processor_inner,
@@ -58,10 +55,7 @@ where
     <ActionProcessor<AP> as ActionProcessor_>::Outcoming: Serialize_,
     <ActionProcessor<AP> as ActionProcessor_>::Precedent: Serialize_,
 {
-    pub fn run_<'a, 'b>(
-        inner: &'a mut Inner<'b>,
-        action_processor_inner: &'a ActionProcessorInner<'b>,
-    ) -> impl Future<Output = Response> + Send + use<'a, 'b, AP> {
+    pub fn run_<'a, 'b>(inner: &'a mut Inner<'b>, action_processor_inner: &'a ActionProcessorInner<'b>) -> impl Future<Output = Response> + Send + use<'a, 'b, AP> {
         return Processor::<ActionRound>::process::<'_, '_, AP, Json, Json>(
             inner,
             action_processor_inner,

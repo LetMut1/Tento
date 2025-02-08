@@ -61,8 +61,10 @@ pub use self::{
 use {
     crate::infrastructure_layer::data::aggregate_error::AggregateError,
     deadpool_postgres::Client,
-    std::future::Future,
-    std::marker::PhantomData,
+    std::{
+        future::Future,
+        marker::PhantomData,
+    },
     tokio_postgres::types::{
         ToSql,
         Type,
@@ -107,10 +109,7 @@ impl<'a> Transaction<'a> {
     }
 }
 impl Resolver<Transaction<'_>> {
-    pub fn start<'a>(
-        client: &'a mut Client,
-        transaction_isolation_level: IsolationLevel,
-    ) -> impl Future<Output = Result<Transaction<'a>, AggregateError>> + Send {
+    pub fn start<'a>(client: &'a mut Client, transaction_isolation_level: IsolationLevel) -> impl Future<Output = Result<Transaction<'a>, AggregateError>> + Send {
         return async move {
             let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
             match transaction_isolation_level {

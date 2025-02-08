@@ -1,9 +1,9 @@
 use {
+    super::Validator,
     crate::infrastructure_layer::{
         data::control_type::Response,
         functionality::service::creator::Creator,
     },
-    super::Validator,
     http::{
         header,
         request::Parts,

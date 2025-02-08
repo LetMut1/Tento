@@ -1,4 +1,8 @@
 use {
+    super::{
+        ParameterStorage,
+        Postgresql,
+    },
     crate::{
         domain_layer::data::entity::user::{
             User,
@@ -12,10 +16,6 @@ use {
             data::aggregate_error::AggregateError,
             functionality::repository::Repository,
         },
-    },
-    super::{
-        Postgresql,
-        ParameterStorage,
     },
     deadpool_postgres::Client,
     std::{
@@ -198,11 +198,10 @@ impl Repository<Postgresql<User<'_>>> {
                 WHERE \
                     u.id = $1;";
             let mut parameter_storage = ParameterStorage::new();
-            parameter_storage
-                .add(
-                    &by_3.user__id,
-                    Type::TEXT,
-                );
+            parameter_storage.add(
+                &by_3.user__id,
+                Type::TEXT,
+            );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
@@ -621,9 +620,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            return Result::Ok(
-                crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
-            );
+            return Result::Ok(crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)));
         };
     }
 }

@@ -1,4 +1,5 @@
 use {
+    super::Encoder,
     crate::{
         domain_layer::data::entity::user::User_Password,
         infrastructure_layer::{
@@ -9,7 +10,6 @@ use {
             },
         },
     },
-    super::Encoder,
 };
 impl Encoder<User_Password> {
     pub fn encode<'a>(user__password: &'a str) -> Result<String, AggregateError> {

@@ -1,4 +1,5 @@
 use {
+    super::Extractor,
     crate::{
         domain_layer::{
             data::entity::user_access_token::UserAccessToken,
@@ -15,14 +16,10 @@ use {
             },
         },
     },
-    super::Extractor,
     dedicated::user_access_token_encoded::UserAccessTokenEncoded,
 };
 impl Extractor<UserAccessToken<'_>> {
-    pub fn extract<'a>(
-        private_key: &'static PrivateKey,
-        user_access_token_encoded: &'a UserAccessTokenEncoded,
-    ) -> Result<Extracted<'a>, AggregateError> {
+    pub fn extract<'a>(private_key: &'static PrivateKey, user_access_token_encoded: &'a UserAccessTokenEncoded) -> Result<Extracted<'a>, AggregateError> {
         let user_access_token = Encoder::<UserAccessToken<'_>>::decode(
             private_key,
             user_access_token_encoded,

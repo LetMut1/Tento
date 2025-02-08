@@ -1,4 +1,5 @@
 use {
+    super::Encoder,
     crate::{
         domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken,
         infrastructure_layer::{
@@ -19,14 +20,10 @@ use {
             },
         },
     },
-    super::Encoder,
     dedicated::user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded,
 };
 impl Encoder<UserAccessRefreshToken<'_>> {
-    pub fn encode<'a>(
-        private_key: &'static PrivateKey,
-        user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
-    ) -> Result<UserAccessRefreshTokenEncoded, AggregateError> {
+    pub fn encode<'a>(private_key: &'static PrivateKey, user_access_refresh_token: &'a UserAccessRefreshToken<'_>) -> Result<UserAccessRefreshTokenEncoded, AggregateError> {
         return Result::Ok(
             UserAccessRefreshTokenEncoded(
                 Encoder_::<HmacSha3_512>::encode(

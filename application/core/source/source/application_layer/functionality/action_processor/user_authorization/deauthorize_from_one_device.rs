@@ -41,10 +41,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDe
     type Incoming = Incoming;
     type Outcoming = Void;
     type Precedent = Precedent;
-    fn process<'a>(
-        inner: &'a Inner<'_>,
-        incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
+    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,
