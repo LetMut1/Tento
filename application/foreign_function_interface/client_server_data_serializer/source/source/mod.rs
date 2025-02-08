@@ -446,7 +446,7 @@ pub struct UserAccessTokenEncoded {
     pub encoded: CVector<c_uchar>,
 }
 #[no_mangle]
-pub extern "C" fn user_access_token__deserialize_allocate(user_access_token_encoded: UserAccessTokenEncoded) -> CResult<UserAccessToken> {
+pub extern "C-unwind" fn user_access_token__deserialize_allocate(user_access_token_encoded: UserAccessTokenEncoded) -> CResult<UserAccessToken> {
     let transformer = move |user_access_token_encoded_serialized: CVector<c_uchar>| -> Result<UserAccessToken, Box<dyn StdError + 'static>> {
         let user_access_token_encoded_serialized_ = user_access_token_encoded_serialized.clone_as_vec()?;
         let user_access_token = Serializer::deserialize::<'_, UserAccessToken_<'_>>(
@@ -467,7 +467,7 @@ pub extern "C" fn user_access_token__deserialize_allocate(user_access_token_enco
     };
 }
 #[no_mangle]
-pub extern "C" fn user_access_token__deserialize_deallocate(c_result: CResult<UserAccessToken>) -> () {
+pub extern "C-unwind" fn user_access_token__deserialize_deallocate(c_result: CResult<UserAccessToken>) -> () {
     if c_result.is_data  {
         Allocator::<CString>::deallocate(c_result.data.id);
         Allocator::<CString>::deallocate(c_result.data.user_device__id);
@@ -529,7 +529,7 @@ pub struct UserAuthorization_AuthorizeByFirstStep_Incoming {
     pub user__password: CString,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__authorize_by_first_step__serialize_allocate(
+pub extern "C-unwind" fn user_authorization__authorize_by_first_step__serialize_allocate(
     incoming: UserAuthorization_AuthorizeByFirstStep_Incoming,
 ) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ UserAuthorization_AuthorizeByFirstStep_Incoming| -> Result<UserAuthorization_AuthorizeByFirstStep_Incoming_, Box<dyn StdError + 'static>> {
@@ -547,7 +547,7 @@ pub extern "C" fn user_authorization__authorize_by_first_step__serialize_allocat
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__authorize_by_first_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__authorize_by_first_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -567,7 +567,7 @@ pub struct UserAuthorization_AuthorizeByFirstStep_Precedent {
     pub user__wrong_email_or_nickname_or_password: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__authorize_by_first_step__deserialize_allocate(
+pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_AuthorizeByFirstStep_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_AuthorizeByFirstStep_Outcoming_, UserAuthorization_AuthorizeByFirstStep_Precedent_>| -> Result<
@@ -615,7 +615,7 @@ pub extern "C" fn user_authorization__authorize_by_first_step__deserialize_alloc
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__authorize_by_first_step__deserialize_deallocate(_c_result: UserAuthorization_AuthorizeByFirstStep_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserialize_deallocate(_c_result: UserAuthorization_AuthorizeByFirstStep_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -626,7 +626,7 @@ pub struct UserAuthorization_AuthorizeByLastStep_Incoming {
     pub user_authorization_token__value: CString,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__authorize_by_last_step__serialize_allocate(incoming: UserAuthorization_AuthorizeByLastStep_Incoming) -> CResult<CVector<c_uchar>> {
+pub extern "C-unwind" fn user_authorization__authorize_by_last_step__serialize_allocate(incoming: UserAuthorization_AuthorizeByLastStep_Incoming) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ UserAuthorization_AuthorizeByLastStep_Incoming| -> Result<UserAuthorization_AuthorizeByLastStep_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             UserAuthorization_AuthorizeByLastStep_Incoming_ {
@@ -642,7 +642,7 @@ pub extern "C" fn user_authorization__authorize_by_last_step__serialize_allocate
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__authorize_by_last_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__authorize_by_last_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -668,7 +668,7 @@ pub struct UserAuthorizationToken_WrongValue {
     pub user_authorization_token__wrong_enter_tries_quantity: c_short,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__authorize_by_last_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_AuthorizeByLastStep_CResult {
+pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_AuthorizeByLastStep_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_AuthorizeByLastStep_Outcoming_, UserAuthorization_AuthorizeByLastStep_Precedent_>| -> Result<
         CUnifiedReport<UserAuthorization_AuthorizeByLastStep_Outcoming, UserAuthorization_AuthorizeByLastStep_Precedent>,
         Box<dyn StdError + 'static>,
@@ -739,7 +739,7 @@ pub extern "C" fn user_authorization__authorize_by_last_step__deserialize_alloca
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__authorize_by_last_step__deserialize_deallocate(c_result: UserAuthorization_AuthorizeByLastStep_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize_deallocate(c_result: UserAuthorization_AuthorizeByLastStep_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.serialized);
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.encoded);
@@ -753,7 +753,7 @@ pub struct UserAuthorization_CheckEmailForExisting_Incoming {
     pub user__email: CString,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__check_email_for_existing__serialize_allocate(
+pub extern "C-unwind" fn user_authorization__check_email_for_existing__serialize_allocate(
     incoming: UserAuthorization_CheckEmailForExisting_Incoming,
 ) -> CResult<CVector<c_uchar>> {
     let converter =
@@ -770,7 +770,7 @@ pub extern "C" fn user_authorization__check_email_for_existing__serialize_alloca
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__check_email_for_existing__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__check_email_for_existing__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -781,7 +781,7 @@ pub struct UserAuthorization_CheckEmailForExisting_Outcoming {
     pub result: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__check_email_for_existing__deserialize_allocate(
+pub extern "C-unwind" fn user_authorization__check_email_for_existing__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_CheckEmailForExisting_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming_, Void>| -> Result<CUnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
@@ -812,7 +812,7 @@ pub extern "C" fn user_authorization__check_email_for_existing__deserialize_allo
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__check_email_for_existing__deserialize_deallocate(_c_result: UserAuthorization_CheckEmailForExisting_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__check_email_for_existing__deserialize_deallocate(_c_result: UserAuthorization_CheckEmailForExisting_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -821,7 +821,7 @@ pub struct UserAuthorization_CheckNicknameForExisting_Incoming {
     pub user__nickname: CString,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__check_nickname_for_existing__serialize_allocate(
+pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__serialize_allocate(
     incoming: UserAuthorization_CheckNicknameForExisting_Incoming,
 ) -> CResult<CVector<c_uchar>> {
     let converter =
@@ -838,7 +838,7 @@ pub extern "C" fn user_authorization__check_nickname_for_existing__serialize_all
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__check_nickname_for_existing__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -849,7 +849,7 @@ pub struct UserAuthorization_CheckNicknameForExisting_Outcoming {
     pub result: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__check_nickname_for_existing__deserialize_allocate(
+pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_CheckNicknameForExisting_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void>| -> Result<CUnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
@@ -880,7 +880,7 @@ pub extern "C" fn user_authorization__check_nickname_for_existing__deserialize_a
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__check_nickname_for_existing__deserialize_deallocate(_c_result: UserAuthorization_CheckNicknameForExisting_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__deserialize_deallocate(_c_result: UserAuthorization_CheckNicknameForExisting_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -889,7 +889,7 @@ pub struct UserAuthorization_DeauthorizeFromAllDevices_Incoming {
     pub user_access_token_encoded: UserAccessTokenEncoded,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__deauthorize_from_all_devices__serialize_allocate(
+pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__serialize_allocate(
     incoming: UserAuthorization_DeauthorizeFromAllDevices_Incoming,
 ) -> CResult<CVector<c_uchar>> {
     let converter =
@@ -909,7 +909,7 @@ pub extern "C" fn user_authorization__deauthorize_from_all_devices__serialize_al
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__deauthorize_from_all_devices__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -921,7 +921,7 @@ pub struct UserAuthorization_DeauthorizeFromAllDevices_Precedent {
     pub user_access_token__in_user_access_token_black_list: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__deauthorize_from_all_devices__deserialize_allocate(
+pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_DeauthorizeFromAllDevices_CResult {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_DeauthorizeFromAllDevices_Precedent>, Box<dyn StdError + 'static>> {
@@ -963,7 +963,7 @@ pub extern "C" fn user_authorization__deauthorize_from_all_devices__deserialize_
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__deauthorize_from_all_devices__deserialize_deallocate(_c_result: UserAuthorization_DeauthorizeFromAllDevices_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deserialize_deallocate(_c_result: UserAuthorization_DeauthorizeFromAllDevices_CResult) -> () {
     return ();
 }
 type UserAuthorization_DeauthorizeFromOneDevice_CResult = CResult<CUnifiedReport<CVoid, UserAuthorization_DeauthorizeFromOneDevice_Precedent>>;
@@ -979,7 +979,7 @@ pub struct UserAuthorization_DeauthorizeFromOneDevice_Incoming {
     pub user_access_token_encoded: UserAccessTokenEncoded,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__deauthorize_from_one_device__serialize_allocate(
+pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__serialize_allocate(
     incoming: UserAuthorization_DeauthorizeFromOneDevice_Incoming,
 ) -> CResult<CVector<c_uchar>> {
     let converter =
@@ -999,12 +999,12 @@ pub extern "C" fn user_authorization__deauthorize_from_one_device__serialize_all
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__deauthorize_from_one_device__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__deauthorize_from_one_device__deserialize_allocate(
+pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_DeauthorizeFromOneDevice_CResult {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_DeauthorizeFromOneDevice_Precedent>, Box<dyn StdError + 'static>> {
@@ -1046,7 +1046,7 @@ pub extern "C" fn user_authorization__deauthorize_from_one_device__deserialize_a
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__deauthorize_from_one_device__deserialize_deallocate(_c_result: UserAuthorization_DeauthorizeFromOneDevice_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deserialize_deallocate(_c_result: UserAuthorization_DeauthorizeFromOneDevice_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1056,7 +1056,7 @@ pub struct UserAuthorization_RefreshAccessToken_Incoming {
     pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__refresh_access_token__serialize_allocate(incoming: UserAuthorization_RefreshAccessToken_Incoming) -> CResult<CVector<c_uchar>> {
+pub extern "C-unwind" fn user_authorization__refresh_access_token__serialize_allocate(incoming: UserAuthorization_RefreshAccessToken_Incoming) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ UserAuthorization_RefreshAccessToken_Incoming| -> Result<UserAuthorization_RefreshAccessToken_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             UserAuthorization_RefreshAccessToken_Incoming_ {
@@ -1074,7 +1074,7 @@ pub extern "C" fn user_authorization__refresh_access_token__serialize_allocate(i
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__refresh_access_token__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__refresh_access_token__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -1092,7 +1092,7 @@ pub struct UserAuthorization_RefreshAccessToken_Precedent {
     pub user_access_refresh_token__already_expired: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__refresh_access_token__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RefreshAccessToken_CResult {
+pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RefreshAccessToken_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_RefreshAccessToken_Outcoming_, UserAuthorization_RefreshAccessToken_Precedent_>| -> Result<
         CUnifiedReport<UserAuthorization_RefreshAccessToken_Outcoming, UserAuthorization_RefreshAccessToken_Precedent>,
         Box<dyn StdError + 'static>,
@@ -1146,7 +1146,7 @@ pub extern "C" fn user_authorization__refresh_access_token__deserialize_allocate
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__refresh_access_token__deserialize_deallocate(c_result: UserAuthorization_RefreshAccessToken_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_deallocate(c_result: UserAuthorization_RefreshAccessToken_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.serialized);
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.encoded);
@@ -1161,7 +1161,7 @@ pub struct UserAuthorization_RegisterByFirstStep_Incoming {
     pub user_device__id: CString,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_first_step__serialize_allocate(incoming: UserAuthorization_RegisterByFirstStep_Incoming) -> CResult<CVector<c_uchar>> {
+pub extern "C-unwind" fn user_authorization__register_by_first_step__serialize_allocate(incoming: UserAuthorization_RegisterByFirstStep_Incoming) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ UserAuthorization_RegisterByFirstStep_Incoming| -> Result<UserAuthorization_RegisterByFirstStep_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             UserAuthorization_RegisterByFirstStep_Incoming_ {
@@ -1176,7 +1176,7 @@ pub extern "C" fn user_authorization__register_by_first_step__serialize_allocate
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_first_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__register_by_first_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -1195,7 +1195,7 @@ pub struct UserAuthorization_RegisterByFirstStep_Precedent {
     pub user__email_already_exist: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_first_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterByFirstStep_CResult {
+pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterByFirstStep_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_RegisterByFirstStep_Outcoming_, UserAuthorization_RegisterByFirstStep_Precedent_>| -> Result<
         CUnifiedReport<UserAuthorization_RegisterByFirstStep_Outcoming, UserAuthorization_RegisterByFirstStep_Precedent>,
         Box<dyn StdError + 'static>,
@@ -1240,7 +1240,7 @@ pub extern "C" fn user_authorization__register_by_first_step__deserialize_alloca
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_first_step__deserialize_deallocate(_c_result: UserAuthorization_RegisterByFirstStep_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize_deallocate(_c_result: UserAuthorization_RegisterByFirstStep_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1251,7 +1251,7 @@ pub struct UserAuthorization_RegisterBySecondStep_Incoming {
     pub user_registration_token__value: CString,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_second_step__serialize_allocate(
+pub extern "C-unwind" fn user_authorization__register_by_second_step__serialize_allocate(
     incoming: UserAuthorization_RegisterBySecondStep_Incoming,
 ) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ UserAuthorization_RegisterBySecondStep_Incoming| -> Result<UserAuthorization_RegisterBySecondStep_Incoming_, Box<dyn StdError + 'static>> {
@@ -1269,7 +1269,7 @@ pub extern "C" fn user_authorization__register_by_second_step__serialize_allocat
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_second_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__register_by_second_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -1289,7 +1289,7 @@ pub struct UserRegistrationToken_WrongValue {
     pub user_registration_token__wrong_enter_tries_quantity: c_short,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_second_step__deserialize_allocate(
+pub extern "C-unwind" fn user_authorization__register_by_second_step__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_RegisterBySecondStep_CResult {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_RegisterBySecondStep_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_RegisterBySecondStep_Precedent>, Box<dyn StdError + 'static>> {
@@ -1346,7 +1346,7 @@ pub extern "C" fn user_authorization__register_by_second_step__deserialize_alloc
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_second_step__deserialize_deallocate(_c_result: UserAuthorization_RegisterBySecondStep_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__register_by_second_step__deserialize_deallocate(_c_result: UserAuthorization_RegisterBySecondStep_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1359,7 +1359,7 @@ pub struct UserAuthorization_RegisterByLastStep_Incoming {
     pub user_registration_token__value: CString,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_last_step__serialize_allocate(incoming: UserAuthorization_RegisterByLastStep_Incoming) -> CResult<CVector<c_uchar>> {
+pub extern "C-unwind" fn user_authorization__register_by_last_step__serialize_allocate(incoming: UserAuthorization_RegisterByLastStep_Incoming) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ UserAuthorization_RegisterByLastStep_Incoming| -> Result<UserAuthorization_RegisterByLastStep_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             UserAuthorization_RegisterByLastStep_Incoming_ {
@@ -1377,7 +1377,7 @@ pub extern "C" fn user_authorization__register_by_last_step__serialize_allocate(
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_last_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__register_by_last_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -1399,7 +1399,7 @@ pub struct UserAuthorization_RegisterByLastStep_Precedent {
     pub user_registration_token__wrong_value: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_last_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterByLastStep_CResult {
+pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterByLastStep_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_RegisterByLastStep_Outcoming_, UserAuthorization_RegisterByLastStep_Precedent_>| -> Result<
         CUnifiedReport<UserAuthorization_RegisterByLastStep_Outcoming, UserAuthorization_RegisterByLastStep_Precedent>,
         Box<dyn StdError + 'static>,
@@ -1477,7 +1477,7 @@ pub extern "C" fn user_authorization__register_by_last_step__deserialize_allocat
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__register_by_last_step__deserialize_deallocate(c_result: UserAuthorization_RegisterByLastStep_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_deallocate(c_result: UserAuthorization_RegisterByLastStep_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.serialized);
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.encoded);
@@ -1492,7 +1492,7 @@ pub struct UserAuthorization_ResetPasswordByFirstStep_Incoming {
     pub user_device__id: CString,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_first_step__serialize_allocate(
+pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__serialize_allocate(
     incoming: UserAuthorization_ResetPasswordByFirstStep_Incoming,
 ) -> CResult<CVector<c_uchar>> {
     let converter =
@@ -1510,7 +1510,7 @@ pub extern "C" fn user_authorization__reset_password_by_first_step__serialize_al
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_first_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -1531,7 +1531,7 @@ pub struct UserAuthorization_ResetPasswordByFirstStep_Precedent {
     pub user__not_found: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_first_step__deserialize_allocate(
+pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_ResetPasswordByFirstStep_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_ResetPasswordByFirstStep_Outcoming_, UserAuthorization_ResetPasswordByFirstStep_Precedent_>| -> Result<
@@ -1579,7 +1579,7 @@ pub extern "C" fn user_authorization__reset_password_by_first_step__deserialize_
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_first_step__deserialize_deallocate(_c_result: UserAuthorization_ResetPasswordByFirstStep_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deserialize_deallocate(_c_result: UserAuthorization_ResetPasswordByFirstStep_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1590,7 +1590,7 @@ pub struct UserAuthorization_ResetPasswordBySecondStep_Incoming {
     pub user_reset_password_token__value: CString,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_second_step__serialize_allocate(
+pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__serialize_allocate(
     incoming: UserAuthorization_ResetPasswordBySecondStep_Incoming,
 ) -> CResult<CVector<c_uchar>> {
     let converter =
@@ -1609,7 +1609,7 @@ pub extern "C" fn user_authorization__reset_password_by_second_step__serialize_a
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_second_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -1629,7 +1629,7 @@ pub struct UserResetPasswordToken_WrongValue {
     pub user_reset_password_token__wrong_enter_tries_quantity: c_short,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_second_step__deserialize_allocate(
+pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_ResetPasswordBySecondStep_CResult {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_ResetPasswordBySecondStep_Precedent>, Box<dyn StdError + 'static>> {
@@ -1686,7 +1686,7 @@ pub extern "C" fn user_authorization__reset_password_by_second_step__deserialize
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_second_step__deserialize_deallocate(_c_result: UserAuthorization_ResetPasswordBySecondStep_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__deserialize_deallocate(_c_result: UserAuthorization_ResetPasswordBySecondStep_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1698,7 +1698,7 @@ pub struct UserAuthorization_ResetPasswordByLastStep_Incoming {
     pub user_reset_password_token__value: CString,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_last_step__serialize_allocate(
+pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__serialize_allocate(
     incoming: UserAuthorization_ResetPasswordByLastStep_Incoming,
 ) -> CResult<CVector<c_uchar>> {
     let converter =
@@ -1718,7 +1718,7 @@ pub extern "C" fn user_authorization__reset_password_by_last_step__serialize_all
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_last_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -1733,7 +1733,7 @@ pub struct UserAuthorization_ResetPasswordByLastStep_Precedent {
     pub user_reset_password_token__wrong_value: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_last_step__deserialize_allocate(
+pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_ResetPasswordByLastStep_CResult {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_ResetPasswordByLastStep_Precedent>, Box<dyn StdError + 'static>> {
@@ -1793,7 +1793,7 @@ pub extern "C" fn user_authorization__reset_password_by_last_step__deserialize_a
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__reset_password_by_last_step__deserialize_deallocate(_c_result: UserAuthorization_ResetPasswordByLastStep_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deserialize_deallocate(_c_result: UserAuthorization_ResetPasswordByLastStep_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1803,7 +1803,7 @@ pub struct UserAuthorization_SendEmailForRegister_Incoming {
     pub user_device__id: CString,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_register__serialize_allocate(
+pub extern "C-unwind" fn user_authorization__send_email_for_register__serialize_allocate(
     incoming: UserAuthorization_SendEmailForRegister_Incoming,
 ) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ UserAuthorization_SendEmailForRegister_Incoming| -> Result<UserAuthorization_SendEmailForRegister_Incoming_, Box<dyn StdError + 'static>> {
@@ -1820,7 +1820,7 @@ pub extern "C" fn user_authorization__send_email_for_register__serialize_allocat
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_register__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__send_email_for_register__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -1839,7 +1839,7 @@ pub struct UserAuthorization_SendEmailForRegister_Precedent {
     pub user_registration_token__time_to_resend_has_not_come: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_register__deserialize_allocate(
+pub extern "C-unwind" fn user_authorization__send_email_for_register__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_SendEmailForRegister_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForRegister_Outcoming_, UserAuthorization_SendEmailForRegister_Precedent_>| -> Result<
@@ -1903,7 +1903,7 @@ pub extern "C" fn user_authorization__send_email_for_register__deserialize_alloc
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_register__deserialize_deallocate(_c_result: UserAuthorization_SendEmailForRegister_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__send_email_for_register__deserialize_deallocate(_c_result: UserAuthorization_SendEmailForRegister_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -1913,7 +1913,7 @@ pub struct UserAuthorization_SendEmailForAuthorize_Incoming {
     pub user__id: c_long,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_authorize__serialize_allocate(
+pub extern "C-unwind" fn user_authorization__send_email_for_authorize__serialize_allocate(
     incoming: UserAuthorization_SendEmailForAuthorize_Incoming,
 ) -> CResult<CVector<c_uchar>> {
     let converter =
@@ -1931,7 +1931,7 @@ pub extern "C" fn user_authorization__send_email_for_authorize__serialize_alloca
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_authorize__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__send_email_for_authorize__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -1951,7 +1951,7 @@ pub struct UserAuthorization_SendEmailForAuthorize_Precedent {
     pub user_authorization_token__time_to_resend_has_not_come: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_authorize__deserialize_allocate(
+pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_SendEmailForAuthorize_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>| -> Result<
@@ -2015,7 +2015,7 @@ pub extern "C" fn user_authorization__send_email_for_authorize__deserialize_allo
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_authorize__deserialize_deallocate(_c_result: UserAuthorization_SendEmailForAuthorize_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deserialize_deallocate(_c_result: UserAuthorization_SendEmailForAuthorize_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -2025,7 +2025,7 @@ pub struct UserAuthorization_SendEmailForResetPassword_Incoming {
     pub user_device__id: CString,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_reset_password__serialize_allocate(
+pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__serialize_allocate(
     incoming: UserAuthorization_SendEmailForResetPassword_Incoming,
 ) -> CResult<CVector<c_uchar>> {
     let converter =
@@ -2043,7 +2043,7 @@ pub extern "C" fn user_authorization__send_email_for_reset_password__serialize_a
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_reset_password__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -2064,7 +2064,7 @@ pub struct UserAuthorization_SendEmailForResetPassword_Precedent {
     pub user_reset_password_token__time_to_resend_has_not_come: bool,
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_reset_password__deserialize_allocate(
+pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_SendEmailForResetPassword_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForResetPassword_Outcoming_, UserAuthorization_SendEmailForResetPassword_Precedent_>| -> Result<
@@ -2134,7 +2134,7 @@ pub extern "C" fn user_authorization__send_email_for_reset_password__deserialize
     );
 }
 #[no_mangle]
-pub extern "C" fn user_authorization__send_email_for_reset_password__deserialize_deallocate(_c_result: UserAuthorization_SendEmailForResetPassword_CResult) -> () {
+pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__deserialize_deallocate(_c_result: UserAuthorization_SendEmailForResetPassword_CResult) -> () {
     return ();
 }
 #[repr(C)]
@@ -2146,7 +2146,7 @@ pub struct Channel_GetManyByNameInSubscriptions_Incoming {
     pub limit: c_short,
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_by_name_in_subscriptions__serialize_allocate(incoming: Channel_GetManyByNameInSubscriptions_Incoming) -> CResult<CVector<c_uchar>> {
+pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__serialize_allocate(incoming: Channel_GetManyByNameInSubscriptions_Incoming) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ Channel_GetManyByNameInSubscriptions_Incoming| -> Result<Channel_GetManyByNameInSubscriptions_Incoming_, Box<dyn StdError + 'static>> {
         let requery___channel__name = if incoming_.requery___channel__name.is_data {
             Option::Some(incoming_.requery___channel__name.data.clone_as_string()?)
@@ -2171,7 +2171,7 @@ pub extern "C" fn channel__get_many_by_name_in_subscriptions__serialize_allocate
     );
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_by_name_in_subscriptions__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -2188,7 +2188,7 @@ pub struct Channel_GetManyByNameInSubscriptions_Precedent {
     pub user_access_token__in_user_access_token_black_list: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_by_name_in_subscriptions__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyByNameInSubscriptions_CResult {
+pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyByNameInSubscriptions_CResult {
     let converter = move |unified_report: UnifiedReport<Channel_GetManyByNameInSubscriptions_Outcoming_, Channel_GetManyByNameInSubscriptions_Precedent_>| -> Result<
         CUnifiedReport<Channel_GetManyByNameInSubscriptions_Outcoming, Channel_GetManyByNameInSubscriptions_Precedent>,
         Box<dyn StdError + 'static>,
@@ -2262,7 +2262,7 @@ pub extern "C" fn channel__get_many_by_name_in_subscriptions__deserialize_alloca
     );
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_by_name_in_subscriptions__deserialize_deallocate(c_result: Channel_GetManyByNameInSubscriptions_CResult) -> () {
+pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize_deallocate(c_result: Channel_GetManyByNameInSubscriptions_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         let common_registry = c_result.data.target.filled.common_registry.as_slice_unchecked();
         for common in common_registry {
@@ -2287,7 +2287,7 @@ pub struct Channel_GetManyBySubscription_Incoming {
     pub limit: c_short,
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_by_subscription__serialize_allocate(incoming: Channel_GetManyBySubscription_Incoming) -> CResult<CVector<c_uchar>> {
+pub extern "C-unwind" fn channel__get_many_by_subscription__serialize_allocate(incoming: Channel_GetManyBySubscription_Incoming) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ Channel_GetManyBySubscription_Incoming| -> Result<Channel_GetManyBySubscription_Incoming_, Box<dyn StdError + 'static>> {
         let requery___channel__id = if incoming_.requery___channel__id.is_data {
             Option::Some(incoming_.requery___channel__id.data)
@@ -2311,7 +2311,7 @@ pub extern "C" fn channel__get_many_by_subscription__serialize_allocate(incoming
     );
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_by_subscription__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn channel__get_many_by_subscription__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -2328,7 +2328,7 @@ pub struct Channel_GetManyBySubscription_Precedent {
     pub user_access_token__in_user_access_token_black_list: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_by_subscription__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyBySubscription_CResult {
+pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyBySubscription_CResult {
     let converter = move |unified_report: UnifiedReport<Channel_GetManyBySubscription_Outcoming_, Channel_GetManyBySubscription_Precedent_>| -> Result<
         CUnifiedReport<Channel_GetManyBySubscription_Outcoming, Channel_GetManyBySubscription_Precedent>,
         Box<dyn StdError + 'static>,
@@ -2402,7 +2402,7 @@ pub extern "C" fn channel__get_many_by_subscription__deserialize_allocate(c_vect
     );
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_by_subscription__deserialize_deallocate(c_result: Channel_GetManyBySubscription_CResult) -> () {
+pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_deallocate(c_result: Channel_GetManyBySubscription_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         let common_registry = c_result.data.target.filled.common_registry.as_slice_unchecked();
         for common in common_registry {
@@ -2428,7 +2428,7 @@ pub struct Channel_GetManyPublicByName_Incoming {
     pub limit: c_short,
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_public_by_name__serialize_allocate(incoming: Channel_GetManyPublicByName_Incoming) -> CResult<CVector<c_uchar>> {
+pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_allocate(incoming: Channel_GetManyPublicByName_Incoming) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ Channel_GetManyPublicByName_Incoming| -> Result<Channel_GetManyPublicByName_Incoming_, Box<dyn StdError + 'static>> {
         let requery___channel__name = if incoming_.requery___channel__name.is_data {
             Option::Some(incoming_.requery___channel__name.data.clone_as_string()?)
@@ -2453,7 +2453,7 @@ pub extern "C" fn channel__get_many_public_by_name__serialize_allocate(incoming:
     );
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_public_by_name__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -2470,7 +2470,7 @@ pub struct Channel_GetManyPublicByName_Precedent {
     pub user_access_token__in_user_access_token_black_list: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_public_by_name__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyPublicByName_CResult {
+pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyPublicByName_CResult {
     let converter = move |unified_report: UnifiedReport<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>| -> Result<
         CUnifiedReport<Channel_GetManyPublicByName_Outcoming, Channel_GetManyPublicByName_Precedent>,
         Box<dyn StdError + 'static>,
@@ -2544,7 +2544,7 @@ pub extern "C" fn channel__get_many_public_by_name__deserialize_allocate(c_vecto
     );
 }
 #[no_mangle]
-pub extern "C" fn channel__get_many_public_by_name__deserialize_deallocate(c_result: Channel_GetManyPublicByName_CResult) -> () {
+pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_deallocate(c_result: Channel_GetManyPublicByName_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         let common_registry = c_result.data.target.filled.common_registry.as_slice_unchecked();
         for common_1 in common_registry {
@@ -2568,7 +2568,7 @@ pub struct Channel_GetOneById_Incoming {
     pub channel__id: c_long,
 }
 #[no_mangle]
-pub extern "C" fn channel__get_one_by_id__serialize_allocate(incoming: Channel_GetOneById_Incoming) -> CResult<CVector<c_uchar>> {
+pub extern "C-unwind" fn channel__get_one_by_id__serialize_allocate(incoming: Channel_GetOneById_Incoming) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ Channel_GetOneById_Incoming| -> Result<Channel_GetOneById_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             Channel_GetOneById_Incoming_ {
@@ -2586,7 +2586,7 @@ pub extern "C" fn channel__get_one_by_id__serialize_allocate(incoming: Channel_G
     );
 }
 #[no_mangle]
-pub extern "C" fn channel__get_one_by_id__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn channel__get_one_by_id__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -2607,7 +2607,7 @@ pub struct Channel_GetOneById_Precedent {
     pub channel__is_close: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel__get_one_by_id__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetOneById_CResult {
+pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetOneById_CResult {
     let converter = move |unified_report: UnifiedReport<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>| -> Result<CUnifiedReport<Channel_GetOneById_Outcoming, Channel_GetOneById_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2705,7 +2705,7 @@ pub extern "C" fn channel__get_one_by_id__deserialize_allocate(c_vector_of_bytes
     );
 }
 #[no_mangle]
-pub extern "C" fn channel__get_one_by_id__deserialize_deallocate(c_result: Channel_GetOneById_CResult) -> () {
+pub extern "C-unwind" fn channel__get_one_by_id__deserialize_deallocate(c_result: Channel_GetOneById_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__name);
         Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__linked_name);
@@ -2736,7 +2736,7 @@ pub struct ChannelSubscription_Create_Incoming {
     pub channel__id: c_long,
 }
 #[no_mangle]
-pub extern "C" fn channel_subscription__create__serialize_allocate(incoming: ChannelSubscription_Create_Incoming) -> CResult<CVector<c_uchar>> {
+pub extern "C-unwind" fn channel_subscription__create__serialize_allocate(incoming: ChannelSubscription_Create_Incoming) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ ChannelSubscription_Create_Incoming| -> Result<ChannelSubscription_Create_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             ChannelSubscription_Create_Incoming_ {
@@ -2754,7 +2754,7 @@ pub extern "C" fn channel_subscription__create__serialize_allocate(incoming: Cha
     );
 }
 #[no_mangle]
-pub extern "C" fn channel_subscription__create__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+pub extern "C-unwind" fn channel_subscription__create__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
@@ -2769,7 +2769,7 @@ pub struct ChannelSubscription_Create_Precedent {
     pub user__is_channel__owner: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel_subscription__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Create_CResult {
+pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Create_CResult {
     let converter = move |unified_report: UnifiedReport<Void, ChannelSubscription_Create_Precedent_>| -> Result<CUnifiedReport<CVoid, ChannelSubscription_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2827,7 +2827,7 @@ pub extern "C" fn channel_subscription__create__deserialize_allocate(c_vector_of
     );
 }
 #[no_mangle]
-pub extern "C" fn channel_subscription__create__deserialize_deallocate(_c_result: ChannelSubscription_Create_CResult) -> () {
+pub extern "C-unwind" fn channel_subscription__create__deserialize_deallocate(_c_result: ChannelSubscription_Create_CResult) -> () {
     return ();
 }
 #[cfg(test)]
@@ -3293,8 +3293,8 @@ mod test {
             };
             fn run_by_template<'a, T, E>(
                 data: &'a T,
-                allocator: extern "C" fn(CVector<c_uchar>) -> CResult<E>,
-                deallocator: extern "C" fn(CResult<E>) -> (),
+                allocator: extern "C-unwind" fn(CVector<c_uchar>) -> CResult<E>,
+                deallocator: extern "C-unwind" fn(CResult<E>) -> (),
             ) -> Result<(), Box<dyn StdError + 'static>>
             where
                 T: Encode,
@@ -4139,8 +4139,8 @@ mod test {
             use super::*;
             fn run_by_template<I>(
                 incoming: I,
-                allocator: extern "C" fn(I) -> CResult<CVector<c_uchar>>,
-                deallocator: extern "C" fn(CResult<CVector<c_uchar>>) -> (),
+                allocator: extern "C-unwind" fn(I) -> CResult<CVector<c_uchar>>,
+                deallocator: extern "C-unwind" fn(CResult<CVector<c_uchar>>) -> (),
             ) -> Result<(), Box<dyn StdError + 'static>>
             {
                 deallocator(allocator(incoming));
