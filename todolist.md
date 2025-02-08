@@ -13,6 +13,8 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // Postgresql сделать максимальное время коннекшна. https://www.postgresql.org/docs/current/runtime-config-client.html
 // Postgresql политика доступа. В приложении дать права только на чтение и запись.
 
+// core affinity - нужно ли это.
+
 // - TLS, Connection Pool for Lettre.
 
 // - Hyper TCP/HTTp connection pool. Есть ли коннекшн пул Тсп на сервере?
