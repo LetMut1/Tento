@@ -58,12 +58,8 @@ pub use self::{
         Update5 as UserResetPasswordTokenUpdate5,
     },
 };
-use crate::infrastructure_layer::data::{
-    aggregate_error::AggregateError,
-    capture::Capture,
-};
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use deadpool_postgres::Client;
-use dedicated::void::Void;
 use std::future::Future;
 use std::marker::PhantomData;
 use tokio_postgres::types::{
@@ -171,7 +167,7 @@ impl Resolver<Transaction<'_>> {
             );
         };
     }
-    pub fn commit<'a>(transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn commit<'a>(transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             if let Result::Err(aggregate_error) = crate::result_into_runtime!(
                 transaction.client.simple_query("COMMIT;").await
@@ -182,7 +178,7 @@ impl Resolver<Transaction<'_>> {
             return Result::Ok(());
         };
     }
-    pub fn rollback<'a>(transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn rollback<'a>(transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             crate::result_return_runtime!(transaction.client.simple_query("ROLLBACK;").await);
             return Result::Ok(());

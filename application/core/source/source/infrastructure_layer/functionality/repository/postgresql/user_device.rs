@@ -5,19 +5,15 @@ use super::{
 use crate::{
     domain_layer::data::entity::user_device::UserDevice,
     infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            capture::Capture,
-        },
+        data::aggregate_error::AggregateError,
         functionality::repository::Repository,
     },
 };
 use deadpool_postgres::Client;
-use dedicated::void::Void;
 use std::future::Future;
 use tokio_postgres::types::Type;
 impl Repository<Postgresql<UserDevice>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \

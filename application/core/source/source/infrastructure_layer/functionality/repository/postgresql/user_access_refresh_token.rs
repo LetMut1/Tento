@@ -5,25 +5,21 @@ use super::{
 use crate::{
     domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken,
     infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            capture::Capture,
-        },
+        data::aggregate_error::AggregateError,
         functionality::repository::Repository,
     },
 };
 use deadpool_postgres::Client;
-use dedicated::void::Void;
 use std::{
     borrow::Cow,
     future::Future,
 };
 use tokio_postgres::types::Type;
 impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
-    pub fn create_1<'a, 'b>(
+    pub fn create_1<'a>(
         database_2_client: &'a Client,
-        user_access_refresh_token: &'a UserAccessRefreshToken<'b>,
-    ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+        user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
+    ) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -87,7 +83,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn update_1<'a>(database_2_client: &'a Client, update_1: Update1<'a>, by_2: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn update_1<'a>(database_2_client: &'a Client, update_1: Update1<'a>, by_2: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -151,7 +147,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn delete_1<'a>(database_2_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn delete_1<'a>(database_2_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
             DELETE FROM ONLY \
@@ -188,7 +184,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn delete_2<'a>(database_2_client: &'a Client, by_1: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn delete_2<'a>(database_2_client: &'a Client, by_1: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -222,7 +218,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
     pub fn find_1<'a, 'b>(
         database_2_client: &'a Client,
         by_2: By2<'b>,
-    ) -> impl Future<Output = Result<Option<UserAccessRefreshToken<'b>>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<Option<UserAccessRefreshToken<'b>>, AggregateError>> + Send + use<'a, 'b> {
         return async move {
             let query = "\
                 SELECT \

@@ -4,11 +4,7 @@ use crate::infrastructure_layer::data::aggregate_error::{
     // Backtrace,
     // ResultConverter,
 };
-use crate::infrastructure_layer::data::{
-    capture::Capture,
-    environment_configuration::run_server::EmailServer,
-};
-use dedicated::void::Void;
+use crate::infrastructure_layer::data::environment_configuration::run_server::EmailServer;
 use std::future::Future;
 // use lettre::{
 //     message::header::ContentType, transport::smtp::authentication::Credentials, AsyncSmtpTransport,
@@ -22,7 +18,7 @@ impl Sender<Email> {
         _subject: &'a str,
         _body: String,
         _to: &'a str,
-    ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             // TODO сделать посторяему отправку при ошибке на количество времени (отправлять через секунду, пока не выйдет время) или раз.
             return Result::Ok(());

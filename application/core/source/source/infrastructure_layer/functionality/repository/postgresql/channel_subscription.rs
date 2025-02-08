@@ -5,19 +5,15 @@ use super::{
 use crate::{
     domain_layer::data::entity::channel_subscription::ChannelSubscription,
     infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            capture::Capture,
-        },
+        data::aggregate_error::AggregateError,
         functionality::repository::Repository,
     },
 };
 use deadpool_postgres::Client;
-use dedicated::void::Void;
 use std::future::Future;
 use tokio_postgres::types::Type;
 impl Repository<Postgresql<ChannelSubscription>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, channel_subscription: &'a ChannelSubscription) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_client: &'a Client, channel_subscription: &'a ChannelSubscription) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -63,7 +59,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
             return Result::Ok(());
         };
     }
-    pub fn is_exist_1<'a>(database_1_client: &'a Client, by_1: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn is_exist_1<'a>(database_1_client: &'a Client, by_1: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \

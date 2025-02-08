@@ -5,22 +5,16 @@ use super::{
 use crate::{
     domain_layer::data::entity::channel_inner_link::ChannelInnerLink,
     infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            capture::Capture,
-        },
+        data::aggregate_error::AggregateError,
         functionality::repository::Repository,
     },
 };
 use deadpool_postgres::Client;
-use dedicated::{
-    action_processor_incoming_outcoming::ChannelInnerLink1,
-    void::Void,
-};
+use dedicated::action_processor_incoming_outcoming::ChannelInnerLink1;
 use std::future::Future;
 use tokio_postgres::types::Type;
 impl Repository<Postgresql<ChannelInnerLink>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, channel_inner_link: &'a ChannelInnerLink) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_client: &'a Client, channel_inner_link: &'a ChannelInnerLink) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -66,7 +60,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
             return Result::Ok(());
         };
     }
-    pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1, limit: i16) -> impl Future<Output = Result<Vec<ChannelInnerLink1>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1, limit: i16) -> impl Future<Output = Result<Vec<ChannelInnerLink1>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \

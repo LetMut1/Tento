@@ -30,7 +30,6 @@ use crate::{
     infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
-            capture::Capture,
             environment_configuration::EnvironmentConfiguration,
         },
         functionality::{
@@ -59,7 +58,6 @@ use crate::{
         },
     },
 };
-use dedicated::void::Void;
 use rand::{
     thread_rng,
     Rng,
@@ -83,7 +81,7 @@ impl CommandProcessor<CreateFixtures> {
             Builder::new_current_thread().enable_all().build()
         );
     }
-    fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration<CreateFixtures>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration<CreateFixtures>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";
         const APPLICATION_USER__PASSWORD: &'static str = "passworD1";
         const ASCII_CHARACTER_REGISTRY: [char; 26] = [

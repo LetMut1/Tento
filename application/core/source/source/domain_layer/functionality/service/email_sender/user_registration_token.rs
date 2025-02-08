@@ -4,7 +4,6 @@ use crate::{
     infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
-            capture::Capture,
             environment_configuration::run_server::EmailServer,
         },
         functionality::service::sender::{
@@ -13,7 +12,6 @@ use crate::{
         },
     },
 };
-use dedicated::void::Void;
 use std::future::Future;
 impl EmailSender<UserRegistrationToken<'_>> {
     pub fn repeatable_send<'a>(
@@ -21,7 +19,7 @@ impl EmailSender<UserRegistrationToken<'_>> {
         user_registration_token__value: &'a str,
         user__email: &'a str,
         user_device__id: &'a str,
-    ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let message_body = format!(
                 "Your code {} for device {}.",

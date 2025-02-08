@@ -1,8 +1,5 @@
 use super::Creator;
-use crate::infrastructure_layer::data::{
-    aggregate_error::AggregateError,
-    capture::Capture,
-};
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use deadpool::{
     managed::QueueMode,
     Runtime,
@@ -15,7 +12,6 @@ use deadpool_postgres::{
     RecyclingMethod,
     Timeouts,
 };
-use dedicated::void::Void;
 use std::{
     future::Future,
     time::Duration,
@@ -32,7 +28,7 @@ impl Creator<PostgresqlConnectionPool> {
     pub fn create<'a, T>(
         postgresql_inner: &'a PostgresqlInner,
         tls_type: T
-    ) -> impl Future<Output = Result<PostgresqlConnectionPool, AggregateError>> + Send + Capture<&'a Void>
+    ) -> impl Future<Output = Result<PostgresqlConnectionPool, AggregateError>> + Send + use<'a, T>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

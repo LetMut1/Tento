@@ -3,10 +3,7 @@ use super::{
     ParameterStorage,
 };
 use crate::infrastructure_layer::{
-    data::{
-        aggregate_error::AggregateError,
-        capture::Capture,
-    },
+    data::aggregate_error::AggregateError,
     functionality::{
         repository::Repository,
         service::counter::{
@@ -16,17 +13,14 @@ use crate::infrastructure_layer::{
     },
 };
 use deadpool_postgres::Client;
-use dedicated::{
-    action_processor_incoming_outcoming::{
-        Channel1,
-        Common1,
-    },
-    void::Void,
+use dedicated::action_processor_incoming_outcoming::{
+    Channel1,
+    Common1,
 };
 use std::future::Future;
 use tokio_postgres::types::Type;
 impl Repository<Postgresql<Common1>> {
-    pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -130,7 +124,7 @@ impl Repository<Postgresql<Common1>> {
             return Result::Ok(common_registry);
         };
     }
-    pub fn find_2<'a>(database_1_client: &'a Client, by_2: By2<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_2<'a>(database_1_client: &'a Client, by_2: By2<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -227,7 +221,7 @@ impl Repository<Postgresql<Common1>> {
             return Result::Ok(common_registry);
         };
     }
-    pub fn find_3<'a>(database_1_client: &'a Client, by_3: By3, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_3<'a>(database_1_client: &'a Client, by_3: By3, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \

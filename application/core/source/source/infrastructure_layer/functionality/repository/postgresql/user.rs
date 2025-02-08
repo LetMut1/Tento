@@ -12,22 +12,18 @@ use crate::{
         User_5,
     },
     infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            capture::Capture,
-        },
+        data::aggregate_error::AggregateError,
         functionality::repository::Repository,
     },
 };
 use deadpool_postgres::Client;
-use dedicated::void::Void;
 use std::{
     borrow::Cow,
     future::Future,
 };
 use tokio_postgres::types::Type;
 impl Repository<Postgresql<User<'_>>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<User<'static>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<User<'static>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -91,7 +87,7 @@ impl Repository<Postgresql<User<'_>>> {
             );
         };
     }
-    pub fn create_2<'a, 'b>(database_1_client: &'a Client, user: &'a User<'b>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_2<'a, 'b>(database_1_client: &'a Client, user: &'a User<'b>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -149,7 +145,7 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn update_1<'a>(database_1_client: &'a Client, update_1: Update1<'a>, by_3: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn update_1<'a>(database_1_client: &'a Client, update_1: Update1<'a>, by_3: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -192,7 +188,7 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn delete_1<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn delete_1<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -224,7 +220,7 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn is_exist_1<'a>(database_1_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn is_exist_1<'a>(database_1_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -260,7 +256,7 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(true);
         };
     }
-    pub fn is_exist_2<'a>(database_1_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn is_exist_2<'a>(database_1_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -296,7 +292,7 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(true);
         };
     }
-    pub fn is_exist_3<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn is_exist_3<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -332,7 +328,7 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(true);
         };
     }
-    pub fn find_1<'a, 'b>(database_1_client: &'a Client, by_1: By1<'b>) -> impl Future<Output = Result<Option<User<'b>>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_1<'a, 'b>(database_1_client: &'a Client, by_1: By1<'b>) -> impl Future<Output = Result<Option<User<'b>>, AggregateError>> + Send + use<'a, 'b> {
         return async move {
             let query = "\
                 SELECT \
@@ -381,7 +377,7 @@ impl Repository<Postgresql<User<'_>>> {
             );
         };
     }
-    pub fn find_2<'a>(database_1_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<Option<User_1>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_2<'a>(database_1_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<Option<User_1>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -427,7 +423,7 @@ impl Repository<Postgresql<User<'_>>> {
             );
         };
     }
-    pub fn find_3<'a>(database_1_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<Option<User_2>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_3<'a>(database_1_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<Option<User_2>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -473,7 +469,7 @@ impl Repository<Postgresql<User<'_>>> {
             );
         };
     }
-    pub fn find_4<'a>(database_1_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<Option<User_3>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_4<'a>(database_1_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<Option<User_3>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -515,7 +511,7 @@ impl Repository<Postgresql<User<'_>>> {
             );
         };
     }
-    pub fn find_5<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<Option<User_4>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_5<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<Option<User_4>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -561,7 +557,7 @@ impl Repository<Postgresql<User<'_>>> {
             );
         };
     }
-    pub fn find_6<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<Option<User_5>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_6<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<Option<User_5>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -603,7 +599,7 @@ impl Repository<Postgresql<User<'_>>> {
             );
         };
     }
-    pub fn get_user_id<'a>(database_1_client: &'a Client) -> impl Future<Output = Result<i64, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn get_user_id<'a>(database_1_client: &'a Client) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT nextval('public.user_1') AS n";
