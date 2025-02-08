@@ -1,27 +1,29 @@
-use super::{
-    Postgresql,
-    ParameterStorage,
-};
-use crate::{
-    domain_layer::data::entity::user::{
-        User,
-        User_1,
-        User_2,
-        User_3,
-        User_4,
-        User_5,
+use {
+    crate::{
+        domain_layer::data::entity::user::{
+            User,
+            User_1,
+            User_2,
+            User_3,
+            User_4,
+            User_5,
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::repository::Repository,
+        },
     },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::repository::Repository,
+    super::{
+        Postgresql,
+        ParameterStorage,
     },
+    deadpool_postgres::Client,
+    std::{
+        borrow::Cow,
+        future::Future,
+    },
+    tokio_postgres::types::Type,
 };
-use deadpool_postgres::Client;
-use std::{
-    borrow::Cow,
-    future::Future,
-};
-use tokio_postgres::types::Type;
 impl Repository<Postgresql<User<'_>>> {
     pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<User<'static>, AggregateError>> + Send + use<'a> {
         return async move {

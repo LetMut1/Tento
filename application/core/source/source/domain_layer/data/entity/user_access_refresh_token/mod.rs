@@ -1,17 +1,19 @@
 mod field;
-use self::field::{
-    ExpiresAt,
-    ObfuscationValue,
-    UpdatedAt,
-};
-use super::{
-    user::User_Id,
-    user_access_token::UserAccessToken_Id,
-    user_device::UserDevice_Id,
-};
-use std::{
-    borrow::Cow,
-    marker::PhantomData,
+use {
+    self::field::{
+        ExpiresAt,
+        ObfuscationValue,
+        UpdatedAt,
+    },
+    super::{
+        user::User_Id,
+        user_access_token::UserAccessToken_Id,
+        user_device::UserDevice_Id,
+    },
+    std::{
+        borrow::Cow,
+        marker::PhantomData,
+    },
 };
 pub struct UserAccessRefreshToken<'a> {
     pub user__id: i64,

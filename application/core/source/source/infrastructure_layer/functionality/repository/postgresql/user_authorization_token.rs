@@ -1,22 +1,24 @@
-use super::{
-    Postgresql,
-    ParameterStorage,
-};
-use crate::{
-    domain_layer::data::entity::user_authorization_token::{
-        UserAuthorizationToken,
-        UserAuthorizationToken_1,
-        UserAuthorizationToken_2,
-        UserAuthorizationToken_3,
+use {
+    crate::{
+        domain_layer::data::entity::user_authorization_token::{
+            UserAuthorizationToken,
+            UserAuthorizationToken_1,
+            UserAuthorizationToken_2,
+            UserAuthorizationToken_3,
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::repository::Repository,
+        },
     },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::repository::Repository,
+    super::{
+        Postgresql,
+        ParameterStorage,
     },
+    deadpool_postgres::Client,
+    std::future::Future,
+    tokio_postgres::types::Type,
 };
-use deadpool_postgres::Client;
-use std::future::Future;
-use tokio_postgres::types::Type;
 impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
     pub fn create_1<'a>(
         database_2_client: &'a Client,

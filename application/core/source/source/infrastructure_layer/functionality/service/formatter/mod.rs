@@ -25,5 +25,7 @@ macro_rules! report_variant_2 {
         "{}\n{}"
     };
 }
-pub(crate) use report_variant_1;
-pub(crate) use report_variant_2;
+pub(crate) use {
+    report_variant_1,
+    report_variant_2,
+};

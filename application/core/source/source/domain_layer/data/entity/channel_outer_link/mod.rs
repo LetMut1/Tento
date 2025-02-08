@@ -1,11 +1,13 @@
 mod field;
-use self::field::{
-    Address,
-    Alias,
-    CreatedAt,
+use {
+    self::field::{
+        Address,
+        Alias,
+        CreatedAt,
+    },
+    super::channel::Channel_Id,
+    std::marker::PhantomData,
 };
-use super::channel::Channel_Id;
-use std::marker::PhantomData;
 pub struct ChannelOuterLink {
     pub from: i64,
     _from: PhantomData<Channel_Id>,

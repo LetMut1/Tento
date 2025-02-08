@@ -1,73 +1,75 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user::{
-                User,
-                User_Email,
-                User_Nickname,
-                User_Password,
-            },
-            user_authorization_token::{
-                UserAuthorizationToken,
-                UserAuthorizationToken_CanBeResentFrom,
-                UserAuthorizationToken_ExpiresAt,
-                UserAuthorizationToken_Value,
-                UserAuthorizationToken_WrongEnterTriesQuantity,
-            },
-            user_device::UserDevice_Id,
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            email_sender::EmailSender,
-            encoder::Encoder,
-            generator::Generator,
-            validator::Validator,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    UserAuthorizationTokenBy1,
-                    UserAuthorizationTokenUpdate1,
-                    UserAuthorizationTokenUpdate2,
-                    UserAuthorizationTokenUpdate3,
-                    UserBy1,
-                    UserBy2,
+        domain_layer::{
+            data::entity::{
+                user::{
+                    User,
+                    User_Email,
+                    User_Nickname,
+                    User_Password,
                 },
-                Repository,
+                user_authorization_token::{
+                    UserAuthorizationToken,
+                    UserAuthorizationToken_CanBeResentFrom,
+                    UserAuthorizationToken_ExpiresAt,
+                    UserAuthorizationToken_Value,
+                    UserAuthorizationToken_WrongEnterTriesQuantity,
+                },
+                user_device::UserDevice_Id,
             },
-            service::{
-                resolver::{
-                    Resolver,
-                    UnixTime,
-                },
-                spawner::{
-                    Spawner,
-                    TokioBlockingTask,
-                    TokioNonBlockingTask,
-                },
+            functionality::service::{
+                email_sender::EmailSender,
+                encoder::Encoder,
+                generator::Generator,
+                validator::Validator,
             },
         },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        UserAuthorizationTokenBy1,
+                        UserAuthorizationTokenUpdate1,
+                        UserAuthorizationTokenUpdate2,
+                        UserAuthorizationTokenUpdate3,
+                        UserBy1,
+                        UserBy2,
+                    },
+                    Repository,
+                },
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    spawner::{
+                        Spawner,
+                        TokioBlockingTask,
+                        TokioNonBlockingTask,
+                    },
+                },
+            },
+        },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::authorize_by_first_step::{
-        Incoming,
-        Outcoming,
-        Precedent,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::authorize_by_first_step::{
+            Incoming,
+            Outcoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
     },
-    unified_report::UnifiedReport,
-};
-use std::{
-    borrow::Cow,
-    future::Future
+    std::{
+        borrow::Cow,
+        future::Future,
+    },
 };
 pub struct UserAuthorization_AuthorizeByFirstStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep> {
@@ -149,7 +151,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             if !crate::result_return_runtime!(is_valid_join_handle.await)? {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword));
             }
-            let now = Resolver::<UnixTime>::get_now();
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_authorization_token__value, user_authorization_token__can_be_resent_from, user_authorization_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_1(

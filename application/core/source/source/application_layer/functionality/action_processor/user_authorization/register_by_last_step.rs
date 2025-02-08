@@ -1,85 +1,87 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user::{
-                User,
-                User_Email,
-                User_Nickname,
-                User_Password,
-            },
-            user_access_refresh_token::{
-                UserAccessRefreshToken,
-                UserAccessRefreshToken_ExpiresAt,
-                UserAccessRefreshToken_ObfuscationValue,
-            },
-            user_access_token::{
-                UserAccessToken,
-                UserAccessToken_ExpiresAt,
-                UserAccessToken_Id,
-            },
-            user_device::{
-                UserDevice,
-                UserDevice_Id,
-            },
-            user_registration_token::{
-                UserRegistrationToken,
-                UserRegistrationToken_Value,
-                UserRegistrationToken_WrongEnterTriesQuantity,
-            },
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            encoder::Encoder,
-            generator::Generator,
-            validator::Validator,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    UserBy1,
-                    UserBy2,
-                    UserBy3,
-                    UserDeviceInsert1,
-                    UserRegistrationTokenBy1,
-                    Resolver as Resolver_,
-                    Transaction,
-                    IsolationLevel,
+        domain_layer::{
+            data::entity::{
+                user::{
+                    User,
+                    User_Email,
+                    User_Nickname,
+                    User_Password,
                 },
-                Repository,
-            },
-            service::{
-                resolver::{
-                    Resolver,
-                    UnixTime,
+                user_access_refresh_token::{
+                    UserAccessRefreshToken,
+                    UserAccessRefreshToken_ExpiresAt,
+                    UserAccessRefreshToken_ObfuscationValue,
                 },
-                spawner::{
-                    Spawner,
-                    TokioBlockingTask,
-                    TokioNonBlockingTask,
+                user_access_token::{
+                    UserAccessToken,
+                    UserAccessToken_ExpiresAt,
+                    UserAccessToken_Id,
+                },
+                user_device::{
+                    UserDevice,
+                    UserDevice_Id,
+                },
+                user_registration_token::{
+                    UserRegistrationToken,
+                    UserRegistrationToken_Value,
+                    UserRegistrationToken_WrongEnterTriesQuantity,
                 },
             },
+            functionality::service::{
+                encoder::Encoder,
+                generator::Generator,
+                validator::Validator,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        UserBy1,
+                        UserBy2,
+                        UserBy3,
+                        UserDeviceInsert1,
+                        UserRegistrationTokenBy1,
+                        Resolver as Resolver_,
+                        Transaction,
+                        IsolationLevel,
+                    },
+                    Repository,
+                },
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    spawner::{
+                        Spawner,
+                        TokioBlockingTask,
+                        TokioNonBlockingTask,
+                    },
+                },
+            },
         },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::register_by_last_step::{
-        Incoming,
-        Outcoming,
-        Precedent,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::register_by_last_step::{
+            Incoming,
+            Outcoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
     },
-    unified_report::UnifiedReport,
-};
-use std::{
-    borrow::Cow,
-    future::Future
+    std::{
+        borrow::Cow,
+        future::Future
+    },
 };
 pub struct UserAuthorization_RegisterByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> {
@@ -133,7 +135,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_EmailAlreadyExist));
                 }
             }
-            let now = Resolver::<UnixTime>::get_now();
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
             {
                 let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
                 let mut user_registration_token = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_2(

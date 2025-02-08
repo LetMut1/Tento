@@ -1,19 +1,21 @@
-use super::Encoder;
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
-use argon2::{
-    password_hash::{
-        rand_core::OsRng,
-        PasswordHash,
-        PasswordHasher,
-        PasswordVerifier,
-        SaltString,
+use {
+    argon2::{
+        password_hash::{
+            rand_core::OsRng,
+            PasswordHash,
+            PasswordHasher,
+            PasswordVerifier,
+            SaltString,
+        },
+        Algorithm,
+        Argon2,
+        Params,
+        Version,
     },
-    Algorithm,
-    Argon2,
-    Params,
-    Version,
+    crate::infrastructure_layer::data::aggregate_error::AggregateError,
+    super::Encoder,
+    std::sync::OnceLock,
 };
-use std::sync::OnceLock;
 static ARGON2: OnceLock<Argon2<'static>> = OnceLock::new();
 pub struct Argon2Id;
 impl Encoder<Argon2Id> {

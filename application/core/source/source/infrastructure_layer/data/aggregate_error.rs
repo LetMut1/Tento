@@ -340,24 +340,26 @@ macro_rules! option_return_logic_invalid_socket_address {
         }
     };
 }
-pub(crate) use new_indefinite_argument;
-pub(crate) use new_invalid_argument;
-pub(crate) use new_logic;
-pub(crate) use new_logic_invalid_socket_address;
-pub(crate) use new_logic_out_of_range;
-pub(crate) use new_logic_unreachable_state;
-pub(crate) use new_logic_value_already_exist;
-pub(crate) use new_logic_value_does_not_exist;
-pub(crate) use new_runtime;
-pub(crate) use result_return_indefinite_argument;
-pub(crate) use result_into_indefinite_argument;
-pub(crate) use result_return_logic;
-pub(crate) use result_into_logic;
-pub(crate) use result_return_runtime;
-pub(crate) use result_into_runtime;
-pub(crate) use option_return_logic_unreachable_state;
-pub(crate) use option_return_logic_out_of_range;
-pub(crate) use option_into_logic_out_of_range;
-pub(crate) use option_return_logic_value_does_not_exist;
-pub(crate) use option_into_logic_value_does_not_exist;
-pub(crate) use option_return_logic_invalid_socket_address;
+pub(crate) use {
+    new_indefinite_argument,
+    new_invalid_argument,
+    new_logic,
+    new_logic_invalid_socket_address,
+    new_logic_out_of_range,
+    new_logic_unreachable_state,
+    new_logic_value_already_exist,
+    new_logic_value_does_not_exist,
+    new_runtime,
+    result_return_indefinite_argument,
+    result_into_indefinite_argument,
+    result_return_logic,
+    result_into_logic,
+    result_return_runtime,
+    result_into_runtime,
+    option_return_logic_unreachable_state,
+    option_return_logic_out_of_range,
+    option_into_logic_out_of_range,
+    option_return_logic_value_does_not_exist,
+    option_into_logic_value_does_not_exist,
+    option_return_logic_invalid_socket_address,
+};

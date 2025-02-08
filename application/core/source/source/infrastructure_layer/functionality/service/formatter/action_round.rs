@@ -1,16 +1,18 @@
-use super::{
-    report_variant_2,
-    Format,
-    Formatter,
-};
-use crate::{
-    infrastructure_layer::data::aggregate_error::{
-        Auditor,
-        Backtrace,
+use {
+    super::{
+        report_variant_2,
+        Format,
+        Formatter,
     },
-    presentation_layer::functionality::service::processor::action_round::ActionRound,
+    crate::{
+        infrastructure_layer::data::aggregate_error::{
+            Auditor,
+            Backtrace,
+        },
+        presentation_layer::functionality::service::processor::action_round::ActionRound,
+    },
+    http::method::Method,
 };
-use http::method::Method;
 impl Formatter<ActionRound> {
     pub fn format<'a>(row_data: &'a RowData) -> String {
         return format!(

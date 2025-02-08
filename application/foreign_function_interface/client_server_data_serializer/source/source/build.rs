@@ -1,12 +1,14 @@
-use cbindgen::{
-    Builder,
-    Language,
+use {
+    cbindgen::{
+        Builder,
+        Language,
+    },
+    std::{
+        error::Error,
+        path::Path,
+    },
+    uuid::Uuid,
 };
-use std::{
-    error::Error,
-    path::Path,
-};
-use uuid::Uuid;
 #[allow(clippy::panic)]
 fn main() -> () {
     if let Result::Err(error) = Processor::process() {

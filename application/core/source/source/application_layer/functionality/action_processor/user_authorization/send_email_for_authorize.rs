@@ -1,61 +1,63 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user::{
-                User,
-                User_Id,
-            },
-            user_authorization_token::{
-                UserAuthorizationToken,
-                UserAuthorizationToken_CanBeResentFrom,
-            },
-            user_device::UserDevice_Id,
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            email_sender::EmailSender,
-            generator::Generator,
-            validator::Validator,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    UserAuthorizationTokenBy1,
-                    UserAuthorizationTokenUpdate3,
-                    UserBy3,
+        domain_layer::{
+            data::entity::{
+                user::{
+                    User,
+                    User_Id,
                 },
-                Repository,
+                user_authorization_token::{
+                    UserAuthorizationToken,
+                    UserAuthorizationToken_CanBeResentFrom,
+                },
+                user_device::UserDevice_Id,
             },
-            service::{
-                resolver::{
-                    Resolver,
-                    UnixTime,
-                },
-                spawner::{
-                    Spawner,
-                    TokioNonBlockingTask,
-                },
+            functionality::service::{
+                email_sender::EmailSender,
+                generator::Generator,
+                validator::Validator,
             },
         },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        UserAuthorizationTokenBy1,
+                        UserAuthorizationTokenUpdate3,
+                        UserBy3,
+                    },
+                    Repository,
+                },
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    spawner::{
+                        Spawner,
+                        TokioNonBlockingTask,
+                    },
+                },
+            },
+        },
     },
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_authorize::{
+            Incoming,
+            Outcoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
+    },
+    std::future::Future,
 };
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_authorize::{
-        Incoming,
-        Outcoming,
-        Precedent,
-    },
-    unified_report::UnifiedReport,
-};
-use std::future::Future;
 pub struct UserAuthorization_SendEmailForAuthorize;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthorize> {
     type Incoming = Incoming;
@@ -100,7 +102,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound));
                 }
             };
-            let now = Resolver::<UnixTime>::get_now();
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_authorization_token.expires_at <= now {
                 Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                     &postgresql_database_2_client,

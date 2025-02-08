@@ -1,36 +1,38 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::user::{
-            User,
-            User_Nickname,
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::validator::Validator,
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::repository::{
-            postgresql::{
-                Postgresql,
-                UserBy1,
+        domain_layer::{
+            data::entity::user::{
+                User,
+                User_Nickname,
             },
-            Repository,
+            functionality::service::validator::Validator,
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::repository::{
+                postgresql::{
+                    Postgresql,
+                    UserBy1,
+                },
+                Repository,
+            },
         },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::check_nickname_for_existing::{
-        Incoming,
-        Outcoming,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::check_nickname_for_existing::{
+            Incoming,
+            Outcoming,
+        },
+        unified_report::UnifiedReport,
+        void::Void,
     },
-    unified_report::UnifiedReport,
-    void::Void,
+    std::future::Future,
 };
-use std::future::Future;
 pub struct UserAuthorization_CheckNicknameForExisting;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExisting> {
     type Incoming = Incoming;

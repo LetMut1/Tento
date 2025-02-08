@@ -1,18 +1,20 @@
-use super::{
-    Postgresql,
-    ParameterStorage,
-};
-use crate::{
-    domain_layer::data::entity::channel_inner_link::ChannelInnerLink,
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::repository::Repository,
+use {
+    super::{
+        Postgresql,
+        ParameterStorage,
     },
+    crate::{
+        domain_layer::data::entity::channel_inner_link::ChannelInnerLink,
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::repository::Repository,
+        },
+    },
+    deadpool_postgres::Client,
+    dedicated::action_processor_incoming_outcoming::ChannelInnerLink1,
+    std::future::Future,
+    tokio_postgres::types::Type,
 };
-use deadpool_postgres::Client;
-use dedicated::action_processor_incoming_outcoming::ChannelInnerLink1;
-use std::future::Future;
-use tokio_postgres::types::Type;
 impl Repository<Postgresql<ChannelInnerLink>> {
     pub fn create_1<'a>(database_1_client: &'a Client, channel_inner_link: &'a ChannelInnerLink) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {

@@ -1,25 +1,27 @@
-use super::Encoder;
-use crate::{
-    domain_layer::data::entity::user_access_token::UserAccessToken,
-    infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            environment_configuration::run_server::PrivateKey,
-        },
-        functionality::service::{
-            encoder::{
-                Encoder as Encoder_,
-                HmacSha3_512,
+use {
+    crate::{
+        domain_layer::data::entity::user_access_token::UserAccessToken,
+        infrastructure_layer::{
+            data::{
+                aggregate_error::AggregateError,
+                environment_configuration::run_server::PrivateKey,
             },
-            serializer::{
-                BitCode,
-                Serialize,
-                Serializer,
+            functionality::service::{
+                encoder::{
+                    Encoder as Encoder_,
+                    HmacSha3_512,
+                },
+                serializer::{
+                    BitCode,
+                    Serialize,
+                    Serializer,
+                },
             },
         },
     },
+    super::Encoder,
+    dedicated::user_access_token_encoded::UserAccessTokenEncoded,
 };
-use dedicated::user_access_token_encoded::UserAccessTokenEncoded;
 impl Encoder<UserAccessToken<'_>> {
     pub fn encode<'a>(
         private_key: &'static PrivateKey,

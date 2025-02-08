@@ -1,73 +1,75 @@
-use super::CommandProcessor;
-use crate::{
-    domain_layer::{
-        data::entity::{
-            channel::{
-                Channel,
-                Channel_AccessModifier,
-                Channel_Description,
-                Channel_LinkedName,
-                Channel_Name,
-                Channel_Orientation,
-                Channel_VisabilityModifier,
+use {
+    crate::{
+        domain_layer::{
+            data::entity::{
+                channel::{
+                    Channel,
+                    Channel_AccessModifier,
+                    Channel_Description,
+                    Channel_LinkedName,
+                    Channel_Name,
+                    Channel_Orientation,
+                    Channel_VisabilityModifier,
+                },
+                user::{
+                    User,
+                    User_Email,
+                    User_Nickname,
+                    User_Password,
+                },
+                user_device::{
+                    UserDevice,
+                    UserDevice_Id,
+                },
             },
-            user::{
-                User,
-                User_Email,
-                User_Nickname,
-                User_Password,
-            },
-            user_device::{
-                UserDevice,
-                UserDevice_Id,
+            functionality::service::{
+                encoder::Encoder,
+                validator::Validator,
             },
         },
-        functionality::service::{
-            encoder::Encoder,
-            validator::Validator,
+        infrastructure_layer::{
+            data::{
+                aggregate_error::AggregateError,
+                environment_configuration::EnvironmentConfiguration,
+            },
+            functionality::{
+                repository::{
+                    postgresql::{
+                        ChannelBy2,
+                        ChannelInsert1,
+                        Postgresql,
+                        UserBy1,
+                        UserDeviceInsert1,
+                        UserInsert1,
+                    },
+                    Repository,
+                },
+                service::{
+                    creator::{
+                        Creator,
+                        PostgresqlConnectionPool,
+                    },
+                    loader::Loader,
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                },
+            },
         },
     },
-    infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            environment_configuration::EnvironmentConfiguration,
-        },
-        functionality::{
-            repository::{
-                postgresql::{
-                    ChannelBy2,
-                    ChannelInsert1,
-                    Postgresql,
-                    UserBy1,
-                    UserDeviceInsert1,
-                    UserInsert1,
-                },
-                Repository,
-            },
-            service::{
-                creator::{
-                    Creator,
-                    PostgresqlConnectionPool,
-                },
-                loader::Loader,
-                resolver::{
-                    Resolver,
-                    UnixTime,
-                },
-            },
-        },
+    super::CommandProcessor,
+    rand::{
+        thread_rng,
+        Rng,
     },
+    std::future::Future,
+    tokio::runtime::{
+        Builder,
+        Runtime,
+    },
+    tokio_postgres::NoTls,
 };
-use rand::{
-    thread_rng,
-    Rng,
-};
-use std::future::Future;
-use tokio::runtime::{
-    Builder,
-    Runtime,
-};
-use tokio_postgres::NoTls;
 pub use crate::infrastructure_layer::data::environment_configuration::create_fixtures::CreateFixtures;
 impl CommandProcessor<CreateFixtures> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
@@ -162,7 +164,7 @@ impl CommandProcessor<CreateFixtures> {
                                 user__email,
                                 user__nickname,
                                 user__password_hash: user__password_hash.clone(),
-                                user__created_at: Resolver::<UnixTime>::get_now(),
+                                user__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
                             },
                         )
                         .await?
@@ -243,7 +245,7 @@ impl CommandProcessor<CreateFixtures> {
                                     channel__subscribers_quantity: 0,
                                     channel__marks_quantity: 0,
                                     channel__viewing_quantity: 0,
-                                    channel__created_at: Resolver::<UnixTime>::get_now(),
+                                    channel__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
                                 },
                             )
                             .await?;

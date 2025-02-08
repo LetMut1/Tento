@@ -1,16 +1,18 @@
-use super::{
-    Format,
-    Formatter,
-};
-use crate::infrastructure_layer::data::{
-    aggregate_error::{
-        Context,
-        IndefiniteArgument,
-        InvalidArgument,
+use {
+    super::{
+        Format,
+        Formatter,
     },
-    server_workflow_error::Responsive,
+    crate::infrastructure_layer::data::{
+        aggregate_error::{
+            Context,
+            IndefiniteArgument,
+            InvalidArgument,
+        },
+        server_workflow_error::Responsive,
+    },
+    std::marker::PhantomData,
 };
-use std::marker::PhantomData;
 impl Format<Responsive> for Formatter<Responsive> {
     fn format<'a>(subject: &'a Responsive) -> String {
         return match *subject {

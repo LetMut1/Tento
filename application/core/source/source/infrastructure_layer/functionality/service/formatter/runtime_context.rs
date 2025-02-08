@@ -1,12 +1,14 @@
-use super::{
-    report_variant_1,
-    Formatter,
+use {
+    super::{
+        report_variant_1,
+        Formatter,
+    },
+    crate::infrastructure_layer::data::aggregate_error::{
+        Context,
+        Runtime,
+    },
+    std::marker::PhantomData,
 };
-use crate::infrastructure_layer::data::aggregate_error::{
-    Context,
-    Runtime,
-};
-use std::marker::PhantomData;
 impl Formatter<Context<PhantomData<Runtime>>> {
     pub fn format<'a>(runtime_context: &'a Context<PhantomData<Runtime>>) -> String {
         return format!(

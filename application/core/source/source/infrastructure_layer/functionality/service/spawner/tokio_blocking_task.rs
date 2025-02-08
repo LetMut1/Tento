@@ -1,9 +1,11 @@
-use super::Spawner;
-use crate::infrastructure_layer::{
-    data::aggregate_error::AggregateError,
-    functionality::service::logger::Logger,
+use {
+    crate::infrastructure_layer::{
+        data::aggregate_error::AggregateError,
+        functionality::service::logger::Logger,
+    },
+    super::Spawner,
+    tokio::task::JoinHandle,
 };
-use tokio::task::JoinHandle;
 pub struct TokioBlockingTask;
 impl Spawner<TokioBlockingTask> {
     pub fn spawn_into_background<T>(

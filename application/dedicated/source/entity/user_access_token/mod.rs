@@ -1,13 +1,15 @@
 mod field;
-use self::field::{
-    ExpiresAt,
-    Id,
+use {
+    self::field::{
+        ExpiresAt,
+        Id,
+    },
+    super::{
+        user::User_Id,
+        user_device::UserDevice_Id,
+    },
+    std::marker::PhantomData,
 };
-use super::{
-    user::User_Id,
-    user_device::UserDevice_Id,
-};
-use std::marker::PhantomData;
 #[cfg_attr(
     feature = "serde_for_manual_test",
     derive(

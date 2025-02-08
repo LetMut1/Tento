@@ -1,7 +1,9 @@
-use super::Logger;
-use crate::infrastructure_layer::{
-    data::aggregate_error::AggregateError,
-    functionality::service::formatter::Formatter,
+use {
+    crate::infrastructure_layer::{
+        data::aggregate_error::AggregateError,
+        functionality::service::formatter::Formatter,
+    },
+    super::Logger,
 };
 impl Logger<AggregateError> {
     pub fn log<'a>(aggregate_error: &'a AggregateError) -> () {

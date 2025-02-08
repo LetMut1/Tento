@@ -1,13 +1,15 @@
-use super::Generator;
-use crate::{
-    domain_layer::data::entity::user_reset_password_token::UserResetPasswordToken_CanBeResentFrom,
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::service::resolver::{
-            Resolver,
-            UnixTime,
+use {
+    crate::{
+        domain_layer::data::entity::user_reset_password_token::UserResetPasswordToken_CanBeResentFrom,
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::service::resolver::{
+                Resolver,
+                UnixTime,
+            },
         },
     },
+    super::Generator,
 };
 impl Generator<UserResetPasswordToken_CanBeResentFrom> {
     pub fn generate(now: i64) -> Result<i64, AggregateError> {

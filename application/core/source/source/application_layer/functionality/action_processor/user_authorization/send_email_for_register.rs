@@ -1,57 +1,59 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user::User_Email,
-            user_device::UserDevice_Id,
-            user_registration_token::{
-                UserRegistrationToken,
-                UserRegistrationToken_CanBeResentFrom,
-            },
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            email_sender::EmailSender,
-            generator::Generator,
-            validator::Validator,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    UserRegistrationTokenBy1,
-                    UserRegistrationTokenUpdate2,
-                },
-                Repository,
-            },
-            service::{
-                resolver::{
-                    Resolver,
-                    UnixTime,
-                },
-                spawner::{
-                    Spawner,
-                    TokioNonBlockingTask,
+        domain_layer::{
+            data::entity::{
+                user::User_Email,
+                user_device::UserDevice_Id,
+                user_registration_token::{
+                    UserRegistrationToken,
+                    UserRegistrationToken_CanBeResentFrom,
                 },
             },
+            functionality::service::{
+                email_sender::EmailSender,
+                generator::Generator,
+                validator::Validator,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        UserRegistrationTokenBy1,
+                        UserRegistrationTokenUpdate2,
+                    },
+                    Repository,
+                },
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    spawner::{
+                        Spawner,
+                        TokioNonBlockingTask,
+                    },
+                },
+            },
         },
     },
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_register::{
+            Incoming,
+            Outcoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
+    },
+    std::future::Future,
 };
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_register::{
-        Incoming,
-        Outcoming,
-        Precedent,
-    },
-    unified_report::UnifiedReport,
-};
-use std::future::Future;
 pub struct UserAuthorization_SendEmailForRegister;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister> {
     type Incoming = Incoming;
@@ -83,7 +85,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                 }
             };
-            let now = Resolver::<UnixTime>::get_now();
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_registration_token.expires_at <= now {
                 Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                     &postgresql_database_2_client,

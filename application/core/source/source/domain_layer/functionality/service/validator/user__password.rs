@@ -1,5 +1,7 @@
-use super::Validator;
-use crate::domain_layer::data::entity::user::User_Password;
+use {
+    super::Validator,
+    crate::domain_layer::data::entity::user::User_Password,
+};
 impl Validator<User_Password> {
     pub fn is_valid<'a>(user__password: &'a str, user__email: &'a str, user__nickname: &'a str) -> bool {
         return Self::is_valid_part_1(user__password)

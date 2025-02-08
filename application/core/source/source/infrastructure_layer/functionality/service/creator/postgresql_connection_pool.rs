@@ -1,29 +1,31 @@
-use super::Creator;
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
-use deadpool::{
-    managed::QueueMode,
-    Runtime,
+use {
+    super::Creator,
+    crate::infrastructure_layer::data::aggregate_error::AggregateError,
+    deadpool::{
+        managed::QueueMode,
+        Runtime,
+    },
+    deadpool_postgres::{
+        Manager,
+        ManagerConfig,
+        PoolConfig,
+        RecyclingMethod,
+        Timeouts,
+    },
+    std::{
+        future::Future,
+        time::Duration,
+    },
+    tokio_postgres::{
+        tls::{
+            MakeTlsConnect,
+            TlsConnect,
+        },
+        Socket,
+    },
+    crate::infrastructure_layer::data::environment_configuration::PostgresqlInner,
 };
 pub use deadpool_postgres::Pool as PostgresqlConnectionPool;
-use deadpool_postgres::{
-    Manager,
-    ManagerConfig,
-    PoolConfig,
-    RecyclingMethod,
-    Timeouts,
-};
-use std::{
-    future::Future,
-    time::Duration,
-};
-use tokio_postgres::{
-    tls::{
-        MakeTlsConnect,
-        TlsConnect,
-    },
-    Socket,
-};
-use crate::infrastructure_layer::data::environment_configuration::PostgresqlInner;
 impl Creator<PostgresqlConnectionPool> {
     pub fn create<'a, T>(
         postgresql_inner: &'a PostgresqlInner,

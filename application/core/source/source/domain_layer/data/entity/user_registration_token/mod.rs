@@ -5,20 +5,22 @@ pub use self::derivative::{
     UserRegistrationToken_2,
     UserRegistrationToken_3,
 };
-use self::field::{
-    CanBeResentFrom,
-    ExpiresAt,
-    IsApproved,
-    Value,
-    WrongEnterTriesQuantity,
-};
-use super::{
-    user::User_Email,
-    user_device::UserDevice_Id,
-};
-use std::{
-    borrow::Cow,
-    marker::PhantomData,
+use {
+    self::field::{
+        CanBeResentFrom,
+        ExpiresAt,
+        IsApproved,
+        Value,
+        WrongEnterTriesQuantity,
+    },
+    super::{
+        user::User_Email,
+        user_device::UserDevice_Id,
+    },
+    std::{
+        borrow::Cow,
+        marker::PhantomData,
+    },
 };
 pub struct UserRegistrationToken<'a> {
     pub user__email: Cow<'a, str>,

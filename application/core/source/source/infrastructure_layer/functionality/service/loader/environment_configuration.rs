@@ -1,40 +1,42 @@
-use super::Loader;
-use crate::infrastructure_layer::data::{
-    aggregate_error::AggregateError,
-    environment_configuration::{
-        EnvironmentConfiguration,
-        Postgresql,
-        PostgresqlInner,
+use {
+    crate::infrastructure_layer::data::{
+        aggregate_error::AggregateError,
+        environment_configuration::{
+            EnvironmentConfiguration,
+            Postgresql,
+            PostgresqlInner,
+        },
+        environment_configuration::run_server::{
+            ApplicationServer,
+            EmailServer,
+            Encryption,
+            RunServer,
+            EnvironmentConfigurationFile as RunServerEnvironmentConfigurationFile,
+            Http,
+            HttpKeepalive,
+            Logging,
+            PrivateKey,
+            Resource as RunServerResource,
+            Tcp,
+            TcpKeepalive,
+            Tls,
+            TokioRuntime,
+        },
+        environment_configuration::create_fixtures::{
+            CreateFixtures,
+            EnvironmentConfigurationFile as CreateFixturesEnvironmentConfigurationFile,
+            Resource as CreateFixturesResource,
+        },
     },
-    environment_configuration::run_server::{
-        ApplicationServer,
-        EmailServer,
-        Encryption,
-        RunServer,
-        EnvironmentConfigurationFile as RunServerEnvironmentConfigurationFile,
-        Http,
-        HttpKeepalive,
-        Logging,
-        PrivateKey,
-        Resource as RunServerResource,
-        Tcp,
-        TcpKeepalive,
-        Tls,
-        TokioRuntime,
+    super::Loader,
+    std::{
+        net::ToSocketAddrs,
+        path::Path,
+        str::FromStr,
     },
-    environment_configuration::create_fixtures::{
-        CreateFixtures,
-        EnvironmentConfigurationFile as CreateFixturesEnvironmentConfigurationFile,
-        Resource as CreateFixturesResource,
-    },
+    serde::Deserialize,
+    tokio_postgres::config::Config,
 };
-use std::{
-    net::ToSocketAddrs,
-    path::Path,
-    str::FromStr,
-};
-use serde::Deserialize;
-use tokio_postgres::config::Config;
 impl Loader<EnvironmentConfiguration<RunServer>> {
     pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<RunServer>, AggregateError> {
         let environment_configuration_file = load_from_file::<RunServerEnvironmentConfigurationFile>(environment_configuration_file_path)?;

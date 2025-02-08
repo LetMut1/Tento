@@ -1,18 +1,20 @@
-use super::{
-    report_variant_2,
-    Formatter,
+use {
+    super::{
+        report_variant_2,
+        Formatter,
+    },
+    crate::infrastructure_layer::data::aggregate_error::{
+        AggregateError,
+        AggregateError_,
+        Backtrace,
+        Context,
+        IndefiniteArgument,
+        InvalidArgument,
+        Logic,
+        Runtime,
+    },
+    std::marker::PhantomData,
 };
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    AggregateError_,
-    Backtrace,
-    Context,
-    IndefiniteArgument,
-    InvalidArgument,
-    Logic,
-    Runtime,
-};
-use std::marker::PhantomData;
 impl Formatter<AggregateError> {
     pub fn format<'a>(aggregate_error: &'a AggregateError) -> String {
         let message_part = match aggregate_error.0.subject {

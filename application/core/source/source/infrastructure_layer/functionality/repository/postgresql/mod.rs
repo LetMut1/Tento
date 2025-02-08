@@ -58,13 +58,15 @@ pub use self::{
         Update5 as UserResetPasswordTokenUpdate5,
     },
 };
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
-use deadpool_postgres::Client;
-use std::future::Future;
-use std::marker::PhantomData;
-use tokio_postgres::types::{
-    ToSql,
-    Type,
+use {
+    crate::infrastructure_layer::data::aggregate_error::AggregateError,
+    deadpool_postgres::Client,
+    std::future::Future,
+    std::marker::PhantomData,
+    tokio_postgres::types::{
+        ToSql,
+        Type,
+    },
 };
 pub struct Postgresql<E> {
     _entity: PhantomData<E>,

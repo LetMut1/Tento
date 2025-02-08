@@ -1,18 +1,20 @@
-use super::EmailSender;
-use crate::{
-    domain_layer::data::entity::user_reset_password_token::UserResetPasswordToken,
-    infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            environment_configuration::run_server::EmailServer,
-        },
-        functionality::service::sender::{
-            Email,
-            Sender,
+use {
+    crate::{
+        domain_layer::data::entity::user_reset_password_token::UserResetPasswordToken,
+        infrastructure_layer::{
+            data::{
+                aggregate_error::AggregateError,
+                environment_configuration::run_server::EmailServer,
+            },
+            functionality::service::sender::{
+                Email,
+                Sender,
+            },
         },
     },
+    super::EmailSender,
+    std::future::Future,
 };
-use std::future::Future;
 impl EmailSender<UserResetPasswordToken<'_>> {
     pub fn repeatable_send<'a>(
         email_server: &'static EmailServer,

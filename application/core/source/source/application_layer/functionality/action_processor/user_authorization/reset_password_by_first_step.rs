@@ -1,68 +1,70 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user::{
-                User,
-                User_Email,
-            },
-            user_device::UserDevice_Id,
-            user_reset_password_token::{
-                UserResetPasswordToken,
-                UserResetPasswordToken_CanBeResentFrom,
-                UserResetPasswordToken_ExpiresAt,
-                UserResetPasswordToken_Value,
-                UserResetPasswordToken_WrongEnterTriesQuantity,
-            },
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            email_sender::EmailSender,
-            generator::Generator,
-            validator::Validator,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    UserBy2,
-                    UserResetPasswordTokenBy1,
-                    UserResetPasswordTokenUpdate1,
-                    UserResetPasswordTokenUpdate2,
-                    UserResetPasswordTokenUpdate3,
+        domain_layer::{
+            data::entity::{
+                user::{
+                    User,
+                    User_Email,
                 },
-                Repository,
-            },
-            service::{
-                resolver::{
-                    Resolver,
-                    UnixTime,
-                },
-                spawner::{
-                    Spawner,
-                    TokioNonBlockingTask,
+                user_device::UserDevice_Id,
+                user_reset_password_token::{
+                    UserResetPasswordToken,
+                    UserResetPasswordToken_CanBeResentFrom,
+                    UserResetPasswordToken_ExpiresAt,
+                    UserResetPasswordToken_Value,
+                    UserResetPasswordToken_WrongEnterTriesQuantity,
                 },
             },
+            functionality::service::{
+                email_sender::EmailSender,
+                generator::Generator,
+                validator::Validator,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        UserBy2,
+                        UserResetPasswordTokenBy1,
+                        UserResetPasswordTokenUpdate1,
+                        UserResetPasswordTokenUpdate2,
+                        UserResetPasswordTokenUpdate3,
+                    },
+                    Repository,
+                },
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    spawner::{
+                        Spawner,
+                        TokioNonBlockingTask,
+                    },
+                },
+            },
         },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_first_step::{
-        Incoming,
-        Outcoming,
-        Precedent,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_first_step::{
+            Incoming,
+            Outcoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
     },
-    unified_report::UnifiedReport,
-};
-use std::{
-    borrow::Cow,
-    future::Future,
+    std::{
+        borrow::Cow,
+        future::Future,
+    }
 };
 pub struct UserAuthorization_ResetPasswordByFirstStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirstStep> {
@@ -93,7 +95,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
-            let now = Resolver::<UnixTime>::get_now();
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_reset_password_token__value, user_reset_password_token__can_be_resent_from, user_reset_password_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_1(

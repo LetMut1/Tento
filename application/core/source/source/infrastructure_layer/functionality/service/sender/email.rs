@@ -1,16 +1,14 @@
-use super::Sender;
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    // Backtrace,
-    // ResultConverter,
+use {
+    super::Sender,
+    crate::infrastructure_layer::data::aggregate_error::AggregateError,
+    crate::infrastructure_layer::data::environment_configuration::run_server::EmailServer,
+    std::future::Future,
+    // lettre::{
+    //     message::header::ContentType, transport::smtp::authentication::Credentials, AsyncSmtpTransport,
+    //     AsyncTransport, Message, Tokio1Executor,
+    // },
+    // std::convert::Into,
 };
-use crate::infrastructure_layer::data::environment_configuration::run_server::EmailServer;
-use std::future::Future;
-// use lettre::{
-//     message::header::ContentType, transport::smtp::authentication::Credentials, AsyncSmtpTransport,
-//     AsyncTransport, Message, Tokio1Executor,
-// };
-// use std::convert::Into;
 pub struct Email;
 impl Sender<Email> {
     pub fn repeatable_send<'a>(

@@ -1,10 +1,12 @@
-use super::Spawner;
-use crate::infrastructure_layer::{
-    data::aggregate_error::AggregateError,
-    functionality::service::logger::Logger,
+use {
+    crate::infrastructure_layer::{
+        data::aggregate_error::AggregateError,
+        functionality::service::logger::Logger,
+    },
+    super::Spawner,
+    std::future::Future,
+    tokio::task::JoinHandle,
 };
-use std::future::Future;
-use tokio::task::JoinHandle;
 pub struct TokioNonBlockingTask;
 impl Spawner<TokioNonBlockingTask> {
     pub fn spawn_into_background<T>(

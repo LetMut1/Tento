@@ -1,7 +1,9 @@
 mod field;
-use self::field::CreatedAt;
-use super::channel::Channel_Id;
-use std::marker::PhantomData;
+use {
+    self::field::CreatedAt,
+    super::channel::Channel_Id,
+    std::marker::PhantomData,
+};
 pub struct ChannelInnerLink {
     pub from: i64,
     _from: PhantomData<Channel_Id>,

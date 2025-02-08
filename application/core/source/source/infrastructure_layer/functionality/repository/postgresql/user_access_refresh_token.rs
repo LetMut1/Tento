@@ -1,20 +1,22 @@
-use super::{
-    Postgresql,
-    ParameterStorage,
-};
-use crate::{
-    domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken,
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::repository::Repository,
+use {
+    crate::{
+        domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken,
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::repository::Repository,
+        },
     },
+    super::{
+        Postgresql,
+        ParameterStorage,
+    },
+    deadpool_postgres::Client,
+    std::{
+        borrow::Cow,
+        future::Future,
+    },
+    tokio_postgres::types::Type,
 };
-use deadpool_postgres::Client;
-use std::{
-    borrow::Cow,
-    future::Future,
-};
-use tokio_postgres::types::Type;
 impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
     pub fn create_1<'a>(
         database_2_client: &'a Client,

@@ -1,48 +1,50 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user::User_Id,
-            user_device::UserDevice_Id,
-            user_reset_password_token::{
-                UserResetPasswordToken,
-                UserResetPasswordToken_Value,
-                UserResetPasswordToken_WrongEnterTriesQuantity,
-            },
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::validator::Validator,
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    UserResetPasswordTokenBy1,
-                    UserResetPasswordTokenUpdate5,
+        domain_layer::{
+            data::entity::{
+                user::User_Id,
+                user_device::UserDevice_Id,
+                user_reset_password_token::{
+                    UserResetPasswordToken,
+                    UserResetPasswordToken_Value,
+                    UserResetPasswordToken_WrongEnterTriesQuantity,
                 },
-                Repository,
             },
-            service::resolver::{
-                UnixTime,
-                Resolver,
+            functionality::service::validator::Validator,
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        UserResetPasswordTokenBy1,
+                        UserResetPasswordTokenUpdate5,
+                    },
+                    Repository,
+                },
+                service::resolver::{
+                    UnixTime,
+                    Resolver,
+                },
             },
         },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_second_step::{
-        Incoming,
-        Precedent,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_second_step::{
+            Incoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
+        void::Void,
     },
-    unified_report::UnifiedReport,
-    void::Void,
+    std::future::Future,
 };
-use std::future::Future;
 pub struct UserAuthorization_ResetPasswordBySecondStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecondStep> {
     type Incoming = Incoming;
@@ -77,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound));
                 }
             };
-            if user_reset_password_token.expires_at <= Resolver::<UnixTime>::get_now() {
+            if user_reset_password_token.expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
                 Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy1 {

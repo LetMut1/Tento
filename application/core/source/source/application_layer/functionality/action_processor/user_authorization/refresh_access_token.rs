@@ -1,56 +1,58 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user_access_refresh_token::{
-                UserAccessRefreshToken,
-                UserAccessRefreshToken_ExpiresAt,
-                UserAccessRefreshToken_ObfuscationValue,
-            },
-            user_access_token::{
-                UserAccessToken,
-                UserAccessToken_ExpiresAt,
-                UserAccessToken_Id,
-            },
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            encoder::Encoder,
-            generator::Generator,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    UserAccessRefreshTokenBy2,
-                    UserAccessRefreshTokenUpdate1,
+        domain_layer::{
+            data::entity::{
+                user_access_refresh_token::{
+                    UserAccessRefreshToken,
+                    UserAccessRefreshToken_ExpiresAt,
+                    UserAccessRefreshToken_ObfuscationValue,
                 },
-                Repository,
+                user_access_token::{
+                    UserAccessToken,
+                    UserAccessToken_ExpiresAt,
+                    UserAccessToken_Id,
+                },
             },
-            service::resolver::{
-                Resolver,
-                UnixTime,
+            functionality::service::{
+                encoder::Encoder,
+                generator::Generator,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        UserAccessRefreshTokenBy2,
+                        UserAccessRefreshTokenUpdate1,
+                    },
+                    Repository,
+                },
+                service::resolver::{
+                    Resolver,
+                    UnixTime,
+                },
             },
         },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::refresh_access_token::{
-        Incoming,
-        Outcoming,
-        Precedent,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::refresh_access_token::{
+            Incoming,
+            Outcoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
     },
-    unified_report::UnifiedReport,
-};
-use std::{
-    borrow::Cow,
-    future::Future,
+    std::{
+        borrow::Cow,
+        future::Future,
+    },
 };
 pub struct UserAuthorization_RefreshAccessToken;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> {
@@ -89,7 +91,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             if !is_valid || user_access_token.id.as_str() != user_access_refresh_token.user_access_token__id.as_ref() {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let now = Resolver::<UnixTime>::get_now();
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_access_refresh_token.expires_at <= now {
                 Repository::<Postgresql<UserAccessRefreshToken<'_>>>::delete_1(
                     &postgresql_database_2_client,

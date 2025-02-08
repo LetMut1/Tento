@@ -1,10 +1,12 @@
 mod field;
-use self::field::CreatedAt;
-use super::{
-    channel::Channel_Id,
-    user::User_Id,
+use {
+    self::field::CreatedAt,
+    super::{
+        channel::Channel_Id,
+        user::User_Id,
+    },
+    std::marker::PhantomData,
 };
-use std::marker::PhantomData;
 pub struct ChannelSubscription {
     pub user__id: i64,
     _user__id: PhantomData<User_Id>,

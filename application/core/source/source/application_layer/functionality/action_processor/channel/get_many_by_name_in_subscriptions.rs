@@ -1,45 +1,47 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            channel::Channel_Name,
-            user_access_token::UserAccessToken,
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            extractor::{
-                Extracted,
-                Extractor,
+        domain_layer::{
+            data::entity::{
+                channel::Channel_Name,
+                user_access_token::UserAccessToken,
             },
-            validator::Validator,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::repository::{
-            postgresql::{
-                CommonBy2,
-                Postgresql,
+            functionality::service::{
+                extractor::{
+                    Extracted,
+                    Extractor,
+                },
+                validator::Validator,
             },
-            Repository,
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::repository::{
+                postgresql::{
+                    CommonBy2,
+                    Postgresql,
+                },
+                Repository,
+            },
         },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::{
-        action_processor::channel::get_many_by_name_in_subscriptions::{
-            Incoming,
-            Outcoming,
-            Precedent,
+    dedicated::{
+        action_processor_incoming_outcoming::{
+            action_processor::channel::get_many_by_name_in_subscriptions::{
+                Incoming,
+                Outcoming,
+                Precedent,
+            },
+            Common1,
         },
-        Common1,
+        unified_report::UnifiedReport,
     },
-    unified_report::UnifiedReport,
+    std::future::Future,
 };
-use std::future::Future;
 pub struct Channel_GetManyByNameInSubscriptions;
 impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> {
     type Incoming = Incoming;

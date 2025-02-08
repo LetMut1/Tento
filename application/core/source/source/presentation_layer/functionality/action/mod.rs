@@ -3,30 +3,32 @@ mod route_not_found;
 pub use self::route_not_found::RouteNotFound;
 #[cfg(feature = "json_for_manual_test")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner as ActionProcessorInner,
-    },
-    infrastructure_layer::{
-        data::control_type::Response,
-        functionality::service::serializer::{
-            BitCode,
-            Deserialize_,
-            Serialize_,
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner as ActionProcessorInner,
+        },
+        infrastructure_layer::{
+            data::control_type::Response,
+            functionality::service::serializer::{
+                BitCode,
+                Deserialize_,
+                Serialize_,
+            },
+        },
+        presentation_layer::functionality::service::processor::{
+            action_round::ActionRound,
+            Processor,
         },
     },
-    presentation_layer::functionality::service::processor::{
-        action_round::ActionRound,
-        Processor,
+    http::request::Parts,
+    hyper::body::Incoming,
+    std::{
+        future::Future,
+        marker::PhantomData,
     },
-};
-use http::request::Parts;
-use hyper::body::Incoming;
-use std::{
-    future::Future,
-    marker::PhantomData,
 };
 pub struct Action<S> {
     _subject: PhantomData<S>,

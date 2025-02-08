@@ -1,68 +1,70 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user::{
-                User,
-                User_Email,
-            },
-            user_device::UserDevice_Id,
-            user_registration_token::{
-                UserRegistrationToken,
-                UserRegistrationToken_CanBeResentFrom,
-                UserRegistrationToken_ExpiresAt,
-                UserRegistrationToken_Value,
-                UserRegistrationToken_WrongEnterTriesQuantity,
-            },
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            email_sender::EmailSender,
-            generator::Generator,
-            validator::Validator,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    UserBy2,
-                    UserRegistrationTokenBy1,
-                    UserRegistrationTokenUpdate1,
-                    UserRegistrationTokenUpdate2,
-                    UserRegistrationTokenUpdate3,
+        domain_layer::{
+            data::entity::{
+                user::{
+                    User,
+                    User_Email,
                 },
-                Repository,
-            },
-            service::{
-                resolver::{
-                    Resolver,
-                    UnixTime,
-                },
-                spawner::{
-                    Spawner,
-                    TokioNonBlockingTask,
+                user_device::UserDevice_Id,
+                user_registration_token::{
+                    UserRegistrationToken,
+                    UserRegistrationToken_CanBeResentFrom,
+                    UserRegistrationToken_ExpiresAt,
+                    UserRegistrationToken_Value,
+                    UserRegistrationToken_WrongEnterTriesQuantity,
                 },
             },
+            functionality::service::{
+                email_sender::EmailSender,
+                generator::Generator,
+                validator::Validator,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        UserBy2,
+                        UserRegistrationTokenBy1,
+                        UserRegistrationTokenUpdate1,
+                        UserRegistrationTokenUpdate2,
+                        UserRegistrationTokenUpdate3,
+                    },
+                    Repository,
+                },
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    spawner::{
+                        Spawner,
+                        TokioNonBlockingTask,
+                    },
+                },
+            },
         },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::register_by_first_step::{
-        Incoming,
-        Outcoming,
-        Precedent,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::register_by_first_step::{
+            Incoming,
+            Outcoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
     },
-    unified_report::UnifiedReport,
-};
-use std::{
-    borrow::Cow,
-    future::Future,
+    std::{
+        borrow::Cow,
+        future::Future,
+    },
 };
 pub struct UserAuthorization_RegisterByFirstStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep> {
@@ -90,7 +92,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_EmailAlreadyExist));
             }
-            let now = Resolver::<UnixTime>::get_now();
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_registration_token__value, user_registration_token__can_be_resent_from, user_registration_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_1(

@@ -1,10 +1,12 @@
-use super::Validator;
-use crate::{
-    domain_layer::data::entity::user_registration_token::UserRegistrationToken_Value,
-    infrastructure_layer::data::aggregate_error::AggregateError,
+use {
+    crate::{
+        domain_layer::data::entity::user_registration_token::UserRegistrationToken_Value,
+        infrastructure_layer::data::aggregate_error::AggregateError,
+    },
+    super::Validator,
+    regex::Regex,
+    std::sync::OnceLock,
 };
-use regex::Regex;
-use std::sync::OnceLock;
 static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
 impl Validator<UserRegistrationToken_Value> {
     pub fn is_valid<'a>(user_authorization_token__value: &'a str) -> Result<bool, AggregateError> {

@@ -1,6 +1,8 @@
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
-use num_integer::Integer;
-use std::convert::TryFrom;
+use {
+    crate::infrastructure_layer::data::aggregate_error::AggregateError,
+    num_integer::Integer,
+    std::convert::TryFrom,
+};
 pub struct Converter;
 pub trait Convert<F, T>
 where

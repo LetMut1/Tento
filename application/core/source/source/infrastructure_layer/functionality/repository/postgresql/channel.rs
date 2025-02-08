@@ -1,20 +1,22 @@
-use super::{
-    Postgresql,
-    ParameterStorage,
-};
-use crate::{
-    domain_layer::data::entity::channel::Channel,
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::repository::Repository,
+use {
+    super::{
+        Postgresql,
+        ParameterStorage,
     },
+    crate::{
+        domain_layer::data::entity::channel::Channel,
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::repository::Repository,
+        },
+    },
+    deadpool_postgres::Client,
+    std::{
+        borrow::Cow,
+        future::Future,
+    },
+    tokio_postgres::types::Type,
 };
-use deadpool_postgres::Client;
-use std::{
-    borrow::Cow,
-    future::Future,
-};
-use tokio_postgres::types::Type;
 impl Repository<Postgresql<Channel<'_>>> {
     pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<Channel<'static>, AggregateError>> + Send + use<'a> {
         return async move {

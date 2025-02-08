@@ -1,24 +1,26 @@
-use super::{
-    Postgresql,
-    ParameterStorage,
-};
-use crate::infrastructure_layer::{
-    data::aggregate_error::AggregateError,
-    functionality::{
-        repository::Repository,
-        service::counter::{
-            Counter,
-            Counter_,
+use {
+    crate::infrastructure_layer::{
+        data::aggregate_error::AggregateError,
+        functionality::{
+            repository::Repository,
+            service::counter::{
+                Counter,
+                Counter_,
+            },
         },
     },
+    super::{
+        Postgresql,
+        ParameterStorage,
+    },
+    deadpool_postgres::Client,
+    dedicated::action_processor_incoming_outcoming::{
+        Channel1,
+        Common1,
+    },
+    std::future::Future,
+    tokio_postgres::types::Type,
 };
-use deadpool_postgres::Client;
-use dedicated::action_processor_incoming_outcoming::{
-    Channel1,
-    Common1,
-};
-use std::future::Future;
-use tokio_postgres::types::Type;
 impl Repository<Postgresql<Common1>> {
     pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {
         return async move {

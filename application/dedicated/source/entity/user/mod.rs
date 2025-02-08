@@ -7,17 +7,19 @@ pub use self::derivative::{
     User_4,
     User_5,
 };
-use self::field::{
-    CreatedAt,
-    Email,
-    Id,
-    Nickname,
-    Password,
-    PasswordHash,
-};
-use std::{
-    borrow::Cow,
-    marker::PhantomData,
+use {
+    self::field::{
+        CreatedAt,
+        Email,
+        Id,
+        Nickname,
+        Password,
+        PasswordHash,
+    },
+    std::{
+        borrow::Cow,
+        marker::PhantomData,
+    },
 };
 pub struct User<'a> {
     pub id: i64,

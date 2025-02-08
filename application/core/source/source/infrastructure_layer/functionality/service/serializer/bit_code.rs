@@ -1,11 +1,13 @@
-use super::{
-    Deserialize_,
-    Serialize,
-    Serialize_,
-    Serializer,
+use {
+    super::{
+        Deserialize_,
+        Serialize,
+        Serialize_,
+        Serializer,
+    },
+    crate::infrastructure_layer::data::aggregate_error::AggregateError,
+    dedicated::bit_code_serializer::Serializer as Serializer_,
 };
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
-use dedicated::bit_code_serializer::Serializer as Serializer_;
 pub struct BitCode;
 impl Serialize for Serializer<BitCode> {
     fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AggregateError>

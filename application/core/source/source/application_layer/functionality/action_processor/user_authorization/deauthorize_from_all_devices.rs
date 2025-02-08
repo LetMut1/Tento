@@ -1,45 +1,47 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user_access_refresh_token::UserAccessRefreshToken,
-            user_access_token::UserAccessToken,
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::extractor::{
-            Extracted,
-            Extractor,
+        domain_layer::{
+            data::entity::{
+                user_access_refresh_token::UserAccessRefreshToken,
+                user_access_token::UserAccessToken,
+            },
+            functionality::service::extractor::{
+                Extracted,
+                Extractor,
+            },
         },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    UserAccessRefreshTokenBy1,
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        UserAccessRefreshTokenBy1,
+                    },
+                    Repository,
                 },
-                Repository,
-            },
-            service::resolver::{
-                CloudMessage,
-                Resolver,
+                service::resolver::{
+                    CloudMessage,
+                    Resolver,
+                },
             },
         },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_all_devices::{
-        Incoming,
-        Precedent,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_all_devices::{
+            Incoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
+        void::Void,
     },
-    unified_report::UnifiedReport,
-    void::Void,
+    std::future::Future,
 };
-use std::future::Future;
 pub struct UserAuthorization_DeauthorizeFromAllDevices;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromAllDevices> {
     type Incoming = Incoming;

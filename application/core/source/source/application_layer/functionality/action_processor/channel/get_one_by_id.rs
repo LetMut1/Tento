@@ -1,55 +1,57 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            channel::{
-                Channel,
-                Channel_AccessModifier,
-                Channel_Id,
-            },
-            channel_inner_link::ChannelInnerLink,
-            channel_outer_link::ChannelOuterLink,
-            channel_subscription::ChannelSubscription,
-            user_access_token::UserAccessToken,
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            extractor::{
-                Extracted,
-                Extractor,
+        domain_layer::{
+            data::entity::{
+                channel::{
+                    Channel,
+                    Channel_AccessModifier,
+                    Channel_Id,
+                },
+                channel_inner_link::ChannelInnerLink,
+                channel_outer_link::ChannelOuterLink,
+                channel_subscription::ChannelSubscription,
+                user_access_token::UserAccessToken,
             },
-            validator::Validator,
+            functionality::service::{
+                extractor::{
+                    Extracted,
+                    Extractor,
+                },
+                validator::Validator,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::repository::{
+                postgresql::{
+                    ChannelBy1,
+                    ChannelInnerLinkBy1,
+                    ChannelOuterLinkBy1,
+                    ChannelSubscriptionBy1,
+                    Postgresql,
+                },
+                Repository,
+            },
         },
     },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::repository::{
-            postgresql::{
-                ChannelBy1,
-                ChannelInnerLinkBy1,
-                ChannelOuterLinkBy1,
-                ChannelSubscriptionBy1,
-                Postgresql,
+    dedicated::{
+        action_processor_incoming_outcoming::{
+            action_processor::channel::get_one_by_id::{
+                Incoming,
+                Outcoming,
+                Precedent,
             },
-            Repository,
+            Channel2,
         },
+        unified_report::UnifiedReport,
     },
+    std::future::Future,
 };
-use dedicated::{
-    action_processor_incoming_outcoming::{
-        action_processor::channel::get_one_by_id::{
-            Incoming,
-            Outcoming,
-            Precedent,
-        },
-        Channel2,
-    },
-    unified_report::UnifiedReport,
-};
-use std::future::Future;
 pub struct Channel_GetOneById;
 impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
     type Incoming = Incoming;

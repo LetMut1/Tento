@@ -1,25 +1,27 @@
-use super::Encoder;
-use crate::{
-    domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken,
-    infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            environment_configuration::run_server::PrivateKey,
-        },
-        functionality::service::{
-            encoder::{
-                Encoder as Encoder_,
-                HmacSha3_512,
+use {
+    crate::{
+        domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken,
+        infrastructure_layer::{
+            data::{
+                aggregate_error::AggregateError,
+                environment_configuration::run_server::PrivateKey,
             },
-            serializer::{
-                BitCode,
-                Serialize,
-                Serializer,
+            functionality::service::{
+                encoder::{
+                    Encoder as Encoder_,
+                    HmacSha3_512,
+                },
+                serializer::{
+                    BitCode,
+                    Serialize,
+                    Serializer,
+                },
             },
         },
     },
+    super::Encoder,
+    dedicated::user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded,
 };
-use dedicated::user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded;
 impl Encoder<UserAccessRefreshToken<'_>> {
     pub fn encode<'a>(
         private_key: &'static PrivateKey,

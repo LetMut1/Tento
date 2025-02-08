@@ -1,48 +1,50 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user::User_Email,
-            user_device::UserDevice_Id,
-            user_registration_token::{
-                UserRegistrationToken,
-                UserRegistrationToken_Value,
-                UserRegistrationToken_WrongEnterTriesQuantity,
-            },
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::validator::Validator,
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    UserRegistrationTokenBy1,
-                    UserRegistrationTokenUpdate5,
+        domain_layer::{
+            data::entity::{
+                user::User_Email,
+                user_device::UserDevice_Id,
+                user_registration_token::{
+                    UserRegistrationToken,
+                    UserRegistrationToken_Value,
+                    UserRegistrationToken_WrongEnterTriesQuantity,
                 },
-                Repository,
             },
-            service::resolver::{
-                Resolver,
-                UnixTime,
+            functionality::service::validator::Validator,
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        UserRegistrationTokenBy1,
+                        UserRegistrationTokenUpdate5,
+                    },
+                    Repository,
+                },
+                service::resolver::{
+                    Resolver,
+                    UnixTime,
+                },
             },
         },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::register_by_second_step::{
-        Incoming,
-        Precedent,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::register_by_second_step::{
+            Incoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
+        void::Void,
     },
-    unified_report::UnifiedReport,
-    void::Void,
+    std::future::Future,
 };
-use std::future::Future;
 pub struct UserAuthorization_RegisterBySecondStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep> {
     type Incoming = Incoming;
@@ -77,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                 }
             };
-            if user_registration_token.expires_at <= Resolver::<UnixTime>::get_now() {
+            if user_registration_token.expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
                 Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy1 {

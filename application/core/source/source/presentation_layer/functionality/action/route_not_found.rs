@@ -1,17 +1,19 @@
-use super::Inner;
-use crate::{
-    infrastructure_layer::{
-        data::control_type::Response,
-        functionality::service::{
-            creator::Creator,
-            formatter::RowData,
-            logger::Logger,
+use {
+    crate::{
+        infrastructure_layer::{
+            data::control_type::Response,
+            functionality::service::{
+                creator::Creator,
+                formatter::RowData,
+                logger::Logger,
+            },
+        },
+        presentation_layer::functionality::{
+            action::Action,
+            service::processor::action_round::ActionRound,
         },
     },
-    presentation_layer::functionality::{
-        action::Action,
-        service::processor::action_round::ActionRound,
-    },
+    super::Inner,
 };
 pub struct RouteNotFound;
 impl Action<RouteNotFound> {

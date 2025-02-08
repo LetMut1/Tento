@@ -1,5 +1,7 @@
-use super::user_access_token::UserAccessToken_Id;
-use std::marker::PhantomData;
+use {
+    super::user_access_token::UserAccessToken_Id,
+    std::marker::PhantomData,
+};
 // This entity is not used yet, and we need to decide whether we will use this flow.
 //
 // Tokens are refreshed every N minutes. That is, N minutes the token remains

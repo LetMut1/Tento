@@ -1,136 +1,138 @@
 #![cfg(target_endian = "little")]
-use bitcode::{
-    Decode,
-    Encode,
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::{
-        channel::{
-            get_many_by_name_in_subscriptions::{
-                Incoming as Channel_GetManyByNameInSubscriptions_Incoming_,
-                Outcoming as Channel_GetManyByNameInSubscriptions_Outcoming_,
-                Precedent as Channel_GetManyByNameInSubscriptions_Precedent_,
+use {
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::{
+            channel::{
+                get_many_by_name_in_subscriptions::{
+                    Incoming as Channel_GetManyByNameInSubscriptions_Incoming_,
+                    Outcoming as Channel_GetManyByNameInSubscriptions_Outcoming_,
+                    Precedent as Channel_GetManyByNameInSubscriptions_Precedent_,
+                },
+                get_many_by_subscription::{
+                    Incoming as Channel_GetManyBySubscription_Incoming_,
+                    Outcoming as Channel_GetManyBySubscription_Outcoming_,
+                    Precedent as Channel_GetManyBySubscription_Precedent_,
+                },
+                get_many_public_by_name::{
+                    Incoming as Channel_GetManyPublicByName_Incoming_,
+                    Outcoming as Channel_GetManyPublicByName_Outcoming_,
+                    Precedent as Channel_GetManyPublicByName_Precedent_,
+                },
+                get_one_by_id::{
+                    Incoming as Channel_GetOneById_Incoming_,
+                    Outcoming as Channel_GetOneById_Outcoming_,
+                    Precedent as Channel_GetOneById_Precedent_,
+                },
             },
-            get_many_by_subscription::{
-                Incoming as Channel_GetManyBySubscription_Incoming_,
-                Outcoming as Channel_GetManyBySubscription_Outcoming_,
-                Precedent as Channel_GetManyBySubscription_Precedent_,
+            channel_subscription::create::{
+                Incoming as ChannelSubscription_Create_Incoming_,
+                Precedent as ChannelSubscription_Create_Precedent_,
             },
-            get_many_public_by_name::{
-                Incoming as Channel_GetManyPublicByName_Incoming_,
-                Outcoming as Channel_GetManyPublicByName_Outcoming_,
-                Precedent as Channel_GetManyPublicByName_Precedent_,
-            },
-            get_one_by_id::{
-                Incoming as Channel_GetOneById_Incoming_,
-                Outcoming as Channel_GetOneById_Outcoming_,
-                Precedent as Channel_GetOneById_Precedent_,
-            },
-        },
-        channel_subscription::create::{
-            Incoming as ChannelSubscription_Create_Incoming_,
-            Precedent as ChannelSubscription_Create_Precedent_,
-        },
-        user_authorization::{
-            authorize_by_first_step::{
-                Incoming as UserAuthorization_AuthorizeByFirstStep_Incoming_,
-                Outcoming as UserAuthorization_AuthorizeByFirstStep_Outcoming_,
-                Precedent as UserAuthorization_AuthorizeByFirstStep_Precedent_,
-            },
-            authorize_by_last_step::{
-                Incoming as UserAuthorization_AuthorizeByLastStep_Incoming_,
-                Outcoming as UserAuthorization_AuthorizeByLastStep_Outcoming_,
-                Precedent as UserAuthorization_AuthorizeByLastStep_Precedent_,
-            },
-            check_email_for_existing::{
-                Incoming as UserAuthorization_CheckEmailForExisting_Incoming_,
-                Outcoming as UserAuthorization_CheckEmailForExisting_Outcoming_,
-            },
-            check_nickname_for_existing::{
-                Incoming as UserAuthorization_CheckNicknameForExisting_Incoming_,
-                Outcoming as UserAuthorization_CheckNicknameForExisting_Outcoming_,
-            },
-            deauthorize_from_all_devices::{
-                Incoming as UserAuthorization_DeauthorizeFromAllDevices_Incoming_,
-                Precedent as UserAuthorization_DeauthorizeFromAllDevices_Precedent_,
-            },
-            deauthorize_from_one_device::{
-                Incoming as UserAuthorization_DeauthorizeFromOneDevice_Incoming_,
-                Precedent as UserAuthorization_DeauthorizeFromOneDevice_Precedent_,
-            },
-            refresh_access_token::{
-                Incoming as UserAuthorization_RefreshAccessToken_Incoming_,
-                Outcoming as UserAuthorization_RefreshAccessToken_Outcoming_,
-                Precedent as UserAuthorization_RefreshAccessToken_Precedent_,
-            },
-            register_by_first_step::{
-                Incoming as UserAuthorization_RegisterByFirstStep_Incoming_,
-                Outcoming as UserAuthorization_RegisterByFirstStep_Outcoming_,
-                Precedent as UserAuthorization_RegisterByFirstStep_Precedent_,
-            },
-            register_by_last_step::{
-                Incoming as UserAuthorization_RegisterByLastStep_Incoming_,
-                Outcoming as UserAuthorization_RegisterByLastStep_Outcoming_,
-                Precedent as UserAuthorization_RegisterByLastStep_Precedent_,
-            },
-            register_by_second_step::{
-                Incoming as UserAuthorization_RegisterBySecondStep_Incoming_,
-                Precedent as UserAuthorization_RegisterBySecondStep_Precedent_,
-            },
-            reset_password_by_first_step::{
-                Incoming as UserAuthorization_ResetPasswordByFirstStep_Incoming_,
-                Outcoming as UserAuthorization_ResetPasswordByFirstStep_Outcoming_,
-                Precedent as UserAuthorization_ResetPasswordByFirstStep_Precedent_,
-            },
-            reset_password_by_last_step::{
-                Incoming as UserAuthorization_ResetPasswordByLastStep_Incoming_,
-                Precedent as UserAuthorization_ResetPasswordByLastStep_Precedent_,
-            },
-            reset_password_by_second_step::{
-                Incoming as UserAuthorization_ResetPasswordBySecondStep_Incoming_,
-                Precedent as UserAuthorization_ResetPasswordBySecondStep_Precedent_,
-            },
-            send_email_for_authorize::{
-                Incoming as UserAuthorization_SendEmailForAuthorize_Incoming_,
-                Outcoming as UserAuthorization_SendEmailForAuthorize_Outcoming_,
-                Precedent as UserAuthorization_SendEmailForAuthorize_Precedent_,
-            },
-            send_email_for_register::{
-                Incoming as UserAuthorization_SendEmailForRegister_Incoming_,
-                Outcoming as UserAuthorization_SendEmailForRegister_Outcoming_,
-                Precedent as UserAuthorization_SendEmailForRegister_Precedent_,
-            },
-            send_email_for_reset_password::{
-                Incoming as UserAuthorization_SendEmailForResetPassword_Incoming_,
-                Outcoming as UserAuthorization_SendEmailForResetPassword_Outcoming_,
-                Precedent as UserAuthorization_SendEmailForResetPassword_Precedent_,
+            user_authorization::{
+                authorize_by_first_step::{
+                    Incoming as UserAuthorization_AuthorizeByFirstStep_Incoming_,
+                    Outcoming as UserAuthorization_AuthorizeByFirstStep_Outcoming_,
+                    Precedent as UserAuthorization_AuthorizeByFirstStep_Precedent_,
+                },
+                authorize_by_last_step::{
+                    Incoming as UserAuthorization_AuthorizeByLastStep_Incoming_,
+                    Outcoming as UserAuthorization_AuthorizeByLastStep_Outcoming_,
+                    Precedent as UserAuthorization_AuthorizeByLastStep_Precedent_,
+                },
+                check_email_for_existing::{
+                    Incoming as UserAuthorization_CheckEmailForExisting_Incoming_,
+                    Outcoming as UserAuthorization_CheckEmailForExisting_Outcoming_,
+                },
+                check_nickname_for_existing::{
+                    Incoming as UserAuthorization_CheckNicknameForExisting_Incoming_,
+                    Outcoming as UserAuthorization_CheckNicknameForExisting_Outcoming_,
+                },
+                deauthorize_from_all_devices::{
+                    Incoming as UserAuthorization_DeauthorizeFromAllDevices_Incoming_,
+                    Precedent as UserAuthorization_DeauthorizeFromAllDevices_Precedent_,
+                },
+                deauthorize_from_one_device::{
+                    Incoming as UserAuthorization_DeauthorizeFromOneDevice_Incoming_,
+                    Precedent as UserAuthorization_DeauthorizeFromOneDevice_Precedent_,
+                },
+                refresh_access_token::{
+                    Incoming as UserAuthorization_RefreshAccessToken_Incoming_,
+                    Outcoming as UserAuthorization_RefreshAccessToken_Outcoming_,
+                    Precedent as UserAuthorization_RefreshAccessToken_Precedent_,
+                },
+                register_by_first_step::{
+                    Incoming as UserAuthorization_RegisterByFirstStep_Incoming_,
+                    Outcoming as UserAuthorization_RegisterByFirstStep_Outcoming_,
+                    Precedent as UserAuthorization_RegisterByFirstStep_Precedent_,
+                },
+                register_by_last_step::{
+                    Incoming as UserAuthorization_RegisterByLastStep_Incoming_,
+                    Outcoming as UserAuthorization_RegisterByLastStep_Outcoming_,
+                    Precedent as UserAuthorization_RegisterByLastStep_Precedent_,
+                },
+                register_by_second_step::{
+                    Incoming as UserAuthorization_RegisterBySecondStep_Incoming_,
+                    Precedent as UserAuthorization_RegisterBySecondStep_Precedent_,
+                },
+                reset_password_by_first_step::{
+                    Incoming as UserAuthorization_ResetPasswordByFirstStep_Incoming_,
+                    Outcoming as UserAuthorization_ResetPasswordByFirstStep_Outcoming_,
+                    Precedent as UserAuthorization_ResetPasswordByFirstStep_Precedent_,
+                },
+                reset_password_by_last_step::{
+                    Incoming as UserAuthorization_ResetPasswordByLastStep_Incoming_,
+                    Precedent as UserAuthorization_ResetPasswordByLastStep_Precedent_,
+                },
+                reset_password_by_second_step::{
+                    Incoming as UserAuthorization_ResetPasswordBySecondStep_Incoming_,
+                    Precedent as UserAuthorization_ResetPasswordBySecondStep_Precedent_,
+                },
+                send_email_for_authorize::{
+                    Incoming as UserAuthorization_SendEmailForAuthorize_Incoming_,
+                    Outcoming as UserAuthorization_SendEmailForAuthorize_Outcoming_,
+                    Precedent as UserAuthorization_SendEmailForAuthorize_Precedent_,
+                },
+                send_email_for_register::{
+                    Incoming as UserAuthorization_SendEmailForRegister_Incoming_,
+                    Outcoming as UserAuthorization_SendEmailForRegister_Outcoming_,
+                    Precedent as UserAuthorization_SendEmailForRegister_Precedent_,
+                },
+                send_email_for_reset_password::{
+                    Incoming as UserAuthorization_SendEmailForResetPassword_Incoming_,
+                    Outcoming as UserAuthorization_SendEmailForResetPassword_Outcoming_,
+                    Precedent as UserAuthorization_SendEmailForResetPassword_Precedent_,
+                },
             },
         },
+        bit_code_serializer::Serializer,
+        entity::user_access_token::UserAccessToken as UserAccessToken_,
+        unified_report::{
+            Data,
+            UnifiedReport,
+        },
+        user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded as UserAccessRefreshTokenEncoded_,
+        user_access_token_encoded::UserAccessTokenEncoded as UserAccessTokenEncoded_,
+        void::Void,
     },
-    bit_code_serializer::Serializer,
-    entity::user_access_token::UserAccessToken as UserAccessToken_,
-    unified_report::{
-        Data,
-        UnifiedReport,
+    libc::{
+        c_char,
+        c_long,
+        c_short,
+        c_uchar,
+        size_t,
     },
-    user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded as UserAccessRefreshTokenEncoded_,
-    user_access_token_encoded::UserAccessTokenEncoded as UserAccessTokenEncoded_,
-    void::Void,
-};
-use libc::{
-    c_char,
-    c_long,
-    c_short,
-    c_uchar,
-    size_t,
-};
-use std::{
-    error::Error as StdError,
-    ffi::{
-        CStr,
-        CString as CString_,
+    std::{
+        error::Error as StdError,
+        ffi::{
+            CStr,
+            CString as CString_,
+        },
+        marker::PhantomData,
     },
-    marker::PhantomData,
+    bitcode::{
+        Decode,
+        Encode,
+    },
 };
 const NULL_POINTER_ERROR_MESAGE: &'static str = "There should not be a null-pointer.";
 const ALLOCATION_ERROR: &'static str = "Data is not allocated.";

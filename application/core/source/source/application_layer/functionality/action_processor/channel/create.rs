@@ -1,54 +1,56 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            channel::{
-                Channel,
-                Channel_LinkedName,
-                Channel_Name,
-            },
-            user_access_token::UserAccessToken,
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            extractor::{
-                Extracted,
-                Extractor,
-            },
-            validator::Validator,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    ChannelBy2,
-                    ChannelBy3,
-                    ChannelInsert1,
-                    Postgresql,
+        domain_layer::{
+            data::entity::{
+                channel::{
+                    Channel,
+                    Channel_LinkedName,
+                    Channel_Name,
                 },
-                Repository,
+                user_access_token::UserAccessToken,
             },
-            service::resolver::{
-                Resolver,
-                UnixTime,
+            functionality::service::{
+                extractor::{
+                    Extracted,
+                    Extractor,
+                },
+                validator::Validator,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        ChannelBy2,
+                        ChannelBy3,
+                        ChannelInsert1,
+                        Postgresql,
+                    },
+                    Repository,
+                },
+                service::resolver::{
+                    Resolver,
+                    UnixTime,
+                },
             },
         },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::channel::create::{
-        Incoming,
-        Outcoming,
-        Precedent,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::channel::create::{
+            Incoming,
+            Outcoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
     },
-    unified_report::UnifiedReport,
+    std::future::Future
 };
-use std::future::Future;
 pub struct Channel_Create;
 impl ActionProcessor_ for ActionProcessor<Channel_Create> {
     type Incoming = Incoming;
@@ -115,7 +117,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     channel__subscribers_quantity: 0,
                     channel__marks_quantity: 0,
                     channel__viewing_quantity: 0,
-                    channel__created_at: Resolver::<UnixTime>::get_now(),
+                    channel__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
                 },
             )
             .await?;

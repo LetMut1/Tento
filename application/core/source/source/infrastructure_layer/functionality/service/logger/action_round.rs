@@ -1,25 +1,27 @@
-use super::Logger;
-use crate::{
-    infrastructure_layer::{
-        data::{
-            aggregate_error::Auditor,
-            server_workflow_error::{
-                Responsive,
-                Unresponsive,
+use {
+    crate::{
+        infrastructure_layer::{
+            data::{
+                aggregate_error::Auditor,
+                server_workflow_error::{
+                    Responsive,
+                    Unresponsive,
+                },
+            },
+            functionality::service::{
+                formatter::{
+                    Formatter,
+                    RowData,
+                },
+                spawner::{
+                    Spawner,
+                    TokioNonBlockingTask,
+                },
             },
         },
-        functionality::service::{
-            formatter::{
-                Formatter,
-                RowData,
-            },
-            spawner::{
-                Spawner,
-                TokioNonBlockingTask,
-            },
-        },
+        presentation_layer::functionality::service::processor::action_round::ActionRound,
     },
-    presentation_layer::functionality::service::processor::action_round::ActionRound,
+    super::Logger,
 };
 impl Logger<ActionRound> {
     pub fn log(row_data: RowData) -> () {

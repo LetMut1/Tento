@@ -31,19 +31,21 @@ pub use self::{
         send_email_for_reset_password::UserAuthorization_SendEmailForResetPassword,
     },
 };
-use crate::infrastructure_layer::{
-    data::{
-        aggregate_error::AggregateError,
-        environment_configuration::EnvironmentConfiguration,
+use {
+    crate::infrastructure_layer::{
+        data::{
+            aggregate_error::AggregateError,
+            environment_configuration::EnvironmentConfiguration,
+        },
+        functionality::service::creator::PostgresqlConnectionPool,
     },
-    functionality::service::creator::PostgresqlConnectionPool,
+    dedicated::unified_report::UnifiedReport,
+    std::{
+        future::Future,
+        marker::PhantomData,
+    },
+    super::command_processor::RunServer,
 };
-use dedicated::unified_report::UnifiedReport;
-use std::{
-    future::Future,
-    marker::PhantomData,
-};
-use super::command_processor::RunServer;
 pub struct ActionProcessor<S> {
     _subject: PhantomData<S>,
 }

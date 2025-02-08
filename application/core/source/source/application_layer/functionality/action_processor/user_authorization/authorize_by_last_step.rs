@@ -1,82 +1,84 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user::{
-                User,
-                User_Id,
-            },
-            user_access_refresh_token::{
-                UserAccessRefreshToken,
-                UserAccessRefreshToken_ExpiresAt,
-                UserAccessRefreshToken_ObfuscationValue,
-            },
-            user_access_token::{
-                UserAccessToken,
-                UserAccessToken_ExpiresAt,
-                UserAccessToken_Id,
-            },
-            user_authorization_token::{
-                UserAuthorizationToken,
-                UserAuthorizationToken_Value,
-                UserAuthorizationToken_WrongEnterTriesQuantity,
-            },
-            user_device::{
-                UserDevice,
-                UserDevice_Id,
-            },
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            encoder::Encoder,
-            generator::Generator,
-            validator::Validator,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    Resolver as Resolver_,
-                    Transaction,
-                    IsolationLevel,
-                    UserAccessRefreshTokenBy2,
-                    UserAccessRefreshTokenUpdate1,
-                    UserAuthorizationTokenBy1,
-                    UserBy3,
-                    UserDeviceInsert1,
+        domain_layer::{
+            data::entity::{
+                user::{
+                    User,
+                    User_Id,
                 },
-                Repository,
-            },
-            service::{
-                resolver::{
-                    Resolver,
-                    UnixTime,
+                user_access_refresh_token::{
+                    UserAccessRefreshToken,
+                    UserAccessRefreshToken_ExpiresAt,
+                    UserAccessRefreshToken_ObfuscationValue,
                 },
-                spawner::{
-                    Spawner,
-                    TokioNonBlockingTask,
+                user_access_token::{
+                    UserAccessToken,
+                    UserAccessToken_ExpiresAt,
+                    UserAccessToken_Id,
+                },
+                user_authorization_token::{
+                    UserAuthorizationToken,
+                    UserAuthorizationToken_Value,
+                    UserAuthorizationToken_WrongEnterTriesQuantity,
+                },
+                user_device::{
+                    UserDevice,
+                    UserDevice_Id,
                 },
             },
+            functionality::service::{
+                encoder::Encoder,
+                generator::Generator,
+                validator::Validator,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        Resolver as Resolver_,
+                        Transaction,
+                        IsolationLevel,
+                        UserAccessRefreshTokenBy2,
+                        UserAccessRefreshTokenUpdate1,
+                        UserAuthorizationTokenBy1,
+                        UserBy3,
+                        UserDeviceInsert1,
+                    },
+                    Repository,
+                },
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    spawner::{
+                        Spawner,
+                        TokioNonBlockingTask,
+                    },
+                },
+            },
         },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::authorize_by_last_step::{
-        Incoming,
-        Outcoming,
-        Precedent,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::authorize_by_last_step::{
+            Incoming,
+            Outcoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
     },
-    unified_report::UnifiedReport,
-};
-use std::{
-    borrow::Cow,
-    future::Future,
+    std::{
+        borrow::Cow,
+        future::Future,
+    },
 };
 pub struct UserAuthorization_AuthorizeByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep> {
@@ -112,7 +114,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound));
                 }
             };
-            let now = Resolver::<UnixTime>::get_now();
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_authorization_token_.expires_at <= now {
                 Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                     &postgresql_database_2_client,

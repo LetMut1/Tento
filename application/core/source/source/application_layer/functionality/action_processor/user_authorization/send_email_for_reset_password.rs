@@ -1,61 +1,63 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user::{
-                User,
-                User_Id,
-            },
-            user_device::UserDevice_Id,
-            user_reset_password_token::{
-                UserResetPasswordToken,
-                UserResetPasswordToken_CanBeResentFrom,
-            },
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            email_sender::EmailSender,
-            generator::Generator,
-            validator::Validator,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    UserBy3,
-                    UserResetPasswordTokenBy1,
-                    UserResetPasswordTokenUpdate2,
+        domain_layer::{
+            data::entity::{
+                user::{
+                    User,
+                    User_Id,
                 },
-                Repository,
-            },
-            service::{
-                resolver::{
-                    Resolver,
-                    UnixTime,
-                },
-                spawner::{
-                    Spawner,
-                    TokioNonBlockingTask,
+                user_device::UserDevice_Id,
+                user_reset_password_token::{
+                    UserResetPasswordToken,
+                    UserResetPasswordToken_CanBeResentFrom,
                 },
             },
+            functionality::service::{
+                email_sender::EmailSender,
+                generator::Generator,
+                validator::Validator,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        UserBy3,
+                        UserResetPasswordTokenBy1,
+                        UserResetPasswordTokenUpdate2,
+                    },
+                    Repository,
+                },
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    spawner::{
+                        Spawner,
+                        TokioNonBlockingTask,
+                    },
+                },
+            },
         },
     },
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_reset_password::{
+            Incoming,
+            Outcoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
+    },
+    std::future::Future,
 };
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_reset_password::{
-        Incoming,
-        Outcoming,
-        Precedent,
-    },
-    unified_report::UnifiedReport,
-};
-use std::future::Future;
 pub struct UserAuthorization_SendEmailForResetPassword;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPassword> {
     type Incoming = Incoming;
@@ -100,7 +102,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound));
                 }
             };
-            let now = Resolver::<UnixTime>::get_now();
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_reset_password_token.expires_at <= now {
                 Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                     &postgresql_database_2_client,

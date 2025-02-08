@@ -1,23 +1,25 @@
 mod field;
-use self::field::{
-    AccessModifier,
-    BackgroundImagePath,
-    CoverImagePath,
-    CreatedAt,
-    Description,
-    Id,
-    LinkedName,
-    MarksQuantity,
-    Name,
-    Orientation,
-    SubscribersQuantity,
-    ViewingQuantity,
-    VisabilityModifier,
-};
-use super::user::User_Id;
-use std::{
-    borrow::Cow,
-    marker::PhantomData,
+use {
+    self::field::{
+        AccessModifier,
+        BackgroundImagePath,
+        CoverImagePath,
+        CreatedAt,
+        Description,
+        Id,
+        LinkedName,
+        MarksQuantity,
+        Name,
+        Orientation,
+        SubscribersQuantity,
+        ViewingQuantity,
+        VisabilityModifier,
+    },
+    super::user::User_Id,
+    std::{
+        borrow::Cow,
+        marker::PhantomData,
+    }
 };
 pub struct Channel<'a> {
     pub id: i64,

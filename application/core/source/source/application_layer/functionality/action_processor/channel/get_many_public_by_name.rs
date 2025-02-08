@@ -1,48 +1,50 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            channel::{
-                Channel_Name,
-                Channel_VisabilityModifier,
-            },
-            user_access_token::UserAccessToken,
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            extractor::{
-                Extracted,
-                Extractor,
+        domain_layer::{
+            data::entity::{
+                channel::{
+                    Channel_Name,
+                    Channel_VisabilityModifier,
+                },
+                user_access_token::UserAccessToken,
             },
-            validator::Validator,
+            functionality::service::{
+                extractor::{
+                    Extracted,
+                    Extractor,
+                },
+                validator::Validator,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::repository::{
+                postgresql::{
+                    CommonBy1,
+                    Postgresql,
+                },
+                Repository,
+            },
         },
     },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::repository::{
-            postgresql::{
-                CommonBy1,
-                Postgresql,
+    dedicated::{
+        action_processor_incoming_outcoming::{
+            action_processor::channel::get_many_public_by_name::{
+                Incoming,
+                Outcoming,
+                Precedent,
             },
-            Repository,
+            Common1,
         },
+        unified_report::UnifiedReport,
     },
+    std::future::Future,
 };
-use dedicated::{
-    action_processor_incoming_outcoming::{
-        action_processor::channel::get_many_public_by_name::{
-            Incoming,
-            Outcoming,
-            Precedent,
-        },
-        Common1,
-    },
-    unified_report::UnifiedReport,
-};
-use std::future::Future;
 pub struct Channel_GetManyPublicByName;
 impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
     type Incoming = Incoming;

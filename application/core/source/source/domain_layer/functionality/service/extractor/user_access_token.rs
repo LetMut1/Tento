@@ -1,21 +1,23 @@
-use super::Extractor;
-use crate::{
-    domain_layer::{
-        data::entity::user_access_token::UserAccessToken,
-        functionality::service::encoder::Encoder,
-    },
-    infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            environment_configuration::run_server::PrivateKey,
+use {
+    crate::{
+        domain_layer::{
+            data::entity::user_access_token::UserAccessToken,
+            functionality::service::encoder::Encoder,
         },
-        functionality::service::resolver::{
-            Resolver,
-            UnixTime,
+        infrastructure_layer::{
+            data::{
+                aggregate_error::AggregateError,
+                environment_configuration::run_server::PrivateKey,
+            },
+            functionality::service::resolver::{
+                Resolver,
+                UnixTime,
+            },
         },
     },
+    super::Extractor,
+    dedicated::user_access_token_encoded::UserAccessTokenEncoded,
 };
-use dedicated::user_access_token_encoded::UserAccessTokenEncoded;
 impl Extractor<UserAccessToken<'_>> {
     pub fn extract<'a>(
         private_key: &'static PrivateKey,
@@ -25,7 +27,7 @@ impl Extractor<UserAccessToken<'_>> {
             private_key,
             user_access_token_encoded,
         )?;
-        if user_access_token.expires_at <= Resolver::<UnixTime>::get_now() {
+        if user_access_token.expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
             return Result::Ok(Extracted::UserAccessTokenAlreadyExpired);
         }
         return Result::Ok(

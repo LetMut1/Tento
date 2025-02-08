@@ -5,19 +5,21 @@ pub use self::derivative::{
     UserAuthorizationToken_2,
     UserAuthorizationToken_3,
 };
-use self::field::{
-    CanBeResentFrom,
-    ExpiresAt,
-    Value,
-    WrongEnterTriesQuantity,
-};
-use super::{
-    user::User_Id,
-    user_device::UserDevice_Id,
-};
-use std::{
-    borrow::Cow,
-    marker::PhantomData,
+use {
+    self::field::{
+        CanBeResentFrom,
+        ExpiresAt,
+        Value,
+        WrongEnterTriesQuantity,
+    },
+    super::{
+        user::User_Id,
+        user_device::UserDevice_Id,
+    },
+    std::{
+        borrow::Cow,
+        marker::PhantomData,
+    },
 };
 pub struct UserAuthorizationToken<'a> {
     pub user__id: i64,

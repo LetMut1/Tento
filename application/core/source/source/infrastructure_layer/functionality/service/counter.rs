@@ -1,6 +1,8 @@
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
-use num_integer::Integer;
-use std::fmt::Display;
+use {
+    crate::infrastructure_layer::data::aggregate_error::AggregateError,
+    num_integer::Integer,
+    std::fmt::Display,
+};
 pub struct Counter<T>
 where
     T: Integer + Display,

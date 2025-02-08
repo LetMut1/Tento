@@ -1,69 +1,71 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user::{
-                User,
-                User_Id,
-                User_Password,
-            },
-            user_access_refresh_token::UserAccessRefreshToken,
-            user_device::UserDevice_Id,
-            user_reset_password_token::{
-                UserResetPasswordToken,
-                UserResetPasswordToken_Value,
-                UserResetPasswordToken_WrongEnterTriesQuantity,
-            },
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            encoder::Encoder,
-            validator::Validator,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::{
-            repository::{
-                postgresql::{
-                    Postgresql,
-                    UserAccessRefreshTokenBy1,
-                    UserBy3,
-                    UserResetPasswordTokenBy1,
-                    UserUpdate1,
-                    Resolver as Resolver_,
-                    Transaction,
-                    IsolationLevel,
+        domain_layer::{
+            data::entity::{
+                user::{
+                    User,
+                    User_Id,
+                    User_Password,
                 },
-                Repository,
-            },
-            service::{
-                resolver::{
-                    CloudMessage,
-                    Resolver,
-                    UnixTime,
-                },
-                spawner::{
-                    Spawner,
-                    TokioBlockingTask,
-                    TokioNonBlockingTask,
+                user_access_refresh_token::UserAccessRefreshToken,
+                user_device::UserDevice_Id,
+                user_reset_password_token::{
+                    UserResetPasswordToken,
+                    UserResetPasswordToken_Value,
+                    UserResetPasswordToken_WrongEnterTriesQuantity,
                 },
             },
+            functionality::service::{
+                encoder::Encoder,
+                validator::Validator,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        Postgresql,
+                        UserAccessRefreshTokenBy1,
+                        UserBy3,
+                        UserResetPasswordTokenBy1,
+                        UserUpdate1,
+                        Resolver as Resolver_,
+                        Transaction,
+                        IsolationLevel,
+                    },
+                    Repository,
+                },
+                service::{
+                    resolver::{
+                        CloudMessage,
+                        Resolver,
+                        UnixTime,
+                    },
+                    spawner::{
+                        Spawner,
+                        TokioBlockingTask,
+                        TokioNonBlockingTask,
+                    },
+                },
+            },
         },
     },
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_last_step::{
+            Incoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
+        void::Void,
+    },
+    std::future::Future,
 };
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_last_step::{
-        Incoming,
-        Precedent,
-    },
-    unified_report::UnifiedReport,
-    void::Void,
-};
-use std::future::Future;
 pub struct UserAuthorization_ResetPasswordByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastStep> {
     type Incoming = Incoming;
@@ -102,7 +104,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                         return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound));
                     }
                 };
-                if user_reset_password_token.expires_at <= Resolver::<UnixTime>::get_now() {
+                if user_reset_password_token.expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
                     Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                         &postgresql_database_2_client,
                         UserResetPasswordTokenBy1 {

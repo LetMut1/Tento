@@ -1,24 +1,27 @@
-use super::CommandProcessor;
-use crate::infrastructure_layer::{
-    data::{
-        aggregate_error::AggregateError,
-        environment_configuration::EnvironmentConfiguration,
+use {
+    crate::infrastructure_layer::{
+        data::{
+            aggregate_error::AggregateError,
+            environment_configuration::EnvironmentConfiguration,
+        },
+        functionality::service::{
+            http_server::HttpServer,
+            loader::Loader,
+        },
     },
-    functionality::service::{
-        http_server::HttpServer,
-        loader::Loader,
+    super::CommandProcessor,
+    std::sync::OnceLock,
+    tokio::runtime::{
+        Builder as RuntimeBuilder,
+        Runtime,
     },
-};
-use std::sync::OnceLock;
-use tokio::runtime::{
-    Builder as RuntimeBuilder,
-    Runtime,
-};
-use tracing::Level;
-use tracing_appender::non_blocking::{
-    NonBlocking,
-    NonBlockingBuilder,
-    WorkerGuard,
+    tracing::Level,
+    tracing_appender::non_blocking::{
+        NonBlocking,
+        NonBlockingBuilder,
+        WorkerGuard,
+    },
+    tracing_subscriber::FmtSubscriber,
 };
 #[cfg(feature = "logging_to_file")]
 use tracing_appender::rolling::{
@@ -26,7 +29,6 @@ use tracing_appender::rolling::{
     Rotation,
 };
 pub use crate::infrastructure_layer::data::environment_configuration::run_server::RunServer;
-use tracing_subscriber::FmtSubscriber;
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration<RunServer>> = OnceLock::new();
 impl CommandProcessor<RunServer> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {

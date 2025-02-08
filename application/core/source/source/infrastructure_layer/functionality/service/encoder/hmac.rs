@@ -1,10 +1,12 @@
-use super::Encoder;
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
-use hmac::{
-    Hmac,
-    Mac,
+use {
+    super::Encoder,
+    crate::infrastructure_layer::data::aggregate_error::AggregateError,
+    hmac::{
+        Hmac,
+        Mac,
+    },
+    sha3::Sha3_512,
 };
-use sha3::Sha3_512;
 pub type HmacSha3_512 = Hmac<Sha3_512>;
 impl Encoder<HmacSha3_512> {
     pub fn encode<'a>(salt: &'a [u8], data_for_encode: &'a [u8]) -> Result<Vec<u8>, AggregateError> {

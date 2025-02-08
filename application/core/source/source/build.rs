@@ -1,8 +1,10 @@
-use std::{
-    env::var,
-    error::Error,
+use {
+    std::{
+        env::var,
+        error::Error,
+    },
+    uuid::Uuid,
 };
-use uuid::Uuid;
 #[allow(clippy::panic)]
 fn main() -> () {
     if let Result::Err(error) = Processor::process() {

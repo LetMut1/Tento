@@ -1,45 +1,47 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            channel::{
-                Channel,
-                Channel_LinkedName,
-            },
-            user_access_token::UserAccessToken,
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::{
-            extractor::{
-                Extracted,
-                Extractor,
+        domain_layer::{
+            data::entity::{
+                channel::{
+                    Channel,
+                    Channel_LinkedName,
+                },
+                user_access_token::UserAccessToken,
             },
-            validator::Validator,
+            functionality::service::{
+                extractor::{
+                    Extracted,
+                    Extractor,
+                },
+                validator::Validator,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::repository::{
+                postgresql::{
+                    ChannelBy2,
+                    Postgresql,
+                },
+                Repository,
+            },
         },
     },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::repository::{
-            postgresql::{
-                ChannelBy2,
-                Postgresql,
-            },
-            Repository,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::channel::check_linked_name_for_existing::{
+            Incoming,
+            Outcoming,
+            Precedent,
         },
+        unified_report::UnifiedReport,
     },
+    std::future::Future,
 };
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::channel::check_linked_name_for_existing::{
-        Incoming,
-        Outcoming,
-        Precedent,
-    },
-    unified_report::UnifiedReport,
-};
-use std::future::Future;
 pub struct Channel_CheckLinkedNameForExisting;
 impl ActionProcessor_ for ActionProcessor<Channel_CheckLinkedNameForExisting> {
     type Incoming = Incoming;

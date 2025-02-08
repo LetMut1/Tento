@@ -1,15 +1,17 @@
-use crate::{
-    application_layer::functionality::command_processor::{
-        CommandProcessor,
-        CreateFixtures,
-        RemoveIncompliteState,
-        RunServer,
+use {
+    crate::{
+        application_layer::functionality::command_processor::{
+            CommandProcessor,
+            CreateFixtures,
+            RemoveIncompliteState,
+            RunServer,
+        },
+        infrastructure_layer::data::aggregate_error::AggregateError,
     },
-    infrastructure_layer::data::aggregate_error::AggregateError,
-};
-use clap::{
-    Arg,
-    Command as Command_,
+    clap::{
+        Arg,
+        Command as Command_,
+    },
 };
 pub struct Command;
 impl Command {

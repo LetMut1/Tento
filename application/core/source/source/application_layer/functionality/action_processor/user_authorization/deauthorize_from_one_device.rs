@@ -1,39 +1,41 @@
-use crate::{
-    application_layer::functionality::action_processor::{
-        ActionProcessor,
-        ActionProcessor_,
-        Inner,
-    },
-    domain_layer::{
-        data::entity::{
-            user_access_refresh_token::UserAccessRefreshToken,
-            user_access_token::UserAccessToken,
+use {
+    crate::{
+        application_layer::functionality::action_processor::{
+            ActionProcessor,
+            ActionProcessor_,
+            Inner,
         },
-        functionality::service::extractor::{
-            Extracted,
-            Extractor,
-        },
-    },
-    infrastructure_layer::{
-        data::aggregate_error::AggregateError,
-        functionality::repository::{
-            postgresql::{
-                Postgresql,
-                UserAccessRefreshTokenBy2,
+        domain_layer::{
+            data::entity::{
+                user_access_refresh_token::UserAccessRefreshToken,
+                user_access_token::UserAccessToken,
             },
-            Repository,
+            functionality::service::extractor::{
+                Extracted,
+                Extractor,
+            },
+        },
+        infrastructure_layer::{
+            data::aggregate_error::AggregateError,
+            functionality::repository::{
+                postgresql::{
+                    Postgresql,
+                    UserAccessRefreshTokenBy2,
+                },
+                Repository,
+            },
         },
     },
-};
-use dedicated::{
-    action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_one_device::{
-        Incoming,
-        Precedent,
+    dedicated::{
+        action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_one_device::{
+            Incoming,
+            Precedent,
+        },
+        unified_report::UnifiedReport,
+        void::Void,
     },
-    unified_report::UnifiedReport,
-    void::Void,
+    std::future::Future,
 };
-use std::future::Future;
 pub struct UserAuthorization_DeauthorizeFromOneDevice;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDevice> {
     type Incoming = Incoming;

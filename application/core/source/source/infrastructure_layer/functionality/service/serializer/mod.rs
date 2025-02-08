@@ -4,17 +4,19 @@ mod json;
 pub use self::bit_code::BitCode;
 #[cfg(feature = "json_for_manual_test")]
 pub use self::json::Json;
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
-use bitcode::{
-    Decode,
-    Encode,
+use {
+    crate::infrastructure_layer::data::aggregate_error::AggregateError,
+    bitcode::{
+        Decode,
+        Encode,
+    },
+    std::marker::PhantomData,
 };
 #[cfg(feature = "serde_for_manual_test")]
 use serde::{
     Deserialize as SerdeDeserialize,
     Serialize as SerdeSerialize,
 };
-use std::marker::PhantomData;
 pub struct Serializer<T> {
     _format: PhantomData<T>,
 }

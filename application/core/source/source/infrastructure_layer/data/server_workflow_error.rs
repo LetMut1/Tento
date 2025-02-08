@@ -1,22 +1,24 @@
-use super::aggregate_error::{
-    AggregateError,
-    AggregateError_,
-    Auditor,
-    Context,
-    IndefiniteArgument,
-    InvalidArgument,
-    Logic,
-    Runtime,
-};
-use std::{
-    error::Error as StdError,
-    fmt::{
-        Debug,
-        Display,
-        Error as FmtError,
-        Formatter,
+use {
+    super::aggregate_error::{
+        AggregateError,
+        AggregateError_,
+        Auditor,
+        Context,
+        IndefiniteArgument,
+        InvalidArgument,
+        Logic,
+        Runtime,
     },
-    marker::PhantomData,
+    std::{
+        error::Error as StdError,
+        fmt::{
+            Debug,
+            Display,
+            Error as FmtError,
+            Formatter,
+        },
+        marker::PhantomData,
+    },
 };
 pub enum ServerWorkflowError {
     Responsive {

@@ -1,85 +1,89 @@
-#[cfg(not(feature = "postgresql_connection_with_tls"))]
-use crate::infrastructure_layer::functionality::service::creator::Creator;
-use crate::{
-    application_layer::functionality::{
-        action_processor::{
-            ChannelSubscription_Create,
-            Channel_CheckLinkedNameForExisting,
-            Channel_CheckNameForExisting,
-            Channel_Create,
-            Channel_GetManyByNameInSubscriptions,
-            Channel_GetManyBySubscription,
-            Channel_GetManyPublicByName,
-            Channel_GetOneById,
-            Inner as ActionProcessorInner,
-            UserAuthorization_AuthorizeByFirstStep,
-            UserAuthorization_AuthorizeByLastStep,
-            UserAuthorization_CheckEmailForExisting,
-            UserAuthorization_CheckNicknameForExisting,
-            UserAuthorization_DeauthorizeFromAllDevices,
-            UserAuthorization_DeauthorizeFromOneDevice,
-            UserAuthorization_RefreshAccessToken,
-            UserAuthorization_RegisterByFirstStep,
-            UserAuthorization_RegisterByLastStep,
-            UserAuthorization_RegisterBySecondStep,
-            UserAuthorization_ResetPasswordByFirstStep,
-            UserAuthorization_ResetPasswordByLastStep,
-            UserAuthorization_ResetPasswordBySecondStep,
-            UserAuthorization_SendEmailForAuthorize,
-            UserAuthorization_SendEmailForRegister,
-            UserAuthorization_SendEmailForResetPassword,
-        },
-        command_processor::RunServer,
-    },
-    infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            control_type::{
-                Request,
-                Response,
+use {
+    crate::{
+        application_layer::functionality::{
+            action_processor::{
+                ChannelSubscription_Create,
+                Channel_CheckLinkedNameForExisting,
+                Channel_CheckNameForExisting,
+                Channel_Create,
+                Channel_GetManyByNameInSubscriptions,
+                Channel_GetManyBySubscription,
+                Channel_GetManyPublicByName,
+                Channel_GetOneById,
+                Inner as ActionProcessorInner,
+                UserAuthorization_AuthorizeByFirstStep,
+                UserAuthorization_AuthorizeByLastStep,
+                UserAuthorization_CheckEmailForExisting,
+                UserAuthorization_CheckNicknameForExisting,
+                UserAuthorization_DeauthorizeFromAllDevices,
+                UserAuthorization_DeauthorizeFromOneDevice,
+                UserAuthorization_RefreshAccessToken,
+                UserAuthorization_RegisterByFirstStep,
+                UserAuthorization_RegisterByLastStep,
+                UserAuthorization_RegisterBySecondStep,
+                UserAuthorization_ResetPasswordByFirstStep,
+                UserAuthorization_ResetPasswordByLastStep,
+                UserAuthorization_ResetPasswordBySecondStep,
+                UserAuthorization_SendEmailForAuthorize,
+                UserAuthorization_SendEmailForRegister,
+                UserAuthorization_SendEmailForResetPassword,
             },
-            environment_configuration::EnvironmentConfiguration,
+            command_processor::RunServer,
         },
-        functionality::service::{
-            creator::PostgresqlConnectionPool,
-            logger::Logger,
-            spawner::{
-                Spawner,
-                TokioNonBlockingTask,
+        infrastructure_layer::{
+            data::{
+                aggregate_error::AggregateError,
+                control_type::{
+                    Request,
+                    Response,
+                },
+                environment_configuration::EnvironmentConfiguration,
+            },
+            functionality::service::{
+                creator::PostgresqlConnectionPool,
+                logger::Logger,
+                spawner::{
+                    Spawner,
+                    TokioNonBlockingTask,
+                },
             },
         },
+        presentation_layer::functionality::action::{
+            Action,
+            Inner as ActionInner,
+            RouteNotFound,
+        },
     },
-    presentation_layer::functionality::action::{
-        Action,
-        Inner as ActionInner,
-        RouteNotFound,
+    dedicated::void::Void,
+    hyper::{
+        server::conn::http2::Builder as Http2Builder,
+        Method,
+    },
+    hyper_util::rt::{
+        tokio::TokioExecutor,
+        TokioIo,
+    },
+    matchit::Router,
+    std::{
+        future::Future,
+        sync::Arc,
+        time::Duration,
+    },
+    tokio::{
+        net::TcpListener,
+        signal::unix::SignalKind,
     },
 };
 #[cfg(feature = "port_for_manual_test")]
-use core::net::SocketAddr;
-use dedicated::void::Void;
-#[cfg(feature = "port_for_manual_test")]
-use hyper::server::conn::http1::Builder as Http1Builder;
-use hyper::{
-    server::conn::http2::Builder as Http2Builder,
-    Method,
-};
-use hyper_util::rt::{
-    tokio::TokioExecutor,
-    TokioIo,
-};
-use matchit::Router;
-use std::{
-    future::Future,
-    sync::Arc,
-    time::Duration,
-};
-use tokio::{
-    net::TcpListener,
-    signal::unix::SignalKind,
+use {
+    hyper::server::conn::http1::Builder as Http1Builder,
+    core::net::SocketAddr,
 };
 #[cfg(not(feature = "postgresql_connection_with_tls"))]
-use tokio_postgres::NoTls;
+use {
+    crate::infrastructure_layer::functionality::service::creator::Creator,
+    tokio_postgres::NoTls,
+};
 pub struct HttpServer;
 impl HttpServer {
     pub fn run(environment_configuration: &'static EnvironmentConfiguration<RunServer>) -> impl Future<Output = Result<(), AggregateError>> + Send {
