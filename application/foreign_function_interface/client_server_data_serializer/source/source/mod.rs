@@ -319,11 +319,6 @@ impl<T> Default for CVector<T> {
 pub struct CVoid {
     _inner: bool,
 }
-impl CVoid {
-    fn new() -> Self {
-        return Self::default();
-    }
-}
 struct Allocator<S> {
     _subject: PhantomData<S>,
 }
@@ -785,26 +780,19 @@ pub extern "C-unwind" fn user_authorization__check_email_for_existing__deseriali
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_CheckEmailForExisting_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming_, Void>| -> Result<CUnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
-        let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
-                let data_ = match data {
-                    Data::Empty => {
-                        CData::empty()
-                    }
-                    Data::Filled { data: data__ } => {
-                        let outcoming = UserAuthorization_CheckEmailForExisting_Outcoming {
-                            result: data__.result,
-                        };
-                        CData::filled(outcoming)
-                    }
-                };
-                CUnifiedReport::target(data_)
+        let UnifiedReport::Target { data } = unified_report;
+        let data_ = match data {
+            Data::Empty => {
+                CData::empty()
             }
-            UnifiedReport::Precedent { precedent: _ } => {
-                CUnifiedReport::precedent(CVoid::new())
+            Data::Filled { data: data__ } => {
+                let outcoming = UserAuthorization_CheckEmailForExisting_Outcoming {
+                    result: data__.result,
+                };
+                CData::filled(outcoming)
             }
         };
-        return Result::Ok(unified_report_);
+        return Result::Ok(CUnifiedReport::target(data_));
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -853,26 +841,19 @@ pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__deseri
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_CheckNicknameForExisting_CResult {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void>| -> Result<CUnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
-        let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
-                let data_ = match data {
-                    Data::Empty => {
-                        CData::empty()
-                    }
-                    Data::Filled { data: data__ } => {
-                        let outcoming = UserAuthorization_CheckNicknameForExisting_Outcoming {
-                            result: data__.result,
-                        };
-                        CData::filled(outcoming)
-                    }
-                };
-                CUnifiedReport::target(data_)
+        let UnifiedReport::Target { data } = unified_report;
+        let data_ = match data {
+            Data::Empty => {
+                CData::empty()
             }
-            UnifiedReport::Precedent { precedent: _ } => {
-                CUnifiedReport::precedent(CVoid::new())
+            Data::Filled { data: data__ } => {
+                let outcoming = UserAuthorization_CheckNicknameForExisting_Outcoming {
+                    result: data__.result,
+                };
+                CData::filled(outcoming)
             }
         };
-        return Result::Ok(unified_report_);
+        return Result::Ok(CUnifiedReport::target(data_));
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -926,17 +907,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deser
 ) -> UserAuthorization_DeauthorizeFromAllDevices_CResult {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_DeauthorizeFromAllDevices_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
-                let c_data = match data {
-                    Data::Empty => {
-                        CData::empty()
-                    }
-                    Data::Filled { data: _ } => {
-                        CData::filled(CVoid::new())
-                    }
-                };
-                CUnifiedReport::target(c_data)
-            }
+            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired => {
@@ -1009,17 +980,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deseri
 ) -> UserAuthorization_DeauthorizeFromOneDevice_CResult {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_DeauthorizeFromOneDevice_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
-                let c_data = match data {
-                    Data::Empty => {
-                        CData::empty()
-                    }
-                    Data::Filled { data: _ } => {
-                        CData::filled(CVoid::new())
-                    }
-                };
-                CUnifiedReport::target(c_data)
-            }
+            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired => {
@@ -1294,17 +1255,7 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__deserializ
 ) -> UserAuthorization_RegisterBySecondStep_CResult {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_RegisterBySecondStep_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_RegisterBySecondStep_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
-                let c_data = match data {
-                    Data::Empty => {
-                        CData::empty()
-                    }
-                    Data::Filled { data: _ } => {
-                        CData::filled(CVoid::new())
-                    }
-                };
-                CUnifiedReport::target(c_data)
-            }
+            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_NotFound => {
@@ -1634,17 +1585,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__dese
 ) -> UserAuthorization_ResetPasswordBySecondStep_CResult {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_ResetPasswordBySecondStep_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
-                let c_data = match data {
-                    Data::Empty => {
-                        CData::empty()
-                    }
-                    Data::Filled { data: _ } => {
-                        CData::filled(CVoid::new())
-                    }
-                };
-                CUnifiedReport::target(c_data)
-            }
+            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_NotFound => {
@@ -1738,17 +1679,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deseri
 ) -> UserAuthorization_ResetPasswordByLastStep_CResult {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_ResetPasswordByLastStep_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
-                let c_data = match data {
-                    Data::Empty => {
-                        CData::empty()
-                    }
-                    Data::Filled { data: _ } => {
-                        CData::filled(CVoid::new())
-                    }
-                };
-                CUnifiedReport::target(c_data)
-            }
+            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::User_NotFound => {
@@ -2772,17 +2703,7 @@ pub struct ChannelSubscription_Create_Precedent {
 pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Create_CResult {
     let converter = move |unified_report: UnifiedReport<Void, ChannelSubscription_Create_Precedent_>| -> Result<CUnifiedReport<CVoid, ChannelSubscription_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
-                let data_ = match data {
-                    Data::Empty => {
-                        CData::empty()
-                    }
-                    Data::Filled { data: _ } => {
-                        CData::filled(CVoid::new())
-                    }
-                };
-                CUnifiedReport::target(data_)
-            }
+            UnifiedReport::Target { data } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired => {
