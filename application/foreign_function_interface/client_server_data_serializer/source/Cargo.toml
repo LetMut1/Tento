@@ -26,7 +26,7 @@ libc = { package = "libc", version = "=0.2.158", default-features = true, featur
 
 [build-dependencies]
 cargo-emit = { workspace = true }
-cbindgen = { package = "cbindgen", version = "=0.27.0", default-features = true, features = [], optional = false }
+cbindgen = { package = "cbindgen", version = "=0.28.0", default-features = true, features = [], optional = false }
 uuid = { workspace = true }
 
 [dev-dependencies]
