@@ -1165,7 +1165,7 @@ impl HttpServer {
             return Action::<RouteNotFound>::run(&action_inner);
         };
     }
-    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()> + Send, AggregateError> {
+    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()> + Send + use<>, AggregateError> {
         let mut signal = crate::result_return_logic!(
             tokio::signal::unix::signal(signal_kind)
         );

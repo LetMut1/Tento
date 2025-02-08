@@ -7,10 +7,9 @@ use std::future::Future;
 use tokio::task::JoinHandle;
 pub struct TokioNonBlockingTask;
 impl Spawner<TokioNonBlockingTask> {
-    pub fn spawn_into_background<F, T>(future: F) -> ()
-    where
-        F: Future<Output = Result<T, AggregateError>> + Send + 'static,
-    {
+    pub fn spawn_into_background<T>(
+        future: impl Future<Output = Result<T, AggregateError>> + Send + 'static,
+    ) -> () {
         tokio::spawn(
             async move {
                 if let Result::Err(aggregate_error) = future.await {
