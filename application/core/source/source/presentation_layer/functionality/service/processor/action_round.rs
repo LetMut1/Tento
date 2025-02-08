@@ -7,7 +7,6 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            capture::Capture,
             control_type::Response,
             server_workflow_error::ServerWorkflowError,
         },
@@ -27,7 +26,6 @@ use crate::{
     presentation_layer::functionality::action::Inner,
 };
 use bytes::Buf;
-use dedicated::void::Void;
 use http::request::Parts;
 use http_body_util::BodyExt;
 use std::future::Future;
@@ -36,12 +34,7 @@ impl Processor<ActionRound> {
     pub fn process<'a, 'b, AP, SS, SD>(
         inner: &'a mut Inner<'b>,
         action_processor_inner: &'a ActionProcessorInner<'b>,
-    ) -> impl Future<Output = Response>
-           + Send
-           + Capture<(
-        &'a Void,
-        &'b Void,
-    )>
+    ) -> impl Future<Output = Response> + Send + use<'a, 'b, AP, SS, SD>
     where
         ActionProcessor<AP>: ActionProcessor_,
         <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'c> Deserialize_<'c>,

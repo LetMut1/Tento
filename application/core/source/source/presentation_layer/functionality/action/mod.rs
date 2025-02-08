@@ -10,10 +10,7 @@ use crate::{
         Inner as ActionProcessorInner,
     },
     infrastructure_layer::{
-        data::{
-            capture::Capture,
-            control_type::Response,
-        },
+        data::control_type::Response,
         functionality::service::serializer::{
             BitCode,
             Deserialize_,
@@ -25,7 +22,6 @@ use crate::{
         Processor,
     },
 };
-use dedicated::void::Void;
 use http::request::Parts;
 use hyper::body::Incoming;
 use std::{
@@ -45,12 +41,7 @@ where
     pub fn run<'a, 'b>(
         inner: &'a mut Inner<'b>,
         action_processor_inner: &'a ActionProcessorInner<'b>,
-    ) -> impl Future<Output = Response>
-           + Send
-           + Capture<(
-        &'a Void,
-        &'b Void,
-    )> {
+    ) -> impl Future<Output = Response> + Send + use<'a, 'b, AP> {
         return Processor::<ActionRound>::process::<'_, '_, AP, BitCode, BitCode>(
             inner,
             action_processor_inner,
@@ -68,12 +59,7 @@ where
     pub fn run_<'a, 'b>(
         inner: &'a mut Inner<'b>,
         action_processor_inner: &'a ActionProcessorInner<'b>,
-    ) -> impl Future<Output = Response>
-           + Send
-           + Capture<(
-        &'a Void,
-        &'b Void,
-    )> {
+    ) -> impl Future<Output = Response> + Send + use<'a, 'b, AP> {
         return Processor::<ActionRound>::process::<'_, '_, AP, Json, Json>(
             inner,
             action_processor_inner,
