@@ -25,10 +25,7 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            capture::Capture,
-        },
+        data::aggregate_error::AggregateError,
         functionality::repository::{
             postgresql::{
                 ChannelBy1,
@@ -51,7 +48,6 @@ use dedicated::{
         Channel2,
     },
     unified_report::UnifiedReport,
-    void::Void,
 };
 use std::future::Future;
 pub struct Channel_GetOneById;
@@ -62,7 +58,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
     fn process<'a>(
         inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,

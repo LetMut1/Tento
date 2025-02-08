@@ -34,15 +34,11 @@ pub use self::{
 use crate::infrastructure_layer::{
     data::{
         aggregate_error::AggregateError,
-        capture::Capture,
         environment_configuration::EnvironmentConfiguration,
     },
     functionality::service::creator::PostgresqlConnectionPool,
 };
-use dedicated::{
-    unified_report::UnifiedReport,
-    void::Void,
-};
+use dedicated::unified_report::UnifiedReport;
 use std::{
     future::Future,
     marker::PhantomData,
@@ -58,7 +54,7 @@ pub trait ActionProcessor_ {
     fn process<'a>(
         inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>;
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send;
 }
 pub struct Inner<'a> {
     pub environment_configuration: &'static EnvironmentConfiguration<RunServer>,

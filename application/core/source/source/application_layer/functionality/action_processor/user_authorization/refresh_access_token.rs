@@ -23,10 +23,7 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            capture::Capture,
-        },
+        data::aggregate_error::AggregateError,
         functionality::{
             repository::{
                 postgresql::{
@@ -50,7 +47,6 @@ use dedicated::{
         Precedent,
     },
     unified_report::UnifiedReport,
-    void::Void,
 };
 use std::{
     borrow::Cow,
@@ -64,7 +60,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
     fn process<'a>(
         inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             let user_access_token = Encoder::<UserAccessToken<'_>>::decode(
                 &inner.environment_configuration.subject.encryption.private_key,

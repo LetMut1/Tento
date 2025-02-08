@@ -18,10 +18,7 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            capture::Capture,
-        },
+        data::aggregate_error::AggregateError,
         functionality::repository::{
             postgresql::{
                 CommonBy3,
@@ -41,7 +38,6 @@ use dedicated::{
         Common1,
     },
     unified_report::UnifiedReport,
-    void::Void,
 };
 use std::future::Future;
 pub struct Channel_GetManyBySubscription;
@@ -52,8 +48,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
     fn process<'a>(
         inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
-        const LIMIT: i16 = 100;
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,
@@ -74,6 +69,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
                     return Result::Err(crate::new_invalid_argument!());
                 }
             }
+            const LIMIT: i16 = 100;
             if incoming.limit <= 0 || incoming.limit > LIMIT {
                 return Result::Err(crate::new_invalid_argument!());
             }

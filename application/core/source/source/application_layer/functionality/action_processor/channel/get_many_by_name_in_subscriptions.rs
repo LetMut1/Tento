@@ -18,10 +18,7 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            capture::Capture,
-        },
+        data::aggregate_error::AggregateError,
         functionality::repository::{
             postgresql::{
                 CommonBy2,
@@ -41,7 +38,6 @@ use dedicated::{
         Common1,
     },
     unified_report::UnifiedReport,
-    void::Void,
 };
 use std::future::Future;
 pub struct Channel_GetManyByNameInSubscriptions;
@@ -52,7 +48,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
     fn process<'a>(
         inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         const LIMIT: i16 = 100;
         return async move {
             let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(

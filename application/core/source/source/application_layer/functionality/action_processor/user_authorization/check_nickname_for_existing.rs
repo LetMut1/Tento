@@ -12,10 +12,7 @@ use crate::{
         functionality::service::validator::Validator,
     },
     infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            capture::Capture,
-        },
+        data::aggregate_error::AggregateError,
         functionality::repository::{
             postgresql::{
                 Postgresql,
@@ -42,7 +39,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExis
     fn process<'a>(
         inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             if !Validator::<User_Nickname>::is_valid(incoming.user__nickname.as_str()) {
                 return Result::Err(crate::new_invalid_argument!());

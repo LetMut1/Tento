@@ -39,10 +39,7 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            capture::Capture,
-        },
+        data::aggregate_error::AggregateError,
         functionality::{
             repository::{
                 postgresql::{
@@ -79,7 +76,6 @@ use dedicated::{
         Precedent,
     },
     unified_report::UnifiedReport,
-    void::Void,
 };
 use std::{
     borrow::Cow,
@@ -93,7 +89,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
     fn process<'a>(
         inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             if !Validator::<User_Password>::is_valid(
                 incoming.user__password.as_str(),
