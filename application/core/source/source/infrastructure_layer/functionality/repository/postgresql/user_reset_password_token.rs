@@ -6,9 +6,11 @@ use {
     crate::{
         domain_layer::data::entity::user_reset_password_token::{
             UserResetPasswordToken,
-            UserResetPasswordToken_1,
-            UserResetPasswordToken_2,
-            UserResetPasswordToken_3,
+            derivative::{
+                UserResetPasswordToken_1,
+                UserResetPasswordToken_2,
+                UserResetPasswordToken_3,
+            },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,

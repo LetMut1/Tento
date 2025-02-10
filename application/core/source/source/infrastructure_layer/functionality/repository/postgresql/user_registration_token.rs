@@ -6,9 +6,11 @@ use {
     crate::{
         domain_layer::data::entity::user_registration_token::{
             UserRegistrationToken,
-            UserRegistrationToken_1,
-            UserRegistrationToken_2,
-            UserRegistrationToken_3,
+            derivative::{
+                UserRegistrationToken_1,
+                UserRegistrationToken_2,
+                UserRegistrationToken_3,
+            },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,

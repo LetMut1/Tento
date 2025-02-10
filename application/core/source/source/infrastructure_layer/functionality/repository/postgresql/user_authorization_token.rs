@@ -6,9 +6,11 @@ use {
     crate::{
         domain_layer::data::entity::user_authorization_token::{
             UserAuthorizationToken,
-            UserAuthorizationToken_1,
-            UserAuthorizationToken_2,
-            UserAuthorizationToken_3,
+            derivative::{
+                UserAuthorizationToken_1,
+                UserAuthorizationToken_2,
+                UserAuthorizationToken_3,
+            },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,

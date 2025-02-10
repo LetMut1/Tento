@@ -1,10 +1,5 @@
-mod derivative;
+pub mod derivative;
 mod field;
-pub use self::derivative::{
-    UserRegistrationToken_1,
-    UserRegistrationToken_2,
-    UserRegistrationToken_3,
-};
 use {
     self::field::{
         CanBeResentFrom,
