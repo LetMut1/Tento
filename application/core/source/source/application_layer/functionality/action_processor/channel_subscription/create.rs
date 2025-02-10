@@ -106,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 transaction.get_client(),
                 &ChannelSubscription::new(
                     user_access_token.user__id,
-                    channel.id,
+                    incoming.channel__id,
                     Resolver::<UnixTime>::get_now_in_seconds(),
                 ),
             )
