@@ -74,26 +74,26 @@ pub struct Postgresql<E> {
     _entity: PhantomData<E>,
 }
 struct ParameterStorage<'a, 'b> {
-    parameter_registry: Vec<&'a (dyn ToSql + Sync + 'b)>,
-    parameter_type_registry: Vec<Type>,
+    parameters: Vec<&'a (dyn ToSql + Sync + 'b)>,
+    parameters_types: Vec<Type>,
 }
 impl<'a, 'b> ParameterStorage<'a, 'b> {
     pub fn new() -> Self {
         return Self {
-            parameter_registry: vec![],
-            parameter_type_registry: vec![],
+            parameters: vec![],
+            parameters_types: vec![],
         };
     }
     pub fn add<'c>(&'c mut self, parameter_value: &'a (dyn ToSql + Sync + 'b), patameter_type: Type) -> &'c mut Self {
-        self.parameter_registry.push(parameter_value);
-        self.parameter_type_registry.push(patameter_type);
+        self.parameters.push(parameter_value);
+        self.parameters_types.push(patameter_type);
         return self;
     }
-    pub fn get_parameter_registry<'c>(&'c self) -> &'c [&'a (dyn ToSql + Sync + 'b)] {
-        return &self.parameter_registry;
+    pub fn get_parameters<'c>(&'c self) -> &'c [&'a (dyn ToSql + Sync + 'b)] {
+        return &self.parameters;
     }
-    pub fn get_parameter_type_registry<'c>(&'c self) -> &'c [Type] {
-        return &self.parameter_type_registry;
+    pub fn get_parameters_types<'c>(&'c self) -> &'c [Type] {
+        return &self.parameters_types;
     }
 }
 pub struct Resolver<E> {

@@ -22,7 +22,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<Common1>> {
-    pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {
+    pub fn find_1<'a>(database_1_client: &'a Client, by: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -48,22 +48,22 @@ impl Repository<Postgresql<Common1>> {
                 3,
                 1,
             );
-            let wildcard = format!("{}%", by_1.channel__name,);
+            let wildcard = format!("{}%", by.channel__name,);
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &by_1.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.channel__visability_modifier,
+                    &by.channel__visability_modifier,
                     Type::INT2,
                 )
                 .add(
                     &wildcard,
                     Type::TEXT,
                 );
-            if let Option::Some(ref requery___channel__name) = by_1.requery___channel__name {
+            if let Option::Some(ref requery___channel__name) = by.requery___channel__name {
                 query = format!(
                     "{} \
                     AND c.name > ${}",
@@ -90,29 +90,29 @@ impl Repository<Postgresql<Common1>> {
                 database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            let mut common_registry: Vec<Common1> = vec![];
-            if row_registry.is_empty() {
-                return Result::Ok(common_registry);
+            let mut commons: Vec<Common1> = vec![];
+            if rows.is_empty() {
+                return Result::Ok(commons);
             }
-            '_a: for row in row_registry.iter() {
+            '_a: for row in rows.iter() {
                 let channel = Channel1 {
                     channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
                     channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
-                    channel__visability_modifier: by_1.channel__visability_modifier,
+                    channel__visability_modifier: by.channel__visability_modifier,
                     channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(4)),
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
                 };
@@ -121,12 +121,12 @@ impl Repository<Postgresql<Common1>> {
                     channel,
                     is_user_subscribed,
                 };
-                common_registry.push(common);
+                commons.push(common);
             }
-            return Result::Ok(common_registry);
+            return Result::Ok(commons);
         };
     }
-    pub fn find_2<'a>(database_1_client: &'a Client, by_2: By2<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {
+    pub fn find_2<'a>(database_1_client: &'a Client, by: By2<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -150,18 +150,18 @@ impl Repository<Postgresql<Common1>> {
                 2,
                 1,
             );
-            let wildcard = format!("{}%", by_2.channel__name,);
+            let wildcard = format!("{}%", by.channel__name,);
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &by_2.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
                     &wildcard,
                     Type::TEXT,
                 );
-            if let Option::Some(ref requery___channel__name) = by_2.requery___channel__name {
+            if let Option::Some(ref requery___channel__name) = by.requery___channel__name {
                 query = format!(
                     "{} \
                     AND c.name > ${}",
@@ -188,23 +188,23 @@ impl Repository<Postgresql<Common1>> {
                 database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            let mut common_registry: Vec<Common1> = vec![];
-            if row_registry.is_empty() {
-                return Result::Ok(common_registry);
+            let mut commons: Vec<Common1> = vec![];
+            if rows.is_empty() {
+                return Result::Ok(commons);
             }
-            '_a: for row in row_registry.iter() {
+            '_a: for row in rows.iter() {
                 let channel = Channel1 {
                     channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
@@ -218,12 +218,12 @@ impl Repository<Postgresql<Common1>> {
                     channel,
                     is_user_subscribed: true,
                 };
-                common_registry.push(common);
+                commons.push(common);
             }
-            return Result::Ok(common_registry);
+            return Result::Ok(commons);
         };
     }
-    pub fn find_3<'a>(database_1_client: &'a Client, by_3: By3, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {
+    pub fn find_3<'a>(database_1_client: &'a Client, by: By3, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -248,11 +248,11 @@ impl Repository<Postgresql<Common1>> {
             );
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_3.user__id,
+                &by.user__id,
                 Type::INT8,
             );
             let requery___channel__id: i64;
-            if let Option::Some(requery___channel__id_) = by_3.requery___channel__id {
+            if let Option::Some(requery___channel__id_) = by.requery___channel__id {
                 requery___channel__id = requery___channel__id_;
                 query = format!(
                     "{} \
@@ -280,23 +280,23 @@ impl Repository<Postgresql<Common1>> {
                 database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            let mut common_registry: Vec<Common1> = vec![];
-            if row_registry.is_empty() {
-                return Result::Ok(common_registry);
+            let mut commons: Vec<Common1> = vec![];
+            if rows.is_empty() {
+                return Result::Ok(commons);
             }
-            '_a: for row in row_registry.iter() {
+            '_a: for row in rows.iter() {
                 let channel = Channel1 {
                     channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
@@ -310,9 +310,9 @@ impl Repository<Postgresql<Common1>> {
                     channel,
                     is_user_subscribed: true,
                 };
-                common_registry.push(common);
+                commons.push(common);
             }
-            return Result::Ok(common_registry);
+            return Result::Ok(commons);
         };
     }
 }

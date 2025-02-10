@@ -47,7 +47,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -55,14 +55,14 @@ impl Repository<Postgresql<ChannelInnerLink>> {
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1, limit: i16) -> impl Future<Output = Result<Vec<ChannelInnerLink1>, AggregateError>> + Send + use<'a> {
+    pub fn find_1<'a>(database_1_client: &'a Client, by: By1, limit: i16) -> impl Future<Output = Result<Vec<ChannelInnerLink1>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -75,7 +75,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &by_1.channel_inner_link__from,
+                    &by.channel_inner_link__from,
                     Type::INT8,
                 )
                 .add(
@@ -86,29 +86,29 @@ impl Repository<Postgresql<ChannelInnerLink>> {
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            let mut channel_inner_link_registry: Vec<ChannelInnerLink1> = vec![];
-            if row_registry.is_empty() {
-                return Result::Ok(channel_inner_link_registry);
+            let mut channel_inner_links: Vec<ChannelInnerLink1> = vec![];
+            if rows.is_empty() {
+                return Result::Ok(channel_inner_links);
             }
-            '_a: for row in row_registry.iter() {
+            '_a: for row in rows.iter() {
                 let channel_inner_link = ChannelInnerLink1 {
                     channel_inner_link__to: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                 };
-                channel_inner_link_registry.push(channel_inner_link);
+                channel_inner_links.push(channel_inner_link);
             }
-            return Result::Ok(channel_inner_link_registry);
+            return Result::Ok(channel_inner_links);
         };
     }
 }

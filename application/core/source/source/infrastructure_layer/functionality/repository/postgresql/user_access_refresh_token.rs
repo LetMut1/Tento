@@ -70,7 +70,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -78,14 +78,14 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn update_1<'a>(database_2_client: &'a Client, update_1: Update1<'a>, by_2: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(database_2_client: &'a Client, update: Update1<'a>, by: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -107,34 +107,34 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &update_1.user_access_token__id,
+                    &update.user_access_token__id,
                     Type::TEXT,
                 )
                 .add(
-                    &update_1.user_access_refresh_token__obfuscation_value,
+                    &update.user_access_refresh_token__obfuscation_value,
                     Type::TEXT,
                 )
                 .add(
-                    &update_1.user_access_refresh_token__expires_at,
+                    &update.user_access_refresh_token__expires_at,
                     Type::INT8,
                 )
                 .add(
-                    &update_1.user_access_refresh_token__updated_at,
+                    &update.user_access_refresh_token__updated_at,
                     Type::INT8,
                 )
                 .add(
-                    &by_2.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_2.user_device__id,
+                    &by.user_device__id,
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -142,14 +142,14 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn delete_1<'a>(database_2_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn delete_1<'a>(database_2_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
             DELETE FROM ONLY \
@@ -160,18 +160,18 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &by_2.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_2.user_device__id,
+                    &by.user_device__id,
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -179,14 +179,14 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn delete_2<'a>(database_2_client: &'a Client, by_1: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn delete_2<'a>(database_2_client: &'a Client, by: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -195,14 +195,14 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                     uart.user__id = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_1.user__id,
+                &by.user__id,
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -210,14 +210,14 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn find_1<'a, 'b>(database_2_client: &'a Client, by_2: By2<'b>) -> impl Future<Output = Result<Option<UserAccessRefreshToken<'b>>, AggregateError>> + Send + use<'a, 'b> {
+    pub fn find_1<'a, 'b>(database_2_client: &'a Client, by: By2<'b>) -> impl Future<Output = Result<Option<UserAccessRefreshToken<'b>>, AggregateError>> + Send + use<'a, 'b> {
         return async move {
             let query = "\
                 SELECT \
@@ -233,41 +233,41 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &by_2.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_2.user_device__id,
+                    &by.user_device__id,
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     UserAccessRefreshToken::new(
-                        by_2.user__id,
-                        by_2.user_device__id,
-                        Cow::Owned(crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0))),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
+                        by.user__id,
+                        by.user_device__id,
+                        Cow::Owned(crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0))),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
                     ),
                 ),
             );

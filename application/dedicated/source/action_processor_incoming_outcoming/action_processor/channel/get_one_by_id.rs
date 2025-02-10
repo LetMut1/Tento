@@ -29,8 +29,8 @@ pub struct Incoming {
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Outcoming {
     pub channel: Channel2,
-    pub channel_inner_link_registry: Vec<ChannelInnerLink1>,
-    pub channel_outer_link_registry: Vec<ChannelOuterLink1>,
+    pub channel_inner_links: Vec<ChannelInnerLink1>,
+    pub channel_outer_links: Vec<ChannelOuterLink1>,
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {

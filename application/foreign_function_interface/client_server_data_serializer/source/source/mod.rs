@@ -2087,7 +2087,7 @@ type Channel_GetManyByNameInSubscriptions_CResult = CResult<CUnifiedReport<Chann
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyByNameInSubscriptions_Outcoming {
-    pub common_registry: CVector<Common1>,
+    pub commons: CVector<Common1>,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -2110,32 +2110,32 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                     Data::Filled {
                         data: data__,
                     } => {
-                        let mut common_registry: Vec<Common1> = vec![];
-                        '_a: for common_1 in data__.common_registry {
-                            let channel__cover_image_path = match common_1.channel.channel__cover_image_path {
+                        let mut commons: Vec<Common1> = vec![];
+                        '_a: for common in data__.commons {
+                            let channel__cover_image_path = match common.channel.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
                                 Option::None => COption::none(),
                             };
-                            let channel__background_image_path = match common_1.channel.channel__background_image_path {
+                            let channel__background_image_path = match common.channel.channel__background_image_path {
                                 Option::Some(channel__background_image_path_) => COption::data(Allocator::<CString>::allocate(channel__background_image_path_)),
                                 Option::None => COption::none(),
                             };
-                            let common_1_ = Common1 {
+                            let common_ = Common1 {
                                 channel: Channel1 {
-                                    channel__id: common_1.channel.channel__id,
-                                    channel__name: Allocator::<CString>::allocate(common_1.channel.channel__name),
-                                    channel__linked_name: Allocator::<CString>::allocate(common_1.channel.channel__linked_name),
-                                    channel__access_modifier: common_1.channel.channel__access_modifier,
-                                    channel__visability_modifier: common_1.channel.channel__visability_modifier,
+                                    channel__id: common.channel.channel__id,
+                                    channel__name: Allocator::<CString>::allocate(common.channel.channel__name),
+                                    channel__linked_name: Allocator::<CString>::allocate(common.channel.channel__linked_name),
+                                    channel__access_modifier: common.channel.channel__access_modifier,
+                                    channel__visability_modifier: common.channel.channel__visability_modifier,
                                     channel__cover_image_path,
                                     channel__background_image_path,
                                 },
-                                is_user_subscribed: common_1.is_user_subscribed,
+                                is_user_subscribed: common.is_user_subscribed,
                             };
-                            common_registry.push(common_1_);
+                            commons.push(common_);
                         }
                         let outcoming = Channel_GetManyByNameInSubscriptions_Outcoming {
-                            common_registry: Allocator::<CVector<_>>::allocate(common_registry),
+                            commons: Allocator::<CVector<_>>::allocate(commons),
                         };
                         CData::filled(outcoming)
                     }
@@ -2172,8 +2172,8 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize_deallocate(c_result: Channel_GetManyByNameInSubscriptions_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        let common_registry = c_result.data.target.filled.common_registry.as_slice_unchecked();
-        for common in common_registry {
+        let commons = c_result.data.target.filled.commons.as_slice_unchecked();
+        for common in commons {
             Allocator::<CString>::deallocate(common.channel.channel__name);
             Allocator::<CString>::deallocate(common.channel.channel__linked_name);
             if common.channel.channel__background_image_path.is_data {
@@ -2183,7 +2183,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                 Allocator::<CString>::deallocate(common.channel.channel__cover_image_path.data);
             }
         }
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.common_registry);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.commons);
     }
     return ();
 }
@@ -2227,7 +2227,7 @@ type Channel_GetManyBySubscription_CResult = CResult<CUnifiedReport<Channel_GetM
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyBySubscription_Outcoming {
-    pub common_registry: CVector<Common1>,
+    pub commons: CVector<Common1>,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -2250,32 +2250,32 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                     Data::Filled {
                         data: data__,
                     } => {
-                        let mut common_registry: Vec<Common1> = vec![];
-                        '_a: for common_1 in data__.common_registry {
-                            let channel__cover_image_path = match common_1.channel.channel__cover_image_path {
+                        let mut commons: Vec<Common1> = vec![];
+                        '_a: for common in data__.commons {
+                            let channel__cover_image_path = match common.channel.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
                                 Option::None => COption::none(),
                             };
-                            let channel__background_image_path = match common_1.channel.channel__background_image_path {
+                            let channel__background_image_path = match common.channel.channel__background_image_path {
                                 Option::Some(channel__background_image_path_) => COption::data(Allocator::<CString>::allocate(channel__background_image_path_)),
                                 Option::None => COption::none(),
                             };
-                            let common_1_ = Common1 {
+                            let common_ = Common1 {
                                 channel: Channel1 {
-                                    channel__id: common_1.channel.channel__id,
-                                    channel__name: Allocator::<CString>::allocate(common_1.channel.channel__name),
-                                    channel__linked_name: Allocator::<CString>::allocate(common_1.channel.channel__linked_name),
-                                    channel__access_modifier: common_1.channel.channel__access_modifier,
-                                    channel__visability_modifier: common_1.channel.channel__visability_modifier,
+                                    channel__id: common.channel.channel__id,
+                                    channel__name: Allocator::<CString>::allocate(common.channel.channel__name),
+                                    channel__linked_name: Allocator::<CString>::allocate(common.channel.channel__linked_name),
+                                    channel__access_modifier: common.channel.channel__access_modifier,
+                                    channel__visability_modifier: common.channel.channel__visability_modifier,
                                     channel__cover_image_path,
                                     channel__background_image_path,
                                 },
-                                is_user_subscribed: common_1.is_user_subscribed,
+                                is_user_subscribed: common.is_user_subscribed,
                             };
-                            common_registry.push(common_1_);
+                            commons.push(common_);
                         }
                         let outcoming = Channel_GetManyBySubscription_Outcoming {
-                            common_registry: Allocator::<CVector<_>>::allocate(common_registry),
+                            commons: Allocator::<CVector<_>>::allocate(commons),
                         };
                         CData::filled(outcoming)
                     }
@@ -2312,8 +2312,8 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_deallocate(c_result: Channel_GetManyBySubscription_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        let common_registry = c_result.data.target.filled.common_registry.as_slice_unchecked();
-        for common in common_registry {
+        let commons = c_result.data.target.filled.commons.as_slice_unchecked();
+        for common in commons {
             Allocator::<CString>::deallocate(common.channel.channel__name);
             Allocator::<CString>::deallocate(common.channel.channel__linked_name);
             if common.channel.channel__background_image_path.is_data {
@@ -2323,7 +2323,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_dealloca
                 Allocator::<CString>::deallocate(common.channel.channel__cover_image_path.data);
             }
         }
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.common_registry);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.commons);
     }
     return ();
 }
@@ -2369,7 +2369,7 @@ type Channel_GetManyPublicByName_CResult = CResult<CUnifiedReport<Channel_GetMan
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyPublicByName_Outcoming {
-    pub common_registry: CVector<Common1>,
+    pub commons: CVector<Common1>,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -2392,32 +2392,32 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                     Data::Filled {
                         data: data__,
                     } => {
-                        let mut common_registry: Vec<Common1> = vec![];
-                        '_a: for common_1 in data__.common_registry {
-                            let channel__cover_image_path = match common_1.channel.channel__cover_image_path {
+                        let mut commons: Vec<Common1> = vec![];
+                        '_a: for common in data__.commons {
+                            let channel__cover_image_path = match common.channel.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
                                 Option::None => COption::none(),
                             };
-                            let channel__background_image_path = match common_1.channel.channel__background_image_path {
+                            let channel__background_image_path = match common.channel.channel__background_image_path {
                                 Option::Some(channel__background_image_path_) => COption::data(Allocator::<CString>::allocate(channel__background_image_path_)),
                                 Option::None => COption::none(),
                             };
-                            let common_1_ = Common1 {
+                            let common_ = Common1 {
                                 channel: Channel1 {
-                                    channel__id: common_1.channel.channel__id,
-                                    channel__name: Allocator::<CString>::allocate(common_1.channel.channel__name),
-                                    channel__linked_name: Allocator::<CString>::allocate(common_1.channel.channel__linked_name),
-                                    channel__access_modifier: common_1.channel.channel__access_modifier,
-                                    channel__visability_modifier: common_1.channel.channel__visability_modifier,
+                                    channel__id: common.channel.channel__id,
+                                    channel__name: Allocator::<CString>::allocate(common.channel.channel__name),
+                                    channel__linked_name: Allocator::<CString>::allocate(common.channel.channel__linked_name),
+                                    channel__access_modifier: common.channel.channel__access_modifier,
+                                    channel__visability_modifier: common.channel.channel__visability_modifier,
                                     channel__cover_image_path,
                                     channel__background_image_path,
                                 },
-                                is_user_subscribed: common_1.is_user_subscribed,
+                                is_user_subscribed: common.is_user_subscribed,
                             };
-                            common_registry.push(common_1_);
+                            commons.push(common_);
                         }
                         let outcoming = Channel_GetManyPublicByName_Outcoming {
-                            common_registry: Allocator::<CVector<_>>::allocate(common_registry),
+                            commons: Allocator::<CVector<_>>::allocate(commons),
                         };
                         CData::filled(outcoming)
                     }
@@ -2454,18 +2454,18 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_deallocate(c_result: Channel_GetManyPublicByName_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        let common_registry = c_result.data.target.filled.common_registry.as_slice_unchecked();
-        for common_1 in common_registry {
-            Allocator::<CString>::deallocate(common_1.channel.channel__name);
-            Allocator::<CString>::deallocate(common_1.channel.channel__linked_name);
-            if common_1.channel.channel__background_image_path.is_data {
-                Allocator::<CString>::deallocate(common_1.channel.channel__background_image_path.data);
+        let commons = c_result.data.target.filled.commons.as_slice_unchecked();
+        for common in commons {
+            Allocator::<CString>::deallocate(common.channel.channel__name);
+            Allocator::<CString>::deallocate(common.channel.channel__linked_name);
+            if common.channel.channel__background_image_path.is_data {
+                Allocator::<CString>::deallocate(common.channel.channel__background_image_path.data);
             }
-            if common_1.channel.channel__cover_image_path.is_data {
-                Allocator::<CString>::deallocate(common_1.channel.channel__cover_image_path.data);
+            if common.channel.channel__cover_image_path.is_data {
+                Allocator::<CString>::deallocate(common.channel.channel__cover_image_path.data);
             }
         }
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.common_registry);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.commons);
     }
     return ();
 }
@@ -2503,8 +2503,8 @@ type Channel_GetOneById_CResult = CResult<CUnifiedReport<Channel_GetOneById_Outc
 #[derive(Default)]
 pub struct Channel_GetOneById_Outcoming {
     pub channel: Channel2,
-    pub channel_inner_link_registry: CVector<ChannelInnerLink1>,
-    pub channel_outer_link_registry: CVector<ChannelOuterLink1>,
+    pub channel_inner_links: CVector<ChannelInnerLink1>,
+    pub channel_outer_links: CVector<ChannelOuterLink1>,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -2550,25 +2550,25 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                             channel__marks_quantity: data__.channel.channel__marks_quantity,
                             channel__viewing_quantity: data__.channel. channel__viewing_quantity,
                         };
-                        let mut channel_inner_link_registry: Vec<ChannelInnerLink1> = vec![];
-                        '_a: for channel_inner_link_1 in data__.channel_inner_link_registry {
-                            let channel_inner_link_1_ = ChannelInnerLink1 {
-                                channel_inner_link__to: channel_inner_link_1.channel_inner_link__to
+                        let mut channel_inner_links: Vec<ChannelInnerLink1> = vec![];
+                        '_a: for channel_inner_link in data__.channel_inner_links {
+                            let channel_inner_link_ = ChannelInnerLink1 {
+                                channel_inner_link__to: channel_inner_link.channel_inner_link__to
                             };
-                            channel_inner_link_registry.push(channel_inner_link_1_);
+                            channel_inner_links.push(channel_inner_link_);
                         }
-                        let mut channel_outer_link_registry: Vec<ChannelOuterLink1> = vec![];
-                        '_a: for channel_outer_link_1 in data__.channel_outer_link_registry {
-                            let channel_outer_link_1_ = ChannelOuterLink1 {
-                                channel_outer_link__alias: Allocator::<CString>::allocate(channel_outer_link_1.channel_outer_link__alias),
-                                channel_outer_link__address: Allocator::<CString>::allocate(channel_outer_link_1.channel_outer_link__address)
+                        let mut channel_outer_links: Vec<ChannelOuterLink1> = vec![];
+                        '_a: for channel_outer_link in data__.channel_outer_links {
+                            let channel_outer_link_ = ChannelOuterLink1 {
+                                channel_outer_link__alias: Allocator::<CString>::allocate(channel_outer_link.channel_outer_link__alias),
+                                channel_outer_link__address: Allocator::<CString>::allocate(channel_outer_link.channel_outer_link__address)
                             };
-                            channel_outer_link_registry.push(channel_outer_link_1_);
+                            channel_outer_links.push(channel_outer_link_);
                         }
                         let outcoming = Channel_GetOneById_Outcoming {
                             channel: channel_2,
-                            channel_inner_link_registry: Allocator::<CVector<_>>::allocate(channel_inner_link_registry),
-                            channel_outer_link_registry: Allocator::<CVector<_>>::allocate(channel_outer_link_registry),
+                            channel_inner_links: Allocator::<CVector<_>>::allocate(channel_inner_links),
+                            channel_outer_links: Allocator::<CVector<_>>::allocate(channel_outer_links),
                         };
                         CData::filled(outcoming)
                     }
@@ -2627,13 +2627,13 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_deallocate(c_result
             Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__cover_image_path.data);
         }
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel.channel__orientation);
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_inner_link_registry);
-        let channel_outer_link_registry = c_result.data.target.filled.channel_outer_link_registry.as_slice_unchecked();
-        for channel_outer_link_1 in channel_outer_link_registry {
-            Allocator::<CString>::deallocate(channel_outer_link_1.channel_outer_link__alias);
-            Allocator::<CString>::deallocate(channel_outer_link_1.channel_outer_link__address);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_inner_links);
+        let channel_outer_links = c_result.data.target.filled.channel_outer_links.as_slice_unchecked();
+        for channel_outer_link in channel_outer_links {
+            Allocator::<CString>::deallocate(channel_outer_link.channel_outer_link__alias);
+            Allocator::<CString>::deallocate(channel_outer_link.channel_outer_link__address);
         }
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_outer_link_registry);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_outer_links);
     }
     return ();
 }
@@ -2759,7 +2759,7 @@ mod test {
         {
             return std::any::type_name::<F>();
         }
-        let test_registry: Vec<(
+        let tests: Vec<(
             fn() -> Result<(), Box<dyn StdError + 'static>>,
             &'static str,
         )> = vec![
@@ -3117,10 +3117,10 @@ mod test {
         // is not deallocated until the program process completes. Accordingly, when the `bitcode::encode` method is called
         // again, no additional byte occurs and it becomes possible to expect that the number of allocated bytes will be
         // equal to the number of deallocated bytes.
-        '_a: for test in test_registry.iter() {
+        '_a: for test in tests.iter() {
             let _ = test.0();
         }
-        '_a: for test in test_registry.iter() {
+        '_a: for test in tests.iter() {
             let region = Region::new(&GLOBAL_ALLOCATOR);
             if let Result::Err(error) = test.0() {
                 return Result::Err(format!("{}: {}", test.1, &error).into());
@@ -3271,16 +3271,16 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<UserAuthorization_AuthorizeByLastStep_Precedent_> = vec![];
-                precedent_registry.push(UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_NotFound);
-                precedent_registry.push(UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_AlreadyExpired);
-                precedent_registry.push(
+                let mut precedents: Vec<UserAuthorization_AuthorizeByLastStep_Precedent_> = vec![];
+                precedents.push(UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_NotFound);
+                precedents.push(UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_AlreadyExpired);
+                precedents.push(
                     UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_WrongValue {
                         user_authorization_token__wrong_enter_tries_quantity: 0,
                     },
                 );
-                precedent_registry.push(UserAuthorization_AuthorizeByLastStep_Precedent_::User_NotFound);
-                '_a: for precedent in precedent_registry {
+                precedents.push(UserAuthorization_AuthorizeByLastStep_Precedent_::User_NotFound);
+                '_a: for precedent in precedents {
                     _precedent__user_authorization__authorize_by_last_step(precedent)?;
                 }
                 return Result::Ok(());
@@ -3351,10 +3351,10 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<UserAuthorization_DeauthorizeFromAllDevices_Precedent_> = vec![];
-                precedent_registry.push(UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired);
-                precedent_registry.push(UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<UserAuthorization_DeauthorizeFromAllDevices_Precedent_> = vec![];
+                precedents.push(UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired);
+                precedents.push(UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                '_a: for precedent in precedents {
                     _precedent__user_authorization__deauthorize_from_all_devices(precedent)?;
                 }
                 return Result::Ok(());
@@ -3381,10 +3381,10 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<UserAuthorization_DeauthorizeFromOneDevice_Precedent_> = vec![];
-                precedent_registry.push(UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired);
-                precedent_registry.push(UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<UserAuthorization_DeauthorizeFromOneDevice_Precedent_> = vec![];
+                precedents.push(UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired);
+                precedents.push(UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                '_a: for precedent in precedents {
                     _precedent__user_authorization__deauthorize_from_one_device(precedent)?;
                 }
                 return Result::Ok(());
@@ -3421,10 +3421,10 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<UserAuthorization_RefreshAccessToken_Precedent_> = vec![];
-                precedent_registry.push(UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_NotFound);
-                precedent_registry.push(UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_AlreadyExpired);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<UserAuthorization_RefreshAccessToken_Precedent_> = vec![];
+                precedents.push(UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_NotFound);
+                precedents.push(UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_AlreadyExpired);
+                '_a: for precedent in precedents {
                     _precedent__user_authorization__refresh_access_token(precedent)?;
                 }
                 return Result::Ok(());
@@ -3480,16 +3480,16 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<UserAuthorization_RegisterBySecondStep_Precedent_> = vec![];
-                precedent_registry.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_NotFound);
-                precedent_registry.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyExpired);
-                precedent_registry.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyApproved);
-                precedent_registry.push(
+                let mut precedents: Vec<UserAuthorization_RegisterBySecondStep_Precedent_> = vec![];
+                precedents.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_NotFound);
+                precedents.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyExpired);
+                precedents.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyApproved);
+                precedents.push(
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_WrongValue {
                         user_registration_token__wrong_enter_tries_quantity: 0,
                     },
                 );
-                '_a: for precedent in precedent_registry {
+                '_a: for precedent in precedents {
                     _precedent__user_authorization__register_by_second_step(precedent)?;
                 }
                 return Result::Ok(());
@@ -3526,14 +3526,14 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<UserAuthorization_RegisterByLastStep_Precedent_> = vec![];
-                precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::User_NicknameAlreadyExist);
-                precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::User_EmailAlreadyExist);
-                precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_NotFound);
-                precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_AlreadyExpired);
-                precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_IsNotApproved);
-                precedent_registry.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_WrongValue);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<UserAuthorization_RegisterByLastStep_Precedent_> = vec![];
+                precedents.push(UserAuthorization_RegisterByLastStep_Precedent_::User_NicknameAlreadyExist);
+                precedents.push(UserAuthorization_RegisterByLastStep_Precedent_::User_EmailAlreadyExist);
+                precedents.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_NotFound);
+                precedents.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_AlreadyExpired);
+                precedents.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_IsNotApproved);
+                precedents.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_WrongValue);
+                '_a: for precedent in precedents {
                     _precedent__user_authorization__register_by_last_step(precedent)?;
                 }
                 return Result::Ok(());
@@ -3594,16 +3594,16 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<UserAuthorization_ResetPasswordBySecondStep_Precedent_> = vec![];
-                precedent_registry.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_NotFound);
-                precedent_registry.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyExpired);
-                precedent_registry.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyApproved);
-                precedent_registry.push(
+                let mut precedents: Vec<UserAuthorization_ResetPasswordBySecondStep_Precedent_> = vec![];
+                precedents.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_NotFound);
+                precedents.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyExpired);
+                precedents.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyApproved);
+                precedents.push(
                     UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_WrongValue {
                         user_reset_password_token__wrong_enter_tries_quantity: 0,
                     },
                 );
-                '_a: for precedent in precedent_registry {
+                '_a: for precedent in precedents {
                     _precedent__user_authorization__reset_password_by_second_step(precedent)?;
                 }
                 return Result::Ok(());
@@ -3630,13 +3630,13 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<UserAuthorization_ResetPasswordByLastStep_Precedent_> = vec![];
-                precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::User_NotFound);
-                precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_NotFound);
-                precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_AlreadyExpired);
-                precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_IsNotApproved);
-                precedent_registry.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_WrongValue);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<UserAuthorization_ResetPasswordByLastStep_Precedent_> = vec![];
+                precedents.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::User_NotFound);
+                precedents.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_NotFound);
+                precedents.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_AlreadyExpired);
+                precedents.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_IsNotApproved);
+                precedents.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_WrongValue);
+                '_a: for precedent in precedents {
                     _precedent__user_authorization__reset_password_by_last_step(precedent)?;
                 }
                 return Result::Ok(());
@@ -3670,12 +3670,12 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<UserAuthorization_SendEmailForRegister_Precedent_> = vec![];
-                precedent_registry.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_NotFound);
-                precedent_registry.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyExpired);
-                precedent_registry.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyApproved);
-                precedent_registry.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_TimeToResendHasNotCome);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<UserAuthorization_SendEmailForRegister_Precedent_> = vec![];
+                precedents.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_NotFound);
+                precedents.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyExpired);
+                precedents.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyApproved);
+                precedents.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_TimeToResendHasNotCome);
+                '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_register(precedent)?;
                 }
                 return Result::Ok(());
@@ -3709,12 +3709,12 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<UserAuthorization_SendEmailForAuthorize_Precedent_> = vec![];
-                precedent_registry.push(UserAuthorization_SendEmailForAuthorize_Precedent_::User_NotFound);
-                precedent_registry.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_NotFound);
-                precedent_registry.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_AlreadyExpired);
-                precedent_registry.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_TimeToResendHasNotCome);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<UserAuthorization_SendEmailForAuthorize_Precedent_> = vec![];
+                precedents.push(UserAuthorization_SendEmailForAuthorize_Precedent_::User_NotFound);
+                precedents.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_NotFound);
+                precedents.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_AlreadyExpired);
+                precedents.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_TimeToResendHasNotCome);
+                '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_authorize(precedent)?;
                 }
                 return Result::Ok(());
@@ -3752,13 +3752,13 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<UserAuthorization_SendEmailForResetPassword_Precedent_> = vec![];
-                precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::User_NotFound);
-                precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_NotFound);
-                precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyExpired);
-                precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyApproved);
-                precedent_registry.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_TimeToResendHasNotCome);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<UserAuthorization_SendEmailForResetPassword_Precedent_> = vec![];
+                precedents.push(UserAuthorization_SendEmailForResetPassword_Precedent_::User_NotFound);
+                precedents.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_NotFound);
+                precedents.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyExpired);
+                precedents.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyApproved);
+                precedents.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_TimeToResendHasNotCome);
+                '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_reset_password(precedent)?;
                 }
                 return Result::Ok(());
@@ -3772,9 +3772,9 @@ mod test {
                 );
             }
             pub fn target_filled__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut common_registry: Vec<Common1_> = vec![];
+                let mut commons: Vec<Common1_> = vec![];
                 '_a: for _ in 1..=5 {
-                    let common_1 = Common1_ {
+                    let common = Common1_ {
                         channel: Channel1_ {
                             channel__id: 0,
                             channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
@@ -3786,10 +3786,10 @@ mod test {
                         },
                         is_user_subscribed: false,
                     };
-                    common_registry.push(common_1);
+                    commons.push(common);
                 }
                 let outcoming = Channel_GetManyByNameInSubscriptions_Outcoming_ {
-                    common_registry,
+                    commons,
                 };
                 let unified_report = UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming_, Channel_GetManyByNameInSubscriptions_Precedent_>::target_filled(outcoming);
                 return run_by_template(
@@ -3807,10 +3807,10 @@ mod test {
                 );
             }
             pub fn precedent__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<Channel_GetManyByNameInSubscriptions_Precedent_> = vec![];
-                precedent_registry.push(Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired);
-                precedent_registry.push(Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<Channel_GetManyByNameInSubscriptions_Precedent_> = vec![];
+                precedents.push(Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired);
+                precedents.push(Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                '_a: for precedent in precedents {
                     _precedent__channel__get_many_by_name_in_subscriptions(precedent)?;
                 }
                 return Result::Ok(());
@@ -3824,9 +3824,9 @@ mod test {
                 );
             }
             pub fn target_filled__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut common_registry: Vec<Common1_> = vec![];
+                let mut commons: Vec<Common1_> = vec![];
                 '_a: for _ in 1..=2 {
-                    let common_1 = Common1_ {
+                    let common = Common1_ {
                         channel: Channel1_ {
                             channel__id: 0,
                             channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
@@ -3838,10 +3838,10 @@ mod test {
                         },
                         is_user_subscribed: false,
                     };
-                    common_registry.push(common_1);
+                    commons.push(common);
                 }
                 let outcoming = Channel_GetManyBySubscription_Outcoming_ {
-                    common_registry,
+                    commons,
                 };
                 let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming_, Channel_GetManyBySubscription_Precedent_>::target_filled(outcoming);
                 return run_by_template(
@@ -3859,10 +3859,10 @@ mod test {
                 );
             }
             pub fn precedent__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<Channel_GetManyBySubscription_Precedent_> = vec![];
-                precedent_registry.push(Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired);
-                precedent_registry.push(Channel_GetManyBySubscription_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<Channel_GetManyBySubscription_Precedent_> = vec![];
+                precedents.push(Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired);
+                precedents.push(Channel_GetManyBySubscription_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                '_a: for precedent in precedents {
                     _precedent__channel__get_many_by_subscription(precedent)?;
                 }
                 return Result::Ok(());
@@ -3876,9 +3876,9 @@ mod test {
                 );
             }
             pub fn target_filled__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut common_registry: Vec<Common1_> = vec![];
+                let mut commons: Vec<Common1_> = vec![];
                 '_a: for _ in 1..=5 {
-                    let common_1 = Common1_ {
+                    let common = Common1_ {
                         channel: Channel1_ {
                             channel__id: 0,
                             channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
@@ -3890,10 +3890,10 @@ mod test {
                         },
                         is_user_subscribed: false,
                     };
-                    common_registry.push(common_1);
+                    commons.push(common);
                 }
                 let outcoming = Channel_GetManyPublicByName_Outcoming_ {
-                    common_registry,
+                    commons,
                 };
                 let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>::target_filled(outcoming);
                 return run_by_template(
@@ -3911,10 +3911,10 @@ mod test {
                 );
             }
             pub fn precedent__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<Channel_GetManyPublicByName_Precedent_> = vec![];
-                precedent_registry.push(Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired);
-                precedent_registry.push(Channel_GetManyPublicByName_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<Channel_GetManyPublicByName_Precedent_> = vec![];
+                precedents.push(Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired);
+                precedents.push(Channel_GetManyPublicByName_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                '_a: for precedent in precedents {
                     _precedent__channel__get_many_public_by_name(precedent)?;
                 }
                 return Result::Ok(());
@@ -3928,22 +3928,22 @@ mod test {
                 );
             }
             pub fn target_filled__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut channel_inner_link_registry: Vec<ChannelInnerLink1_> = vec![];
+                let mut channel_inner_links: Vec<ChannelInnerLink1_> = vec![];
                 '_a: for _ in 1..=5 {
-                    let channel_inner_link_1 = ChannelInnerLink1_ {
+                    let channel_inner_link = ChannelInnerLink1_ {
                         channel_inner_link__to: 0,
                     };
-                    channel_inner_link_registry.push(channel_inner_link_1);
+                    channel_inner_links.push(channel_inner_link);
                 }
-                let mut channel_outer_link_registry: Vec<ChannelOuterLink1_> = vec![];
+                let mut channel_outer_links: Vec<ChannelOuterLink1_> = vec![];
                 '_a: for _ in 1..=5 {
-                    let channel_outer_link_1 = ChannelOuterLink1_ {
+                    let channel_outer_link = ChannelOuterLink1_ {
                         channel_outer_link__alias: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel_outer_link__address: NOT_EMPTY_STRING_LITERAL.to_string(),
                     };
-                    channel_outer_link_registry.push(channel_outer_link_1);
+                    channel_outer_links.push(channel_outer_link);
                 }
-                let channel_2 = Channel2_ {
+                let channel = Channel2_ {
                     channel__owner: 0,
                     channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
                     channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
@@ -3958,9 +3958,9 @@ mod test {
                     channel__viewing_quantity: 0,
                 };
                 let outcoming = Channel_GetOneById_Outcoming_ {
-                    channel: channel_2,
-                    channel_inner_link_registry,
-                    channel_outer_link_registry,
+                    channel,
+                    channel_inner_links,
+                    channel_outer_links,
                 };
                 let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>::target_filled(outcoming);
                 return run_by_template(
@@ -3978,12 +3978,12 @@ mod test {
                 );
             }
             pub fn precedent__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<Channel_GetOneById_Precedent_> = vec![];
-                precedent_registry.push(Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired);
-                precedent_registry.push(Channel_GetOneById_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                precedent_registry.push(Channel_GetOneById_Precedent_::Channel_NotFound);
-                precedent_registry.push(Channel_GetOneById_Precedent_::Channel_IsClose);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<Channel_GetOneById_Precedent_> = vec![];
+                precedents.push(Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired);
+                precedents.push(Channel_GetOneById_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                precedents.push(Channel_GetOneById_Precedent_::Channel_NotFound);
+                precedents.push(Channel_GetOneById_Precedent_::Channel_IsClose);
+                '_a: for precedent in precedents {
                     _precedent__channel__get_one_by_id(precedent)?;
                 }
                 return Result::Ok(());
@@ -4008,13 +4008,13 @@ mod test {
                 );
             }
             pub fn precedent__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut precedent_registry: Vec<ChannelSubscription_Create_Precedent_> = vec![];
-                precedent_registry.push(ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired);
-                precedent_registry.push(ChannelSubscription_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                precedent_registry.push(ChannelSubscription_Create_Precedent_::Channel_NotFound);
-                precedent_registry.push(ChannelSubscription_Create_Precedent_::Channel_IsClose);
-                precedent_registry.push(ChannelSubscription_Create_Precedent_::User_IsChannelOwner);
-                '_a: for precedent in precedent_registry {
+                let mut precedents: Vec<ChannelSubscription_Create_Precedent_> = vec![];
+                precedents.push(ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired);
+                precedents.push(ChannelSubscription_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                precedents.push(ChannelSubscription_Create_Precedent_::Channel_NotFound);
+                precedents.push(ChannelSubscription_Create_Precedent_::Channel_IsClose);
+                precedents.push(ChannelSubscription_Create_Precedent_::User_IsChannelOwner);
+                '_a: for precedent in precedents {
                     _precedent__channel_subscription__create(precedent)?;
                 }
                 return Result::Ok(());

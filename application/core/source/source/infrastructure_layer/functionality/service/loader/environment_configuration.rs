@@ -40,14 +40,14 @@ use {
 impl Loader<EnvironmentConfiguration<RunServer>> {
     pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<RunServer>, AggregateError> {
         let environment_configuration_file = load_from_file::<RunServerEnvironmentConfigurationFile>(environment_configuration_file_path)?;
-        let mut application_server_tcp_socket_address_registry = crate::result_return_runtime!(
+        let mut application_server_tcp_socket_addresses = crate::result_return_runtime!(
             environment_configuration_file.application_server.tcp.socket_address.value.to_socket_addrs()
         );
-        let application_server_tcp_socket_address = crate::option_return_logic_invalid_socket_address!(application_server_tcp_socket_address_registry.next());
-        let mut email_server_tcp_socket_address_registry = crate::result_return_runtime!(
+        let application_server_tcp_socket_address = crate::option_return_logic_invalid_socket_address!(application_server_tcp_socket_addresses.next());
+        let mut email_server_tcp_socket_addresses = crate::result_return_runtime!(
             environment_configuration_file.resource.email_server.socket_address.value.to_socket_addrs()
         );
-        let email_server_tcp_socket_address = crate::option_return_logic_invalid_socket_address!(email_server_tcp_socket_address_registry.next());
+        let email_server_tcp_socket_address = crate::option_return_logic_invalid_socket_address!(email_server_tcp_socket_addresses.next());
         let postgreql_database_1_configuration = crate::result_return_logic!(
             Config::from_str(environment_configuration_file.resource.postgresql.database_1.url.value.as_str())
         );

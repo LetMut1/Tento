@@ -46,7 +46,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -54,14 +54,14 @@ impl Repository<Postgresql<ChannelSubscription>> {
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn is_exist_1<'a>(database_1_client: &'a Client, by_1: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn is_exist_1<'a>(database_1_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -74,30 +74,30 @@ impl Repository<Postgresql<ChannelSubscription>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &by_1.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.channel__id,
+                    &by.channel__id,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(false);
             }
             return Result::Ok(true);

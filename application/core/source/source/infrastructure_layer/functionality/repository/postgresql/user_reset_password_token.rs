@@ -78,7 +78,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -86,14 +86,14 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn delete_2<'a>(database_2_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn delete_2<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -104,18 +104,18 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &by_1.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.user_device__id,
+                    &by.user_device__id,
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -123,14 +123,14 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn update_1<'a>(database_2_client: &'a Client, update_1: Update1<'a>, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(database_2_client: &'a Client, update: Update1<'a>, by: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -154,38 +154,38 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &update_1.user_reset_password_token__value,
+                    &update.user_reset_password_token__value,
                     Type::TEXT,
                 )
                 .add(
-                    &update_1.user_reset_password_token__wrong_enter_tries_quantity,
+                    &update.user_reset_password_token__wrong_enter_tries_quantity,
                     Type::INT2,
                 )
                 .add(
-                    &update_1.user_reset_password_token__is_approved,
+                    &update.user_reset_password_token__is_approved,
                     Type::BOOL,
                 )
                 .add(
-                    &update_1.user_reset_password_token__expires_at,
+                    &update.user_reset_password_token__expires_at,
                     Type::INT8,
                 )
                 .add(
-                    &update_1.user_reset_password_token__can_be_resent_from,
+                    &update.user_reset_password_token__can_be_resent_from,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.user_device__id,
+                    &by.user_device__id,
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -193,14 +193,14 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn update_2<'a>(database_2_client: &'a Client, update_2: Update2, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_2<'a>(database_2_client: &'a Client, update: Update2, by: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -216,22 +216,22 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &update_2.user_reset_password_token__can_be_resent_from,
+                    &update.user_reset_password_token__can_be_resent_from,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.user_device__id,
+                    &by.user_device__id,
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -239,14 +239,14 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn update_3<'a>(database_2_client: &'a Client, update_3: Update3<'a>, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_3<'a>(database_2_client: &'a Client, update: Update3<'a>, by: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -268,34 +268,34 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &update_3.user_reset_password_token__value,
+                    &update.user_reset_password_token__value,
                     Type::TEXT,
                 )
                 .add(
-                    &update_3.user_reset_password_token__wrong_enter_tries_quantity,
+                    &update.user_reset_password_token__wrong_enter_tries_quantity,
                     Type::INT2,
                 )
                 .add(
-                    &update_3.user_reset_password_token__is_approved,
+                    &update.user_reset_password_token__is_approved,
                     Type::BOOL,
                 )
                 .add(
-                    &update_3.user_reset_password_token__expires_at,
+                    &update.user_reset_password_token__expires_at,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.user_device__id,
+                    &by.user_device__id,
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -303,14 +303,14 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn update_4<'a>(database_2_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_4<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -323,18 +323,18 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &by_1.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.user_device__id,
+                    &by.user_device__id,
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -342,14 +342,14 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn update_5<'a>(database_2_client: &'a Client, update_5: Update5, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_5<'a>(database_2_client: &'a Client, update: Update5, by: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -365,22 +365,22 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &update_5.user_reset_password_token__is_approved,
+                    &update.user_reset_password_token__is_approved,
                     Type::BOOL,
                 )
                 .add(
-                    &by_1.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.user_device__id,
+                    &by.user_device__id,
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -388,14 +388,14 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn find_1<'a>(database_2_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<Option<UserResetPasswordToken_1>, AggregateError>> + Send + use<'a> {
+    pub fn find_1<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserResetPasswordToken_1>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -412,46 +412,46 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &by_1.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.user_device__id,
+                    &by.user_device__id,
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     UserResetPasswordToken_1 {
-                        value: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
-                        wrong_enter_tries_quantity: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(1)),
-                        is_approved: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, bool>(2)),
-                        expires_at: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
-                        can_be_resent_from: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(4)),
+                        value: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
+                        wrong_enter_tries_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
+                        is_approved: crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(2)),
+                        expires_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
+                        can_be_resent_from: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(4)),
                     },
                 ),
             );
         };
     }
-    pub fn find_2<'a>(database_2_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<Option<UserResetPasswordToken_2>, AggregateError>> + Send + use<'a> {
+    pub fn find_2<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserResetPasswordToken_2>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -467,45 +467,45 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &by_1.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.user_device__id,
+                    &by.user_device__id,
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     UserResetPasswordToken_2 {
-                        value: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
-                        wrong_enter_tries_quantity: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(1)),
-                        is_approved: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, bool>(2)),
-                        expires_at: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
+                        value: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
+                        wrong_enter_tries_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
+                        is_approved: crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(2)),
+                        expires_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
                     },
                 ),
             );
         };
     }
-    pub fn find_3<'a>(database_2_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<Option<UserResetPasswordToken_3>, AggregateError>> + Send + use<'a> {
+    pub fn find_3<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserResetPasswordToken_3>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -521,39 +521,39 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &by_1.user__id,
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &by_1.user_device__id,
+                    &by.user_device__id,
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
                 database_2_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     UserResetPasswordToken_3 {
-                        value: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
-                        is_approved: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, bool>(1)),
-                        expires_at: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(2)),
-                        can_be_resent_from: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
+                        value: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
+                        is_approved: crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(1)),
+                        expires_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
+                        can_be_resent_from: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
                     },
                 ),
             );

@@ -18,7 +18,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<Channel<'_>>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<Channel<'static>, AggregateError>> + Send + use<'a> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1) -> impl Future<Output = Result<Channel<'static>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -55,22 +55,22 @@ impl Repository<Postgresql<Channel<'_>>> {
                     ) \
                 RETURNING \
                     c.id AS i;";
-            let channel__description = insert_1.channel__description.as_ref();
-            let channel__orientation = insert_1.channel__orientation.as_slice();
-            let channel__cover_image_path = insert_1.channel__cover_image_path.as_ref();
-            let channel__background_image_path = insert_1.channel__background_image_path.as_ref();
+            let channel__description = insert.channel__description.as_ref();
+            let channel__orientation = insert.channel__orientation.as_slice();
+            let channel__cover_image_path = insert.channel__cover_image_path.as_ref();
+            let channel__background_image_path = insert.channel__background_image_path.as_ref();
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &insert_1.channel__owner,
+                    &insert.channel__owner,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.channel__name,
+                    &insert.channel__name,
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.channel__linked_name,
+                    &insert.channel__linked_name,
                     Type::TEXT,
                 )
                 .add(
@@ -78,11 +78,11 @@ impl Repository<Postgresql<Channel<'_>>> {
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.channel__access_modifier,
+                    &insert.channel__access_modifier,
                     Type::INT2,
                 )
                 .add(
-                    &insert_1.channel__visability_modifier,
+                    &insert.channel__visability_modifier,
                     Type::INT2,
                 )
                 .add(
@@ -98,58 +98,58 @@ impl Repository<Postgresql<Channel<'_>>> {
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.channel__subscribers_quantity,
+                    &insert.channel__subscribers_quantity,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.channel__marks_quantity,
+                    &insert.channel__marks_quantity,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.channel__viewing_quantity,
+                    &insert.channel__viewing_quantity,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.channel__created_at,
+                    &insert.channel__created_at,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(
                 Channel::new(
-                    crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
-                    insert_1.channel__owner,
-                    Cow::Owned(insert_1.channel__name),
-                    insert_1.channel__linked_name,
-                    insert_1.channel__description,
-                    insert_1.channel__access_modifier,
-                    insert_1.channel__visability_modifier,
-                    insert_1.channel__orientation,
-                    insert_1.channel__cover_image_path,
-                    insert_1.channel__background_image_path,
-                    insert_1.channel__subscribers_quantity,
-                    insert_1.channel__marks_quantity,
-                    insert_1.channel__viewing_quantity,
-                    insert_1.channel__created_at,
+                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                    insert.channel__owner,
+                    Cow::Owned(insert.channel__name),
+                    insert.channel__linked_name,
+                    insert.channel__description,
+                    insert.channel__access_modifier,
+                    insert.channel__visability_modifier,
+                    insert.channel__orientation,
+                    insert.channel__cover_image_path,
+                    insert.channel__background_image_path,
+                    insert.channel__subscribers_quantity,
+                    insert.channel__marks_quantity,
+                    insert.channel__viewing_quantity,
+                    insert.channel__created_at,
                 ),
             );
         };
     }
-    pub fn update_1<'a>(database_1_client: &'a Client, by_1: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(database_1_client: &'a Client, by: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -160,14 +160,14 @@ impl Repository<Postgresql<Channel<'_>>> {
                     c.id = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_1.channel__id,
+                &by.channel__id,
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -175,14 +175,14 @@ impl Repository<Postgresql<Channel<'_>>> {
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1) -> impl Future<Output = Result<Option<Channel<'static>>, AggregateError>> + Send + use<'a> {
+    pub fn find_1<'a>(database_1_client: &'a Client, by: By1) -> impl Future<Output = Result<Option<Channel<'static>>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -205,55 +205,55 @@ impl Repository<Postgresql<Channel<'_>>> {
                     c.id = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_1.channel__id,
+                &by.channel__id,
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     Channel::new(
-                        by_1.channel__id,
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                        by.channel__id,
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
                         Cow::Owned(
                             crate::result_return_logic!(
-                                row_registry[0].try_get::<'_, usize, String>(1)
+                                rows[0].try_get::<'_, usize, String>(1)
                             ),
                         ),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(3)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(4)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(5)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Vec<i16>>(6)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(7)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(8)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(9)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(10)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(11)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(12)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(3)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(4)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(5)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Vec<i16>>(6)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(7)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(8)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(9)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(10)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(11)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(12)),
                     ),
                 ),
             );
         };
     }
-    pub fn find_2<'a, 'b>(database_1_client: &'a Client, by_2: By2<'b>) -> impl Future<Output = Result<Option<Channel<'b>>, AggregateError>> + Send + use<'a, 'b> {
+    pub fn find_2<'a, 'b>(database_1_client: &'a Client, by: By2<'b>) -> impl Future<Output = Result<Option<Channel<'b>>, AggregateError>> + Send + use<'a, 'b> {
         return async move {
             let query = "\
                 SELECT \
@@ -276,51 +276,51 @@ impl Repository<Postgresql<Channel<'_>>> {
                     c.name = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_2.channel__name,
+                &by.channel__name,
                 Type::TEXT,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     Channel::new(
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(1)),
-                        Cow::Borrowed(by_2.channel__name),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(3)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(4)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i16>(5)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Vec<i16>>(6)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(7)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, Option<String>>(8)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(9)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(10)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(11)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(12)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(1)),
+                        Cow::Borrowed(by.channel__name),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(3)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(4)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(5)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Vec<i16>>(6)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(7)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(8)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(9)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(10)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(11)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(12)),
                     ),
                 ),
             );
         };
     }
-    pub fn is_exist_1<'a>(database_1_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn is_exist_1<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -331,32 +331,32 @@ impl Repository<Postgresql<Channel<'_>>> {
                     c.name = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_2.channel__name,
+                &by.channel__name,
                 Type::TEXT,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(false);
             }
             return Result::Ok(true);
         };
     }
-    pub fn is_exist_2<'a>(database_1_client: &'a Client, by_3: By3<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn is_exist_2<'a>(database_1_client: &'a Client, by: By3<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -367,26 +367,26 @@ impl Repository<Postgresql<Channel<'_>>> {
                     c.linked_name = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_3.channel__linked_name,
+                &by.channel__linked_name,
                 Type::TEXT,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(false);
             }
             return Result::Ok(true);

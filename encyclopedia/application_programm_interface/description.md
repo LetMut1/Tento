@@ -160,8 +160,8 @@ struct Incoming {
 ```
 struct Outcoming {
     channel: Channel,
-    channel_inner_link_registry: Vec<ChannelInnerLink>,
-    channel_outer_link_registry: Vec<ChannelOuterLink>,
+    channel_inner_links: Vec<ChannelInnerLink>,
+    channel_outer_links: Vec<ChannelOuterLink>,
 }
 
 struct Channel {
@@ -219,7 +219,7 @@ Incoming parameters validation rule:
 ```
 ```
 struct Outcoming {
-    common_registry: Vec<Common1>
+    commons: Vec<Common1>
 }
 
 struct Common1 {
@@ -265,7 +265,7 @@ Incoming parameters validation rule:
 ```
 ```
 struct Outcoming {
-    common_registry: Vec<Common1>
+    commons: Vec<Common1>
 }
 
 struct Common1 {
@@ -312,7 +312,7 @@ Incoming parameters validation rule:
 ```
 ```
 struct Outcoming {
-    common_registry: Vec<Common1>
+    commons: Vec<Common1>
 }
 
 struct Common1 {

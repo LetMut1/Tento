@@ -588,7 +588,7 @@ typedef struct CVector_Common1 {
 } CVector_Common1;
 
 typedef struct Channel_GetManyByNameInSubscriptions_Outcoming {
-  struct CVector_Common1 common_registry;
+  struct CVector_Common1 commons;
 } Channel_GetManyByNameInSubscriptions_Outcoming;
 
 typedef struct CData_Channel_GetManyByNameInSubscriptions_Outcoming {
@@ -626,7 +626,7 @@ typedef struct Channel_GetManyBySubscription_Incoming {
 } Channel_GetManyBySubscription_Incoming;
 
 typedef struct Channel_GetManyBySubscription_Outcoming {
-  struct CVector_Common1 common_registry;
+  struct CVector_Common1 commons;
 } Channel_GetManyBySubscription_Outcoming;
 
 typedef struct CData_Channel_GetManyBySubscription_Outcoming {
@@ -660,7 +660,7 @@ typedef struct Channel_GetManyPublicByName_Incoming {
 } Channel_GetManyPublicByName_Incoming;
 
 typedef struct Channel_GetManyPublicByName_Outcoming {
-  struct CVector_Common1 common_registry;
+  struct CVector_Common1 commons;
 } Channel_GetManyPublicByName_Outcoming;
 
 typedef struct CData_Channel_GetManyPublicByName_Outcoming {
@@ -732,8 +732,8 @@ typedef struct CVector_ChannelOuterLink1 {
 
 typedef struct Channel_GetOneById_Outcoming {
   struct Channel2 channel;
-  struct CVector_ChannelInnerLink1 channel_inner_link_registry;
-  struct CVector_ChannelOuterLink1 channel_outer_link_registry;
+  struct CVector_ChannelInnerLink1 channel_inner_links;
+  struct CVector_ChannelOuterLink1 channel_outer_links;
 } Channel_GetOneById_Outcoming;
 
 typedef struct CData_Channel_GetOneById_Outcoming {

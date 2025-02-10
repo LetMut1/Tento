@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<UserDevice>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + use<'a> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -32,18 +32,18 @@ impl Repository<Postgresql<UserDevice>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &insert_1.user_device__id,
+                    &insert.user_device__id,
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.user__id,
+                    &insert.user__id,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -51,14 +51,14 @@ impl Repository<Postgresql<UserDevice>> {
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(
                 UserDevice::new(
-                    insert_1.user_device__id,
-                    insert_1.user__id,
+                    insert.user_device__id,
+                    insert.user__id,
                 ),
             );
         };

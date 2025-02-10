@@ -25,7 +25,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<User<'_>>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<User<'static>, AggregateError>> + Send + use<'a> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1) -> impl Future<Output = Result<User<'static>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -47,44 +47,44 @@ impl Repository<Postgresql<User<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &insert_1.user__email,
+                    &insert.user__email,
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.user__nickname,
+                    &insert.user__nickname,
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.user__password_hash,
+                    &insert.user__password_hash,
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.user__created_at,
+                    &insert.user__created_at,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(
                 User::new(
-                    crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
-                    insert_1.user__email,
-                    Cow::Owned(insert_1.user__nickname),
-                    insert_1.user__password_hash,
-                    insert_1.user__created_at,
+                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                    insert.user__email,
+                    Cow::Owned(insert.user__nickname),
+                    insert.user__password_hash,
+                    insert.user__created_at,
                 ),
             );
         };
@@ -132,22 +132,22 @@ impl Repository<Postgresql<User<'_>>> {
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn update_1<'a>(database_1_client: &'a Client, update_1: Update1<'a>, by_3: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(database_1_client: &'a Client, update: Update1<'a>, by: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -164,18 +164,18 @@ impl Repository<Postgresql<User<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &update_1.user__password_hash,
+                    &update.user__password_hash,
                     Type::TEXT,
                 )
                 .add(
-                    &by_3.user__id,
+                    &by.user__id,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -183,14 +183,14 @@ impl Repository<Postgresql<User<'_>>> {
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn delete_1<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn delete_1<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -199,14 +199,14 @@ impl Repository<Postgresql<User<'_>>> {
                     u.id = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_3.user__id,
+                &by.user__id,
                 Type::TEXT,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
@@ -214,14 +214,14 @@ impl Repository<Postgresql<User<'_>>> {
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
             return Result::Ok(());
         };
     }
-    pub fn is_exist_1<'a>(database_1_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn is_exist_1<'a>(database_1_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -232,32 +232,32 @@ impl Repository<Postgresql<User<'_>>> {
                     u.nickname = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_1.user__nickname,
+                &by.user__nickname,
                 Type::TEXT,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(false);
             }
             return Result::Ok(true);
         };
     }
-    pub fn is_exist_2<'a>(database_1_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn is_exist_2<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -268,32 +268,32 @@ impl Repository<Postgresql<User<'_>>> {
                     u.email = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_2.user__email,
+                &by.user__email,
                 Type::TEXT,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(false);
             }
             return Result::Ok(true);
         };
     }
-    pub fn is_exist_3<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn is_exist_3<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -304,32 +304,32 @@ impl Repository<Postgresql<User<'_>>> {
                     u.id = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_3.user__id,
+                &by.user__id,
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(false);
             }
             return Result::Ok(true);
         };
     }
-    pub fn find_1<'a, 'b>(database_1_client: &'a Client, by_1: By1<'b>) -> impl Future<Output = Result<Option<User<'b>>, AggregateError>> + Send + use<'a, 'b> {
+    pub fn find_1<'a, 'b>(database_1_client: &'a Client, by: By1<'b>) -> impl Future<Output = Result<Option<User<'b>>, AggregateError>> + Send + use<'a, 'b> {
         return async move {
             let query = "\
                 SELECT \
@@ -343,42 +343,42 @@ impl Repository<Postgresql<User<'_>>> {
                     u.nickname = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_1.user__nickname,
+                &by.user__nickname,
                 Type::TEXT,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     User::new(
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
-                        Cow::Borrowed(by_1.user__nickname),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
-                        crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(3)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
+                        Cow::Borrowed(by.user__nickname),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
                     ),
                 ),
             );
         };
     }
-    pub fn find_2<'a>(database_1_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<Option<User_1>, AggregateError>> + Send + use<'a> {
+    pub fn find_2<'a>(database_1_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<User_1>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -391,40 +391,40 @@ impl Repository<Postgresql<User<'_>>> {
                     u.nickname = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_1.user__nickname,
+                &by.user__nickname,
                 Type::TEXT,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     User_1 {
-                        id: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
-                        email: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
-                        password_hash: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
+                        id: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                        email: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
+                        password_hash: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
                     },
                 ),
             );
         };
     }
-    pub fn find_3<'a>(database_1_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<Option<User_2>, AggregateError>> + Send + use<'a> {
+    pub fn find_3<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<Option<User_2>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -437,40 +437,40 @@ impl Repository<Postgresql<User<'_>>> {
                     u.email = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_2.user__email,
+                &by.user__email,
                 Type::TEXT,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     User_2 {
-                        id: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
-                        nickname: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
-                        password_hash: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
+                        id: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                        nickname: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
+                        password_hash: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
                     },
                 ),
             );
         };
     }
-    pub fn find_4<'a>(database_1_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<Option<User_3>, AggregateError>> + Send + use<'a> {
+    pub fn find_4<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<Option<User_3>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -481,38 +481,38 @@ impl Repository<Postgresql<User<'_>>> {
                     u.email = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_2.user__email,
+                &by.user__email,
                 Type::TEXT,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     User_3 {
-                        id: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)),
+                        id: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
                     },
                 ),
             );
         };
     }
-    pub fn find_5<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<Option<User_4>, AggregateError>> + Send + use<'a> {
+    pub fn find_5<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<Option<User_4>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -525,40 +525,40 @@ impl Repository<Postgresql<User<'_>>> {
                     u.id = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_3.user__id,
+                &by.user__id,
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     User_4 {
-                        email: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
-                        nickname: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(1)),
-                        password_hash: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(2)),
+                        email: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
+                        nickname: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
+                        password_hash: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
                     },
                 ),
             );
         };
     }
-    pub fn find_6<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<Option<User_5>, AggregateError>> + Send + use<'a> {
+    pub fn find_6<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<Option<User_5>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -569,32 +569,32 @@ impl Repository<Postgresql<User<'_>>> {
                     u.id = $1;";
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
-                &by_3.user__id,
+                &by.user__id,
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
                     query,
-                    parameter_storage.get_parameter_type_registry(),
+                    parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
-                    parameter_storage.get_parameter_registry(),
+                    parameter_storage.get_parameters(),
                 )
                 .await
             );
-            if row_registry.is_empty() {
+            if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(
                 Option::Some(
                     User_5 {
-                        email: crate::result_return_logic!(row_registry[0].try_get::<'_, usize, String>(0)),
+                        email: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
                     },
                 ),
             );
@@ -612,7 +612,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            let row_registry = crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -620,7 +620,7 @@ impl Repository<Postgresql<User<'_>>> {
                 )
                 .await
             );
-            return Result::Ok(crate::result_return_logic!(row_registry[0].try_get::<'_, usize, i64>(0)));
+            return Result::Ok(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)));
         };
     }
 }

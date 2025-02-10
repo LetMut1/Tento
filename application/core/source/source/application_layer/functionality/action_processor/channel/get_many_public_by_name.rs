@@ -78,7 +78,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                     return Result::Err(crate::new_invalid_argument!());
                 }
             }
-            let common_registry = Repository::<Postgresql<Common1>>::find_1(
+            let commons = Repository::<Postgresql<Common1>>::find_1(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 CommonBy1 {
                     user__id: user_access_token.user__id,
@@ -90,7 +90,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
             )
             .await?;
             let outcoming = Outcoming {
-                common_registry,
+                commons,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

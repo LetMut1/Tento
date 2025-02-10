@@ -103,7 +103,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
                 }
             }
-            let channel_inner_link_registry = Repository::<Postgresql<ChannelInnerLink>>::find_1(
+            let channel_inner_links = Repository::<Postgresql<ChannelInnerLink>>::find_1(
                 &postgresql_database_1_client,
                 ChannelInnerLinkBy1 {
                     channel_inner_link__from: channel.id,
@@ -111,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 ChannelInnerLink::MAXIMUM_QUANTITY,
             )
             .await?;
-            let channel_outer_link_registry = Repository::<Postgresql<ChannelOuterLink>>::find_1(
+            let channel_outer_links = Repository::<Postgresql<ChannelOuterLink>>::find_1(
                 &postgresql_database_1_client,
                 ChannelOuterLinkBy1 {
                     channel_outer_link__from: channel.id,
@@ -119,7 +119,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 ChannelOuterLink::MAXIMUM_QUANTITY,
             )
             .await?;
-            let channel_2 = Channel2 {
+            let channel = Channel2 {
                 channel__owner: channel.owner,
                 channel__name: channel.name.into_owned(),
                 channel__linked_name: channel.linked_name,
@@ -134,9 +134,9 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 channel__viewing_quantity: channel.viewing_quantity,
             };
             let outcoming = Outcoming {
-                channel: channel_2,
-                channel_inner_link_registry,
-                channel_outer_link_registry,
+                channel,
+                channel_inner_links,
+                channel_outer_links,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

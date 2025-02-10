@@ -26,7 +26,7 @@ pub struct Incoming {
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Outcoming {
-    pub common_registry: Vec<Common1>,
+    pub commons: Vec<Common1>,
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
