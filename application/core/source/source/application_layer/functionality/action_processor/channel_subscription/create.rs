@@ -94,7 +94,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if channel.owner == user_access_token.user__id {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
             }
-            if const { Channel_AccessModifier::Close as i16 } == channel.access_modifier {
+            if Channel_AccessModifier::Close as i16 == channel.access_modifier {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
             }
             let transaction = Resolver_::<Transaction<'_>>::start(
