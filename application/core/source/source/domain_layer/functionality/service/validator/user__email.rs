@@ -10,6 +10,15 @@ use {
 static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
 impl Validator<User_Email> {
     pub fn is_valid<'a>(user__email: &'a str) -> Result<bool, AggregateError> {
+        let chars = user__email.chars();
+        if user__email.chars().count() > User_Email::MAXIMUM_LENGTH {
+            return Result::Ok(false);
+        }
+        '_a: for r#char in chars {
+            if r#char.is_uppercase() {
+                return Result::Ok(false);
+            }
+        }
         let regular_expression = match REGULAR_EXPRESSION.get() {
             Option::Some(regular_expression_) => regular_expression_,
             Option::None => {
@@ -26,6 +35,6 @@ impl Validator<User_Email> {
                 crate::option_return_logic_value_does_not_exist!(REGULAR_EXPRESSION.get())
             }
         };
-        return Result::Ok(regular_expression.is_match(user__email) && user__email.chars().count() <= User_Email::MAXIMUM_LENGTH);
+        return Result::Ok(regular_expression.is_match(user__email));
     }
 }

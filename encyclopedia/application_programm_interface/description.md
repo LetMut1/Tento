@@ -704,6 +704,8 @@ enum Precedent {
 
 320 - maximum number of characters.
 
+Lowercase.
+
 ```
  - ## user__nickname
 ```
@@ -714,6 +716,8 @@ enum Precedent {
 Can not contain whitespace character.
 
 Can not be empty.
+
+Lowercase.
 
 ```
  - ## user__password
@@ -735,4 +739,8 @@ Can not be equal to user__nickname.
  - ## channel__name
 ```
 75 - maximum number of characters.
+```
+ - ## channel__linked_name
+```
+Lowercase.
 ```
