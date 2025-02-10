@@ -95,7 +95,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     &postgresql_database_1_client,
                     ChannelSubscriptionBy1 {
                         user__id: user_access_token.user__id,
-                        channel__id: channel.id,
+                        channel__id: incoming.channel__id,
                     },
                 )
                 .await?;
@@ -106,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             let channel_inner_links = Repository::<Postgresql<ChannelInnerLink>>::find_1(
                 &postgresql_database_1_client,
                 ChannelInnerLinkBy1 {
-                    channel_inner_link__from: channel.id,
+                    channel_inner_link__from: incoming.channel__id,
                 },
                 ChannelInnerLink::MAXIMUM_QUANTITY,
             )
@@ -114,14 +114,13 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             let channel_outer_links = Repository::<Postgresql<ChannelOuterLink>>::find_1(
                 &postgresql_database_1_client,
                 ChannelOuterLinkBy1 {
-                    channel_outer_link__from: channel.id,
+                    channel_outer_link__from: incoming.channel__id,
                 },
                 ChannelOuterLink::MAXIMUM_QUANTITY,
             )
             .await?;
-            let channel = Channel2 {
-                channel__owner: channel.owner,
-                channel__name: channel.name.into_owned(),
+            let channel_ = Channel2 {
+                channel__name: channel.name,
                 channel__linked_name: channel.linked_name,
                 channel__description: channel.description,
                 channel__access_modifier: channel.access_modifier,
@@ -134,9 +133,10 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 channel__viewing_quantity: channel.viewing_quantity,
             };
             let outcoming = Outcoming {
-                channel,
+                channel: channel_,
                 channel_inner_links,
                 channel_outer_links,
+                user_is_channel_owner: user_access_token.user__id == channel.owner,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

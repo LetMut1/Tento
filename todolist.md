@@ -152,15 +152,3 @@ Update-  Нужно ли проверять количество вернувш�
 
 access_modifier + visability_modifier -> 2 bytes.
 But We can hold 8 similar (0/1)-types in 1 byte as: 000000(0 - for access_modifier)(0 - for visability modifier)
-
-
-
-
-
-
-
-
-------TODO:
-// СДелал оптимизацию запросов для:
-// - user_authorization. // ToDo ДОделать остальные. и сделать репозиторий по новым правилам.
-// - channel_description

@@ -485,7 +485,6 @@ pub struct Channel1 {
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel2 {
-    pub channel__owner: c_long,
     pub channel__name: CString,
     pub channel__linked_name: CString,
     pub channel__description: COption<CString>,
@@ -2505,6 +2504,7 @@ pub struct Channel_GetOneById_Outcoming {
     pub channel: Channel2,
     pub channel_inner_links: CVector<ChannelInnerLink1>,
     pub channel_outer_links: CVector<ChannelOuterLink1>,
+    pub user_is_channel_owner: bool,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -2537,7 +2537,6 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                             Option::None => COption::none()
                         };
                         let channel_2 = Channel2 {
-                            channel__owner: data__.channel.channel__owner,
                             channel__name: Allocator::<CString>::allocate(data__.channel.channel__name),
                             channel__linked_name: Allocator::<CString>::allocate(data__.channel.channel__linked_name),
                             channel__description,
@@ -2569,6 +2568,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                             channel: channel_2,
                             channel_inner_links: Allocator::<CVector<_>>::allocate(channel_inner_links),
                             channel_outer_links: Allocator::<CVector<_>>::allocate(channel_outer_links),
+                            user_is_channel_owner: data__.user_is_channel_owner,
                         };
                         CData::filled(outcoming)
                     }
@@ -2680,7 +2680,7 @@ pub struct ChannelSubscription_Create_Precedent {
 pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Create_CResult {
     let converter = move |unified_report: UnifiedReport<Void, ChannelSubscription_Create_Precedent_>| -> Result<CUnifiedReport<CVoid, ChannelSubscription_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired => {
@@ -3944,7 +3944,6 @@ mod test {
                     channel_outer_links.push(channel_outer_link);
                 }
                 let channel = Channel2_ {
-                    channel__owner: 0,
                     channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
                     channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                     channel__description: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
@@ -3961,6 +3960,7 @@ mod test {
                     channel,
                     channel_inner_links,
                     channel_outer_links,
+                    user_is_channel_owner: true,
                 };
                 let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>::target_filled(outcoming);
                 return run_by_template(

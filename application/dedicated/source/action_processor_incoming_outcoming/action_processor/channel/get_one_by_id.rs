@@ -31,6 +31,7 @@ pub struct Outcoming {
     pub channel: Channel2,
     pub channel_inner_links: Vec<ChannelInnerLink1>,
     pub channel_outer_links: Vec<ChannelOuterLink1>,
+    pub user_is_channel_owner: bool,
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {

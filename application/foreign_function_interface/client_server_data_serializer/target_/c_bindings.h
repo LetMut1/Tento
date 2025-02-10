@@ -697,7 +697,6 @@ typedef struct CVector_c_short {
 } CVector_c_short;
 
 typedef struct Channel2 {
-  long channel__owner;
   struct CString channel__name;
   struct CString channel__linked_name;
   struct COption_CString channel__description;
@@ -734,6 +733,7 @@ typedef struct Channel_GetOneById_Outcoming {
   struct Channel2 channel;
   struct CVector_ChannelInnerLink1 channel_inner_links;
   struct CVector_ChannelOuterLink1 channel_outer_links;
+  bool user_is_channel_owner;
 } Channel_GetOneById_Outcoming;
 
 typedef struct CData_Channel_GetOneById_Outcoming {

@@ -162,10 +162,10 @@ struct Outcoming {
     channel: Channel,
     channel_inner_links: Vec<ChannelInnerLink>,
     channel_outer_links: Vec<ChannelOuterLink>,
+    user_is_channel_owner: bool,
 }
 
 struct Channel {
-    channel__owner: i64,
     channel__name: String,
     channel__linked_name: String,
     channel__description: Option<String>,

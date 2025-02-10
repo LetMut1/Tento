@@ -37,7 +37,6 @@ pub struct Channel1 {
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Channel2 {
-    pub channel__owner: i64,
     pub channel__name: String,
     pub channel__linked_name: String,
     pub channel__description: Option<String>,

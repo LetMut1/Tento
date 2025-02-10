@@ -48,7 +48,6 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
     type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
-        const LIMIT: i16 = 100;
         return async move {
             let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,
@@ -64,6 +63,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
+            const LIMIT: i16 = 100;
             if incoming.limit <= 0 || incoming.limit > LIMIT {
                 return Result::Err(crate::new_invalid_argument!());
             }
