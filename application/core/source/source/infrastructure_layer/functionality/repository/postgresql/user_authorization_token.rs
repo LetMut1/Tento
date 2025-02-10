@@ -7,9 +7,9 @@ use {
         domain_layer::data::entity::user_authorization_token::{
             UserAuthorizationToken,
             derivative::{
-                UserAuthorizationToken_1,
-                UserAuthorizationToken_2,
-                UserAuthorizationToken_3,
+                UserAuthorizationToken1,
+                UserAuthorizationToken2,
+                UserAuthorizationToken3,
             },
         },
         infrastructure_layer::{
@@ -333,7 +333,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn find_1<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserAuthorizationToken_1>, AggregateError>> + Send + use<'a> {
+    pub fn find_1<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserAuthorizationToken1>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -377,7 +377,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    UserAuthorizationToken_1 {
+                    UserAuthorizationToken1 {
                         value: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
                         wrong_enter_tries_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
                         expires_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
@@ -387,7 +387,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             );
         };
     }
-    pub fn find_2<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserAuthorizationToken_2>, AggregateError>> + Send + use<'a> {
+    pub fn find_2<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserAuthorizationToken2>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -430,7 +430,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    UserAuthorizationToken_2 {
+                    UserAuthorizationToken2 {
                         value: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
                         wrong_enter_tries_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
                         expires_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
@@ -439,7 +439,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             );
         };
     }
-    pub fn find_3<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserAuthorizationToken_3>, AggregateError>> + Send + use<'a> {
+    pub fn find_3<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserAuthorizationToken3>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -482,7 +482,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    UserAuthorizationToken_3 {
+                    UserAuthorizationToken3 {
                         value: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
                         expires_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(1)),
                         can_be_resent_from: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),

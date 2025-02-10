@@ -7,9 +7,9 @@ use {
         domain_layer::data::entity::user_reset_password_token::{
             UserResetPasswordToken,
             derivative::{
-                UserResetPasswordToken_1,
-                UserResetPasswordToken_2,
-                UserResetPasswordToken_3,
+                UserResetPasswordToken1,
+                UserResetPasswordToken2,
+                UserResetPasswordToken3,
             },
         },
         infrastructure_layer::{
@@ -397,7 +397,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn find_1<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserResetPasswordToken_1>, AggregateError>> + Send + use<'a> {
+    pub fn find_1<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserResetPasswordToken1>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -442,7 +442,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    UserResetPasswordToken_1 {
+                    UserResetPasswordToken1 {
                         value: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
                         wrong_enter_tries_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
                         is_approved: crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(2)),
@@ -453,7 +453,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             );
         };
     }
-    pub fn find_2<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserResetPasswordToken_2>, AggregateError>> + Send + use<'a> {
+    pub fn find_2<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserResetPasswordToken2>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -497,7 +497,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    UserResetPasswordToken_2 {
+                    UserResetPasswordToken2 {
                         value: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
                         wrong_enter_tries_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
                         is_approved: crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(2)),
@@ -507,7 +507,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             );
         };
     }
-    pub fn find_3<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserResetPasswordToken_3>, AggregateError>> + Send + use<'a> {
+    pub fn find_3<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserResetPasswordToken3>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -551,7 +551,7 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    UserResetPasswordToken_3 {
+                    UserResetPasswordToken3 {
                         value: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
                         is_approved: crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(1)),
                         expires_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
