@@ -289,18 +289,17 @@ Incoming parameters validation rule:
 ```
 ```
 struct Outcoming {
-    commons: Vec<Common1>
+    data_registry: Vec<Data>,
 }
-
-struct Common1 {
+struct Data {
     channel__id: i64,
     channel__name: String,
     channel__linked_name: String,
     channel__access_modifier: i16,
     channel__visability_modifier: i16,
     channel__cover_image_path: Option<String>,
-    channel__background_image_path: Option<String>
-    is_user_subscribed: bool
+    channel__background_image_path: Option<String>,
+    is_user_subscribed: bool,
 }
 ```
 ```

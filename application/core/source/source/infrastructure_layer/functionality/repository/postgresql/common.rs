@@ -14,12 +14,15 @@ use {
         },
     },
     deadpool_postgres::Client,
-    dedicated::action_processor_incoming_outcoming::Common1,
+    dedicated::action_processor_incoming_outcoming::{
+        action_processor::channel::get_many_public_by_name::Data,
+        Common1
+    },
     std::future::Future,
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<Common1>> {
-    pub fn find_1<'a>(database_1_client: &'a Client, by: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {
+    pub fn find_1<'a>(database_1_client: &'a Client, by: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Data>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -99,12 +102,12 @@ impl Repository<Postgresql<Common1>> {
                 )
                 .await
             );
-            let mut commons: Vec<Common1> = vec![];
+            let mut data_registry: Vec<Data> = vec![];
             if rows.is_empty() {
-                return Result::Ok(commons);
+                return Result::Ok(data_registry);
             }
             '_a: for row in rows.iter() {
-                let common = Common1 {
+                let common = Data {
                     channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
@@ -114,9 +117,9 @@ impl Repository<Postgresql<Common1>> {
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
                     is_user_subscribed: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)).is_some(),
                 };
-                commons.push(common);
+                data_registry.push(common);
             }
-            return Result::Ok(commons);
+            return Result::Ok(data_registry);
         };
     }
     pub fn find_2<'a>(database_1_client: &'a Client, by: By2<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {

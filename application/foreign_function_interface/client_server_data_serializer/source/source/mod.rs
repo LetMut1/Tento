@@ -2343,8 +2343,20 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_deallocate(
 type Channel_GetManyPublicByName_CResult = CResult<CUnifiedReport<Channel_GetManyPublicByName_Outcoming, Channel_GetManyPublicByName_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
+pub struct Channel_GetManyPublicByName_Data {
+    pub channel__id: c_long,
+    pub channel__name: CString,
+    pub channel__linked_name: CString,
+    pub channel__access_modifier: c_short,
+    pub channel__visability_modifier: c_short,
+    pub channel__cover_image_path: COption<CString>,
+    pub channel__background_image_path: COption<CString>,
+    pub is_user_subscribed: bool,
+}
+#[repr(C)]
+#[derive(Default)]
 pub struct Channel_GetManyPublicByName_Outcoming {
-    pub commons: CVector<Common1>,
+    pub data_registry: CVector<Channel_GetManyPublicByName_Data>,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -2367,30 +2379,30 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                     Data::Filled {
                         data: data__,
                     } => {
-                        let mut commons: Vec<Common1> = vec![];
-                        '_a: for common in data__.commons {
-                            let channel__cover_image_path = match common.channel__cover_image_path {
+                        let mut data_registry: Vec<Channel_GetManyPublicByName_Data> = vec![];
+                        '_a: for data in data__.data_registry {
+                            let channel__cover_image_path = match data.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
                                 Option::None => COption::none(),
                             };
-                            let channel__background_image_path = match common.channel__background_image_path {
+                            let channel__background_image_path = match data.channel__background_image_path {
                                 Option::Some(channel__background_image_path_) => COption::data(Allocator::<CString>::allocate(channel__background_image_path_)),
                                 Option::None => COption::none(),
                             };
-                            let common_ = Common1 {
-                                channel__id: common.channel__id,
-                                channel__name: Allocator::<CString>::allocate(common.channel__name),
-                                channel__linked_name: Allocator::<CString>::allocate(common.channel__linked_name),
-                                channel__access_modifier: common.channel__access_modifier,
-                                channel__visability_modifier: common.channel__visability_modifier,
+                            let data_ = Channel_GetManyPublicByName_Data {
+                                channel__id: data.channel__id,
+                                channel__name: Allocator::<CString>::allocate(data.channel__name),
+                                channel__linked_name: Allocator::<CString>::allocate(data.channel__linked_name),
+                                channel__access_modifier: data.channel__access_modifier,
+                                channel__visability_modifier: data.channel__visability_modifier,
                                 channel__cover_image_path,
                                 channel__background_image_path,
-                                is_user_subscribed: common.is_user_subscribed,
+                                is_user_subscribed: data.is_user_subscribed,
                             };
-                            commons.push(common_);
+                            data_registry.push(data_);
                         }
                         let outcoming = Channel_GetManyPublicByName_Outcoming {
-                            commons: Allocator::<CVector<_>>::allocate(commons),
+                            data_registry: Allocator::<CVector<_>>::allocate(data_registry),
                         };
                         CData::filled(outcoming)
                     }
@@ -2427,18 +2439,18 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_deallocate(c_result: Channel_GetManyPublicByName_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        let commons = c_result.data.target.filled.commons.as_slice_unchecked();
-        for common in commons {
-            Allocator::<CString>::deallocate(common.channel__name);
-            Allocator::<CString>::deallocate(common.channel__linked_name);
-            if common.channel__background_image_path.is_data {
-                Allocator::<CString>::deallocate(common.channel__background_image_path.data);
+        let data_registry = c_result.data.target.filled.data_registry.as_slice_unchecked();
+        for data in data_registry {
+            Allocator::<CString>::deallocate(data.channel__name);
+            Allocator::<CString>::deallocate(data.channel__linked_name);
+            if data.channel__background_image_path.is_data {
+                Allocator::<CString>::deallocate(data.channel__background_image_path.data);
             }
-            if common.channel__cover_image_path.is_data {
-                Allocator::<CString>::deallocate(common.channel__cover_image_path.data);
+            if data.channel__cover_image_path.is_data {
+                Allocator::<CString>::deallocate(data.channel__cover_image_path.data);
             }
         }
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.commons);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.data_registry);
     }
     return ();
 }
@@ -3140,7 +3152,10 @@ mod test {
         pub mod server_response_data_deserialization {
             use {
                 super::*,
-                dedicated::action_processor_incoming_outcoming::Common1 as Common1_,
+                dedicated::action_processor_incoming_outcoming::{
+                    Common1 as Common1_,
+                    action_processor::channel::get_many_public_by_name::Data as Channel_GetManyPublicByName_Data_,
+                },
             };
             fn run_by_template<'a, T, E>(
                 data: &'a T,
@@ -3821,9 +3836,9 @@ mod test {
                 );
             }
             pub fn target_filled__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut commons: Vec<Common1_> = vec![];
+                let mut data_registry: Vec<Channel_GetManyPublicByName_Data_> = vec![];
                 '_a: for _ in 1..=5 {
-                    let common = Common1_ {
+                    let data = Channel_GetManyPublicByName_Data_ {
                         channel__id: 0,
                         channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
@@ -3833,10 +3848,10 @@ mod test {
                         channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         is_user_subscribed: false,
                     };
-                    commons.push(common);
+                    data_registry.push(data);
                 }
                 let outcoming = Channel_GetManyPublicByName_Outcoming_ {
-                    commons,
+                    data_registry,
                 };
                 let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>::target_filled(outcoming);
                 return run_by_template(

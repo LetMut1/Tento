@@ -14,9 +14,6 @@ pub struct Incoming {
     pub user_access_token_encoded: UserAccessTokenEncoded,
     pub channel__id: i64,
 }
-pub struct Data1 {
-    pub channel_inner_link__to: i64,
-}
 #[cfg_attr(
     feature = "serde_for_manual_test",
     derive(
