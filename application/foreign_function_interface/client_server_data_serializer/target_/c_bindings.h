@@ -567,7 +567,7 @@ typedef struct Channel_GetManyByNameInSubscriptions_Incoming {
   short limit;
 } Channel_GetManyByNameInSubscriptions_Incoming;
 
-typedef struct Common1 {
+typedef struct Channel_GetManyByNameInSubscriptions_Data {
   long channel__id;
   struct CString channel__name;
   struct CString channel__linked_name;
@@ -575,16 +575,15 @@ typedef struct Common1 {
   short channel__visability_modifier;
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
-  bool is_user_subscribed;
-} Common1;
+} Channel_GetManyByNameInSubscriptions_Data;
 
-typedef struct CVector_Common1 {
-  struct Common1 *pointer;
+typedef struct CVector_Channel_GetManyByNameInSubscriptions_Data {
+  struct Channel_GetManyByNameInSubscriptions_Data *pointer;
   size_t length;
-} CVector_Common1;
+} CVector_Channel_GetManyByNameInSubscriptions_Data;
 
 typedef struct Channel_GetManyByNameInSubscriptions_Outcoming {
-  struct CVector_Common1 commons;
+  struct CVector_Channel_GetManyByNameInSubscriptions_Data data_registry;
 } Channel_GetManyByNameInSubscriptions_Outcoming;
 
 typedef struct CData_Channel_GetManyByNameInSubscriptions_Outcoming {
@@ -620,6 +619,22 @@ typedef struct Channel_GetManyBySubscription_Incoming {
   struct COption_c_long requery___channel__id;
   short limit;
 } Channel_GetManyBySubscription_Incoming;
+
+typedef struct Common1 {
+  long channel__id;
+  struct CString channel__name;
+  struct CString channel__linked_name;
+  short channel__access_modifier;
+  short channel__visability_modifier;
+  struct COption_CString channel__cover_image_path;
+  struct COption_CString channel__background_image_path;
+  bool is_user_subscribed;
+} Common1;
+
+typedef struct CVector_Common1 {
+  struct Common1 *pointer;
+  size_t length;
+} CVector_Common1;
 
 typedef struct Channel_GetManyBySubscription_Outcoming {
   struct CVector_Common1 commons;
