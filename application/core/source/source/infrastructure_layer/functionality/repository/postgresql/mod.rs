@@ -1,6 +1,4 @@
 mod channel;
-mod channel_inner_link;
-mod channel_outer_link;
 mod channel_subscription;
 mod common;
 mod user;
@@ -16,8 +14,6 @@ pub use self::{
         By3 as ChannelBy3,
         Insert1 as ChannelInsert1,
     },
-    channel_inner_link::By1 as ChannelInnerLinkBy1,
-    channel_outer_link::By1 as ChannelOuterLinkBy1,
     channel_subscription::By1 as ChannelSubscriptionBy1,
     common::{
         By1 as CommonBy1,

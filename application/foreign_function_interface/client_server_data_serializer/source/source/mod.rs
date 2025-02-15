@@ -479,21 +479,6 @@ pub struct Common1 {
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct Channel2 {
-    pub channel__name: CString,
-    pub channel__linked_name: CString,
-    pub channel__description: COption<CString>,
-    pub channel__access_modifier: c_short,
-    pub channel__visability_modifier: c_short,
-    pub channel__orientation: CVector<c_short>,
-    pub channel__cover_image_path: COption<CString>,
-    pub channel__background_image_path: COption<CString>,
-    pub channel__subscribers_quantity: c_long,
-    pub channel__marks_quantity: c_long,
-    pub channel__viewing_quantity: c_long,
-}
-#[repr(C)]
-#[derive(Default)]
 pub struct ChannelInnerLink1 {
     pub channel_inner_link__to: c_long,
 }
@@ -2490,9 +2475,17 @@ type Channel_GetOneById_CResult = CResult<CUnifiedReport<Channel_GetOneById_Outc
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetOneById_Outcoming {
-    pub channel: Channel2,
-    pub channel_inner_links: CVector<ChannelInnerLink1>,
-    pub channel_outer_links: CVector<ChannelOuterLink1>,
+    pub channel__name: CString,
+    pub channel__linked_name: CString,
+    pub channel__description: COption<CString>,
+    pub channel__access_modifier: c_short,
+    pub channel__visability_modifier: c_short,
+    pub channel__orientation: CVector<c_short>,
+    pub channel__cover_image_path: COption<CString>,
+    pub channel__background_image_path: COption<CString>,
+    pub channel__subscribers_quantity: c_long,
+    pub channel__marks_quantity: c_long,
+    pub channel__viewing_quantity: c_long,
     pub user_is_channel_owner: bool,
 }
 #[repr(C)]
@@ -2513,50 +2506,30 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                         CData::empty()
                     }
                     Data::Filled { data: data__ } => {
-                        let channel__description = match data__.channel.channel__description {
+                        let channel__description = match data__.channel__description {
                             Option::Some(channel__description_) => COption::data(Allocator::<CString>::allocate(channel__description_)),
                             Option::None => COption::none()
                         };
-                        let channel__cover_image_path = match data__.channel.channel__cover_image_path {
+                        let channel__cover_image_path = match data__.channel__cover_image_path {
                             Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
                             Option::None => COption::none()
                         };
-                        let channel__background_image_path = match data__.channel.channel__background_image_path {
+                        let channel__background_image_path = match data__.channel__background_image_path {
                             Option::Some(channel__background_image_path_) => COption::data(Allocator::<CString>::allocate(channel__background_image_path_)),
                             Option::None => COption::none()
                         };
-                        let channel_2 = Channel2 {
-                            channel__name: Allocator::<CString>::allocate(data__.channel.channel__name),
-                            channel__linked_name: Allocator::<CString>::allocate(data__.channel.channel__linked_name),
+                        let outcoming = Channel_GetOneById_Outcoming {
+                            channel__name: Allocator::<CString>::allocate(data__.channel__name),
+                            channel__linked_name: Allocator::<CString>::allocate(data__.channel__linked_name),
                             channel__description,
-                            channel__access_modifier: data__.channel.channel__access_modifier,
-                            channel__visability_modifier: data__.channel.channel__visability_modifier,
-                            channel__orientation: Allocator::<CVector<_>>::allocate(data__.channel.channel__orientation),
+                            channel__access_modifier: data__.channel__access_modifier,
+                            channel__visability_modifier: data__.channel__visability_modifier,
+                            channel__orientation: Allocator::<CVector<_>>::allocate(data__.channel__orientation),
                             channel__cover_image_path,
                             channel__background_image_path,
-                            channel__subscribers_quantity: data__.channel.channel__subscribers_quantity,
-                            channel__marks_quantity: data__.channel.channel__marks_quantity,
-                            channel__viewing_quantity: data__.channel. channel__viewing_quantity,
-                        };
-                        let mut channel_inner_links: Vec<ChannelInnerLink1> = vec![];
-                        '_a: for channel_inner_link in data__.channel_inner_links {
-                            let channel_inner_link_ = ChannelInnerLink1 {
-                                channel_inner_link__to: channel_inner_link.channel_inner_link__to
-                            };
-                            channel_inner_links.push(channel_inner_link_);
-                        }
-                        let mut channel_outer_links: Vec<ChannelOuterLink1> = vec![];
-                        '_a: for channel_outer_link in data__.channel_outer_links {
-                            let channel_outer_link_ = ChannelOuterLink1 {
-                                channel_outer_link__alias: Allocator::<CString>::allocate(channel_outer_link.channel_outer_link__alias),
-                                channel_outer_link__address: Allocator::<CString>::allocate(channel_outer_link.channel_outer_link__address)
-                            };
-                            channel_outer_links.push(channel_outer_link_);
-                        }
-                        let outcoming = Channel_GetOneById_Outcoming {
-                            channel: channel_2,
-                            channel_inner_links: Allocator::<CVector<_>>::allocate(channel_inner_links),
-                            channel_outer_links: Allocator::<CVector<_>>::allocate(channel_outer_links),
+                            channel__subscribers_quantity: data__.channel__subscribers_quantity,
+                            channel__marks_quantity: data__.channel__marks_quantity,
+                            channel__viewing_quantity: data__. channel__viewing_quantity,
                             user_is_channel_owner: data__.user_is_channel_owner,
                         };
                         CData::filled(outcoming)
@@ -2604,25 +2577,18 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_one_by_id__deserialize_deallocate(c_result: Channel_GetOneById_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__name);
-        Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__linked_name);
-        if c_result.data.target.filled.channel.channel__description.is_data {
-            Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__description.data);
+        Allocator::<CString>::deallocate(c_result.data.target.filled.channel__name);
+        Allocator::<CString>::deallocate(c_result.data.target.filled.channel__linked_name);
+        if c_result.data.target.filled.channel__description.is_data {
+            Allocator::<CString>::deallocate(c_result.data.target.filled.channel__description.data);
         }
-        if c_result.data.target.filled.channel.channel__background_image_path.is_data {
-            Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__background_image_path.data);
+        if c_result.data.target.filled.channel__background_image_path.is_data {
+            Allocator::<CString>::deallocate(c_result.data.target.filled.channel__background_image_path.data);
         }
-        if c_result.data.target.filled.channel.channel__cover_image_path.is_data {
-            Allocator::<CString>::deallocate(c_result.data.target.filled.channel.channel__cover_image_path.data);
+        if c_result.data.target.filled.channel__cover_image_path.is_data {
+            Allocator::<CString>::deallocate(c_result.data.target.filled.channel__cover_image_path.data);
         }
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel.channel__orientation);
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_inner_links);
-        let channel_outer_links = c_result.data.target.filled.channel_outer_links.as_slice_unchecked();
-        for channel_outer_link in channel_outer_links {
-            Allocator::<CString>::deallocate(channel_outer_link.channel_outer_link__alias);
-            Allocator::<CString>::deallocate(channel_outer_link.channel_outer_link__address);
-        }
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_outer_links);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel__orientation);
     }
     return ();
 }
@@ -3174,12 +3140,7 @@ mod test {
         pub mod server_response_data_deserialization {
             use {
                 super::*,
-                dedicated::action_processor_incoming_outcoming::{
-                    Channel2 as Channel2_,
-                    ChannelInnerLink1 as ChannelInnerLink1_,
-                    ChannelOuterLink1 as ChannelOuterLink1_,
-                    Common1 as Common1_,
-                },
+                dedicated::action_processor_incoming_outcoming::Common1 as Common1_,
             };
             fn run_by_template<'a, T, E>(
                 data: &'a T,
@@ -3910,22 +3871,7 @@ mod test {
                 );
             }
             pub fn target_filled__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut channel_inner_links: Vec<ChannelInnerLink1_> = vec![];
-                '_a: for _ in 1..=5 {
-                    let channel_inner_link = ChannelInnerLink1_ {
-                        channel_inner_link__to: 0,
-                    };
-                    channel_inner_links.push(channel_inner_link);
-                }
-                let mut channel_outer_links: Vec<ChannelOuterLink1_> = vec![];
-                '_a: for _ in 1..=5 {
-                    let channel_outer_link = ChannelOuterLink1_ {
-                        channel_outer_link__alias: NOT_EMPTY_STRING_LITERAL.to_string(),
-                        channel_outer_link__address: NOT_EMPTY_STRING_LITERAL.to_string(),
-                    };
-                    channel_outer_links.push(channel_outer_link);
-                }
-                let channel = Channel2_ {
+                let outcoming = Channel_GetOneById_Outcoming_ {
                     channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
                     channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                     channel__description: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
@@ -3937,11 +3883,6 @@ mod test {
                     channel__subscribers_quantity: 0,
                     channel__marks_quantity: 0,
                     channel__viewing_quantity: 0,
-                };
-                let outcoming = Channel_GetOneById_Outcoming_ {
-                    channel,
-                    channel_inner_links,
-                    channel_outer_links,
                     user_is_channel_owner: true,
                 };
                 let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>::target_filled(outcoming);

@@ -692,7 +692,7 @@ typedef struct CVector_c_short {
   size_t length;
 } CVector_c_short;
 
-typedef struct Channel2 {
+typedef struct Channel_GetOneById_Outcoming {
   struct CString channel__name;
   struct CString channel__linked_name;
   struct COption_CString channel__description;
@@ -704,31 +704,6 @@ typedef struct Channel2 {
   long channel__subscribers_quantity;
   long channel__marks_quantity;
   long channel__viewing_quantity;
-} Channel2;
-
-typedef struct ChannelInnerLink1 {
-  long channel_inner_link__to;
-} ChannelInnerLink1;
-
-typedef struct CVector_ChannelInnerLink1 {
-  struct ChannelInnerLink1 *pointer;
-  size_t length;
-} CVector_ChannelInnerLink1;
-
-typedef struct ChannelOuterLink1 {
-  struct CString channel_outer_link__alias;
-  struct CString channel_outer_link__address;
-} ChannelOuterLink1;
-
-typedef struct CVector_ChannelOuterLink1 {
-  struct ChannelOuterLink1 *pointer;
-  size_t length;
-} CVector_ChannelOuterLink1;
-
-typedef struct Channel_GetOneById_Outcoming {
-  struct Channel2 channel;
-  struct CVector_ChannelInnerLink1 channel_inner_links;
-  struct CVector_ChannelOuterLink1 channel_outer_links;
   bool user_is_channel_owner;
 } Channel_GetOneById_Outcoming;
 

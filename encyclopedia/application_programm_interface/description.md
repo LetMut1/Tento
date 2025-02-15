@@ -159,33 +159,18 @@ struct Incoming {
 ```
 ```
 struct Outcoming {
-    channel: Channel,
-    channel_inner_links: Vec<ChannelInnerLink>,
-    channel_outer_links: Vec<ChannelOuterLink>,
-    user_is_channel_owner: bool,
-}
-
-struct Channel {
-    channel__name: String,
-    channel__linked_name: String,
-    channel__description: Option<String>,
-    channel__access_modifier: i16,
-    channel__visability_modifier: i16,
-    channel__orientation: Vec<i16>,
-    channel__cover_image_path: Option<String>,
-    channel__background_image_path: Option<String>,
-    channel__subscribers_quantity: i64,
-    channel__marks_quantity: i64,
-    channel__viewing_quantity: i64
-}
-
-struct ChannelInnerLink {
-    channel_inner_link__to: i64
-}
-
-struct ChannelOuterLink {
-    channel_outer_link__alias: String,
-    channel_outer_link__address: String
+    pub channel__name: String,
+    pub channel__linked_name: String,
+    pub channel__description: Option<String>,
+    pub channel__access_modifier: i16,
+    pub channel__visability_modifier: i16,
+    pub channel__orientation: Vec<i16>,
+    pub channel__cover_image_path: Option<String>,
+    pub channel__background_image_path: Option<String>,
+    pub channel__subscribers_quantity: i64,
+    pub channel__marks_quantity: i64,
+    pub channel__viewing_quantity: i64,
+    pub user_is_channel_owner: bool,
 }
 ```
 ```

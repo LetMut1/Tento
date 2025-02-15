@@ -12,8 +12,6 @@ use {
                     Channel_AccessModifier,
                     Channel_Id,
                 },
-                channel_inner_link::ChannelInnerLink,
-                channel_outer_link::ChannelOuterLink,
                 channel_subscription::ChannelSubscription,
                 user_access_token::UserAccessToken,
             },
@@ -30,8 +28,6 @@ use {
             functionality::repository::{
                 postgresql::{
                     ChannelBy1,
-                    ChannelInnerLinkBy1,
-                    ChannelOuterLinkBy1,
                     ChannelSubscriptionBy1,
                     Postgresql,
                 },
@@ -40,13 +36,10 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::{
-            action_processor::channel::get_one_by_id::{
-                Incoming,
-                Outcoming,
-                Precedent,
-            },
-            Channel2,
+        action_processor_incoming_outcoming::action_processor::channel::get_one_by_id::{
+            Incoming,
+            Outcoming,
+            Precedent,
         },
         unified_report::UnifiedReport,
     },
@@ -103,23 +96,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
                 }
             }
-            let channel_inner_links = Repository::<Postgresql<ChannelInnerLink>>::find_1(
-                &postgresql_database_1_client,
-                ChannelInnerLinkBy1 {
-                    channel_inner_link__from: incoming.channel__id,
-                },
-                ChannelInnerLink::MAXIMUM_QUANTITY,
-            )
-            .await?;
-            let channel_outer_links = Repository::<Postgresql<ChannelOuterLink>>::find_1(
-                &postgresql_database_1_client,
-                ChannelOuterLinkBy1 {
-                    channel_outer_link__from: incoming.channel__id,
-                },
-                ChannelOuterLink::MAXIMUM_QUANTITY,
-            )
-            .await?;
-            let channel_ = Channel2 {
+            let outcoming = Outcoming {
                 channel__name: channel.name,
                 channel__linked_name: channel.linked_name,
                 channel__description: channel.description,
@@ -131,11 +108,6 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 channel__subscribers_quantity: channel.subscribers_quantity,
                 channel__marks_quantity: channel.marks_quantity,
                 channel__viewing_quantity: channel.viewing_quantity,
-            };
-            let outcoming = Outcoming {
-                channel: channel_,
-                channel_inner_links,
-                channel_outer_links,
                 user_is_channel_owner: user_access_token.user__id == channel.owner,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));

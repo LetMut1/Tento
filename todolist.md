@@ -155,5 +155,4 @@ Update-  Нужно ли проверять количество вернувш�
 Access/Visability in game, we need to ckeck all constraints for it in routes.
 
 
-
-is_user_subscribed: true, todo
+проерить, что в инкоминг ауткоминг нет переиспользуемых сущностей. channel_get_one_by_is - вот так должно быть
