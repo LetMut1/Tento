@@ -1,8 +1,11 @@
 pub use crate::infrastructure_layer::data::environment_configuration::run_server::RunServer;
 #[cfg(feature = "logging_to_file")]
-use tracing_appender::rolling::{
-    RollingFileAppender,
-    Rotation,
+use {
+    crate::infrastructure_layer::data::environment_configuration::run_server::Logging,
+    tracing_appender::rolling::{
+        RollingFileAppender,
+        Rotation,
+    },
 };
 use {
     super::CommandProcessor,
@@ -36,7 +39,7 @@ impl CommandProcessor<RunServer> {
         let environment_configuration = Self::initialize_environment(environment_configuration_file_path)?;
         #[cfg(feature = "logging_to_file")]
         {
-            _worker_guard = Self::initialize_logging_to_fileger(environment_configuration)?;
+            _worker_guard = Self::initialize_logging_to_fileger(&environment_configuration.subject.logging)?;
         }
         #[cfg(not(feature = "logging_to_file"))]
         {
@@ -59,11 +62,11 @@ impl CommandProcessor<RunServer> {
         };
     }
     #[cfg(feature = "logging_to_file")]
-    fn initialize_logging_to_fileger<'a>(environment_configuration: &'a EnvironmentConfiguration<RunServer>) -> Result<WorkerGuard, AggregateError> {
+    fn initialize_logging_to_fileger<'a>(logging: &'a Logging) -> Result<WorkerGuard, AggregateError> {
         let rolling_file_appender = RollingFileAppender::new(
             Rotation::DAILY,
-            environment_configuration.subject.logging.directory_path.as_str(),
-            environment_configuration.subject.logging.file_name_prefix.as_str(),
+            logging.directory_path.as_str(),
+            logging.file_name_prefix.as_str(),
         );
         let (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(rolling_file_appender);
         Self::initialize_tracing_subscriber(non_blocking)?;

@@ -120,8 +120,6 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // проставить инлайнинг
 // в Бд различать ConstraintException и недоступность базы данных.
 
-// TODO TODO TODO: qkwmdjndsicjpewem,lskdncyebchsdnjnsuhv[fo[sdccn]]
-
 // Составить требования для пароля.
 
 // PostgresqlRepository<ChannelSubscription>::create_1  В подобных местах нужно делать в парадигме апсерта/ Do Nothing?
@@ -150,5 +148,8 @@ Update-  Нужно ли проверять количество вернувш�
 // TODO можно ли сериализовать Incoming не со String, а со &str для подготовки converter, чтобы избежать аллокации в стринг. На большой стренге это будет сильно замедлять.
 // TODO FFI-------------------------------------------------------------------------------------------------------------------------------------------
 
-access_modifier + visability_modifier -> 2 bytes.
-But We can hold 8 similar (0/1)-types in 1 byte as: 000000(0 - for access_modifier)(0 - for visability modifier)
+
+
+Как сделать защиту от подписок на каналы со скрипта.
+
+Access/Visability in game, we need to ckeck all constraints for it in routes.

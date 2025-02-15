@@ -7,6 +7,7 @@ use crate::infrastructure_layer::data::environment_configuration::{
 pub struct EnvironmentConfigurationFile {
     pub tokio_runtime: TokioRuntime,
     pub application_server: ApplicationServer,
+    #[cfg(feature = "logging_to_file")]
     pub logging: Logging,
     pub resource: Resource,
     pub encryption: Encryption,
@@ -60,6 +61,7 @@ pub struct Tls {
     pub certificate_crt_file_path: Value<String>,
     pub certificate_key_file_path: Value<String>,
 }
+#[cfg(feature = "logging_to_file")]
 #[derive(serde::Deserialize)]
 pub struct Logging {
     pub directory_path: Value<String>,

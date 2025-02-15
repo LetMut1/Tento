@@ -15,7 +15,6 @@ use {
                 EnvironmentConfigurationFile as RunServerEnvironmentConfigurationFile,
                 Http,
                 HttpKeepalive,
-                Logging,
                 PrivateKey,
                 Resource as RunServerResource,
                 RunServer,
@@ -37,6 +36,8 @@ use {
     },
     tokio_postgres::config::Config,
 };
+#[cfg(feature = "logging_to_file")]
+use crate::infrastructure_layer::data::environment_configuration::run_server::Logging;
 impl Loader<EnvironmentConfiguration<RunServer>> {
     pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<RunServer>, AggregateError> {
         let environment_configuration_file = load_from_file::<RunServerEnvironmentConfigurationFile>(environment_configuration_file_path)?;
@@ -129,6 +130,8 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
                 http,
             }
         };
+
+
         return Result::Ok(
             EnvironmentConfiguration {
                 subject: RunServer {
@@ -138,6 +141,7 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
                         worker_thread_stack_size: environment_configuration_file.tokio_runtime.worker_thread_stack_size.value,
                     },
                     application_server,
+                    #[cfg(feature = "logging_to_file")]
                     logging: Logging {
                         directory_path: environment_configuration_file.logging.directory_path.value,
                         file_name_prefix: environment_configuration_file.logging.file_name_prefix.value,

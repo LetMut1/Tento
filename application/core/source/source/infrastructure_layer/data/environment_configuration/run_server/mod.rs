@@ -7,6 +7,7 @@ use {
 pub struct RunServer {
     pub tokio_runtime: TokioRuntime,
     pub application_server: ApplicationServer,
+    #[cfg(feature = "logging_to_file")]
     pub logging: Logging,
     pub resource: Resource,
     pub encryption: Encryption,
@@ -51,6 +52,7 @@ pub struct Tls {
     pub certificate_crt_file_path: String,
     pub certificate_key_file_path: String,
 }
+#[cfg(feature = "logging_to_file")]
 pub struct Logging {
     pub directory_path: String,
     pub file_name_prefix: String,
