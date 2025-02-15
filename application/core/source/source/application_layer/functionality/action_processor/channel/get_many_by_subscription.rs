@@ -72,7 +72,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
             if incoming.limit <= 0 || incoming.limit > LIMIT {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let commons = Repository::<Postgresql<Common1>>::find_3(
+            let data_registry = Repository::<Postgresql<Common1>>::find_3(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 CommonBy3 {
                     user__id: user_access_token.user__id,
@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
             )
             .await?;
             let outcoming = Outcoming {
-                commons,
+                data_registry,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

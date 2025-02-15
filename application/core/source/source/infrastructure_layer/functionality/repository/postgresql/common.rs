@@ -18,6 +18,7 @@ use {
         action_processor::channel::{
             get_many_public_by_name::Data as Data1,
             get_many_by_name_in_subscriptions::Data as Data2,
+            get_many_by_subscription::Data as Data3,
         },
         Common1
     },
@@ -218,7 +219,7 @@ impl Repository<Postgresql<Common1>> {
             return Result::Ok(data_registry);
         };
     }
-    pub fn find_3<'a>(database_1_client: &'a Client, by: By3, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + use<'a> {
+    pub fn find_3<'a>(database_1_client: &'a Client, by: By3, limit: i16) -> impl Future<Output = Result<Vec<Data3>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -287,12 +288,12 @@ impl Repository<Postgresql<Common1>> {
                 )
                 .await
             );
-            let mut commons: Vec<Common1> = vec![];
+            let mut data_registry: Vec<Data3> = vec![];
             if rows.is_empty() {
-                return Result::Ok(commons);
+                return Result::Ok(data_registry);
             }
             '_a: for row in rows.iter() {
-                let common = Common1 {
+                let data = Data3 {
                     channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
@@ -300,11 +301,10 @@ impl Repository<Postgresql<Common1>> {
                     channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
                     channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
-                    is_user_subscribed: true,
                 };
-                commons.push(common);
+                data_registry.push(data);
             }
-            return Result::Ok(commons);
+            return Result::Ok(data_registry);
         };
     }
 }

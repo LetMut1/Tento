@@ -620,7 +620,7 @@ typedef struct Channel_GetManyBySubscription_Incoming {
   short limit;
 } Channel_GetManyBySubscription_Incoming;
 
-typedef struct Common1 {
+typedef struct Channel_GetManyBySubscription_Data {
   long channel__id;
   struct CString channel__name;
   struct CString channel__linked_name;
@@ -628,16 +628,15 @@ typedef struct Common1 {
   short channel__visability_modifier;
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
-  bool is_user_subscribed;
-} Common1;
+} Channel_GetManyBySubscription_Data;
 
-typedef struct CVector_Common1 {
-  struct Common1 *pointer;
+typedef struct CVector_Channel_GetManyBySubscription_Data {
+  struct Channel_GetManyBySubscription_Data *pointer;
   size_t length;
-} CVector_Common1;
+} CVector_Channel_GetManyBySubscription_Data;
 
 typedef struct Channel_GetManyBySubscription_Outcoming {
-  struct CVector_Common1 commons;
+  struct CVector_Channel_GetManyBySubscription_Data data_registry;
 } Channel_GetManyBySubscription_Outcoming;
 
 typedef struct CData_Channel_GetManyBySubscription_Outcoming {
