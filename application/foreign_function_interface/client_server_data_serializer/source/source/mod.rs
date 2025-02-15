@@ -468,12 +468,6 @@ pub struct UserAccessRefreshTokenEncoded(pub CVector<c_uchar>);
 #[repr(C)]
 #[derive(Default)]
 pub struct Common1 {
-    pub channel: Channel1,
-    pub is_user_subscribed: bool,
-}
-#[repr(C)]
-#[derive(Default)]
-pub struct Channel1 {
     pub channel__id: c_long,
     pub channel__name: CString,
     pub channel__linked_name: CString,
@@ -481,6 +475,7 @@ pub struct Channel1 {
     pub channel__visability_modifier: c_short,
     pub channel__cover_image_path: COption<CString>,
     pub channel__background_image_path: COption<CString>,
+    pub is_user_subscribed: bool,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -2111,24 +2106,22 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                     } => {
                         let mut commons: Vec<Common1> = vec![];
                         '_a: for common in data__.commons {
-                            let channel__cover_image_path = match common.channel.channel__cover_image_path {
+                            let channel__cover_image_path = match common.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
                                 Option::None => COption::none(),
                             };
-                            let channel__background_image_path = match common.channel.channel__background_image_path {
+                            let channel__background_image_path = match common.channel__background_image_path {
                                 Option::Some(channel__background_image_path_) => COption::data(Allocator::<CString>::allocate(channel__background_image_path_)),
                                 Option::None => COption::none(),
                             };
                             let common_ = Common1 {
-                                channel: Channel1 {
-                                    channel__id: common.channel.channel__id,
-                                    channel__name: Allocator::<CString>::allocate(common.channel.channel__name),
-                                    channel__linked_name: Allocator::<CString>::allocate(common.channel.channel__linked_name),
-                                    channel__access_modifier: common.channel.channel__access_modifier,
-                                    channel__visability_modifier: common.channel.channel__visability_modifier,
-                                    channel__cover_image_path,
-                                    channel__background_image_path,
-                                },
+                                channel__id: common.channel__id,
+                                channel__name: Allocator::<CString>::allocate(common.channel__name),
+                                channel__linked_name: Allocator::<CString>::allocate(common.channel__linked_name),
+                                channel__access_modifier: common.channel__access_modifier,
+                                channel__visability_modifier: common.channel__visability_modifier,
+                                channel__cover_image_path,
+                                channel__background_image_path,
                                 is_user_subscribed: common.is_user_subscribed,
                             };
                             commons.push(common_);
@@ -2173,13 +2166,13 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         let commons = c_result.data.target.filled.commons.as_slice_unchecked();
         for common in commons {
-            Allocator::<CString>::deallocate(common.channel.channel__name);
-            Allocator::<CString>::deallocate(common.channel.channel__linked_name);
-            if common.channel.channel__background_image_path.is_data {
-                Allocator::<CString>::deallocate(common.channel.channel__background_image_path.data);
+            Allocator::<CString>::deallocate(common.channel__name);
+            Allocator::<CString>::deallocate(common.channel__linked_name);
+            if common.channel__background_image_path.is_data {
+                Allocator::<CString>::deallocate(common.channel__background_image_path.data);
             }
-            if common.channel.channel__cover_image_path.is_data {
-                Allocator::<CString>::deallocate(common.channel.channel__cover_image_path.data);
+            if common.channel__cover_image_path.is_data {
+                Allocator::<CString>::deallocate(common.channel__cover_image_path.data);
             }
         }
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.commons);
@@ -2251,24 +2244,22 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                     } => {
                         let mut commons: Vec<Common1> = vec![];
                         '_a: for common in data__.commons {
-                            let channel__cover_image_path = match common.channel.channel__cover_image_path {
+                            let channel__cover_image_path = match common.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
                                 Option::None => COption::none(),
                             };
-                            let channel__background_image_path = match common.channel.channel__background_image_path {
+                            let channel__background_image_path = match common.channel__background_image_path {
                                 Option::Some(channel__background_image_path_) => COption::data(Allocator::<CString>::allocate(channel__background_image_path_)),
                                 Option::None => COption::none(),
                             };
                             let common_ = Common1 {
-                                channel: Channel1 {
-                                    channel__id: common.channel.channel__id,
-                                    channel__name: Allocator::<CString>::allocate(common.channel.channel__name),
-                                    channel__linked_name: Allocator::<CString>::allocate(common.channel.channel__linked_name),
-                                    channel__access_modifier: common.channel.channel__access_modifier,
-                                    channel__visability_modifier: common.channel.channel__visability_modifier,
-                                    channel__cover_image_path,
-                                    channel__background_image_path,
-                                },
+                                channel__id: common.channel__id,
+                                channel__name: Allocator::<CString>::allocate(common.channel__name),
+                                channel__linked_name: Allocator::<CString>::allocate(common.channel__linked_name),
+                                channel__access_modifier: common.channel__access_modifier,
+                                channel__visability_modifier: common.channel__visability_modifier,
+                                channel__cover_image_path,
+                                channel__background_image_path,
                                 is_user_subscribed: common.is_user_subscribed,
                             };
                             commons.push(common_);
@@ -2313,13 +2304,13 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_dealloca
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         let commons = c_result.data.target.filled.commons.as_slice_unchecked();
         for common in commons {
-            Allocator::<CString>::deallocate(common.channel.channel__name);
-            Allocator::<CString>::deallocate(common.channel.channel__linked_name);
-            if common.channel.channel__background_image_path.is_data {
-                Allocator::<CString>::deallocate(common.channel.channel__background_image_path.data);
+            Allocator::<CString>::deallocate(common.channel__name);
+            Allocator::<CString>::deallocate(common.channel__linked_name);
+            if common.channel__background_image_path.is_data {
+                Allocator::<CString>::deallocate(common.channel__background_image_path.data);
             }
-            if common.channel.channel__cover_image_path.is_data {
-                Allocator::<CString>::deallocate(common.channel.channel__cover_image_path.data);
+            if common.channel__cover_image_path.is_data {
+                Allocator::<CString>::deallocate(common.channel__cover_image_path.data);
             }
         }
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.commons);
@@ -2393,24 +2384,22 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                     } => {
                         let mut commons: Vec<Common1> = vec![];
                         '_a: for common in data__.commons {
-                            let channel__cover_image_path = match common.channel.channel__cover_image_path {
+                            let channel__cover_image_path = match common.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
                                 Option::None => COption::none(),
                             };
-                            let channel__background_image_path = match common.channel.channel__background_image_path {
+                            let channel__background_image_path = match common.channel__background_image_path {
                                 Option::Some(channel__background_image_path_) => COption::data(Allocator::<CString>::allocate(channel__background_image_path_)),
                                 Option::None => COption::none(),
                             };
                             let common_ = Common1 {
-                                channel: Channel1 {
-                                    channel__id: common.channel.channel__id,
-                                    channel__name: Allocator::<CString>::allocate(common.channel.channel__name),
-                                    channel__linked_name: Allocator::<CString>::allocate(common.channel.channel__linked_name),
-                                    channel__access_modifier: common.channel.channel__access_modifier,
-                                    channel__visability_modifier: common.channel.channel__visability_modifier,
-                                    channel__cover_image_path,
-                                    channel__background_image_path,
-                                },
+                                channel__id: common.channel__id,
+                                channel__name: Allocator::<CString>::allocate(common.channel__name),
+                                channel__linked_name: Allocator::<CString>::allocate(common.channel__linked_name),
+                                channel__access_modifier: common.channel__access_modifier,
+                                channel__visability_modifier: common.channel__visability_modifier,
+                                channel__cover_image_path,
+                                channel__background_image_path,
                                 is_user_subscribed: common.is_user_subscribed,
                             };
                             commons.push(common_);
@@ -2455,13 +2444,13 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_deallocat
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
         let commons = c_result.data.target.filled.commons.as_slice_unchecked();
         for common in commons {
-            Allocator::<CString>::deallocate(common.channel.channel__name);
-            Allocator::<CString>::deallocate(common.channel.channel__linked_name);
-            if common.channel.channel__background_image_path.is_data {
-                Allocator::<CString>::deallocate(common.channel.channel__background_image_path.data);
+            Allocator::<CString>::deallocate(common.channel__name);
+            Allocator::<CString>::deallocate(common.channel__linked_name);
+            if common.channel__background_image_path.is_data {
+                Allocator::<CString>::deallocate(common.channel__background_image_path.data);
             }
-            if common.channel.channel__cover_image_path.is_data {
-                Allocator::<CString>::deallocate(common.channel.channel__cover_image_path.data);
+            if common.channel__cover_image_path.is_data {
+                Allocator::<CString>::deallocate(common.channel__cover_image_path.data);
             }
         }
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.commons);
@@ -3186,7 +3175,6 @@ mod test {
             use {
                 super::*,
                 dedicated::action_processor_incoming_outcoming::{
-                    Channel1 as Channel1_,
                     Channel2 as Channel2_,
                     ChannelInnerLink1 as ChannelInnerLink1_,
                     ChannelOuterLink1 as ChannelOuterLink1_,
@@ -3775,15 +3763,13 @@ mod test {
                 let mut commons: Vec<Common1_> = vec![];
                 '_a: for _ in 1..=5 {
                     let common = Common1_ {
-                        channel: Channel1_ {
-                            channel__id: 0,
-                            channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                            channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                            channel__access_modifier: 0,
-                            channel__visability_modifier: 0,
-                            channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                            channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                        },
+                        channel__id: 0,
+                        channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        channel__access_modifier: 0,
+                        channel__visability_modifier: 0,
+                        channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         is_user_subscribed: false,
                     };
                     commons.push(common);
@@ -3827,15 +3813,13 @@ mod test {
                 let mut commons: Vec<Common1_> = vec![];
                 '_a: for _ in 1..=2 {
                     let common = Common1_ {
-                        channel: Channel1_ {
-                            channel__id: 0,
-                            channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                            channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                            channel__access_modifier: 0,
-                            channel__visability_modifier: 0,
-                            channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                            channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                        },
+                        channel__id: 0,
+                        channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        channel__access_modifier: 0,
+                        channel__visability_modifier: 0,
+                        channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         is_user_subscribed: false,
                     };
                     commons.push(common);
@@ -3879,15 +3863,13 @@ mod test {
                 let mut commons: Vec<Common1_> = vec![];
                 '_a: for _ in 1..=5 {
                     let common = Common1_ {
-                        channel: Channel1_ {
-                            channel__id: 0,
-                            channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                            channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                            channel__access_modifier: 0,
-                            channel__visability_modifier: 0,
-                            channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                            channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                        },
+                        channel__id: 0,
+                        channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        channel__access_modifier: 0,
+                        channel__visability_modifier: 0,
+                        channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         is_user_subscribed: false,
                     };
                     commons.push(common);

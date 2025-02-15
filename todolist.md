@@ -153,3 +153,7 @@ Update-  Нужно ли проверять количество вернувш�
 Как сделать защиту от подписок на каналы со скрипта.
 
 Access/Visability in game, we need to ckeck all constraints for it in routes.
+
+
+
+is_user_subscribed: true, todo

@@ -66,7 +66,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
-            const LIMIT: i16 = 100;
+            const LIMIT: i16 = 15;
             if incoming.limit <= 0 || incoming.limit > LIMIT {
                 return Result::Err(crate::new_invalid_argument!());
             }

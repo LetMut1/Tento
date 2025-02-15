@@ -567,7 +567,7 @@ typedef struct Channel_GetManyByNameInSubscriptions_Incoming {
   short limit;
 } Channel_GetManyByNameInSubscriptions_Incoming;
 
-typedef struct Channel1 {
+typedef struct Common1 {
   long channel__id;
   struct CString channel__name;
   struct CString channel__linked_name;
@@ -575,10 +575,6 @@ typedef struct Channel1 {
   short channel__visability_modifier;
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
-} Channel1;
-
-typedef struct Common1 {
-  struct Channel1 channel;
   bool is_user_subscribed;
 } Common1;
 

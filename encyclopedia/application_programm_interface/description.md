@@ -223,11 +223,6 @@ struct Outcoming {
 }
 
 struct Common1 {
-    channel: Channel1,
-    is_user_subscribed: bool
-}
-
-struct Channel1 {
     channel__id: i64,
     channel__name: String,
     channel__linked_name: String,
@@ -235,6 +230,7 @@ struct Channel1 {
     channel__visability_modifier: i16,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>
+    is_user_subscribed: bool
 }
 ```
 ```
@@ -269,11 +265,6 @@ struct Outcoming {
 }
 
 struct Common1 {
-    channel: Channel1,
-    is_user_subscribed: bool
-}
-
-struct Channel1 {
     channel__id: i64,
     channel__name: String,
     channel__linked_name: String,
@@ -281,6 +272,7 @@ struct Channel1 {
     channel__visability_modifier: i16,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>
+    is_user_subscribed: bool
 }
 ```
 ```
@@ -308,7 +300,7 @@ Incoming parameters validation rule:
 - requery___channel__name:
     -- same as channel__name.
 - limit:
-    -- [1, 100] values.
+    -- [1, 15] values.
 ```
 ```
 struct Outcoming {
@@ -316,11 +308,6 @@ struct Outcoming {
 }
 
 struct Common1 {
-    channel: Channel1,
-    is_user_subscribed: bool
-}
-
-struct Channel1 {
     channel__id: i64,
     channel__name: String,
     channel__linked_name: String,
@@ -328,6 +315,7 @@ struct Channel1 {
     channel__visability_modifier: i16,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>
+    is_user_subscribed: bool
 }
 ```
 ```

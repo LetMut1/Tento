@@ -8,18 +8,6 @@ pub mod action_processor;
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Common1 {
-    pub channel: Channel1,
-    pub is_user_subscribed: bool,
-}
-#[cfg_attr(
-    feature = "serde_for_manual_test",
-    derive(
-        serde::Serialize,
-        serde::Deserialize
-    )
-)]
-#[derive(bitcode::Encode, bitcode::Decode)]
-pub struct Channel1 {
     pub channel__id: i64,
     pub channel__name: String,
     pub channel__linked_name: String,
@@ -27,6 +15,7 @@ pub struct Channel1 {
     pub channel__visability_modifier: i16,
     pub channel__cover_image_path: Option<String>,
     pub channel__background_image_path: Option<String>,
+    pub is_user_subscribed: bool,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

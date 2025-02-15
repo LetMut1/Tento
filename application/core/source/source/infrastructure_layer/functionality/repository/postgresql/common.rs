@@ -14,10 +14,7 @@ use {
         },
     },
     deadpool_postgres::Client,
-    dedicated::action_processor_incoming_outcoming::{
-        Channel1,
-        Common1,
-    },
+    dedicated::action_processor_incoming_outcoming::Common1,
     std::future::Future,
     tokio_postgres::types::Type,
 };
@@ -107,7 +104,7 @@ impl Repository<Postgresql<Common1>> {
                 return Result::Ok(commons);
             }
             '_a: for row in rows.iter() {
-                let channel = Channel1 {
+                let common = Common1 {
                     channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
@@ -115,11 +112,7 @@ impl Repository<Postgresql<Common1>> {
                     channel__visability_modifier: by.channel__visability_modifier,
                     channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(4)),
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
-                };
-                let is_user_subscribed = crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)).is_some();
-                let common = Common1 {
-                    channel,
-                    is_user_subscribed,
+                    is_user_subscribed: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)).is_some(),
                 };
                 commons.push(common);
             }
@@ -205,7 +198,7 @@ impl Repository<Postgresql<Common1>> {
                 return Result::Ok(commons);
             }
             '_a: for row in rows.iter() {
-                let channel = Channel1 {
+                let common = Common1 {
                     channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
@@ -213,9 +206,6 @@ impl Repository<Postgresql<Common1>> {
                     channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
                     channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
-                };
-                let common = Common1 {
-                    channel,
                     is_user_subscribed: true,
                 };
                 commons.push(common);
@@ -297,7 +287,7 @@ impl Repository<Postgresql<Common1>> {
                 return Result::Ok(commons);
             }
             '_a: for row in rows.iter() {
-                let channel = Channel1 {
+                let common = Common1 {
                     channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
@@ -305,9 +295,6 @@ impl Repository<Postgresql<Common1>> {
                     channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
                     channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
-                };
-                let common = Common1 {
-                    channel,
                     is_user_subscribed: true,
                 };
                 commons.push(common);
