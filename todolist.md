@@ -156,5 +156,3 @@ Access/Visability in game, we need to ckeck all constraints for it in routes.
 
 
 проерить, что в инкоминг ауткоминг нет переиспользуемых сущностей. channel_get_one_by_is - вот так должно быть
-Common1 delete
-Repository<Postgresql<Common1>>

@@ -2295,15 +2295,15 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_deallocate(c_result: Channel_GetManyBySubscription_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        let commons = c_result.data.target.filled.data_registry.as_slice_unchecked();
-        for common in commons {
-            Allocator::<CString>::deallocate(common.channel__name);
-            Allocator::<CString>::deallocate(common.channel__linked_name);
-            if common.channel__background_image_path.is_data {
-                Allocator::<CString>::deallocate(common.channel__background_image_path.data);
+        let data_registry = c_result.data.target.filled.data_registry.as_slice_unchecked();
+        for data in data_registry {
+            Allocator::<CString>::deallocate(data.channel__name);
+            Allocator::<CString>::deallocate(data.channel__linked_name);
+            if data.channel__background_image_path.is_data {
+                Allocator::<CString>::deallocate(data.channel__background_image_path.data);
             }
-            if common.channel__cover_image_path.is_data {
-                Allocator::<CString>::deallocate(common.channel__cover_image_path.data);
+            if data.channel__cover_image_path.is_data {
+                Allocator::<CString>::deallocate(data.channel__cover_image_path.data);
             }
         }
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.data_registry);

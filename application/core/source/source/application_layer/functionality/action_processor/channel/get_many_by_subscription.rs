@@ -7,7 +7,10 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::Channel_Id,
+                channel::{
+                    Channel_Id,
+                    Channel,
+                },
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
@@ -22,7 +25,7 @@ use {
             data::aggregate_error::AggregateError,
             functionality::repository::{
                 postgresql::{
-                    CommonBy3,
+                    ChannelBy6,
                     Postgresql,
                 },
                 Repository,
@@ -30,13 +33,10 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::{
-            action_processor::channel::get_many_by_subscription::{
-                Incoming,
-                Outcoming,
-                Precedent,
-            },
-            Common1,
+        action_processor_incoming_outcoming::action_processor::channel::get_many_by_subscription::{
+            Incoming,
+            Outcoming,
+            Precedent,
         },
         unified_report::UnifiedReport,
     },
@@ -72,9 +72,9 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
             if incoming.limit <= 0 || incoming.limit > LIMIT {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let data_registry = Repository::<Postgresql<Common1>>::find_3(
+            let data_registry = Repository::<Postgresql<Channel>>::find_6(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
-                CommonBy3 {
+                ChannelBy6 {
                     user__id: user_access_token.user__id,
                     requery___channel__id: incoming.requery___channel__id,
                 },

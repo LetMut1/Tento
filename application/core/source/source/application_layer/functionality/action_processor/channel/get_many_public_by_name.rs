@@ -8,6 +8,7 @@ use {
         domain_layer::{
             data::entity::{
                 channel::{
+                    Channel,
                     Channel_Name,
                     Channel_VisabilityModifier,
                 },
@@ -25,7 +26,7 @@ use {
             data::aggregate_error::AggregateError,
             functionality::repository::{
                 postgresql::{
-                    CommonBy1,
+                    ChannelBy4,
                     Postgresql,
                 },
                 Repository,
@@ -33,13 +34,10 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::{
-            action_processor::channel::get_many_public_by_name::{
-                Incoming,
-                Outcoming,
-                Precedent,
-            },
-            Common1,
+        action_processor_incoming_outcoming::action_processor::channel::get_many_public_by_name::{
+            Incoming,
+            Outcoming,
+            Precedent,
         },
         unified_report::UnifiedReport,
     },
@@ -78,9 +76,9 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                     return Result::Err(crate::new_invalid_argument!());
                 }
             }
-            let data_registry = Repository::<Postgresql<Common1>>::find_1(
+            let data_registry = Repository::<Postgresql<Channel>>::find_4(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
-                CommonBy1 {
+                ChannelBy4 {
                     user__id: user_access_token.user__id,
                     channel__name: incoming.channel__name.as_str(),
                     requery___channel__name: incoming.requery___channel__name.as_deref(),

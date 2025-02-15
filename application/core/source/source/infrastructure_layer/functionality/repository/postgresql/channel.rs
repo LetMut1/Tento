@@ -13,7 +13,13 @@ use {
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::repository::Repository,
+            functionality::{
+                repository::Repository,
+                service::counter::{
+                    Counter,
+                    Counter_,
+                },
+            }
         },
     },
     deadpool_postgres::Client,
@@ -22,6 +28,11 @@ use {
         future::Future,
     },
     tokio_postgres::types::Type,
+    dedicated::action_processor_incoming_outcoming::action_processor::channel::{
+        get_many_public_by_name::Data as Data1,
+        get_many_by_name_in_subscriptions::Data as Data2,
+        get_many_by_subscription::Data as Data3,
+    },
 };
 impl Repository<Postgresql<Channel<'_>>> {
     pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1) -> impl Future<Output = Result<Channel<'static>, AggregateError>> + Send + use<'a> {
@@ -363,6 +374,287 @@ impl Repository<Postgresql<Channel<'_>>> {
             );
         };
     }
+    pub fn find_4<'a>(database_1_client: &'a Client, by: By4<'a>, limit: i16) -> impl Future<Output = Result<Vec<Data1>, AggregateError>> + Send + use<'a> {
+        return async move {
+            let mut query = "\
+                SELECT \
+                    c.id AS i,\
+                    c.name AS n,\
+                    c.linked_name AS ln,\
+                    c.access_modifier AS am,\
+                    c.cover_image_path AS cip,\
+                    c.background_image_path AS bip,\
+                    cs.channel__id AS ca \
+                FROM \
+                    public.channel c \
+                LEFT OUTER JOIN \
+                    public.channel_subscription cs \
+                ON \
+                    cs.user__id = $1 \
+                    AND c.id = cs.channel__id \
+                WHERE \
+                    c.visability_modifier = $2 \
+                    AND c.name LIKE $3"
+                .to_string();
+            let mut counter = Counter::<u8>::new(
+                3,
+                1,
+            );
+            let wildcard = format!("{}%", by.channel__name,);
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
+                .add(
+                    &by.user__id,
+                    Type::INT8,
+                )
+                .add(
+                    &by.channel__visability_modifier,
+                    Type::INT2,
+                )
+                .add(
+                    &wildcard,
+                    Type::TEXT,
+                );
+            if let Option::Some(ref requery___channel__name) = by.requery___channel__name {
+                query = format!(
+                    "{} \
+                    AND c.name > ${}",
+                    query.as_str(),
+                    counter.get_next_value_unchecked(),
+                );
+                parameter_storage.add(
+                    requery___channel__name,
+                    Type::TEXT,
+                );
+            }
+            query = format!(
+                "{} \
+                ORDER BY c.name ASC \
+                LIMIT ${};",
+                query.as_str(),
+                counter.get_next_value_unchecked(),
+            );
+            parameter_storage.add(
+                &limit,
+                Type::INT2,
+            );
+            let statement = crate::result_return_logic!(
+                database_1_client
+                .prepare_typed_cached(
+                    query.as_str(),
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                database_1_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            let mut data_registry: Vec<Data1> = vec![];
+            if rows.is_empty() {
+                return Result::Ok(data_registry);
+            }
+            '_a: for row in rows.iter() {
+                let data = Data1 {
+                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
+                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
+                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
+                    channel__visability_modifier: by.channel__visability_modifier,
+                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(4)),
+                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
+                    is_user_subscribed: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)).is_some(),
+                };
+                data_registry.push(data);
+            }
+            return Result::Ok(data_registry);
+        };
+    }
+    pub fn find_5<'a>(database_1_client: &'a Client, by: By5<'a>, limit: i16) -> impl Future<Output = Result<Vec<Data2>, AggregateError>> + Send + use<'a> {
+        return async move {
+            let mut query = "\
+                SELECT \
+                    c.id AS i,\
+                    c.name AS n,\
+                    c.linked_name AS ln,\
+                    c.access_modifier AS am,\
+                    c.visability_modifier AS vm,\
+                    c.cover_image_path AS cip,\
+                    c.background_image_path AS bip \
+                FROM \
+                    public.channel c \
+                INNER JOIN \
+                    public.channel_subscription cs \
+                ON \
+                    cs.user__id = $1 \
+                    AND c.id = cs.channel__id \
+                WHERE c.name LIKE $2"
+                .to_string();
+            let mut counter = Counter::<u8>::new(
+                2,
+                1,
+            );
+            let wildcard = format!("{}%", by.channel__name,);
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
+                .add(
+                    &by.user__id,
+                    Type::INT8,
+                )
+                .add(
+                    &wildcard,
+                    Type::TEXT,
+                );
+            if let Option::Some(ref requery___channel__name) = by.requery___channel__name {
+                query = format!(
+                    "{} \
+                    AND c.name > ${}",
+                    query.as_str(),
+                    counter.get_next_value_unchecked(),
+                );
+                parameter_storage.add(
+                    requery___channel__name,
+                    Type::TEXT,
+                );
+            }
+            query = format!(
+                "{} \
+                ORDER BY c.name ASC \
+                LIMIT ${};",
+                query.as_str(),
+                counter.get_next_value_unchecked(),
+            );
+            parameter_storage.add(
+                &limit,
+                Type::INT2,
+            );
+            let statement = crate::result_return_logic!(
+                database_1_client
+                .prepare_typed_cached(
+                    query.as_str(),
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                database_1_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            let mut data_registry: Vec<Data2> = vec![];
+            if rows.is_empty() {
+                return Result::Ok(data_registry);
+            }
+            '_a: for row in rows.iter() {
+                let data = Data2 {
+                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
+                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
+                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
+                    channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
+                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
+                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
+                };
+                data_registry.push(data);
+            }
+            return Result::Ok(data_registry);
+        };
+    }
+    pub fn find_6<'a>(database_1_client: &'a Client, by: By6, limit: i16) -> impl Future<Output = Result<Vec<Data3>, AggregateError>> + Send + use<'a> {
+        return async move {
+            let mut query = "\
+                SELECT \
+                    c.id AS i,\
+                    c.name AS n,\
+                    c.linked_name AS ln,\
+                    c.access_modifier AS am,\
+                    c.visability_modifier AS vm,\
+                    c.cover_image_path AS cip,\
+                    c.background_image_path AS bip \
+                FROM \
+                    public.channel c \
+                INNER JOIN \
+                    public.channel_subscription cs \
+                ON \
+                    cs.user__id = $1 \
+                    AND c.id = cs.channel__id"
+                .to_string();
+            let mut counter = Counter::<u8>::new(
+                1,
+                1,
+            );
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage.add(
+                &by.user__id,
+                Type::INT8,
+            );
+            let requery___channel__id: i64;
+            if let Option::Some(requery___channel__id_) = by.requery___channel__id {
+                requery___channel__id = requery___channel__id_;
+                query = format!(
+                    "{} \
+                    WHERE cs.channel__id > ${}",
+                    query.as_str(),
+                    counter.get_next_value_unchecked(),
+                );
+                parameter_storage.add(
+                    &requery___channel__id,
+                    Type::INT8,
+                );
+            }
+            query = format!(
+                "{} \
+                ORDER BY cs.channel__id ASC \
+                LIMIT ${};",
+                query.as_str(),
+                counter.get_next_value_unchecked(),
+            );
+            parameter_storage.add(
+                &limit,
+                Type::INT2,
+            );
+            let statement = crate::result_return_logic!(
+                database_1_client
+                .prepare_typed_cached(
+                    query.as_str(),
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                database_1_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            let mut data_registry: Vec<Data3> = vec![];
+            if rows.is_empty() {
+                return Result::Ok(data_registry);
+            }
+            '_a: for row in rows.iter() {
+                let data = Data3 {
+                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
+                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
+                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
+                    channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
+                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
+                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
+                };
+                data_registry.push(data);
+            }
+            return Result::Ok(data_registry);
+        };
+    }
     pub fn is_exist_1<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
@@ -459,4 +751,19 @@ pub struct By2<'a> {
 }
 pub struct By3<'a> {
     pub channel__linked_name: &'a str,
+}
+pub struct By4<'a> {
+    pub user__id: i64,
+    pub channel__name: &'a str,
+    pub requery___channel__name: Option<&'a str>,
+    pub channel__visability_modifier: i16,
+}
+pub struct By5<'a> {
+    pub user__id: i64,
+    pub channel__name: &'a str,
+    pub requery___channel__name: Option<&'a str>,
+}
+pub struct By6 {
+    pub user__id: i64,
+    pub requery___channel__id: Option<i64>,
 }
