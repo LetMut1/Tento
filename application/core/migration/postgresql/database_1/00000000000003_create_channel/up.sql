@@ -12,6 +12,7 @@ CREATE TABLE public.channel (
     subscribers_quantity BIGINT,
     marks_quantity BIGINT,
     viewing_quantity BIGINT,
+    obfuscation_value BIGINT,
     created_at BIGINT
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
@@ -39,6 +40,7 @@ ALTER COLUMN orientation SET NOT NULL,
 ALTER COLUMN subscribers_quantity SET NOT NULL,
 ALTER COLUMN marks_quantity SET NOT NULL,
 ALTER COLUMN viewing_quantity SET NOT NULL,
+ALTER COLUMN obfuscation_value SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT channel8 PRIMARY KEY USING INDEX channel2,
 ADD CONSTRAINT channel9 FOREIGN KEY (owner)

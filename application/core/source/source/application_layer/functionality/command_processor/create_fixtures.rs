@@ -12,6 +12,7 @@ use {
                     Channel_Name,
                     Channel_Orientation,
                     Channel_VisabilityModifier,
+                    Channel_ObfuscationValue,
                 },
                 user::{
                     User,
@@ -27,6 +28,7 @@ use {
             functionality::service::{
                 encoder::Encoder,
                 validator::Validator,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
@@ -60,10 +62,7 @@ use {
             },
         },
     },
-    rand::{
-        thread_rng,
-        Rng,
-    },
+    rand::Rng,
     std::future::Future,
     tokio::runtime::{
         Builder,
@@ -130,8 +129,8 @@ impl CommandProcessor<CreateFixtures> {
             );
             '_a: for _ in 1..=QUANTITY_OF_APPLICATION_USERS {
                 let mut user__nickname = String::new();
-                '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=User_Nickname::MAXIMUM_LENGTH) {
-                    let character = ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..ASCII_CHARACTER_REGISTRY.len())];
+                '_b: for _ in 1..=rand::thread_rng().gen_range::<usize, _>(1..=User_Nickname::MAXIMUM_LENGTH) {
+                    let character = ASCII_CHARACTER_REGISTRY[rand::thread_rng().gen_range::<usize, _>(0..ASCII_CHARACTER_REGISTRY.len())];
                     user__nickname = format!("{}{}", user__nickname.as_str(), character);
                 }
                 if !Validator::<User_Nickname>::is_valid(user__nickname.as_str()) {
@@ -188,8 +187,8 @@ impl CommandProcessor<CreateFixtures> {
                 .await?;
                 'b: for _ in 1..=QUANTITY_OF_CHANNELS {
                     let mut channel__name = String::new();
-                    '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Name::MAXIMUM_LENGTH) {
-                        let character = ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..ASCII_CHARACTER_REGISTRY.len())];
+                    '_c: for _ in 1..=rand::thread_rng().gen_range::<usize, _>(1..=Channel_Name::MAXIMUM_LENGTH) {
+                        let character = ASCII_CHARACTER_REGISTRY[rand::thread_rng().gen_range::<usize, _>(0..ASCII_CHARACTER_REGISTRY.len())];
                         channel__name = format!("{}{}", channel__name.as_str(), character,);
                     }
                     if !Validator::<Channel_Name>::is_valid(channel__name.as_str()) {
@@ -199,10 +198,10 @@ impl CommandProcessor<CreateFixtures> {
                     if !Validator::<Channel_LinkedName>::is_valid(channel__linked_name.as_str()) {
                         return Result::Err(crate::new_invalid_argument!());
                     }
-                    let channel__description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
+                    let channel__description = if rand::thread_rng().gen_range::<i8, _>(0..=1) == 1 {
                         let mut channel__description_ = String::new();
-                        '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Description::MAXIMUM_LENGTH) {
-                            let character = ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..ASCII_CHARACTER_REGISTRY.len())];
+                        '_c: for _ in 1..=rand::thread_rng().gen_range::<usize, _>(1..=Channel_Description::MAXIMUM_LENGTH) {
+                            let character = ASCII_CHARACTER_REGISTRY[rand::thread_rng().gen_range::<usize, _>(0..ASCII_CHARACTER_REGISTRY.len())];
                             channel__description_ = format!("{}{}", channel__description_.as_str(), character,);
                         }
                         if !Validator::<Channel_Description>::is_valid(channel__description_.as_str()) {
@@ -245,6 +244,7 @@ impl CommandProcessor<CreateFixtures> {
                                     channel__subscribers_quantity: 0,
                                     channel__marks_quantity: 0,
                                     channel__viewing_quantity: 0,
+                                    channel__obfuscation_value: Generator::<Channel_ObfuscationValue>::generate(),
                                     channel__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
                                 },
                             )

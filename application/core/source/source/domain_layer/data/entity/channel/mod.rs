@@ -15,6 +15,7 @@ use {
         SubscribersQuantity,
         ViewingQuantity,
         VisabilityModifier,
+        ObfuscationValue,
     },
     super::user::User_Id,
     std::{
@@ -49,6 +50,8 @@ pub struct Channel<'a> {
     _marks_quantity: PhantomData<MarksQuantity>,
     pub viewing_quantity: i64,
     _viewing_quantity: PhantomData<ViewingQuantity>,
+    pub obfuscation_value: i64,
+    _obfuscation_value: PhantomData<ObfuscationValue>,
     pub created_at: i64,
     _created_at: PhantomData<CreatedAt>,
 }
@@ -67,6 +70,7 @@ impl<'a> Channel<'a> {
         subscribers_quantity: i64,
         marks_quantity: i64,
         viewing_quantity: i64,
+        obfuscation_value: i64,
         created_at: i64,
     ) -> Self {
         return Self {
@@ -96,6 +100,8 @@ impl<'a> Channel<'a> {
             _marks_quantity: PhantomData,
             viewing_quantity,
             _viewing_quantity: PhantomData,
+            obfuscation_value,
+            _obfuscation_value: PhantomData,
             created_at,
             _created_at: PhantomData,
         };
@@ -114,3 +120,4 @@ pub type Channel_Id = Id;
 pub type Channel_LinkedName = LinkedName;
 pub type Channel_Name = Name;
 pub type Channel_VisabilityModifier = VisabilityModifier;
+pub type Channel_ObfuscationValue = ObfuscationValue;

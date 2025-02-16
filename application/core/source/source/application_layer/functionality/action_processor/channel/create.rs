@@ -11,6 +11,7 @@ use {
                     Channel,
                     Channel_LinkedName,
                     Channel_Name,
+                    Channel_ObfuscationValue,
                 },
                 user_access_token::UserAccessToken,
             },
@@ -20,6 +21,7 @@ use {
                     Extractor,
                 },
                 validator::Validator,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
@@ -114,6 +116,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     channel__subscribers_quantity: 0,
                     channel__marks_quantity: 0,
                     channel__viewing_quantity: 0,
+                    channel__obfuscation_value: Generator::<Channel_ObfuscationValue>::generate(),
                     channel__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
                 },
             )

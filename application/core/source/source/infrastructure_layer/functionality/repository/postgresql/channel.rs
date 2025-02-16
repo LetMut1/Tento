@@ -55,6 +55,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                         subscribers_quantity,\
                         marks_quantity,\
                         viewing_quantity,\
+                        obfuscation_value,\
                         created_at\
                     ) VALUES (\
                         nextval('public.channel1'), \
@@ -70,7 +71,8 @@ impl Repository<Postgresql<Channel<'_>>> {
                         $10,\
                         $11,\
                         $12,\
-                        $13\
+                        $13,\
+                        $14\
                     ) \
                 RETURNING \
                     c.id AS i;";
@@ -129,6 +131,10 @@ impl Repository<Postgresql<Channel<'_>>> {
                     Type::INT8,
                 )
                 .add(
+                    &insert.channel__obfuscation_value,
+                    Type::INT8,
+                )
+                .add(
                     &insert.channel__created_at,
                     Type::INT8,
                 );
@@ -163,6 +169,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                     insert.channel__subscribers_quantity,
                     insert.channel__marks_quantity,
                     insert.channel__viewing_quantity,
+                    insert.channel__obfuscation_value,
                     insert.channel__created_at,
                 ),
             );
@@ -281,6 +288,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                     c.subscribers_quantity,\
                     c.marks_quantity AS mq,\
                     c.viewing_quantity AS vq,\
+                    c.obfuscation_value AS ov,\
                     c.created_at AS ca \
                 FROM \
                     public.channel c \
@@ -327,6 +335,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(10)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(11)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(12)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(13)),
                     ),
                 ),
             );
@@ -726,6 +735,7 @@ pub struct Insert1 {
     pub channel__subscribers_quantity: i64,
     pub channel__marks_quantity: i64,
     pub channel__viewing_quantity: i64,
+    pub channel__obfuscation_value: i64,
     pub channel__created_at: i64,
 }
 pub struct By1 {

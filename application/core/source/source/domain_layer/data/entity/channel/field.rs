@@ -24,4 +24,5 @@ pub struct BackgroundImagePath;
 pub struct SubscribersQuantity;
 pub struct MarksQuantity;
 pub struct ViewingQuantity;
+pub struct ObfuscationValue;
 pub struct CreatedAt;

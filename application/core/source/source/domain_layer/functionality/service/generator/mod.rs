@@ -1,3 +1,4 @@
+mod channel__obfuscation_value;
 mod user_access_refresh_token__expires_at;
 mod user_access_refresh_token__obfuscation_value;
 mod user_access_token__expires_at;
