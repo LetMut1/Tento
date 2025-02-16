@@ -27,9 +27,11 @@ use {
         borrow::Cow,
         future::Future,
     },
-    tokio_postgres::types::Type,
+    tokio_postgres::{
+        types::Type,
+        Row,
+    },
     dedicated::action_processor_incoming_outcoming::action_processor::channel::{
-        get_many_public_by_name::Data as Data1,
         get_many_by_name_in_subscriptions::Data as Data2,
         get_many_by_subscription::Data as Data3,
     },
@@ -374,7 +376,7 @@ impl Repository<Postgresql<Channel<'_>>> {
             );
         };
     }
-    pub fn find_4<'a>(database_1_client: &'a Client, by: By4<'a>, limit: i16) -> impl Future<Output = Result<Vec<Data1>, AggregateError>> + Send + use<'a> {
+    pub fn find_4<'a>(database_1_client: &'a Client, by: By4<'a>, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -454,24 +456,7 @@ impl Repository<Postgresql<Channel<'_>>> {
                 )
                 .await
             );
-            let mut data_registry: Vec<Data1> = vec![];
-            if rows.is_empty() {
-                return Result::Ok(data_registry);
-            }
-            '_a: for row in rows.iter() {
-                let data = Data1 {
-                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
-                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
-                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
-                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
-                    channel__visability_modifier: by.channel__visability_modifier,
-                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(4)),
-                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
-                    is_user_subscribed: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)).is_some(),
-                };
-                data_registry.push(data);
-            }
-            return Result::Ok(data_registry);
+            return Result::Ok(rows);
         };
     }
     pub fn find_5<'a>(database_1_client: &'a Client, by: By5<'a>, limit: i16) -> impl Future<Output = Result<Vec<Data2>, AggregateError>> + Send + use<'a> {

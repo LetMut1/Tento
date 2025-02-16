@@ -38,6 +38,7 @@ use {
             Incoming,
             Outcoming,
             Precedent,
+            Data,
         },
         unified_report::UnifiedReport,
     },
@@ -76,17 +77,32 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                     return Result::Err(crate::new_invalid_argument!());
                 }
             }
-            let data_registry = Repository::<Postgresql<Channel>>::find_4(
+            let channel__visability_modifier = Channel_VisabilityModifier::Public as i16;
+            let rows = Repository::<Postgresql<Channel>>::find_4(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 ChannelBy4 {
                     user__id: user_access_token.user__id,
                     channel__name: incoming.channel__name.as_str(),
                     requery___channel__name: incoming.requery___channel__name.as_deref(),
-                    channel__visability_modifier: Channel_VisabilityModifier::Public as _,
+                    channel__visability_modifier,
                 },
                 incoming.limit,
             )
             .await?;
+            let mut data_registry: Vec<Data> = vec![];
+            '_a: for row in rows.iter() {
+                let data = Data {
+                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
+                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
+                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
+                    channel__visability_modifier,
+                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(4)),
+                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
+                    is_user_subscribed: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)).is_some(),
+                };
+                data_registry.push(data);
+            }
             let outcoming = Outcoming {
                 data_registry,
             };
