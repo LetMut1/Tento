@@ -62,3 +62,18 @@ impl Encoder<Argon2Id> {
         };
     }
 }
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn validate() -> Result<(), Box<dyn std::error::Error + 'static>> {
+        let data_for_encode = [0 as u8, 1];
+        if !Encoder::<Argon2Id>::is_valid(
+            data_for_encode.as_slice(),
+            Encoder::<Argon2Id>::encode(data_for_encode.as_slice())?.as_str(),
+        )? {
+            return Result::Err("".into());
+        }
+        return Result::Ok(());
+    }
+}

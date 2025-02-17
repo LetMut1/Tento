@@ -65,6 +65,7 @@ impl Encoder<UserAccessRefreshToken<'_>> {
         );
     }
 }
+// This structure is necessary because BitCode serializer can not serialize std::borrow::Cow.
 #[cfg_attr(
     feature = "serde_for_manual_test",
     derive(

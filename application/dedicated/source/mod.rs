@@ -1,6 +1,7 @@
 #![cfg(target_endian = "little")]
 pub mod action_processor_incoming_outcoming;
 pub mod bit_code_serializer;
+pub mod channel_subscription_token_encoded;
 pub mod common_precedent;
 pub mod entity;
 pub mod unified_report;

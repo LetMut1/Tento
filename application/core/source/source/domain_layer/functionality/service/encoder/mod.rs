@@ -1,3 +1,4 @@
+mod channel_subscription_token;
 mod user__password;
 mod user_access_refresh_token;
 mod user_access_token;
