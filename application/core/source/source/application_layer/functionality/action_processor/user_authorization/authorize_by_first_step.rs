@@ -107,24 +107,28 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 )
             } else {
                 if Validator::<User_Nickname>::is_valid(incoming.user__email___or___user__nickname.as_str()) {
-                    let user_ = Repository::<Postgresql<User>>::find_2(
+                    let (
+                        user__id,
+                        user__email,
+                        user__password_hash,
+                    ) = match Repository::<Postgresql<User>>::find_2(
                         &postgresql_database_1_client,
                         UserBy1 {
                             user__nickname: incoming.user__email___or___user__nickname.as_str(),
                         },
                     )
-                    .await?;
-                    let user__ = match user_ {
-                        Option::Some(user___) => user___,
+                    .await?
+                    {
+                        Option::Some(values) => values,
                         Option::None => {
                             return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword));
                         }
                     };
                     (
-                        user__.id,
-                        user__.email,
+                        user__id,
+                        user__email,
                         incoming.user__email___or___user__nickname,
-                        user__.password_hash,
+                        user__password_hash,
                     )
                 } else {
                     return Result::Err(crate::new_invalid_argument!());
