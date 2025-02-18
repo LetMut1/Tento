@@ -87,7 +87,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             }
             {
                 let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
-                let mut user_reset_password_token = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_2(
+                let (
+                    user_reset_password_token__value,
+                    mut user_reset_password_token__wrong_enter_tries_quantity,
+                    user_reset_password_token__is_approved,
+                    user_reset_password_token__expires_at,
+                ) = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_2(
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy1 {
                         user__id: incoming.user__id,
@@ -101,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                         return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound));
                     }
                 };
-                if user_reset_password_token.expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+                if user_reset_password_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
                     Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                         &postgresql_database_2_client,
                         UserResetPasswordTokenBy1 {
@@ -112,14 +117,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     .await?;
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyExpired));
                 }
-                if !user_reset_password_token.is_approved {
+                if !user_reset_password_token__is_approved {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_IsNotApproved));
                 }
-                if user_reset_password_token.value != incoming.user_reset_password_token__value {
-                    if user_reset_password_token.wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
-                        user_reset_password_token.wrong_enter_tries_quantity += 1;
+                if user_reset_password_token__value != incoming.user_reset_password_token__value {
+                    if user_reset_password_token__wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
+                        user_reset_password_token__wrong_enter_tries_quantity += 1;
                     }
-                    if user_reset_password_token.wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
+                    if user_reset_password_token__wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                         Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_4(
                             &postgresql_database_2_client,
                             UserResetPasswordTokenBy1 {
