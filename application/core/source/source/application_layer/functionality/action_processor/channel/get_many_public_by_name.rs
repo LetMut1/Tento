@@ -78,7 +78,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                 }
             }
             let channel__visability_modifier = Channel_VisabilityModifier::Public as i16;
-            let rows = Repository::<Postgresql<Channel>>::find_4(
+            let rows = Repository::<Postgresql<Channel>>::find_3(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 ChannelBy4 {
                     user__id: user_access_token.user__id,

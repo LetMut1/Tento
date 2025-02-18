@@ -155,3 +155,6 @@ Access/Visability in game, we need to ckeck all constraints for it in routes.
 
 
 Как сделать защиту от подписок на каналы со скрипта.
+
+
+убрать дто Инсерты и апдейты и заменить на деривативы

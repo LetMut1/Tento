@@ -18,17 +18,14 @@ use {
         ObfuscationValue,
     },
     super::user::User_Id,
-    std::{
-        borrow::Cow,
-        marker::PhantomData,
-    },
+    std::marker::PhantomData,
 };
-pub struct Channel<'a> {
+pub struct Channel {
     pub id: i64,
     _id: PhantomData<Id>,
     pub owner: i64,
     _owner: PhantomData<User_Id>,
-    pub name: Cow<'a, str>,
+    pub name: String,
     _name: PhantomData<Name>,
     pub linked_name: String,
     _linked_name: PhantomData<LinkedName>,
@@ -55,11 +52,11 @@ pub struct Channel<'a> {
     pub created_at: i64,
     _created_at: PhantomData<CreatedAt>,
 }
-impl<'a> Channel<'a> {
+impl Channel {
     pub fn new(
         id: i64,
         owner: i64,
-        name: Cow<'a, str>,
+        name: String,
         linked_name: String,
         description: Option<String>,
         access_modifier: i16,

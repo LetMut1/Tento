@@ -217,39 +217,36 @@ impl CommandProcessor<CreateFixtures> {
                     if !Validator::<Channel_Orientation>::is_valid(channel__orientation.as_slice()) {
                         return Result::Err(crate::new_invalid_argument!());
                     }
-                    let channel = Repository::<Postgresql<Channel<'_>>>::find_2(
+                    if Repository::<Postgresql<Channel>>::is_exist_1(
                         &postgresql_database_1_client,
                         ChannelBy2 {
                             channel__name: channel__name.as_str(),
                         },
                     )
-                    .await?;
-                    match channel {
-                        Option::Some(_) => {
-                            continue 'b;
-                        }
-                        Option::None => {
-                            Repository::<Postgresql<Channel<'_>>>::create_1(
-                                &postgresql_database_1_client,
-                                ChannelInsert1 {
-                                    channel__owner: user.id,
-                                    channel__name,
-                                    channel__linked_name,
-                                    channel__description,
-                                    channel__access_modifier: Channel_AccessModifier::Open as _,
-                                    channel__visability_modifier: Channel_VisabilityModifier::Public as _,
-                                    channel__orientation,
-                                    channel__cover_image_path: Option::Some(STUB.to_string()),
-                                    channel__background_image_path: Option::Some(STUB.to_string()),
-                                    channel__subscribers_quantity: 0,
-                                    channel__marks_quantity: 0,
-                                    channel__viewing_quantity: 0,
-                                    channel__obfuscation_value: Generator::<Channel_ObfuscationValue>::generate(),
-                                    channel__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
-                                },
-                            )
-                            .await?;
-                        }
+                    .await?
+                    {
+                        continue 'b;
+                    } else {
+                        Repository::<Postgresql<Channel>>::create_1(
+                            &postgresql_database_1_client,
+                            ChannelInsert1 {
+                                channel__owner: user.id,
+                                channel__name,
+                                channel__linked_name,
+                                channel__description,
+                                channel__access_modifier: Channel_AccessModifier::Open as _,
+                                channel__visability_modifier: Channel_VisabilityModifier::Public as _,
+                                channel__orientation,
+                                channel__cover_image_path: Option::Some(STUB.to_string()),
+                                channel__background_image_path: Option::Some(STUB.to_string()),
+                                channel__subscribers_quantity: 0,
+                                channel__marks_quantity: 0,
+                                channel__viewing_quantity: 0,
+                                channel__obfuscation_value: Generator::<Channel_ObfuscationValue>::generate(),
+                                channel__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
+                            },
+                        )
+                        .await?;
                     }
                 }
             }

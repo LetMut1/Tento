@@ -75,7 +75,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
                     return Result::Err(crate::new_invalid_argument!());
                 }
             }
-            let data_registry = Repository::<Postgresql<Channel>>::find_5(
+            let data_registry = Repository::<Postgresql<Channel>>::find_4(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 ChannelBy5 {
                     user__id: user_access_token.user__id,
