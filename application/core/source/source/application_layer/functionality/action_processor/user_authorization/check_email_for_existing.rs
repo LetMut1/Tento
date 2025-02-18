@@ -43,7 +43,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckEmailForExistin
             if !Validator::<User_Email>::is_valid(incoming.user__email.as_str())? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let is_exist = Repository::<Postgresql<User<'_>>>::is_exist_2(
+            let is_exist = Repository::<Postgresql<User>>::is_exist_2(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy2 {
                     user__email: incoming.user__email.as_str(),

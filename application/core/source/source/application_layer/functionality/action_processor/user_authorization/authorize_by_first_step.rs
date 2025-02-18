@@ -86,7 +86,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             }
             let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             let (user__id, user__email, user__nickname, user__password_hash) = if Validator::<User_Email>::is_valid(incoming.user__email___or___user__nickname.as_str())? {
-                let user_ = Repository::<Postgresql<User<'_>>>::find_3(
+                let user_ = Repository::<Postgresql<User>>::find_3(
                     &postgresql_database_1_client,
                     UserBy2 {
                         user__email: incoming.user__email___or___user__nickname.as_str(),
@@ -107,7 +107,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 )
             } else {
                 if Validator::<User_Nickname>::is_valid(incoming.user__email___or___user__nickname.as_str()) {
-                    let user_ = Repository::<Postgresql<User<'_>>>::find_2(
+                    let user_ = Repository::<Postgresql<User>>::find_2(
                         &postgresql_database_1_client,
                         UserBy1 {
                             user__nickname: incoming.user__email___or___user__nickname.as_str(),

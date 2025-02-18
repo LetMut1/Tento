@@ -147,7 +147,7 @@ impl CommandProcessor<CreateFixtures> {
                 ) {
                     return Result::Err(crate::new_invalid_argument!());
                 }
-                let user = match Repository::<Postgresql<User<'_>>>::find_1(
+                let user__id = match Repository::<Postgresql<User>>::find_1(
                     &postgresql_database_1_client,
                     UserBy1 {
                         user__nickname: user__nickname.as_str(),
@@ -155,23 +155,24 @@ impl CommandProcessor<CreateFixtures> {
                 )
                 .await?
                 {
-                    Option::Some(user_) => user_,
+                    Option::Some(user_) => user_.id,
                     Option::None => {
-                        Repository::<Postgresql<User<'_>>>::create_1(
+                        Repository::<Postgresql<User>>::create_1(
                             &postgresql_database_1_client,
                             UserInsert1 {
                                 user__email,
-                                user__nickname,
+                                user__nickname: user__nickname.clone(),
                                 user__password_hash: user__password_hash.clone(),
                                 user__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
                             },
                         )
                         .await?
+                        .id
                     }
                 };
                 let user_device__id = format!(
                     "{}_{}",
-                    user.nickname.as_ref(),
+                    user__nickname.as_str(),
                     APPLICATION_USER_DEVICE__ID_PART
                 );
                 if !Validator::<UserDevice_Id>::is_valid(&user_device__id) {
@@ -181,7 +182,7 @@ impl CommandProcessor<CreateFixtures> {
                     &postgresql_database_1_client,
                     UserDeviceInsert1 {
                         user_device__id,
-                        user__id: user.id,
+                        user__id,
                     },
                 )
                 .await?;
@@ -230,7 +231,7 @@ impl CommandProcessor<CreateFixtures> {
                         Repository::<Postgresql<Channel>>::create_1(
                             &postgresql_database_1_client,
                             ChannelInsert1 {
-                                channel__owner: user.id,
+                                channel__owner: user__id,
                                 channel__name,
                                 channel__linked_name,
                                 channel__description,

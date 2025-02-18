@@ -111,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             }
             {
                 let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
-                if Repository::<Postgresql<User<'_>>>::is_exist_1(
+                if Repository::<Postgresql<User>>::is_exist_1(
                     &postgresql_database_1_client,
                     UserBy1 {
                         user__nickname: incoming.user__nickname.as_str(),
@@ -121,7 +121,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 {
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NicknameAlreadyExist));
                 }
-                if Repository::<Postgresql<User<'_>>>::is_exist_2(
+                if Repository::<Postgresql<User>>::is_exist_2(
                     &postgresql_database_1_client,
                     UserBy2 {
                         user__email: incoming.user__email.as_str(),
@@ -198,11 +198,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 .await
             )?;
             let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
-            let user__id = Repository::<Postgresql<User<'_>>>::get_user_id(&postgresql_database_1_client).await?;
+            let user__id = Repository::<Postgresql<User>>::get_id(&postgresql_database_1_client).await?;
             let user = User::new(
                 user__id,
                 incoming.user__email,
-                Cow::Owned(incoming.user__nickname),
+                incoming.user__nickname,
                 user__password_hash,
                 now,
             );
@@ -247,7 +247,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Err(aggregate_error);
             }
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<User<'_>>>::create_2(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<User>>::create_2(
                 &postgresql_database_1_client,
                 &user,
             )
@@ -257,7 +257,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 return Result::Err(aggregate_error);
             }
             if let Result::Err(aggregate_error) = Resolver_::<Transaction<'_>>::commit(transaction).await {
-                Repository::<Postgresql<User<'_>>>::delete_1(
+                Repository::<Postgresql<User>>::delete_1(
                     &postgresql_database_1_client,
                     UserBy3 {
                         user__id: user.id,

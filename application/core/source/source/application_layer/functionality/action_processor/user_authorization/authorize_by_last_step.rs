@@ -155,7 +155,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 );
             }
             let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
-            if !Repository::<Postgresql<User<'_>>>::is_exist_3(
+            if !Repository::<Postgresql<User>>::is_exist_3(
                 &postgresql_database_1_client,
                 UserBy3 {
                     user__id: incoming.user__id,

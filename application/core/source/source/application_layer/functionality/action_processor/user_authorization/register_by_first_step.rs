@@ -79,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if Repository::<Postgresql<User<'_>>>::is_exist_2(
+            if Repository::<Postgresql<User>>::is_exist_2(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy2 {
                     user__email: incoming.user__email.as_str(),

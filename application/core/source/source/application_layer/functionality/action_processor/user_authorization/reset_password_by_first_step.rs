@@ -79,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let user = Repository::<Postgresql<User<'_>>>::find_4(
+            let user = Repository::<Postgresql<User>>::find_4(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy2 {
                     user__email: incoming.user__email.as_str(),

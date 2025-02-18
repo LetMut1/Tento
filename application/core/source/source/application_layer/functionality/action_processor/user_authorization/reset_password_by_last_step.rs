@@ -141,7 +141,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_WrongValue));
                 }
             }
-            let mut user = match Repository::<Postgresql<User<'_>>>::find_5(
+            let mut user = match Repository::<Postgresql<User>>::find_5(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy3 {
                     user__id: incoming.user__id,
@@ -200,7 +200,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Err(aggregate_error);
             }
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<User<'_>>>::update_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<User>>::update_1(
                 &postgresql_database_1_client,
                 UserUpdate1 {
                     user__password_hash: user.password_hash.as_str(),
@@ -215,7 +215,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 return Result::Err(aggregate_error);
             }
             if let Result::Err(aggregate_error) = Resolver_::<Transaction<'_>>::commit(transaction).await {
-                Repository::<Postgresql<User<'_>>>::update_1(
+                Repository::<Postgresql<User>>::update_1(
                     &postgresql_database_1_client,
                     UserUpdate1 {
                         user__password_hash: user__password_hash___old.as_str(),

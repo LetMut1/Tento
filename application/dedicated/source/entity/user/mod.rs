@@ -9,25 +9,22 @@ use {
         Password,
         PasswordHash,
     },
-    std::{
-        borrow::Cow,
-        marker::PhantomData,
-    },
+    std::marker::PhantomData,
 };
-pub struct User<'a> {
+pub struct User {
     pub id: i64,
     _id: PhantomData<Id>,
     pub email: String,
     _email: PhantomData<Email>,
-    pub nickname: Cow<'a, str>,
+    pub nickname: String,
     _nickname: PhantomData<Nickname>,
     pub password_hash: String,
     _password_hash: PhantomData<PasswordHash>,
     pub created_at: i64,
     _created_at: PhantomData<CreatedAt>,
 }
-impl<'a> User<'a> {
-    pub fn new(id: i64, email: String, nickname: Cow<'a, str>, password_hash: String, created_at: i64) -> Self {
+impl User {
+    pub fn new(id: i64, email: String, nickname: String, password_hash: String, created_at: i64) -> Self {
         return Self {
             id,
             _id: PhantomData,

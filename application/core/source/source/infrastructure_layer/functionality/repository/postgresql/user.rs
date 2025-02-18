@@ -7,11 +7,11 @@ use {
         domain_layer::data::entity::user::{
             User,
             derivative::{
-                User1,
                 User2,
                 User3,
                 User4,
                 User5,
+                User6,
             },
         },
         infrastructure_layer::{
@@ -20,14 +20,11 @@ use {
         },
     },
     deadpool_postgres::Client,
-    std::{
-        borrow::Cow,
-        future::Future,
-    },
+    std::future::Future,
     tokio_postgres::types::Type,
 };
-impl Repository<Postgresql<User<'_>>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1) -> impl Future<Output = Result<User<'static>, AggregateError>> + Send + use<'a> {
+impl Repository<Postgresql<User>> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1) -> impl Future<Output = Result<User, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -84,14 +81,14 @@ impl Repository<Postgresql<User<'_>>> {
                 User::new(
                     crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
                     insert.user__email,
-                    Cow::Owned(insert.user__nickname),
+                    insert.user__nickname,
                     insert.user__password_hash,
                     insert.user__created_at,
                 ),
             );
         };
     }
-    pub fn create_2<'a, 'b>(database_1_client: &'a Client, user: &'a User<'b>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn create_2<'a>(database_1_client: &'a Client, user: &'a User) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -331,14 +328,11 @@ impl Repository<Postgresql<User<'_>>> {
             return Result::Ok(true);
         };
     }
-    pub fn find_1<'a, 'b>(database_1_client: &'a Client, by: By1<'b>) -> impl Future<Output = Result<Option<User<'b>>, AggregateError>> + Send + use<'a, 'b> {
+    pub fn find_1<'a, 'b>(database_1_client: &'a Client, by: By1<'b>) -> impl Future<Output = Result<Option<User4>, AggregateError>> + Send + use<'a, 'b> {
         return async move {
             let query = "\
                 SELECT \
-                    u.id AS i,\
-                    u.email AS e,\
-                    u.password_hash AS ph,\
-                    u.created_at AS ca \
+                    u.id AS i \
                 FROM \
                     public.user_ u \
                 WHERE \
@@ -369,18 +363,14 @@ impl Repository<Postgresql<User<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User::new(
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
-                        Cow::Borrowed(by.user__nickname),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
-                    ),
+                    User4 {
+                        id: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                    },
                 ),
             );
         };
     }
-    pub fn find_2<'a>(database_1_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<User1>, AggregateError>> + Send + use<'a> {
+    pub fn find_2<'a>(database_1_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<User2>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -417,7 +407,7 @@ impl Repository<Postgresql<User<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User1 {
+                    User2 {
                         id: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
                         email: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
                         password_hash: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
@@ -426,7 +416,7 @@ impl Repository<Postgresql<User<'_>>> {
             );
         };
     }
-    pub fn find_3<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<Option<User2>, AggregateError>> + Send + use<'a> {
+    pub fn find_3<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<Option<User3>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -463,7 +453,7 @@ impl Repository<Postgresql<User<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User2 {
+                    User3 {
                         id: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
                         nickname: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
                         password_hash: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
@@ -472,7 +462,7 @@ impl Repository<Postgresql<User<'_>>> {
             );
         };
     }
-    pub fn find_4<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<Option<User3>, AggregateError>> + Send + use<'a> {
+    pub fn find_4<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<Option<User4>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -507,14 +497,14 @@ impl Repository<Postgresql<User<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User3 {
+                    User4 {
                         id: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
                     },
                 ),
             );
         };
     }
-    pub fn find_5<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<Option<User4>, AggregateError>> + Send + use<'a> {
+    pub fn find_5<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<Option<User5>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -551,7 +541,7 @@ impl Repository<Postgresql<User<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User4 {
+                    User5 {
                         email: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
                         nickname: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
                         password_hash: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
@@ -560,7 +550,7 @@ impl Repository<Postgresql<User<'_>>> {
             );
         };
     }
-    pub fn find_6<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<Option<User5>, AggregateError>> + Send + use<'a> {
+    pub fn find_6<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<Option<User6>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -595,14 +585,14 @@ impl Repository<Postgresql<User<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User5 {
+                    User6 {
                         email: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
                     },
                 ),
             );
         };
     }
-    pub fn get_user_id<'a>(database_1_client: &'a Client) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
+    pub fn get_id<'a>(database_1_client: &'a Client) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT nextval('public.user_1') AS n";

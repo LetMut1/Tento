@@ -43,7 +43,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExis
             if !Validator::<User_Nickname>::is_valid(incoming.user__nickname.as_str()) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let is_exist = Repository::<Postgresql<User<'_>>>::is_exist_1(
+            let is_exist = Repository::<Postgresql<User>>::is_exist_1(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy1 {
                     user__nickname: incoming.user__nickname.as_str(),
