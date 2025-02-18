@@ -7,7 +7,6 @@ use {
         domain_layer::data::entity::user::{
             User,
             derivative::{
-                User5,
                 User6,
             },
         },
@@ -509,7 +508,11 @@ impl Repository<Postgresql<User>> {
             );
         };
     }
-    pub fn find_5<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<Option<User5>, AggregateError>> + Send + use<'a> {
+    // Return values:
+    // user__email: String,
+    // user__nickname: String,
+    // user__password_hash: String,
+    pub fn find_5<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<Option<(String, String, String)>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -546,11 +549,11 @@ impl Repository<Postgresql<User>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User5 {
-                        email: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
-                        nickname: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
-                        password_hash: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
-                    },
+                    (
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
+                    ),
                 ),
             );
         };

@@ -141,7 +141,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_WrongValue));
                 }
             }
-            let mut user = match Repository::<Postgresql<User>>::find_5(
+            let (
+                user__email,
+                user__nickname,
+                mut user__password_hash,
+            ) = match Repository::<Postgresql<User>>::find_5(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy3 {
                     user__id: incoming.user__id,
@@ -149,20 +153,20 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             )
             .await?
             {
-                Option::Some(user_) => user_,
+                Option::Some(values) => values,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
             if !Validator::<User_Password>::is_valid_part_2(
                 incoming.user__password.as_str(),
-                user.email.as_str(),
-                user.nickname.as_str(),
+                user__email.as_str(),
+                user__nickname.as_str(),
             ) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let user__password_hash___old = user.password_hash;
-            user.password_hash = crate::result_return_runtime!(
+            let user__password_hash___old = user__password_hash;
+            user__password_hash = crate::result_return_runtime!(
                 Spawner::<TokioBlockingTask>::spawn_processed(
                     move || -> _ {
                         return Encoder::<User_Password>::encode(incoming.user__password.as_str());
@@ -203,7 +207,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             if let Result::Err(aggregate_error) = Repository::<Postgresql<User>>::update_1(
                 &postgresql_database_1_client,
                 UserUpdate1 {
-                    user__password_hash: user.password_hash.as_str(),
+                    user__password_hash: user__password_hash.as_str(),
                 },
                 UserBy3 {
                     user__id: incoming.user__id,
