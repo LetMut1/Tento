@@ -4,12 +4,7 @@ use {
         Postgresql,
     },
     crate::{
-        domain_layer::data::entity::user::{
-            User,
-            derivative::{
-                User6,
-            },
-        },
+        domain_layer::data::entity::user::User,
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::repository::Repository,
@@ -558,7 +553,9 @@ impl Repository<Postgresql<User>> {
             );
         };
     }
-    pub fn find_6<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<Option<User6>, AggregateError>> + Send + use<'a> {
+    // Return values:
+    // user__email: String,
+    pub fn find_6<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<Option<String>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -593,9 +590,7 @@ impl Repository<Postgresql<User>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User6 {
-                        email: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
-                    },
+                    crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
                 ),
             );
         };

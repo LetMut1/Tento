@@ -71,7 +71,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let user = match Repository::<Postgresql<User>>::find_6(
+            let user__email = match Repository::<Postgresql<User>>::find_6(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy3 {
                     user__id: incoming.user__id,
@@ -135,7 +135,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                     EmailSender::<UserResetPasswordToken<'_>>::repeatable_send(
                         &environment_configuration.subject.resource.email_server,
                         user_reset_password_token.value.as_str(),
-                        user.email.as_str(),
+                        user__email.as_str(),
                         incoming.user_device__id.as_str(),
                     )
                     .await?;
