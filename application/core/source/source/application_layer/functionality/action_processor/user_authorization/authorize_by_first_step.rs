@@ -86,24 +86,28 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             }
             let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             let (user__id, user__email, user__nickname, user__password_hash) = if Validator::<User_Email>::is_valid(incoming.user__email___or___user__nickname.as_str())? {
-                let user_ = Repository::<Postgresql<User>>::find_3(
+                let (
+                    user__id,
+                    user__nickname,
+                    user__password_hash,
+                ) = match Repository::<Postgresql<User>>::find_3(
                     &postgresql_database_1_client,
                     UserBy2 {
                         user__email: incoming.user__email___or___user__nickname.as_str(),
                     },
                 )
-                .await?;
-                let user__ = match user_ {
-                    Option::Some(user___) => user___,
+                .await?
+                {
+                    Option::Some(values) => values,
                     Option::None => {
                         return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword));
                     }
                 };
                 (
-                    user__.id,
+                    user__id,
                     incoming.user__email___or___user__nickname,
-                    user__.nickname,
-                    user__.password_hash,
+                    user__nickname,
+                    user__password_hash,
                 )
             } else {
                 if Validator::<User_Nickname>::is_valid(incoming.user__email___or___user__nickname.as_str()) {
