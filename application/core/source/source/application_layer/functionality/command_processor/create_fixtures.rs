@@ -155,7 +155,7 @@ impl CommandProcessor<CreateFixtures> {
                 )
                 .await?
                 {
-                    Option::Some(user_) => user_.id,
+                    Option::Some(user__id_) => user__id_,
                     Option::None => {
                         Repository::<Postgresql<User>>::create_1(
                             &postgresql_database_1_client,

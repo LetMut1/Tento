@@ -1,6 +1,3 @@
-pub struct User4 {
-    pub id: i64,
-}
 pub struct User5 {
     pub email: String,
     pub nickname: String,

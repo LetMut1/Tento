@@ -79,15 +79,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let user = Repository::<Postgresql<User>>::find_4(
+            let user__id = match Repository::<Postgresql<User>>::find_4(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy2 {
                     user__email: incoming.user__email.as_str(),
                 },
             )
-            .await?;
-            let user_ = match user {
-                Option::Some(user__) => user__,
+            .await?
+            {
+                Option::Some(user__id_) => user__id_,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                 match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_1(
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy1 {
-                        user__id: user_.id,
+                        user__id,
                         user_device__id: incoming.user_device__id.as_str(),
                     },
                 )
@@ -137,7 +137,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                     user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,
                                 },
                                 UserResetPasswordTokenBy1 {
-                                    user__id: user_.id,
+                                    user__id,
                                     user_device__id: incoming.user_device__id.as_str(),
                                 },
                             )
@@ -150,7 +150,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                         user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,
                                     },
                                     UserResetPasswordTokenBy1 {
-                                        user__id: user_.id,
+                                        user__id,
                                         user_device__id: incoming.user_device__id.as_str(),
                                     },
                                 )
@@ -166,7 +166,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                         user_reset_password_token__expires_at: user_reset_password_token.expires_at,
                                     },
                                     UserResetPasswordTokenBy1 {
-                                        user__id: user_.id,
+                                        user__id,
                                         user_device__id: incoming.user_device__id.as_str(),
                                     },
                                 )
@@ -182,7 +182,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                     }
                     Option::None => {
                         let user_reset_password_token = UserResetPasswordToken::new(
-                            user_.id,
+                            user__id,
                             Cow::Borrowed(incoming.user_device__id.as_str()),
                             Generator::<UserResetPasswordToken_Value>::generate(),
                             0,
@@ -219,7 +219,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                 );
             }
             let outcoming = Outcoming {
-                user__id: user_.id,
+                user__id,
                 verification_message_sent: can_send,
                 user_reset_password_token__can_be_resent_from,
                 user_reset_password_token__wrong_enter_tries_quantity,
