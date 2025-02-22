@@ -68,7 +68,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
-            let mut user_registration_token = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_3(
+            let (
+                user_registration_token__value,
+                user_registration_token__is_approved,
+                user_registration_token__expires_at,
+                mut user_registration_token__can_be_resent_from,
+            ) = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_3(
                 &postgresql_database_2_client,
                 UserRegistrationTokenBy1 {
                     user__email: incoming.user__email.as_str(),
@@ -83,7 +88,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 }
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
-            if user_registration_token.expires_at <= now {
+            if user_registration_token__expires_at <= now {
                 Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy1 {
@@ -94,17 +99,17 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyExpired));
             }
-            if user_registration_token.is_approved {
+            if user_registration_token__is_approved {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyApproved));
             }
-            if user_registration_token.can_be_resent_from > now {
+            if user_registration_token__can_be_resent_from > now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_TimeToResendHasNotCome));
             }
-            user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
+            user_registration_token__can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
             Repository::<Postgresql<UserRegistrationToken<'_>>>::update_2(
                 &postgresql_database_2_client,
                 UserRegistrationTokenUpdate2 {
-                    user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
+                    user_registration_token__can_be_resent_from,
                 },
                 UserRegistrationTokenBy1 {
                     user__email: incoming.user__email.as_str(),
@@ -117,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 async move {
                     EmailSender::<UserRegistrationToken<'_>>::repeatable_send(
                         &environment_configuration.subject.resource.email_server,
-                        user_registration_token.value.as_str(),
+                        user_registration_token__value.as_str(),
                         incoming.user__email.as_str(),
                         incoming.user_device__id.as_str(),
                     )
@@ -126,7 +131,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 },
             );
             let outcoming = Outcoming {
-                user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
+                user_registration_token__can_be_resent_from,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

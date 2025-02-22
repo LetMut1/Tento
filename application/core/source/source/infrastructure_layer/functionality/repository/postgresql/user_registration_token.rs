@@ -4,12 +4,7 @@ use {
         Postgresql,
     },
     crate::{
-        domain_layer::data::entity::user_registration_token::{
-            UserRegistrationToken,
-            derivative::{
-                UserRegistrationToken3,
-            },
-        },
+        domain_layer::data::entity::user_registration_token::UserRegistrationToken,
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::repository::Repository,
@@ -514,7 +509,11 @@ impl Repository<Postgresql<UserRegistrationToken<'_>>> {
             );
         };
     }
-    pub fn find_3<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserRegistrationToken3>, AggregateError>> + Send + use<'a> {
+    // user_registration_token__value: String,
+    // user_registration_token__is_approved: bool,
+    // user_registration_token__expires_at: i64,
+    // user_registration_token__can_be_resent_from: i64,
+    pub fn find_3<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<(String, bool, i64, i64)>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -558,12 +557,12 @@ impl Repository<Postgresql<UserRegistrationToken<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    UserRegistrationToken3 {
-                        value: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
-                        is_approved: crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(1)),
-                        expires_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
-                        can_be_resent_from: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
-                    },
+                    (
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(1)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
+                    ),
                 ),
             );
         };
