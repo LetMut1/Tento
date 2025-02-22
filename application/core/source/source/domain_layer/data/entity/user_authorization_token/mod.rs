@@ -1,4 +1,3 @@
-pub mod derivative;
 mod field;
 use {
     self::field::{

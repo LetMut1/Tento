@@ -149,7 +149,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 )
                 .await?
                 {
-                    Option::Some(user_registration_token_) => user_registration_token_,
+                    Option::Some(values) => values,
                     Option::None => {
                         return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                     }

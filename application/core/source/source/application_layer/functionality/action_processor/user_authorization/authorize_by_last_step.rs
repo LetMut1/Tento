@@ -110,7 +110,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             )
             .await?
             {
-                Option::Some(user_authorization_token__) => user_authorization_token__,
+                Option::Some(values) => values,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound));
                 }
