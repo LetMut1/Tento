@@ -135,7 +135,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             {
                 let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
-                let mut user_registration_token = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_2(
+                let (
+                    user_registration_token__value,
+                    mut user_registration_token__wrong_enter_tries_quantity,
+                    user_registration_token__is_approved,
+                    user_registration_token__expires_at,
+                ) = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_2(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy1 {
                         user__email: incoming.user__email.as_str(),
@@ -149,7 +154,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                         return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                     }
                 };
-                if user_registration_token.expires_at <= now {
+                if user_registration_token__expires_at <= now {
                     Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                         &postgresql_database_2_client,
                         UserRegistrationTokenBy1 {
@@ -160,14 +165,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     .await?;
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyExpired));
                 }
-                if !user_registration_token.is_approved {
+                if !user_registration_token__is_approved {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_IsNotApproved));
                 }
-                if user_registration_token.value != incoming.user_registration_token__value {
-                    if user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
-                        user_registration_token.wrong_enter_tries_quantity += 1;
+                if user_registration_token__value != incoming.user_registration_token__value {
+                    if user_registration_token__wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
+                        user_registration_token__wrong_enter_tries_quantity += 1;
                     }
-                    if user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
+                    if user_registration_token__wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                         Repository::<Postgresql<UserRegistrationToken<'_>>>::update_4(
                             &postgresql_database_2_client,
                             UserRegistrationTokenBy1 {

@@ -319,7 +319,6 @@ impl Repository<Postgresql<User>> {
             return Result::Ok(true);
         };
     }
-    // Return values:
     // user__id: i64,
     pub fn find_1<'a, 'b>(database_1_client: &'a Client, by: By1<'b>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a, 'b> {
         return async move {
@@ -361,7 +360,6 @@ impl Repository<Postgresql<User>> {
             );
         };
     }
-    // Return values:
     // user__id: i64,
     // user__email: String,
     // user__password_hash: String,
@@ -411,7 +409,6 @@ impl Repository<Postgresql<User>> {
             );
         };
     }
-    // Return values:
     // user__id: i64,
     // user__nickname: String,
     // user__password_hash: String,
@@ -461,7 +458,6 @@ impl Repository<Postgresql<User>> {
             );
         };
     }
-    // Return values:
     // user__id: i64,
     pub fn find_4<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
@@ -503,7 +499,6 @@ impl Repository<Postgresql<User>> {
             );
         };
     }
-    // Return values:
     // user__email: String,
     // user__nickname: String,
     // user__password_hash: String,
@@ -553,7 +548,6 @@ impl Repository<Postgresql<User>> {
             );
         };
     }
-    // Return values:
     // user__email: String,
     pub fn find_6<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<Option<String>, AggregateError>> + Send + use<'a> {
         return async move {

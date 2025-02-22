@@ -7,7 +7,6 @@ use {
         domain_layer::data::entity::user_registration_token::{
             UserRegistrationToken,
             derivative::{
-                UserRegistrationToken2,
                 UserRegistrationToken3,
             },
         },
@@ -396,7 +395,6 @@ impl Repository<Postgresql<UserRegistrationToken<'_>>> {
             return Result::Ok(());
         };
     }
-    // Return values:
     // user_registration_token__value: String,
     // user_registration_token__wrong_enter_tries_quantity: i16,
     // user_registration_token__is_approved: bool,
@@ -458,7 +456,11 @@ impl Repository<Postgresql<UserRegistrationToken<'_>>> {
             );
         };
     }
-    pub fn find_2<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<UserRegistrationToken2>, AggregateError>> + Send + use<'a> {
+    // user_registration_token__value: String,
+    // user_registration_token__wrong_enter_tries_quantity: i16,
+    // user_registration_token__is_approved: bool,
+    // user_registration_token__expires_at: i64,
+    pub fn find_2<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<(String, i16, bool, i64)>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -502,12 +504,12 @@ impl Repository<Postgresql<UserRegistrationToken<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    UserRegistrationToken2 {
-                        value: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
-                        wrong_enter_tries_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
-                        is_approved: crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(2)),
-                        expires_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
-                    },
+                    (
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(2)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
+                    ),
                 ),
             );
         };

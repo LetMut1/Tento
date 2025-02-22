@@ -390,7 +390,6 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             return Result::Ok(());
         };
     }
-    // Return values:
     // user_reset_password_token__value: String,
     // user_reset_password_token__wrong_enter_tries_quantity: i16,
     // user_reset_password_token__is_approved: bool,
@@ -452,7 +451,6 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             );
         };
     }
-    // Return values:
     // user_reset_password_token__value: String,
     // user_reset_password_token__wrong_enter_tries_quantity: i16,
     // user_reset_password_token__is_approved: bool,
@@ -511,7 +509,6 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             );
         };
     }
-    // Return values:
     // user_reset_password_token__value: String,
     // user_reset_password_token__is_approved: bool,
     // user_reset_password_token__expires_at: i64,
