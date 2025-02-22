@@ -101,9 +101,17 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                 )
                 .await?
                 {
-                    Option::Some(mut user_registration_token) => {
-                        let (can_send_, need_to_update_1) = if user_registration_token.can_be_resent_from <= now {
-                            user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
+                    Option::Some(
+                        (
+                            mut user_registration_token__value_,
+                            mut user_registration_token__wrong_enter_tries_quantity_,
+                            mut user_registration_token__is_approved,
+                            mut user_registration_token__expires_at,
+                            mut user_registration_token__can_be_resent_from_,
+                        )
+                    ) => {
+                        let (can_send_, need_to_update_1) = if user_registration_token__can_be_resent_from_ <= now {
+                            user_registration_token__can_be_resent_from_ = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
                             (
                                 true,
                                 true,
@@ -114,11 +122,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                 false,
                             )
                         };
-                        let need_to_update_2 = if user_registration_token.expires_at <= now || user_registration_token.is_approved {
-                            user_registration_token.value = Generator::<UserRegistrationToken_Value>::generate();
-                            user_registration_token.wrong_enter_tries_quantity = 0;
-                            user_registration_token.is_approved = false;
-                            user_registration_token.expires_at = Generator::<UserRegistrationToken_ExpiresAt>::generate(now)?;
+                        let need_to_update_2 = if user_registration_token__expires_at <= now || user_registration_token__is_approved {
+                            user_registration_token__value_ = Generator::<UserRegistrationToken_Value>::generate();
+                            user_registration_token__wrong_enter_tries_quantity_ = 0;
+                            user_registration_token__is_approved = false;
+                            user_registration_token__expires_at = Generator::<UserRegistrationToken_ExpiresAt>::generate(now)?;
                             true
                         } else {
                             false
@@ -127,11 +135,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             Repository::<Postgresql<UserRegistrationToken<'_>>>::update_1(
                                 &postgresql_database_2_client,
                                 UserRegistrationTokenUpdate1 {
-                                    user_registration_token__value: user_registration_token.value.as_str(),
-                                    user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
-                                    user_registration_token__is_approved: user_registration_token.is_approved,
-                                    user_registration_token__expires_at: user_registration_token.expires_at,
-                                    user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
+                                    user_registration_token__value: user_registration_token__value_.as_str(),
+                                    user_registration_token__wrong_enter_tries_quantity: user_registration_token__wrong_enter_tries_quantity_,
+                                    user_registration_token__is_approved,
+                                    user_registration_token__expires_at,
+                                    user_registration_token__can_be_resent_from: user_registration_token__can_be_resent_from_,
                                 },
                                 UserRegistrationTokenBy1 {
                                     user__email: incoming.user__email.as_str(),
@@ -144,7 +152,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                 Repository::<Postgresql<UserRegistrationToken<'_>>>::update_2(
                                     &postgresql_database_2_client,
                                     UserRegistrationTokenUpdate2 {
-                                        user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
+                                        user_registration_token__can_be_resent_from: user_registration_token__can_be_resent_from_,
                                     },
                                     UserRegistrationTokenBy1 {
                                         user__email: incoming.user__email.as_str(),
@@ -157,10 +165,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                 Repository::<Postgresql<UserRegistrationToken<'_>>>::update_3(
                                     &postgresql_database_2_client,
                                     UserRegistrationTokenUpdate3 {
-                                        user_registration_token__value: user_registration_token.value.as_str(),
-                                        user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
-                                        user_registration_token__is_approved: user_registration_token.is_approved,
-                                        user_registration_token__expires_at: user_registration_token.expires_at,
+                                        user_registration_token__value: user_registration_token__value_.as_str(),
+                                        user_registration_token__wrong_enter_tries_quantity: user_registration_token__wrong_enter_tries_quantity_,
+                                        user_registration_token__is_approved,
+                                        user_registration_token__expires_at,
                                     },
                                     UserRegistrationTokenBy1 {
                                         user__email: incoming.user__email.as_str(),
@@ -171,9 +179,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             }
                         }
                         (
-                            user_registration_token.value,
-                            user_registration_token.can_be_resent_from,
-                            user_registration_token.wrong_enter_tries_quantity,
+                            user_registration_token__value_,
+                            user_registration_token__can_be_resent_from_,
+                            user_registration_token__wrong_enter_tries_quantity_,
                             can_send_,
                         )
                     }
