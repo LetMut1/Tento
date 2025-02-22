@@ -97,22 +97,26 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 return Result::Err(crate::new_invalid_argument!());
             }
             let mut postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
-            let user_authorization_token = Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_2(
+            let (
+                user_authorization_token__value,
+                mut user_authorization_token__wrong_enter_tries_quantity,
+                user_authorization_token__expires_at,
+            ) = match Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_2(
                 &postgresql_database_2_client,
                 UserAuthorizationTokenBy1 {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },
             )
-            .await?;
-            let mut user_authorization_token_ = match user_authorization_token {
+            .await?
+            {
                 Option::Some(user_authorization_token__) => user_authorization_token__,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound));
                 }
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
-            if user_authorization_token_.expires_at <= now {
+            if user_authorization_token__expires_at <= now {
                 Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                     &postgresql_database_2_client,
                     UserAuthorizationTokenBy1 {
@@ -123,11 +127,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_AlreadyExpired));
             }
-            if user_authorization_token_.value != incoming.user_authorization_token__value {
-                if user_authorization_token_.wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
-                    user_authorization_token_.wrong_enter_tries_quantity += 1;
+            if user_authorization_token__value != incoming.user_authorization_token__value {
+                if user_authorization_token__wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
+                    user_authorization_token__wrong_enter_tries_quantity += 1;
                 }
-                if user_authorization_token_.wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
+                if user_authorization_token__wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
                     Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_4(
                         &postgresql_database_2_client,
                         UserAuthorizationTokenBy1 {
@@ -149,7 +153,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 return Result::Ok(
                     UnifiedReport::precedent(
                         Precedent::UserAuthorizationToken_WrongValue {
-                            user_authorization_token__wrong_enter_tries_quantity: user_authorization_token_.wrong_enter_tries_quantity,
+                            user_authorization_token__wrong_enter_tries_quantity,
                         },
                     ),
                 );
