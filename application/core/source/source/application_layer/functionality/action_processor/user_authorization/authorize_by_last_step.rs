@@ -254,7 +254,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
             let user_access_token_encoded = Encoder::<UserAccessToken<'_>>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
-                &user_access_token,
+                user_access_token.id.as_str(),
+                user_access_token.user__id,
+                user_access_token.user_device__id,
+                user_access_token.expires_at,
             )?;
             let user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken<'_>>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
