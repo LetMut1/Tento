@@ -15,12 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<ChannelSubscription>> {
-    pub fn create_1<'a>(
-        database_1_client: &'a Client,
-        user__id: i64,
-        channel__id: i64,
-        channel_subscription__created_at: i64,
-    ) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -36,15 +31,15 @@ impl Repository<Postgresql<ChannelSubscription>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &user__id,
+                    &insert.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &channel__id,
+                    &insert.channel__id,
                     Type::INT8,
                 )
                 .add(
-                    &channel_subscription__created_at,
+                    &insert.channel_subscription__created_at,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
@@ -108,6 +103,11 @@ impl Repository<Postgresql<ChannelSubscription>> {
             return Result::Ok(true);
         };
     }
+}
+pub struct Insert1 {
+    pub user__id: i64,
+    pub channel__id: i64,
+    pub channel_subscription__created_at: i64,
 }
 pub struct By1 {
     pub user__id: i64,

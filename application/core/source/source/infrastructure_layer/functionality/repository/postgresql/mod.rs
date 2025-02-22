@@ -16,7 +16,10 @@ pub use self::{
         By6 as ChannelBy6,
         Insert1 as ChannelInsert1,
     },
-    channel_subscription::By1 as ChannelSubscriptionBy1,
+    channel_subscription::{
+        By1 as ChannelSubscriptionBy1,
+        Insert1 as ChannelSubscriptionInsert1,
+    },
     user::{
         By1 as UserBy1,
         By2 as UserBy2,
