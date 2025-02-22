@@ -168,9 +168,16 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 )
                 .await?
                 {
-                    Option::Some(mut user_authorization_token) => {
-                        let (can_send_, need_to_update_1) = if user_authorization_token.can_be_resent_from <= now {
-                            user_authorization_token.can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?;
+                    Option::Some(
+                        (
+                            mut user_authorization_token__value_,
+                            mut user_authorization_token__wrong_enter_tries_quantity_,
+                            mut user_authorization_token__expires_at,
+                            mut user_authorization_token__can_be_resent_from_,
+                        )
+                    ) => {
+                        let (can_send_, need_to_update_1) = if user_authorization_token__can_be_resent_from_ <= now {
+                            user_authorization_token__can_be_resent_from_ = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?;
                             (
                                 true,
                                 true,
@@ -181,10 +188,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                 false,
                             )
                         };
-                        let need_to_update_2 = if user_authorization_token.expires_at <= now {
-                            user_authorization_token.value = Generator::<UserAuthorizationToken_Value>::generate();
-                            user_authorization_token.wrong_enter_tries_quantity = 0;
-                            user_authorization_token.expires_at = Generator::<UserAuthorizationToken_ExpiresAt>::generate(now)?;
+                        let need_to_update_2 = if user_authorization_token__expires_at <= now {
+                            user_authorization_token__value_ = Generator::<UserAuthorizationToken_Value>::generate();
+                            user_authorization_token__wrong_enter_tries_quantity_ = 0;
+                            user_authorization_token__expires_at = Generator::<UserAuthorizationToken_ExpiresAt>::generate(now)?;
                             true
                         } else {
                             false
@@ -193,10 +200,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_1(
                                 &postgresql_database_2_client,
                                 UserAuthorizationTokenUpdate1 {
-                                    user_authorization_token__value: user_authorization_token.value.as_str(),
-                                    user_authorization_token__wrong_enter_tries_quantity: user_authorization_token.wrong_enter_tries_quantity,
-                                    user_authorization_token__expires_at: user_authorization_token.expires_at,
-                                    user_authorization_token__can_be_resent_from: user_authorization_token.can_be_resent_from,
+                                    user_authorization_token__value: user_authorization_token__value_.as_str(),
+                                    user_authorization_token__wrong_enter_tries_quantity: user_authorization_token__wrong_enter_tries_quantity_,
+                                    user_authorization_token__expires_at,
+                                    user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from_,
                                 },
                                 UserAuthorizationTokenBy1 {
                                     user__id,
@@ -209,7 +216,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                 Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_3(
                                     &postgresql_database_2_client,
                                     UserAuthorizationTokenUpdate3 {
-                                        user_authorization_token__can_be_resent_from: user_authorization_token.can_be_resent_from,
+                                        user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from_,
                                     },
                                     UserAuthorizationTokenBy1 {
                                         user__id,
@@ -222,9 +229,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                 Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_2(
                                     &postgresql_database_2_client,
                                     UserAuthorizationTokenUpdate2 {
-                                        user_authorization_token__value: user_authorization_token.value.as_str(),
-                                        user_authorization_token__wrong_enter_tries_quantity: user_authorization_token.wrong_enter_tries_quantity,
-                                        user_authorization_token__expires_at: user_authorization_token.expires_at,
+                                        user_authorization_token__value: user_authorization_token__value_.as_str(),
+                                        user_authorization_token__wrong_enter_tries_quantity: user_authorization_token__wrong_enter_tries_quantity_,
+                                        user_authorization_token__expires_at,
                                     },
                                     UserAuthorizationTokenBy1 {
                                         user__id,
@@ -235,9 +242,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             }
                         }
                         (
-                            user_authorization_token.value,
-                            user_authorization_token.can_be_resent_from,
-                            user_authorization_token.wrong_enter_tries_quantity,
+                            user_authorization_token__value_,
+                            user_authorization_token__can_be_resent_from_,
+                            user_authorization_token__wrong_enter_tries_quantity_,
                             can_send_,
                         )
                     }
