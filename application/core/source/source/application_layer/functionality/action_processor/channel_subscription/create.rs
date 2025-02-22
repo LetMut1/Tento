@@ -107,11 +107,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             .await?;
             if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::create_1(
                 transaction.get_client(),
-                &ChannelSubscription::new(
-                    user_access_token.user__id,
-                    incoming.channel__id,
-                    Resolver::<UnixTime>::get_now_in_seconds(),
-                ),
+                user_access_token.user__id,
+                incoming.channel__id,
+                Resolver::<UnixTime>::get_now_in_seconds(),
             )
             .await
             {
