@@ -4,12 +4,7 @@ use {
         Postgresql,
     },
     crate::{
-        domain_layer::data::entity::channel::{
-            Channel,
-            derivative::{
-                Channel2,
-            },
-        },
+        domain_layer::data::entity::channel::Channel,
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
@@ -204,7 +199,21 @@ impl Repository<Postgresql<Channel>> {
             return Result::Ok(());
         };
     }
-    pub fn find_1<'a>(database_1_client: &'a Client, by: By1) -> impl Future<Output = Result<Option<Channel2>, AggregateError>> + Send + use<'a> {
+    // channel__owner: i64,
+    // channel__name: String,
+    // channel__linked_name: String,
+    // channel__description: Option<String>,
+    // channel__access_modifier: i16,
+    // channel__visability_modifier: i16,
+    // channel__orientation: Vec<i16>,
+    // channel__cover_image_path: Option<String>,
+    // channel__background_image_path: Option<String>,
+    // channel__subscribers_quantity: i64,
+    // channel__marks_quantity: i64,
+    // channel__viewing_quantity: i64,
+    pub fn find_1<'a>(
+        database_1_client: &'a Client, by: By1,
+    ) -> impl Future<Output = Result<Option<(i64, String, String, Option<String>, i16, i16, Vec<i16>, Option<String>, Option<String>, i64, i64, i64)>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -250,20 +259,20 @@ impl Repository<Postgresql<Channel>> {
             }
             return Result::Ok(
                 Option::Some(
-                    Channel2 {
-                        owner: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                        name: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
-                        linked_name: crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
-                        description: crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(3)),
-                        access_modifier: crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(4)),
-                        visability_modifier: crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(5)),
-                        orientation: crate::result_return_logic!(rows[0].try_get::<'_, usize, Vec<i16>>(6)),
-                        cover_image_path: crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(7)),
-                        background_image_path: crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(8)),
-                        subscribers_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(9)),
-                        marks_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(10)),
-                        viewing_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(11)),
-                    },
+                    (
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(3)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(4)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(5)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Vec<i16>>(6)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(7)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(8)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(9)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(10)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(11)),
+                    ),
                 ),
             );
         };

@@ -1,5 +1,4 @@
 mod field;
-pub mod derivative;
 use {
     self::field::{
         AccessModifier,

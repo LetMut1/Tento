@@ -70,7 +70,20 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
-            let channel = match Repository::<Postgresql<Channel>>::find_1(
+            let (
+                channel__owner,
+                channel__name,
+                channel__linked_name,
+                channel__description,
+                channel__access_modifier,
+                channel__visability_modifier,
+                channel__orientation,
+                channel__cover_image_path,
+                channel__background_image_path,
+                channel__subscribers_quantity,
+                channel__marks_quantity,
+                channel__viewing_quantity,
+            ) = match Repository::<Postgresql<Channel>>::find_1(
                 &postgresql_database_1_client,
                 ChannelBy1 {
                     channel__id: incoming.channel__id,
@@ -83,7 +96,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }
             };
-            if Channel_AccessModifier::Close as i16 == channel.access_modifier {
+            if Channel_AccessModifier::Close as i16 == channel__access_modifier {
                 let is_exist = Repository::<Postgresql<ChannelSubscription>>::is_exist_1(
                     &postgresql_database_1_client,
                     ChannelSubscriptionBy1 {
@@ -92,23 +105,23 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     },
                 )
                 .await?;
-                if !is_exist && user_access_token.user__id != channel.owner {
+                if !is_exist && user_access_token.user__id != channel__owner {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
                 }
             }
             let outcoming = Outcoming {
-                channel__name: channel.name,
-                channel__linked_name: channel.linked_name,
-                channel__description: channel.description,
-                channel__access_modifier: channel.access_modifier,
-                channel__visability_modifier: channel.visability_modifier,
-                channel__orientation: channel.orientation,
-                channel__cover_image_path: channel.cover_image_path,
-                channel__background_image_path: channel.background_image_path,
-                channel__subscribers_quantity: channel.subscribers_quantity,
-                channel__marks_quantity: channel.marks_quantity,
-                channel__viewing_quantity: channel.viewing_quantity,
-                user_is_channel_owner: user_access_token.user__id == channel.owner,
+                channel__name,
+                channel__linked_name,
+                channel__description,
+                channel__access_modifier,
+                channel__visability_modifier,
+                channel__orientation,
+                channel__cover_image_path,
+                channel__background_image_path,
+                channel__subscribers_quantity,
+                channel__marks_quantity,
+                channel__viewing_quantity,
+                user_is_channel_owner: user_access_token.user__id == channel__owner,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
