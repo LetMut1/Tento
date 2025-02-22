@@ -7,7 +7,6 @@ use {
         domain_layer::data::entity::channel::{
             Channel,
             derivative::{
-                Channel1,
                 Channel2,
             },
         },
@@ -269,7 +268,9 @@ impl Repository<Postgresql<Channel>> {
             );
         };
     }
-    pub fn find_2<'a>(database_1_client: &'a Client, by: By1) -> impl Future<Output = Result<Option<Channel1>, AggregateError>> + Send + use<'a> {
+    // channel__owner: i64,
+    // channel__access_modifier: i16,
+    pub fn find_2<'a>(database_1_client: &'a Client, by: By1) -> impl Future<Output = Result<Option<(i64, i16)>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -305,10 +306,10 @@ impl Repository<Postgresql<Channel>> {
             }
             return Result::Ok(
                 Option::Some(
-                    Channel1 {
-                        owner: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                        access_modifier: crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
-                    },
+                    (
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
+                    ),
                 ),
             );
         };

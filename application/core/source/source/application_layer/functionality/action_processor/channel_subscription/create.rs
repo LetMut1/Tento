@@ -78,7 +78,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let mut postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
-            let channel = match Repository::<Postgresql<Channel>>::find_2(
+            let (
+                channel__owner,
+                channel__access_modifier,
+            ) = match Repository::<Postgresql<Channel>>::find_2(
                 &postgresql_database_1_client,
                 ChannelBy1 {
                     channel__id: incoming.channel__id,
@@ -91,10 +94,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }
             };
-            if channel.owner == user_access_token.user__id {
+            if channel__owner == user_access_token.user__id {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
             }
-            if Channel_AccessModifier::Close as i16 == channel.access_modifier {
+            if Channel_AccessModifier::Close as i16 == channel__access_modifier {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
             }
             let transaction = Resolver_::<Transaction<'_>>::start(
