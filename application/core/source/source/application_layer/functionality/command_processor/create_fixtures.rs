@@ -230,16 +230,16 @@ impl CommandProcessor<CreateFixtures> {
                     } else {
                         Repository::<Postgresql<Channel>>::create_1(
                             &postgresql_database_1_client,
-                            ChannelInsert1 {
+                            &ChannelInsert1 {
                                 channel__owner: user__id,
-                                channel__name,
-                                channel__linked_name,
-                                channel__description,
+                                channel__name: channel__name.as_str(),
+                                channel__linked_name: channel__linked_name.as_str(),
+                                channel__description: channel__description.as_deref(),
                                 channel__access_modifier: Channel_AccessModifier::Open as _,
                                 channel__visability_modifier: Channel_VisabilityModifier::Public as _,
-                                channel__orientation,
-                                channel__cover_image_path: Option::Some(STUB.to_string()),
-                                channel__background_image_path: Option::Some(STUB.to_string()),
+                                channel__orientation: channel__orientation.as_slice(),
+                                channel__cover_image_path: Option::Some(STUB),
+                                channel__background_image_path: Option::Some(STUB),
                                 channel__subscribers_quantity: 0,
                                 channel__marks_quantity: 0,
                                 channel__viewing_quantity: 0,

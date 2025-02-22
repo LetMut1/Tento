@@ -27,8 +27,9 @@ use {
         get_many_by_subscription::Data as Data3,
     },
 };
+// channel__id: i64,
 impl Repository<Postgresql<Channel>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1) -> impl Future<Output = Result<Channel, AggregateError>> + Send + use<'a> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert: &'a Insert1<'_>) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -67,10 +68,6 @@ impl Repository<Postgresql<Channel>> {
                     ) \
                 RETURNING \
                     c.id AS i;";
-            let channel__description = insert.channel__description.as_ref();
-            let channel__orientation = insert.channel__orientation.as_slice();
-            let channel__cover_image_path = insert.channel__cover_image_path.as_ref();
-            let channel__background_image_path = insert.channel__background_image_path.as_ref();
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
@@ -86,7 +83,7 @@ impl Repository<Postgresql<Channel>> {
                     Type::TEXT,
                 )
                 .add(
-                    &channel__description,
+                    &insert.channel__description,
                     Type::TEXT,
                 )
                 .add(
@@ -98,15 +95,15 @@ impl Repository<Postgresql<Channel>> {
                     Type::INT2,
                 )
                 .add(
-                    &channel__orientation,
+                    &insert.channel__orientation,
                     Type::INT2_ARRAY,
                 )
                 .add(
-                    &channel__cover_image_path,
+                    &insert.channel__cover_image_path,
                     Type::TEXT,
                 )
                 .add(
-                    &channel__background_image_path,
+                    &insert.channel__background_image_path,
                     Type::TEXT,
                 )
                 .add(
@@ -146,23 +143,7 @@ impl Repository<Postgresql<Channel>> {
                 .await
             );
             return Result::Ok(
-                Channel::new(
-                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                    insert.channel__owner,
-                    insert.channel__name,
-                    insert.channel__linked_name,
-                    insert.channel__description,
-                    insert.channel__access_modifier,
-                    insert.channel__visability_modifier,
-                    insert.channel__orientation,
-                    insert.channel__cover_image_path,
-                    insert.channel__background_image_path,
-                    insert.channel__subscribers_quantity,
-                    insert.channel__marks_quantity,
-                    insert.channel__viewing_quantity,
-                    insert.channel__obfuscation_value,
-                    insert.channel__created_at,
-                ),
+                crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
             );
         };
     }
@@ -660,16 +641,16 @@ impl Repository<Postgresql<Channel>> {
         };
     }
 }
-pub struct Insert1 {
+pub struct Insert1<'a> {
     pub channel__owner: i64,
-    pub channel__name: String,
-    pub channel__linked_name: String,
-    pub channel__description: Option<String>,
+    pub channel__name: &'a str,
+    pub channel__linked_name: &'a str,
+    pub channel__description: Option<&'a str,>,
     pub channel__access_modifier: i16,
     pub channel__visability_modifier: i16,
-    pub channel__orientation: Vec<i16>,
-    pub channel__cover_image_path: Option<String>,
-    pub channel__background_image_path: Option<String>,
+    pub channel__orientation: &'a [i16],
+    pub channel__cover_image_path: Option<&'a str,>,
+    pub channel__background_image_path: Option<&'a str,>,
     pub channel__subscribers_quantity: i64,
     pub channel__marks_quantity: i64,
     pub channel__viewing_quantity: i64,

@@ -101,16 +101,16 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_LinkedNameAlreadyExist));
             }
-            let channel = Repository::<Postgresql<Channel>>::create_1(
+            let channel__id = Repository::<Postgresql<Channel>>::create_1(
                 &postgresql_database_1_client,
-                ChannelInsert1 {
+                &ChannelInsert1 {
                     channel__owner: user_access_token.user__id,
-                    channel__name: incoming.channel__name,
-                    channel__linked_name: incoming.channel__linked_name,
+                    channel__name: incoming.channel__name.as_str(),
+                    channel__linked_name: incoming.channel__linked_name.as_str(),
                     channel__description: Option::None,
                     channel__access_modifier: incoming.channel__access_modifier,
                     channel__visability_modifier: incoming.channel__visability_modifier,
-                    channel__orientation: vec![],
+                    channel__orientation: vec![].as_slice(),
                     channel__cover_image_path: Option::None,
                     channel__background_image_path: Option::None,
                     channel__subscribers_quantity: 0,
@@ -124,7 +124,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {
-                        channel__id: channel.id,
+                        channel__id,
                     },
                 ),
             );
