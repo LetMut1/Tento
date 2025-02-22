@@ -277,7 +277,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             )?;
             let user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken<'_>>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
-                &user_access_refresh_token,
+                user_access_refresh_token.user__id,
+                user_access_refresh_token.user_device__id,
+                user_access_refresh_token.user_access_token__id.as_ref(),
+                user_access_refresh_token.obfuscation_value.as_str(),
+                user_access_refresh_token.expires_at,
+                user_access_refresh_token.updated_at,
             )?;
             let postgresql_connection_pool_database_1 = inner.postgresql_connection_pool_database_1.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
