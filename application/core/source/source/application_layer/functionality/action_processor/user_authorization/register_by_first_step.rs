@@ -33,7 +33,7 @@ use {
                     postgresql::{
                         Postgresql,
                         UserBy2,
-                        UserRegistrationTokenBy1,
+                        UserRegistrationTokenBy,
                         UserRegistrationTokenUpdate1,
                         UserRegistrationTokenUpdate2,
                         UserRegistrationTokenUpdate3,
@@ -94,7 +94,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             let (user_registration_token__value, user_registration_token__can_be_resent_from, user_registration_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_1(
                     &postgresql_database_2_client,
-                    UserRegistrationTokenBy1 {
+                    UserRegistrationTokenBy {
                         user__email: incoming.user__email.as_str(),
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -141,7 +141,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                     user_registration_token__expires_at,
                                     user_registration_token__can_be_resent_from: user_registration_token__can_be_resent_from_,
                                 },
-                                UserRegistrationTokenBy1 {
+                                UserRegistrationTokenBy {
                                     user__email: incoming.user__email.as_str(),
                                     user_device__id: incoming.user_device__id.as_str(),
                                 },
@@ -154,7 +154,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                     UserRegistrationTokenUpdate2 {
                                         user_registration_token__can_be_resent_from: user_registration_token__can_be_resent_from_,
                                     },
-                                    UserRegistrationTokenBy1 {
+                                    UserRegistrationTokenBy {
                                         user__email: incoming.user__email.as_str(),
                                         user_device__id: incoming.user_device__id.as_str(),
                                     },
@@ -170,7 +170,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                         user_registration_token__is_approved,
                                         user_registration_token__expires_at,
                                     },
-                                    UserRegistrationTokenBy1 {
+                                    UserRegistrationTokenBy {
                                         user__email: incoming.user__email.as_str(),
                                         user_device__id: incoming.user_device__id.as_str(),
                                     },

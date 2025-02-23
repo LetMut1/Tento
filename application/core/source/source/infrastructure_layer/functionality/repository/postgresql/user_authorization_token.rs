@@ -82,7 +82,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn delete_1<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn delete_1<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -119,7 +119,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn update_1<'a>(database_2_client: &'a Client, update: Update1<'a>, by: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(database_2_client: &'a Client, update: Update1<'a>, by: By<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -183,7 +183,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn update_2<'a>(database_2_client: &'a Client, update: Update2<'a>, by: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_2<'a>(database_2_client: &'a Client, update: Update2<'a>, by: By<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -241,7 +241,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn update_3<'a>(database_2_client: &'a Client, update: Update3, by: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_3<'a>(database_2_client: &'a Client, update: Update3, by: By<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -287,7 +287,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn update_4<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_4<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -330,7 +330,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
     // user_authorization_token__wrong_enter_tries_quantity: i16,
     // user_authorization_token__expires_at: i64,
     // user_authorization_token__can_be_resent_from: i64,
-    pub fn find_1<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<(String, i16, i64, i64)>, AggregateError>> + Send + use<'a> {
+    pub fn find_1<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<Option<(String, i16, i64, i64)>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -387,7 +387,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
     // user_authorization_token__value: String,
     // user_authorization_token__wrong_enter_tries_quantity: i16,
     // user_authorization_token__expires_at: i64,
-    pub fn find_2<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<(String, i16, i64)>, AggregateError>> + Send + use<'a> {
+    pub fn find_2<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<Option<(String, i16, i64)>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -442,7 +442,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
     // user_authorization_token__value: String,
     // user_authorization_token__expires_at: i64,
     // user_authorization_token__can_be_resent_from: i64,
-    pub fn find_3<'a>(database_2_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<(String, i64, i64)>, AggregateError>> + Send + use<'a> {
+    pub fn find_3<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<Option<(String, i64, i64)>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -509,7 +509,7 @@ pub struct Update2<'a> {
 pub struct Update3 {
     pub user_authorization_token__can_be_resent_from: i64,
 }
-pub struct By1<'a> {
+pub struct By<'a> {
     pub user__id: i64,
     pub user_device__id: &'a str,
 }

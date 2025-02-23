@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<UserDevice>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + use<'a> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -64,7 +64,7 @@ impl Repository<Postgresql<UserDevice>> {
         };
     }
 }
-pub struct Insert1 {
+pub struct Insert {
     pub user_device__id: String,
     pub user__id: i64,
 }

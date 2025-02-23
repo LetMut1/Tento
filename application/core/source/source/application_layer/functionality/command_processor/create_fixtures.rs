@@ -40,11 +40,11 @@ use {
                 repository::{
                     postgresql::{
                         ChannelBy2,
-                        ChannelInsert1,
+                        ChannelInsert,
                         Postgresql,
                         UserBy1,
-                        UserDeviceInsert1,
-                        UserInsert1,
+                        UserDeviceInsert,
+                        UserInsert,
                     },
                     Repository,
                 },
@@ -159,7 +159,7 @@ impl CommandProcessor<CreateFixtures> {
                     Option::None => {
                         Repository::<Postgresql<User>>::create_1(
                             &postgresql_database_1_client,
-                            UserInsert1 {
+                            UserInsert {
                                 user__email,
                                 user__nickname: user__nickname.clone(),
                                 user__password_hash: user__password_hash.clone(),
@@ -180,7 +180,7 @@ impl CommandProcessor<CreateFixtures> {
                 }
                 Repository::<Postgresql<UserDevice>>::create_1(
                     &postgresql_database_1_client,
-                    UserDeviceInsert1 {
+                    UserDeviceInsert {
                         user_device__id,
                         user__id,
                     },
@@ -230,7 +230,7 @@ impl CommandProcessor<CreateFixtures> {
                     } else {
                         Repository::<Postgresql<Channel>>::create_1(
                             &postgresql_database_1_client,
-                            &ChannelInsert1 {
+                            &ChannelInsert {
                                 channel__owner: user__id,
                                 channel__name: channel__name.as_str(),
                                 channel__linked_name: channel__linked_name.as_str(),

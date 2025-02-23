@@ -30,7 +30,7 @@ use {
                     postgresql::{
                         Postgresql,
                         UserBy3,
-                        UserResetPasswordTokenBy1,
+                        UserResetPasswordTokenBy,
                         UserResetPasswordTokenUpdate2,
                     },
                     Repository,
@@ -92,7 +92,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 mut user_reset_password_token__can_be_resent_from
             ) = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_3(
                 &postgresql_database_2_client,
-                UserResetPasswordTokenBy1 {
+                UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },
@@ -108,7 +108,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             if user_reset_password_token__expires_at <= now {
                 Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                     &postgresql_database_2_client,
-                    UserResetPasswordTokenBy1 {
+                    UserResetPasswordTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -128,7 +128,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 UserResetPasswordTokenUpdate2 {
                     user_reset_password_token__can_be_resent_from,
                 },
-                UserResetPasswordTokenBy1 {
+                UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },

@@ -33,7 +33,7 @@ use {
                     postgresql::{
                         Postgresql,
                         UserBy2,
-                        UserResetPasswordTokenBy1,
+                        UserResetPasswordTokenBy,
                         UserResetPasswordTokenUpdate1,
                         UserResetPasswordTokenUpdate2,
                         UserResetPasswordTokenUpdate3,
@@ -97,7 +97,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
             let (user_reset_password_token__value, user_reset_password_token__can_be_resent_from, user_reset_password_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_1(
                     &postgresql_database_2_client,
-                    UserResetPasswordTokenBy1 {
+                    UserResetPasswordTokenBy {
                         user__id,
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -144,7 +144,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                     user_reset_password_token__expires_at,
                                     user_reset_password_token__can_be_resent_from: user_reset_password_token__can_be_resent_from_,
                                 },
-                                UserResetPasswordTokenBy1 {
+                                UserResetPasswordTokenBy {
                                     user__id,
                                     user_device__id: incoming.user_device__id.as_str(),
                                 },
@@ -157,7 +157,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                     UserResetPasswordTokenUpdate2 {
                                         user_reset_password_token__can_be_resent_from: user_reset_password_token__can_be_resent_from_,
                                     },
-                                    UserResetPasswordTokenBy1 {
+                                    UserResetPasswordTokenBy {
                                         user__id,
                                         user_device__id: incoming.user_device__id.as_str(),
                                     },
@@ -173,7 +173,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                         user_reset_password_token__is_approved,
                                         user_reset_password_token__expires_at,
                                     },
-                                    UserResetPasswordTokenBy1 {
+                                    UserResetPasswordTokenBy {
                                         user__id,
                                         user_device__id: incoming.user_device__id.as_str(),
                                     },

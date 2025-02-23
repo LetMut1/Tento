@@ -35,7 +35,7 @@ use {
                 repository::{
                     postgresql::{
                         Postgresql,
-                        UserAuthorizationTokenBy1,
+                        UserAuthorizationTokenBy,
                         UserAuthorizationTokenUpdate1,
                         UserAuthorizationTokenUpdate2,
                         UserAuthorizationTokenUpdate3,
@@ -161,7 +161,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             let (user_authorization_token__value, user_authorization_token__can_be_resent_from, user_authorization_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_1(
                     &postgresql_database_2_client,
-                    UserAuthorizationTokenBy1 {
+                    UserAuthorizationTokenBy {
                         user__id,
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -205,7 +205,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                     user_authorization_token__expires_at,
                                     user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from_,
                                 },
-                                UserAuthorizationTokenBy1 {
+                                UserAuthorizationTokenBy {
                                     user__id,
                                     user_device__id: incoming.user_device__id.as_str(),
                                 },
@@ -218,7 +218,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                     UserAuthorizationTokenUpdate3 {
                                         user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from_,
                                     },
-                                    UserAuthorizationTokenBy1 {
+                                    UserAuthorizationTokenBy {
                                         user__id,
                                         user_device__id: incoming.user_device__id.as_str(),
                                     },
@@ -233,7 +233,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                         user_authorization_token__wrong_enter_tries_quantity: user_authorization_token__wrong_enter_tries_quantity_,
                                         user_authorization_token__expires_at,
                                     },
-                                    UserAuthorizationTokenBy1 {
+                                    UserAuthorizationTokenBy {
                                         user__id,
                                         user_device__id: incoming.user_device__id.as_str(),
                                     },

@@ -85,7 +85,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn update_1<'a>(database_2_client: &'a Client, update: Update1<'a>, by: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(database_2_client: &'a Client, update: Update<'a>, by: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -274,7 +274,15 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
         };
     }
 }
-pub struct Update1<'a> {
+pub struct Insert<'a> {
+    pub user__id: i64,
+    pub user_device__id: &'a str,
+    pub user_access_token__id: &'a str,
+    pub obfuscation_value: &'a str,
+    pub expires_at: i64,
+    pub updated_at: i64,
+}
+pub struct Update<'a> {
     pub user_access_token__id: &'a str,
     pub user_access_refresh_token__obfuscation_value: &'a str,
     pub user_access_refresh_token__expires_at: i64,

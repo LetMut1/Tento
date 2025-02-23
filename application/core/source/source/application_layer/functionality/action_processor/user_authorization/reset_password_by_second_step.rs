@@ -23,7 +23,7 @@ use {
                 repository::{
                     postgresql::{
                         Postgresql,
-                        UserResetPasswordTokenBy1,
+                        UserResetPasswordTokenBy,
                         UserResetPasswordTokenUpdate5,
                     },
                     Repository,
@@ -69,7 +69,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 user_reset_password_token__expires_at,
             ) = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_2(
                 &postgresql_database_2_client,
-                UserResetPasswordTokenBy1 {
+                UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },
@@ -84,7 +84,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
             if user_reset_password_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
                 Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                     &postgresql_database_2_client,
-                    UserResetPasswordTokenBy1 {
+                    UserResetPasswordTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -102,7 +102,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 if user_reset_password_token__wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                     Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_4(
                         &postgresql_database_2_client,
-                        UserResetPasswordTokenBy1 {
+                        UserResetPasswordTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),
                         },
@@ -111,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 } else {
                     Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                         &postgresql_database_2_client,
-                        UserResetPasswordTokenBy1 {
+                        UserResetPasswordTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),
                         },
@@ -131,7 +131,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 UserResetPasswordTokenUpdate5 {
                     user_reset_password_token__is_approved: true,
                 },
-                UserResetPasswordTokenBy1 {
+                UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },

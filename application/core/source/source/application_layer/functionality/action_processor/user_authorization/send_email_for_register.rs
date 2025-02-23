@@ -26,7 +26,7 @@ use {
                 repository::{
                     postgresql::{
                         Postgresql,
-                        UserRegistrationTokenBy1,
+                        UserRegistrationTokenBy,
                         UserRegistrationTokenUpdate2,
                     },
                     Repository,
@@ -75,7 +75,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 mut user_registration_token__can_be_resent_from,
             ) = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_3(
                 &postgresql_database_2_client,
-                UserRegistrationTokenBy1 {
+                UserRegistrationTokenBy {
                     user__email: incoming.user__email.as_str(),
                     user_device__id: incoming.user_device__id.as_str(),
                 },
@@ -91,7 +91,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             if user_registration_token__expires_at <= now {
                 Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                     &postgresql_database_2_client,
-                    UserRegistrationTokenBy1 {
+                    UserRegistrationTokenBy {
                         user__email: incoming.user__email.as_str(),
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -111,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 UserRegistrationTokenUpdate2 {
                     user_registration_token__can_be_resent_from,
                 },
-                UserRegistrationTokenBy1 {
+                UserRegistrationTokenBy {
                     user__email: incoming.user__email.as_str(),
                     user_device__id: incoming.user_device__id.as_str(),
                 },

@@ -29,7 +29,7 @@ use {
                 repository::{
                     postgresql::{
                         Postgresql,
-                        UserAuthorizationTokenBy1,
+                        UserAuthorizationTokenBy,
                         UserAuthorizationTokenUpdate3,
                         UserBy3,
                     },
@@ -91,7 +91,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 mut user_authorization_token__can_be_resent_from,
             ) = match Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_3(
                 &postgresql_database_2_client,
-                UserAuthorizationTokenBy1 {
+                UserAuthorizationTokenBy {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },
@@ -107,7 +107,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             if user_authorization_token__expires_at <= now {
                 Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                     &postgresql_database_2_client,
-                    UserAuthorizationTokenBy1 {
+                    UserAuthorizationTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -124,7 +124,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 UserAuthorizationTokenUpdate3 {
                     user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from,
                 },
-                UserAuthorizationTokenBy1 {
+                UserAuthorizationTokenBy {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },

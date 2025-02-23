@@ -51,8 +51,8 @@ use {
                         UserBy1,
                         UserBy2,
                         UserBy3,
-                        UserDeviceInsert1,
-                        UserRegistrationTokenBy1,
+                        UserDeviceInsert,
+                        UserRegistrationTokenBy,
                     },
                     Repository,
                 },
@@ -142,7 +142,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     user_registration_token__expires_at,
                 ) = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_2(
                     &postgresql_database_2_client,
-                    UserRegistrationTokenBy1 {
+                    UserRegistrationTokenBy {
                         user__email: incoming.user__email.as_str(),
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -157,7 +157,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 if user_registration_token__expires_at <= now {
                     Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                         &postgresql_database_2_client,
-                        UserRegistrationTokenBy1 {
+                        UserRegistrationTokenBy {
                             user__email: incoming.user__email.as_str(),
                             user_device__id: incoming.user_device__id.as_str(),
                         },
@@ -175,7 +175,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     if user_registration_token__wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                         Repository::<Postgresql<UserRegistrationToken<'_>>>::update_4(
                             &postgresql_database_2_client,
-                            UserRegistrationTokenBy1 {
+                            UserRegistrationTokenBy {
                                 user__email: incoming.user__email.as_str(),
                                 user_device__id: incoming.user_device__id.as_str(),
                             },
@@ -184,7 +184,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     } else {
                         Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                             &postgresql_database_2_client,
-                            UserRegistrationTokenBy1 {
+                            UserRegistrationTokenBy {
                                 user__email: incoming.user__email.as_str(),
                                 user_device__id: incoming.user_device__id.as_str(),
                             },
@@ -242,7 +242,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             };
             if let Result::Err(aggregate_error) = Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                 transaction.get_client(),
-                UserRegistrationTokenBy1 {
+                UserRegistrationTokenBy {
                     user__email: user.email.as_str(),
                     user_device__id: incoming.user_device__id.as_str(),
                 },
@@ -292,7 +292,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 async move {
                     let user_device = Repository::<Postgresql<UserDevice>>::create_1(
                         &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
-                        UserDeviceInsert1 {
+                        UserDeviceInsert {
                             user_device__id: incoming.user_device__id,
                             user__id,
                         },

@@ -47,10 +47,10 @@ use {
                         Resolver as Resolver_,
                         Transaction,
                         UserAccessRefreshTokenBy2,
-                        UserAccessRefreshTokenUpdate1,
-                        UserAuthorizationTokenBy1,
+                        UserAccessRefreshTokenUpdate,
+                        UserAuthorizationTokenBy,
                         UserBy3,
-                        UserDeviceInsert1,
+                        UserDeviceInsert,
                     },
                     Repository,
                 },
@@ -103,7 +103,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 user_authorization_token__expires_at,
             ) = match Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_2(
                 &postgresql_database_2_client,
-                UserAuthorizationTokenBy1 {
+                UserAuthorizationTokenBy {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },
@@ -119,7 +119,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             if user_authorization_token__expires_at <= now {
                 Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                     &postgresql_database_2_client,
-                    UserAuthorizationTokenBy1 {
+                    UserAuthorizationTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -134,7 +134,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 if user_authorization_token__wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
                     Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_4(
                         &postgresql_database_2_client,
-                        UserAuthorizationTokenBy1 {
+                        UserAuthorizationTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),
                         },
@@ -143,7 +143,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 } else {
                     Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                         &postgresql_database_2_client,
-                        UserAuthorizationTokenBy1 {
+                        UserAuthorizationTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),
                         },
@@ -200,7 +200,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     user_access_refresh_token__.updated_at = user_access_refresh_token__updated_at;
                     if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken<'_>>>::update_1(
                         transaction.get_client(),
-                        UserAccessRefreshTokenUpdate1 {
+                        UserAccessRefreshTokenUpdate {
                             user_access_token__id: user_access_refresh_token__.user_access_token__id.as_ref(),
                             user_access_refresh_token__obfuscation_value: user_access_refresh_token__.obfuscation_value.as_str(),
                             user_access_refresh_token__expires_at: user_access_refresh_token__.expires_at,
@@ -241,7 +241,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             };
             if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                 transaction.get_client(),
-                UserAuthorizationTokenBy1 {
+                UserAuthorizationTokenBy {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },
@@ -273,7 +273,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 async move {
                     let user_device = Repository::<Postgresql<UserDevice>>::create_1(
                         &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
-                        UserDeviceInsert1 {
+                        UserDeviceInsert {
                             user_device__id: incoming.user_device__id,
                             user__id: incoming.user__id,
                         },

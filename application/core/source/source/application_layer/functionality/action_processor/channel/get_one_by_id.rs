@@ -28,7 +28,7 @@ use {
             functionality::repository::{
                 postgresql::{
                     ChannelBy1,
-                    ChannelSubscriptionBy1,
+                    ChannelSubscriptionBy,
                     Postgresql,
                 },
                 Repository,
@@ -99,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             if Channel_AccessModifier::Close as i16 == channel__access_modifier {
                 let is_exist = Repository::<Postgresql<ChannelSubscription>>::is_exist_1(
                     &postgresql_database_1_client,
-                    ChannelSubscriptionBy1 {
+                    ChannelSubscriptionBy {
                         user__id: user_access_token.user__id,
                         channel__id: incoming.channel__id,
                     },

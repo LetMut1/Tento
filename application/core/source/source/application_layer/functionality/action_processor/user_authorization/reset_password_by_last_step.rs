@@ -36,8 +36,8 @@ use {
                         Transaction,
                         UserAccessRefreshTokenBy1,
                         UserBy3,
-                        UserResetPasswordTokenBy1,
-                        UserUpdate1,
+                        UserResetPasswordTokenBy,
+                        UserUpdate,
                     },
                     Repository,
                 },
@@ -94,7 +94,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     user_reset_password_token__expires_at,
                 ) = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_2(
                     &postgresql_database_2_client,
-                    UserResetPasswordTokenBy1 {
+                    UserResetPasswordTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -109,7 +109,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 if user_reset_password_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
                     Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                         &postgresql_database_2_client,
-                        UserResetPasswordTokenBy1 {
+                        UserResetPasswordTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),
                         },
@@ -127,7 +127,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     if user_reset_password_token__wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                         Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_4(
                             &postgresql_database_2_client,
-                            UserResetPasswordTokenBy1 {
+                            UserResetPasswordTokenBy {
                                 user__id: incoming.user__id,
                                 user_device__id: incoming.user_device__id.as_str(),
                             },
@@ -136,7 +136,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     } else {
                         Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                             &postgresql_database_2_client,
-                            UserResetPasswordTokenBy1 {
+                            UserResetPasswordTokenBy {
                                 user__id: incoming.user__id,
                                 user_device__id: incoming.user_device__id.as_str(),
                             },
@@ -199,7 +199,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             }
             if let Result::Err(aggregate_error) = Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                 transaction.get_client(),
-                UserResetPasswordTokenBy1 {
+                UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },
@@ -211,7 +211,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             }
             if let Result::Err(aggregate_error) = Repository::<Postgresql<User>>::update_1(
                 &postgresql_database_1_client,
-                UserUpdate1 {
+                UserUpdate {
                     user__password_hash: user__password_hash.as_str(),
                 },
                 UserBy3 {
@@ -226,7 +226,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             if let Result::Err(aggregate_error) = Resolver_::<Transaction<'_>>::commit(transaction).await {
                 Repository::<Postgresql<User>>::update_1(
                     &postgresql_database_1_client,
-                    UserUpdate1 {
+                    UserUpdate {
                         user__password_hash: user__password_hash___old.as_str(),
                     },
                     UserBy3 {

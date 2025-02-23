@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<User>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1) -> impl Future<Output = Result<User, AggregateError>> + Send + use<'a> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert) -> impl Future<Output = Result<User, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -137,7 +137,7 @@ impl Repository<Postgresql<User>> {
             return Result::Ok(());
         };
     }
-    pub fn update_1<'a>(database_1_client: &'a Client, update: Update1<'a>, by: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(database_1_client: &'a Client, update: Update<'a>, by: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -613,13 +613,13 @@ impl Repository<Postgresql<User>> {
         };
     }
 }
-pub struct Insert1 {
+pub struct Insert {
     pub user__email: String,
     pub user__nickname: String,
     pub user__password_hash: String,
     pub user__created_at: i64,
 }
-pub struct Update1<'a> {
+pub struct Update<'a> {
     pub user__password_hash: &'a str,
 }
 pub struct By1<'a> {

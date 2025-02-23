@@ -31,7 +31,7 @@ use {
                     postgresql::{
                         ChannelBy2,
                         ChannelBy3,
-                        ChannelInsert1,
+                        ChannelInsert,
                         Postgresql,
                     },
                     Repository,
@@ -103,7 +103,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             }
             let channel__id = Repository::<Postgresql<Channel>>::create_1(
                 &postgresql_database_1_client,
-                &ChannelInsert1 {
+                &ChannelInsert {
                     channel__owner: user_access_token.user__id,
                     channel__name: incoming.channel__name.as_str(),
                     channel__linked_name: incoming.channel__linked_name.as_str(),

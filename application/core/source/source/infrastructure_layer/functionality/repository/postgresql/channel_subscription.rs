@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<ChannelSubscription>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -61,7 +61,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
             return Result::Ok(());
         };
     }
-    pub fn is_exist_1<'a>(database_1_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn is_exist_1<'a>(database_1_client: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -104,12 +104,12 @@ impl Repository<Postgresql<ChannelSubscription>> {
         };
     }
 }
-pub struct Insert1 {
+pub struct Insert {
     pub user__id: i64,
     pub channel__id: i64,
     pub channel_subscription__created_at: i64,
 }
-pub struct By1 {
+pub struct By {
     pub user__id: i64,
     pub channel__id: i64,
 }

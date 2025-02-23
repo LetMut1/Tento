@@ -30,7 +30,7 @@ use {
                     postgresql::{
                         Postgresql,
                         UserAccessRefreshTokenBy2,
-                        UserAccessRefreshTokenUpdate1,
+                        UserAccessRefreshTokenUpdate,
                     },
                     Repository,
                 },
@@ -117,7 +117,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             user_access_refresh_token.updated_at = now;
             Repository::<Postgresql<UserAccessRefreshToken<'_>>>::update_1(
                 &postgresql_database_2_client,
-                UserAccessRefreshTokenUpdate1 {
+                UserAccessRefreshTokenUpdate {
                     user_access_token__id: user_access_refresh_token.user_access_token__id.as_ref(),
                     user_access_refresh_token__obfuscation_value: user_access_refresh_token.obfuscation_value.as_str(),
                     user_access_refresh_token__expires_at: user_access_refresh_token.expires_at,

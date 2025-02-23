@@ -29,7 +29,7 @@ use {
                 repository::{
                     postgresql::{
                         ChannelBy1,
-                        ChannelSubscriptionInsert1,
+                        ChannelSubscriptionInsert,
                         IsolationLevel,
                         Postgresql,
                         Resolver as Resolver_,
@@ -108,7 +108,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             .await?;
             if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::create_1(
                 transaction.get_client(),
-                ChannelSubscriptionInsert1 {
+                ChannelSubscriptionInsert {
                     user__id: user_access_token.user__id,
                     channel__id: incoming.channel__id,
                     channel_subscription__created_at: Resolver::<UnixTime>::get_now_in_seconds(),

@@ -164,6 +164,7 @@ Access/Visability in game, we need to ckeck all constraints for it in routes.
 
 
 pub struct UserAccessRefreshToken<'a> { - не должно остаться лайфтайма
+убрать entity::new + pub -> pivate fields
 Убрать дто-деривативы оболочки и везде просто на полях делать? так всегда можно.
 Update/By/insert - оставить
 Заменить при креэйтах сущности на инсерты
