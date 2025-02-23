@@ -264,8 +264,8 @@ impl CString {
             return Result::Err(NULL_POINTER_ERROR_MESAGE.into());
         }
         let c_str = unsafe { CStr::from_ptr(self.pointer as *const _) };
-        let c_string = c_str.to_str()?.to_string();
-        return Result::Ok(c_string);
+        let string = c_str.to_str()?.to_string();
+        return Result::Ok(string);
     }
 }
 impl Default for CString {
