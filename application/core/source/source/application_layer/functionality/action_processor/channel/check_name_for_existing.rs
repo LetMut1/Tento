@@ -49,17 +49,20 @@ impl ActionProcessor_ for ActionProcessor<Channel_CheckNameForExisting> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            match Extractor::<UserAccessToken<'_>>::extract(
+            match Extractor::<UserAccessToken>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_encoded,
             )? {
-                Extracted::UserAccessToken {
-                    user_access_token: _,
+                Extracted::Data {
+                    user_access_token__id: _,
+                    user__id: _,
+                    user_device__id: _,
+                    user_access_token__expires_at: _,
                 } => {}
-                Extracted::UserAccessTokenAlreadyExpired => {
+                Extracted::AlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
-                Extracted::UserAccessTokenInUserAccessTokenBlackList => {
+                Extracted::InUserAccessTokenBlackList => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };

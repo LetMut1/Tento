@@ -22,7 +22,7 @@ use {
     },
     dedicated::user_access_token_encoded::UserAccessTokenEncoded,
 };
-impl Encoder<UserAccessToken<'_>> {
+impl Encoder<UserAccessToken> {
     pub fn encode<'a>(
         private_key: &'static PrivateKey,
         user_access_token__id: &'a str,
@@ -49,7 +49,11 @@ impl Encoder<UserAccessToken<'_>> {
             },
         );
     }
-    pub fn decode<'a>(private_key: &'static PrivateKey, user_access_token_encoded: &'a UserAccessTokenEncoded) -> Result<UserAccessToken<'a>, AggregateError> {
+    // user_access_token__id: &'a str,
+    // user__id: i64,
+    // user_device__id: &'a str,
+    // user_access_token__expires_at: i64,
+    pub fn decode<'a>(private_key: &'static PrivateKey, user_access_token_encoded: &'a UserAccessTokenEncoded) -> Result<(&'a str, i64, &'a str, i64), AggregateError> {
         if !Encoder_::<HmacSha3_512>::is_valid(
             private_key.user_access_token.as_bytes(),
             user_access_token_encoded.serialized.as_slice(),
@@ -63,13 +67,13 @@ impl Encoder<UserAccessToken<'_>> {
             user_device__id,
             user_access_token__expires_at,
         } = Serializer::<BitCode>::deserialize::<'_, Data<'a>>(user_access_token_encoded.serialized.as_slice())?;
-
-
-
-
-todo!("!!!!!!!!!!!!!!!!!!!!!!!11");
         return Result::Ok(
-            UserAccessToken::new(user_access_token__id.to_string(), user__id, user_device__id, user_access_token__expires_at)
+            (
+                user_access_token__id,
+                user__id,
+                user_device__id,
+                user_access_token__expires_at,
+            ),
         )
     }
 }

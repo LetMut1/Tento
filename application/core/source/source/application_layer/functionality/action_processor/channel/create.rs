@@ -60,17 +60,20 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
+            let user__id = match Extractor::<UserAccessToken>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_encoded,
             )? {
-                Extracted::UserAccessToken {
-                    user_access_token: user_access_token_,
-                } => user_access_token_,
-                Extracted::UserAccessTokenAlreadyExpired => {
+                Extracted::Data {
+                    user_access_token__id: _,
+                    user__id: user__id_,
+                    user_device__id: _,
+                    user_access_token__expires_at: _,
+                } => user__id_,
+                Extracted::AlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
-                Extracted::UserAccessTokenInUserAccessTokenBlackList => {
+                Extracted::InUserAccessTokenBlackList => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
@@ -104,7 +107,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             let channel__id = Repository::<Postgresql<Channel>>::create_1(
                 &postgresql_database_1_client,
                 &ChannelInsert {
-                    channel__owner: user_access_token.user__id,
+                    channel__owner: user__id,
                     channel__name: incoming.channel__name.as_str(),
                     channel__linked_name: incoming.channel__linked_name.as_str(),
                     channel__description: Option::None,

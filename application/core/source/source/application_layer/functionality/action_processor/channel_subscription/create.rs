@@ -61,17 +61,20 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
+            let user__id = match Extractor::<UserAccessToken>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_encoded,
             )? {
-                Extracted::UserAccessToken {
-                    user_access_token: user_access_token_,
-                } => user_access_token_,
-                Extracted::UserAccessTokenAlreadyExpired => {
+                Extracted::Data {
+                    user_access_token__id: _,
+                    user__id: user__id_,
+                    user_device__id: _,
+                    user_access_token__expires_at: _,
+                } => user__id_,
+                Extracted::AlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
-                Extracted::UserAccessTokenInUserAccessTokenBlackList => {
+                Extracted::InUserAccessTokenBlackList => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
@@ -95,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }
             };
-            if channel__owner == user_access_token.user__id {
+            if channel__owner == user__id {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
             }
             if Channel_AccessModifier::Close as i16 == channel__access_modifier {
@@ -109,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::create_1(
                 transaction.get_client(),
                 ChannelSubscriptionInsert {
-                    user__id: user_access_token.user__id,
+                    user__id,
                     channel__id: incoming.channel__id,
                     channel_subscription__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
                 }

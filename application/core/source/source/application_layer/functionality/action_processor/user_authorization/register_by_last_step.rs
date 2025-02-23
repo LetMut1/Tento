@@ -209,12 +209,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 user__password_hash,
                 now,
             );
-            let user_access_token = UserAccessToken::new(
-                Generator::<UserAccessToken_Id>::generate(),
-                user.id,
-                incoming.user_device__id.as_str(),
-                Generator::<UserAccessToken_ExpiresAt>::generate(now)?,
-            );
+            let user_access_token__id = Generator::<UserAccessToken_Id>::generate();
+            let user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
             let user_access_refresh_token__updated_at = now;
@@ -229,7 +225,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 &UserAccessRefreshTokenInsert {
                     user__id: user.id,
                     user_device__id: incoming.user_device__id.as_str(),
-                    user_access_token__id: user_access_token.id.as_str(),
+                    user_access_token__id: user_access_token__id.as_str(),
                     user_access_refresh_token__obfuscation_value: user_access_refresh_token__obfuscation_value.as_str(),
                     user_access_refresh_token__expires_at,
                     user_access_refresh_token__updated_at,
@@ -271,18 +267,18 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 .await?;
                 return Result::Err(aggregate_error);
             }
-            let user_access_token_encoded = Encoder::<UserAccessToken<'_>>::encode(
+            let user_access_token_encoded = Encoder::<UserAccessToken>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
-                user_access_token.id.as_str(),
-                user_access_token.user__id,
-                user_access_token.user_device__id,
-                user_access_token.expires_at,
+                user_access_token__id.as_str(),
+                user.id,
+                incoming.user_device__id.as_str(),
+                user_access_token__expires_at,
             )?;
             let user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
                 user__id,
                 incoming.user_device__id.as_str(),
-                user_access_token.id.as_str(),
+                user_access_token__id.as_str(),
                 user_access_refresh_token__obfuscation_value.as_str(),
                 user_access_refresh_token__expires_at,
                 user_access_refresh_token__updated_at,

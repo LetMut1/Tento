@@ -52,17 +52,20 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
+            let user__id = match Extractor::<UserAccessToken>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_encoded,
             )? {
-                Extracted::UserAccessToken {
-                    user_access_token: user_access_token_,
-                } => user_access_token_,
-                Extracted::UserAccessTokenAlreadyExpired => {
+                Extracted::Data {
+                    user_access_token__id: _,
+                    user__id: user__id_,
+                    user_device__id: _,
+                    user_access_token__expires_at: _,
+                } => user__id_,
+                Extracted::AlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
-                Extracted::UserAccessTokenInUserAccessTokenBlackList => {
+                Extracted::InUserAccessTokenBlackList => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
@@ -100,12 +103,12 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 let is_exist = Repository::<Postgresql<ChannelSubscription>>::is_exist_1(
                     &postgresql_database_1_client,
                     ChannelSubscriptionBy {
-                        user__id: user_access_token.user__id,
+                        user__id,
                         channel__id: incoming.channel__id,
                     },
                 )
                 .await?;
-                if !is_exist && user_access_token.user__id != channel__owner {
+                if !is_exist && user__id != channel__owner {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
                 }
             }
@@ -121,7 +124,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 channel__subscribers_quantity,
                 channel__marks_quantity,
                 channel__viewing_quantity,
-                user_is_channel_owner: user_access_token.user__id == channel__owner,
+                user_is_channel_owner: user__id == channel__owner,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

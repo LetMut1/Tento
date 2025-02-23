@@ -58,21 +58,26 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            let user_access_token = Encoder::<UserAccessToken<'_>>::decode(
+            let (
+                user_access_token__id,
+                user__id,
+                user_device__id,
+                user_access_token__expires_at,
+            ) = Encoder::<UserAccessToken>::decode(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_encoded,
             )?;
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (
-                user_access_token__id,
+                user_access_token__id_,
                 user_access_refresh_token__obfuscation_value,
                 user_access_refresh_token__expires_at,
                 user_access_refresh_token__updated_at,
             ) = match Repository::<Postgresql<UserAccessRefreshToken>>::find_1(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenBy2 {
-                    user__id: user_access_token.user__id,
-                    user_device__id: user_access_token.user_device__id,
+                    user__id,
+                    user_device__id,
                 },
             )
             .await?
@@ -84,15 +89,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             };
             let is_valid = Encoder::<UserAccessRefreshToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
-                user_access_token.user__id,
-                user_access_token.user_device__id,
-                user_access_token.id.as_str(),
+                user__id,
+                user_device__id,
+                user_access_token__id,
                 user_access_refresh_token__obfuscation_value.as_str(),
                 user_access_refresh_token__expires_at,
                 user_access_refresh_token__updated_at,
                 &incoming.user_access_refresh_token_encoded,
             )?;
-            if !is_valid || user_access_token.id != user_access_token__id {
+            if !is_valid || user_access_token__id != user_access_token__id_.as_str() {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let now = Resolver::<UnixTime>::get_now_in_seconds();
@@ -100,49 +105,45 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 Repository::<Postgresql<UserAccessRefreshToken>>::delete_1(
                     &postgresql_database_2_client,
                     UserAccessRefreshTokenBy2 {
-                        user__id: user_access_token.user__id,
-                        user_device__id: user_access_token.user_device__id,
+                        user__id,
+                        user_device__id,
                     },
                 )
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken_AlreadyExpired));
             }
-            let new___user_access_token = UserAccessToken::new(
-                Generator::<UserAccessToken_Id>::generate(),
-                user_access_token.user__id,
-                user_access_token.user_device__id,
-                Generator::<UserAccessToken_ExpiresAt>::generate(now)?,
-            );
+            let new___user_access_token__id = Generator::<UserAccessToken_Id>::generate();
+            let new___user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
             let new___user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let new___user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
             let new___user_access_refresh_token__updated_at = now;
             Repository::<Postgresql<UserAccessRefreshToken>>::update_1(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenUpdate {
-                    user_access_token__id: new___user_access_token.id.as_str(),
+                    user_access_token__id: new___user_access_token__id.as_str(),
                     user_access_refresh_token__obfuscation_value: new___user_access_refresh_token__obfuscation_value.as_str(),
                     user_access_refresh_token__expires_at: new___user_access_refresh_token__expires_at,
                     user_access_refresh_token__updated_at: new___user_access_refresh_token__updated_at,
                 },
                 UserAccessRefreshTokenBy2 {
-                    user__id: user_access_token.user__id,
-                    user_device__id: user_access_token.user_device__id,
+                    user__id,
+                    user_device__id,
                 },
             )
             .await?;
             let outcoming = Outcoming {
-                user_access_token_encoded: Encoder::<UserAccessToken<'_>>::encode(
+                user_access_token_encoded: Encoder::<UserAccessToken>::encode(
                     &inner.environment_configuration.subject.encryption.private_key,
-                    new___user_access_token.id.as_str(),
-                    new___user_access_token.user__id,
-                    new___user_access_token.user_device__id,
-                    new___user_access_token.expires_at,
+                    new___user_access_token__id.as_str(),
+                    user__id,
+                    user_device__id,
+                    new___user_access_token__expires_at,
                 )?,
                 user_access_refresh_token_encoded: Encoder::<UserAccessRefreshToken>::encode(
                     &inner.environment_configuration.subject.encryption.private_key,
-                    new___user_access_token.user__id,
-                    new___user_access_token.user_device__id,
-                    new___user_access_token.id.as_str(),
+                    user__id,
+                    user_device__id,
+                    new___user_access_token__id.as_str(),
                     new___user_access_refresh_token__obfuscation_value.as_str(),
                     new___user_access_refresh_token__expires_at,
                     new___user_access_refresh_token__updated_at,

@@ -43,25 +43,28 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDe
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
+            let (user__id, user_device__id) = match Extractor::<UserAccessToken>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_encoded,
             )? {
-                Extracted::UserAccessToken {
-                    user_access_token: user_access_token_,
-                } => user_access_token_,
-                Extracted::UserAccessTokenAlreadyExpired => {
+                Extracted::Data {
+                    user_access_token__id: _,
+                    user__id: user__id_,
+                    user_device__id: user_device__id_,
+                    user_access_token__expires_at: _,
+                } => (user__id_, user_device__id_),
+                Extracted::AlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
-                Extracted::UserAccessTokenInUserAccessTokenBlackList => {
+                Extracted::InUserAccessTokenBlackList => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
             Repository::<Postgresql<UserAccessRefreshToken>>::delete_1(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await),
                 UserAccessRefreshTokenBy2 {
-                    user__id: user_access_token.user__id,
-                    user_device__id: user_access_token.user_device__id,
+                    user__id,
+                    user_device__id,
                 },
             )
             .await?;
