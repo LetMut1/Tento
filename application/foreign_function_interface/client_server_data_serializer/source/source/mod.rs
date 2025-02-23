@@ -109,7 +109,6 @@ use {
             },
         },
         bit_code_serializer::Serializer,
-        entity::user_access_token::UserAccessToken as UserAccessToken_,
         unified_report::{
             Data,
             UnifiedReport,
@@ -422,45 +421,10 @@ impl Transformer<ServerRequestData> {
     }
 }
 #[repr(C)]
-#[derive(Default)]
-pub struct UserAccessToken {
-    pub id: CString,
-    pub user__id: c_long,
-    pub user_device__id: CString,
-    pub expires_at: c_long,
-}
-#[repr(C)]
 #[derive(Default, Clone, Copy)]
 pub struct UserAccessTokenEncoded {
     pub serialized: CVector<c_uchar>,
     pub encoded: CVector<c_uchar>,
-}
-#[unsafe(no_mangle)]
-pub extern "C-unwind" fn user_access_token__deserialize_allocate(user_access_token_encoded: UserAccessTokenEncoded) -> CResult<UserAccessToken> {
-    let transformer = move |user_access_token_encoded_serialized: CVector<c_uchar>| -> Result<UserAccessToken, Box<dyn StdError + 'static>> {
-        let user_access_token_encoded_serialized_ = user_access_token_encoded_serialized.clone_as_vec()?;
-        let user_access_token = Serializer::deserialize::<'_, UserAccessToken_<'_>>(user_access_token_encoded_serialized_.as_slice())?;
-        return Ok(
-            UserAccessToken {
-                id: Allocator::<CString>::allocate(user_access_token.id),
-                user__id: user_access_token.user__id,
-                user_device__id: Allocator::<CString>::allocate(user_access_token.user_device__id.to_string()),
-                expires_at: user_access_token.expires_at,
-            },
-        );
-    };
-    return match transformer(user_access_token_encoded.serialized) {
-        Result::Ok(user_acces_token) => CResult::data(user_acces_token),
-        Result::Err(_) => CResult::error(),
-    };
-}
-#[unsafe(no_mangle)]
-pub extern "C-unwind" fn user_access_token__deserialize_deallocate(c_result: CResult<UserAccessToken>) -> () {
-    if c_result.is_data {
-        Allocator::<CString>::deallocate(c_result.data.id);
-        Allocator::<CString>::deallocate(c_result.data.user_device__id);
-    }
-    return ();
 }
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
@@ -2747,10 +2711,6 @@ mod test {
                 get_function_name(self::deallocation::c_string_clone),
             ),
             (
-                self::deallocation::user_access_token__deserialize,
-                get_function_name(self::deallocation::user_access_token__deserialize),
-            ),
-            (
                 self::deallocation::server_response_data_deserialization::target_empty__user_authorization__authorize_by_first_step,
                 get_function_name(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__authorize_by_first_step),
             ),
@@ -3138,24 +3098,6 @@ mod test {
             }
             Allocator::<CString>::deallocate(c_string);
             return Result::Ok(());
-        }
-        pub fn user_access_token__deserialize() -> Result<(), Box<dyn StdError + 'static>> {
-            let user_acces_token_encoded = UserAccessTokenEncoded {
-                serialized: Allocator::<CVector<_>>::allocate(
-                    Serializer::serialize(
-                        &UserAccessToken_::new(
-                            NOT_EMPTY_STRING_LITERAL.to_string(),
-                            0,
-                            NOT_EMPTY_STRING_LITERAL,
-                            0,
-                        ),
-                    ),
-                ),
-                ..Default::default()
-            };
-            user_access_token__deserialize_deallocate(user_access_token__deserialize_allocate(user_acces_token_encoded));
-            Allocator::<CVector<_>>::deallocate(user_acces_token_encoded.serialized);
-            return Ok(());
         }
         pub mod server_response_data_deserialization {
             use {
