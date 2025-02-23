@@ -175,3 +175,5 @@ Update/By/insert - оставить
 
 
 incoming.user__email должен приходить &'a str
+
+Insert<'_> - указать анонимный лайфтайм

@@ -257,7 +257,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     let user_device = Repository::<Postgresql<UserDevice>>::create_1(
                         &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
                         UserDeviceInsert {
-                            user_device__id: incoming.user_device__id,
+                            user_device__id: incoming.user_device__id.as_str(),
                             user__id: incoming.user__id,
                         },
                     )

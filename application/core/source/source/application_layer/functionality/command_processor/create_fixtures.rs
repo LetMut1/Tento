@@ -181,7 +181,7 @@ impl CommandProcessor<CreateFixtures> {
                 Repository::<Postgresql<UserDevice>>::create_1(
                     &postgresql_database_1_client,
                     UserDeviceInsert {
-                        user_device__id,
+                        user_device__id: user_device__id.as_str(),
                         user__id,
                     },
                 )
