@@ -11,16 +11,11 @@ use {
     std::marker::PhantomData,
 };
 pub struct User {
-    id: i64,
-    _id: PhantomData<Id>,
-    email: String,
-    _email: PhantomData<Email>,
-    nickname: String,
-    _nickname: PhantomData<Nickname>,
-    password_hash: String,
-    _password_hash: PhantomData<PasswordHash>,
-    created_at: i64,
-    _created_at: PhantomData<CreatedAt>,
+    id: PhantomData<(i64, Id)>,
+    email: PhantomData<(String, Email)>,
+    nickname: PhantomData<(String, Nickname)>,
+    password_hash: PhantomData<(String, PasswordHash)>,
+    created_at: PhantomData<(i64, CreatedAt)>,
 }
 pub type User_Email = Email;
 pub type User_Id = Id;

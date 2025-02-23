@@ -5,9 +5,7 @@ use {
     std::marker::PhantomData,
 };
 pub struct UserDevice {
-    id: String,
-    _id: PhantomData<Id>,
-    user__id: i64,
-    _user__id: PhantomData<User_Id>,
+    id: PhantomData<(String, Id)>,
+    user__id: PhantomData<(i64, User_Id)>,
 }
 pub type UserDevice_Id = Id;

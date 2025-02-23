@@ -11,6 +11,5 @@ use {
 // Wherever the validity of a token is checked, you need to check if this token is in this
 // entity, and block the action if it is.
 pub struct UserAccessTokenBlackList {
-    _user_access_token__id: String,
-    __user_access_token__id: PhantomData<UserAccessToken_Id>,
+    user_access_token__id: PhantomData<(String, UserAccessToken_Id)>,
 }

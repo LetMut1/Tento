@@ -11,13 +11,9 @@ use {
     std::marker::PhantomData,
 };
 pub struct ChannelSubscriptionToken {
-    user__id: i64,
-    _user__id: PhantomData<User_Id>,
-    channel__id: i64,
-    _channel__id: PhantomData<Channel_Id>,
-    channel__obfuscation_value: i64,
-    _channel__obfuscation_value: PhantomData<Channel_ObfuscationValue>,
-    created_at: i64,
-    _created_at: PhantomData<CreatedAt>,
+    user__id: PhantomData<(i64, User_Id)>,
+    channel__id: PhantomData<(i64, Channel_Id)>,
+    channel__obfuscation_value: PhantomData<(i64, Channel_ObfuscationValue)>,
+    created_at: PhantomData<(i64, CreatedAt)>,
 }
 pub type ChannelSubscriptionToken_CreatedAt = CreatedAt;

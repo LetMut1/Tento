@@ -5,12 +5,9 @@ use {
     std::marker::PhantomData,
 };
 pub struct ChannelInnerLink {
-    from: i64,
-    _from: PhantomData<Channel_Id>,
-    to: i64,
-    _to: PhantomData<Channel_Id>,
-    created_at: i64,
-    _created_at: PhantomData<CreatedAt>,
+    from: PhantomData<(i64, Channel_Id)>,
+    to: PhantomData<(i64, Channel_Id)>,
+    created_at: PhantomData<(i64, CreatedAt)>,
 }
 impl ChannelInnerLink {
     pub const MAXIMUM_QUANTITY: i16 = 10;

@@ -14,20 +14,13 @@ use {
     std::marker::PhantomData,
 };
 pub struct UserResetPasswordToken {
-    user__id: i64,
-    _user__id: PhantomData<User_Id>,
-    user_device__id: String,
-    _user_device__id: PhantomData<UserDevice_Id>,
-    value: String,
-    _value: PhantomData<Value>,
-    wrong_enter_tries_quantity: i16,
-    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
-    is_approved: bool,
-    _is_approved: PhantomData<IsApproved>,
-    expires_at: i64,
-    _expires_at: PhantomData<ExpiresAt>,
-    can_be_resent_from: i64,
-    _can_be_resent_from: PhantomData<CanBeResentFrom>,
+    user__id: PhantomData<(i64, User_Id)>,
+    user_device__id: PhantomData<(String, UserDevice_Id)>,
+    value: PhantomData<(String, Value)>,
+    wrong_enter_tries_quantity: PhantomData<(i16, WrongEnterTriesQuantity)>,
+    is_approved: PhantomData<(bool, IsApproved)>,
+    expires_at: PhantomData<(i64, ExpiresAt)>,
+    can_be_resent_from: PhantomData<(i64, CanBeResentFrom)>,
 }
 pub type UserResetPasswordToken_CanBeResentFrom = CanBeResentFrom;
 pub type UserResetPasswordToken_ExpiresAt = ExpiresAt;

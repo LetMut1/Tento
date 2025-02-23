@@ -9,14 +9,10 @@ use {
     std::marker::PhantomData,
 };
 pub struct ChannelOuterLink {
-    from: i64,
-    _from: PhantomData<Channel_Id>,
-    alias: String,
-    _alias: PhantomData<Alias>,
-    address: String,
-    _address: PhantomData<Address>,
-    created_at: i64,
-    _created_at: PhantomData<CreatedAt>,
+    from: PhantomData<(i64, Channel_Id)>,
+    alias: PhantomData<(String, Alias)>,
+    address: PhantomData<(String, Address)>,
+    created_at: PhantomData<(i64, CreatedAt)>,
 }
 impl ChannelOuterLink {
     pub const MAXIMUM_QUANTITY: i16 = 5;
