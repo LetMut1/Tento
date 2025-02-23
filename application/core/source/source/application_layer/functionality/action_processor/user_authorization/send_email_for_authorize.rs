@@ -63,7 +63,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
-    fn process<'b>(inner: &'b Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
+    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
                 return Result::Err(crate::new_invalid_argument!());
