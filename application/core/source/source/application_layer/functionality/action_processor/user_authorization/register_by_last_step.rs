@@ -217,7 +217,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             .await?;
             if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::create(
                 transaction.get_client(),
-                &UserAccessRefreshTokenInsert {
+                UserAccessRefreshTokenInsert {
                     user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                     user_access_token__id: user_access_token__id.as_str(),

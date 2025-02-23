@@ -106,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             }
             let channel__id = Repository::<Postgresql<Channel>>::create(
                 &postgresql_database_1_client,
-                &ChannelInsert {
+                ChannelInsert {
                     channel__owner: user__id,
                     channel__name: incoming.channel__name.as_str(),
                     channel__linked_name: incoming.channel__linked_name.as_str(),

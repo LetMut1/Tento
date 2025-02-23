@@ -229,7 +229,7 @@ impl CommandProcessor<CreateFixtures> {
                     } else {
                         Repository::<Postgresql<Channel>>::create(
                             &postgresql_database_1_client,
-                            &ChannelInsert {
+                            ChannelInsert {
                                 channel__owner: user__id,
                                 channel__name: channel__name.as_str(),
                                 channel__linked_name: channel__linked_name.as_str(),
