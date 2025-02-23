@@ -53,7 +53,7 @@ pub trait ActionProcessor_ {
     type Incoming;
     type Outcoming;
     type Precedent;
-    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send;
+    fn process<'b>(inner: &'b Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send;
 }
 pub struct Inner<'a> {
     pub environment_configuration: &'static EnvironmentConfiguration<RunServer>,
