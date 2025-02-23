@@ -139,7 +139,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     mut user_registration_token__wrong_enter_tries_quantity,
                     user_registration_token__is_approved,
                     user_registration_token__expires_at,
-                ) = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_2(
+                ) = match Repository::<Postgresql<UserRegistrationToken>>::find_2(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy {
                         user__email: incoming.user__email.as_str(),
@@ -154,7 +154,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     }
                 };
                 if user_registration_token__expires_at <= now {
-                    Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
+                    Repository::<Postgresql<UserRegistrationToken>>::delete_2(
                         &postgresql_database_2_client,
                         UserRegistrationTokenBy {
                             user__email: incoming.user__email.as_str(),
@@ -172,7 +172,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                         user_registration_token__wrong_enter_tries_quantity += 1;
                     }
                     if user_registration_token__wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
-                        Repository::<Postgresql<UserRegistrationToken<'_>>>::update_4(
+                        Repository::<Postgresql<UserRegistrationToken>>::update_4(
                             &postgresql_database_2_client,
                             UserRegistrationTokenBy {
                                 user__email: incoming.user__email.as_str(),
@@ -181,7 +181,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                         )
                         .await?;
                     } else {
-                        Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
+                        Repository::<Postgresql<UserRegistrationToken>>::delete_2(
                             &postgresql_database_2_client,
                             UserRegistrationTokenBy {
                                 user__email: incoming.user__email.as_str(),
@@ -231,7 +231,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Err(aggregate_error);
             };
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserRegistrationToken>>::delete_2(
                 transaction.get_client(),
                 UserRegistrationTokenBy {
                     user__email: incoming.user__email.as_str(),

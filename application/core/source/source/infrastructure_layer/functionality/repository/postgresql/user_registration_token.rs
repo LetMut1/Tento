@@ -14,10 +14,10 @@ use {
     std::future::Future,
     tokio_postgres::types::Type,
 };
-impl Repository<Postgresql<UserRegistrationToken<'_>>> {
+impl Repository<Postgresql<UserRegistrationToken>> {
     pub fn create_1<'a>(
         database_2_client: &'a Client,
-        user_registration_token: &'a UserRegistrationToken<'_>,
+        insert: Insert<'a>,
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
@@ -42,31 +42,31 @@ impl Repository<Postgresql<UserRegistrationToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &user_registration_token.user__email,
+                    &insert.user__email,
                     Type::TEXT,
                 )
                 .add(
-                    &user_registration_token.user_device__id,
+                    &insert.user_device__id,
                     Type::TEXT,
                 )
                 .add(
-                    &user_registration_token.value,
+                    &insert.user_registration_token__value,
                     Type::TEXT,
                 )
                 .add(
-                    &user_registration_token.wrong_enter_tries_quantity,
+                    &insert.user_registration_token__wrong_enter_tries_quantity,
                     Type::INT2,
                 )
                 .add(
-                    &user_registration_token.is_approved,
+                    &insert.user_registration_token__is_approved,
                     Type::BOOL,
                 )
                 .add(
-                    &user_registration_token.expires_at,
+                    &insert.user_registration_token__expires_at,
                     Type::INT8,
                 )
                 .add(
-                    &user_registration_token.can_be_resent_from,
+                    &insert.user_registration_token__can_be_resent_from,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
@@ -567,6 +567,15 @@ impl Repository<Postgresql<UserRegistrationToken<'_>>> {
             );
         };
     }
+}
+pub struct Insert<'a> {
+    pub user__email: &'a str,
+    pub user_device__id: &'a str,
+    pub user_registration_token__value: &'a str,
+    pub user_registration_token__wrong_enter_tries_quantity: i16,
+    pub user_registration_token__is_approved: bool,
+    pub user_registration_token__expires_at: i64,
+    pub user_registration_token__can_be_resent_from: i64,
 }
 pub struct Update1<'a> {
     pub user_registration_token__value: &'a str,

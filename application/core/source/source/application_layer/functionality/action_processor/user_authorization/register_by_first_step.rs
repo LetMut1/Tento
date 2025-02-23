@@ -33,6 +33,7 @@ use {
                     postgresql::{
                         Postgresql,
                         UserBy2,
+                        UserRegistrationTokenInsert,
                         UserRegistrationTokenBy,
                         UserRegistrationTokenUpdate1,
                         UserRegistrationTokenUpdate2,
@@ -61,10 +62,7 @@ use {
         },
         unified_report::UnifiedReport,
     },
-    std::{
-        borrow::Cow,
-        future::Future,
-    },
+    std::future::Future,
 };
 pub struct UserAuthorization_RegisterByFirstStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep> {
@@ -92,7 +90,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_registration_token__value, user_registration_token__can_be_resent_from, user_registration_token__wrong_enter_tries_quantity, can_send) =
-                match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_1(
+                match Repository::<Postgresql<UserRegistrationToken>>::find_1(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy {
                         user__email: incoming.user__email.as_str(),
@@ -132,7 +130,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             false
                         };
                         if need_to_update_1 && need_to_update_2 {
-                            Repository::<Postgresql<UserRegistrationToken<'_>>>::update_1(
+                            Repository::<Postgresql<UserRegistrationToken>>::update_1(
                                 &postgresql_database_2_client,
                                 UserRegistrationTokenUpdate1 {
                                     user_registration_token__value: user_registration_token__value_.as_str(),
@@ -149,7 +147,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             .await?;
                         } else {
                             if need_to_update_1 {
-                                Repository::<Postgresql<UserRegistrationToken<'_>>>::update_2(
+                                Repository::<Postgresql<UserRegistrationToken>>::update_2(
                                     &postgresql_database_2_client,
                                     UserRegistrationTokenUpdate2 {
                                         user_registration_token__can_be_resent_from: user_registration_token__can_be_resent_from_,
@@ -162,7 +160,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                 .await?;
                             }
                             if need_to_update_2 {
-                                Repository::<Postgresql<UserRegistrationToken<'_>>>::update_3(
+                                Repository::<Postgresql<UserRegistrationToken>>::update_3(
                                     &postgresql_database_2_client,
                                     UserRegistrationTokenUpdate3 {
                                         user_registration_token__value: user_registration_token__value_.as_str(),
@@ -186,24 +184,26 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         )
                     }
                     Option::None => {
-                        let user_registration_token = UserRegistrationToken::new(
-                            Cow::Borrowed(incoming.user__email.as_str()),
-                            Cow::Borrowed(incoming.user_device__id.as_str()),
-                            Generator::<UserRegistrationToken_Value>::generate(),
-                            0,
-                            false,
-                            Generator::<UserRegistrationToken_ExpiresAt>::generate(now)?,
-                            Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?,
-                        );
-                        Repository::<Postgresql<UserRegistrationToken<'_>>>::create_1(
+                        let user_registration_token__value_ = Generator::<UserRegistrationToken_Value>::generate();
+                        let user_registration_token__wrong_enter_tries_quantity_ = 0;
+                        let user_registration_token__can_be_resent_from_ = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
+                        Repository::<Postgresql<UserRegistrationToken>>::create_1(
                             &postgresql_database_2_client,
-                            &user_registration_token,
+                            UserRegistrationTokenInsert {
+                                user__email: incoming.user__email.as_str(),
+                                user_device__id: incoming.user_device__id.as_str(),
+                                user_registration_token__value: user_registration_token__value_.as_str(),
+                                user_registration_token__wrong_enter_tries_quantity: user_registration_token__wrong_enter_tries_quantity_,
+                                user_registration_token__is_approved: false,
+                                user_registration_token__can_be_resent_from: user_registration_token__can_be_resent_from_,
+                                user_registration_token__expires_at:  Generator::<UserRegistrationToken_ExpiresAt>::generate(now)?,
+                            }
                         )
                         .await?;
                         (
-                            user_registration_token.value,
-                            user_registration_token.can_be_resent_from,
-                            user_registration_token.wrong_enter_tries_quantity,
+                            user_registration_token__value_,
+                            user_registration_token__can_be_resent_from_,
+                            user_registration_token__wrong_enter_tries_quantity_,
                             true,
                         )
                     }
@@ -212,7 +212,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                 let environment_configuration = inner.environment_configuration;
                 Spawner::<TokioNonBlockingTask>::spawn_into_background(
                     async move {
-                        EmailSender::<UserRegistrationToken<'_>>::repeatable_send(
+                        EmailSender::<UserRegistrationToken>::repeatable_send(
                             &environment_configuration.subject.resource.email_server,
                             user_registration_token__value.as_str(),
                             incoming.user__email.as_str(),

@@ -247,25 +247,25 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                         )
                     }
                     Option::None => {
-                        let user_authorization_token__value = Generator::<UserAuthorizationToken_Value>::generate();
-                        let user_authorization_token__wrong_enter_tries_quantity = 0;
-                        let user_authorization_token__can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?;
+                        let user_authorization_token__value_ = Generator::<UserAuthorizationToken_Value>::generate();
+                        let user_authorization_token__wrong_enter_tries_quantity_ = 0;
+                        let user_authorization_token__can_be_resent_from_ = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?;
                         Repository::<Postgresql<UserAuthorizationToken>>::create_1(
                             &postgresql_database_2_client,
                             UserAuthorizationTokenInsert {
                                 user__id,
                                 user_device__id: incoming.user_device__id.as_str(),
-                                user_authorization_token__value: user_authorization_token__value.as_str(),
-                                user_authorization_token__wrong_enter_tries_quantity,
-                                user_authorization_token__can_be_resent_from,
+                                user_authorization_token__value: user_authorization_token__value_.as_str(),
+                                user_authorization_token__wrong_enter_tries_quantity: user_authorization_token__wrong_enter_tries_quantity_,
+                                user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from_,
                                 user_authorization_token__expires_at: Generator::<UserAuthorizationToken_ExpiresAt>::generate(now)?,
                             }
                         )
                         .await?;
                         (
-                            user_authorization_token__value,
-                            user_authorization_token__can_be_resent_from,
-                            user_authorization_token__wrong_enter_tries_quantity,
+                            user_authorization_token__value_,
+                            user_authorization_token__can_be_resent_from_,
+                            user_authorization_token__wrong_enter_tries_quantity_,
                             true,
                         )
                     }

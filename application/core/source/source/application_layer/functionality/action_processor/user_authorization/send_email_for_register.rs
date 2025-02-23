@@ -73,7 +73,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 user_registration_token__is_approved,
                 user_registration_token__expires_at,
                 mut user_registration_token__can_be_resent_from,
-            ) = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_3(
+            ) = match Repository::<Postgresql<UserRegistrationToken>>::find_3(
                 &postgresql_database_2_client,
                 UserRegistrationTokenBy {
                     user__email: incoming.user__email.as_str(),
@@ -89,7 +89,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_registration_token__expires_at <= now {
-                Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
+                Repository::<Postgresql<UserRegistrationToken>>::delete_2(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy {
                         user__email: incoming.user__email.as_str(),
@@ -106,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_TimeToResendHasNotCome));
             }
             user_registration_token__can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
-            Repository::<Postgresql<UserRegistrationToken<'_>>>::update_2(
+            Repository::<Postgresql<UserRegistrationToken>>::update_2(
                 &postgresql_database_2_client,
                 UserRegistrationTokenUpdate2 {
                     user_registration_token__can_be_resent_from,
@@ -120,7 +120,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             let environment_configuration = inner.environment_configuration;
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    EmailSender::<UserRegistrationToken<'_>>::repeatable_send(
+                    EmailSender::<UserRegistrationToken>::repeatable_send(
                         &environment_configuration.subject.resource.email_server,
                         user_registration_token__value.as_str(),
                         incoming.user__email.as_str(),

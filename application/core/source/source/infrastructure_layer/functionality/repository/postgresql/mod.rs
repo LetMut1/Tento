@@ -43,6 +43,7 @@ pub use self::{
     },
     user_device::Insert as UserDeviceInsert,
     user_registration_token::{
+        Insert as UserRegistrationTokenInsert,
         By as UserRegistrationTokenBy,
         Update1 as UserRegistrationTokenUpdate1,
         Update2 as UserRegistrationTokenUpdate2,

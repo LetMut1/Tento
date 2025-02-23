@@ -67,7 +67,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                 mut user_registration_token__wrong_enter_tries_quantity,
                 mut user_registration_token__is_approved,
                 user_registration_token__expires_at,
-            ) = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_2(
+            ) = match Repository::<Postgresql<UserRegistrationToken>>::find_2(
                 &postgresql_database_2_client,
                 UserRegistrationTokenBy {
                     user__email: incoming.user__email.as_str(),
@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                 }
             };
             if user_registration_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
-                Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
+                Repository::<Postgresql<UserRegistrationToken>>::delete_2(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy {
                         user__email: incoming.user__email.as_str(),
@@ -100,7 +100,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                     user_registration_token__wrong_enter_tries_quantity += 1;
                 }
                 if user_registration_token__wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
-                    Repository::<Postgresql<UserRegistrationToken<'_>>>::update_4(
+                    Repository::<Postgresql<UserRegistrationToken>>::update_4(
                         &postgresql_database_2_client,
                         UserRegistrationTokenBy {
                             user__email: incoming.user__email.as_str(),
@@ -109,7 +109,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                     )
                     .await?;
                 } else {
-                    Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
+                    Repository::<Postgresql<UserRegistrationToken>>::delete_2(
                         &postgresql_database_2_client,
                         UserRegistrationTokenBy {
                             user__email: incoming.user__email.as_str(),
@@ -127,7 +127,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                 );
             }
             user_registration_token__is_approved = true;
-            Repository::<Postgresql<UserRegistrationToken<'_>>>::update_5(
+            Repository::<Postgresql<UserRegistrationToken>>::update_5(
                 &postgresql_database_2_client,
                 UserRegistrationTokenUpdate5 {
                     user_registration_token__is_approved,
