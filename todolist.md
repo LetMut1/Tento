@@ -159,14 +159,14 @@ Access/Visability in game, we need to ckeck all constraints for it in routes.
 
 
 
-ПеренеСТИ СуЩНОСТИ из Дедикейтеда. После того, как сделаю то. что выше, посмотреть, нужно ли иметь сущности в dedicated. Надо ли их перенести.
-
-
-
-
-incoming.user__email должен приходить &'a str
-
 can_send - там, где это вычисляется, посмотреть, нет ли более оптимальнго ценария
 
 
 fn get_id() in Repo User - есть ли смысл использовать это в контексте того, что все тереперь без деривативов-дто.
+
+
+
+FFI CString get_as_str    Сделать все максимально без аллоквций Стринги и Вектора.  СДелать так же в Векторе.
+
+
+продолжить идти к ChannelSubscriptionToken. Убрать serialized из UserAccessTokenEncoded;

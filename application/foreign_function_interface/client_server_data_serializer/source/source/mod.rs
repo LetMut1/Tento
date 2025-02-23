@@ -267,6 +267,13 @@ impl CString {
         let string = c_str.to_str()?.to_string();
         return Result::Ok(string);
     }
+    fn get_as_str<'a, 'b>(&'a self) -> Result<&'b str, Box<dyn StdError + 'static>> {
+        if self.pointer.is_null() {
+            return Result::Err(NULL_POINTER_ERROR_MESAGE.into());
+        }
+        let c_str = unsafe { CStr::from_ptr(self.pointer as *const _) };
+        return Result::Ok(c_str.to_str()?);
+    }
 }
 impl Default for CString {
     fn default() -> Self {
@@ -452,9 +459,9 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__serialize_
     let converter = move |incoming_: &'_ UserAuthorization_AuthorizeByFirstStep_Incoming| -> Result<UserAuthorization_AuthorizeByFirstStep_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             UserAuthorization_AuthorizeByFirstStep_Incoming_ {
-                user_device__id: incoming_.user_device__id.clone_as_string()?,
-                user__email___or___user__nickname: incoming_.user__email___or___user__nickname.clone_as_string()?,
-                user__password: incoming_.user__password.clone_as_string()?,
+                user_device__id: incoming_.user_device__id.get_as_str()?,
+                user__email___or___user__nickname: incoming_.user__email___or___user__nickname.get_as_str()?,
+                user__password: incoming_.user__password.get_as_str()?,
             },
         );
     };
@@ -546,8 +553,8 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__serialize_a
         return Result::Ok(
             UserAuthorization_AuthorizeByLastStep_Incoming_ {
                 user__id: incoming_.user__id,
-                user_device__id: incoming_.user_device__id.clone_as_string()?,
-                user_authorization_token__value: incoming_.user_authorization_token__value.clone_as_string()?,
+                user_device__id: incoming_.user_device__id.get_as_str()?,
+                user_authorization_token__value: incoming_.user_authorization_token__value.get_as_str()?,
             },
         );
     };
@@ -673,7 +680,7 @@ pub extern "C-unwind" fn user_authorization__check_email_for_existing__serialize
         move |incoming_: &'_ UserAuthorization_CheckEmailForExisting_Incoming| -> Result<UserAuthorization_CheckEmailForExisting_Incoming_, Box<dyn StdError + 'static>> {
             return Result::Ok(
                 UserAuthorization_CheckEmailForExisting_Incoming_ {
-                    user__email: incoming_.user__email.clone_as_string()?,
+                    user__email: incoming_.user__email.get_as_str()?,
                 },
             );
         };
@@ -734,7 +741,7 @@ pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__serial
         move |incoming_: &'_ UserAuthorization_CheckNicknameForExisting_Incoming| -> Result<UserAuthorization_CheckNicknameForExisting_Incoming_, Box<dyn StdError + 'static>> {
             return Result::Ok(
                 UserAuthorization_CheckNicknameForExisting_Incoming_ {
-                    user__nickname: incoming_.user__nickname.clone_as_string()?,
+                    user__nickname: incoming_.user__nickname.get_as_str()?,
                 },
             );
         };
@@ -1044,8 +1051,8 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__serialize_a
     let converter = move |incoming_: &'_ UserAuthorization_RegisterByFirstStep_Incoming| -> Result<UserAuthorization_RegisterByFirstStep_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             UserAuthorization_RegisterByFirstStep_Incoming_ {
-                user__email: incoming_.user__email.clone_as_string()?,
-                user_device__id: incoming_.user_device__id.clone_as_string()?,
+                user__email: incoming_.user__email.get_as_str()?,
+                user_device__id: incoming_.user_device__id.get_as_str()?,
             },
         );
     };
@@ -1134,9 +1141,9 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__serialize_
     let converter = move |incoming_: &'_ UserAuthorization_RegisterBySecondStep_Incoming| -> Result<UserAuthorization_RegisterBySecondStep_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             UserAuthorization_RegisterBySecondStep_Incoming_ {
-                user__email: incoming_.user__email.clone_as_string()?,
-                user_device__id: incoming_.user_device__id.clone_as_string()?,
-                user_registration_token__value: incoming_.user_registration_token__value.clone_as_string()?,
+                user__email: incoming_.user__email.get_as_str()?,
+                user_device__id: incoming_.user_device__id.get_as_str()?,
+                user_registration_token__value: incoming_.user_registration_token__value.get_as_str()?,
             },
         );
     };
@@ -1228,11 +1235,11 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__serialize_al
     let converter = move |incoming_: &'_ UserAuthorization_RegisterByLastStep_Incoming| -> Result<UserAuthorization_RegisterByLastStep_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             UserAuthorization_RegisterByLastStep_Incoming_ {
-                user_device__id: incoming_.user_device__id.clone_as_string()?,
-                user__email: incoming_.user__email.clone_as_string()?,
-                user__nickname: incoming_.user__nickname.clone_as_string()?,
-                user__password: incoming_.user__password.clone_as_string()?,
-                user_registration_token__value: incoming_.user_registration_token__value.clone_as_string()?,
+                user_device__id: incoming_.user_device__id.get_as_str()?,
+                user__email: incoming_.user__email.get_as_str()?,
+                user__nickname: incoming_.user__nickname.get_as_str()?,
+                user__password: incoming_.user__password.get_as_str()?,
+                user_registration_token__value: incoming_.user_registration_token__value.get_as_str()?,
             },
         );
     };
@@ -1364,8 +1371,8 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__seria
         move |incoming_: &'_ UserAuthorization_ResetPasswordByFirstStep_Incoming| -> Result<UserAuthorization_ResetPasswordByFirstStep_Incoming_, Box<dyn StdError + 'static>> {
             return Result::Ok(
                 UserAuthorization_ResetPasswordByFirstStep_Incoming_ {
-                    user__email: incoming_.user__email.clone_as_string()?,
-                    user_device__id: incoming_.user_device__id.clone_as_string()?,
+                    user__email: incoming_.user__email.get_as_str()?,
+                    user_device__id: incoming_.user_device__id.get_as_str()?,
                 },
             );
         };
@@ -1463,8 +1470,8 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__seri
             return Result::Ok(
                 UserAuthorization_ResetPasswordBySecondStep_Incoming_ {
                     user__id: incoming_.user__id,
-                    user_device__id: incoming_.user_device__id.clone_as_string()?,
-                    user_reset_password_token__value: incoming_.user_reset_password_token__value.clone_as_string()?,
+                    user_device__id: incoming_.user_device__id.get_as_str()?,
+                    user_reset_password_token__value: incoming_.user_reset_password_token__value.get_as_str()?,
                 },
             );
         };
@@ -1561,9 +1568,9 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__serial
             return Result::Ok(
                 UserAuthorization_ResetPasswordByLastStep_Incoming_ {
                     user__id: incoming_.user__id,
-                    user_device__id: incoming_.user_device__id.clone_as_string()?,
-                    user__password: incoming_.user__password.clone_as_string()?,
-                    user_reset_password_token__value: incoming_.user_reset_password_token__value.clone_as_string()?,
+                    user_device__id: incoming_.user_device__id.get_as_str()?,
+                    user__password: incoming_.user__password.get_as_str()?,
+                    user_reset_password_token__value: incoming_.user_reset_password_token__value.get_as_str()?,
                 },
             );
         };
@@ -1652,8 +1659,8 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__serialize_
     let converter = move |incoming_: &'_ UserAuthorization_SendEmailForRegister_Incoming| -> Result<UserAuthorization_SendEmailForRegister_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             UserAuthorization_SendEmailForRegister_Incoming_ {
-                user__email: incoming_.user__email.clone_as_string()?,
-                user_device__id: incoming_.user_device__id.clone_as_string()?,
+                user__email: incoming_.user__email.get_as_str()?,
+                user_device__id: incoming_.user_device__id.get_as_str()?,
             },
         );
     };
@@ -1759,7 +1766,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__serialize
         move |incoming_: &'_ UserAuthorization_SendEmailForAuthorize_Incoming| -> Result<UserAuthorization_SendEmailForAuthorize_Incoming_, Box<dyn StdError + 'static>> {
             return Result::Ok(
                 UserAuthorization_SendEmailForAuthorize_Incoming_ {
-                    user_device__id: incoming_.user_device__id.clone_as_string()?,
+                    user_device__id: incoming_.user_device__id.get_as_str()?,
                     user__id: incoming_.user__id,
                 },
             );
@@ -1872,7 +1879,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__seri
             return Result::Ok(
                 UserAuthorization_SendEmailForResetPassword_Incoming_ {
                     user__id: incoming_.user__id,
-                    user_device__id: incoming_.user_device__id.clone_as_string()?,
+                    user_device__id: incoming_.user_device__id.get_as_str()?,
                 },
             );
         };
@@ -1988,7 +1995,7 @@ pub struct Channel_GetManyByNameInSubscriptions_Incoming {
 pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__serialize_allocate(incoming: Channel_GetManyByNameInSubscriptions_Incoming) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ Channel_GetManyByNameInSubscriptions_Incoming| -> Result<Channel_GetManyByNameInSubscriptions_Incoming_, Box<dyn StdError + 'static>> {
         let requery___channel__name = if incoming_.requery___channel__name.is_data {
-            Option::Some(incoming_.requery___channel__name.data.clone_as_string()?)
+            Option::Some(incoming_.requery___channel__name.data.get_as_str()?)
         } else {
             Option::None
         };
@@ -1998,7 +2005,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__serialize_a
                     serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
                     encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                 },
-                channel__name: incoming_.channel__name.clone_as_string()?,
+                channel__name: incoming_.channel__name.get_as_str()?,
                 requery___channel__name,
                 limit: incoming_.limit,
             },
@@ -2286,7 +2293,7 @@ pub struct Channel_GetManyPublicByName_Incoming {
 pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_allocate(incoming: Channel_GetManyPublicByName_Incoming) -> CResult<CVector<c_uchar>> {
     let converter = move |incoming_: &'_ Channel_GetManyPublicByName_Incoming| -> Result<Channel_GetManyPublicByName_Incoming_, Box<dyn StdError + 'static>> {
         let requery___channel__name = if incoming_.requery___channel__name.is_data {
-            Option::Some(incoming_.requery___channel__name.data.clone_as_string()?)
+            Option::Some(incoming_.requery___channel__name.data.get_as_str()?)
         } else {
             Option::None
         };
@@ -2296,7 +2303,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_allocate(in
                     serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
                     encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                 },
-                channel__name: incoming_.channel__name.clone_as_string()?,
+                channel__name: incoming_.channel__name.get_as_str()?,
                 requery___channel__name,
                 limit: incoming_.limit,
             },
