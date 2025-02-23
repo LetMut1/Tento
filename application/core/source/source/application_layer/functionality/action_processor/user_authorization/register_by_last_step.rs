@@ -53,6 +53,7 @@ use {
                         UserBy3,
                         UserDeviceInsert,
                         UserRegistrationTokenBy,
+                        UserAccessRefreshTokenInsert,
                     },
                     Repository,
                 },
@@ -78,10 +79,7 @@ use {
         },
         unified_report::UnifiedReport,
     },
-    std::{
-        borrow::Cow,
-        future::Future,
-    },
+    std::future::Future
 };
 pub struct UserAuthorization_RegisterByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> {
@@ -217,23 +215,25 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 incoming.user_device__id.as_str(),
                 Generator::<UserAccessToken_ExpiresAt>::generate(now)?,
             );
-            let user_access_refresh_token = UserAccessRefreshToken::new(
-                user.id,
-                incoming.user_device__id.as_str(),
-                Cow::Borrowed(user_access_token.id.as_str()),
-                Generator::<UserAccessRefreshToken_ObfuscationValue>::generate(),
-                Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?,
-                now,
-            );
+            let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
+            let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
+            let user_access_refresh_token__updated_at = now;
             let mut postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_database_2_client,
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken<'_>>>::create_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::create_1(
                 transaction.get_client(),
-                &user_access_refresh_token,
+                &UserAccessRefreshTokenInsert {
+                    user__id: user.id,
+                    user_device__id: incoming.user_device__id.as_str(),
+                    user_access_token__id: user_access_token.id.as_str(),
+                    user_access_refresh_token__obfuscation_value: user_access_refresh_token__obfuscation_value.as_str(),
+                    user_access_refresh_token__expires_at,
+                    user_access_refresh_token__updated_at,
+                },
             )
             .await
             {
@@ -278,14 +278,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 user_access_token.user_device__id,
                 user_access_token.expires_at,
             )?;
-            let user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken<'_>>::encode(
+            let user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
-                user_access_refresh_token.user__id,
-                user_access_refresh_token.user_device__id,
-                user_access_refresh_token.user_access_token__id.as_ref(),
-                user_access_refresh_token.obfuscation_value.as_str(),
-                user_access_refresh_token.expires_at,
-                user_access_refresh_token.updated_at,
+                user__id,
+                incoming.user_device__id.as_str(),
+                user_access_token.id.as_str(),
+                user_access_refresh_token__obfuscation_value.as_str(),
+                user_access_refresh_token__expires_at,
+                user_access_refresh_token__updated_at,
             )?;
             let postgresql_connection_pool_database_1 = inner.postgresql_connection_pool_database_1.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(

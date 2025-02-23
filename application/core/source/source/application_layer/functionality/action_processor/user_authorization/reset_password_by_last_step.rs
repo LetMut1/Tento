@@ -186,7 +186,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken<'_>>>::delete_2(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::delete_2(
                 transaction.get_client(),
                 UserAccessRefreshTokenBy1 {
                     user__id: incoming.user__id,

@@ -31,12 +31,12 @@ impl Encoder<UserAccessToken<'_>> {
         user_access_token__expires_at: i64,
     ) -> Result<UserAccessTokenEncoded, AggregateError> {
         let user_access_token_serialized = Serializer::<BitCode>::serialize(
-            &(
+            &Data {
                 user_access_token__id,
                 user__id,
                 user_device__id,
                 user_access_token__expires_at,
-            ),
+            },
         )?;
         let user_access_token_encoded = Encoder_::<HmacSha3_512>::encode(
             private_key.user_access_token.as_bytes(),
@@ -57,6 +57,33 @@ impl Encoder<UserAccessToken<'_>> {
         )? {
             return Result::Err(crate::new_invalid_argument!());
         }
-        return Serializer::<BitCode>::deserialize::<'_, UserAccessToken<'a>>(user_access_token_encoded.serialized.as_slice());
+        let Data {
+            user_access_token__id,
+            user__id,
+            user_device__id,
+            user_access_token__expires_at,
+        } = Serializer::<BitCode>::deserialize::<'_, Data<'a>>(user_access_token_encoded.serialized.as_slice())?;
+
+
+
+
+todo!("!!!!!!!!!!!!!!!!!!!!!!!11");
+        return Result::Ok(
+            UserAccessToken::new(user_access_token__id.to_string(), user__id, user_device__id, user_access_token__expires_at)
+        )
     }
+}
+#[cfg_attr(
+    feature = "serde_for_manual_test",
+    derive(
+        serde::Serialize,
+        serde::Deserialize
+    )
+)]
+#[derive(bitcode::Encode, bitcode::Decode)]
+struct Data<'a> {
+    user_access_token__id: &'a str,
+    user__id: i64,
+    user_device__id: &'a str,
+    user_access_token__expires_at: i64,
 }

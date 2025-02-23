@@ -11,17 +11,11 @@ use {
         },
     },
     deadpool_postgres::Client,
-    std::{
-        borrow::Cow,
-        future::Future,
-    },
+    std::future::Future,
     tokio_postgres::types::Type,
 };
-impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
-    pub fn create_1<'a>(
-        database_2_client: &'a Client,
-        user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
-    ) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+impl Repository<Postgresql<UserAccessRefreshToken>> {
+    pub fn create_1<'a>(database_2_client: &'a Client, insert: &'a Insert) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -43,27 +37,27 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &user_access_refresh_token.user__id,
+                    &insert.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &user_access_refresh_token.user_device__id,
+                    &insert.user_device__id,
                     Type::TEXT,
                 )
                 .add(
-                    &user_access_refresh_token.user_access_token__id,
+                    &insert.user_access_token__id,
                     Type::TEXT,
                 )
                 .add(
-                    &user_access_refresh_token.obfuscation_value,
+                    &insert.user_access_refresh_token__obfuscation_value,
                     Type::TEXT,
                 )
                 .add(
-                    &user_access_refresh_token.expires_at,
+                    &insert.user_access_refresh_token__expires_at,
                     Type::INT8,
                 )
                 .add(
-                    &user_access_refresh_token.updated_at,
+                    &insert.user_access_refresh_token__updated_at,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
@@ -217,7 +211,11 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn find_1<'a, 'b>(database_2_client: &'a Client, by: By2<'b>) -> impl Future<Output = Result<Option<UserAccessRefreshToken<'b>>, AggregateError>> + Send + use<'a, 'b> {
+    // user_access_token__id: String,
+    // user_access_refresh_token__obfuscation_value: String,
+    // user_access_refresh_token__expires_at: i64,
+    // user_access_refresh_token__updated_at: i64,
+    pub fn find_1<'a, 'b>(database_2_client: &'a Client, by: By2<'b>) -> impl Future<Output = Result<Option<(String, String, i64, i64)>, AggregateError>> + Send + use<'a, 'b> {
         return async move {
             let query = "\
                 SELECT \
@@ -261,10 +259,8 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             }
             return Result::Ok(
                 Option::Some(
-                    UserAccessRefreshToken::new(
-                        by.user__id,
-                        by.user_device__id,
-                        Cow::Owned(crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0))),
+                    (
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
@@ -273,14 +269,56 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             );
         };
     }
+    pub fn is_exist_1<'a, 'b>(database_2_client: &'a Client, by: By2<'b>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a, 'b> {
+        return async move {
+            let query = "\
+                SELECT \
+                    uart.user__id AS ui \
+                FROM \
+                    public.user_access_refresh_token uart \
+                WHERE \
+                    uart.user__id = $1 \
+                    AND uart.user_device__id = $2;";
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage
+                .add(
+                    &by.user__id,
+                    Type::INT8,
+                )
+                .add(
+                    &by.user_device__id,
+                    Type::TEXT,
+                );
+            let statement = crate::result_return_logic!(
+                database_2_client
+                .prepare_typed_cached(
+                    query,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                database_2_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(false);
+            }
+            return Result::Ok(true);
+        };
+    }
 }
 pub struct Insert<'a> {
     pub user__id: i64,
     pub user_device__id: &'a str,
     pub user_access_token__id: &'a str,
-    pub obfuscation_value: &'a str,
-    pub expires_at: i64,
-    pub updated_at: i64,
+    pub user_access_refresh_token__obfuscation_value: &'a str,
+    pub user_access_refresh_token__expires_at: i64,
+    pub user_access_refresh_token__updated_at: i64,
 }
 pub struct Update<'a> {
     pub user_access_token__id: &'a str,

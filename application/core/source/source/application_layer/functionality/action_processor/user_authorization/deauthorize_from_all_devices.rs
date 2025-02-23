@@ -63,7 +63,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromAllDe
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
-            Repository::<Postgresql<UserAccessRefreshToken<'_>>>::delete_2(
+            Repository::<Postgresql<UserAccessRefreshToken>>::delete_2(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await),
                 UserAccessRefreshTokenBy1 {
                     user__id: user_access_token.user__id,
