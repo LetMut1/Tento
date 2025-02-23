@@ -60,7 +60,7 @@ impl Processor<ActionRound> {
                     .aggregate()
                     .chunk(),
                 )?;
-                let unified_report = ActionProcessor::<AP>::process(
+                let unified_report = <ActionProcessor<AP> as ActionProcessor_>::process(
                     action_processor_inner,
                     incoming,
                 )

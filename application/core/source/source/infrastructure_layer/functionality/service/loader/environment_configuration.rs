@@ -227,7 +227,7 @@ impl Loader<EnvironmentConfiguration<CreateFixtures>> {
 }
 pub fn load_from_file<'a, T>(environment_configuration_file_path: &'a str) -> Result<T, AggregateError>
 where
-    T: for<'de> Deserialize<'de>,
+    T: for<'b> Deserialize<'b>,
 {
     let environment_configuration_file_path_ = Path::new(environment_configuration_file_path);
     let environment_file_data = if crate::result_return_runtime!(environment_configuration_file_path_.try_exists()) {
