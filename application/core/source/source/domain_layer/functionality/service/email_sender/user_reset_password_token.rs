@@ -15,7 +15,7 @@ use {
     },
     std::future::Future,
 };
-impl EmailSender<UserResetPasswordToken<'_>> {
+impl EmailSender<UserResetPasswordToken> {
     pub fn repeatable_send<'a>(
         email_server: &'static EmailServer,
         user_reset_password_token__value: &'a str,

@@ -14,11 +14,8 @@ use {
     std::future::Future,
     tokio_postgres::types::Type,
 };
-impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
-    pub fn create_1<'a>(
-        database_2_client: &'a Client,
-        user_reset_password_token: &'a UserResetPasswordToken<'_>,
-    ) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+impl Repository<Postgresql<UserResetPasswordToken>> {
+    pub fn create_1<'a>(database_2_client: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -42,31 +39,31 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &user_reset_password_token.user__id,
+                    &insert.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &user_reset_password_token.user_device__id,
+                    &insert.user_device__id,
                     Type::TEXT,
                 )
                 .add(
-                    &user_reset_password_token.value,
+                    &insert.user_reset_password_token__value,
                     Type::TEXT,
                 )
                 .add(
-                    &user_reset_password_token.wrong_enter_tries_quantity,
+                    &insert.user_reset_password_token__wrong_enter_tries_quantity,
                     Type::INT2,
                 )
                 .add(
-                    &user_reset_password_token.is_approved,
+                    &insert.user_reset_password_token__is_approved,
                     Type::BOOL,
                 )
                 .add(
-                    &user_reset_password_token.expires_at,
+                    &insert.user_reset_password_token__expires_at,
                     Type::INT8,
                 )
                 .add(
-                    &user_reset_password_token.can_be_resent_from,
+                    &insert.user_reset_password_token__can_be_resent_from,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
@@ -567,6 +564,15 @@ impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
             );
         };
     }
+}
+pub struct Insert<'a> {
+    pub user__id: i64,
+    pub user_device__id: &'a str,
+    pub user_reset_password_token__value: &'a str,
+    pub user_reset_password_token__wrong_enter_tries_quantity: i16,
+    pub user_reset_password_token__is_approved: bool,
+    pub user_reset_password_token__expires_at: i64,
+    pub user_reset_password_token__can_be_resent_from: i64,
 }
 pub struct Update1<'a> {
     pub user_reset_password_token__value: &'a str,

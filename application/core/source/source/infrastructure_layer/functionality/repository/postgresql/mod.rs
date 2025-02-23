@@ -51,6 +51,7 @@ pub use self::{
         Update5 as UserRegistrationTokenUpdate5,
     },
     user_reset_password_token::{
+        Insert as UserResetPasswordTokenInsert,
         By as UserResetPasswordTokenBy,
         Update1 as UserResetPasswordTokenUpdate1,
         Update2 as UserResetPasswordTokenUpdate2,
