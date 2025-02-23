@@ -100,7 +100,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 }
             };
             if Channel_AccessModifier::Close as i16 == channel__access_modifier {
-                let is_exist = Repository::<Postgresql<ChannelSubscription>>::is_exist_1(
+                let is_exist = Repository::<Postgresql<ChannelSubscription>>::is_exist(
                     &postgresql_database_1_client,
                     ChannelSubscriptionBy {
                         user__id,

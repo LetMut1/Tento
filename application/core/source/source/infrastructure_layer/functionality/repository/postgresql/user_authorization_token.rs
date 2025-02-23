@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<UserAuthorizationToken>> {
-    pub fn create_1<'a>(
+    pub fn create<'a>(
         database_2_client: &'a Client,
         insert: Insert<'a>,
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
@@ -82,7 +82,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             return Result::Ok(());
         };
     }
-    pub fn delete_1<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn delete<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \

@@ -177,7 +177,7 @@ impl CommandProcessor<CreateFixtures> {
                 if !Validator::<UserDevice_Id>::is_valid(&user_device__id) {
                     return Result::Err(crate::new_invalid_argument!());
                 }
-                Repository::<Postgresql<UserDevice>>::create_1(
+                Repository::<Postgresql<UserDevice>>::create(
                     &postgresql_database_1_client,
                     UserDeviceInsert {
                         user_device__id: user_device__id.as_str(),
@@ -227,7 +227,7 @@ impl CommandProcessor<CreateFixtures> {
                     {
                         continue 'b;
                     } else {
-                        Repository::<Postgresql<Channel>>::create_1(
+                        Repository::<Postgresql<Channel>>::create(
                             &postgresql_database_1_client,
                             &ChannelInsert {
                                 channel__owner: user__id,

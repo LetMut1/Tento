@@ -104,7 +104,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_LinkedNameAlreadyExist));
             }
-            let channel__id = Repository::<Postgresql<Channel>>::create_1(
+            let channel__id = Repository::<Postgresql<Channel>>::create(
                 &postgresql_database_1_client,
                 &ChannelInsert {
                     channel__owner: user__id,

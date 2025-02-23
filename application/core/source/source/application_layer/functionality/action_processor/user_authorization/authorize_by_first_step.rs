@@ -250,7 +250,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                         let user_authorization_token__value_ = Generator::<UserAuthorizationToken_Value>::generate();
                         let user_authorization_token__wrong_enter_tries_quantity_ = 0;
                         let user_authorization_token__can_be_resent_from_ = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?;
-                        Repository::<Postgresql<UserAuthorizationToken>>::create_1(
+                        Repository::<Postgresql<UserAuthorizationToken>>::create(
                             &postgresql_database_2_client,
                             UserAuthorizationTokenInsert {
                                 user__id,

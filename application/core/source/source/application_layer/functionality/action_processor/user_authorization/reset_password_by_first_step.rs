@@ -190,7 +190,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                         let user_reset_password_token__value_ = Generator::<UserResetPasswordToken_Value>::generate();
                         let user_reset_password_token__wrong_enter_tries_quantity_ = 0;
                         let user_reset_password_token__can_be_resent_from_ = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate(now)?;
-                        Repository::<Postgresql<UserResetPasswordToken>>::create_1(
+                        Repository::<Postgresql<UserResetPasswordToken>>::create(
                             &postgresql_database_2_client,
                             UserResetPasswordTokenInsert {
                                 user__id,

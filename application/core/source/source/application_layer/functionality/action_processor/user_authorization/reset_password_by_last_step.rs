@@ -107,7 +107,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     }
                 };
                 if user_reset_password_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
-                    Repository::<Postgresql<UserResetPasswordToken>>::delete_2(
+                    Repository::<Postgresql<UserResetPasswordToken>>::delete(
                         &postgresql_database_2_client,
                         UserResetPasswordTokenBy {
                             user__id: incoming.user__id,
@@ -134,7 +134,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                         )
                         .await?;
                     } else {
-                        Repository::<Postgresql<UserResetPasswordToken>>::delete_2(
+                        Repository::<Postgresql<UserResetPasswordToken>>::delete(
                             &postgresql_database_2_client,
                             UserResetPasswordTokenBy {
                                 user__id: incoming.user__id,
@@ -197,7 +197,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Err(aggregate_error);
             }
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserResetPasswordToken>>::delete_2(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserResetPasswordToken>>::delete(
                 transaction.get_client(),
                 UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
@@ -209,7 +209,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Err(aggregate_error);
             }
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<User>>::update_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<User>>::update(
                 &postgresql_database_1_client,
                 UserUpdate {
                     user__password_hash: user__password_hash.as_str(),
@@ -224,7 +224,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 return Result::Err(aggregate_error);
             }
             if let Result::Err(aggregate_error) = Resolver_::<Transaction<'_>>::commit(transaction).await {
-                Repository::<Postgresql<User>>::update_1(
+                Repository::<Postgresql<User>>::update(
                     &postgresql_database_1_client,
                     UserUpdate {
                         user__password_hash: user__password_hash___old.as_str(),

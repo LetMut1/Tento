@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 }
             };
             if user_reset_password_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
-                Repository::<Postgresql<UserResetPasswordToken>>::delete_2(
+                Repository::<Postgresql<UserResetPasswordToken>>::delete(
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy {
                         user__id: incoming.user__id,
@@ -109,7 +109,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                     )
                     .await?;
                 } else {
-                    Repository::<Postgresql<UserResetPasswordToken>>::delete_2(
+                    Repository::<Postgresql<UserResetPasswordToken>>::delete(
                         &postgresql_database_2_client,
                         UserResetPasswordTokenBy {
                             user__id: incoming.user__id,

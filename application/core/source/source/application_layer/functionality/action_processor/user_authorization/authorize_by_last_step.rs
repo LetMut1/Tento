@@ -115,7 +115,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_authorization_token__expires_at <= now {
-                Repository::<Postgresql<UserAuthorizationToken>>::delete_1(
+                Repository::<Postgresql<UserAuthorizationToken>>::delete(
                     &postgresql_database_2_client,
                     UserAuthorizationTokenBy {
                         user__id: incoming.user__id,
@@ -139,7 +139,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     )
                     .await?;
                 } else {
-                    Repository::<Postgresql<UserAuthorizationToken>>::delete_1(
+                    Repository::<Postgresql<UserAuthorizationToken>>::delete(
                         &postgresql_database_2_client,
                         UserAuthorizationTokenBy {
                             user__id: incoming.user__id,
@@ -172,7 +172,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
             let user_access_refresh_token__updated_at = now;
-            let is_exist = Repository::<Postgresql<UserAccessRefreshToken>>::is_exist_1(
+            let is_exist = Repository::<Postgresql<UserAccessRefreshToken>>::is_exist(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenBy2 {
                     user__id: incoming.user__id,
@@ -186,7 +186,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             )
             .await?;
             if is_exist {
-                if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::update_1(
+                if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::update(
                     transaction.get_client(),
                     UserAccessRefreshTokenUpdate {
                         user_access_token__id: user_access_token__id.as_str(),
@@ -205,7 +205,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     return Result::Err(aggregate_error);
                 }
             } else {
-                if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::create_1(
+                if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::create(
                     transaction.get_client(),
                     &UserAccessRefreshTokenInsert {
                         user__id: incoming.user__id,
@@ -222,7 +222,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     return Result::Err(aggregate_error);
                 };
             };
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAuthorizationToken>>::delete_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAuthorizationToken>>::delete(
                 transaction.get_client(),
                 UserAuthorizationTokenBy {
                     user__id: incoming.user__id,
@@ -254,7 +254,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             let postgresql_connection_pool_database_1 = inner.postgresql_connection_pool_database_1.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    let user_device = Repository::<Postgresql<UserDevice>>::create_1(
+                    let user_device = Repository::<Postgresql<UserDevice>>::create(
                         &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
                         UserDeviceInsert {
                             user_device__id: incoming.user_device__id.as_str(),

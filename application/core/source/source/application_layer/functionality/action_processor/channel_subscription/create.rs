@@ -109,7 +109,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::create_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::create(
                 transaction.get_client(),
                 ChannelSubscriptionInsert {
                     user__id,
@@ -122,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Err(aggregate_error);
             }
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<Channel>>::update_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<Channel>>::update(
                 transaction.get_client(),
                 ChannelBy1 {
                     channel__id: incoming.channel__id,

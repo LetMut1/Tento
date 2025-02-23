@@ -187,7 +187,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         let user_registration_token__value_ = Generator::<UserRegistrationToken_Value>::generate();
                         let user_registration_token__wrong_enter_tries_quantity_ = 0;
                         let user_registration_token__can_be_resent_from_ = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
-                        Repository::<Postgresql<UserRegistrationToken>>::create_1(
+                        Repository::<Postgresql<UserRegistrationToken>>::create(
                             &postgresql_database_2_client,
                             UserRegistrationTokenInsert {
                                 user__email: incoming.user__email.as_str(),

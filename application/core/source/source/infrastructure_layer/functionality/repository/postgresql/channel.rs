@@ -29,7 +29,7 @@ use {
 };
 // channel__id: i64,
 impl Repository<Postgresql<Channel>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert: &'a Insert<'_>) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
+    pub fn create<'a>(database_1_client: &'a Client, insert: &'a Insert<'_>) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -147,7 +147,7 @@ impl Repository<Postgresql<Channel>> {
             );
         };
     }
-    pub fn update_1<'a>(database_1_client: &'a Client, by: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update<'a>(database_1_client: &'a Client, by: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \

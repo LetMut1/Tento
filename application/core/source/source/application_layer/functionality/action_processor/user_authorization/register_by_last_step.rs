@@ -154,7 +154,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     }
                 };
                 if user_registration_token__expires_at <= now {
-                    Repository::<Postgresql<UserRegistrationToken>>::delete_2(
+                    Repository::<Postgresql<UserRegistrationToken>>::delete(
                         &postgresql_database_2_client,
                         UserRegistrationTokenBy {
                             user__email: incoming.user__email.as_str(),
@@ -181,7 +181,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                         )
                         .await?;
                     } else {
-                        Repository::<Postgresql<UserRegistrationToken>>::delete_2(
+                        Repository::<Postgresql<UserRegistrationToken>>::delete(
                             &postgresql_database_2_client,
                             UserRegistrationTokenBy {
                                 user__email: incoming.user__email.as_str(),
@@ -215,7 +215,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::create_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::create(
                 transaction.get_client(),
                 &UserAccessRefreshTokenInsert {
                     user__id,
@@ -231,7 +231,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Err(aggregate_error);
             };
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserRegistrationToken>>::delete_2(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserRegistrationToken>>::delete(
                 transaction.get_client(),
                 UserRegistrationTokenBy {
                     user__email: incoming.user__email.as_str(),
@@ -259,7 +259,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 return Result::Err(aggregate_error);
             }
             if let Result::Err(aggregate_error) = Resolver_::<Transaction<'_>>::commit(transaction).await {
-                Repository::<Postgresql<User>>::delete_1(
+                Repository::<Postgresql<User>>::delete(
                     &postgresql_database_1_client,
                     UserBy3 {
                         user__id,
@@ -287,7 +287,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             let postgresql_connection_pool_database_1 = inner.postgresql_connection_pool_database_1.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    let user_device = Repository::<Postgresql<UserDevice>>::create_1(
+                    let user_device = Repository::<Postgresql<UserDevice>>::create(
                         &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
                         UserDeviceInsert {
                             user_device__id: incoming.user_device__id.as_str(),

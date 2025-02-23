@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<UserAccessRefreshToken>> {
-    pub fn create_1<'a>(database_2_client: &'a Client, insert: &'a Insert) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn create<'a>(database_2_client: &'a Client, insert: &'a Insert) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -79,7 +79,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             return Result::Ok(());
         };
     }
-    pub fn update_1<'a>(database_2_client: &'a Client, update: Update<'a>, by: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update<'a>(database_2_client: &'a Client, update: Update<'a>, by: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -215,7 +215,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
     // user_access_refresh_token__obfuscation_value: String,
     // user_access_refresh_token__expires_at: i64,
     // user_access_refresh_token__updated_at: i64,
-    pub fn find_1<'a, 'b>(database_2_client: &'a Client, by: By2<'b>) -> impl Future<Output = Result<Option<(String, String, i64, i64)>, AggregateError>> + Send + use<'a, 'b> {
+    pub fn find<'a, 'b>(database_2_client: &'a Client, by: By2<'b>) -> impl Future<Output = Result<Option<(String, String, i64, i64)>, AggregateError>> + Send + use<'a, 'b> {
         return async move {
             let query = "\
                 SELECT \
@@ -269,7 +269,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             );
         };
     }
-    pub fn is_exist_1<'a, 'b>(database_2_client: &'a Client, by: By2<'b>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a, 'b> {
+    pub fn is_exist<'a, 'b>(database_2_client: &'a Client, by: By2<'b>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a, 'b> {
         return async move {
             let query = "\
                 SELECT \

@@ -89,7 +89,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_registration_token__expires_at <= now {
-                Repository::<Postgresql<UserRegistrationToken>>::delete_2(
+                Repository::<Postgresql<UserRegistrationToken>>::delete(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy {
                         user__email: incoming.user__email.as_str(),

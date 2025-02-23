@@ -106,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_reset_password_token__expires_at <= now {
-                Repository::<Postgresql<UserResetPasswordToken>>::delete_2(
+                Repository::<Postgresql<UserResetPasswordToken>>::delete(
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy {
                         user__id: incoming.user__id,

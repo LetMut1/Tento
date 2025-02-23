@@ -132,7 +132,7 @@ impl Repository<Postgresql<User>> {
             return Result::Ok(());
         };
     }
-    pub fn update_1<'a>(database_1_client: &'a Client, update: Update<'a>, by: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update<'a>(database_1_client: &'a Client, update: Update<'a>, by: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -175,7 +175,7 @@ impl Repository<Postgresql<User>> {
             return Result::Ok(());
         };
     }
-    pub fn delete_1<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn delete<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -584,6 +584,7 @@ impl Repository<Postgresql<User>> {
             );
         };
     }
+    // user__id: i64,
     pub fn get_id<'a>(database_1_client: &'a Client) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\

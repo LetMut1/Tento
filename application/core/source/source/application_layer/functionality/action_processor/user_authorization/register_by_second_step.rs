@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                 }
             };
             if user_registration_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
-                Repository::<Postgresql<UserRegistrationToken>>::delete_2(
+                Repository::<Postgresql<UserRegistrationToken>>::delete(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy {
                         user__email: incoming.user__email.as_str(),
@@ -109,7 +109,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                     )
                     .await?;
                 } else {
-                    Repository::<Postgresql<UserRegistrationToken>>::delete_2(
+                    Repository::<Postgresql<UserRegistrationToken>>::delete(
                         &postgresql_database_2_client,
                         UserRegistrationTokenBy {
                             user__email: incoming.user__email.as_str(),

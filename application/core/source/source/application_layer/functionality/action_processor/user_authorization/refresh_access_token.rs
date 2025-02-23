@@ -73,7 +73,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 user_access_refresh_token__obfuscation_value,
                 user_access_refresh_token__expires_at,
                 user_access_refresh_token__updated_at,
-            ) = match Repository::<Postgresql<UserAccessRefreshToken>>::find_1(
+            ) = match Repository::<Postgresql<UserAccessRefreshToken>>::find(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenBy2 {
                     user__id,
@@ -117,7 +117,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             let new___user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let new___user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
             let new___user_access_refresh_token__updated_at = now;
-            Repository::<Postgresql<UserAccessRefreshToken>>::update_1(
+            Repository::<Postgresql<UserAccessRefreshToken>>::update(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenUpdate {
                     user_access_token__id: new___user_access_token__id.as_str(),
