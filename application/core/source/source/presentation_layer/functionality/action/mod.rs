@@ -36,7 +36,7 @@ pub struct Action<S> {
 impl<AP> Action<AP>
 where
     ActionProcessor<AP>: ActionProcessor_,
-    <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'a> Deserialize_<'a>,
+    for<'a> <ActionProcessor<AP> as ActionProcessor_>::Incoming<'a>: Deserialize_<'a>,
     <ActionProcessor<AP> as ActionProcessor_>::Outcoming: Serialize_,
     <ActionProcessor<AP> as ActionProcessor_>::Precedent: Serialize_,
 {
@@ -51,7 +51,7 @@ where
 impl<AP> Action<AP>
 where
     ActionProcessor<AP>: ActionProcessor_,
-    <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'a> Deserialize_<'a>,
+    for<'a> <ActionProcessor<AP> as ActionProcessor_>::Incoming<'a>: Deserialize_<'a>,
     <ActionProcessor<AP> as ActionProcessor_>::Outcoming: Serialize_,
     <ActionProcessor<AP> as ActionProcessor_>::Precedent: Serialize_,
 {

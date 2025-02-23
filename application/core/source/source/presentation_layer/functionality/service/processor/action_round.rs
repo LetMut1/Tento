@@ -39,7 +39,7 @@ impl Processor<ActionRound> {
     ) -> impl Future<Output = Response> + Send + use<'a, 'b, AP, SS, SD>
     where
         ActionProcessor<AP>: ActionProcessor_,
-        <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'c> Deserialize_<'c>,
+        for<'c> <ActionProcessor<AP> as ActionProcessor_>::Incoming<'c>: Deserialize_<'c>,
         <ActionProcessor<AP> as ActionProcessor_>::Outcoming: Serialize_,
         <ActionProcessor<AP> as ActionProcessor_>::Precedent: Serialize_,
         Serializer<SS>: Serialize,
@@ -53,12 +53,12 @@ impl Processor<ActionRound> {
                 if !Validator::<Parts>::is_valid(inner.parts) {
                     return Result::Err(crate::new_invalid_argument!());
                 }
-                let incoming = Serializer::<SS>::deserialize::<'_, <ActionProcessor<AP> as ActionProcessor_>::Incoming>(
-                    crate::result_return_runtime!(
-                        inner.incoming.collect().await
-                    )
-                    .aggregate()
-                    .chunk(),
+                let incoming_data = crate::result_return_runtime!(
+                    inner.incoming.collect().await
+                )
+                .aggregate();
+                let incoming = Serializer::<SS>::deserialize::<'_, <ActionProcessor<AP> as ActionProcessor_>::Incoming<'_>>(
+                    incoming_data.chunk(),
                 )?;
                 let unified_report = <ActionProcessor<AP> as ActionProcessor_>::process(
                     action_processor_inner,

@@ -50,10 +50,10 @@ pub struct ActionProcessor<S> {
     _subject: PhantomData<S>,
 }
 pub trait ActionProcessor_ {
-    type Incoming;
+    type Incoming<'a>;
     type Outcoming;
     type Precedent;
-    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send;
+    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send;
 }
 pub struct Inner<'a> {
     pub environment_configuration: &'static EnvironmentConfiguration<RunServer>,

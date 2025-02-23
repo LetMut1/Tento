@@ -56,10 +56,10 @@ use {
 };
 pub struct ChannelSubscription_Create;
 impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
-    type Incoming = Incoming;
+    type Incoming<'a> = Incoming;
     type Outcoming = Void;
     type Precedent = Precedent;
-    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
+    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             let user__id = match Extractor::<UserAccessToken>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,

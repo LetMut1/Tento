@@ -44,10 +44,10 @@ use {
 };
 pub struct Channel_CheckLinkedNameForExisting;
 impl ActionProcessor_ for ActionProcessor<Channel_CheckLinkedNameForExisting> {
-    type Incoming = Incoming;
+    type Incoming<'a> = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
-    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
+    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             match Extractor::<UserAccessToken>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,

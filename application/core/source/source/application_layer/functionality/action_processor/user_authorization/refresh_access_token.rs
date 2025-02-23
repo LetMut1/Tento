@@ -53,10 +53,10 @@ use {
 };
 pub struct UserAuthorization_RefreshAccessToken;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> {
-    type Incoming = Incoming;
+    type Incoming<'a> = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
-    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
+    fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             let (
                 user_access_token__id,
