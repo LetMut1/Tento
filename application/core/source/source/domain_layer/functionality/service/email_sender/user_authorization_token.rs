@@ -15,7 +15,7 @@ use {
     },
     std::future::Future,
 };
-impl EmailSender<UserAuthorizationToken<'_>> {
+impl EmailSender<UserAuthorizationToken> {
     pub fn repeatable_send<'a>(
         email_server: &'static EmailServer,
         user_authorization_token__value: &'a str,

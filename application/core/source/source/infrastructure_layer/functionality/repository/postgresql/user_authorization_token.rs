@@ -14,10 +14,10 @@ use {
     std::future::Future,
     tokio_postgres::types::Type,
 };
-impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
+impl Repository<Postgresql<UserAuthorizationToken>> {
     pub fn create_1<'a>(
         database_2_client: &'a Client,
-        user_authorization_token: &'a UserAuthorizationToken<'_>,
+        insert: Insert<'a>,
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
@@ -40,27 +40,27 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &user_authorization_token.user__id,
+                    &insert.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &user_authorization_token.user_device__id,
+                    &insert.user_device__id,
                     Type::TEXT,
                 )
                 .add(
-                    &user_authorization_token.value,
+                    &insert.user_authorization_token__value,
                     Type::TEXT,
                 )
                 .add(
-                    &user_authorization_token.wrong_enter_tries_quantity,
+                    &insert.user_authorization_token__wrong_enter_tries_quantity,
                     Type::INT2,
                 )
                 .add(
-                    &user_authorization_token.expires_at,
+                    &insert.user_authorization_token__expires_at,
                     Type::INT8,
                 )
                 .add(
-                    &user_authorization_token.can_be_resent_from,
+                    &insert.user_authorization_token__can_be_resent_from,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
@@ -494,6 +494,14 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             );
         };
     }
+}
+pub struct Insert<'a> {
+    pub user__id: i64,
+    pub user_device__id: &'a str,
+    pub user_authorization_token__value: &'a str,
+    pub user_authorization_token__wrong_enter_tries_quantity: i16,
+    pub user_authorization_token__expires_at: i64,
+    pub user_authorization_token__can_be_resent_from: i64,
 }
 pub struct Update1<'a> {
     pub user_authorization_token__value: &'a str,

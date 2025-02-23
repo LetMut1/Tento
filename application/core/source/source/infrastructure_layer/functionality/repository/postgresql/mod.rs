@@ -35,6 +35,7 @@ pub use self::{
         Update as UserAccessRefreshTokenUpdate,
     },
     user_authorization_token::{
+        Insert as UserAuthorizationTokenInsert,
         By as UserAuthorizationTokenBy,
         Update1 as UserAuthorizationTokenUpdate1,
         Update2 as UserAuthorizationTokenUpdate2,

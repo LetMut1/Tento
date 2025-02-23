@@ -89,7 +89,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 user_authorization_token__value,
                 user_authorization_token__expires_at,
                 mut user_authorization_token__can_be_resent_from,
-            ) = match Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_3(
+            ) = match Repository::<Postgresql<UserAuthorizationToken>>::find_3(
                 &postgresql_database_2_client,
                 UserAuthorizationTokenBy {
                     user__id: incoming.user__id,
@@ -105,7 +105,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_authorization_token__expires_at <= now {
-                Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
+                Repository::<Postgresql<UserAuthorizationToken>>::delete_1(
                     &postgresql_database_2_client,
                     UserAuthorizationTokenBy {
                         user__id: incoming.user__id,
@@ -119,7 +119,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_TimeToResendHasNotCome));
             }
             user_authorization_token__can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?;
-            Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_3(
+            Repository::<Postgresql<UserAuthorizationToken>>::update_3(
                 &postgresql_database_2_client,
                 UserAuthorizationTokenUpdate3 {
                     user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from,
@@ -133,7 +133,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             let environment_configuration = inner.environment_configuration;
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    EmailSender::<UserAuthorizationToken<'_>>::repeatable_send(
+                    EmailSender::<UserAuthorizationToken>::repeatable_send(
                         &environment_configuration.subject.resource.email_server,
                         user_authorization_token__value.as_str(),
                         user__email.as_str(),

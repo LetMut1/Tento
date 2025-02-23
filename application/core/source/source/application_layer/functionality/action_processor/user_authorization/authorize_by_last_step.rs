@@ -99,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 user_authorization_token__value,
                 mut user_authorization_token__wrong_enter_tries_quantity,
                 user_authorization_token__expires_at,
-            ) = match Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_2(
+            ) = match Repository::<Postgresql<UserAuthorizationToken>>::find_2(
                 &postgresql_database_2_client,
                 UserAuthorizationTokenBy {
                     user__id: incoming.user__id,
@@ -115,7 +115,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_authorization_token__expires_at <= now {
-                Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
+                Repository::<Postgresql<UserAuthorizationToken>>::delete_1(
                     &postgresql_database_2_client,
                     UserAuthorizationTokenBy {
                         user__id: incoming.user__id,
@@ -130,7 +130,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     user_authorization_token__wrong_enter_tries_quantity += 1;
                 }
                 if user_authorization_token__wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
-                    Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_4(
+                    Repository::<Postgresql<UserAuthorizationToken>>::update_4(
                         &postgresql_database_2_client,
                         UserAuthorizationTokenBy {
                             user__id: incoming.user__id,
@@ -139,7 +139,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     )
                     .await?;
                 } else {
-                    Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
+                    Repository::<Postgresql<UserAuthorizationToken>>::delete_1(
                         &postgresql_database_2_client,
                         UserAuthorizationTokenBy {
                             user__id: incoming.user__id,
@@ -222,7 +222,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     return Result::Err(aggregate_error);
                 };
             };
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAuthorizationToken>>::delete_1(
                 transaction.get_client(),
                 UserAuthorizationTokenBy {
                     user__id: incoming.user__id,

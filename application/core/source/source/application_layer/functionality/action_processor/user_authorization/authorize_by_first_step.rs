@@ -36,6 +36,7 @@ use {
                     postgresql::{
                         Postgresql,
                         UserAuthorizationTokenBy,
+                        UserAuthorizationTokenInsert,
                         UserAuthorizationTokenUpdate1,
                         UserAuthorizationTokenUpdate2,
                         UserAuthorizationTokenUpdate3,
@@ -66,10 +67,7 @@ use {
         },
         unified_report::UnifiedReport,
     },
-    std::{
-        borrow::Cow,
-        future::Future,
-    },
+    std::future::Future,
 };
 pub struct UserAuthorization_AuthorizeByFirstStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep> {
@@ -159,7 +157,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_authorization_token__value, user_authorization_token__can_be_resent_from, user_authorization_token__wrong_enter_tries_quantity, can_send) =
-                match Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_1(
+                match Repository::<Postgresql<UserAuthorizationToken>>::find_1(
                     &postgresql_database_2_client,
                     UserAuthorizationTokenBy {
                         user__id,
@@ -197,7 +195,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             false
                         };
                         if need_to_update_1 && need_to_update_2 {
-                            Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_1(
+                            Repository::<Postgresql<UserAuthorizationToken>>::update_1(
                                 &postgresql_database_2_client,
                                 UserAuthorizationTokenUpdate1 {
                                     user_authorization_token__value: user_authorization_token__value_.as_str(),
@@ -213,7 +211,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             .await?;
                         } else {
                             if need_to_update_1 {
-                                Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_3(
+                                Repository::<Postgresql<UserAuthorizationToken>>::update_3(
                                     &postgresql_database_2_client,
                                     UserAuthorizationTokenUpdate3 {
                                         user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from_,
@@ -226,7 +224,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                 .await?;
                             }
                             if need_to_update_2 {
-                                Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_2(
+                                Repository::<Postgresql<UserAuthorizationToken>>::update_2(
                                     &postgresql_database_2_client,
                                     UserAuthorizationTokenUpdate2 {
                                         user_authorization_token__value: user_authorization_token__value_.as_str(),
@@ -249,23 +247,25 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                         )
                     }
                     Option::None => {
-                        let user_authorization_token = UserAuthorizationToken::new(
-                            user__id,
-                            Cow::Borrowed(incoming.user_device__id.as_str()),
-                            Generator::<UserAuthorizationToken_Value>::generate(),
-                            0,
-                            Generator::<UserAuthorizationToken_ExpiresAt>::generate(now)?,
-                            Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?,
-                        );
-                        Repository::<Postgresql<UserAuthorizationToken<'_>>>::create_1(
+                        let user_authorization_token__value = Generator::<UserAuthorizationToken_Value>::generate();
+                        let user_authorization_token__wrong_enter_tries_quantity = 0;
+                        let user_authorization_token__can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?;
+                        Repository::<Postgresql<UserAuthorizationToken>>::create_1(
                             &postgresql_database_2_client,
-                            &user_authorization_token,
+                            UserAuthorizationTokenInsert {
+                                user__id,
+                                user_device__id: incoming.user_device__id.as_str(),
+                                user_authorization_token__value: user_authorization_token__value.as_str(),
+                                user_authorization_token__wrong_enter_tries_quantity,
+                                user_authorization_token__can_be_resent_from,
+                                user_authorization_token__expires_at: Generator::<UserAuthorizationToken_ExpiresAt>::generate(now)?,
+                            }
                         )
                         .await?;
                         (
-                            user_authorization_token.value,
-                            user_authorization_token.can_be_resent_from,
-                            user_authorization_token.wrong_enter_tries_quantity,
+                            user_authorization_token__value,
+                            user_authorization_token__can_be_resent_from,
+                            user_authorization_token__wrong_enter_tries_quantity,
                             true,
                         )
                     }
@@ -274,7 +274,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 let environment_configuration = inner.environment_configuration;
                 Spawner::<TokioNonBlockingTask>::spawn_into_background(
                     async move {
-                        EmailSender::<UserAuthorizationToken<'_>>::repeatable_send(
+                        EmailSender::<UserAuthorizationToken>::repeatable_send(
                             &environment_configuration.subject.resource.email_server,
                             user_authorization_token__value.as_str(),
                             user__email.as_str(),
