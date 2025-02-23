@@ -10,10 +10,10 @@ use crate::{
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
-pub struct Incoming {
+pub struct Incoming<'a> {
     pub user_access_token_encoded: UserAccessTokenEncoded,
-    pub channel__name: String,
-    pub channel__linked_name: String,
+    pub channel__name: &'a str,
+    pub channel__linked_name: &'a str,
     pub channel__access_modifier: i16,
     pub channel__visability_modifier: i16,
 }

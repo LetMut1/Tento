@@ -44,7 +44,7 @@ use {
 };
 pub struct Channel_GetManyByNameInSubscriptions;
 impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
@@ -70,11 +70,11 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
             if incoming.limit <= 0 || incoming.limit > LIMIT {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
+            if !Validator::<Channel_Name>::is_valid(incoming.channel__name) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if let Option::Some(ref requery___channel__name_) = incoming.requery___channel__name {
-                if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
+            if let Option::Some(requery___channel__name_) = incoming.requery___channel__name {
+                if !Validator::<Channel_Name>::is_valid(requery___channel__name_) {
                     return Result::Err(crate::new_invalid_argument!());
                 }
             }
@@ -82,8 +82,8 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 ChannelBy5 {
                     user__id,
-                    channel__name: incoming.channel__name.as_str(),
-                    requery___channel__name: incoming.requery___channel__name.as_deref(),
+                    channel__name: incoming.channel__name,
+                    requery___channel__name: incoming.requery___channel__name,
                 },
                 incoming.limit,
             )

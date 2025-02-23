@@ -56,15 +56,15 @@ use {
 };
 pub struct UserAuthorization_SendEmailForRegister;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Validator::<User_Email>::is_valid(incoming.user__email.as_str())? {
+            if !Validator::<User_Email>::is_valid(incoming.user__email)? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
@@ -76,8 +76,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             ) = match Repository::<Postgresql<UserRegistrationToken>>::find_3(
                 &postgresql_database_2_client,
                 UserRegistrationTokenBy {
-                    user__email: incoming.user__email.as_str(),
-                    user_device__id: incoming.user_device__id.as_str(),
+                    user__email: incoming.user__email,
+                    user_device__id: incoming.user_device__id,
                 },
             )
             .await?
@@ -92,8 +92,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 Repository::<Postgresql<UserRegistrationToken>>::delete(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy {
-                        user__email: incoming.user__email.as_str(),
-                        user_device__id: incoming.user_device__id.as_str(),
+                        user__email: incoming.user__email,
+                        user_device__id: incoming.user_device__id,
                     },
                 )
                 .await?;
@@ -112,19 +112,21 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     user_registration_token__can_be_resent_from,
                 },
                 UserRegistrationTokenBy {
-                    user__email: incoming.user__email.as_str(),
-                    user_device__id: incoming.user_device__id.as_str(),
+                    user__email: incoming.user__email,
+                    user_device__id: incoming.user_device__id,
                 },
             )
             .await?;
             let environment_configuration = inner.environment_configuration;
+            let user__email = incoming.user__email.to_string();
+            let user_device__id = incoming.user_device__id.to_string();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     EmailSender::<UserRegistrationToken>::repeatable_send(
                         &environment_configuration.subject.resource.email_server,
                         user_registration_token__value.as_str(),
-                        incoming.user__email.as_str(),
-                        incoming.user_device__id.as_str(),
+                        user__email.as_str(),
+                        user_device__id.as_str(),
                     )
                     .await?;
                     return Result::Ok(());

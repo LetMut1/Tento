@@ -44,7 +44,7 @@ use {
 };
 pub struct Channel_CheckNameForExisting;
 impl ActionProcessor_ for ActionProcessor<Channel_CheckNameForExisting> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
@@ -66,13 +66,13 @@ impl ActionProcessor_ for ActionProcessor<Channel_CheckNameForExisting> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
-            if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
+            if !Validator::<Channel_Name>::is_valid(incoming.channel__name) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let is_exist = Repository::<Postgresql<Channel>>::is_exist_1(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 ChannelBy2 {
-                    channel__name: incoming.channel__name.as_str(),
+                    channel__name: incoming.channel__name,
                 },
             )
             .await?;

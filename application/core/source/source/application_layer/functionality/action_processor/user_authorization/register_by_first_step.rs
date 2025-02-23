@@ -66,21 +66,21 @@ use {
 };
 pub struct UserAuthorization_RegisterByFirstStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Validator::<User_Email>::is_valid(incoming.user__email.as_str())? {
+            if !Validator::<User_Email>::is_valid(incoming.user__email)? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             if Repository::<Postgresql<User>>::is_exist_2(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy2 {
-                    user__email: incoming.user__email.as_str(),
+                    user__email: incoming.user__email,
                 },
             )
             .await?
@@ -93,8 +93,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                 match Repository::<Postgresql<UserRegistrationToken>>::find_1(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy {
-                        user__email: incoming.user__email.as_str(),
-                        user_device__id: incoming.user_device__id.as_str(),
+                        user__email: incoming.user__email,
+                        user_device__id: incoming.user_device__id,
                     },
                 )
                 .await?
@@ -140,8 +140,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                     user_registration_token__can_be_resent_from: user_registration_token__can_be_resent_from_,
                                 },
                                 UserRegistrationTokenBy {
-                                    user__email: incoming.user__email.as_str(),
-                                    user_device__id: incoming.user_device__id.as_str(),
+                                    user__email: incoming.user__email,
+                                    user_device__id: incoming.user_device__id,
                                 },
                             )
                             .await?;
@@ -153,8 +153,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                         user_registration_token__can_be_resent_from: user_registration_token__can_be_resent_from_,
                                     },
                                     UserRegistrationTokenBy {
-                                        user__email: incoming.user__email.as_str(),
-                                        user_device__id: incoming.user_device__id.as_str(),
+                                        user__email: incoming.user__email,
+                                        user_device__id: incoming.user_device__id,
                                     },
                                 )
                                 .await?;
@@ -169,8 +169,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                         user_registration_token__expires_at,
                                     },
                                     UserRegistrationTokenBy {
-                                        user__email: incoming.user__email.as_str(),
-                                        user_device__id: incoming.user_device__id.as_str(),
+                                        user__email: incoming.user__email,
+                                        user_device__id: incoming.user_device__id,
                                     },
                                 )
                                 .await?;
@@ -190,8 +190,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         Repository::<Postgresql<UserRegistrationToken>>::create(
                             &postgresql_database_2_client,
                             UserRegistrationTokenInsert {
-                                user__email: incoming.user__email.as_str(),
-                                user_device__id: incoming.user_device__id.as_str(),
+                                user__email: incoming.user__email,
+                                user_device__id: incoming.user_device__id,
                                 user_registration_token__value: user_registration_token__value_.as_str(),
                                 user_registration_token__wrong_enter_tries_quantity: user_registration_token__wrong_enter_tries_quantity_,
                                 user_registration_token__is_approved: false,
@@ -210,13 +210,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                 };
             if can_send {
                 let environment_configuration = inner.environment_configuration;
+                let user__email = incoming.user__email.to_string();
+                let user_device__id = incoming.user_device__id.to_string();
                 Spawner::<TokioNonBlockingTask>::spawn_into_background(
                     async move {
                         EmailSender::<UserRegistrationToken>::repeatable_send(
                             &environment_configuration.subject.resource.email_server,
                             user_registration_token__value.as_str(),
-                            incoming.user__email.as_str(),
-                            incoming.user_device__id.as_str(),
+                            user__email.as_str(),
+                            user_device__id.as_str(),
                         )
                         .await?;
                         return Result::Ok(());

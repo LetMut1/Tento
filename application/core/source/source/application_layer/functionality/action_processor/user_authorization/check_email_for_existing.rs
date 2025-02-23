@@ -35,18 +35,18 @@ use {
 };
 pub struct UserAuthorization_CheckEmailForExisting;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckEmailForExisting> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Void;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Validator::<User_Email>::is_valid(incoming.user__email.as_str())? {
+            if !Validator::<User_Email>::is_valid(incoming.user__email)? {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let is_exist = Repository::<Postgresql<User>>::is_exist_2(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy2 {
-                    user__email: incoming.user__email.as_str(),
+                    user__email: incoming.user__email,
                 },
             )
             .await?;

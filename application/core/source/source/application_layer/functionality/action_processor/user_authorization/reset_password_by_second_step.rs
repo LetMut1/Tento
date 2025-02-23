@@ -47,18 +47,18 @@ use {
 };
 pub struct UserAuthorization_ResetPasswordBySecondStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecondStep> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Validator::<UserResetPasswordToken_Value>::is_valid(incoming.user_reset_password_token__value.as_str())? {
+            if !Validator::<UserResetPasswordToken_Value>::is_valid(incoming.user_reset_password_token__value)? {
                 return Result::Err(crate::new_invalid_argument!());
             }
             if !Validator::<User_Id>::is_valid(incoming.user__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
@@ -71,7 +71,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 &postgresql_database_2_client,
                 UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
-                    user_device__id: incoming.user_device__id.as_str(),
+                    user_device__id: incoming.user_device__id,
                 },
             )
             .await?
@@ -86,7 +86,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy {
                         user__id: incoming.user__id,
-                        user_device__id: incoming.user_device__id.as_str(),
+                        user_device__id: incoming.user_device__id,
                     },
                 )
                 .await?;
@@ -104,7 +104,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                         &postgresql_database_2_client,
                         UserResetPasswordTokenBy {
                             user__id: incoming.user__id,
-                            user_device__id: incoming.user_device__id.as_str(),
+                            user_device__id: incoming.user_device__id,
                         },
                     )
                     .await?;
@@ -113,7 +113,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                         &postgresql_database_2_client,
                         UserResetPasswordTokenBy {
                             user__id: incoming.user__id,
-                            user_device__id: incoming.user_device__id.as_str(),
+                            user_device__id: incoming.user_device__id,
                         },
                     )
                     .await?;
@@ -133,7 +133,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 },
                 UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
-                    user_device__id: incoming.user_device__id.as_str(),
+                    user_device__id: incoming.user_device__id,
                 },
             )
             .await?;

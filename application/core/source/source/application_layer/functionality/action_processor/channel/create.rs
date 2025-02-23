@@ -55,7 +55,7 @@ use {
 };
 pub struct Channel_Create;
 impl ActionProcessor_ for ActionProcessor<Channel_Create> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
@@ -77,17 +77,17 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
-            if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
+            if !Validator::<Channel_Name>::is_valid(incoming.channel__name) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<Channel_LinkedName>::is_valid(incoming.channel__linked_name.as_str()) {
+            if !Validator::<Channel_LinkedName>::is_valid(incoming.channel__linked_name) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             if Repository::<Postgresql<Channel>>::is_exist_1(
                 &postgresql_database_1_client,
                 ChannelBy2 {
-                    channel__name: incoming.channel__name.as_str(),
+                    channel__name: incoming.channel__name,
                 },
             )
             .await?
@@ -97,7 +97,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             if Repository::<Postgresql<Channel>>::is_exist_2(
                 &postgresql_database_1_client,
                 ChannelBy3 {
-                    channel__linked_name: incoming.channel__linked_name.as_str(),
+                    channel__linked_name: incoming.channel__linked_name,
                 },
             )
             .await?
@@ -108,8 +108,8 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                 &postgresql_database_1_client,
                 ChannelInsert {
                     channel__owner: user__id,
-                    channel__name: incoming.channel__name.as_str(),
-                    channel__linked_name: incoming.channel__linked_name.as_str(),
+                    channel__name: incoming.channel__name,
+                    channel__linked_name: incoming.channel__linked_name,
                     channel__description: Option::None,
                     channel__access_modifier: incoming.channel__access_modifier,
                     channel__visability_modifier: incoming.channel__visability_modifier,

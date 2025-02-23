@@ -10,9 +10,9 @@ use crate::{
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
-pub struct Incoming {
+pub struct Incoming<'a> {
     pub user_access_token_encoded: UserAccessTokenEncoded,
-    pub channel__name: String,
+    pub channel__name: &'a str,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

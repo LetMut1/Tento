@@ -35,18 +35,18 @@ use {
 };
 pub struct UserAuthorization_CheckNicknameForExisting;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExisting> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Void;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Validator::<User_Nickname>::is_valid(incoming.user__nickname.as_str()) {
+            if !Validator::<User_Nickname>::is_valid(incoming.user__nickname) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let is_exist = Repository::<Postgresql<User>>::is_exist_1(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy1 {
-                    user__nickname: incoming.user__nickname.as_str(),
+                    user__nickname: incoming.user__nickname,
                 },
             )
             .await?;

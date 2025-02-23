@@ -84,28 +84,28 @@ use {
 };
 pub struct UserAuthorization_RegisterByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             if !Validator::<User_Password>::is_valid(
-                incoming.user__password.as_str(),
-                incoming.user__email.as_str(),
-                incoming.user__nickname.as_str(),
+                incoming.user__password,
+                incoming.user__email,
+                incoming.user__nickname,
             ) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<User_Nickname>::is_valid(incoming.user__nickname.as_str()) {
+            if !Validator::<User_Nickname>::is_valid(incoming.user__nickname) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<User_Email>::is_valid(incoming.user__email.as_str())? {
+            if !Validator::<User_Email>::is_valid(incoming.user__email)? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<UserRegistrationToken_Value>::is_valid(incoming.user_registration_token__value.as_str())? {
+            if !Validator::<UserRegistrationToken_Value>::is_valid(incoming.user_registration_token__value)? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             {
@@ -113,7 +113,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 if Repository::<Postgresql<User>>::is_exist_1(
                     &postgresql_database_1_client,
                     UserBy1 {
-                        user__nickname: incoming.user__nickname.as_str(),
+                        user__nickname: incoming.user__nickname,
                     },
                 )
                 .await?
@@ -123,7 +123,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 if Repository::<Postgresql<User>>::is_exist_2(
                     &postgresql_database_1_client,
                     UserBy2 {
-                        user__email: incoming.user__email.as_str(),
+                        user__email: incoming.user__email,
                     },
                 )
                 .await?
@@ -142,8 +142,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 ) = match Repository::<Postgresql<UserRegistrationToken>>::find_2(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy {
-                        user__email: incoming.user__email.as_str(),
-                        user_device__id: incoming.user_device__id.as_str(),
+                        user__email: incoming.user__email,
+                        user_device__id: incoming.user_device__id,
                     },
                 )
                 .await?
@@ -157,8 +157,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     Repository::<Postgresql<UserRegistrationToken>>::delete(
                         &postgresql_database_2_client,
                         UserRegistrationTokenBy {
-                            user__email: incoming.user__email.as_str(),
-                            user_device__id: incoming.user_device__id.as_str(),
+                            user__email: incoming.user__email,
+                            user_device__id: incoming.user_device__id,
                         },
                     )
                     .await?;
@@ -175,8 +175,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                         Repository::<Postgresql<UserRegistrationToken>>::update_4(
                             &postgresql_database_2_client,
                             UserRegistrationTokenBy {
-                                user__email: incoming.user__email.as_str(),
-                                user_device__id: incoming.user_device__id.as_str(),
+                                user__email: incoming.user__email,
+                                user_device__id: incoming.user_device__id,
                             },
                         )
                         .await?;
@@ -184,8 +184,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                         Repository::<Postgresql<UserRegistrationToken>>::delete(
                             &postgresql_database_2_client,
                             UserRegistrationTokenBy {
-                                user__email: incoming.user__email.as_str(),
-                                user_device__id: incoming.user_device__id.as_str(),
+                                user__email: incoming.user__email,
+                                user_device__id: incoming.user_device__id,
                             },
                         )
                         .await?;
@@ -193,10 +193,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_WrongValue));
                 }
             }
+            let user__password = incoming.user__password.to_string();
             let user__password_hash = crate::result_return_runtime!(
                 Spawner::<TokioBlockingTask>::spawn_processed(
                     move || -> _ {
-                        return Encoder::<User_Password>::encode(incoming.user__password.as_str());
+                        return Encoder::<User_Password>::encode(user__password.as_str());
                     },
                 )
                 .await
@@ -219,7 +220,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 transaction.get_client(),
                 UserAccessRefreshTokenInsert {
                     user__id,
-                    user_device__id: incoming.user_device__id.as_str(),
+                    user_device__id: incoming.user_device__id,
                     user_access_token__id: user_access_token__id.as_str(),
                     user_access_refresh_token__obfuscation_value: user_access_refresh_token__obfuscation_value.as_str(),
                     user_access_refresh_token__expires_at,
@@ -234,8 +235,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             if let Result::Err(aggregate_error) = Repository::<Postgresql<UserRegistrationToken>>::delete(
                 transaction.get_client(),
                 UserRegistrationTokenBy {
-                    user__email: incoming.user__email.as_str(),
-                    user_device__id: incoming.user_device__id.as_str(),
+                    user__email: incoming.user__email,
+                    user_device__id: incoming.user_device__id,
                 },
             )
             .await
@@ -247,8 +248,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 &postgresql_database_1_client,
                 UserInsert2 {
                     user__id,
-                    user__email: incoming.user__email.as_str(),
-                    user__nickname: incoming.user__nickname.as_str(),
+                    user__email: incoming.user__email,
+                    user__nickname: incoming.user__nickname,
                     user__password_hash: user__password_hash.as_str(),
                     user__created_at,
                 },
@@ -272,25 +273,26 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 &inner.environment_configuration.subject.encryption.private_key,
                 user_access_token__id.as_str(),
                 user__id,
-                incoming.user_device__id.as_str(),
+                incoming.user_device__id,
                 user_access_token__expires_at,
             )?;
             let user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
                 user__id,
-                incoming.user_device__id.as_str(),
+                incoming.user_device__id,
                 user_access_token__id.as_str(),
                 user_access_refresh_token__obfuscation_value.as_str(),
                 user_access_refresh_token__expires_at,
                 user_access_refresh_token__updated_at,
             )?;
             let postgresql_connection_pool_database_1 = inner.postgresql_connection_pool_database_1.clone();
+            let user_device__id = incoming.user_device__id.to_string();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     let user_device = Repository::<Postgresql<UserDevice>>::create(
                         &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
                         UserDeviceInsert {
-                            user_device__id: incoming.user_device__id.as_str(),
+                            user_device__id: user_device__id.as_str(),
                             user__id,
                         },
                     )

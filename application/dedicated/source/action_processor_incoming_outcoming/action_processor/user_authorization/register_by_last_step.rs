@@ -11,12 +11,12 @@ use crate::{
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
-pub struct Incoming {
-    pub user_device__id: String,
-    pub user__nickname: String,
-    pub user__password: String,
-    pub user__email: String,
-    pub user_registration_token__value: String,
+pub struct Incoming<'a> {
+    pub user_device__id: &'a str,
+    pub user__nickname: &'a str,
+    pub user__password: &'a str,
+    pub user__email: &'a str,
+    pub user_registration_token__value: &'a str,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

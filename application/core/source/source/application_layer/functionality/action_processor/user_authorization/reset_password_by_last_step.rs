@@ -68,21 +68,21 @@ use {
 };
 pub struct UserAuthorization_ResetPasswordByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastStep> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Validator::<UserResetPasswordToken_Value>::is_valid(incoming.user_reset_password_token__value.as_str())? {
+            if !Validator::<UserResetPasswordToken_Value>::is_valid(incoming.user_reset_password_token__value)? {
                 return Result::Err(crate::new_invalid_argument!());
             }
             if !Validator::<User_Id>::is_valid(incoming.user__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<User_Password>::is_valid_part_1(incoming.user__password.as_str()) {
+            if !Validator::<User_Password>::is_valid_part_1(incoming.user__password) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             {
@@ -96,7 +96,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy {
                         user__id: incoming.user__id,
-                        user_device__id: incoming.user_device__id.as_str(),
+                        user_device__id: incoming.user_device__id,
                     },
                 )
                 .await?
@@ -111,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                         &postgresql_database_2_client,
                         UserResetPasswordTokenBy {
                             user__id: incoming.user__id,
-                            user_device__id: incoming.user_device__id.as_str(),
+                            user_device__id: incoming.user_device__id,
                         },
                     )
                     .await?;
@@ -129,7 +129,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                             &postgresql_database_2_client,
                             UserResetPasswordTokenBy {
                                 user__id: incoming.user__id,
-                                user_device__id: incoming.user_device__id.as_str(),
+                                user_device__id: incoming.user_device__id,
                             },
                         )
                         .await?;
@@ -138,7 +138,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                             &postgresql_database_2_client,
                             UserResetPasswordTokenBy {
                                 user__id: incoming.user__id,
-                                user_device__id: incoming.user_device__id.as_str(),
+                                user_device__id: incoming.user_device__id,
                             },
                         )
                         .await?;
@@ -164,17 +164,18 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 }
             };
             if !Validator::<User_Password>::is_valid_part_2(
-                incoming.user__password.as_str(),
+                incoming.user__password,
                 user__email.as_str(),
                 user__nickname.as_str(),
             ) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let user__password_hash___old = user__password_hash;
+            let user__password = incoming.user__password.to_string();
             user__password_hash = crate::result_return_runtime!(
                 Spawner::<TokioBlockingTask>::spawn_processed(
                     move || -> _ {
-                        return Encoder::<User_Password>::encode(incoming.user__password.as_str());
+                        return Encoder::<User_Password>::encode(user__password.as_str());
                     },
                 )
                 .await
@@ -201,7 +202,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 transaction.get_client(),
                 UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
-                    user_device__id: incoming.user_device__id.as_str(),
+                    user_device__id: incoming.user_device__id,
                 },
             )
             .await

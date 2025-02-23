@@ -7,8 +7,8 @@ use crate::common_precedent::CommonPrecedent;
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
-pub struct Incoming {
-    pub user_device__id: String,
+pub struct Incoming<'a> {
+    pub user_device__id: &'a str,
     pub user__id: i64,
 }
 #[cfg_attr(

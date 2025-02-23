@@ -7,10 +7,10 @@ use crate::common_precedent::CommonPrecedent;
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
-pub struct Incoming {
-    pub user__email: String,
-    pub user_device__id: String,
-    pub user_registration_token__value: String,
+pub struct Incoming<'a> {
+    pub user__email: &'a str,
+    pub user_device__id: &'a str,
+    pub user_registration_token__value: &'a str,
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {

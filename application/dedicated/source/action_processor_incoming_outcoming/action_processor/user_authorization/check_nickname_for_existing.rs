@@ -6,8 +6,8 @@
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
-pub struct Incoming {
-    pub user__nickname: String,
+pub struct Incoming<'a> {
+    pub user__nickname: &'a str,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

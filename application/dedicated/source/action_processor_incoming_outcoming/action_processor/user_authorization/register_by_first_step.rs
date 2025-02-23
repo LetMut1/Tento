@@ -7,9 +7,9 @@ use crate::common_precedent::CommonPrecedent;
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
-pub struct Incoming {
-    pub user__email: String,
-    pub user_device__id: String,
+pub struct Incoming<'a> {
+    pub user__email: &'a str,
+    pub user_device__id: &'a str,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

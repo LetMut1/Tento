@@ -67,23 +67,26 @@ use {
         },
         unified_report::UnifiedReport,
     },
-    std::future::Future,
+    std::{
+        future::Future,
+        borrow::Cow,
+    },
 };
 pub struct UserAuthorization_AuthorizeByFirstStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Validator::<User_Password>::is_valid_part_1(incoming.user__password.as_str()) {
+            if !Validator::<User_Password>::is_valid_part_1(incoming.user__password) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
-            let (user__id, user__email, user__nickname, user__password_hash) = if Validator::<User_Email>::is_valid(incoming.user__email___or___user__nickname.as_str())? {
+            let (user__id, user__email, user__nickname, user__password_hash) = if Validator::<User_Email>::is_valid(incoming.user__email___or___user__nickname)? {
                 let (
                     user__id,
                     user__nickname,
@@ -91,7 +94,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 ) = match Repository::<Postgresql<User>>::find_3(
                     &postgresql_database_1_client,
                     UserBy2 {
-                        user__email: incoming.user__email___or___user__nickname.as_str(),
+                        user__email: incoming.user__email___or___user__nickname,
                     },
                 )
                 .await?
@@ -103,12 +106,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 };
                 (
                     user__id,
-                    incoming.user__email___or___user__nickname,
-                    user__nickname,
+                    Cow::Borrowed(incoming.user__email___or___user__nickname),
+                    Cow::Owned(user__nickname),
                     user__password_hash,
                 )
             } else {
-                if Validator::<User_Nickname>::is_valid(incoming.user__email___or___user__nickname.as_str()) {
+                if Validator::<User_Nickname>::is_valid(incoming.user__email___or___user__nickname) {
                     let (
                         user__id,
                         user__email,
@@ -116,7 +119,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                     ) = match Repository::<Postgresql<User>>::find_2(
                         &postgresql_database_1_client,
                         UserBy1 {
-                            user__nickname: incoming.user__email___or___user__nickname.as_str(),
+                            user__nickname: incoming.user__email___or___user__nickname,
                         },
                     )
                     .await?
@@ -128,8 +131,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                     };
                     (
                         user__id,
-                        user__email,
-                        incoming.user__email___or___user__nickname,
+                        Cow::Owned(user__email),
+                        Cow::Borrowed(incoming.user__email___or___user__nickname),
                         user__password_hash,
                     )
                 } else {
@@ -137,16 +140,17 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 }
             };
             if !Validator::<User_Password>::is_valid_part_2(
-                incoming.user__password.as_str(),
-                user__email.as_str(),
-                user__nickname.as_str(),
+                incoming.user__password,
+                user__email.as_ref(),
+                user__nickname.as_ref(),
             ) {
                 return Result::Err(crate::new_invalid_argument!());
             }
+            let user__password = incoming.user__password.to_string();
             let is_valid_join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
                 move || -> _ {
                     return Encoder::<User_Password>::is_valid(
-                        incoming.user__password.as_str(),
+                        user__password.as_str(),
                         user__password_hash.as_str(),
                     );
                 },
@@ -161,7 +165,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                     &postgresql_database_2_client,
                     UserAuthorizationTokenBy {
                         user__id,
-                        user_device__id: incoming.user_device__id.as_str(),
+                        user_device__id: incoming.user_device__id,
                     },
                 )
                 .await?
@@ -205,7 +209,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                 },
                                 UserAuthorizationTokenBy {
                                     user__id,
-                                    user_device__id: incoming.user_device__id.as_str(),
+                                    user_device__id: incoming.user_device__id,
                                 },
                             )
                             .await?;
@@ -218,7 +222,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                     },
                                     UserAuthorizationTokenBy {
                                         user__id,
-                                        user_device__id: incoming.user_device__id.as_str(),
+                                        user_device__id: incoming.user_device__id,
                                     },
                                 )
                                 .await?;
@@ -233,7 +237,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                     },
                                     UserAuthorizationTokenBy {
                                         user__id,
-                                        user_device__id: incoming.user_device__id.as_str(),
+                                        user_device__id: incoming.user_device__id,
                                     },
                                 )
                                 .await?;
@@ -254,7 +258,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             &postgresql_database_2_client,
                             UserAuthorizationTokenInsert {
                                 user__id,
-                                user_device__id: incoming.user_device__id.as_str(),
+                                user_device__id: incoming.user_device__id,
                                 user_authorization_token__value: user_authorization_token__value_.as_str(),
                                 user_authorization_token__wrong_enter_tries_quantity: user_authorization_token__wrong_enter_tries_quantity_,
                                 user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from_,
@@ -272,13 +276,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 };
             if can_send {
                 let environment_configuration = inner.environment_configuration;
+                let user__email_ = user__email.into_owned();
+                let user_device__id = incoming.user_device__id.to_string();
                 Spawner::<TokioNonBlockingTask>::spawn_into_background(
                     async move {
                         EmailSender::<UserAuthorizationToken>::repeatable_send(
                             &environment_configuration.subject.resource.email_server,
                             user_authorization_token__value.as_str(),
-                            user__email.as_str(),
-                            incoming.user_device__id.as_str(),
+                            user__email_.as_str(),
+                            user_device__id.as_str(),
                         )
                         .await?;
                         return Result::Ok(());

@@ -60,7 +60,7 @@ use {
 };
 pub struct UserAuthorization_SendEmailForResetPassword;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPassword> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
@@ -68,7 +68,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             if !Validator::<User_Id>::is_valid(incoming.user__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let user__email = match Repository::<Postgresql<User>>::find_6(
@@ -94,7 +94,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 &postgresql_database_2_client,
                 UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
-                    user_device__id: incoming.user_device__id.as_str(),
+                    user_device__id: incoming.user_device__id,
                 },
             )
             .await?
@@ -110,7 +110,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy {
                         user__id: incoming.user__id,
-                        user_device__id: incoming.user_device__id.as_str(),
+                        user_device__id: incoming.user_device__id,
                     },
                 )
                 .await?;
@@ -130,18 +130,19 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 },
                 UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
-                    user_device__id: incoming.user_device__id.as_str(),
+                    user_device__id: incoming.user_device__id,
                 },
             )
             .await?;
             let environment_configuration = inner.environment_configuration;
+            let user_device__id = incoming.user_device__id.to_string();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     EmailSender::<UserResetPasswordToken>::repeatable_send(
                         &environment_configuration.subject.resource.email_server,
                         user_reset_password_token__value.as_str(),
                         user__email.as_str(),
-                        incoming.user_device__id.as_str(),
+                        user_device__id.as_str(),
                     )
                     .await?;
                     return Result::Ok(());

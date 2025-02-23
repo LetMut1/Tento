@@ -80,7 +80,7 @@ use {
 };
 pub struct UserAuthorization_AuthorizeByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
@@ -88,10 +88,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             if !Validator::<User_Id>::is_valid(incoming.user__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<UserAuthorizationToken_Value>::is_valid(incoming.user_authorization_token__value.as_str())? {
+            if !Validator::<UserAuthorizationToken_Value>::is_valid(incoming.user_authorization_token__value)? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let mut postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
@@ -103,7 +103,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 &postgresql_database_2_client,
                 UserAuthorizationTokenBy {
                     user__id: incoming.user__id,
-                    user_device__id: incoming.user_device__id.as_str(),
+                    user_device__id: incoming.user_device__id,
                 },
             )
             .await?
@@ -119,7 +119,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     &postgresql_database_2_client,
                     UserAuthorizationTokenBy {
                         user__id: incoming.user__id,
-                        user_device__id: incoming.user_device__id.as_str(),
+                        user_device__id: incoming.user_device__id,
                     },
                 )
                 .await?;
@@ -134,7 +134,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                         &postgresql_database_2_client,
                         UserAuthorizationTokenBy {
                             user__id: incoming.user__id,
-                            user_device__id: incoming.user_device__id.as_str(),
+                            user_device__id: incoming.user_device__id,
                         },
                     )
                     .await?;
@@ -143,7 +143,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                         &postgresql_database_2_client,
                         UserAuthorizationTokenBy {
                             user__id: incoming.user__id,
-                            user_device__id: incoming.user_device__id.as_str(),
+                            user_device__id: incoming.user_device__id,
                         },
                     )
                     .await?;
@@ -176,7 +176,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenBy2 {
                     user__id: incoming.user__id,
-                    user_device__id: incoming.user_device__id.as_str(),
+                    user_device__id: incoming.user_device__id,
                 },
             )
             .await?;
@@ -196,7 +196,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     },
                     UserAccessRefreshTokenBy2 {
                         user__id: incoming.user__id,
-                        user_device__id: incoming.user_device__id.as_str(),
+                        user_device__id: incoming.user_device__id,
                     },
                 )
                 .await
@@ -209,7 +209,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     transaction.get_client(),
                     UserAccessRefreshTokenInsert {
                         user__id: incoming.user__id,
-                        user_device__id: incoming.user_device__id.as_str(),
+                        user_device__id: incoming.user_device__id,
                         user_access_token__id: user_access_token__id.as_str(),
                         user_access_refresh_token__obfuscation_value: user_access_refresh_token__obfuscation_value.as_str(),
                         user_access_refresh_token__expires_at,
@@ -226,7 +226,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 transaction.get_client(),
                 UserAuthorizationTokenBy {
                     user__id: incoming.user__id,
-                    user_device__id: incoming.user_device__id.as_str(),
+                    user_device__id: incoming.user_device__id,
                 },
             )
             .await
@@ -239,25 +239,26 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 &inner.environment_configuration.subject.encryption.private_key,
                 user_access_token__id.as_str(),
                 incoming.user__id,
-                incoming.user_device__id.as_str(),
+                incoming.user_device__id,
                 user_access_token__expires_at,
             )?;
             let user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
                 incoming.user__id,
-                incoming.user_device__id.as_str(),
+                incoming.user_device__id,
                 user_access_token__id.as_str(),
                 user_access_refresh_token__obfuscation_value.as_str(),
                 user_access_refresh_token__expires_at,
                 user_access_refresh_token__updated_at,
             )?;
             let postgresql_connection_pool_database_1 = inner.postgresql_connection_pool_database_1.clone();
+            let user_device__id = incoming.user_device__id.to_string();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     let user_device = Repository::<Postgresql<UserDevice>>::create(
                         &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
                         UserDeviceInsert {
-                            user_device__id: incoming.user_device__id.as_str(),
+                            user_device__id: user_device__id.as_str(),
                             user__id: incoming.user__id,
                         },
                     )
