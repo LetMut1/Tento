@@ -15,7 +15,8 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<User>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert) -> impl Future<Output = Result<User, AggregateError>> + Send + use<'a> {
+    // user__id: i64,
+    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1<'a>) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -69,17 +70,11 @@ impl Repository<Postgresql<User>> {
                 .await
             );
             return Result::Ok(
-                User::new(
-                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                    insert.user__email,
-                    insert.user__nickname,
-                    insert.user__password_hash,
-                    insert.user__created_at,
-                ),
+                crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))
             );
         };
     }
-    pub fn create_2<'a>(database_1_client: &'a Client, user: &'a User) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn create_2<'a>(database_1_client: &'a Client, insert: Insert2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -99,23 +94,23 @@ impl Repository<Postgresql<User>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage
                 .add(
-                    &user.id,
+                    &insert.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &user.email,
+                    &insert.user__email,
                     Type::TEXT,
                 )
                 .add(
-                    &user.nickname,
+                    &insert.user__nickname,
                     Type::TEXT,
                 )
                 .add(
-                    &user.password_hash,
+                    &insert.user__password_hash,
                     Type::TEXT,
                 )
                 .add(
-                    &user.created_at,
+                    &insert.user__created_at,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
@@ -613,10 +608,17 @@ impl Repository<Postgresql<User>> {
         };
     }
 }
-pub struct Insert {
-    pub user__email: String,
-    pub user__nickname: String,
-    pub user__password_hash: String,
+pub struct Insert1<'a> {
+    pub user__email: &'a str,
+    pub user__nickname: &'a str,
+    pub user__password_hash: &'a str,
+    pub user__created_at: i64,
+}
+pub struct Insert2<'a> {
+    pub user__id: i64,
+    pub user__email: &'a str,
+    pub user__nickname: &'a str,
+    pub user__password_hash: &'a str,
     pub user__created_at: i64,
 }
 pub struct Update<'a> {

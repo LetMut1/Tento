@@ -47,6 +47,7 @@ use {
                         IsolationLevel,
                         Postgresql,
                         Resolver as Resolver_,
+                        UserInsert2,
                         Transaction,
                         UserBy1,
                         UserBy2,
@@ -202,13 +203,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             )?;
             let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             let user__id = Repository::<Postgresql<User>>::get_id(&postgresql_database_1_client).await?;
-            let user = User::new(
-                user__id,
-                incoming.user__email,
-                incoming.user__nickname,
-                user__password_hash,
-                now,
-            );
+            let user__created_at = now;
             let user_access_token__id = Generator::<UserAccessToken_Id>::generate();
             let user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
@@ -223,7 +218,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::create_1(
                 transaction.get_client(),
                 &UserAccessRefreshTokenInsert {
-                    user__id: user.id,
+                    user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                     user_access_token__id: user_access_token__id.as_str(),
                     user_access_refresh_token__obfuscation_value: user_access_refresh_token__obfuscation_value.as_str(),
@@ -239,7 +234,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             if let Result::Err(aggregate_error) = Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                 transaction.get_client(),
                 UserRegistrationTokenBy {
-                    user__email: user.email.as_str(),
+                    user__email: incoming.user__email.as_str(),
                     user_device__id: incoming.user_device__id.as_str(),
                 },
             )
@@ -250,7 +245,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             }
             if let Result::Err(aggregate_error) = Repository::<Postgresql<User>>::create_2(
                 &postgresql_database_1_client,
-                &user,
+                UserInsert2 {
+                    user__id,
+                    user__email: incoming.user__email.as_str(),
+                    user__nickname: incoming.user__nickname.as_str(),
+                    user__password_hash: user__password_hash.as_str(),
+                    user__created_at,
+                },
             )
             .await
             {
@@ -261,7 +262,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 Repository::<Postgresql<User>>::delete_1(
                     &postgresql_database_1_client,
                     UserBy3 {
-                        user__id: user.id,
+                        user__id,
                     },
                 )
                 .await?;
@@ -270,7 +271,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             let user_access_token_encoded = Encoder::<UserAccessToken>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
                 user_access_token__id.as_str(),
-                user.id,
+                user__id,
                 incoming.user_device__id.as_str(),
                 user_access_token__expires_at,
             )?;

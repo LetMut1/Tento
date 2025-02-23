@@ -44,7 +44,7 @@ use {
                         Postgresql,
                         UserBy1,
                         UserDeviceInsert,
-                        UserInsert,
+                        UserInsert1,
                     },
                     Repository,
                 },
@@ -159,15 +159,14 @@ impl CommandProcessor<CreateFixtures> {
                     Option::None => {
                         Repository::<Postgresql<User>>::create_1(
                             &postgresql_database_1_client,
-                            UserInsert {
-                                user__email,
-                                user__nickname: user__nickname.clone(),
-                                user__password_hash: user__password_hash.clone(),
+                            UserInsert1 {
+                                user__email: user__email.as_str(),
+                                user__nickname: user__nickname.as_str(),
+                                user__password_hash: user__password_hash.as_str(),
                                 user__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
                             },
                         )
                         .await?
-                        .id
                     }
                 };
                 let user_device__id = format!(

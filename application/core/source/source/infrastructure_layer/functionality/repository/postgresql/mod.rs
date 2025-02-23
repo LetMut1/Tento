@@ -24,7 +24,8 @@ pub use self::{
         By1 as UserBy1,
         By2 as UserBy2,
         By3 as UserBy3,
-        Insert as UserInsert,
+        Insert1 as UserInsert1,
+        Insert2 as UserInsert2,
         Update as UserUpdate,
     },
     user_access_refresh_token::{
