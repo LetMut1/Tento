@@ -1,1 +1,0 @@
-pub use dedicated::entity::user::*;
