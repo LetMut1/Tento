@@ -53,7 +53,7 @@ use {
 };
 pub struct UserAuthorization_RefreshAccessToken;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
@@ -65,7 +65,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 user_access_token__expires_at,
             ) = Encoder::<UserAccessToken>::decode(
                 &inner.environment_configuration.subject.encryption.private_key,
-                &incoming.user_access_token_encoded,
+                &incoming.user_access_token_signed,
             )?;
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (
@@ -132,7 +132,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             )
             .await?;
             let outcoming = Outcoming {
-                user_access_token_encoded: Encoder::<UserAccessToken>::encode(
+                user_access_token_signed: Encoder::<UserAccessToken>::encode(
                     &inner.environment_configuration.subject.encryption.private_key,
                     new___user_access_token__id.as_str(),
                     user__id,

@@ -235,7 +235,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 return Result::Err(aggregate_error);
             }
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
-            let user_access_token_encoded = Encoder::<UserAccessToken>::encode(
+            let user_access_token_signed = Encoder::<UserAccessToken>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
                 user_access_token__id.as_str(),
                 incoming.user__id,
@@ -267,7 +267,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 },
             );
             let outcoming = Outcoming {
-                user_access_token_encoded,
+                user_access_token_signed,
                 user_access_refresh_token_encoded,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));

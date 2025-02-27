@@ -53,7 +53,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
         return async move {
             let user__id = match Extractor::<UserAccessToken>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,
-                &incoming.user_access_token_encoded,
+                &incoming.user_access_token_signed,
             )? {
                 Extracted::Data {
                     user_access_token__id: _,

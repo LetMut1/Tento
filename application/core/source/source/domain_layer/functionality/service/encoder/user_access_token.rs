@@ -20,7 +20,10 @@ use {
             },
         },
     },
-    dedicated::user_access_token_encoded::UserAccessTokenEncoded,
+    dedicated::user_access_token_signed::{
+        UserAccessTokenSigned,
+        UserAccessTokenSigned_,
+    },
 };
 impl Encoder<UserAccessToken> {
     pub fn encode<'a>(
@@ -29,8 +32,8 @@ impl Encoder<UserAccessToken> {
         user__id: i64,
         user_device__id: &'a str,
         user_access_token__expires_at: i64,
-    ) -> Result<UserAccessTokenEncoded, AggregateError> {
-        let user_access_token_serialized = Serializer::<BitCode>::serialize(
+    ) -> Result<UserAccessTokenSigned_, AggregateError> {
+        let serialized = Serializer::<BitCode>::serialize(
             &Data {
                 user_access_token__id,
                 user__id,
@@ -38,14 +41,17 @@ impl Encoder<UserAccessToken> {
                 user_access_token__expires_at,
             },
         )?;
-        let user_access_token_encoded = Encoder_::<HmacSha3_512>::encode(
+        let signature = Encoder_::<HmacSha3_512>::encode(
             private_key.user_access_token.as_bytes(),
-            user_access_token_serialized.as_slice(),
+            serialized.as_slice(),
         )?;
         return Result::Ok(
-            UserAccessTokenEncoded {
-                serialized: user_access_token_serialized,
-                encoded: user_access_token_encoded,
+            UserAccessTokenSigned_ {
+                user_access_token__id: user_access_token__id.to_string(),
+                user__id,
+                user_device__id: user_device__id.to_string(),
+                user_access_token__expires_at,
+                singature,
             },
         );
     }
@@ -53,26 +59,28 @@ impl Encoder<UserAccessToken> {
     // user__id: i64,
     // user_device__id: &'a str,
     // user_access_token__expires_at: i64,
-    pub fn decode<'a>(private_key: &'static PrivateKey, user_access_token_encoded: &'a UserAccessTokenEncoded) -> Result<(&'a str, i64, &'a str, i64), AggregateError> {
+    pub fn decode<'a>(private_key: &'static PrivateKey, user_access_token_signed: &'a UserAccessTokenSigned) -> Result<(&'a str, i64, &'a str, i64), AggregateError> {
         if !Encoder_::<HmacSha3_512>::is_valid(
             private_key.user_access_token.as_bytes(),
-            user_access_token_encoded.serialized.as_slice(),
-            user_access_token_encoded.encoded.as_slice(),
+            Serializer::<BitCode>::serialize(
+                &Data {
+                    user_access_token__id: user_access_token_signed.user_access_token__id,
+                    user__id: user_access_token_signed.user__id,
+                    user_device__id: user_access_token_signed.user_device__id,
+                    user_access_token__expires_at: user_access_token_signed.user_access_token__expires_at,
+                },
+            )?
+            .as_slice(),
+            user_access_token_signed.singature,
         )? {
             return Result::Err(crate::new_invalid_argument!());
         }
-        let Data {
-            user_access_token__id,
-            user__id,
-            user_device__id,
-            user_access_token__expires_at,
-        } = Serializer::<BitCode>::deserialize::<'_, Data<'a>>(user_access_token_encoded.serialized.as_slice())?;
         return Result::Ok(
             (
-                user_access_token__id,
-                user__id,
-                user_device__id,
-                user_access_token__expires_at,
+                user_access_token_signed.user_access_token__id,
+                user_access_token_signed.user__id,
+                user_access_token_signed.user_device__id,
+                user_access_token_signed.user_access_token__expires_at,
             ),
         )
     }

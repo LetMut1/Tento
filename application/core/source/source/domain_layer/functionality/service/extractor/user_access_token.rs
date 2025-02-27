@@ -16,14 +16,14 @@ use {
             },
         },
     },
-    dedicated::user_access_token_encoded::UserAccessTokenEncoded,
+    dedicated::user_access_token_signed::UserAccessTokenSigned,
 };
 impl Extractor<UserAccessToken> {
     // user_access_token__id: &'a str,
     // user__id: i64,
     // user_device__id: &'a str,
     // user_access_token__expires_at: i64,
-    pub fn extract<'a>(private_key: &'static PrivateKey, user_access_token_encoded: &'a UserAccessTokenEncoded) -> Result<Extracted<'a>, AggregateError> {
+    pub fn extract<'a>(private_key: &'static PrivateKey, user_access_token_signed: &'a UserAccessTokenSigned) -> Result<Extracted<'a>, AggregateError> {
         let (
             user_access_token__id,
             user__id,
@@ -31,7 +31,7 @@ impl Extractor<UserAccessToken> {
             user_access_token__expires_at,
         ) = Encoder::<UserAccessToken>::decode(
             private_key,
-            user_access_token_encoded,
+            user_access_token_signed,
         )?;
         if user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
             return Result::Ok(Extracted::AlreadyExpired);

@@ -44,14 +44,14 @@ use {
 };
 pub struct UserAuthorization_DeauthorizeFromAllDevices;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromAllDevices> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             let user__id = match Extractor::<UserAccessToken>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,
-                &incoming.user_access_token_encoded,
+                &incoming.user_access_token_signed,
             )? {
                 Extracted::Data {
                     user_access_token__id: _,

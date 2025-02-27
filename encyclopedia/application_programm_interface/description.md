@@ -1,9 +1,12 @@
 # Data standards
-- `user_access_token_encoded`:
+- `user_access_token_signed`:
 ```
 struct UserAccessTokenEncoded {
-    serialized: Vec<u8>,
-    encoded: Vec<u8>,
+    user_access_token__id: String,
+    user__id: i64,
+    user_device__id: String,
+    user_access_token__expires_at: i64,
+    signature: Vec<u8>,
 }
 ```
 - `user_access_refresh_token_encoded`:
@@ -48,14 +51,14 @@ enum Data<D> {
 <br/><br/>
 
 # API for authorized user.
- Every endpoint at this area requires an existing of `user_access_token_encoded`.
+ Every endpoint at this area requires an existing of `user_access_token_signed`.
  - ## UserAuthorization_DeauthorizeFromOneDevice POST /user_authorization/deauthorize_from_one_device
 ```
 Deauthorizes user from one device.
 ```
 ```
 struct Incoming {
-    user_access_token_encoded: <Data standards>
+    user_access_token_signed: <Data standards>
 }
 ```
 ```
@@ -70,7 +73,7 @@ Deauthorizes user from all devices.
 ```
 ```
 struct Incoming {
-    user_access_token_encoded: <Data standards>
+    user_access_token_signed: <Data standards>
 }
 ```
 ```
@@ -85,7 +88,7 @@ Checks linked name for existing.
 ```
 ```
 struct Incoming {
-    user_access_token_encoded: <Data standards>,
+    user_access_token_signed: <Data standards>,
     channel__linked_name: String,
 }
 ```
@@ -106,7 +109,7 @@ Checks name for existing.
 ```
 ```
 struct Incoming {
-    user_access_token_encoded: <Data standards>,
+    user_access_token_signed: <Data standards>,
     channel__name: String,
 }
 ```
@@ -127,7 +130,7 @@ Creates channel.
 ```
 ```
 struct Incoming {
-    user_access_token_encoded: <Data standards>,
+    user_access_token_signed: <Data standards>,
     channel__name: String,
     channel__linked_name: String,
     channel__access_modifier: i16,
@@ -153,7 +156,7 @@ Returns channel data by id.
 ```
 ```
 struct Incoming {
-    user_access_token_encoded: <Data standards>
+    user_access_token_signed: <Data standards>
     channel__id: i64
 }
 ```
@@ -187,7 +190,7 @@ Returns channels the user is subscribed to by name.
 ```
 ```
 struct Incoming {
-    user_access_token_encoded: <Data standards>
+    user_access_token_signed: <Data standards>
     channel__name: String,
     requery___channel__name: Option<String>,
     limit: i16
@@ -228,7 +231,7 @@ Returns channels the user is subscribed to.
 ```
 ```
 struct Incoming {
-    user_access_token_encoded: <Data standards>
+    user_access_token_signed: <Data standards>
     requery___channel__id: Option<i64>,
     limit: i16
 }
@@ -268,7 +271,7 @@ Returns public channels by name.
 ```
 ```
 struct Incoming {
-    user_access_token_encoded: <Data standards>
+    user_access_token_signed: <Data standards>
     channel__name: String,
     requery___channel__name: Option<String>,
     limit: i16
@@ -310,7 +313,7 @@ Subscribes user to channel.
 ```
 ```
 struct Incoming {
-    user_access_token_encoded: <Data standards>
+    user_access_token_signed: <Data standards>
     channel__id: i64
 }
 ```
@@ -420,7 +423,7 @@ struct Incoming {
 ```
 ```
 struct Outcoming {
-    user_access_token_encoded: <Data standards>
+    user_access_token_signed: <Data standards>
     user_access_refresh_token_encoded: <Data standards>
 }
 ```
@@ -500,7 +503,7 @@ struct Incoming {
 ```
 ```
 struct Outcoming {
-    user_access_token_encoded: <Data standards>
+    user_access_token_signed: <Data standards>
     user_access_refresh_token_encoded: <Data standards>
 }
 ```
@@ -633,13 +636,13 @@ Refreshs user access token.
 ```
 ```
 struct Incoming {
-    user_access_token_encoded: <Data standards>
+    user_access_token_signed: <Data standards>
     user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
 struct Outcoming {
-    user_access_token_encoded: <Data standards>
+    user_access_token_signed: <Data standards>
     user_access_refresh_token_encoded: <Data standards>
 }
 ```

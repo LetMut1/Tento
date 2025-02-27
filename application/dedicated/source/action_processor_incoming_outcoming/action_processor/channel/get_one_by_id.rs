@@ -1,6 +1,6 @@
 use crate::{
     common_precedent::CommonPrecedent,
-    user_access_token_encoded::UserAccessTokenEncoded,
+    user_access_token_signed::UserAccessTokenSigned,
 };
 #[cfg_attr(
     feature = "serde_for_manual_test",
@@ -10,8 +10,8 @@ use crate::{
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
-pub struct Incoming {
-    pub user_access_token_encoded: UserAccessTokenEncoded,
+pub struct Incoming<'a> {
+    pub user_access_token_signed: UserAccessTokenSigned<'a>,
     pub channel__id: i64,
 }
 #[cfg_attr(

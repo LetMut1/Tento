@@ -44,14 +44,14 @@ use {
 };
 pub struct Channel_GetManyBySubscription;
 impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
-    type Incoming<'a> = Incoming;
+    type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             let user__id = match Extractor::<UserAccessToken>::extract(
                 &inner.environment_configuration.subject.encryption.private_key,
-                &incoming.user_access_token_encoded,
+                &incoming.user_access_token_signed,
             )? {
                 Extracted::Data {
                     user_access_token__id: _,

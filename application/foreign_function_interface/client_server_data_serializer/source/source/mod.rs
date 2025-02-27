@@ -114,7 +114,7 @@ use {
             UnifiedReport,
         },
         user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded as UserAccessRefreshTokenEncoded_,
-        user_access_token_encoded::UserAccessTokenEncoded as UserAccessTokenEncoded_,
+        user_access_token_signed::UserAccessTokenSigned as UserAccessTokenEncoded_,
         void::Void,
     },
     libc::{
@@ -607,7 +607,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                         let outcoming = UserAuthorization_AuthorizeByLastStep_Outcoming {
                             user_access_token_encoded: UserAccessTokenEncoded {
                                 serialized: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.serialized),
-                                encoded: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.encoded),
+                                encoded: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.singature),
                             },
                             user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_encoded.0)),
                         };
@@ -804,7 +804,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__seria
                 UserAuthorization_DeauthorizeFromAllDevices_Incoming_ {
                     user_access_token_encoded: UserAccessTokenEncoded_ {
                         serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                        encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                        singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                     },
                 },
             );
@@ -884,7 +884,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__serial
                 UserAuthorization_DeauthorizeFromOneDevice_Incoming_ {
                     user_access_token_encoded: UserAccessTokenEncoded_ {
                         serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                        encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                        singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                     },
                 },
             );
@@ -948,7 +948,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__serialize_all
             UserAuthorization_RefreshAccessToken_Incoming_ {
                 user_access_token_encoded: UserAccessTokenEncoded_ {
                     serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                    encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                    singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                 },
                 user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(incoming_.user_access_refresh_token_encoded.0.clone_as_vec()?),
             },
@@ -995,7 +995,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
                         let outcoming = UserAuthorization_RefreshAccessToken_Outcoming {
                             user_access_token_encoded: UserAccessTokenEncoded {
                                 serialized: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.serialized),
-                                encoded: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.encoded),
+                                encoded: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.singature),
                             },
                             user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_encoded.0)),
                         };
@@ -1288,7 +1288,7 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
                         let outcoming = UserAuthorization_RegisterByLastStep_Outcoming {
                             user_access_token_encoded: UserAccessTokenEncoded {
                                 serialized: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.serialized),
-                                encoded: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.encoded),
+                                encoded: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.singature),
                             },
                             user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_encoded.0)),
                         };
@@ -2003,7 +2003,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__serialize_a
             Channel_GetManyByNameInSubscriptions_Incoming_ {
                 user_access_token_encoded: UserAccessTokenEncoded_ {
                     serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                    encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                    singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                 },
                 channel__name: incoming_.channel__name.get_as_str()?,
                 requery___channel__name,
@@ -2152,7 +2152,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__serialize_allocate(i
             Channel_GetManyBySubscription_Incoming_ {
                 user_access_token_encoded: UserAccessTokenEncoded_ {
                     serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                    encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                    singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                 },
                 requery___channel__id,
                 limit: incoming_.limit,
@@ -2301,7 +2301,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_allocate(in
             Channel_GetManyPublicByName_Incoming_ {
                 user_access_token_encoded: UserAccessTokenEncoded_ {
                     serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                    encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                    singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                 },
                 channel__name: incoming_.channel__name.get_as_str()?,
                 requery___channel__name,
@@ -2446,7 +2446,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__serialize_allocate(incoming: Ch
             Channel_GetOneById_Incoming_ {
                 user_access_token_encoded: UserAccessTokenEncoded_ {
                     serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                    encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                    singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
             },
@@ -2596,7 +2596,7 @@ pub extern "C-unwind" fn channel_subscription__create__serialize_allocate(incomi
             ChannelSubscription_Create_Incoming_ {
                 user_access_token_encoded: UserAccessTokenEncoded_ {
                     serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                    encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                    singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
             },
@@ -3173,7 +3173,7 @@ mod test {
                 let outcoming = UserAuthorization_AuthorizeByLastStep_Outcoming_ {
                     user_access_token_encoded: UserAccessTokenEncoded_ {
                         serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
-                        encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                        singature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                     user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                 };
@@ -3323,7 +3323,7 @@ mod test {
                 let outcoming = UserAuthorization_RefreshAccessToken_Outcoming_ {
                     user_access_token_encoded: UserAccessTokenEncoded_ {
                         serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
-                        encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                        singature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                     user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                 };
@@ -3428,7 +3428,7 @@ mod test {
                 let outcoming = UserAuthorization_RegisterByLastStep_Outcoming_ {
                     user_access_token_encoded: UserAccessTokenEncoded_ {
                         serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
-                        encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                        singature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                     user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                 };
