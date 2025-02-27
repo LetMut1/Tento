@@ -71,7 +71,7 @@ impl Encoder<UserAccessToken> {
                 },
             )?
             .as_slice(),
-            user_access_token_signed.singature,
+            user_access_token_signed.singature.as_slice(),
         )? {
             return Result::Err(crate::new_invalid_argument!());
         }
