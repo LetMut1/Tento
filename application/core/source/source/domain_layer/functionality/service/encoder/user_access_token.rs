@@ -51,7 +51,7 @@ impl Encoder<UserAccessToken> {
                 user__id,
                 user_device__id: user_device__id.to_string(),
                 user_access_token__expires_at,
-                singature,
+                signature,
             },
         );
     }

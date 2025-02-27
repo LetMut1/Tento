@@ -27,5 +27,5 @@ pub struct UserAccessTokenSigned_ {
     pub user__id: i64,
     pub user_device__id: String,
     pub user_access_token__expires_at: i64,
-    pub singature: Vec<u8>,
+    pub signature: Vec<u8>,
 }

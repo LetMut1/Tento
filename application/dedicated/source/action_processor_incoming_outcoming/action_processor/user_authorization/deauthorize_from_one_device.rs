@@ -11,6 +11,7 @@ use crate::{
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Incoming<'a> {
+    #[cfg_attr(feature = "serde_for_manual_test", serde(borrow))]
     pub user_access_token_signed: UserAccessTokenSigned<'a>,
 }
 crate::common_precedent::enum_from!(
