@@ -114,7 +114,7 @@ use {
             UnifiedReport,
         },
         user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded as UserAccessRefreshTokenEncoded_,
-        user_access_token_signed::UserAccessTokenSigned as UserAccessTokenEncoded_,
+        user_access_token_signed::UserAccessTokenSigned as UserAccessTokenSigned_,
         void::Void,
     },
     libc::{
@@ -429,12 +429,12 @@ impl Transformer<ServerRequestData> {
 }
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
-pub struct UserAccessTokenEncoded {
+pub struct UserAccessTokenSigned {
     pub user_access_token__id: CString,
     pub user__id: c_long,
     pub user_device__id: CString,
     pub user_access_token__expires_at: c_long,
-    pub encoded: CVector<c_uchar>,
+    pub signature: CVector<c_uchar>,
 }
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
@@ -564,7 +564,7 @@ type UserAuthorization_AuthorizeByLastStep_CResult = CResult<CUnifiedReport<User
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_AuthorizeByLastStep_Outcoming {
-    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_token_signed: UserAccessTokenSigned,
     pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 #[repr(C)]
@@ -597,9 +597,12 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                         data: data__,
                     } => {
                         let outcoming = UserAuthorization_AuthorizeByLastStep_Outcoming {
-                            user_access_token_encoded: UserAccessTokenEncoded {
-                                serialized: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.serialized),
-                                encoded: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.singature),
+                            user_access_token_signed: UserAccessTokenSigned {
+                                user_access_token__id: Allocator::<CString>::allocate(data__.user_access_token_signed.user_access_token__id),
+                                user__id: data__.user_access_token_signed.user__id,
+                                user_device__id: Allocator::<CString>::allocate(data__.user_access_token_signed.user_device__id),
+                                user_access_token__expires_at: data__.user_access_token_signed.user_access_token__expires_at,
+                                signature: Allocator::<CVector<_>>::allocate(data__.user_access_token_signed.signature),
                             },
                             user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_encoded.0)),
                         };
@@ -655,8 +658,9 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize_deallocate(c_result: UserAuthorization_AuthorizeByLastStep_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.serialized);
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.encoded);
+        Allocator::<CString>::deallocate(c_result.data.target.filled.user_access_token_signed.user_access_token__id);
+        Allocator::<CString>::deallocate(c_result.data.target.filled.user_access_token_signed.user_device__id);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_signed.signature);
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_refresh_token_encoded.0);
     }
     return ();
@@ -784,7 +788,7 @@ pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__deseri
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_DeauthorizeFromAllDevices_Incoming {
-    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_token_signed: UserAccessTokenSigned,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__serialize_allocate(
@@ -794,9 +798,12 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__seria
         move |incoming_: &'_ UserAuthorization_DeauthorizeFromAllDevices_Incoming| -> Result<UserAuthorization_DeauthorizeFromAllDevices_Incoming_, Box<dyn StdError + 'static>> {
             return Result::Ok(
                 UserAuthorization_DeauthorizeFromAllDevices_Incoming_ {
-                    user_access_token_encoded: UserAccessTokenEncoded_ {
-                        serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                        singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                    user_access_token_signed: UserAccessTokenSigned_ {
+                        user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                        user__id: incoming_.user_access_token_signed.user__id,
+                        user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                        user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                        singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                     },
                 },
             );
@@ -864,7 +871,7 @@ pub struct UserAuthorization_DeauthorizeFromOneDevice_Precedent {
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_DeauthorizeFromOneDevice_Incoming {
-    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_token_signed: UserAccessTokenSigned,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__serialize_allocate(
@@ -874,9 +881,12 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__serial
         move |incoming_: &'_ UserAuthorization_DeauthorizeFromOneDevice_Incoming| -> Result<UserAuthorization_DeauthorizeFromOneDevice_Incoming_, Box<dyn StdError + 'static>> {
             return Result::Ok(
                 UserAuthorization_DeauthorizeFromOneDevice_Incoming_ {
-                    user_access_token_encoded: UserAccessTokenEncoded_ {
-                        serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                        singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                    user_access_token_signed: UserAccessTokenSigned_ {
+                        user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                        user__id: incoming_.user_access_token_signed.user__id,
+                        user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                        user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                        singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                     },
                 },
             );
@@ -930,7 +940,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deseri
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_RefreshAccessToken_Incoming {
-    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_token_signed: UserAccessTokenSigned,
     pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 #[unsafe(no_mangle)]
@@ -938,9 +948,12 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__serialize_all
     let converter = move |incoming_: &'_ UserAuthorization_RefreshAccessToken_Incoming| -> Result<UserAuthorization_RefreshAccessToken_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             UserAuthorization_RefreshAccessToken_Incoming_ {
-                user_access_token_encoded: UserAccessTokenEncoded_ {
-                    serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                    singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                user_access_token_signed: UserAccessTokenSigned_ {
+                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user__id: incoming_.user_access_token_signed.user__id,
+                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(incoming_.user_access_refresh_token_encoded.0.clone_as_vec()?),
             },
@@ -960,7 +973,7 @@ type UserAuthorization_RefreshAccessToken_CResult = CResult<CUnifiedReport<UserA
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_RefreshAccessToken_Outcoming {
-    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_token_signed: UserAccessTokenSigned,
     pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 #[repr(C)]
@@ -985,9 +998,12 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
                         data: data__,
                     } => {
                         let outcoming = UserAuthorization_RefreshAccessToken_Outcoming {
-                            user_access_token_encoded: UserAccessTokenEncoded {
-                                serialized: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.serialized),
-                                encoded: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.singature),
+                            user_access_token_signed: UserAccessTokenSigned {
+                                user_access_token__id: Allocator::<CString>::allocate(data__.user_access_token_signed.user_access_token__id),
+                                user__id: data__.user_access_token_signed.user__id,
+                                user_device__id: Allocator::<CString>::allocate(data__.user_access_token_signed.user_device__id),
+                                user_access_token__expires_at: data__.user_access_token_signed.user_access_token__expires_at,
+                                signature: Allocator::<CVector<_>>::allocate(data__.user_access_token_signed.signature),
                             },
                             user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_encoded.0)),
                         };
@@ -1026,8 +1042,9 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_deallocate(c_result: UserAuthorization_RefreshAccessToken_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.serialized);
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.encoded);
+        Allocator::<CString>::deallocate(c_result.data.target.filled.user_access_token_signed.user_access_token__id);
+        Allocator::<CString>::deallocate(c_result.data.target.filled.user_access_token_signed.user_device__id);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_signed.signature);
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_refresh_token_encoded.0);
     }
     return ();
@@ -1249,7 +1266,7 @@ type UserAuthorization_RegisterByLastStep_CResult = CResult<CUnifiedReport<UserA
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_RegisterByLastStep_Outcoming {
-    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_token_signed: UserAccessTokenSigned,
     pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 #[repr(C)]
@@ -1278,9 +1295,12 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
                         data: data__,
                     } => {
                         let outcoming = UserAuthorization_RegisterByLastStep_Outcoming {
-                            user_access_token_encoded: UserAccessTokenEncoded {
-                                serialized: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.serialized),
-                                encoded: Allocator::<CVector<_>>::allocate(data__.user_access_token_encoded.singature),
+                            user_access_token_signed: UserAccessTokenSigned {
+                            user_access_token__id: Allocator::<CString>::allocate(data__.user_access_token_signed.user_access_token__id),
+                            user__id: data__.user_access_token_signed.user__id,
+                            user_device__id: Allocator::<CString>::allocate(data__.user_access_token_signed.user_device__id),
+                            user_access_token__expires_at: data__.user_access_token_signed.user_access_token__expires_at,
+                            signature: Allocator::<CVector<_>>::allocate(data__.user_access_token_signed.signature),
                             },
                             user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_encoded.0)),
                         };
@@ -1343,8 +1363,9 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_deallocate(c_result: UserAuthorization_RegisterByLastStep_CResult) -> () {
     if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.serialized);
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_encoded.encoded);
+        Allocator::<CString>::deallocate(c_result.data.target.filled.user_access_token_signed.user_access_token__id);
+        Allocator::<CString>::deallocate(c_result.data.target.filled.user_access_token_signed.user_device__id);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_signed.signature);
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_refresh_token_encoded.0);
     }
     return ();
@@ -1978,7 +1999,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct Channel_GetManyByNameInSubscriptions_Incoming {
-    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__name: CString,
     pub requery___channel__name: COption<CString>,
     pub limit: c_short,
@@ -1993,9 +2014,12 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__serialize_a
         };
         return Result::Ok(
             Channel_GetManyByNameInSubscriptions_Incoming_ {
-                user_access_token_encoded: UserAccessTokenEncoded_ {
-                    serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                    singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                user_access_token_signed: UserAccessTokenSigned_ {
+                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user__id: incoming_.user_access_token_signed.user__id,
+                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__name: incoming_.channel__name.get_as_str()?,
                 requery___channel__name,
@@ -2128,7 +2152,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct Channel_GetManyBySubscription_Incoming {
-    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_token_signed: UserAccessTokenSigned,
     pub requery___channel__id: COption<c_long>,
     pub limit: c_short,
 }
@@ -2142,9 +2166,12 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__serialize_allocate(i
         };
         return Result::Ok(
             Channel_GetManyBySubscription_Incoming_ {
-                user_access_token_encoded: UserAccessTokenEncoded_ {
-                    serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                    singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                user_access_token_signed: UserAccessTokenSigned_ {
+                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user__id: incoming_.user_access_token_signed.user__id,
+                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 requery___channel__id,
                 limit: incoming_.limit,
@@ -2276,7 +2303,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_dealloca
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct Channel_GetManyPublicByName_Incoming {
-    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__name: CString,
     pub requery___channel__name: COption<CString>,
     pub limit: c_short,
@@ -2291,9 +2318,12 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_allocate(in
         };
         return Result::Ok(
             Channel_GetManyPublicByName_Incoming_ {
-                user_access_token_encoded: UserAccessTokenEncoded_ {
-                    serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                    singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                user_access_token_signed: UserAccessTokenSigned_ {
+                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user__id: incoming_.user_access_token_signed.user__id,
+                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__name: incoming_.channel__name.get_as_str()?,
                 requery___channel__name,
@@ -2428,7 +2458,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_deallocat
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct Channel_GetOneById_Incoming {
-    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__id: c_long,
 }
 #[unsafe(no_mangle)]
@@ -2436,9 +2466,12 @@ pub extern "C-unwind" fn channel__get_one_by_id__serialize_allocate(incoming: Ch
     let converter = move |incoming_: &'_ Channel_GetOneById_Incoming| -> Result<Channel_GetOneById_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             Channel_GetOneById_Incoming_ {
-                user_access_token_encoded: UserAccessTokenEncoded_ {
-                    serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                    singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                user_access_token_signed: UserAccessTokenSigned_ {
+                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user__id: incoming_.user_access_token_signed.user__id,
+                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
             },
@@ -2578,7 +2611,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_deallocate(c_result
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct ChannelSubscription_Create_Incoming {
-    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__id: c_long,
 }
 #[unsafe(no_mangle)]
@@ -2586,9 +2619,12 @@ pub extern "C-unwind" fn channel_subscription__create__serialize_allocate(incomi
     let converter = move |incoming_: &'_ ChannelSubscription_Create_Incoming| -> Result<ChannelSubscription_Create_Incoming_, Box<dyn StdError + 'static>> {
         return Result::Ok(
             ChannelSubscription_Create_Incoming_ {
-                user_access_token_encoded: UserAccessTokenEncoded_ {
-                    serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
-                    singature: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                user_access_token_signed: UserAccessTokenSigned_ {
+                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user__id: incoming_.user_access_token_signed.user__id,
+                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
             },
@@ -3101,10 +3137,13 @@ mod test {
         pub mod server_response_data_deserialization {
             use {
                 super::*,
-                dedicated::action_processor_incoming_outcoming::action_processor::channel::{
-                    get_many_public_by_name::Data as Channel_GetManyPublicByName_Data_,
-                    get_many_by_name_in_subscriptions::Data as Channel_GetManyByNameInSubscriptions_Data_,
-                    get_many_by_subscription::Data as Channel_GetManyBySubscription_Data_,
+                dedicated::{
+                    action_processor_incoming_outcoming::action_processor::channel::{
+                        get_many_public_by_name::Data as Channel_GetManyPublicByName_Data_,
+                        get_many_by_name_in_subscriptions::Data as Channel_GetManyByNameInSubscriptions_Data_,
+                        get_many_by_subscription::Data as Channel_GetManyBySubscription_Data_,
+                    },
+                    user_access_token_signed::UserAccessTokenSigned_ as UserAccessTokenSigned__,
                 },
             };
             fn run_by_template<'a, T, E>(
@@ -3163,9 +3202,12 @@ mod test {
             }
             pub fn target_filled__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let outcoming = UserAuthorization_AuthorizeByLastStep_Outcoming_ {
-                    user_access_token_encoded: UserAccessTokenEncoded_ {
-                        serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
-                        singature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                    user_access_token_signed: UserAccessTokenSigned__ {
+                        user_access_token__id: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        user__id: 0,
+                        user_device__id: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        user_access_token__expires_at: 0,
+                        signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                     user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                 };
@@ -3313,9 +3355,12 @@ mod test {
             }
             pub fn target_filled__user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
                 let outcoming = UserAuthorization_RefreshAccessToken_Outcoming_ {
-                    user_access_token_encoded: UserAccessTokenEncoded_ {
-                        serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
-                        singature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                    user_access_token_signed: UserAccessTokenSigned__ {
+                        user_access_token__id: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        user__id: 0,
+                        user_device__id: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        user_access_token__expires_at: 0,
+                        signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                     user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                 };
@@ -3418,9 +3463,12 @@ mod test {
             }
             pub fn target_filled__user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let outcoming = UserAuthorization_RegisterByLastStep_Outcoming_ {
-                    user_access_token_encoded: UserAccessTokenEncoded_ {
-                        serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
-                        singature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                    user_access_token_signed: UserAccessTokenSigned__ {
+                        user_access_token__id: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        user__id: 0,
+                        user_device__id: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        user_access_token__expires_at: 0,
+                        signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                     user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                 };
@@ -3973,9 +4021,12 @@ mod test {
             }
             pub fn user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_DeauthorizeFromAllDevices_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user_access_token__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user__id: 0,
+                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_access_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                 };
                 run_by_template(
@@ -3983,15 +4034,19 @@ mod test {
                     user_authorization__deauthorize_from_all_devices__serialize_allocate,
                     user_authorization__deauthorize_from_all_devices__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 return Result::Ok(());
             }
             pub fn user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_DeauthorizeFromOneDevice_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user_access_token__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user__id: 0,
+                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_access_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                 };
                 run_by_template(
@@ -3999,15 +4054,19 @@ mod test {
                     user_authorization__deauthorize_from_one_device__serialize_allocate,
                     user_authorization__deauthorize_from_one_device__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 return Result::Ok(());
             }
             pub fn user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_RefreshAccessToken_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user_access_token__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user__id: 0,
+                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_access_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec())),
                 };
@@ -4016,8 +4075,9 @@ mod test {
                     user_authorization__refresh_access_token__serialize_allocate,
                     user_authorization__refresh_access_token__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_refresh_token_encoded.0);
                 return Result::Ok(());
             }
@@ -4159,9 +4219,12 @@ mod test {
             }
             pub fn channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel_GetManyByNameInSubscriptions_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user_access_token__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user__id: 0,
+                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_access_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     requery___channel__name: COption::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
@@ -4172,17 +4235,21 @@ mod test {
                     channel__get_many_by_name_in_subscriptions__serialize_allocate,
                     channel__get_many_by_name_in_subscriptions__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CString>::deallocate(incoming.channel__name);
                 Allocator::<CString>::deallocate(incoming.requery___channel__name.data);
                 return Result::Ok(());
             }
             pub fn channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel_GetManyBySubscription_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user_access_token__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user__id: 0,
+                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_access_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     requery___channel__id: COption::data(0),
                     limit: 0,
@@ -4192,15 +4259,19 @@ mod test {
                     channel__get_many_by_subscription__serialize_allocate,
                     channel__get_many_by_subscription__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 return Result::Ok(());
             }
             pub fn channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel_GetManyPublicByName_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user_access_token__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user__id: 0,
+                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_access_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     requery___channel__name: COption::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
@@ -4211,17 +4282,21 @@ mod test {
                     channel__get_many_public_by_name__serialize_allocate,
                     channel__get_many_public_by_name__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CString>::deallocate(incoming.channel__name);
                 Allocator::<CString>::deallocate(incoming.requery___channel__name.data);
                 return Result::Ok(());
             }
             pub fn channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel_GetOneById_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user_access_token__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user__id: 0,
+                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_access_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel__id: 0,
                 };
@@ -4230,15 +4305,19 @@ mod test {
                     channel__get_one_by_id__serialize_allocate,
                     channel__get_one_by_id__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 return Result::Ok(());
             }
             pub fn channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ChannelSubscription_Create_Incoming {
-                    user_access_token_encoded: UserAccessTokenEncoded {
-                        serialized: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
-                        encoded: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user_access_token__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user__id: 0,
+                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_access_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel__id: 0,
                 };
@@ -4247,8 +4326,9 @@ mod test {
                     channel_subscription__create__serialize_allocate,
                     channel_subscription__create__serialize_deallocate,
                 )?;
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.serialized);
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_encoded.encoded);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 return Result::Ok(());
             }
         }

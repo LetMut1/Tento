@@ -59,20 +59,20 @@ typedef struct UserAuthorization_AuthorizeByLastStep_Incoming {
   struct CString user_authorization_token__value;
 } UserAuthorization_AuthorizeByLastStep_Incoming;
 
-typedef struct UserAccessTokenEncoded {
+typedef struct UserAccessTokenSigned {
   struct CString user_access_token__id;
   long user__id;
   struct CString user_device__id;
   long user_access_token__expires_at;
-  struct CVector_c_uchar encoded;
-} UserAccessTokenEncoded;
+  struct CVector_c_uchar signature;
+} UserAccessTokenSigned;
 
 typedef struct UserAccessRefreshTokenEncoded {
   struct CVector_c_uchar _0;
 } UserAccessRefreshTokenEncoded;
 
 typedef struct UserAuthorization_AuthorizeByLastStep_Outcoming {
-  struct UserAccessTokenEncoded user_access_token_encoded;
+  struct UserAccessTokenSigned user_access_token_signed;
   struct UserAccessRefreshTokenEncoded user_access_refresh_token_encoded;
 } UserAuthorization_AuthorizeByLastStep_Outcoming;
 
@@ -163,7 +163,7 @@ typedef struct CResult_CUnifiedReport_UserAuthorization_CheckNicknameForExisting
 typedef struct CResult_CUnifiedReport_UserAuthorization_CheckNicknameForExisting_Outcoming__CVoid UserAuthorization_CheckNicknameForExisting_CResult;
 
 typedef struct UserAuthorization_DeauthorizeFromAllDevices_Incoming {
-  struct UserAccessTokenEncoded user_access_token_encoded;
+  struct UserAccessTokenSigned user_access_token_signed;
 } UserAuthorization_DeauthorizeFromAllDevices_Incoming;
 
 typedef struct CData_CVoid {
@@ -190,7 +190,7 @@ typedef struct CResult_CUnifiedReport_CVoid__UserAuthorization_DeauthorizeFromAl
 typedef struct CResult_CUnifiedReport_CVoid__UserAuthorization_DeauthorizeFromAllDevices_Precedent UserAuthorization_DeauthorizeFromAllDevices_CResult;
 
 typedef struct UserAuthorization_DeauthorizeFromOneDevice_Incoming {
-  struct UserAccessTokenEncoded user_access_token_encoded;
+  struct UserAccessTokenSigned user_access_token_signed;
 } UserAuthorization_DeauthorizeFromOneDevice_Incoming;
 
 typedef struct UserAuthorization_DeauthorizeFromOneDevice_Precedent {
@@ -212,12 +212,12 @@ typedef struct CResult_CUnifiedReport_CVoid__UserAuthorization_DeauthorizeFromOn
 typedef struct CResult_CUnifiedReport_CVoid__UserAuthorization_DeauthorizeFromOneDevice_Precedent UserAuthorization_DeauthorizeFromOneDevice_CResult;
 
 typedef struct UserAuthorization_RefreshAccessToken_Incoming {
-  struct UserAccessTokenEncoded user_access_token_encoded;
+  struct UserAccessTokenSigned user_access_token_signed;
   struct UserAccessRefreshTokenEncoded user_access_refresh_token_encoded;
 } UserAuthorization_RefreshAccessToken_Incoming;
 
 typedef struct UserAuthorization_RefreshAccessToken_Outcoming {
-  struct UserAccessTokenEncoded user_access_token_encoded;
+  struct UserAccessTokenSigned user_access_token_signed;
   struct UserAccessRefreshTokenEncoded user_access_refresh_token_encoded;
 } UserAuthorization_RefreshAccessToken_Outcoming;
 
@@ -318,7 +318,7 @@ typedef struct UserAuthorization_RegisterByLastStep_Incoming {
 } UserAuthorization_RegisterByLastStep_Incoming;
 
 typedef struct UserAuthorization_RegisterByLastStep_Outcoming {
-  struct UserAccessTokenEncoded user_access_token_encoded;
+  struct UserAccessTokenSigned user_access_token_signed;
   struct UserAccessRefreshTokenEncoded user_access_refresh_token_encoded;
 } UserAuthorization_RegisterByLastStep_Outcoming;
 
@@ -552,7 +552,7 @@ typedef struct COption_CString {
 } COption_CString;
 
 typedef struct Channel_GetManyByNameInSubscriptions_Incoming {
-  struct UserAccessTokenEncoded user_access_token_encoded;
+  struct UserAccessTokenSigned user_access_token_signed;
   struct CString channel__name;
   struct COption_CString requery___channel__name;
   short limit;
@@ -606,7 +606,7 @@ typedef struct COption_c_long {
 } COption_c_long;
 
 typedef struct Channel_GetManyBySubscription_Incoming {
-  struct UserAccessTokenEncoded user_access_token_encoded;
+  struct UserAccessTokenSigned user_access_token_signed;
   struct COption_c_long requery___channel__id;
   short limit;
 } Channel_GetManyBySubscription_Incoming;
@@ -654,7 +654,7 @@ typedef struct CResult_CUnifiedReport_Channel_GetManyBySubscription_Outcoming__C
 typedef struct CResult_CUnifiedReport_Channel_GetManyBySubscription_Outcoming__Channel_GetManyBySubscription_Precedent Channel_GetManyBySubscription_CResult;
 
 typedef struct Channel_GetManyPublicByName_Incoming {
-  struct UserAccessTokenEncoded user_access_token_encoded;
+  struct UserAccessTokenSigned user_access_token_signed;
   struct CString channel__name;
   struct COption_CString requery___channel__name;
   short limit;
@@ -704,7 +704,7 @@ typedef struct CResult_CUnifiedReport_Channel_GetManyPublicByName_Outcoming__Cha
 typedef struct CResult_CUnifiedReport_Channel_GetManyPublicByName_Outcoming__Channel_GetManyPublicByName_Precedent Channel_GetManyPublicByName_CResult;
 
 typedef struct Channel_GetOneById_Incoming {
-  struct UserAccessTokenEncoded user_access_token_encoded;
+  struct UserAccessTokenSigned user_access_token_signed;
   long channel__id;
 } Channel_GetOneById_Incoming;
 
@@ -754,7 +754,7 @@ typedef struct CResult_CUnifiedReport_Channel_GetOneById_Outcoming__Channel_GetO
 typedef struct CResult_CUnifiedReport_Channel_GetOneById_Outcoming__Channel_GetOneById_Precedent Channel_GetOneById_CResult;
 
 typedef struct ChannelSubscription_Create_Incoming {
-  struct UserAccessTokenEncoded user_access_token_encoded;
+  struct UserAccessTokenSigned user_access_token_signed;
   long channel__id;
 } ChannelSubscription_Create_Incoming;
 
