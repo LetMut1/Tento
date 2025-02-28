@@ -68,7 +68,8 @@ typedef struct UserAccessTokenSigned {
 } UserAccessTokenSigned;
 
 typedef struct UserAccessRefreshTokenSigned {
-  struct CVector_c_uchar _0;
+  int64_t user_access_refresh_token__expires_at;
+  struct CVector_c_uchar signature;
 } UserAccessRefreshTokenSigned;
 
 typedef struct UserAuthorization_AuthorizeByLastStep_Outcoming {

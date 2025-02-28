@@ -11,7 +11,10 @@ struct UserAccessTokenEncoded {
 ```
 - `user_access_refresh_token_signed`:
 ```
-struct UserAccessRefreshTokenSigned(Vec<u8>)
+struct UserAccessRefreshTokenSigned {
+    user_access_refresh_token__expires_at: i64,
+    signature: Vec<u8>,
+}
 ```
 # Request standards
 - All payload data is transferred in `HTTP Body` and described under each API endpoint as `Incoming`.
