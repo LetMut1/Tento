@@ -1,6 +1,6 @@
 mod field;
 use {
-    self::field::CreatedAt,
+    self::field::ExpiresAt,
     super::{
         user::User_Id,
         channel::{
@@ -14,6 +14,6 @@ pub struct ChannelSubscriptionToken {
     user__id: PhantomData<(i64, User_Id)>,
     channel__id: PhantomData<(i64, Channel_Id)>,
     channel__obfuscation_value: PhantomData<(i64, Channel_ObfuscationValue)>,
-    created_at: PhantomData<(i64, CreatedAt)>,
+    expires_at: PhantomData<(i64, ExpiresAt)>,
 }
-pub type ChannelSubscriptionToken_CreatedAt = CreatedAt;
+pub type ChannelSubscriptionToken_ExpiresAt = ExpiresAt;

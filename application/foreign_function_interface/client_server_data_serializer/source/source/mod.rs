@@ -1,3 +1,4 @@
+// It is necessary to specify permanent target endian in purpose to obtain a permanent hash-function result.
 #![cfg(target_endian = "little")]
 use {
     bitcode::{

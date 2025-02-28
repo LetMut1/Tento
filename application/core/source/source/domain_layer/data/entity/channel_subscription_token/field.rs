@@ -1,1 +1,1 @@
-pub struct CreatedAt;
+pub struct ExpiresAt;
