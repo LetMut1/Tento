@@ -170,15 +170,3 @@ FFI CString get_as_str    Сделать все максимально без а
 
 
 продолжить идти к ChannelSubscriptionToken.
-
-
-
-посмотреть, что где нужно.
-#[cfg_attr(
-    feature = "serde_for_manual_test",
-    derive(
-        serde::Serialize,
-        serde::Deserialize
-    )
-)]
-#[derive(bitcode::Encode, bitcode::Decode)]

@@ -85,14 +85,8 @@ impl Encoder<UserAccessToken> {
         )
     }
 }
-#[cfg_attr(
-    feature = "serde_for_manual_test",
-    derive(
-        serde::Serialize,
-        serde::Deserialize
-    )
-)]
-#[derive(bitcode::Encode, bitcode::Decode)]
+#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize))]
+#[derive(bitcode::Encode)]
 struct Data<'a> {
     user_access_token__id: &'a str,
     user__id: i64,

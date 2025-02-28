@@ -79,14 +79,8 @@ impl Encoder<UserAccessRefreshToken> {
         );
     }
 }
-#[cfg_attr(
-    feature = "serde_for_manual_test",
-    derive(
-        serde::Serialize,
-        serde::Deserialize
-    )
-)]
-#[derive(bitcode::Encode, bitcode::Decode)]
+#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize))]
+#[derive(bitcode::Encode)]
 struct Data<'a> {
     user__id: i64,
     user_device__id: &'a str,
