@@ -276,7 +276,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 incoming.user_device__id,
                 user_access_token__expires_at,
             )?;
-            let user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken>::encode(
+            let user_access_refresh_token_signed = Encoder::<UserAccessRefreshToken>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
                 user__id,
                 incoming.user_device__id,
@@ -302,7 +302,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             );
             let outcoming = Outcoming {
                 user_access_token_signed,
-                user_access_refresh_token_encoded,
+                user_access_refresh_token_signed,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

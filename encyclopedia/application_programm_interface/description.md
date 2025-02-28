@@ -9,9 +9,9 @@ struct UserAccessTokenEncoded {
     signature: Vec<u8>,
 }
 ```
-- `user_access_refresh_token_encoded`:
+- `user_access_refresh_token_signed`:
 ```
-struct UserAccessRefreshTokenEncoded(Vec<u8>)
+struct UserAccessRefreshTokenSigned(Vec<u8>)
 ```
 # Request standards
 - All payload data is transferred in `HTTP Body` and described under each API endpoint as `Incoming`.
@@ -424,7 +424,7 @@ struct Incoming {
 ```
 struct Outcoming {
     user_access_token_signed: <Data standards>
-    user_access_refresh_token_encoded: <Data standards>
+    user_access_refresh_token_signed: <Data standards>
 }
 ```
 ```
@@ -504,7 +504,7 @@ struct Incoming {
 ```
 struct Outcoming {
     user_access_token_signed: <Data standards>
-    user_access_refresh_token_encoded: <Data standards>
+    user_access_refresh_token_signed: <Data standards>
 }
 ```
 ```
@@ -637,13 +637,13 @@ Refreshs user access token.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    user_access_refresh_token_encoded: <Data standards>
+    user_access_refresh_token_signed: <Data standards>
 }
 ```
 ```
 struct Outcoming {
     user_access_token_signed: <Data standards>
-    user_access_refresh_token_encoded: <Data standards>
+    user_access_refresh_token_signed: <Data standards>
 }
 ```
 ```

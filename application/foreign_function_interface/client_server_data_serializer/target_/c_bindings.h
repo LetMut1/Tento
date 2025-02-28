@@ -67,13 +67,13 @@ typedef struct UserAccessTokenSigned {
   struct CVector_c_uchar signature;
 } UserAccessTokenSigned;
 
-typedef struct UserAccessRefreshTokenEncoded {
+typedef struct UserAccessRefreshTokenSigned {
   struct CVector_c_uchar _0;
-} UserAccessRefreshTokenEncoded;
+} UserAccessRefreshTokenSigned;
 
 typedef struct UserAuthorization_AuthorizeByLastStep_Outcoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  struct UserAccessRefreshTokenEncoded user_access_refresh_token_encoded;
+  struct UserAccessRefreshTokenSigned user_access_refresh_token_signed;
 } UserAuthorization_AuthorizeByLastStep_Outcoming;
 
 typedef struct CData_UserAuthorization_AuthorizeByLastStep_Outcoming {
@@ -213,12 +213,12 @@ typedef struct CResult_CUnifiedReport_CVoid__UserAuthorization_DeauthorizeFromOn
 
 typedef struct UserAuthorization_RefreshAccessToken_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  struct UserAccessRefreshTokenEncoded user_access_refresh_token_encoded;
+  struct UserAccessRefreshTokenSigned user_access_refresh_token_signed;
 } UserAuthorization_RefreshAccessToken_Incoming;
 
 typedef struct UserAuthorization_RefreshAccessToken_Outcoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  struct UserAccessRefreshTokenEncoded user_access_refresh_token_encoded;
+  struct UserAccessRefreshTokenSigned user_access_refresh_token_signed;
 } UserAuthorization_RefreshAccessToken_Outcoming;
 
 typedef struct CData_UserAuthorization_RefreshAccessToken_Outcoming {
@@ -319,7 +319,7 @@ typedef struct UserAuthorization_RegisterByLastStep_Incoming {
 
 typedef struct UserAuthorization_RegisterByLastStep_Outcoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  struct UserAccessRefreshTokenEncoded user_access_refresh_token_encoded;
+  struct UserAccessRefreshTokenSigned user_access_refresh_token_signed;
 } UserAuthorization_RegisterByLastStep_Outcoming;
 
 typedef struct CData_UserAuthorization_RegisterByLastStep_Outcoming {

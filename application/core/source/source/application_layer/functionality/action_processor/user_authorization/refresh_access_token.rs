@@ -95,7 +95,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 user_access_refresh_token__obfuscation_value.as_str(),
                 user_access_refresh_token__expires_at,
                 user_access_refresh_token__updated_at,
-                &incoming.user_access_refresh_token_encoded,
+                &incoming.user_access_refresh_token_signed,
             )?;
             if !is_valid || user_access_token__id != user_access_token__id_.as_str() {
                 return Result::Err(crate::new_invalid_argument!());
@@ -139,7 +139,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                     user_device__id,
                     new___user_access_token__expires_at,
                 )?,
-                user_access_refresh_token_encoded: Encoder::<UserAccessRefreshToken>::encode(
+                user_access_refresh_token_signed: Encoder::<UserAccessRefreshToken>::encode(
                     &inner.environment_configuration.subject.encryption.private_key,
                     user__id,
                     user_device__id,

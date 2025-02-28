@@ -113,7 +113,7 @@ use {
             Data,
             UnifiedReport,
         },
-        user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded as UserAccessRefreshTokenEncoded_,
+        user_access_refresh_token_signed::UserAccessRefreshTokenSigned as UserAccessRefreshTokenSigned_,
         user_access_token_signed::UserAccessTokenSigned as UserAccessTokenSigned_,
         void::Void,
     },
@@ -438,7 +438,7 @@ pub struct UserAccessTokenSigned {
 }
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
-pub struct UserAccessRefreshTokenEncoded(pub CVector<c_uchar>);
+pub struct UserAccessRefreshTokenSigned(pub CVector<c_uchar>);
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_AuthorizeByFirstStep_Incoming {
@@ -565,7 +565,7 @@ type UserAuthorization_AuthorizeByLastStep_CResult = CResult<CUnifiedReport<User
 #[derive(Default)]
 pub struct UserAuthorization_AuthorizeByLastStep_Outcoming {
     pub user_access_token_signed: UserAccessTokenSigned,
-    pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
+    pub user_access_refresh_token_signed: UserAccessRefreshTokenSigned,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -604,7 +604,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                                 user_access_token__expires_at: data__.user_access_token_signed.user_access_token__expires_at,
                                 signature: Allocator::<CVector<_>>::allocate(data__.user_access_token_signed.signature),
                             },
-                            user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_encoded.0)),
+                            user_access_refresh_token_signed: UserAccessRefreshTokenSigned(Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_signed.0)),
                         };
                         CData::filled(outcoming)
                     }
@@ -661,7 +661,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
         Allocator::<CString>::deallocate(c_result.data.target.filled.user_access_token_signed.user_access_token__id);
         Allocator::<CString>::deallocate(c_result.data.target.filled.user_access_token_signed.user_device__id);
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_signed.signature);
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_refresh_token_encoded.0);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_refresh_token_signed.0);
     }
     return ();
 }
@@ -941,7 +941,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deseri
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_RefreshAccessToken_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
-    pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
+    pub user_access_refresh_token_signed: UserAccessRefreshTokenSigned,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__refresh_access_token__serialize_allocate(incoming: UserAuthorization_RefreshAccessToken_Incoming) -> CResult<CVector<c_uchar>> {
@@ -955,7 +955,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__serialize_all
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(incoming_.user_access_refresh_token_encoded.0.clone_as_vec()?),
+                user_access_refresh_token_signed: UserAccessRefreshTokenSigned_(incoming_.user_access_refresh_token_signed.0.clone_as_vec()?),
             },
         );
     };
@@ -974,7 +974,7 @@ type UserAuthorization_RefreshAccessToken_CResult = CResult<CUnifiedReport<UserA
 #[derive(Default)]
 pub struct UserAuthorization_RefreshAccessToken_Outcoming {
     pub user_access_token_signed: UserAccessTokenSigned,
-    pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
+    pub user_access_refresh_token_signed: UserAccessRefreshTokenSigned,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -1005,7 +1005,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
                                 user_access_token__expires_at: data__.user_access_token_signed.user_access_token__expires_at,
                                 signature: Allocator::<CVector<_>>::allocate(data__.user_access_token_signed.signature),
                             },
-                            user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_encoded.0)),
+                            user_access_refresh_token_signed: UserAccessRefreshTokenSigned(Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_signed.0)),
                         };
                         CData::filled(outcoming)
                     }
@@ -1045,7 +1045,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_d
         Allocator::<CString>::deallocate(c_result.data.target.filled.user_access_token_signed.user_access_token__id);
         Allocator::<CString>::deallocate(c_result.data.target.filled.user_access_token_signed.user_device__id);
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_signed.signature);
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_refresh_token_encoded.0);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_refresh_token_signed.0);
     }
     return ();
 }
@@ -1267,7 +1267,7 @@ type UserAuthorization_RegisterByLastStep_CResult = CResult<CUnifiedReport<UserA
 #[derive(Default)]
 pub struct UserAuthorization_RegisterByLastStep_Outcoming {
     pub user_access_token_signed: UserAccessTokenSigned,
-    pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
+    pub user_access_refresh_token_signed: UserAccessRefreshTokenSigned,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -1302,7 +1302,7 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
                             user_access_token__expires_at: data__.user_access_token_signed.user_access_token__expires_at,
                             signature: Allocator::<CVector<_>>::allocate(data__.user_access_token_signed.signature),
                             },
-                            user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_encoded.0)),
+                            user_access_refresh_token_signed: UserAccessRefreshTokenSigned(Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_signed.0)),
                         };
                         CData::filled(outcoming)
                     }
@@ -1366,7 +1366,7 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
         Allocator::<CString>::deallocate(c_result.data.target.filled.user_access_token_signed.user_access_token__id);
         Allocator::<CString>::deallocate(c_result.data.target.filled.user_access_token_signed.user_device__id);
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_token_signed.signature);
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_refresh_token_encoded.0);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.user_access_refresh_token_signed.0);
     }
     return ();
 }
@@ -3209,7 +3209,7 @@ mod test {
                         user_access_token__expires_at: 0,
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
-                    user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    user_access_refresh_token_signed: UserAccessRefreshTokenSigned_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                 };
                 let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming_, UserAuthorization_AuthorizeByLastStep_Precedent_>::target_filled(outcoming);
                 return run_by_template(
@@ -3362,7 +3362,7 @@ mod test {
                         user_access_token__expires_at: 0,
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
-                    user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    user_access_refresh_token_signed: UserAccessRefreshTokenSigned_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                 };
                 let unified_report = UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming_, UserAuthorization_RefreshAccessToken_Precedent_>::target_filled(outcoming);
                 return run_by_template(
@@ -3470,7 +3470,7 @@ mod test {
                         user_access_token__expires_at: 0,
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
-                    user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    user_access_refresh_token_signed: UserAccessRefreshTokenSigned_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                 };
                 let unified_report = UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming_, UserAuthorization_RegisterByLastStep_Precedent_>::target_filled(outcoming);
                 return run_by_template(
@@ -4068,7 +4068,7 @@ mod test {
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec())),
+                    user_access_refresh_token_signed: UserAccessRefreshTokenSigned(Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec())),
                 };
                 run_by_template(
                     incoming,
@@ -4078,7 +4078,7 @@ mod test {
                 Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
                 Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
-                Allocator::<CVector<_>>::deallocate(incoming.user_access_refresh_token_encoded.0);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_refresh_token_signed.0);
                 return Result::Ok(());
             }
             pub fn user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {

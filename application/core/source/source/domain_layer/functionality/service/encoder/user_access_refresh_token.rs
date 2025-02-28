@@ -20,7 +20,7 @@ use {
             },
         },
     },
-    dedicated::user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded,
+    dedicated::user_access_refresh_token_signed::UserAccessRefreshTokenSigned,
 };
 impl Encoder<UserAccessRefreshToken> {
     pub fn encode<'a>(
@@ -31,9 +31,9 @@ impl Encoder<UserAccessRefreshToken> {
         user_access_refresh_token__obfuscation_value: &'a str,
         user_access_refresh_token__expires_at: i64,
         user_access_refresh_token__updated_at: i64,
-    ) -> Result<UserAccessRefreshTokenEncoded, AggregateError> {
+    ) -> Result<UserAccessRefreshTokenSigned, AggregateError> {
         return Result::Ok(
-            UserAccessRefreshTokenEncoded(
+            UserAccessRefreshTokenSigned(
                 Encoder_::<HmacSha3_512>::encode(
                     private_key.user_access_refresh_token.as_bytes(),
                     Serializer::<BitCode>::serialize(
@@ -59,7 +59,7 @@ impl Encoder<UserAccessRefreshToken> {
         user_access_refresh_token__obfuscation_value: &'a str,
         user_access_refresh_token__expires_at: i64,
         user_access_refresh_token__updated_at: i64,
-        user_access_refresh_token_encoded: &'a UserAccessRefreshTokenEncoded,
+        user_access_refresh_token_signed: &'a UserAccessRefreshTokenSigned,
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha3_512>::is_valid(
             private_key.user_access_refresh_token.as_bytes(),
@@ -74,7 +74,7 @@ impl Encoder<UserAccessRefreshToken> {
                 },
             )?
             .as_slice(),
-            user_access_refresh_token_encoded.0.as_slice(),
+            user_access_refresh_token_signed.0.as_slice(),
         );
     }
 }
