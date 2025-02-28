@@ -33,8 +33,9 @@ impl Encoder<UserAccessRefreshToken> {
         user_access_refresh_token__updated_at: i64,
     ) -> Result<UserAccessRefreshTokenSigned, AggregateError> {
         return Result::Ok(
-            UserAccessRefreshTokenSigned(
-                Encoder_::<HmacSha3_512>::encode(
+            UserAccessRefreshTokenSigned {
+                user_access_refresh_token__expires_at,
+                signature: Encoder_::<HmacSha3_512>::encode(
                     private_key.user_access_refresh_token.as_bytes(),
                     Serializer::<BitCode>::serialize(
                         &Data {
@@ -48,7 +49,7 @@ impl Encoder<UserAccessRefreshToken> {
                     )?
                     .as_slice(),
                 )?,
-            ),
+            },
         );
     }
     pub fn is_valid<'a>(
@@ -74,7 +75,7 @@ impl Encoder<UserAccessRefreshToken> {
                 },
             )?
             .as_slice(),
-            user_access_refresh_token_signed.0.as_slice(),
+            user_access_refresh_token_signed.signature.as_slice(),
         );
     }
 }

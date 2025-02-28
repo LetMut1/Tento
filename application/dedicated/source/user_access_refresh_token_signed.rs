@@ -1,5 +1,3 @@
-// There is not UserAccessRefreshTokenSigned(pub &'a [u8]), because Bitcode::Decode not implemented
-// for &'a [u8]. Maybe, it will be implemented in a future releases.
 #[cfg_attr(
     feature = "serde_for_manual_test",
     derive(
@@ -8,4 +6,8 @@
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
-pub struct UserAccessRefreshTokenSigned(pub Vec<u8>);
+pub struct UserAccessRefreshTokenSigned {
+    pub user_access_refresh_token__expires_at: i64,
+    // The bitcode(=0.6.3)::Decode not implemented for &'a [u8]. Maybe, it will be implemented in a future releases.
+    pub signature: Vec<u8>,
+}

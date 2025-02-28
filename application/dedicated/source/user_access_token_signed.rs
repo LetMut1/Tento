@@ -11,7 +11,7 @@ pub struct UserAccessTokenSigned<'a> {
     pub user__id: i64,
     pub user_device__id: &'a str,
     pub user_access_token__expires_at: i64,
-    // Bitcode::Decode not implemented for &'a [u8]. Maybe, it will be implemented in a future releases.
+    // The bitcode(=0.6.3)::Decode not implemented for &'a [u8]. Maybe, it will be implemented in a future releases.
     pub singature: Vec<u8>,
 }
 #[cfg_attr(
