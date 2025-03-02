@@ -160,7 +160,13 @@ Returns channel data by id.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    channel__id: i64
+    channel__id: i64,
+    channel_token_hashed: Option<ChannelTokenHashed>
+}
+
+struct ChannelTokenHashed {
+    channel_token__expires_at: i64,
+    hash: u64,
 }
 ```
 ```
@@ -191,6 +197,8 @@ enum Precedent {
     UserAccessToken_InUserAccessTokenBlackList,
     Channel_NotFound,
     Channel_IsClose,
+    ChannelToken_NotFound,
+    ChannelToken_AlreadyExpired,
 }
 ```
  - ## Channel_GetManyByNameInSubscriptions POST (GET) /channel/get_many_by_name_in_subscriptions
@@ -307,7 +315,12 @@ struct Data {
     channel__visability_modifier: i16,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
-    is_user_subscribed: bool,
+    channel_token_hashed_for_unsubscribed_users: Option<ChannelTokenHashed>,
+}
+
+struct ChannelTokenHashed {
+    channel_token__expires_at: i64,
+    hash: u64,
 }
 ```
 ```

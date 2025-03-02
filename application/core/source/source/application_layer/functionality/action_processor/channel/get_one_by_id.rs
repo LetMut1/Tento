@@ -18,6 +18,7 @@ use {
                     ChannelSubscriptionToken,
                 },
                 user_access_token::UserAccessToken,
+                channel_token::ChannelToken,
             },
             functionality::service::{
                 extractor::{
@@ -54,7 +55,6 @@ use {
             Precedent,
         },
         unified_report::UnifiedReport,
-        channel_subscription_token_hashed::ChannelSubscriptionTokenHashed,
     },
     std::future::Future,
 };
@@ -99,6 +99,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 channel__subscribers_quantity,
                 channel__marks_quantity,
                 channel__viewing_quantity,
+                channel__obfuscation_value,
             ) = match Repository::<Postgresql<Channel>>::find_1(
                 &postgresql_database_1_client,
                 ChannelBy1 {
@@ -112,17 +113,46 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }
             };
-            if Channel_AccessModifier::Close as i16 == channel__access_modifier {
-                let is_exist = Repository::<Postgresql<ChannelSubscription>>::is_exist(
-                    &postgresql_database_1_client,
-                    ChannelSubscriptionBy {
-                        user__id,
-                        channel__id: incoming.channel__id,
-                    },
-                )
-                .await?;
-                if !is_exist && user__id != channel__owner {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            if user__id != channel__owner {
+                match incoming.channel_token_hashed {
+                    Option::Some(ref channel_token_hashed) => {
+                        if !Encoder::<ChannelToken>::is_valid(
+                            user__id,
+                            incoming.channel__id,
+                            channel__obfuscation_value,
+                            channel_token_hashed,
+                        )? {
+                            return Result::Err(crate::new_invalid_argument!());
+                        }
+                        if channel_token_hashed.channel_token__expires_at < now {
+                            return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken_AlreadyExpired));
+                        }
+                        if channel__access_modifier == Channel_AccessModifier::Close as i16
+                        && !Repository::<Postgresql<ChannelSubscription>>::is_exist(
+                            &postgresql_database_1_client,
+                            ChannelSubscriptionBy {
+                                user__id,
+                                channel__id: incoming.channel__id,
+                            },
+                        )
+                        .await? {
+                            return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
+                        }
+                    }
+                    Option::None => {
+                        if !Repository::<Postgresql<ChannelSubscription>>::is_exist(
+                            &postgresql_database_1_client,
+                            ChannelSubscriptionBy {
+                                user__id,
+                                channel__id: incoming.channel__id,
+                            },
+                        )
+                        .await?
+                        {
+                            return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken_NotFound));
+                        }
+                    }
                 }
             }
             let outcoming = Outcoming {
@@ -140,12 +170,10 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 user_is_channel_owner: user__id == channel__owner,
                 channel_subscription_token_hashed: Encoder::<ChannelSubscriptionToken>::encode(
                     user__id,
-                    channel__id,
+                    incoming.channel__id,
                     channel__obfuscation_value,
-                    Generator::<ChannelSubscriptionToken_ExpiresAt>::generate(
-                        Resolver::<UnixTime>::get_now_in_seconds(),
-                    )?,
-                )
+                    Generator::<ChannelSubscriptionToken_ExpiresAt>::generate(now)?,
+                )?,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

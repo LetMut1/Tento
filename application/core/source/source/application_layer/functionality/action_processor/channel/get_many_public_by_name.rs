@@ -13,23 +13,35 @@ use {
                     Channel_VisabilityModifier,
                 },
                 user_access_token::UserAccessToken,
+                channel_token::{
+                    ChannelToken,
+                    ChannelToken_ExpiresAt,
+                }
             },
             functionality::service::{
                 extractor::{
                     Extracted,
                     Extractor,
                 },
+                encoder::Encoder,
                 validator::Validator,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::repository::{
-                postgresql::{
-                    ChannelBy4,
-                    Postgresql,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        ChannelBy4,
+                        Postgresql,
+                    },
+                    Repository,
                 },
-                Repository,
+                service::resolver::{
+                    Resolver,
+                    UnixTime,
+                }
             },
         },
     },
@@ -92,17 +104,31 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                 incoming.limit,
             )
             .await?;
+        let now = Resolver::<UnixTime>::get_now_in_seconds();
             let mut data_registry: Vec<Data> = vec![];
             '_a: for row in rows.iter() {
+                let channel__id = crate::result_return_logic!(row.try_get::<'_, usize, i64>(0));
+                let channel_token_hashed_for_unsubscribed_users = if crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7)).is_some() {
+                    Option::None
+                } else {
+                    Option::Some(
+                        Encoder::<ChannelToken>::encode(
+                            user__id,
+                            channel__id,
+                            crate::result_return_logic!(row.try_get::<'_, usize, i64>(6)),
+                            Generator::<ChannelToken_ExpiresAt>::generate(now)?,
+                        )?,
+                    )
+                };
                 let data = Data {
-                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel__id,
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
                     channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
                     channel__visability_modifier,
                     channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(4)),
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
-                    is_user_subscribed: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)).is_some(),
+                    channel_token_hashed_for_unsubscribed_users,
                 };
                 data_registry.push(data);
             }

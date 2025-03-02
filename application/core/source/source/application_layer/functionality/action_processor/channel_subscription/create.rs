@@ -106,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 incoming.channel__id,
                 channel__obfuscation_value,
                 &incoming.channel_subscription_token_hashed,
-            ) {
+            )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let now = Resolver::<UnixTime>::get_now_in_seconds();

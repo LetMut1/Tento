@@ -1,6 +1,7 @@
 use crate::{
     common_precedent::CommonPrecedent,
     user_access_token_signed::UserAccessTokenSigned,
+    channel_token_hashed::ChannelTokenHashed,
 };
 #[cfg_attr(
     feature = "serde_for_manual_test",
@@ -32,7 +33,7 @@ pub struct Data {
     pub channel__visability_modifier: i16,
     pub channel__cover_image_path: Option<String>,
     pub channel__background_image_path: Option<String>,
-    pub is_user_subscribed: bool,
+    pub channel_token_hashed_for_unsubscribed_users: Option<ChannelTokenHashed>,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

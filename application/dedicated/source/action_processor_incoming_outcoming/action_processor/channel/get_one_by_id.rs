@@ -2,6 +2,7 @@ use crate::{
     common_precedent::CommonPrecedent,
     user_access_token_signed::UserAccessTokenSigned,
     channel_subscription_token_hashed::ChannelSubscriptionTokenHashed,
+    channel_token_hashed::ChannelTokenHashed,
 };
 #[cfg_attr(
     feature = "serde_for_manual_test",
@@ -15,6 +16,8 @@ pub struct Incoming<'a> {
     #[cfg_attr(feature = "serde_for_manual_test", serde(borrow))]
     pub user_access_token_signed: UserAccessTokenSigned<'a>,
     pub channel__id: i64,
+    // It CAN (not MUST) be Option::None for users already subscribed on this channel
+    pub channel_token_hashed: Option<ChannelTokenHashed>,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",
@@ -45,5 +48,7 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::UserAccessToken_InUserAccessTokenBlackList,
         CommonPrecedent::Channel_NotFound,
         CommonPrecedent::Channel_IsClose,
+        CommonPrecedent::ChannelToken_NotFound,
+        CommonPrecedent::ChannelToken_AlreadyExpired,
     }
 );

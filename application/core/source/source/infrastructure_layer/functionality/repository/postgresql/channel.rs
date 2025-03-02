@@ -192,24 +192,26 @@ impl Repository<Postgresql<Channel>> {
     // channel__subscribers_quantity: i64,
     // channel__marks_quantity: i64,
     // channel__viewing_quantity: i64,
+    // channel__obfuscation_value: i64,
     pub fn find_1<'a>(
         database_1_client: &'a Client, by: By1,
-    ) -> impl Future<Output = Result<Option<(i64, String, String, Option<String>, i16, i16, Vec<i16>, Option<String>, Option<String>, i64, i64, i64)>, AggregateError>> + Send + use<'a> {
+    ) -> impl Future<Output = Result<Option<(i64, String, String, Option<String>, i16, i16, Vec<i16>, Option<String>, Option<String>, i64, i64, i64, i64)>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
-                    c.owner AS ow,\
+                    c.owner AS o1,\
                     c.name AS n,\
                     c.linked_name AS ln,\
                     c.description AS d,\
                     c.access_modifier AS am,\
                     c.visability_modifier AS vm,\
-                    c.orientation AS or,\
+                    c.orientation AS o2,\
                     c.cover_image_path AS cip,\
                     c.background_image_path AS bip,\
                     c.subscribers_quantity,\
                     c.marks_quantity AS mq,\
-                    c.viewing_quantity AS vq \
+                    c.viewing_quantity AS vq,\
+                    c.obfuscation_value AS ov \
                 FROM \
                     public.channel c \
                 WHERE \
@@ -253,6 +255,7 @@ impl Repository<Postgresql<Channel>> {
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(9)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(10)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(11)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(12)),
                     ),
                 ),
             );
@@ -317,6 +320,7 @@ impl Repository<Postgresql<Channel>> {
                     c.access_modifier AS am,\
                     c.cover_image_path AS cip,\
                     c.background_image_path AS bip,\
+                    c.obfuscation_value AS ov,\
                     cs.channel__id AS ca \
                 FROM \
                     public.channel c \

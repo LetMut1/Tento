@@ -8,3 +8,4 @@ pub mod unified_report;
 pub mod user_access_refresh_token_signed;
 pub mod user_access_token_signed;
 pub mod void;
+pub mod channel_token_hashed;

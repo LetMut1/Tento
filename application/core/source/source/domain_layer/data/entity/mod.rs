@@ -11,3 +11,4 @@ pub mod user_device;
 pub mod user_registration_token;
 pub mod user_reset_password_token;
 pub mod channel_subscription_token;
+pub mod channel_token;
