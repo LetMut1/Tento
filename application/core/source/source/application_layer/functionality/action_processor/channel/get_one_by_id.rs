@@ -13,6 +13,10 @@ use {
                     Channel_Id,
                 },
                 channel_subscription::ChannelSubscription,
+                channel_subscription_token::{
+                    ChannelSubscriptionToken_ExpiresAt,
+                    ChannelSubscriptionToken,
+                },
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
@@ -21,17 +25,25 @@ use {
                     Extractor,
                 },
                 validator::Validator,
+                encoder::Encoder,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::repository::{
-                postgresql::{
-                    ChannelBy1,
-                    ChannelSubscriptionBy,
-                    Postgresql,
+            functionality::{
+                repository::{
+                    postgresql::{
+                        ChannelBy1,
+                        ChannelSubscriptionBy,
+                        Postgresql,
+                    },
+                    Repository,
                 },
-                Repository,
+                service::resolver::{
+                    Resolver,
+                    UnixTime,
+                },
             },
         },
     },
@@ -42,6 +54,7 @@ use {
             Precedent,
         },
         unified_report::UnifiedReport,
+        channel_subscription_token_hashed::ChannelSubscriptionTokenHashed,
     },
     std::future::Future,
 };
@@ -125,6 +138,14 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 channel__marks_quantity,
                 channel__viewing_quantity,
                 user_is_channel_owner: user__id == channel__owner,
+                channel_subscription_token_hashed: Encoder::<ChannelSubscriptionToken>::encode(
+                    user__id,
+                    channel__id,
+                    channel__obfuscation_value,
+                    Generator::<ChannelSubscriptionToken_ExpiresAt>::generate(
+                        Resolver::<UnixTime>::get_now_in_seconds(),
+                    )?,
+                )
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

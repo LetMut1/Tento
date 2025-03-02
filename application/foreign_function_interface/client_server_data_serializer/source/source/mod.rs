@@ -121,6 +121,7 @@ use {
     libc::{
         c_char,
         c_long,
+        c_ulong,
         c_short,
         c_uchar,
         size_t,
@@ -440,8 +441,14 @@ pub struct UserAccessTokenSigned {
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
 pub struct UserAccessRefreshTokenSigned {
-    pub user_access_refresh_token__expires_at: i64,
+    pub user_access_refresh_token__expires_at: c_long,
     pub signature: CVector<c_uchar>,
+}
+#[repr(C)]
+#[derive(Default, Clone, Copy)]
+pub struct ChannelSubscriptionTokenHashed {
+    pub channel_subscription_token__expires_at: c_long,
+    pub hash: c_ulong,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -2519,6 +2526,8 @@ pub struct Channel_GetOneById_Outcoming {
     pub channel__marks_quantity: c_long,
     pub channel__viewing_quantity: c_long,
     pub user_is_channel_owner: bool,
+    pub channel_subscription_token_hashed: ChannelSubscriptionTokenHashed,
+
 }
 #[repr(C)]
 #[derive(Default)]
@@ -2561,8 +2570,12 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                             channel__background_image_path,
                             channel__subscribers_quantity: data__.channel__subscribers_quantity,
                             channel__marks_quantity: data__.channel__marks_quantity,
-                            channel__viewing_quantity: data__. channel__viewing_quantity,
+                            channel__viewing_quantity: data__.channel__viewing_quantity,
                             user_is_channel_owner: data__.user_is_channel_owner,
+                            channel_subscription_token_hashed: ChannelSubscriptionTokenHashed {
+                                channel_subscription_token__expires_at: data__.channel_subscription_token_hashed.channel_subscription_token__expires_at,
+                                hash: data__.channel_subscription_token_hashed.hash,
+                            },
                         };
                         CData::filled(outcoming)
                     }
@@ -3160,6 +3173,7 @@ mod test {
                         get_many_by_subscription::Data as Channel_GetManyBySubscription_Data_,
                     },
                     user_access_token_signed::UserAccessTokenSigned_ as UserAccessTokenSigned__,
+                    channel_subscription_token_hashed::ChannelSubscriptionTokenHashed as ChannelSubscriptionTokenHashed_,
                 },
             };
             fn run_by_template<'a, T, E>(
@@ -3920,6 +3934,10 @@ mod test {
                     channel__marks_quantity: 0,
                     channel__viewing_quantity: 0,
                     user_is_channel_owner: true,
+                    channel_subscription_token_hashed: ChannelSubscriptionTokenHashed_ {
+                        channel_subscription_token__expires_at: 0,
+                        hash: 0,
+                    },
                 };
                 let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>::target_filled(outcoming);
                 return run_by_template(

@@ -68,7 +68,7 @@ typedef struct UserAccessTokenSigned {
 } UserAccessTokenSigned;
 
 typedef struct UserAccessRefreshTokenSigned {
-  int64_t user_access_refresh_token__expires_at;
+  long user_access_refresh_token__expires_at;
   struct CVector_c_uchar signature;
 } UserAccessRefreshTokenSigned;
 
@@ -714,6 +714,11 @@ typedef struct CVector_c_short {
   size_t length;
 } CVector_c_short;
 
+typedef struct ChannelSubscriptionTokenHashed {
+  long channel_subscription_token__expires_at;
+  unsigned long hash;
+} ChannelSubscriptionTokenHashed;
+
 typedef struct Channel_GetOneById_Outcoming {
   struct CString channel__name;
   struct CString channel__linked_name;
@@ -727,6 +732,7 @@ typedef struct Channel_GetOneById_Outcoming {
   long channel__marks_quantity;
   long channel__viewing_quantity;
   bool user_is_channel_owner;
+  struct ChannelSubscriptionTokenHashed channel_subscription_token_hashed;
 } Channel_GetOneById_Outcoming;
 
 typedef struct CData_Channel_GetOneById_Outcoming {

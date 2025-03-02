@@ -150,7 +150,7 @@ enum Precedent {
 ```
 ```
 struct Outcoming {
-    pub channel__id: i64,
+    channel__id: i64,
 }
 ```
  - ## Channel_GetOneById POST (GET) /channel/get_one_by_id
@@ -165,18 +165,24 @@ struct Incoming {
 ```
 ```
 struct Outcoming {
-    pub channel__name: String,
-    pub channel__linked_name: String,
-    pub channel__description: Option<String>,
-    pub channel__access_modifier: i16,
-    pub channel__visability_modifier: i16,
-    pub channel__orientation: Vec<i16>,
-    pub channel__cover_image_path: Option<String>,
-    pub channel__background_image_path: Option<String>,
-    pub channel__subscribers_quantity: i64,
-    pub channel__marks_quantity: i64,
-    pub channel__viewing_quantity: i64,
-    pub user_is_channel_owner: bool,
+    channel__name: String,
+    channel__linked_name: String,
+    channel__description: Option<String>,
+    channel__access_modifier: i16,
+    channel__visability_modifier: i16,
+    channel__orientation: Vec<i16>,
+    channel__cover_image_path: Option<String>,
+    channel__background_image_path: Option<String>,
+    channel__subscribers_quantity: i64,
+    channel__marks_quantity: i64,
+    channel__viewing_quantity: i64,
+    user_is_channel_owner: bool,
+    channel_subscription_token_hashed: ChannelSubscriptionTokenHashed,
+}
+
+struct ChannelSubscriptionTokenHashed {
+    channel_subscription_token__expires_at: i64,
+    hash: u64,
 }
 ```
 ```

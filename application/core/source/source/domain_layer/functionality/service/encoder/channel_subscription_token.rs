@@ -56,7 +56,10 @@ impl Encoder<ChannelSubscriptionToken> {
     ) -> Result<bool, AggregateError> {
         return Result::Ok(
             Self::encode(
-                user__id, channel__id, channel__obfuscation_value, channel_subscription_token_hashed.channel_subscription_token__expires_at,
+                user__id,
+                channel__id,
+                channel__obfuscation_value,
+                channel_subscription_token_hashed.channel_subscription_token__expires_at,
             )?.hash == channel_subscription_token_hashed.hash,
         );
     }

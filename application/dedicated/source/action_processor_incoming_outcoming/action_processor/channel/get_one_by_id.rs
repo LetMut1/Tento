@@ -1,6 +1,7 @@
 use crate::{
     common_precedent::CommonPrecedent,
     user_access_token_signed::UserAccessTokenSigned,
+    channel_subscription_token_hashed::ChannelSubscriptionTokenHashed,
 };
 #[cfg_attr(
     feature = "serde_for_manual_test",
@@ -36,6 +37,7 @@ pub struct Outcoming {
     pub channel__marks_quantity: i64,
     pub channel__viewing_quantity: i64,
     pub user_is_channel_owner: bool,
+    pub channel_subscription_token_hashed: ChannelSubscriptionTokenHashed,
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
