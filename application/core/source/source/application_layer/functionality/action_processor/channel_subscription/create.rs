@@ -14,6 +14,7 @@ use {
                 },
                 channel_subscription::ChannelSubscription,
                 user_access_token::UserAccessToken,
+                channel_subscription_token::ChannelSubscriptionToken,
             },
             functionality::service::{
                 extractor::{
@@ -21,6 +22,7 @@ use {
                     Extractor,
                 },
                 validator::Validator,
+                encoder::Encoder,
             },
         },
         infrastructure_layer::{
@@ -85,6 +87,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             let (
                 channel__owner,
                 channel__access_modifier,
+                channel__obfuscation_value,
             ) = match Repository::<Postgresql<Channel>>::find_2(
                 &postgresql_database_1_client,
                 ChannelBy1 {
@@ -98,6 +101,18 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }
             };
+            if !Encoder::<ChannelSubscriptionToken>::is_valid(
+                user__id,
+                incoming.channel__id,
+                channel__obfuscation_value,
+                &incoming.channel_subscription_token_hashed,
+            ) {
+                return Result::Err(crate::new_invalid_argument!());
+            }
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            if incoming.channel_subscription_token_hashed.channel_subscription_token__expires_at < now {
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken_AlreadyExpired));
+            }
             if channel__owner == user__id {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
             }
@@ -114,7 +129,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 ChannelSubscriptionInsert {
                     user__id,
                     channel__id: incoming.channel__id,
-                    channel_subscription__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
+                    channel_subscription__created_at: now,
                 }
             )
             .await

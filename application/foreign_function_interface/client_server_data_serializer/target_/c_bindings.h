@@ -763,6 +763,7 @@ typedef struct CResult_CUnifiedReport_Channel_GetOneById_Outcoming__Channel_GetO
 typedef struct ChannelSubscription_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   long channel__id;
+  struct ChannelSubscriptionTokenHashed channel_subscription_token_hashed;
 } ChannelSubscription_Create_Incoming;
 
 typedef struct ChannelSubscription_Create_Precedent {
@@ -771,6 +772,7 @@ typedef struct ChannelSubscription_Create_Precedent {
   bool channel__not_found;
   bool channel__is_close;
   bool user__is_channel__owner;
+  bool channel_subscription_token__already_expired;
 } ChannelSubscription_Create_Precedent;
 
 typedef struct CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent {

@@ -117,6 +117,7 @@ use {
         user_access_refresh_token_signed::UserAccessRefreshTokenSigned as UserAccessRefreshTokenSigned_,
         user_access_token_signed::UserAccessTokenSigned as UserAccessTokenSigned_,
         void::Void,
+        channel_subscription_token_hashed::ChannelSubscriptionTokenHashed as ChannelSubscriptionTokenHashed_,
     },
     libc::{
         c_char,
@@ -2642,6 +2643,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_deallocate(c_result
 pub struct ChannelSubscription_Create_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__id: c_long,
+    pub channel_subscription_token_hashed: ChannelSubscriptionTokenHashed,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__create__serialize_allocate(incoming: ChannelSubscription_Create_Incoming) -> CResult<CVector<c_uchar>> {
@@ -2656,6 +2658,10 @@ pub extern "C-unwind" fn channel_subscription__create__serialize_allocate(incomi
                     singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
+                channel_subscription_token_hashed: ChannelSubscriptionTokenHashed_ {
+                    channel_subscription_token__expires_at: incoming_.channel_subscription_token_hashed.channel_subscription_token__expires_at,
+                    hash: incoming_.channel_subscription_token_hashed.hash,
+                },
             },
         );
     };
@@ -2678,6 +2684,7 @@ pub struct ChannelSubscription_Create_Precedent {
     pub channel__not_found: bool,
     pub channel__is_close: bool,
     pub user__is_channel__owner: bool,
+    pub channel_subscription_token__already_expired: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Create_CResult {
@@ -2713,6 +2720,12 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
                     ChannelSubscription_Create_Precedent_::User_IsChannelOwner => {
                         ChannelSubscription_Create_Precedent {
                             user__is_channel__owner: true,
+                            ..Default::default()
+                        }
+                    }
+                    ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken_AlreadyExpired => {
+                        ChannelSubscription_Create_Precedent {
+                            channel_subscription_token__already_expired: true,
                             ..Default::default()
                         }
                     }
@@ -3173,7 +3186,6 @@ mod test {
                         get_many_by_subscription::Data as Channel_GetManyBySubscription_Data_,
                     },
                     user_access_token_signed::UserAccessTokenSigned_ as UserAccessTokenSigned__,
-                    channel_subscription_token_hashed::ChannelSubscriptionTokenHashed as ChannelSubscriptionTokenHashed_,
                 },
             };
             fn run_by_template<'a, T, E>(
@@ -3991,6 +4003,7 @@ mod test {
                 precedents.push(ChannelSubscription_Create_Precedent_::Channel_NotFound);
                 precedents.push(ChannelSubscription_Create_Precedent_::Channel_IsClose);
                 precedents.push(ChannelSubscription_Create_Precedent_::User_IsChannelOwner);
+                precedents.push(ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken_AlreadyExpired);
                 '_a: for precedent in precedents {
                     _precedent__channel_subscription__create(precedent)?;
                 }
@@ -4366,6 +4379,10 @@ mod test {
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel__id: 0,
+                    channel_subscription_token_hashed: ChannelSubscriptionTokenHashed {
+                        channel_subscription_token__expires_at: 0,
+                        hash: 0,
+                    }
                 };
                 run_by_template(
                     incoming,

@@ -323,7 +323,13 @@ Subscribes user to channel.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    channel__id: i64
+    channel__id: i64,
+    channel_subscription_token_hashed: ChannelSubscriptionTokenHashed,
+}
+
+struct ChannelSubscriptionTokenHashed {
+    channel_subscription_token__expires_at: i64,
+    hash: u64,
 }
 ```
 ```
@@ -333,6 +339,7 @@ enum Precedent {
     Channel_NotFound,
     Channel_IsClose,
     User_IsChannelOwner,
+    ChannelSubscriptionToken_AlreadyExpired,
 }
 ```
 <br/><br/>

@@ -29,6 +29,7 @@ pub enum CommonPrecedent {
     Channel_LinkedNameAlreadyExist,
     Channel_NameAlreadyExist,
     Channel_NotFound,
+    ChannelSubscriptionToken_AlreadyExpired,
 }
 macro_rules! enum_from {
     ($visability:vis enum $enum_name:ident { $($enum:ident :: $enum_variant:ident $({ $($enum_variant_field:ident : $enum_variant_field_type:ty),* $(,)? })?),* $(,)? }) => {
