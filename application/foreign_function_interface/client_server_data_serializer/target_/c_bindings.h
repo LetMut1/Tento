@@ -661,8 +661,13 @@ typedef struct Channel_GetManyPublicByName_Incoming {
   short limit;
 } Channel_GetManyPublicByName_Incoming;
 
+typedef struct ChannelTokenHashed {
+  long channel_token__expires_at;
+  unsigned long hash;
+} ChannelTokenHashed;
+
 typedef struct COption_ChannelTokenHashed {
-  ChannelTokenHashed data;
+  struct ChannelTokenHashed data;
   bool is_data;
 } COption_ChannelTokenHashed;
 
@@ -712,6 +717,7 @@ typedef struct CResult_CUnifiedReport_Channel_GetManyPublicByName_Outcoming__Cha
 typedef struct Channel_GetOneById_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   long channel__id;
+  struct COption_ChannelTokenHashed channel_token_hashed;
 } Channel_GetOneById_Incoming;
 
 typedef struct CVector_c_short {
@@ -750,6 +756,8 @@ typedef struct Channel_GetOneById_Precedent {
   bool user_access_token__in_user_access_token_black_list;
   bool channel__not_found;
   bool channel__is_close;
+  bool channel_token__not_found;
+  bool channel_token__already_expired;
 } Channel_GetOneById_Precedent;
 
 typedef struct CUnifiedReport_Channel_GetOneById_Outcoming__Channel_GetOneById_Precedent {
