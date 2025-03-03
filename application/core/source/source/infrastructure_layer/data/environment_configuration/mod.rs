@@ -7,6 +7,7 @@ pub struct EnvironmentConfiguration<S> {
 pub struct Postgresql {
     pub database_1: PostgresqlInner,
     pub database_2: PostgresqlInner,
+    pub database_3: PostgresqlInner,
 }
 pub struct PostgresqlInner {
     pub configuration: Config,
@@ -17,6 +18,7 @@ pub struct PostgresqlInner {
 pub struct Postgresql_ {
     pub database_1: PostgresqlInner_,
     pub database_2: PostgresqlInner_,
+    pub database_3: PostgresqlInner_,
 }
 #[derive(serde::Deserialize)]
 pub struct PostgresqlInner_ {

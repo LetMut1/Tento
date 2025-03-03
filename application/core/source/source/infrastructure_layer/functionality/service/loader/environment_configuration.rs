@@ -55,6 +55,9 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
         let postgreql_database_2_configuration = crate::result_return_logic!(
             Config::from_str(environment_configuration_file.resource.postgresql.database_2.url.value.as_str())
         );
+        let postgreql_database_3_configuration = crate::result_return_logic!(
+            Config::from_str(environment_configuration_file.resource.postgresql.database_3.url.value.as_str())
+        );
         let application_server = {
             let tcp = {
                 let keepalive = {
@@ -130,8 +133,6 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
                 http,
             }
         };
-
-
         return Result::Ok(
             EnvironmentConfiguration {
                 subject: RunServer {
@@ -168,6 +169,16 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
                                     .connection_pool_waiting_timeout_duration
                                     .value,
                             },
+                            database_3: PostgresqlInner {
+                                configuration: postgreql_database_3_configuration,
+                                maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_3.maximum_connection_pool_size.value,
+                                connection_pool_waiting_timeout_duration: environment_configuration_file
+                                    .resource
+                                    .postgresql
+                                    .database_3
+                                    .connection_pool_waiting_timeout_duration
+                                    .value,
+                            },
                         },
                         email_server: EmailServer {
                             socket_address: email_server_tcp_socket_address,
@@ -193,6 +204,9 @@ impl Loader<EnvironmentConfiguration<CreateFixtures>> {
         let postgreql_database_2_configuration = crate::result_return_logic!(
             Config::from_str(environment_configuration_file.resource.postgresql.database_2.url.value.as_str())
         );
+        let postgreql_database_3_configuration = crate::result_return_logic!(
+            Config::from_str(environment_configuration_file.resource.postgresql.database_3.url.value.as_str())
+        );
         return Result::Ok(
             EnvironmentConfiguration {
                 subject: CreateFixtures {
@@ -215,6 +229,16 @@ impl Loader<EnvironmentConfiguration<CreateFixtures>> {
                                     .resource
                                     .postgresql
                                     .database_2
+                                    .connection_pool_waiting_timeout_duration
+                                    .value,
+                            },
+                            database_3: PostgresqlInner {
+                                configuration: postgreql_database_3_configuration,
+                                maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_3.maximum_connection_pool_size.value,
+                                connection_pool_waiting_timeout_duration: environment_configuration_file
+                                    .resource
+                                    .postgresql
+                                    .database_3
                                     .connection_pool_waiting_timeout_duration
                                     .value,
                             },
