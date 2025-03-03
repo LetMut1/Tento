@@ -30,7 +30,6 @@ pub struct Data {
     pub channel__name: String,
     pub channel__linked_name: String,
     pub channel__access_modifier: i16,
-    pub channel__visability_modifier: i16,
     pub channel__cover_image_path: Option<String>,
     pub channel__background_image_path: Option<String>,
     pub channel_token_hashed_for_unsubscribed_users: Option<ChannelTokenHashed>,

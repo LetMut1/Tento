@@ -2380,7 +2380,6 @@ pub struct Channel_GetManyPublicByName_Data {
     pub channel__name: CString,
     pub channel__linked_name: CString,
     pub channel__access_modifier: c_short,
-    pub channel__visability_modifier: c_short,
     pub channel__cover_image_path: COption<CString>,
     pub channel__background_image_path: COption<CString>,
     pub channel_token_hashed_for_unsubscribed_users: COption<ChannelTokenHashed>,
@@ -2437,7 +2436,6 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                                 channel__name: Allocator::<CString>::allocate(data___.channel__name),
                                 channel__linked_name: Allocator::<CString>::allocate(data___.channel__linked_name),
                                 channel__access_modifier: data___.channel__access_modifier,
-                                channel__visability_modifier: data___.channel__visability_modifier,
                                 channel__cover_image_path,
                                 channel__background_image_path,
                                 channel_token_hashed_for_unsubscribed_users,
@@ -3936,7 +3934,6 @@ mod test {
                         channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel__access_modifier: 0,
-                        channel__visability_modifier: 0,
                         channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         channel_token_hashed_for_unsubscribed_users: Option::Some(

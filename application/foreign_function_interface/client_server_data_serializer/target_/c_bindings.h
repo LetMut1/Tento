@@ -676,7 +676,6 @@ typedef struct Channel_GetManyPublicByName_Data {
   struct CString channel__name;
   struct CString channel__linked_name;
   short channel__access_modifier;
-  short channel__visability_modifier;
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
   struct COption_ChannelTokenHashed channel_token_hashed_for_unsubscribed_users;

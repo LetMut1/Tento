@@ -92,14 +92,13 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                     return Result::Err(crate::new_invalid_argument!());
                 }
             }
-            let channel__visability_modifier = Channel_VisabilityModifier::Public as i16;
             let rows = Repository::<Postgresql<Channel>>::find_3(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 ChannelBy4 {
                     user__id,
                     channel__name: incoming.channel__name,
                     requery___channel__name: incoming.requery___channel__name,
-                    channel__visability_modifier,
+                    channel__visability_modifier: Channel_VisabilityModifier::Public as i16,
                 },
                 incoming.limit,
             )
@@ -125,7 +124,6 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
                     channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
-                    channel__visability_modifier,
                     channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(4)),
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
                     channel_token_hashed_for_unsubscribed_users,

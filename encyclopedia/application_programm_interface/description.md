@@ -312,7 +312,6 @@ struct Data {
     channel__name: String,
     channel__linked_name: String,
     channel__access_modifier: i16,
-    channel__visability_modifier: i16,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
     channel_token_hashed_for_unsubscribed_users: Option<ChannelTokenHashed>,
