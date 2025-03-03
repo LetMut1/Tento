@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<ChannelSubscription>> {
-    pub fn create<'a>(database_1_client: &'a Client, insert: Insert) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn create<'a>(database_3_client: &'a Client, insert: Insert) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -43,7 +43,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
-                database_1_client
+                database_3_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -51,7 +51,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                 .await
             );
             crate::result_return_runtime!(
-                database_1_client
+                database_3_client
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -61,7 +61,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
             return Result::Ok(());
         };
     }
-    pub fn is_exist<'a>(database_1_client: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn is_exist<'a>(database_3_client: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -82,7 +82,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
-                database_1_client
+                database_3_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -90,7 +90,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_1_client
+                database_3_client
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),

@@ -85,7 +85,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
+            let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let (
                 channel__owner,
                 channel__name,
@@ -101,7 +101,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 channel__viewing_quantity,
                 channel__obfuscation_value,
             ) = match Repository::<Postgresql<Channel>>::find_1(
-                &postgresql_database_1_client,
+                &postgresql_database_3_client,
                 ChannelBy1 {
                     channel__id: incoming.channel__id,
                 },
@@ -130,7 +130,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                         }
                         if channel__access_modifier == Channel_AccessModifier::Close as i16
                         && !Repository::<Postgresql<ChannelSubscription>>::is_exist(
-                            &postgresql_database_1_client,
+                            &postgresql_database_3_client,
                             ChannelSubscriptionBy {
                                 user__id,
                                 channel__id: incoming.channel__id,
@@ -142,7 +142,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     }
                     Option::None => {
                         if !Repository::<Postgresql<ChannelSubscription>>::is_exist(
-                            &postgresql_database_1_client,
+                            &postgresql_database_3_client,
                             ChannelSubscriptionBy {
                                 user__id,
                                 channel__id: incoming.channel__id,

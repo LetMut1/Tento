@@ -127,6 +127,9 @@ impl CommandProcessor<CreateFixtures> {
             let postgresql_database_1_client = crate::result_return_runtime!(
                 postgresql_connection_pool_database_1.get().await
             );
+            let postgresql_database_3_client = crate::result_return_runtime!(
+                postgresql_connection_pool_database_1.get().await
+            );
             '_a: for _ in 1..=QUANTITY_OF_APPLICATION_USERS {
                 let mut user__nickname = String::new();
                 '_b: for _ in 1..=rand::thread_rng().gen_range::<usize, _>(1..=User_Nickname::MAXIMUM_LENGTH) {
@@ -218,7 +221,7 @@ impl CommandProcessor<CreateFixtures> {
                         return Result::Err(crate::new_invalid_argument!());
                     }
                     if Repository::<Postgresql<Channel>>::is_exist_1(
-                        &postgresql_database_1_client,
+                        &postgresql_database_3_client,
                         ChannelBy2 {
                             channel__name: channel__name.as_str(),
                         },
@@ -228,7 +231,7 @@ impl CommandProcessor<CreateFixtures> {
                         continue 'b;
                     } else {
                         Repository::<Postgresql<Channel>>::create(
-                            &postgresql_database_1_client,
+                            &postgresql_database_3_client,
                             ChannelInsert {
                                 channel__owner: user__id,
                                 channel__name: channel__name.as_str(),
@@ -248,6 +251,7 @@ impl CommandProcessor<CreateFixtures> {
                         )
                         .await?;
                     }
+                    todo!("create channel_subscriptions");
                 }
             }
             return Result::Ok(());

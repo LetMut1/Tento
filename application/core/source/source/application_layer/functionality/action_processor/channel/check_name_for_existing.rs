@@ -70,7 +70,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_CheckNameForExisting> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let is_exist = Repository::<Postgresql<Channel>>::is_exist_1(
-                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
+                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),
                 ChannelBy2 {
                     channel__name: incoming.channel__name,
                 },

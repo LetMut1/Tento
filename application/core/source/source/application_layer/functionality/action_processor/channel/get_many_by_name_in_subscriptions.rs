@@ -79,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
                 }
             }
             let data_registry = Repository::<Postgresql<Channel>>::find_4(
-                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
+                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),
                 ChannelBy5 {
                     user__id,
                     channel__name: incoming.channel__name,
