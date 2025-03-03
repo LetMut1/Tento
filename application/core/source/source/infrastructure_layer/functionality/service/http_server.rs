@@ -113,30 +113,55 @@ impl HttpServer {
                 },
             );
             let mut graceful_shutdown_signal_future_join_handle_ = std::pin::pin!(graceful_shutdown_signal_future_join_handle);
-            let postgresql_connection_pool_database_1;
-            let postgresql_connection_pool_database_2;
-            #[cfg(feature = "postgresql_connection_with_tls")]
-            {
-                todo!();
-            }
-            #[cfg(not(feature = "postgresql_connection_with_tls"))]
-            {
-                postgresql_connection_pool_database_1 = Creator::<PostgresqlConnectionPool>::create(
-                    &environment_configuration.subject.resource.postgresql.database_1,
-                    NoTls,
-                )
-                .await?;
-                postgresql_connection_pool_database_2 = Creator::<PostgresqlConnectionPool>::create(
-                    &environment_configuration.subject.resource.postgresql.database_2,
-                    NoTls,
-                )
-                .await?;
-            }
+            let postgresql_connection_pool_database_1 = {
+                #[cfg(feature = "postgresql_connection_with_tls")]
+                {
+                    todo!();
+                }
+                #[cfg(not(feature = "postgresql_connection_with_tls"))]
+                {
+                    Creator::<PostgresqlConnectionPool>::create(
+                        &environment_configuration.subject.resource.postgresql.database_1,
+                        NoTls,
+                    )
+                    .await?
+                }
+            };
+            let postgresql_connection_pool_database_2 = {
+                #[cfg(feature = "postgresql_connection_with_tls")]
+                {
+                    todo!();
+                }
+                #[cfg(not(feature = "postgresql_connection_with_tls"))]
+                {
+                    Creator::<PostgresqlConnectionPool>::create(
+                        &environment_configuration.subject.resource.postgresql.database_2,
+                        NoTls,
+                    )
+                    .await?
+                }
+            };
+            let postgresql_connection_pool_database_3 = {
+                #[cfg(feature = "postgresql_connection_with_tls")]
+                {
+                    todo!();
+                }
+                #[cfg(not(feature = "postgresql_connection_with_tls"))]
+                {
+                    Creator::<PostgresqlConnectionPool>::create(
+                        &environment_configuration.subject.resource.postgresql.database_3,
+                        NoTls,
+                    )
+                    .await?
+                }
+            };
+
             let cloned = Arc::new(
                 Cloned {
                     router: Self::create_router()?,
                     postgresql_connection_pool_database_1,
                     postgresql_connection_pool_database_2,
+                    postgresql_connection_pool_database_3,
                 },
             );
             'a: loop {
@@ -747,6 +772,7 @@ impl HttpServer {
                 environment_configuration,
                 postgresql_connection_pool_database_1: &cloned.postgresql_connection_pool_database_1,
                 postgresql_connection_pool_database_2: &cloned.postgresql_connection_pool_database_2,
+                postgresql_connection_pool_database_3: &cloned.postgresql_connection_pool_database_3,
             };
             match *r#match.value {
                 ActionRoute::UserAuthorization {
@@ -1180,6 +1206,7 @@ struct Cloned {
     router: Router<ActionRoute>,
     postgresql_connection_pool_database_1: PostgresqlConnectionPool,
     postgresql_connection_pool_database_2: PostgresqlConnectionPool,
+    postgresql_connection_pool_database_3: PostgresqlConnectionPool,
 }
 pub enum ActionRoute {
     UserAuthorization {

@@ -35,16 +35,17 @@ use {
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration<RunServer>> = OnceLock::new();
 impl CommandProcessor<RunServer> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
-        let _worker_guard;
         let environment_configuration = Self::initialize_environment(environment_configuration_file_path)?;
-        #[cfg(feature = "logging_to_file")]
-        {
-            _worker_guard = Self::initialize_logging_to_fileger(&environment_configuration.subject.logging)?;
-        }
-        #[cfg(not(feature = "logging_to_file"))]
-        {
-            _worker_guard = Self::initialize_stdout_logger();
-        }
+        let _worker_guard = {
+            #[cfg(feature = "logging_to_file")]
+            {
+                Self::initialize_logging_to_fileger(&environment_configuration.subject.logging)?
+            }
+            #[cfg(not(feature = "logging_to_file"))]
+            {
+                Self::initialize_stdout_logger()
+            }
+        };
         let runtime = Self::initialize_runtime(environment_configuration)?;
         runtime.block_on(HttpServer::run(environment_configuration))?;
         return Result::Ok(());
