@@ -27,7 +27,7 @@ impl Repository<Postgresql<User>> {
                         password_hash,\
                         created_at\
                     ) VALUES (\
-                        nextval('public.user_1'),\
+                        nextval('public.user__1'),\
                         $1,\
                         $2,\
                         $3,\
@@ -588,7 +588,7 @@ impl Repository<Postgresql<User>> {
     pub fn get_id<'a>(database_1_client: &'a Client) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
-                SELECT nextval('public.user_1') AS n";
+                SELECT nextval('public.user__1') AS n";
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(

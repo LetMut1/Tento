@@ -50,7 +50,7 @@ impl Repository<Postgresql<Channel>> {
                         obfuscation_value,\
                         created_at\
                     ) VALUES (\
-                        nextval('public.channel1'), \
+                        nextval('public.channel_1'), \
                         $1,\
                         $2,\
                         $3,\

@@ -16,16 +16,16 @@ CREATE TABLE public.channel (
     created_at BIGINT
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
-CREATE SEQUENCE public.channel1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
+CREATE SEQUENCE public.channel_1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.channel.id;
 
-CREATE UNIQUE INDEX channel2 ON public.channel
+CREATE UNIQUE INDEX channel_2 ON public.channel
 USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
-CREATE UNIQUE INDEX channel3 ON public.channel
+CREATE UNIQUE INDEX channel_3 ON public.channel
 USING btree (name COLLATE "C" ASC NULLS LAST) WITH (fillfactor = 80, deduplicate_items = on);
 
-CREATE INDEX channel5 ON public.channel
+CREATE INDEX channel_5 ON public.channel
 USING btree (visability_modifier ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 ALTER TABLE ONLY public.channel
@@ -42,9 +42,7 @@ ALTER COLUMN marks_quantity SET NOT NULL,
 ALTER COLUMN viewing_quantity SET NOT NULL,
 ALTER COLUMN obfuscation_value SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ADD CONSTRAINT channel8 PRIMARY KEY USING INDEX channel2,
-ADD CONSTRAINT channel9 FOREIGN KEY (owner)
+ADD CONSTRAINT channel_8 PRIMARY KEY USING INDEX channel_2,
+ADD CONSTRAINT channel_9 FOREIGN KEY (owner)
 REFERENCES public.user_ (id) ON DELETE RESTRICT,
-ADD CONSTRAINT channel10 UNIQUE USING INDEX channel3;
-
-COMMENT ON COLUMN public.channel.owner IS 'public.user_.id';
+ADD CONSTRAINT channel_10 UNIQUE USING INDEX channel_3;
