@@ -185,7 +185,7 @@ impl Repository<Postgresql<User>> {
             let mut parameter_storage = ParameterStorage::new();
             parameter_storage.add(
                 &by.user__id,
-                Type::TEXT,
+                Type::INT8,
             );
             let statement = crate::result_return_logic!(
                 database_1_client
@@ -315,7 +315,7 @@ impl Repository<Postgresql<User>> {
         };
     }
     // user__id: i64,
-    pub fn find_1<'a, 'b>(database_1_client: &'a Client, by: By1<'b>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a, 'b> {
+    pub fn find_1<'a>(database_1_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \

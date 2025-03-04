@@ -5,6 +5,7 @@ mod user_access_refresh_token;
 mod user_authorization_token;
 mod user_device;
 mod user_registration_token;
+mod channel_publication1;
 mod user_reset_password_token;
 pub use self::{
     channel::{

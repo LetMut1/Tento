@@ -12,6 +12,6 @@ pub struct ChannelPublication1 {
     id: Id,
     channel__id: Channel_Id,
     images_pathes: ImagesPathes,
-    text_: Text,
+    text: Text,
     created_at: CreatedAt,
 }

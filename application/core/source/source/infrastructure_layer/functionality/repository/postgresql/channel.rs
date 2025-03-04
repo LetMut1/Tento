@@ -366,7 +366,8 @@ impl Repository<Postgresql<Channel>> {
             }
             query = format!(
                 "{} \
-                ORDER BY c.name ASC \
+                ORDER BY \
+                    c.name ASC \
                 LIMIT ${};",
                 query.as_str(),
                 counter.get_next_value_unchecked(),
@@ -412,7 +413,8 @@ impl Repository<Postgresql<Channel>> {
                 ON \
                     cs.user__id = $1 \
                     AND c.id = cs.channel__id \
-                WHERE c.name LIKE $2"
+                WHERE \
+                    c.name LIKE $2"
                 .to_string();
             let mut counter = Counter::<u8>::new(
                 2,
@@ -443,7 +445,8 @@ impl Repository<Postgresql<Channel>> {
             }
             query = format!(
                 "{} \
-                ORDER BY c.name ASC \
+                ORDER BY \
+                    c.name ASC \
                 LIMIT ${};",
                 query.as_str(),
                 counter.get_next_value_unchecked(),
@@ -520,7 +523,8 @@ impl Repository<Postgresql<Channel>> {
                 requery___channel__id = requery___channel__id_;
                 query = format!(
                     "{} \
-                    WHERE cs.channel__id > ${}",
+                    WHERE \
+                        cs.channel__id > ${}",
                     query.as_str(),
                     counter.get_next_value_unchecked(),
                 );
@@ -531,7 +535,8 @@ impl Repository<Postgresql<Channel>> {
             }
             query = format!(
                 "{} \
-                ORDER BY cs.channel__id ASC \
+                ORDER BY \
+                    cs.channel__id ASC \
                 LIMIT ${};",
                 query.as_str(),
                 counter.get_next_value_unchecked(),
