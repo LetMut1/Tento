@@ -9,7 +9,7 @@ use {
             data::entity::{
                 channel::{
                     Channel,
-                    Channel_AccessModifier,
+                    Channel_AccessModifier_,
                     Channel_Id,
                 },
                 channel_subscription::ChannelSubscription,
@@ -116,7 +116,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if channel__owner == user__id {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
             }
-            if Channel_AccessModifier::Close as i16 == channel__access_modifier {
+            if Channel_AccessModifier_::Close as i16 == channel__access_modifier {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
             }
             let transaction = Resolver_::<Transaction<'_>>::start(

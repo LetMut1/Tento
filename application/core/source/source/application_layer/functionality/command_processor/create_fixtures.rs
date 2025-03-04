@@ -6,12 +6,12 @@ use {
             data::entity::{
                 channel::{
                     Channel,
-                    Channel_AccessModifier,
+                    Channel_AccessModifier_,
                     Channel_Description,
                     Channel_LinkedName,
                     Channel_Name,
                     Channel_Orientation,
-                    Channel_VisabilityModifier,
+                    Channel_VisabilityModifier_,
                     Channel_ObfuscationValue,
                 },
                 user::{
@@ -237,8 +237,8 @@ impl CommandProcessor<CreateFixtures> {
                                 channel__name: channel__name.as_str(),
                                 channel__linked_name: channel__linked_name.as_str(),
                                 channel__description: channel__description.as_deref(),
-                                channel__access_modifier: Channel_AccessModifier::Open as _,
-                                channel__visability_modifier: Channel_VisabilityModifier::Public as _,
+                                channel__access_modifier: Channel_AccessModifier_::Open as _,
+                                channel__visability_modifier: Channel_VisabilityModifier_::Public as _,
                                 channel__orientation: channel__orientation.as_slice(),
                                 channel__cover_image_path: Option::Some(STUB),
                                 channel__background_image_path: Option::Some(STUB),

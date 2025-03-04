@@ -10,7 +10,7 @@ use {
                 channel::{
                     Channel,
                     Channel_Name,
-                    Channel_VisabilityModifier,
+                    Channel_VisabilityModifier_,
                 },
                 user_access_token::UserAccessToken,
                 channel_token::{
@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                     user__id,
                     channel__name: incoming.channel__name,
                     requery___channel__name: incoming.requery___channel__name,
-                    channel__visability_modifier: Channel_VisabilityModifier::Public as i16,
+                    channel__visability_modifier: Channel_VisabilityModifier_::Public as i16,
                 },
                 incoming.limit,
             )

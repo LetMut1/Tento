@@ -18,6 +18,7 @@ USING btree (channel__id, created_at ASC NULLS LAST) WITH (fillfactor = 90, dedu
 ALTER TABLE ONLY public.channel_publication1
 ALTER COLUMN id SET NOT NULL,
 ALTER COLUMN channel__id SET NOT NULL,
+ALTER COLUMN images_pathes SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT channel_publication1_4 PRIMARY KEY USING INDEX channel_publication1_2,
 ADD CONSTRAINT channel_publication1_5 UNIQUE USING INDEX channel_publication1_3;

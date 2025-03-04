@@ -9,7 +9,7 @@ use {
             data::entity::{
                 channel::{
                     Channel,
-                    Channel_AccessModifier,
+                    Channel_AccessModifier_,
                     Channel_Id,
                 },
                 channel_subscription::ChannelSubscription,
@@ -128,7 +128,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                         if channel_token_hashed.channel_token__expires_at < now {
                             return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken_AlreadyExpired));
                         }
-                        if channel__access_modifier == Channel_AccessModifier::Close as i16
+                        if channel__access_modifier == Channel_AccessModifier_::Close as i16
                         && !Repository::<Postgresql<ChannelSubscription>>::is_exist(
                             &postgresql_database_3_client,
                             ChannelSubscriptionBy {
