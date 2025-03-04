@@ -1,6 +1,7 @@
 mod channel;
 mod channel_subscription;
 mod user_authorization;
+mod channel_publication1;
 pub use self::{
     channel::{
         check_linked_name_for_existing::Channel_CheckLinkedNameForExisting,
