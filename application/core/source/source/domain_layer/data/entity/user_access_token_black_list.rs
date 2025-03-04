@@ -1,7 +1,4 @@
-use {
-    super::user_access_token::UserAccessToken_Id,
-    std::marker::PhantomData,
-};
+use super::user_access_token::UserAccessToken_Id;
 // This entity is not used yet, and we need to decide whether we will use this flow.
 //
 // Tokens are refreshed every N minutes. That is, N minutes the token remains
@@ -11,5 +8,5 @@ use {
 // Wherever the validity of a token is checked, you need to check if this token is in this
 // entity, and block the action if it is.
 pub struct UserAccessTokenBlackList {
-    user_access_token__id: PhantomData<(String, UserAccessToken_Id)>,
+    user_access_token__id: UserAccessToken_Id,
 }

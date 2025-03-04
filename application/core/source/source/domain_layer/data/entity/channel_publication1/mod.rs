@@ -6,13 +6,12 @@ use {
         Text,
         Id,
     },
-    std::marker::PhantomData,
     super::channel::Channel_Id,
 };
 pub struct ChannelPublication1 {
-    id: PhantomData<(i64, Id)>,
-    channel__id: PhantomData<(i64, Channel_Id)>,
-    images_pathes: PhantomData<(Vec<String>, ImagesPathes)>,
-    text_: PhantomData<(String, Text)>,
-    created_at: PhantomData<(i64, CreatedAt)>,
+    id: Id,
+    channel__id: Channel_Id,
+    images_pathes: ImagesPathes,
+    text_: Text,
+    created_at: CreatedAt,
 }
