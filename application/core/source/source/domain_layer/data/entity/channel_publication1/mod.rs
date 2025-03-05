@@ -15,3 +15,4 @@ pub struct ChannelPublication1 {
     text: Text,
     created_at: CreatedAt,
 }
+pub type ChannelPublication1_Id = Id;

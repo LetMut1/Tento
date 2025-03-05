@@ -206,114 +206,6 @@ impl Repository<Postgresql<User>> {
             return Result::Ok(());
         };
     }
-    pub fn is_exist_1<'a>(database_1_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
-        return async move {
-            let query = "\
-                SELECT \
-                    u.id AS i \
-                FROM \
-                    public.user_ u \
-                WHERE \
-                    u.nickname = $1;";
-            let mut parameter_storage = ParameterStorage::new();
-            parameter_storage.add(
-                &by.user__nickname,
-                Type::TEXT,
-            );
-            let statement = crate::result_return_logic!(
-                database_1_client
-                .prepare_typed_cached(
-                    query,
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
-            let rows = crate::result_return_runtime!(
-                database_1_client
-                .query(
-                    &statement,
-                    parameter_storage.get_parameters(),
-                )
-                .await
-            );
-            if rows.is_empty() {
-                return Result::Ok(false);
-            }
-            return Result::Ok(true);
-        };
-    }
-    pub fn is_exist_2<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
-        return async move {
-            let query = "\
-                SELECT \
-                    u.id AS i \
-                FROM \
-                    public.user_ u \
-                WHERE \
-                    u.email = $1;";
-            let mut parameter_storage = ParameterStorage::new();
-            parameter_storage.add(
-                &by.user__email,
-                Type::TEXT,
-            );
-            let statement = crate::result_return_logic!(
-                database_1_client
-                .prepare_typed_cached(
-                    query,
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
-            let rows = crate::result_return_runtime!(
-                database_1_client
-                .query(
-                    &statement,
-                    parameter_storage.get_parameters(),
-                )
-                .await
-            );
-            if rows.is_empty() {
-                return Result::Ok(false);
-            }
-            return Result::Ok(true);
-        };
-    }
-    pub fn is_exist_3<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
-        return async move {
-            let query = "\
-                SELECT \
-                    u.id AS i \
-                FROM \
-                    public.user_ u \
-                WHERE \
-                    u.id = $1;";
-            let mut parameter_storage = ParameterStorage::new();
-            parameter_storage.add(
-                &by.user__id,
-                Type::INT8,
-            );
-            let statement = crate::result_return_logic!(
-                database_1_client
-                .prepare_typed_cached(
-                    query,
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
-            let rows = crate::result_return_runtime!(
-                database_1_client
-                .query(
-                    &statement,
-                    parameter_storage.get_parameters(),
-                )
-                .await
-            );
-            if rows.is_empty() {
-                return Result::Ok(false);
-            }
-            return Result::Ok(true);
-        };
-    }
     // user__id: i64,
     pub fn find_1<'a>(database_1_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
@@ -582,6 +474,114 @@ impl Repository<Postgresql<User>> {
                     crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
                 ),
             );
+        };
+    }
+    pub fn is_exist_1<'a>(database_1_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+        return async move {
+            let query = "\
+                SELECT \
+                    u.id AS i \
+                FROM \
+                    public.user_ u \
+                WHERE \
+                    u.nickname = $1;";
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage.add(
+                &by.user__nickname,
+                Type::TEXT,
+            );
+            let statement = crate::result_return_logic!(
+                database_1_client
+                .prepare_typed_cached(
+                    query,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                database_1_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(false);
+            }
+            return Result::Ok(true);
+        };
+    }
+    pub fn is_exist_2<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+        return async move {
+            let query = "\
+                SELECT \
+                    u.id AS i \
+                FROM \
+                    public.user_ u \
+                WHERE \
+                    u.email = $1;";
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage.add(
+                &by.user__email,
+                Type::TEXT,
+            );
+            let statement = crate::result_return_logic!(
+                database_1_client
+                .prepare_typed_cached(
+                    query,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                database_1_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(false);
+            }
+            return Result::Ok(true);
+        };
+    }
+    pub fn is_exist_3<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+        return async move {
+            let query = "\
+                SELECT \
+                    u.id AS i \
+                FROM \
+                    public.user_ u \
+                WHERE \
+                    u.id = $1;";
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage.add(
+                &by.user__id,
+                Type::INT8,
+            );
+            let statement = crate::result_return_logic!(
+                database_1_client
+                .prepare_typed_cached(
+                    query,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                database_1_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(false);
+            }
+            return Result::Ok(true);
         };
     }
     // user__id: i64,

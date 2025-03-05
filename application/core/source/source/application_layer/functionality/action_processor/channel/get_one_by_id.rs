@@ -108,7 +108,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             )
             .await?
             {
-                Option::Some(channel_) => channel_,
+                Option::Some(values) => values,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }

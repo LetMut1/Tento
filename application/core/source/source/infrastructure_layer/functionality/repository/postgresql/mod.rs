@@ -21,6 +21,11 @@ pub use self::{
         By as ChannelSubscriptionBy,
         Insert as ChannelSubscriptionInsert,
     },
+    channel_publication1:: {
+        Insert as ChannelPublication1Insert,
+        By1 as ChannelPublication1By1,
+        By2 as ChannelPublication1By2,
+    },
     user::{
         By1 as UserBy1,
         By2 as UserBy2,

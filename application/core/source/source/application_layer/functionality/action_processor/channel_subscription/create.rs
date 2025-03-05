@@ -96,7 +96,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             )
             .await?
             {
-                Option::Some(channel_) => channel_,
+                Option::Some(values) => values,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }
@@ -113,7 +113,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if incoming.channel_subscription_token_hashed.channel_subscription_token__expires_at < now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken_AlreadyExpired));
             }
-            if channel__owner == user__id {
+            if user__id == channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
             }
             if Channel_AccessModifier_::Close as i16 == channel__access_modifier {

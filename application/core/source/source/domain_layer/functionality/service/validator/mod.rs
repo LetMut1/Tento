@@ -10,6 +10,7 @@ mod user__password;
 mod user_authorization_token__value;
 mod user_device__id;
 mod user_registration_token__value;
+mod channel_publication1__id;
 mod user_reset_password_token__value;
 use std::marker::PhantomData;
 pub struct Validator<S> {

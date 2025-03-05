@@ -23,8 +23,8 @@ use {
         Row,
     },
     dedicated::action_processor_incoming_outcoming::action_processor::channel::{
-        get_many_by_name_in_subscriptions::Data as Data2,
-        get_many_by_subscription::Data as Data3,
+        get_many_by_name_in_subscriptions::Data as Data1,
+        get_many_by_subscription::Data as Data2,
     },
 };
 // channel__id: i64,
@@ -395,7 +395,7 @@ impl Repository<Postgresql<Channel>> {
             return Result::Ok(rows);
         };
     }
-    pub fn find_4<'a>(database_3_client: &'a Client, by: By5<'a>, limit: i16) -> impl Future<Output = Result<Vec<Data2>, AggregateError>> + Send + use<'a> {
+    pub fn find_4<'a>(database_3_client: &'a Client, by: By5<'a>, limit: i16) -> impl Future<Output = Result<Vec<Data1>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -471,12 +471,12 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
-            let mut data_registry: Vec<Data2> = vec![];
+            let mut data_registry: Vec<Data1> = vec![];
             if rows.is_empty() {
                 return Result::Ok(data_registry);
             }
             '_a: for row in rows.iter() {
-                let data = Data2 {
+                let data = Data1 {
                     channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
@@ -490,7 +490,7 @@ impl Repository<Postgresql<Channel>> {
             return Result::Ok(data_registry);
         };
     }
-    pub fn find_5<'a>(database_3_client: &'a Client, by: By6, limit: i16) -> impl Future<Output = Result<Vec<Data3>, AggregateError>> + Send + use<'a> {
+    pub fn find_5<'a>(database_3_client: &'a Client, by: By6, limit: i16) -> impl Future<Output = Result<Vec<Data2>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -561,12 +561,12 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
-            let mut data_registry: Vec<Data3> = vec![];
+            let mut data_registry: Vec<Data2> = vec![];
             if rows.is_empty() {
                 return Result::Ok(data_registry);
             }
             '_a: for row in rows.iter() {
-                let data = Data3 {
+                let data = Data2 {
                     channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
@@ -578,6 +578,52 @@ impl Repository<Postgresql<Channel>> {
                 data_registry.push(data);
             }
             return Result::Ok(data_registry);
+        };
+    }
+    // channel__owner: i64,
+    // channel__access_modifier: i16,
+    pub fn find_6<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<Option<(i64, i16)>, AggregateError>> + Send + use<'a> {
+        return async move {
+            let query = "\
+                SELECT \
+                    c.owner AS ow,\
+                    c.access_modifier AS am \
+                FROM \
+                    public.channel c \
+                WHERE \
+                    c.id = $1;";
+            let mut parameter_storage = ParameterStorage::new();
+            parameter_storage.add(
+                &by.channel__id,
+                Type::INT8,
+            );
+            let statement = crate::result_return_logic!(
+                database_3_client
+                .prepare_typed_cached(
+                    query,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                database_3_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(Option::None);
+            }
+            return Result::Ok(
+                Option::Some(
+                    (
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
+                    ),
+                ),
+            );
         };
     }
     pub fn is_exist_1<'a>(database_3_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {

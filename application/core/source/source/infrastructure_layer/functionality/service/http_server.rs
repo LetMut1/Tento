@@ -1218,6 +1218,9 @@ pub enum ActionRoute {
     ChannelSubscription {
         channel_subscription: ChannelSubscription,
     },
+    // ChannelPublication1 {
+
+    // }
 }
 #[cfg(feature = "action_for_manual_test")]
 impl ActionRoute {
@@ -1433,6 +1436,21 @@ impl ChannelSubscription {
 impl ChannelSubscription {
     pub const CREATE_: &'static str = const_format::concatcp!(
         ChannelSubscription::CREATE,
+        ActionRoute::PART,
+    );
+}
+pub enum ChannelPublication1 {
+    GetMany,
+    #[cfg(feature = "action_for_manual_test")]
+    GetMany_,
+}
+impl ChannelPublication1 {
+    pub const GET_MANY: &'static str = "/channel_publication1/get_many";
+}
+#[cfg(feature = "action_for_manual_test")]
+impl ChannelPublication1 {
+    pub const GET_MANY_: &'static str = const_format::concatcp!(
+        ChannelPublication1::GET_MANY,
         ActionRoute::PART,
     );
 }

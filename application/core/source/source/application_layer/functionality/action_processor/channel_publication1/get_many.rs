@@ -12,9 +12,8 @@ use {
                     Channel_AccessModifier_,
                     Channel_Id,
                 },
-                channel_subscription::ChannelSubscription,
                 user_access_token::UserAccessToken,
-                channel_subscription_token::ChannelSubscriptionToken,
+                channel_publication1::ChannelPublication1,
             },
             functionality::service::{
                 extractor::{
@@ -22,44 +21,34 @@ use {
                     Extractor,
                 },
                 validator::Validator,
-                encoder::Encoder,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::{
-                repository::{
-                    postgresql::{
-                        ChannelBy1,
-                        ChannelSubscriptionInsert,
-                        IsolationLevel,
-                        Postgresql,
-                        Resolver as Resolver_,
-                        Transaction,
-                    },
-                    Repository,
+            functionality::repository::{
+                postgresql::{
+                    ChannelBy1,
+                    ChannelPublication1By2,
+                    Postgresql,
                 },
-                service::resolver::{
-                    Resolver,
-                    UnixTime,
-                },
+                Repository,
             },
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::channel_subscription::create::{
+        action_processor_incoming_outcoming::action_processor::channel_publication1::get_many::{
             Incoming,
             Precedent,
+            Outcoming
         },
         unified_report::UnifiedReport,
-        void::Void,
     },
     std::future::Future,
 };
-pub struct ChannelSubscription_Create;
-impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
+pub struct ChannelPublication1_GetMany;
+impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
     type Incoming<'a> = Incoming<'a>;
-    type Outcoming = Void;
+    type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
@@ -83,12 +72,15 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
+            const LIMIT: i16 = 30;
+            if incoming.limit <= 0 || incoming.limit > LIMIT {
+                return Result::Err(crate::new_invalid_argument!());
+            }
             let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let (
                 channel__owner,
                 channel__access_modifier,
-                channel__obfuscation_value,
-            ) = match Repository::<Postgresql<Channel>>::find_2(
+            ) = match Repository::<Postgresql<Channel>>::find_6(
                 &postgresql_database_3_client,
                 ChannelBy1 {
                     channel__id: incoming.channel__id,
@@ -96,60 +88,31 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             )
             .await?
             {
-                Option::Some(channel_) => channel_,
+                Option::Some(values) => values,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }
             };
-            if !Encoder::<ChannelSubscriptionToken>::is_valid(
-                user__id,
-                incoming.channel__id,
-                channel__obfuscation_value,
-                &incoming.channel_subscription_token_hashed,
-            )? {
-                return Result::Err(crate::new_invalid_argument!());
-            }
-            let now = Resolver::<UnixTime>::get_now_in_seconds();
-            if incoming.channel_subscription_token_hashed.channel_subscription_token__expires_at < now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken_AlreadyExpired));
-            }
-            if channel__owner == user__id {
-                return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
-            }
-            if Channel_AccessModifier_::Close as i16 == channel__access_modifier {
-                return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
-            }
-            let transaction = Resolver_::<Transaction<'_>>::start(
-                &mut postgresql_database_3_client,
-                IsolationLevel::ReadCommitted,
-            )
-            .await?;
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::create(
-                transaction.get_client(),
-                ChannelSubscriptionInsert {
-                    user__id,
-                    channel__id: incoming.channel__id,
-                    channel_subscription__created_at: now,
+            if user__id != channel__owner {
+                if Channel_AccessModifier_::Close as i16 == channel__access_modifier {
+                    return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
                 }
-            )
-            .await
-            {
-                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Err(aggregate_error);
             }
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<Channel>>::update(
-                transaction.get_client(),
-                ChannelBy1 {
+            let data_registry = Repository::<Postgresql<ChannelPublication1>>::find(
+                &postgresql_database_3_client,
+                ChannelPublication1By2 {
                     channel__id: incoming.channel__id,
+                    channel_publication1__created_at: incoming.channel_publication1__created_at,
                 },
-            )
-            .await
-            {
-                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Err(aggregate_error);
-            }
-            Resolver_::<Transaction<'_>>::commit(transaction).await?;
-            return Result::Ok(UnifiedReport::target_empty());
+                incoming.limit,
+            ).await?;
+            return Result::Ok(
+                UnifiedReport::target_filled(
+                    Outcoming {
+                        data_registry,
+                    }
+                )
+            );
         };
     }
 }
