@@ -800,6 +800,59 @@ typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Create_Preceden
 
 typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent ChannelSubscription_Create_CResult;
 
+typedef struct ChannelPublication1_GetMany_Incoming {
+  struct UserAccessTokenSigned user_access_token_signed;
+  long channel__id;
+  long channel_publication1__created_at;
+  short limit;
+} ChannelPublication1_GetMany_Incoming;
+
+typedef struct CVector_CString {
+  struct CString *pointer;
+  size_t length;
+} CVector_CString;
+
+typedef struct ChannelPublication1_GetMany_Data {
+  long channel_publication1__id;
+  struct CVector_CString channel_publication1__images_pathes;
+  struct COption_CString channel_publication1__text;
+  long channel_publication1__created_at;
+} ChannelPublication1_GetMany_Data;
+
+typedef struct CVector_ChannelPublication1_GetMany_Data {
+  struct ChannelPublication1_GetMany_Data *pointer;
+  size_t length;
+} CVector_ChannelPublication1_GetMany_Data;
+
+typedef struct ChannelPublication1_GetMany_Outcoming {
+  struct CVector_ChannelPublication1_GetMany_Data data_registry;
+} ChannelPublication1_GetMany_Outcoming;
+
+typedef struct CData_ChannelPublication1_GetMany_Outcoming {
+  struct ChannelPublication1_GetMany_Outcoming filled;
+  bool is_filled;
+} CData_ChannelPublication1_GetMany_Outcoming;
+
+typedef struct ChannelPublication1_GetMany_Precedent {
+  bool user_access_token__already_expired;
+  bool user_access_token__in_user_access_token_black_list;
+  bool channel__not_found;
+  bool channel__is_close;
+} ChannelPublication1_GetMany_Precedent;
+
+typedef struct CUnifiedReport_ChannelPublication1_GetMany_Outcoming__ChannelPublication1_GetMany_Precedent {
+  struct CData_ChannelPublication1_GetMany_Outcoming target;
+  struct ChannelPublication1_GetMany_Precedent precedent;
+  bool is_target;
+} CUnifiedReport_ChannelPublication1_GetMany_Outcoming__ChannelPublication1_GetMany_Precedent;
+
+typedef struct CResult_CUnifiedReport_ChannelPublication1_GetMany_Outcoming__ChannelPublication1_GetMany_Precedent {
+  struct CUnifiedReport_ChannelPublication1_GetMany_Outcoming__ChannelPublication1_GetMany_Precedent data;
+  bool is_data;
+} CResult_CUnifiedReport_ChannelPublication1_GetMany_Outcoming__ChannelPublication1_GetMany_Precedent;
+
+typedef struct CResult_CUnifiedReport_ChannelPublication1_GetMany_Outcoming__ChannelPublication1_GetMany_Precedent ChannelPublication1_GetMany_CResult;
+
 struct CResult_CVector_c_uchar user_authorization__authorize_by_first_step__serialize_allocate(struct UserAuthorization_AuthorizeByFirstStep_Incoming incoming);
 
 void user_authorization__authorize_by_first_step__serialize_deallocate(struct CResult_CVector_c_uchar c_result);
@@ -967,3 +1020,11 @@ void channel_subscription__create__serialize_deallocate(struct CResult_CVector_c
 ChannelSubscription_Create_CResult channel_subscription__create__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
 
 void channel_subscription__create__deserialize_deallocate(ChannelSubscription_Create_CResult _c_result);
+
+struct CResult_CVector_c_uchar channel_publication1__get_many__serialize_allocate(struct ChannelPublication1_GetMany_Incoming incoming);
+
+void channel_publication1__get_many__serialize_deallocate(struct CResult_CVector_c_uchar c_result);
+
+ChannelPublication1_GetMany_CResult channel_publication1__get_many__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
+
+void channel_publication1__get_many__deserialize_deallocate(ChannelPublication1_GetMany_CResult c_result);
