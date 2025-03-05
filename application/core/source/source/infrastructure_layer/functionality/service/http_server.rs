@@ -32,6 +32,7 @@ use {
                 UserAuthorization_SendEmailForAuthorize,
                 UserAuthorization_SendEmailForRegister,
                 UserAuthorization_SendEmailForResetPassword,
+                ChannelPublication1_GetMany,
             },
             command_processor::RunServer,
         },
@@ -323,216 +324,175 @@ impl HttpServer {
             router
             .insert(
                 UserAuthorization::CHECK_NICKNAME_FOR_EXISTING,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::CheckNicknameForExisting,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::CheckNicknameForExisting)
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::CHECK_EMAIL_FOR_EXISTING,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::CheckEmailForExisting,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::CheckEmailForExisting)
             )
         );
         crate::result_return_logic!(router
 
             .insert(
                 UserAuthorization::REGISTER_BY_FIRST_STEP,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::RegisterByFirstStep,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::RegisterByFirstStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::REGISTER_BY_SECOND_STEP,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::RegisterBySecondStep,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::RegisterBySecondStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::REGISTER_BY_LAST_STEP,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::RegisterByLastStep,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::RegisterByLastStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::SEND_EMAIL_FOR_REGISTER,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::SendEmailForRegister,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::SendEmailForRegister),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::AUTHORIZE_BY_FIRST_STEP,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::AuthorizeByFirstStep,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::AuthorizeByFirstStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::AUTHORIZE_BY_LAST_STEP,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::AuthorizeByLastStep,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::AuthorizeByLastStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::SendEmailForAuthorize,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::SendEmailForAuthorize),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::ResetPasswordByFirstStep,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::ResetPasswordByFirstStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::ResetPasswordBySecondStep,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::ResetPasswordBySecondStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::RESET_PASSWORD_BY_LAST_STEP,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::ResetPasswordByLastStep,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::ResetPasswordByLastStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::SendEmailForResetPassword,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::SendEmailForResetPassword),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::REFRESH_ACCESS_TOKEN,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::RefreshAccessToken,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::RefreshAccessToken),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::DeauthorizeFromOneDevice,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::DeauthorizeFromOneDevice),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES,
-                ActionRoute::UserAuthorization {
-                    user_authorization: UserAuthorization::DeauthorizeFromAllDevices,
-                },
+                ActionRoute::UserAuthorization(UserAuthorization::DeauthorizeFromAllDevices),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 Channel::GET_ONE_BY_ID,
-                ActionRoute::Channel {
-                    channel: Channel::GetOneById,
-                },
+                ActionRoute::Channel(Channel::GetOneById),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
-                ActionRoute::Channel {
-                    channel: Channel::GetManyByNameInSubscriptions,
-                },
+                ActionRoute::Channel(Channel::GetManyByNameInSubscriptions),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 Channel::GET_MANY_BY_SUBSCRIPTION,
-                ActionRoute::Channel {
-                    channel: Channel::GetManyBySubscription,
-                },
+                ActionRoute::Channel(Channel::GetManyBySubscription),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 Channel::GET_MANY_PUBLIC_BY_NAME,
-                ActionRoute::Channel {
-                    channel: Channel::GetManyPublicByName,
-                },
+                ActionRoute::Channel(Channel::GetManyPublicByName),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 Channel::CREATE,
-                ActionRoute::Channel {
-                    channel: Channel::Create,
-                },
+                ActionRoute::Channel(Channel::Create),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 Channel::CHECK_NAME_FOR_EXISTING,
-                ActionRoute::Channel {
-                    channel: Channel::CheckNameForExisting,
-                },
+                ActionRoute::Channel(Channel::CheckNameForExisting),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 Channel::CHECK_LINKED_NAME_FOR_EXISTING,
-                ActionRoute::Channel {
-                    channel: Channel::CheckLinkedNameForExisting,
-                },
+                ActionRoute::Channel(Channel::CheckLinkedNameForExisting),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
                 ChannelSubscription::CREATE,
-                ActionRoute::ChannelSubscription {
-                    channel_subscription: ChannelSubscription::Create,
-                },
+                ActionRoute::ChannelSubscription(ChannelSubscription::Create),
+            )
+        );
+        crate::result_return_logic!(
+            router
+            .insert(
+                ChannelPublication1::GET_MANY,
+                ActionRoute::ChannelPublication1(ChannelPublication1::GetMany),
             )
         );
         #[cfg(feature = "action_for_manual_test")]
@@ -541,215 +501,174 @@ impl HttpServer {
                 router
                 .insert(
                     UserAuthorization::CHECK_NICKNAME_FOR_EXISTING_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::CheckNicknameForExisting_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::CheckNicknameForExisting_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::CHECK_EMAIL_FOR_EXISTING_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::CheckEmailForExisting_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::CheckEmailForExisting_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::REGISTER_BY_FIRST_STEP_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::RegisterByFirstStep_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::RegisterByFirstStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::REGISTER_BY_SECOND_STEP_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::RegisterBySecondStep_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::RegisterBySecondStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::REGISTER_BY_LAST_STEP_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::RegisterByLastStep_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::RegisterByLastStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::SEND_EMAIL_FOR_REGISTER_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::SendEmailForRegister_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::SendEmailForRegister_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::AUTHORIZE_BY_FIRST_STEP_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::AuthorizeByFirstStep_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::AuthorizeByFirstStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::AUTHORIZE_BY_LAST_STEP_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::AuthorizeByLastStep_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::AuthorizeByLastStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::SendEmailForAuthorize_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::SendEmailForAuthorize_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::ResetPasswordByFirstStep_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::ResetPasswordByFirstStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::ResetPasswordBySecondStep_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::ResetPasswordBySecondStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::RESET_PASSWORD_BY_LAST_STEP_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::ResetPasswordByLastStep_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::ResetPasswordByLastStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::SendEmailForResetPassword_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::SendEmailForResetPassword_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::REFRESH_ACCESS_TOKEN_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::RefreshAccessToken_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::RefreshAccessToken_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::DeauthorizeFromOneDevice_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::DeauthorizeFromOneDevice_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES_,
-                    ActionRoute::UserAuthorization {
-                        user_authorization: UserAuthorization::DeauthorizeFromAllDevices_,
-                    },
+                    ActionRoute::UserAuthorization(UserAuthorization::DeauthorizeFromAllDevices_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     Channel::GET_ONE_BY_ID_,
-                    ActionRoute::Channel {
-                        channel: Channel::GetOneById_,
-                    },
+                    ActionRoute::Channel(Channel::GetOneById_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_,
-                    ActionRoute::Channel {
-                        channel: Channel::GetManyByNameInSubscriptions_,
-                    },
+                    ActionRoute::Channel(Channel::GetManyByNameInSubscriptions_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     Channel::GET_MANY_BY_SUBSCRIPTION_,
-                    ActionRoute::Channel {
-                        channel: Channel::GetManyBySubscription_,
-                    },
+                    ActionRoute::Channel(Channel::GetManyBySubscription_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     Channel::GET_MANY_PUBLIC_BY_NAME_,
-                    ActionRoute::Channel {
-                        channel: Channel::GetManyPublicByName_,
-                    },
+                    ActionRoute::Channel(Channel::GetManyPublicByName_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     Channel::CREATE_,
-                    ActionRoute::Channel {
-                        channel: Channel::Create_,
-                    },
+                    ActionRoute::Channel(Channel::Create_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     Channel::CHECK_NAME_FOR_EXISTING_,
-                    ActionRoute::Channel {
-                        channel: Channel::CheckNameForExisting_,
-                    },
+                    ActionRoute::Channel(Channel::CheckNameForExisting_),
                 )
             );
             crate::result_return_logic!(router
                 .insert(
                     Channel::CHECK_LINKED_NAME_FOR_EXISTING_,
-                    ActionRoute::Channel {
-                        channel: Channel::CheckLinkedNameForExisting_,
-                    },
+                    ActionRoute::Channel(Channel::CheckLinkedNameForExisting_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
                     ChannelSubscription::CREATE_,
-                    ActionRoute::ChannelSubscription {
-                        channel_subscription: ChannelSubscription::Create_,
-                    },
+                    ActionRoute::ChannelSubscription(ChannelSubscription::Create_),
+                )
+            );
+            crate::result_return_logic!(
+                router
+                .insert(
+                    ChannelPublication1::GET_MANY_,
+                    ActionRoute::ChannelPublication1(ChannelPublication1::GetMany_),
                 )
             );
         }
@@ -775,9 +694,9 @@ impl HttpServer {
                 postgresql_connection_pool_database_3: &cloned.postgresql_connection_pool_database_3,
             };
             match *r#match.value {
-                ActionRoute::UserAuthorization {
+                ActionRoute::UserAuthorization(
                     ref user_authorization,
-                } => {
+                ) => {
                     match (
                         user_authorization,
                         &parts.method,
@@ -1023,9 +942,9 @@ impl HttpServer {
                         }
                     }
                 }
-                ActionRoute::Channel {
+                ActionRoute::Channel(
                     ref channel,
-                } => {
+                ) => {
                     match (
                         channel,
                         &parts.method,
@@ -1153,9 +1072,9 @@ impl HttpServer {
                         }
                     }
                 }
-                ActionRoute::ChannelSubscription {
+                ActionRoute::ChannelSubscription(
                     ref channel_subscription,
-                } => {
+                ) => {
                     match (
                         channel_subscription,
                         &parts.method,
@@ -1176,6 +1095,40 @@ impl HttpServer {
                                 ) {
                                     (&ChannelSubscription::Create_, &Method::POST) => {
                                         return Action::<ChannelSubscription_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    _ => {}
+                                }
+                            }
+                        }
+                    }
+                }
+                ActionRoute::ChannelPublication1(
+                    ref channel_publication1,
+                ) => {
+                    match (
+                        channel_publication1,
+                        &parts.method,
+                    ) {
+                        (&ChannelPublication1::GetMany, &Method::POST) => {
+                            return Action::<ChannelPublication1_GetMany>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        _ => {
+                            #[cfg(feature = "action_for_manual_test")]
+                            {
+                                match (
+                                    channel_publication1,
+                                    &parts.method,
+                                ) {
+                                    (&ChannelPublication1::GetMany_, &Method::POST) => {
+                                        return Action::<ChannelPublication1_GetMany>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
@@ -1209,18 +1162,10 @@ struct Cloned {
     postgresql_connection_pool_database_3: PostgresqlConnectionPool,
 }
 pub enum ActionRoute {
-    UserAuthorization {
-        user_authorization: UserAuthorization,
-    },
-    Channel {
-        channel: Channel,
-    },
-    ChannelSubscription {
-        channel_subscription: ChannelSubscription,
-    },
-    // ChannelPublication1 {
-
-    // }
+    UserAuthorization(UserAuthorization),
+    Channel(Channel),
+    ChannelSubscription(ChannelSubscription),
+    ChannelPublication1(ChannelPublication1),
 }
 #[cfg(feature = "action_for_manual_test")]
 impl ActionRoute {

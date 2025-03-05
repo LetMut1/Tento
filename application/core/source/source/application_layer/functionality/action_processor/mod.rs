@@ -31,6 +31,9 @@ pub use self::{
         send_email_for_register::UserAuthorization_SendEmailForRegister,
         send_email_for_reset_password::UserAuthorization_SendEmailForResetPassword,
     },
+    channel_publication1::{
+        get_many::ChannelPublication1_GetMany,
+    }
 };
 use {
     super::command_processor::RunServer,

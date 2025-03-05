@@ -214,7 +214,7 @@ struct Incoming {
 }
 
 
-requery___channel__name - an alternative for offset. Used only for requering with persistent channel__name. The value must be equal to the last channel__name of channel registry in received early response.
+requery___channel__name - an alternative for offset. Used only for requering with persistent channel__name. The value must be equal to the last channel__name of data_registry registry in received early response.
 
 Incoming parameters validation rule:
 - requery___channel__name:
@@ -226,6 +226,7 @@ Incoming parameters validation rule:
 struct Outcoming {
     data_registry: Vec<Data>,
 }
+
 struct Data {
     channel__id: i64,
     channel__name: String,
@@ -254,7 +255,7 @@ struct Incoming {
 }
 
 
-requery___channel__id - an alternative for offset. The value must be equal to the last channel__id of channel registry in received early response.
+requery___channel__id - an alternative for offset. The value must be equal to the last channel__id of data_registry registry in received early response.
 
 Incoming parameters validation rule:
 - requery___channel__id:
@@ -266,6 +267,7 @@ Incoming parameters validation rule:
 struct Outcoming {
     data_registry: Vec<Data>,
 }
+
 struct Data {
     channel__id: i64,
     channel__name: String,
@@ -295,7 +297,7 @@ struct Incoming {
 }
 
 
-requery___channel__name - an alternative for offset. Used only for requering with persistent channel__name. The value must be equal to the last channel__name of channel registry in received early response.
+requery___channel__name - an alternative for offset. Used only for requering with persistent channel__name. The value must be equal to the last channel__name of data_registry registry in received early response.
 
 Incoming parameters validation rule:
 - requery___channel__name:
@@ -307,6 +309,7 @@ Incoming parameters validation rule:
 struct Outcoming {
     data_registry: Vec<Data>,
 }
+
 struct Data {
     channel__id: i64,
     channel__name: String,
@@ -352,6 +355,45 @@ enum Precedent {
     Channel_IsClose,
     User_IsChannelOwner,
     ChannelSubscriptionToken_AlreadyExpired,
+}
+```
+ - ## ChannelPublication1_GetMany POST /channel_publication1/get_many
+```
+Returns channel publications of type 1.
+```
+```
+struct Incoming {
+    user_access_token_signed: <Data standards>
+    channel__id: i64,
+    channel_publication1__created_at: i64,
+    limit: i16,
+}
+
+
+channel_publication1__created_at - an alternative for offset. The value for next requests must be equal to the last channel_publication1__created_at of data_regitry registry in received early response.
+
+Incoming parameters validation rule:
+- limit:
+    -- [1, 30] values.
+```
+```
+struct Outcoming {
+    data_registry: Vec<Data>,
+}
+
+struct Data {
+    channel_publication1__id: i64,
+    channel_publication1__images_pathes: Vec<String>,
+    channel_publication1__text: Option<String>,
+    channel_publication1__created_at: i64,
+}
+```
+```
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+    Channel_NotFound,
+    Channel_IsClose,
 }
 ```
 <br/><br/>
@@ -510,6 +552,7 @@ struct Outcoming {
     user_authorization_token__wrong_enter_tries_quantity: i16,
     user_authorization_token__wrong_enter_tries_quantity_limit: i16,
 }
+
 
 user_authorization_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
