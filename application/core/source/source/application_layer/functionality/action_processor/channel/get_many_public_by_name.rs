@@ -104,7 +104,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
             )
             .await?;
         let now = Resolver::<UnixTime>::get_now_in_seconds();
-            let mut data_registry: Vec<Data> = vec![];
+            let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
             '_a: for row in rows.iter() {
                 let channel__id = crate::result_return_logic!(row.try_get::<'_, usize, i64>(0));
                 let channel_token_hashed_for_unsubscribed_users = if crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7)).is_some() {

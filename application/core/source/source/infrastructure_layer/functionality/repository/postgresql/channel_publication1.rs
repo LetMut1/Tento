@@ -150,7 +150,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 )
                 .await
             );
-            let mut data_registry: Vec<Data> = vec![];
+            let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
             if rows.is_empty() {
                 return Result::Ok(data_registry);
             }

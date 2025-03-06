@@ -2105,7 +2105,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                     Data::Filled {
                         data: data_,
                     } => {
-                        let mut data_registry: Vec<Channel_GetManyByNameInSubscriptions_Data> = vec![];
+                        let mut data_registry: Vec<Channel_GetManyByNameInSubscriptions_Data> = Vec::with_capacity(data_.data_registry.len());
                         '_a: for data__ in data_.data_registry {
                             let channel__cover_image_path = match data__.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
@@ -2257,7 +2257,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                     Data::Filled {
                         data: data_,
                     } => {
-                        let mut data_registry: Vec<Channel_GetManyBySubscription_Data> = vec![];
+                        let mut data_registry: Vec<Channel_GetManyBySubscription_Data> = Vec::with_capacity(data_.data_registry.len());
                         '_a: for data__ in data_.data_registry {
                             let channel__cover_image_path = match data__.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
@@ -2411,7 +2411,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                     Data::Filled {
                         data: data_,
                     } => {
-                        let mut data_registry: Vec<Channel_GetManyPublicByName_Data> = vec![];
+                        let mut data_registry: Vec<Channel_GetManyPublicByName_Data> = Vec::with_capacity(data_.data_registry.len());
                         '_a: for data__ in data_.data_registry {
                             let channel__cover_image_path = match data__.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
@@ -2860,13 +2860,13 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                     Data::Filled {
                         data: data_,
                     } => {
-                        let mut data_registry: Vec<ChannelPublication1_GetMany_Data> = vec![];
+                        let mut data_registry: Vec<ChannelPublication1_GetMany_Data> = Vec::with_capacity(data_.data_registry.len());
                         '_a: for data__ in data_.data_registry {
                             let channel_publication1__text = match data__.channel_publication1__text {
                                 Option::Some(channel_publication1__text_) => COption::data(Allocator::<CString>::allocate(channel_publication1__text_)),
                                 Option::None => COption::none(),
                             };
-                            let mut channel_publication1__images_pathes: Vec<CString> = vec![];
+                            let mut channel_publication1__images_pathes: Vec<CString> = Vec::with_capacity(data__.channel_publication1__images_pathes.len());
                             '_b: for channel_publication1__image_pathe in data__.channel_publication1__images_pathes {
                                 channel_publication1__images_pathes.push(
                                     Allocator::<CString>::allocate(channel_publication1__image_pathe),

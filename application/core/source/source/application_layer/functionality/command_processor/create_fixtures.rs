@@ -214,9 +214,7 @@ impl CommandProcessor<CreateFixtures> {
                     } else {
                         Option::None
                     };
-                    let channel__orientation: Vec<i16> = vec![
-                        0, 1, 2,
-                    ];
+                    let channel__orientation: Vec<i16> = vec![0, 1, 2];
                     if !Validator::<Channel_Orientation>::is_valid(channel__orientation.as_slice()) {
                         return Result::Err(crate::new_invalid_argument!());
                     }
