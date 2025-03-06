@@ -270,14 +270,6 @@ pub struct CString {
     pub pointer: *mut c_char,
 }
 impl CString {
-    fn clone_as_string<'a>(&'a self) -> Result<String, Box<dyn StdError + 'static>> {
-        if self.pointer.is_null() {
-            return Result::Err(NULL_POINTER_ERROR_MESAGE.into());
-        }
-        let c_str = unsafe { CStr::from_ptr(self.pointer as *const _) };
-        let string = c_str.to_str()?.to_string();
-        return Result::Ok(string);
-    }
     fn get_as_str<'a, 'b>(&'a self) -> Result<&'b str, Box<dyn StdError + 'static>> {
         if self.pointer.is_null() {
             return Result::Err(NULL_POINTER_ERROR_MESAGE.into());
@@ -2992,8 +2984,8 @@ mod test {
                 get_function_name(self::deallocation::c_vector_clone),
             ),
             (
-                self::deallocation::c_string_clone,
-                get_function_name(self::deallocation::c_string_clone),
+                self::deallocation::c_string_get_as_str,
+                get_function_name(self::deallocation::c_string_get_as_str),
             ),
             (
                 self::deallocation::server_response_data_deserialization::target_empty__user_authorization__authorize_by_first_step,
@@ -3389,10 +3381,10 @@ mod test {
             Allocator::<CVector<_>>::deallocate(c_vector);
             return Result::Ok(());
         }
-        pub fn c_string_clone() -> Result<(), Box<dyn StdError + 'static>> {
+        pub fn c_string_get_as_str() -> Result<(), Box<dyn StdError + 'static>> {
             let c_string = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
             {
-                let _ = c_string.clone_as_string()?;
+                let _ = c_string.get_as_str()?;
             }
             if c_string.pointer.is_null() {
                 return Result::Err(ALLOCATION_ERROR.into());
