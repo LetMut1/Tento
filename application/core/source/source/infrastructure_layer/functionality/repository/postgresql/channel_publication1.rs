@@ -25,15 +25,19 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         channel__id,\
                         images_pathes,\
                         text_,\
+                        marks_quantity,\
+                        viewing_quantity,\
                         created_at\
                     ) VALUES (\
                         $1,\
                         $2,\
                         $3,\
                         $4,\
-                        $5\
+                        $5,\
+                        $6,\
+                        $7\
                     );";
-            let mut parameter_storage = ParameterStorage::new(5);
+            let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
                     &insert.channel_publication1__id,
@@ -50,6 +54,14 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 .add(
                     &insert.channel_publication1__text,
                     Type::TEXT,
+                )
+                .add(
+                    &insert.channel_publication1__marks_quantity,
+                    Type::INT8,
+                )
+                .add(
+                    &insert.channel_publication1__viewing_quantity,
+                    Type::INT8,
                 )
                 .add(
                     &insert.channel_publication1__created_at,
@@ -112,6 +124,8 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     cp1.id AS i,\
                     cp1.images_pathes AS ip,\
                     cp1.text_ AS t,\
+                    cp1.marks_quantity AS mq,\
+                    cp1.viewing_quantity AS vq,\
                     cp1.created_at AS ca \
                 FROM \
                     public.channel_publication1 cp1 \
@@ -160,7 +174,9 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         channel_publication1__id: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
                         channel_publication1__images_pathes: crate::result_return_logic!(rows[0].try_get::<'_, usize, Vec<String>>(1)),
                         channel_publication1__text: crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(2)),
-                        channel_publication1__created_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
+                        channel_publication1__marks_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
+                        channel_publication1__viewing_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(4)),
+                        channel_publication1__created_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(5)),
                     }
                 );
             }
@@ -173,6 +189,8 @@ pub struct Insert<'a> {
     pub channel__id: i64,
     pub channel_publication1__images_pathes: &'a [String],
     pub channel_publication1__text: Option<&'a str>,
+    pub channel_publication1__marks_quantity: i64,
+    pub channel_publication1__viewing_quantity: i64,
     pub channel_publication1__created_at: i64,
 }
 pub struct By1 {

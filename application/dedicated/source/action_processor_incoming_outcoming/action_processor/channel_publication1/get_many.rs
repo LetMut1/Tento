@@ -29,6 +29,8 @@ pub struct Data {
     pub channel_publication1__id: i64,
     pub channel_publication1__images_pathes: Vec<String>,
     pub channel_publication1__text: Option<String>,
+    pub channel_publication1__marks_quantity: i64,
+    pub channel_publication1__viewing_quantity: i64,
     pub channel_publication1__created_at: i64,
 }
 #[cfg_attr(

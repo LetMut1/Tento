@@ -3,6 +3,8 @@ CREATE TABLE public.channel_publication1 (
     channel__id BIGINT,
     images_pathes TEXT[],
     text_ TEXT,
+    marks_quantity BIGINT,
+    viewing_quantity BIGINT,
     created_at BIGINT
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
@@ -19,6 +21,8 @@ ALTER TABLE ONLY public.channel_publication1
 ALTER COLUMN id SET NOT NULL,
 ALTER COLUMN channel__id SET NOT NULL,
 ALTER COLUMN images_pathes SET NOT NULL,
+ALTER COLUMN marks_quantity SET NOT NULL,
+ALTER COLUMN viewing_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT channel_publication1_4 PRIMARY KEY USING INDEX channel_publication1_2,
 ADD CONSTRAINT channel_publication1_5 UNIQUE USING INDEX channel_publication1_3;

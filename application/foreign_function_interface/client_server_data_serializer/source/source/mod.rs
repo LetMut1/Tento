@@ -2833,6 +2833,8 @@ pub struct ChannelPublication1_GetMany_Data {
     pub channel_publication1__id: c_long,
     pub channel_publication1__images_pathes: CVector<CString>,
     pub channel_publication1__text: COption<CString>,
+    pub channel_publication1__marks_quantity: c_long,
+    pub channel_publication1__viewing_quantity: c_long,
     pub channel_publication1__created_at: c_long,
 }
 #[repr(C)]
@@ -2877,6 +2879,8 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                                     channel_publication1__id: data__.channel_publication1__id,
                                     channel_publication1__images_pathes: Allocator::<CVector<_>>::allocate(channel_publication1__images_pathes),
                                     channel_publication1__text,
+                                    channel_publication1__marks_quantity: data__.channel_publication1__marks_quantity,
+                                    channel_publication1__viewing_quantity: data__.channel_publication1__viewing_quantity,
                                     channel_publication1__created_at: data__.channel_publication1__created_at,
                                 }
                             );
@@ -4361,6 +4365,8 @@ mod test {
                             NOT_EMPTY_STRING_LITERAL.to_string(),
                             NOT_EMPTY_STRING_LITERAL.to_string(),
                         ],
+                        channel_publication1__marks_quantity: 0,
+                        channel_publication1__viewing_quantity: 0,
                         channel_publication1__created_at: 0,
                     };
                     data_registry.push(data);
