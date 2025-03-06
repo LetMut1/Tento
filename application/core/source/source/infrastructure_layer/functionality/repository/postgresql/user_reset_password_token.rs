@@ -36,7 +36,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                         $6,\
                         $7\
                     );";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
                     &insert.user__id,
@@ -93,7 +93,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 WHERE \
                     urpt.user__id = $1 \
                     AND urpt.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -143,7 +143,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 WHERE \
                     urpt.user__id = $6 \
                     AND urpt.user_device__id = $7;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
                     &update.user_reset_password_token__value,
@@ -205,7 +205,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 WHERE \
                     urpt.user__id = $2 \
                     AND urpt.user_device__id = $3;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
                     &update.user_reset_password_token__can_be_resent_from,
@@ -257,7 +257,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 WHERE \
                     urpt.user__id = $5 \
                     AND urpt.user_device__id = $6;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
                     &update.user_reset_password_token__value,
@@ -312,7 +312,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 WHERE \
                     urpt.user__id = $1 \
                     AND urpt.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -354,7 +354,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 WHERE \
                     urpt.user__id = $2 \
                     AND urpt.user_device__id = $3;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
                     &update.user_reset_password_token__is_approved,
@@ -406,7 +406,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 WHERE \
                     urpt.user__id = $1 \
                     AND urpt.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -465,7 +465,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 WHERE \
                     urpt.user__id = $1 \
                     AND urpt.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -523,7 +523,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 WHERE \
                     urpt.user__id = $1 \
                     AND urpt.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,

@@ -68,7 +68,7 @@ impl Repository<Postgresql<Channel>> {
                     ) \
                 RETURNING \
                     c.id AS i;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(14);
             parameter_storage
                 .add(
                     &insert.channel__owner,
@@ -156,7 +156,7 @@ impl Repository<Postgresql<Channel>> {
                     subscribers_quantity = subscribers_quantity + 1 \
                 WHERE \
                     c.id = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel__id,
                 Type::INT8,
@@ -216,7 +216,7 @@ impl Repository<Postgresql<Channel>> {
                     public.channel c \
                 WHERE \
                     c.id = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel__id,
                 Type::INT8,
@@ -275,7 +275,7 @@ impl Repository<Postgresql<Channel>> {
                     public.channel c \
                 WHERE \
                     c.id = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel__id,
                 Type::INT8,
@@ -338,7 +338,7 @@ impl Repository<Postgresql<Channel>> {
                 1,
             );
             let wildcard = format!("{}%", by.channel__name,);
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -421,7 +421,7 @@ impl Repository<Postgresql<Channel>> {
                 1,
             );
             let wildcard = format!("{}%", by.channel__name,);
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(4);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -513,7 +513,7 @@ impl Repository<Postgresql<Channel>> {
                 1,
                 1,
             );
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage.add(
                 &by.user__id,
                 Type::INT8,
@@ -592,7 +592,7 @@ impl Repository<Postgresql<Channel>> {
                     public.channel c \
                 WHERE \
                     c.id = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel__id,
                 Type::INT8,
@@ -635,7 +635,7 @@ impl Repository<Postgresql<Channel>> {
                     public.channel c \
                 WHERE \
                     c.name = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel__name,
                 Type::TEXT,
@@ -671,7 +671,7 @@ impl Repository<Postgresql<Channel>> {
                     public.channel c \
                 WHERE \
                     c.linked_name = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel__linked_name,
                 Type::TEXT,

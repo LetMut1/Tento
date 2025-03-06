@@ -39,7 +39,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                         $6,\
                         $7\
                     );";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
                     &insert.user__email,
@@ -96,7 +96,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 WHERE \
                     urt.user__email = $1 \
                     AND urt.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__email,
@@ -146,7 +146,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 WHERE \
                     urt.user__email = $6 \
                     AND urt.user_device__id = $7;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
                     &update.user_registration_token__value,
@@ -208,7 +208,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 WHERE \
                     urt.user__email = $2 \
                     AND urt.user_device__id = $3;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
                     &update.user_registration_token__can_be_resent_from,
@@ -260,7 +260,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 WHERE \
                     urt.user__email = $5 AND \
                     urt.user_device__id = $6;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
                     &update.user_registration_token__value,
@@ -315,7 +315,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 WHERE \
                     urt.user__email = $1 \
                     AND urt.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__email,
@@ -357,7 +357,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 WHERE \
                     urt.user__email = $2 \
                     AND urt.user_device__id = $3;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
                     &update.user_registration_token__is_approved,
@@ -409,7 +409,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 WHERE \
                     urt.user__email = $1 \
                     AND urt.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__email,
@@ -468,7 +468,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 WHERE \
                     urt.user__email = $1 \
                     AND urt.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__email,
@@ -526,7 +526,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 WHERE \
                     urt.user__email = $1 \
                     AND urt.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__email,

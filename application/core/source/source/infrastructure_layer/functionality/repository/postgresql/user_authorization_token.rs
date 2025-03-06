@@ -37,7 +37,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                         $5,\
                         $6\
                     );";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
                     &insert.user__id,
@@ -90,7 +90,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 WHERE \
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -138,7 +138,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 WHERE \
                     uat.user__id = $5 \
                     AND uat.user_device__id = $6;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
                     &update.user_authorization_token__value,
@@ -200,7 +200,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 WHERE \
                     uat.user__id = $4 \
                     AND uat.user_device__id = $5;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
                     &update.user_authorization_token__value,
@@ -254,7 +254,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 WHERE \
                     uat.user__id = $2 \
                     AND uat.user_device__id = $3;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
                     &update.user_authorization_token__can_be_resent_from,
@@ -297,7 +297,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 WHERE \
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -343,7 +343,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 WHERE \
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -399,7 +399,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 WHERE \
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -454,7 +454,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 WHERE \
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,

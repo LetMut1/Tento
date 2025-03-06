@@ -85,10 +85,10 @@ struct ParameterStorage<'a, 'b> {
     parameters_types: Vec<Type>,
 }
 impl<'a, 'b> ParameterStorage<'a, 'b> {
-    pub fn new() -> Self {
+    pub fn new(capacity: usize) -> Self {
         return Self {
-            parameters: vec![],
-            parameters_types: vec![],
+            parameters: Vec::with_capacity(capacity),
+            parameters_types: Vec::with_capacity(capacity),
         };
     }
     pub fn add<'c>(&'c mut self, parameter_value: &'a (dyn ToSql + Sync + 'b), patameter_type: Type) -> &'c mut Self {

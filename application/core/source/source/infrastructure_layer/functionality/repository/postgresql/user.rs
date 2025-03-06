@@ -35,7 +35,7 @@ impl Repository<Postgresql<User>> {
                     ) \
                 RETURNING \
                     u.id AS i;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(4);
             parameter_storage
                 .add(
                     &insert.user__email,
@@ -91,7 +91,7 @@ impl Repository<Postgresql<User>> {
                         $4,\
                         $5\
                     );";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
                     &insert.user__id,
@@ -146,7 +146,7 @@ impl Repository<Postgresql<User>> {
                     u.id = $2 \
                 RETURNING \
                     u.id AS i;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &update.user__password_hash,
@@ -182,7 +182,7 @@ impl Repository<Postgresql<User>> {
                     public.user_ AS u \
                 WHERE \
                     u.id = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__id,
                 Type::INT8,
@@ -216,7 +216,7 @@ impl Repository<Postgresql<User>> {
                     public.user_ u \
                 WHERE \
                     u.nickname = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__nickname,
                 Type::TEXT,
@@ -261,7 +261,7 @@ impl Repository<Postgresql<User>> {
                     public.user_ u \
                 WHERE \
                     u.nickname = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__nickname,
                 Type::TEXT,
@@ -310,7 +310,7 @@ impl Repository<Postgresql<User>> {
                     public.user_ u \
                 WHERE \
                     u.email = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__email,
                 Type::TEXT,
@@ -355,7 +355,7 @@ impl Repository<Postgresql<User>> {
                     public.user_ u \
                 WHERE \
                     u.email = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__email,
                 Type::TEXT,
@@ -400,7 +400,7 @@ impl Repository<Postgresql<User>> {
                     public.user_ u \
                 WHERE \
                     u.id = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__id,
                 Type::INT8,
@@ -445,7 +445,7 @@ impl Repository<Postgresql<User>> {
                     public.user_ u \
                 WHERE \
                     u.id = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__id,
                 Type::INT8,
@@ -485,7 +485,7 @@ impl Repository<Postgresql<User>> {
                     public.user_ u \
                 WHERE \
                     u.nickname = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__nickname,
                 Type::TEXT,
@@ -521,7 +521,7 @@ impl Repository<Postgresql<User>> {
                     public.user_ u \
                 WHERE \
                     u.email = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__email,
                 Type::TEXT,
@@ -557,7 +557,7 @@ impl Repository<Postgresql<User>> {
                     public.user_ u \
                 WHERE \
                     u.id = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__id,
                 Type::INT8,

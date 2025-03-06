@@ -28,7 +28,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                         $2,\
                         $3\
                     );";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
                     &insert.user__id,
@@ -71,7 +71,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                 WHERE \
                     cs.user__id = $1 \
                     AND cs.channel__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,

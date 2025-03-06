@@ -29,7 +29,7 @@ impl Repository<Postgresql<UserDevice>> {
                 ON CONFLICT ON CONSTRAINT \
                     user_device_2 \
                 DO NOTHING;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &insert.user_device__id,

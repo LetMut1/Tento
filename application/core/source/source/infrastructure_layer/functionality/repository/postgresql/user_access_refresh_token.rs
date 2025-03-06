@@ -34,7 +34,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                         $5,\
                         $6\
                     );";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
                     &insert.user__id,
@@ -98,7 +98,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 WHERE \
                     uart.user__id = $5 \
                     AND uart.user_device__id = $6;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
                     &update.user_access_token__id,
@@ -151,7 +151,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             WHERE \
                 uart.user__id = $1 \
                 AND uart.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -187,7 +187,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                     public.user_access_refresh_token AS uart \
                 WHERE \
                     uart.user__id = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__id,
                 Type::INT8,
@@ -228,7 +228,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 WHERE \
                     uart.user__id = $1 \
                     AND uart.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -279,7 +279,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 WHERE \
                     uart.user__id = $1 \
                     AND uart.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,

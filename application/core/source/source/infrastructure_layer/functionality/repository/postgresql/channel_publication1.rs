@@ -33,7 +33,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         $4,\
                         $5\
                     );";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
                     &insert.channel_publication1__id,
@@ -81,7 +81,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     public.channel_publication1 cp1 \
                 WHERE \
                     cp1.id = $1;";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel_publication1__id,
                 Type::TEXT,
@@ -121,7 +121,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 ORDER BY \
                     cp1.created_at DESC \
                 LIMIT $3";
-            let mut parameter_storage = ParameterStorage::new();
+            let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage.add(
                 &by.channel__id,
                 Type::INT8,
