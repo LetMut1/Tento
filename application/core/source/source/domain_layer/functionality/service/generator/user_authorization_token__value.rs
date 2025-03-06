@@ -1,15 +1,21 @@
 use {
     super::Generator,
-    crate::{
-        domain_layer::data::entity::user_authorization_token::UserAuthorizationToken_Value,
-        infrastructure_layer::functionality::service::generator::{
-            Generator as Generator_,
-            NumberRow,
-        },
-    },
+    crate::domain_layer::data::entity::user_authorization_token::UserAuthorizationToken_Value,
+};
+#[cfg(not(feature = "token_666666"))]
+use crate::infrastructure_layer::functionality::service::generator::{
+    Generator as Generator_,
+    NumberRow,
 };
 impl Generator<UserAuthorizationToken_Value> {
     pub fn generate() -> String {
-        return Generator_::<NumberRow>::generate_6();
+        #[cfg(feature = "token_666666")]
+        {
+            return "666666".to_string();
+        }
+        #[cfg(not(feature = "token_666666"))]
+        {
+            return Generator_::<NumberRow>::generate_6();
+        }
     }
 }

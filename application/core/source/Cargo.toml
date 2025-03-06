@@ -60,6 +60,11 @@ uuid = { workspace = true }
 
 [features]
 default = []
+for_development = [
+    "logging_to_file",
+    "port_for_manual_test",
+    "token_666666",
+]
 logging_to_file = []
 postgresql_connection_with_tls = []
 serde_for_manual_test = [
@@ -76,3 +81,4 @@ action_for_manual_test = [
 port_for_manual_test = [
     "action_for_manual_test"
 ]
+token_666666 = []
