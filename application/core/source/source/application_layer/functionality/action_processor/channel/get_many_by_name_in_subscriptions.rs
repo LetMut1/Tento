@@ -37,6 +37,7 @@ use {
             Incoming,
             Outcoming,
             Precedent,
+            Data,
         },
         unified_report::UnifiedReport,
     },
@@ -78,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
                     return Result::Err(crate::new_invalid_argument!());
                 }
             }
-            let data_registry = Repository::<Postgresql<Channel>>::find_4(
+            let rows = Repository::<Postgresql<Channel>>::find_4(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),
                 ChannelBy5 {
                     user__id,
@@ -88,6 +89,19 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
                 incoming.limit,
             )
             .await?;
+            let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
+            '_a: for row in rows.iter() {
+                let data = Data {
+                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
+                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
+                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
+                    channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
+                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
+                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
+                };
+                data_registry.push(data);
+            }
             let outcoming = Outcoming {
                 data_registry,
             };

@@ -22,10 +22,6 @@ use {
         types::Type,
         Row,
     },
-    dedicated::action_processor_incoming_outcoming::action_processor::channel::{
-        get_many_by_name_in_subscriptions::Data as Data1,
-        get_many_by_subscription::Data as Data2,
-    },
 };
 // channel__id: i64,
 impl Repository<Postgresql<Channel>> {
@@ -394,7 +390,7 @@ impl Repository<Postgresql<Channel>> {
             );
         };
     }
-    pub fn find_4<'a>(database_3_client: &'a Client, by: By5<'a>, limit: i16) -> impl Future<Output = Result<Vec<Data1>, AggregateError>> + Send + use<'a> {
+    pub fn find_4<'a>(database_3_client: &'a Client, by: By5<'a>, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -462,7 +458,7 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
-            let rows = crate::result_return_runtime!(
+            return crate::result_into_runtime!(
                 database_3_client
                 .query(
                     &statement,
@@ -470,26 +466,9 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
-            let mut data_registry: Vec<Data1> = Vec::with_capacity(rows.len());
-            if rows.is_empty() {
-                return Result::Ok(data_registry);
-            }
-            '_a: for row in rows.iter() {
-                let data = Data1 {
-                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
-                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
-                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
-                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
-                    channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
-                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
-                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
-                };
-                data_registry.push(data);
-            }
-            return Result::Ok(data_registry);
         };
     }
-    pub fn find_5<'a>(database_3_client: &'a Client, by: By6, limit: i16) -> impl Future<Output = Result<Vec<Data2>, AggregateError>> + Send + use<'a> {
+    pub fn find_5<'a>(database_3_client: &'a Client, by: By6, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -552,7 +531,7 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
-            let rows = crate::result_return_runtime!(
+            return crate::result_into_runtime!(
                 database_3_client
                 .query(
                     &statement,
@@ -560,23 +539,6 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
-            let mut data_registry: Vec<Data2> = Vec::with_capacity(rows.len());
-            if rows.is_empty() {
-                return Result::Ok(data_registry);
-            }
-            '_a: for row in rows.iter() {
-                let data = Data2 {
-                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
-                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
-                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
-                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
-                    channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
-                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
-                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
-                };
-                data_registry.push(data);
-            }
-            return Result::Ok(data_registry);
         };
     }
     // channel__owner: i64,
