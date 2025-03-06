@@ -12,8 +12,10 @@ use {
     },
     deadpool_postgres::Client,
     std::future::Future,
-    tokio_postgres::types::Type,
-    dedicated::action_processor_incoming_outcoming::action_processor::channel_publication1::get_many::Data,
+    tokio_postgres::{
+        types::Type,
+        Row,
+    },
 };
 impl Repository<Postgresql<ChannelPublication1>> {
     pub fn create<'a>(database_3_client: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
@@ -117,7 +119,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(());
         };
     }
-    pub fn find<'a>(database_1_client: &'a Client, by: By2, limit: i16) -> impl Future<Output = Result<Vec<Data>, AggregateError>> + Send + use<'a> {
+    pub fn find<'a>(database_3_client: &'a Client, by: By2, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -149,38 +151,21 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 Type::INT2,
             );
             let statement = crate::result_return_logic!(
-                database_1_client
+                database_3_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
             );
-            let rows = crate::result_return_runtime!(
-                database_1_client
+            return crate::result_into_runtime!(
+                database_3_client
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
                 )
                 .await
             );
-            let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
-            if rows.is_empty() {
-                return Result::Ok(data_registry);
-            }
-            '_a: for row in rows.iter() {
-                data_registry.push(
-                    Data {
-                        channel_publication1__id: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                        channel_publication1__images_pathes: crate::result_return_logic!(rows[0].try_get::<'_, usize, Vec<String>>(1)),
-                        channel_publication1__text: crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(2)),
-                        channel_publication1__marks_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
-                        channel_publication1__viewing_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(4)),
-                        channel_publication1__created_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(5)),
-                    }
-                );
-            }
-            return Result::Ok(data_registry);
         };
     }
 }

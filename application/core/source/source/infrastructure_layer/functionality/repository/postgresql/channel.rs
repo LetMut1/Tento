@@ -384,7 +384,7 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
-            let rows = crate::result_return_runtime!(
+            return crate::result_into_runtime!(
                 database_3_client
                 .query(
                     &statement,
@@ -392,7 +392,6 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
-            return Result::Ok(rows);
         };
     }
     pub fn find_4<'a>(database_3_client: &'a Client, by: By5<'a>, limit: i16) -> impl Future<Output = Result<Vec<Data1>, AggregateError>> + Send + use<'a> {

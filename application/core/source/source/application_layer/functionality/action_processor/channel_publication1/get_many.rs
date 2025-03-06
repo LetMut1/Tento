@@ -39,7 +39,8 @@ use {
         action_processor_incoming_outcoming::action_processor::channel_publication1::get_many::{
             Incoming,
             Precedent,
-            Outcoming
+            Outcoming,
+            Data,
         },
         unified_report::UnifiedReport,
     },
@@ -98,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
                 }
             }
-            let data_registry = Repository::<Postgresql<ChannelPublication1>>::find(
+            let rows = Repository::<Postgresql<ChannelPublication1>>::find(
                 &postgresql_database_3_client,
                 ChannelPublication1By2 {
                     channel__id: incoming.channel__id,
@@ -106,6 +107,21 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                 },
                 incoming.limit,
             ).await?;
+            let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
+            if !rows.is_empty() {
+                '_a: for row in rows.iter() {
+                    data_registry.push(
+                        Data {
+                            channel_publication1__id: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                            channel_publication1__images_pathes: crate::result_return_logic!(rows[0].try_get::<'_, usize, Vec<String>>(1)),
+                            channel_publication1__text: crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(2)),
+                            channel_publication1__marks_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
+                            channel_publication1__viewing_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(4)),
+                            channel_publication1__created_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(5)),
+                        }
+                    );
+                }
+            }
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {
