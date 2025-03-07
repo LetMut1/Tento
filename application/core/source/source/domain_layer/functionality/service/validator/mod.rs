@@ -12,6 +12,8 @@ mod user_device__id;
 mod user_registration_token__value;
 mod channel_publication1__id;
 mod user_reset_password_token__value;
+mod channel_publication1__images_pathes;
+mod channel_publication1__text;
 use std::marker::PhantomData;
 pub struct Validator<S> {
     _subject: PhantomData<S>,

@@ -357,6 +357,32 @@ enum Precedent {
     ChannelSubscriptionToken_AlreadyExpired,
 }
 ```
+ - ## ChannelPublication1_Create POST /channel_publication1/create
+```
+Creates channel publications of type 1.
+```
+```
+struct Incoming {
+    user_access_token_signed: <Data standards>
+    channel__id: i64,
+    channel_publication1__images_pathes: Vec<String>,
+    channel_publication1__text: Option<String>,
+}
+```
+```
+struct Outcoming {
+    channel_publication1__id: i64,
+    channel_publication1__created_at: i64,
+}
+```
+```
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+    Channel_NotFound,
+    User_IsNotChannelOwner,
+}
+```
  - ## ChannelPublication1_GetMany POST /channel_publication1/get_many
 ```
 Returns channel publications of type 1.

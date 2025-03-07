@@ -1,7 +1,6 @@
 use crate::{
     common_precedent::CommonPrecedent,
     user_access_token_signed::UserAccessTokenSigned,
-    channel_token_hashed::ChannelTokenHashed,
 };
 #[cfg_attr(
     feature = "serde_for_manual_test",
@@ -12,28 +11,13 @@ use crate::{
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Incoming<'a> {
+    #[cfg_attr(feature = "serde_for_manual_test", serde(borrow))]
     pub user_access_token_signed: UserAccessTokenSigned<'a>,
-    pub channel__name: &'a str,
-    // The bitcode(=0.6.3)::Decode not implemented for &'_ Option<&'_ str>.
-    pub requery___channel__name: Option<&'a str>,
-    pub limit: i16,
-}
-#[cfg_attr(
-    feature = "serde_for_manual_test",
-    derive(
-        serde::Serialize,
-        serde::Deserialize
-    )
-)]
-#[derive(bitcode::Encode, bitcode::Decode)]
-pub struct Data {
     pub channel__id: i64,
-    pub channel__name: String,
-    pub channel__linked_name: String,
-    pub channel__access_modifier: i16,
-    pub channel__cover_image_path: Option<String>,
-    pub channel__background_image_path: Option<String>,
-    pub channel_token_hashed_for_unsubscribed_users: Option<ChannelTokenHashed>,
+    // The bitcode(=0.6.3)::Decode not implemented for &'_ [&'_ str],
+    pub channel_publication1__images_pathes: Vec<&'a str>,
+    // The bitcode(=0.6.3)::Decode not implemented for &'_ Option<&'_ str>.
+    pub channel_publication1__text: Option<&'a str>,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",
@@ -44,11 +28,14 @@ pub struct Data {
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Outcoming {
-    pub data_registry: Vec<Data>,
+    pub channel_publication1__id: i64,
+    pub channel_publication1__created_at: i64,
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserAccessToken_AlreadyExpired,
         CommonPrecedent::UserAccessToken_InUserAccessTokenBlackList,
+        CommonPrecedent::Channel_NotFound,
+        CommonPrecedent::User_IsNotChannelOwner,
     }
 );

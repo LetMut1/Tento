@@ -13,6 +13,7 @@ use crate::{
 pub struct Incoming<'a> {
     pub user_access_token_signed: UserAccessTokenSigned<'a>,
     pub channel__name: &'a str,
+    // The bitcode(=0.6.3)::Decode not implemented for &'_ Option<&'_ str>.
     pub requery___channel__name: Option<&'a str>,
     pub limit: i16,
 }

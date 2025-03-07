@@ -547,7 +547,7 @@ impl Repository<Postgresql<Channel>> {
         return async move {
             let query = "\
                 SELECT \
-                    c.owner AS ow,\
+                    c.owner AS o,\
                     c.access_modifier AS am \
                 FROM \
                     public.channel c \
@@ -585,6 +585,43 @@ impl Repository<Postgresql<Channel>> {
                     ),
                 ),
             );
+        };
+    }
+    // channel__owner: i64,
+    pub fn find_7<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
+        return async move {
+            let query = "\
+                SELECT \
+                    c.owner AS o \
+                FROM \
+                    public.channel c \
+                WHERE \
+                    c.id = $1;";
+            let mut parameter_storage = ParameterStorage::new(1);
+            parameter_storage.add(
+                &by.channel__id,
+                Type::INT8,
+            );
+            let statement = crate::result_return_logic!(
+                database_3_client
+                .prepare_typed_cached(
+                    query,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                database_3_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(Option::None);
+            }
+            return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
         };
     }
     pub fn is_exist_1<'a>(database_3_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
@@ -664,7 +701,7 @@ pub struct Insert<'a> {
     pub channel__owner: i64,
     pub channel__name: &'a str,
     pub channel__linked_name: &'a str,
-    pub channel__description: Option<&'a str,>,
+    pub channel__description: Option<&'a str>,
     pub channel__access_modifier: i16,
     pub channel__visability_modifier: i16,
     pub channel__orientation: &'a [i16],

@@ -20,3 +20,5 @@ pub struct ChannelPublication1 {
     created_at: CreatedAt,
 }
 pub type ChannelPublication1_Id = Id;
+pub type ChannelPublication1_ImagesPathes = ImagesPathes;
+pub type ChannelPublication1_Text = Text;

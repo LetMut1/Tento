@@ -33,6 +33,7 @@ use {
                 UserAuthorization_SendEmailForRegister,
                 UserAuthorization_SendEmailForResetPassword,
                 ChannelPublication1_GetMany,
+                ChannelPublication1_Create,
             },
             command_processor::RunServer,
         },
@@ -491,8 +492,8 @@ impl HttpServer {
         crate::result_return_logic!(
             router
             .insert(
-                ChannelPublication1::GET_MANY,
-                ActionRoute::ChannelPublication1(ChannelPublication1::GetMany),
+                ChannelPublication1::CREATE,
+                ActionRoute::ChannelPublication1(ChannelPublication1::Create),
             )
         );
         #[cfg(feature = "action_for_manual_test")]
@@ -662,6 +663,13 @@ impl HttpServer {
                 .insert(
                     ChannelSubscription::CREATE_,
                     ActionRoute::ChannelSubscription(ChannelSubscription::Create_),
+                )
+            );
+            crate::result_return_logic!(
+                router
+                .insert(
+                    ChannelPublication1::CREATE_,
+                    ActionRoute::ChannelPublication1(ChannelPublication1::Create_),
                 )
             );
             crate::result_return_logic!(
@@ -1113,6 +1121,13 @@ impl HttpServer {
                         channel_publication1,
                         &parts.method,
                     ) {
+                        (&ChannelPublication1::Create, &Method::POST) => {
+                            return Action::< ChannelPublication1_Create>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         (&ChannelPublication1::GetMany, &Method::POST) => {
                             return Action::<ChannelPublication1_GetMany>::run(
                                 &mut action_inner,
@@ -1127,6 +1142,13 @@ impl HttpServer {
                                     channel_publication1,
                                     &parts.method,
                                 ) {
+                                    (&ChannelPublication1::Create_, &Method::POST) => {
+                                        return Action::< ChannelPublication1_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
                                     (&ChannelPublication1::GetMany_, &Method::POST) => {
                                         return Action::<ChannelPublication1_GetMany>::run_(
                                             &mut action_inner,
@@ -1385,15 +1407,23 @@ impl ChannelSubscription {
     );
 }
 pub enum ChannelPublication1 {
+    Create,
     GetMany,
+    #[cfg(feature = "action_for_manual_test")]
+    Create_,
     #[cfg(feature = "action_for_manual_test")]
     GetMany_,
 }
 impl ChannelPublication1 {
+    pub const CREATE: &'static str = "/channel_publication1/create";
     pub const GET_MANY: &'static str = "/channel_publication1/get_many";
 }
 #[cfg(feature = "action_for_manual_test")]
 impl ChannelPublication1 {
+    pub const CREATE_: &'static str = const_format::concatcp!(
+        ChannelPublication1::CREATE,
+        ActionRoute::PART,
+    );
     pub const GET_MANY_: &'static str = const_format::concatcp!(
         ChannelPublication1::GET_MANY,
         ActionRoute::PART,

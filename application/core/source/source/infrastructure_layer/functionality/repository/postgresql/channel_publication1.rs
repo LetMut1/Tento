@@ -18,7 +18,8 @@ use {
     },
 };
 impl Repository<Postgresql<ChannelPublication1>> {
-    pub fn create<'a>(database_3_client: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    // channel_publication1__id: i64
+    pub fn create<'a, 'b>(database_3_client: &'a Client, insert: Insert<'a, 'b>) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a, 'b> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -31,20 +32,18 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         viewing_quantity,\
                         created_at\
                     ) VALUES (\
+                        nextval('public.channel_publication1_1'),\
                         $1,\
                         $2,\
                         $3,\
                         $4,\
                         $5,\
-                        $6,\
-                        $7\
-                    );";
-            let mut parameter_storage = ParameterStorage::new(7);
+                        $6\
+                    )\
+                RETURNING \
+                    u.id AS i;";
+            let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
-                .add(
-                    &insert.channel_publication1__id,
-                    Type::INT8,
-                )
                 .add(
                     &insert.channel__id,
                     Type::TEXT,
@@ -85,7 +84,9 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 )
                 .await
             );
-            return Result::Ok(());
+            return Result::Ok(
+                crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))
+            );
         };
     }
     pub fn delete<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
@@ -169,10 +170,9 @@ impl Repository<Postgresql<ChannelPublication1>> {
         };
     }
 }
-pub struct Insert<'a> {
-    pub channel_publication1__id: i64,
+pub struct Insert<'a, 'b> {
     pub channel__id: i64,
-    pub channel_publication1__images_pathes: &'a [String],
+    pub channel_publication1__images_pathes: &'a [&'b str],
     pub channel_publication1__text: Option<&'a str>,
     pub channel_publication1__marks_quantity: i64,
     pub channel_publication1__viewing_quantity: i64,

@@ -1,6 +1,7 @@
 pub enum CommonPrecedent {
     User_EmailAlreadyExist,
     User_IsChannelOwner,
+    User_IsNotChannelOwner,
     User_NicknameAlreadyExist,
     User_NotFound,
     User_WrongEmailOrNicknameOrPassword,
