@@ -772,6 +772,38 @@ typedef struct CResult_CUnifiedReport_Channel_GetOneById_Outcoming__Channel_GetO
 
 typedef struct CResult_CUnifiedReport_Channel_GetOneById_Outcoming__Channel_GetOneById_Precedent Channel_GetOneById_CResult;
 
+typedef struct Channel_CheckNameForExisting_Incoming {
+  struct UserAccessTokenSigned user_access_token_signed;
+  struct CString channel__name;
+} Channel_CheckNameForExisting_Incoming;
+
+typedef struct Channel_CheckNameForExisting_Outcoming {
+  bool result;
+} Channel_CheckNameForExisting_Outcoming;
+
+typedef struct CData_Channel_CheckNameForExisting_Outcoming {
+  struct Channel_CheckNameForExisting_Outcoming filled;
+  bool is_filled;
+} CData_Channel_CheckNameForExisting_Outcoming;
+
+typedef struct Channel_CheckNameForExisting_Precedent {
+  bool user_access_token__already_expired;
+  bool user_access_token__in_user_access_token_black_list;
+} Channel_CheckNameForExisting_Precedent;
+
+typedef struct CUnifiedReport_Channel_CheckNameForExisting_Outcoming__Channel_CheckNameForExisting_Precedent {
+  struct CData_Channel_CheckNameForExisting_Outcoming target;
+  struct Channel_CheckNameForExisting_Precedent precedent;
+  bool is_target;
+} CUnifiedReport_Channel_CheckNameForExisting_Outcoming__Channel_CheckNameForExisting_Precedent;
+
+typedef struct CResult_CUnifiedReport_Channel_CheckNameForExisting_Outcoming__Channel_CheckNameForExisting_Precedent {
+  struct CUnifiedReport_Channel_CheckNameForExisting_Outcoming__Channel_CheckNameForExisting_Precedent data;
+  bool is_data;
+} CResult_CUnifiedReport_Channel_CheckNameForExisting_Outcoming__Channel_CheckNameForExisting_Precedent;
+
+typedef struct CResult_CUnifiedReport_Channel_CheckNameForExisting_Outcoming__Channel_CheckNameForExisting_Precedent Channel_CheckNameForExisting_CResult;
+
 typedef struct Channel_CheckLinkedNameForExisting_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   struct CString channel__linked_name;
@@ -1083,6 +1115,14 @@ void channel__get_one_by_id__serialize_deallocate(struct CResult_CVector_c_uchar
 Channel_GetOneById_CResult channel__get_one_by_id__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
 
 void channel__get_one_by_id__deserialize_deallocate(Channel_GetOneById_CResult c_result);
+
+struct CResult_CVector_c_uchar channel__check_name_for_existing__serialize_allocate(struct Channel_CheckNameForExisting_Incoming incoming);
+
+void channel__check_name_for_existing__serialize_deallocate(struct CResult_CVector_c_uchar c_result);
+
+Channel_CheckNameForExisting_CResult channel__check_name_for_existing__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
+
+void channel__check_name_for_existing__deserialize_deallocate(Channel_CheckNameForExisting_CResult _c_result);
 
 struct CResult_CVector_c_uchar channel__check_linked_name_for_existing__serialize_allocate(struct Channel_CheckLinkedNameForExisting_Incoming incoming);
 
