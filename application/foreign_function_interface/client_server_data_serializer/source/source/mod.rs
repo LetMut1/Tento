@@ -3480,15 +3480,14 @@ mod test {
                     } => {}
                     UserAuthorization_AuthorizeByLastStep_Precedent_::User_NotFound => {}
                 }
-                let mut precedents: Vec<UserAuthorization_AuthorizeByLastStep_Precedent_> = vec![];
-                precedents.push(UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_NotFound);
-                precedents.push(UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_AlreadyExpired);
-                precedents.push(
+                let precedents: Vec<UserAuthorization_AuthorizeByLastStep_Precedent_> = vec![
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_NotFound,
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_AlreadyExpired,
                     UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_WrongValue {
                         user_authorization_token__wrong_enter_tries_quantity: 0,
                     },
-                );
-                precedents.push(UserAuthorization_AuthorizeByLastStep_Precedent_::User_NotFound);
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::User_NotFound
+                ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__authorize_by_last_step(precedent)?;
                 }
@@ -3564,9 +3563,10 @@ mod test {
                     UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired => {}
                     UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
-                let mut precedents: Vec<UserAuthorization_DeauthorizeFromAllDevices_Precedent_> = vec![];
-                precedents.push(UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired);
-                precedents.push(UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                let precedents: Vec<UserAuthorization_DeauthorizeFromAllDevices_Precedent_> = vec![
+                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired,
+                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__deauthorize_from_all_devices(precedent)?;
                 }
@@ -3598,9 +3598,10 @@ mod test {
                     UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired => {}
                     UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
-                let mut precedents: Vec<UserAuthorization_DeauthorizeFromOneDevice_Precedent_> = vec![];
-                precedents.push(UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired);
-                precedents.push(UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                let precedents: Vec<UserAuthorization_DeauthorizeFromOneDevice_Precedent_> = vec![
+                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired,
+                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__deauthorize_from_one_device(precedent)?;
                 }
@@ -3648,9 +3649,10 @@ mod test {
                     UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_NotFound => {}
                     UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_AlreadyExpired => {}
                 }
-                let mut precedents: Vec<UserAuthorization_RefreshAccessToken_Precedent_> = vec![];
-                precedents.push(UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_NotFound);
-                precedents.push(UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_AlreadyExpired);
+                let precedents: Vec<UserAuthorization_RefreshAccessToken_Precedent_> = vec![
+                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_NotFound,
+                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_AlreadyExpired,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__refresh_access_token(precedent)?;
                 }
@@ -3718,15 +3720,15 @@ mod test {
                         user_registration_token__wrong_enter_tries_quantity: _,
                     } => {}
                 }
-                let mut precedents: Vec<UserAuthorization_RegisterBySecondStep_Precedent_> = vec![];
-                precedents.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_NotFound);
-                precedents.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyExpired);
-                precedents.push(UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyApproved);
-                precedents.push(
+                let precedents: Vec<UserAuthorization_RegisterBySecondStep_Precedent_> = vec![
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_NotFound,
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyExpired,
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyApproved,
+
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_WrongValue {
                         user_registration_token__wrong_enter_tries_quantity: 0,
                     },
-                );
+                ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__register_by_second_step(precedent)?;
                 }
@@ -3778,13 +3780,14 @@ mod test {
                     UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_IsNotApproved => {}
                     UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_WrongValue => {}
                 }
-                let mut precedents: Vec<UserAuthorization_RegisterByLastStep_Precedent_> = vec![];
-                precedents.push(UserAuthorization_RegisterByLastStep_Precedent_::User_NicknameAlreadyExist);
-                precedents.push(UserAuthorization_RegisterByLastStep_Precedent_::User_EmailAlreadyExist);
-                precedents.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_NotFound);
-                precedents.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_AlreadyExpired);
-                precedents.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_IsNotApproved);
-                precedents.push(UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_WrongValue);
+                let precedents: Vec<UserAuthorization_RegisterByLastStep_Precedent_> = vec![
+                    UserAuthorization_RegisterByLastStep_Precedent_::User_NicknameAlreadyExist,
+                    UserAuthorization_RegisterByLastStep_Precedent_::User_EmailAlreadyExist,
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_NotFound,
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_AlreadyExpired,
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_IsNotApproved,
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_WrongValue,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__register_by_last_step(precedent)?;
                 }
@@ -3857,15 +3860,14 @@ mod test {
                         user_reset_password_token__wrong_enter_tries_quantity: _,
                     } => {}
                 }
-                let mut precedents: Vec<UserAuthorization_ResetPasswordBySecondStep_Precedent_> = vec![];
-                precedents.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_NotFound);
-                precedents.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyExpired);
-                precedents.push(UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyApproved);
-                precedents.push(
+                let precedents: Vec<UserAuthorization_ResetPasswordBySecondStep_Precedent_> = vec![
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_NotFound,
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyExpired,
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyApproved,
                     UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_WrongValue {
                         user_reset_password_token__wrong_enter_tries_quantity: 0,
                     },
-                );
+                ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__reset_password_by_second_step(precedent)?;
                 }
@@ -3900,12 +3902,13 @@ mod test {
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_IsNotApproved => {}
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_WrongValue => {}
                 }
-                let mut precedents: Vec<UserAuthorization_ResetPasswordByLastStep_Precedent_> = vec![];
-                precedents.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::User_NotFound);
-                precedents.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_NotFound);
-                precedents.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_AlreadyExpired);
-                precedents.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_IsNotApproved);
-                precedents.push(UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_WrongValue);
+                let precedents: Vec<UserAuthorization_ResetPasswordByLastStep_Precedent_> = vec![
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::User_NotFound,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_NotFound,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_AlreadyExpired,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_IsNotApproved,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_WrongValue,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__reset_password_by_last_step(precedent)?;
                 }
@@ -3946,11 +3949,12 @@ mod test {
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyApproved => {}
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_TimeToResendHasNotCome => {}
                 }
-                let mut precedents: Vec<UserAuthorization_SendEmailForRegister_Precedent_> = vec![];
-                precedents.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_NotFound);
-                precedents.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyExpired);
-                precedents.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyApproved);
-                precedents.push(UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_TimeToResendHasNotCome);
+                let precedents: Vec<UserAuthorization_SendEmailForRegister_Precedent_> = vec![
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_NotFound,
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyExpired,
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyApproved,
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_TimeToResendHasNotCome
+                ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_register(precedent)?;
                 }
@@ -3991,11 +3995,12 @@ mod test {
                     UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_AlreadyExpired => {}
                     UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_TimeToResendHasNotCome => {}
                 }
-                let mut precedents: Vec<UserAuthorization_SendEmailForAuthorize_Precedent_> = vec![];
-                precedents.push(UserAuthorization_SendEmailForAuthorize_Precedent_::User_NotFound);
-                precedents.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_NotFound);
-                precedents.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_AlreadyExpired);
-                precedents.push(UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_TimeToResendHasNotCome);
+                let precedents: Vec<UserAuthorization_SendEmailForAuthorize_Precedent_> = vec![
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::User_NotFound,
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_NotFound,
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_AlreadyExpired,
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_TimeToResendHasNotCome,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_authorize(precedent)?;
                 }
@@ -4041,12 +4046,13 @@ mod test {
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyApproved => {}
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_TimeToResendHasNotCome => {}
                 }
-                let mut precedents: Vec<UserAuthorization_SendEmailForResetPassword_Precedent_> = vec![];
-                precedents.push(UserAuthorization_SendEmailForResetPassword_Precedent_::User_NotFound);
-                precedents.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_NotFound);
-                precedents.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyExpired);
-                precedents.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyApproved);
-                precedents.push(UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_TimeToResendHasNotCome);
+                let precedents: Vec<UserAuthorization_SendEmailForResetPassword_Precedent_> = vec![
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::User_NotFound,
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_NotFound,
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyExpired,
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyApproved,
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_TimeToResendHasNotCome,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_reset_password(precedent)?;
                 }
@@ -4097,9 +4103,10 @@ mod test {
                     Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired => {}
                     Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
-                let mut precedents: Vec<Channel_GetManyByNameInSubscriptions_Precedent_> = vec![];
-                precedents.push(Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired);
-                precedents.push(Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                let precedents: Vec<Channel_GetManyByNameInSubscriptions_Precedent_> = vec![
+                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired,
+                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_by_name_in_subscriptions(precedent)?;
                 }
@@ -4150,9 +4157,10 @@ mod test {
                     Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired => {}
                     Channel_GetManyBySubscription_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
-                let mut precedents: Vec<Channel_GetManyBySubscription_Precedent_> = vec![];
-                precedents.push(Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired);
-                precedents.push(Channel_GetManyBySubscription_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                let precedents: Vec<Channel_GetManyBySubscription_Precedent_> = vec![
+                    Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired,
+                    Channel_GetManyBySubscription_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_by_subscription(precedent)?;
                 }
@@ -4208,9 +4216,10 @@ mod test {
                     Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired => {}
                     Channel_GetManyPublicByName_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
-                let mut precedents: Vec<Channel_GetManyPublicByName_Precedent_> = vec![];
-                precedents.push(Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired);
-                precedents.push(Channel_GetManyPublicByName_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                let precedents: Vec<Channel_GetManyPublicByName_Precedent_> = vec![
+                    Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired,
+                    Channel_GetManyPublicByName_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_public_by_name(precedent)?;
                 }
@@ -4267,13 +4276,14 @@ mod test {
                     Channel_GetOneById_Precedent_::ChannelToken_NotFound => {}
                     Channel_GetOneById_Precedent_::ChannelToken_AlreadyExpired => {}
                 }
-                let mut precedents: Vec<Channel_GetOneById_Precedent_> = vec![];
-                precedents.push(Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired);
-                precedents.push(Channel_GetOneById_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                precedents.push(Channel_GetOneById_Precedent_::Channel_NotFound);
-                precedents.push(Channel_GetOneById_Precedent_::Channel_IsClose);
-                precedents.push(Channel_GetOneById_Precedent_::ChannelToken_NotFound);
-                precedents.push(Channel_GetOneById_Precedent_::ChannelToken_AlreadyExpired);
+                let precedents: Vec<Channel_GetOneById_Precedent_> = vec![
+                    Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired,
+                    Channel_GetOneById_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
+                    Channel_GetOneById_Precedent_::Channel_NotFound,
+                    Channel_GetOneById_Precedent_::Channel_IsClose,
+                    Channel_GetOneById_Precedent_::ChannelToken_NotFound,
+                    Channel_GetOneById_Precedent_::ChannelToken_AlreadyExpired,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_one_by_id(precedent)?;
                 }
@@ -4311,9 +4321,10 @@ mod test {
                     Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_AlreadyExpired => {}
                     Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
-                let mut precedents: Vec<Channel_CheckLinkedNameForExisting_Precedent_> = vec![];
-                precedents.push(Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_AlreadyExpired);
-                precedents.push(Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                let precedents: Vec<Channel_CheckLinkedNameForExisting_Precedent_> = vec![
+                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_AlreadyExpired,
+                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__channel__check_linked_name_for_existing(precedent)?;
                 }
@@ -4347,13 +4358,14 @@ mod test {
                     ChannelSubscription_Create_Precedent_::User_IsChannelOwner => {}
                     ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken_AlreadyExpired => {}
                 }
-                let mut precedents: Vec<ChannelSubscription_Create_Precedent_> = vec![];
-                precedents.push(ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired);
-                precedents.push(ChannelSubscription_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                precedents.push(ChannelSubscription_Create_Precedent_::Channel_NotFound);
-                precedents.push(ChannelSubscription_Create_Precedent_::Channel_IsClose);
-                precedents.push(ChannelSubscription_Create_Precedent_::User_IsChannelOwner);
-                precedents.push(ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken_AlreadyExpired);
+                let precedents: Vec<ChannelSubscription_Create_Precedent_> = vec![
+                    ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired,
+                    ChannelSubscription_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
+                    ChannelSubscription_Create_Precedent_::Channel_NotFound,
+                    ChannelSubscription_Create_Precedent_::Channel_IsClose,
+                    ChannelSubscription_Create_Precedent_::User_IsChannelOwner,
+                    ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken_AlreadyExpired,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__channel_subscription__create(precedent)?;
                 }
@@ -4409,11 +4421,12 @@ mod test {
                     ChannelPublication1_GetMany_Precedent_::Channel_NotFound => {}
                     ChannelPublication1_GetMany_Precedent_::Channel_IsClose => {}
                 }
-                let mut precedents: Vec<ChannelPublication1_GetMany_Precedent_> = vec![];
-                precedents.push(ChannelPublication1_GetMany_Precedent_::UserAccessToken_AlreadyExpired);
-                precedents.push(ChannelPublication1_GetMany_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                precedents.push(ChannelPublication1_GetMany_Precedent_::Channel_NotFound);
-                precedents.push(ChannelPublication1_GetMany_Precedent_::Channel_IsClose);
+                let precedents: Vec<ChannelPublication1_GetMany_Precedent_> = vec![
+                    ChannelPublication1_GetMany_Precedent_::UserAccessToken_AlreadyExpired,
+                    ChannelPublication1_GetMany_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
+                    ChannelPublication1_GetMany_Precedent_::Channel_NotFound,
+                    ChannelPublication1_GetMany_Precedent_::Channel_IsClose,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__get_many(precedent)?;
                 }
@@ -4454,11 +4467,12 @@ mod test {
                     ChannelPublication1_Create_Precedent_::Channel_NotFound => {}
                     ChannelPublication1_Create_Precedent_::User_IsNotChannelOwner => {}
                 }
-                let mut precedents: Vec<ChannelPublication1_Create_Precedent_> = vec![];
-                precedents.push(ChannelPublication1_Create_Precedent_::UserAccessToken_AlreadyExpired);
-                precedents.push(ChannelPublication1_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList);
-                precedents.push(ChannelPublication1_Create_Precedent_::Channel_NotFound);
-                precedents.push(ChannelPublication1_Create_Precedent_::User_IsNotChannelOwner);
+                let precedents: Vec<ChannelPublication1_Create_Precedent_> = vec![
+                    ChannelPublication1_Create_Precedent_::UserAccessToken_AlreadyExpired,
+                    ChannelPublication1_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
+                    ChannelPublication1_Create_Precedent_::Channel_NotFound,
+                    ChannelPublication1_Create_Precedent_::User_IsNotChannelOwner,
+                ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__create(precedent)?;
                 }
