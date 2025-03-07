@@ -836,6 +836,43 @@ typedef struct CResult_CUnifiedReport_Channel_CheckLinkedNameForExisting_Outcomi
 
 typedef struct CResult_CUnifiedReport_Channel_CheckLinkedNameForExisting_Outcoming__Channel_CheckLinkedNameForExisting_Precedent Channel_CheckLinkedNameForExisting_CResult;
 
+typedef struct Channel_Create_Incoming {
+  struct UserAccessTokenSigned user_access_token_signed;
+  struct CString channel__name;
+  struct CString channel__linked_name;
+  short channel__access_modifier;
+  short channel__visability_modifier;
+} Channel_Create_Incoming;
+
+typedef struct Channel_Create_Outcoming {
+  int64_t channel__id;
+} Channel_Create_Outcoming;
+
+typedef struct CData_Channel_Create_Outcoming {
+  struct Channel_Create_Outcoming filled;
+  bool is_filled;
+} CData_Channel_Create_Outcoming;
+
+typedef struct Channel_Create_Precedent {
+  bool user_access_token__already_expired;
+  bool user_access_token__in_user_access_token_black_list;
+  bool channel__name_already_exist;
+  bool channel__linked_name_already_exist;
+} Channel_Create_Precedent;
+
+typedef struct CUnifiedReport_Channel_Create_Outcoming__Channel_Create_Precedent {
+  struct CData_Channel_Create_Outcoming target;
+  struct Channel_Create_Precedent precedent;
+  bool is_target;
+} CUnifiedReport_Channel_Create_Outcoming__Channel_Create_Precedent;
+
+typedef struct CResult_CUnifiedReport_Channel_Create_Outcoming__Channel_Create_Precedent {
+  struct CUnifiedReport_Channel_Create_Outcoming__Channel_Create_Precedent data;
+  bool is_data;
+} CResult_CUnifiedReport_Channel_Create_Outcoming__Channel_Create_Precedent;
+
+typedef struct CResult_CUnifiedReport_Channel_Create_Outcoming__Channel_Create_Precedent Channel_Create_CResult;
+
 typedef struct ChannelSubscription_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   long channel__id;
@@ -1131,6 +1168,14 @@ void channel__check_linked_name_for_existing__serialize_deallocate(struct CResul
 Channel_CheckLinkedNameForExisting_CResult channel__check_linked_name_for_existing__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
 
 void channel__check_linked_name_for_existing__deserialize_deallocate(Channel_CheckLinkedNameForExisting_CResult _c_result);
+
+struct CResult_CVector_c_uchar channel__create__serialize_allocate(struct Channel_Create_Incoming incoming);
+
+void channel__create__serialize_deallocate(struct CResult_CVector_c_uchar c_result);
+
+Channel_Create_CResult channel__create__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
+
+void channel__create__deserialize_deallocate(Channel_Create_CResult c_result);
 
 struct CResult_CVector_c_uchar channel_subscription__create__serialize_allocate(struct ChannelSubscription_Create_Incoming incoming);
 

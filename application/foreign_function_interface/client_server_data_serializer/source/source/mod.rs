@@ -37,6 +37,11 @@ use {
                     Incoming as Channel_CheckNameForExisting_Incoming_,
                     Outcoming as Channel_CheckNameForExisting_Outcoming_,
                     Precedent as Channel_CheckNameForExisting_Precedent_,
+                },
+                create::{
+                    Incoming as Channel_Create_Incoming_,
+                    Outcoming as Channel_Create_Outcoming_,
+                    Precedent as Channel_Create_Precedent_,
                 }
             },
             channel_subscription::create::{
@@ -2887,6 +2892,119 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_de
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
+pub struct Channel_Create_Incoming {
+    pub user_access_token_signed: UserAccessTokenSigned,
+    pub channel__name: CString,
+    pub channel__linked_name: CString,
+    pub channel__access_modifier: c_short,
+    pub channel__visability_modifier: c_short,
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel__create__serialize_allocate(incoming: Channel_Create_Incoming) -> CResult<CVector<c_uchar>> {
+    let converter = move |incoming_: &'_ Channel_Create_Incoming| -> Result<Channel_Create_Incoming_, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            Channel_Create_Incoming_ {
+                user_access_token_signed: UserAccessTokenSigned_ {
+                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user__id: incoming_.user_access_token_signed.user__id,
+                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                },
+                channel__name: incoming_.channel__name.get_as_str()?,
+                channel__linked_name: incoming_.channel__linked_name.get_as_str()?,
+                channel__access_modifier: incoming_.channel__access_modifier,
+                channel__visability_modifier: incoming_.channel__visability_modifier,
+            },
+        );
+    };
+    return Transformer::<ServerRequestData>::transform(
+        incoming,
+        converter,
+    );
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel__create__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+    Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
+    return ();
+}
+type Channel_Create_CResult = CResult<CUnifiedReport<Channel_Create_Outcoming, Channel_Create_Precedent>>;
+#[repr(C)]
+#[derive(Default)]
+pub struct Channel_Create_Outcoming {
+    pub channel__id: i64,
+}
+#[repr(C)]
+#[derive(Default)]
+pub struct Channel_Create_Precedent {
+    pub user_access_token__already_expired: bool,
+    pub user_access_token__in_user_access_token_black_list: bool,
+    pub channel__name_already_exist: bool,
+    pub channel__linked_name_already_exist: bool,
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_Create_CResult {
+    let converter = move |unified_report: UnifiedReport<Channel_Create_Outcoming_, Channel_Create_Precedent_>| -> Result<CUnifiedReport<Channel_Create_Outcoming, Channel_Create_Precedent>, Box<dyn StdError + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport::Target { data } => {
+                let c_data = match data {
+                    Data::Empty => {
+                        CData::empty()
+                    }
+                    Data::Filled {
+                        data: data_
+                    } => {
+                        let outcoming = Channel_Create_Outcoming {
+                            channel__id: data_.channel__id,
+                        };
+                        CData::filled(outcoming)
+                    }
+                };
+                CUnifiedReport::target(c_data)
+            }
+            UnifiedReport::Precedent { precedent } => {
+                let precedent_ = match precedent {
+                    Channel_Create_Precedent_::UserAccessToken_AlreadyExpired => {
+                        Channel_Create_Precedent {
+                            user_access_token__already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    Channel_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
+                        Channel_Create_Precedent {
+                            user_access_token__in_user_access_token_black_list: true,
+                            ..Default::default()
+                        }
+                    }
+                    Channel_Create_Precedent_::Channel_NameAlreadyExist => {
+                        Channel_Create_Precedent {
+                            channel__name_already_exist: true,
+                            ..Default::default()
+                        }
+                    }
+                    Channel_Create_Precedent_::Channel_LinkedNameAlreadyExist => {
+                        Channel_Create_Precedent {
+                            channel__linked_name_already_exist: true,
+                            ..Default::default()
+                        }
+                    }
+                };
+                CUnifiedReport::precedent(precedent_)
+            }
+        };
+        return Result::Ok(unified_report_);
+    };
+    return Transformer::<ServerResponseData>::transform(
+        c_vector_of_bytes,
+        converter,
+    );
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel__create__deserialize_deallocate(_c_result: Channel_Create_CResult) -> () {
+    return ();
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
 pub struct ChannelSubscription_Create_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__id: c_long,
@@ -3340,6 +3458,7 @@ mod test {
             with_name!(self::deallocation::server_request_data_serialization::channel__get_one_by_id),
             with_name!(self::deallocation::server_request_data_serialization::channel__check_name_for_existing),
             with_name!(self::deallocation::server_request_data_serialization::channel__check_linked_name_for_existing),
+            with_name!(self::deallocation::server_request_data_serialization::channel__create),
             with_name!(self::deallocation::server_request_data_serialization::channel_subscription__create),
             with_name!(self::deallocation::server_request_data_serialization::channel_publication1__get_many),
             with_name!(self::deallocation::server_request_data_serialization::channel_publication1__create),
@@ -3409,6 +3528,9 @@ mod test {
             with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__check_linked_name_for_existing),
             with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__check_linked_name_for_existing),
             with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__check_linked_name_for_existing),
+            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__create),
+            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__create),
+            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__create),
             with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_subscription__create),
             with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_subscription__create),
             with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_subscription__create),
@@ -3877,6 +3999,32 @@ mod test {
                 Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
                 Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
+                Allocator::<CString>::deallocate(incoming.channel__linked_name);
+                return Result::Ok(());
+            }
+            pub fn channel__create() -> Result<(), Box<dyn StdError + 'static>> {
+                let incoming = Channel_Create_Incoming {
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user_access_token__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user__id: 0,
+                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_access_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
+                    channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    channel__linked_name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    channel__access_modifier: 0,
+                    channel__visability_modifier: 0,
+                };
+                run_by_template(
+                    incoming,
+                    channel__create__serialize_allocate,
+                    channel__create__serialize_deallocate,
+                )?;
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
+                Allocator::<CString>::deallocate(incoming.channel__name);
                 Allocator::<CString>::deallocate(incoming.channel__linked_name);
                 return Result::Ok(());
             }
@@ -4961,6 +5109,51 @@ mod test {
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__check_linked_name_for_existing(precedent)?;
+                }
+                return Result::Ok(());
+            }
+            pub fn target_empty__channel__create() -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Channel_Create_Outcoming_, Channel_Create_Precedent_>::target_empty();
+                return run_by_template(
+                    &unified_report,
+                    channel__create__deserialize_allocate,
+                    channel__create__deserialize_deallocate,
+                );
+            }
+            pub fn target_filled__channel__create() -> Result<(), Box<dyn StdError + 'static>> {
+                let outcoming = Channel_Create_Outcoming_ {
+                    channel__id: 0,
+                };
+                let unified_report = UnifiedReport::<Channel_Create_Outcoming_, Channel_Create_Precedent_>::target_filled(outcoming);
+                return run_by_template(
+                    &unified_report,
+                    channel__create__deserialize_allocate,
+                    channel__create__deserialize_deallocate,
+                );
+            }
+            fn _precedent__channel__create(precedent: Channel_Create_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Channel_Create_Outcoming_, Channel_Create_Precedent_>::precedent(precedent);
+                return run_by_template(
+                    &unified_report,
+                    channel__create__deserialize_allocate,
+                    channel__create__deserialize_deallocate,
+                );
+            }
+            pub fn precedent__channel__create() -> Result<(), Box<dyn StdError + 'static>> {
+                match Channel_Create_Precedent_::UserAccessToken_AlreadyExpired {
+                    Channel_Create_Precedent_::UserAccessToken_AlreadyExpired => {}
+                    Channel_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
+                    Channel_Create_Precedent_::Channel_NameAlreadyExist => {}
+                    Channel_Create_Precedent_::Channel_LinkedNameAlreadyExist => {}
+                }
+                let precedents: Vec<Channel_Create_Precedent_> = vec![
+                    Channel_Create_Precedent_::UserAccessToken_AlreadyExpired,
+                    Channel_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
+                    Channel_Create_Precedent_::Channel_NameAlreadyExist,
+                    Channel_Create_Precedent_::Channel_LinkedNameAlreadyExist,
+                ];
+                '_a: for precedent in precedents {
+                    _precedent__channel__create(precedent)?;
                 }
                 return Result::Ok(());
             }
