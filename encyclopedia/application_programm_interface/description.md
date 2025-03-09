@@ -357,6 +357,23 @@ enum Precedent {
     ChannelSubscriptionToken_AlreadyExpired,
 }
 ```
+ - ## ChannelSubscription_Delete POST /channel_subscription/delete
+```
+Unsubscribes user from channel.
+```
+```
+struct Incoming {
+    user_access_token_signed: <Data standards>
+    channel__id: i64,
+}
+```
+```
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+    ChannelSubscription_NotFound,
+}
+```
  - ## ChannelPublication1_Create POST /channel_publication1/create
 ```
 Creates channel publications of type 1.

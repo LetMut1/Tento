@@ -901,6 +901,30 @@ typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Create_Preceden
 
 typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent ChannelSubscription_Create_CResult;
 
+typedef struct ChannelSubscription_Delete_Incoming {
+  struct UserAccessTokenSigned user_access_token_signed;
+  long channel__id;
+} ChannelSubscription_Delete_Incoming;
+
+typedef struct ChannelSubscription_Delete_Precedent {
+  bool user_access_token__already_expired;
+  bool user_access_token__in_user_access_token_black_list;
+  bool channel_subscription__not_found;
+} ChannelSubscription_Delete_Precedent;
+
+typedef struct CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent {
+  struct CData_CVoid target;
+  struct ChannelSubscription_Delete_Precedent precedent;
+  bool is_target;
+} CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent;
+
+typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent {
+  struct CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent data;
+  bool is_data;
+} CResult_CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent;
+
+typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent ChannelSubscription_Delete_CResult;
+
 typedef struct ChannelPublication1_GetMany_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   long channel__id;
@@ -1184,6 +1208,14 @@ void channel_subscription__create__serialize_deallocate(struct CResult_CVector_c
 ChannelSubscription_Create_CResult channel_subscription__create__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
 
 void channel_subscription__create__deserialize_deallocate(ChannelSubscription_Create_CResult _c_result);
+
+struct CResult_CVector_c_uchar channel_subscription__delete__serialize_allocate(struct ChannelSubscription_Delete_Incoming incoming);
+
+void channel_subscription__delete__serialize_deallocate(struct CResult_CVector_c_uchar c_result);
+
+ChannelSubscription_Delete_CResult channel_subscription__delete__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
+
+void channel_subscription__delete__deserialize_deallocate(ChannelSubscription_Delete_CResult _c_result);
 
 struct CResult_CVector_c_uchar channel_publication1__get_many__serialize_allocate(struct ChannelPublication1_GetMany_Incoming incoming);
 
