@@ -143,13 +143,46 @@ impl Repository<Postgresql<Channel>> {
             );
         };
     }
-    pub fn update<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
                     public.channel AS c \
                 SET \
                     subscribers_quantity = subscribers_quantity + 1 \
+                WHERE \
+                    c.id = $1;";
+            let mut parameter_storage = ParameterStorage::new(1);
+            parameter_storage.add(
+                &by.channel__id,
+                Type::INT8,
+            );
+            let statement = crate::result_return_logic!(
+                database_3_client
+                .prepare_typed_cached(
+                    query,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            crate::result_return_runtime!(
+                database_3_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            return Result::Ok(());
+        };
+    }
+    pub fn update_2<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+        return async move {
+            let query = "\
+                UPDATE ONLY \
+                    public.channel AS c \
+                SET \
+                    subscribers_quantity = subscribers_quantity - 1 \
                 WHERE \
                     c.id = $1;";
             let mut parameter_storage = ParameterStorage::new(1);

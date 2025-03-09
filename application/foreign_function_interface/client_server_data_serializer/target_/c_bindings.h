@@ -1175,7 +1175,7 @@ void channel__create__serialize_deallocate(struct CResult_CVector_c_uchar c_resu
 
 Channel_Create_CResult channel__create__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
 
-void channel__create__deserialize_deallocate(Channel_Create_CResult c_result);
+void channel__create__deserialize_deallocate(Channel_Create_CResult _c_result);
 
 struct CResult_CVector_c_uchar channel_subscription__create__serialize_allocate(struct ChannelSubscription_Create_Incoming incoming);
 

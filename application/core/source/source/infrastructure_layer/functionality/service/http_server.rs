@@ -8,6 +8,7 @@ use {
         application_layer::functionality::{
             action_processor::{
                 ChannelSubscription_Create,
+                ChannelSubscription_Delete,
                 Channel_CheckLinkedNameForExisting,
                 Channel_CheckNameForExisting,
                 Channel_Create,
@@ -492,6 +493,13 @@ impl HttpServer {
         crate::result_return_logic!(
             router
             .insert(
+                ChannelSubscription::DELETE,
+                ActionRoute::ChannelSubscription(ChannelSubscription::Delete),
+            )
+        );
+        crate::result_return_logic!(
+            router
+            .insert(
                 ChannelPublication1::CREATE,
                 ActionRoute::ChannelPublication1(ChannelPublication1::Create),
             )
@@ -663,6 +671,13 @@ impl HttpServer {
                 .insert(
                     ChannelSubscription::CREATE_,
                     ActionRoute::ChannelSubscription(ChannelSubscription::Create_),
+                )
+            );
+            crate::result_return_logic!(
+                router
+                .insert(
+                    ChannelSubscription::DELETE_,
+                    ActionRoute::ChannelSubscription(ChannelSubscription::Delete_),
                 )
             );
             crate::result_return_logic!(
@@ -1094,6 +1109,13 @@ impl HttpServer {
                             )
                             .await;
                         }
+                        (&ChannelSubscription::Delete, &Method::POST) => {
+                            return Action::<ChannelSubscription_Delete>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -1103,6 +1125,13 @@ impl HttpServer {
                                 ) {
                                     (&ChannelSubscription::Create_, &Method::POST) => {
                                         return Action::<ChannelSubscription_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&ChannelSubscription::Delete_, &Method::POST) => {
+                                        return Action::<ChannelSubscription_Delete>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
@@ -1393,16 +1422,24 @@ impl Channel {
 }
 pub enum ChannelSubscription {
     Create,
+    Delete,
     #[cfg(feature = "action_for_manual_test")]
     Create_,
+    #[cfg(feature = "action_for_manual_test")]
+    Delete_,
 }
 impl ChannelSubscription {
     pub const CREATE: &'static str = "/channel_subscription/create";
+    pub const DELETE: &'static str = "/channel_subscription/delete";
 }
 #[cfg(feature = "action_for_manual_test")]
 impl ChannelSubscription {
     pub const CREATE_: &'static str = const_format::concatcp!(
         ChannelSubscription::CREATE,
+        ActionRoute::PART,
+    );
+    pub const DELETE_: &'static str = const_format::concatcp!(
+        ChannelSubscription::DELETE,
         ActionRoute::PART,
     );
 }

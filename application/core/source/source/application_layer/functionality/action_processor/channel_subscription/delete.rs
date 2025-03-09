@@ -36,6 +36,7 @@ use {
                         Postgresql,
                         Resolver as Resolver_,
                         Transaction,
+                        ChannelSubscriptionBy,
                     },
                     Repository,
                 },
@@ -47,7 +48,7 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::channel_subscription::create::{
+        action_processor_incoming_outcoming::action_processor::channel_subscription::delete::{
             Incoming,
             Precedent,
         },
@@ -56,8 +57,8 @@ use {
     },
     std::future::Future,
 };
-pub struct ChannelSubscription_Create;
-impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
+pub struct ChannelSubscription_Delete;
+impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;
@@ -84,47 +85,22 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
-            let (
-                channel__owner,
-                channel__access_modifier,
-                channel__obfuscation_value,
-            ) = match Repository::<Postgresql<Channel>>::find_2(
+            if !Repository::<Postgresql<ChannelSubscription>>::is_exist(
                 &postgresql_database_3_client,
-                ChannelBy1 {
+                ChannelSubscriptionBy {
+                    user__id,
                     channel__id: incoming.channel__id,
                 },
             )
-            .await?
-            {
-                Option::Some(values) => values,
-                Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
-                }
-            };
-            if !Encoder::<ChannelSubscriptionToken>::is_valid(
-                user__id,
-                incoming.channel__id,
-                channel__obfuscation_value,
-                &incoming.channel_subscription_token_hashed,
-            )? {
-                return Result::Err(crate::new_invalid_argument!());
-            }
-            let now = Resolver::<UnixTime>::get_now_in_seconds();
-            if incoming.channel_subscription_token_hashed.channel_subscription_token__expires_at < now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken_AlreadyExpired));
-            }
-            if user__id == channel__owner {
-                return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
-            }
-            if Channel_AccessModifier_::Close as i16 == channel__access_modifier {
-                return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
+            .await? {
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscription_NotFound));
             }
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_database_3_client,
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::create(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::delete(
                 transaction.get_client(),
                 ChannelSubscriptionInsert {
                     user__id,
@@ -137,7 +113,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Err(aggregate_error);
             }
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<Channel>>::update_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<Channel>>::update_2(
                 transaction.get_client(),
                 ChannelBy1 {
                     channel__id: incoming.channel__id,

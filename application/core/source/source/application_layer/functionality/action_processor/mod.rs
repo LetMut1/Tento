@@ -12,7 +12,10 @@ pub use self::{
         get_many_public_by_name::Channel_GetManyPublicByName,
         get_one_by_id::Channel_GetOneById,
     },
-    channel_subscription::create::ChannelSubscription_Create,
+    channel_subscription::{
+        create::ChannelSubscription_Create,
+        delete::ChannelSubscription_Delete,
+    },
     user_authorization::{
         authorize_by_first_step::UserAuthorization_AuthorizeByFirstStep,
         authorize_by_last_step::UserAuthorization_AuthorizeByLastStep,
