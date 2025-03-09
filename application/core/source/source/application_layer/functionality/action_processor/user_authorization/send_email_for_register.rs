@@ -83,9 +83,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
-                }
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound))
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_registration_token__expires_at <= now {

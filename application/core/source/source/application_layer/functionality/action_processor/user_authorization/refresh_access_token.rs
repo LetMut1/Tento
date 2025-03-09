@@ -83,9 +83,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken_NotFound));
-                }
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken_NotFound))
             };
             let is_valid = Encoder::<UserAccessRefreshToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,

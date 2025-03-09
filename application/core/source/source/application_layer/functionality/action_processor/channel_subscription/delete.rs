@@ -9,12 +9,10 @@ use {
             data::entity::{
                 channel::{
                     Channel,
-                    Channel_AccessModifier_,
                     Channel_Id,
                 },
                 channel_subscription::ChannelSubscription,
                 user_access_token::UserAccessToken,
-                channel_subscription_token::ChannelSubscriptionToken,
             },
             functionality::service::{
                 extractor::{
@@ -22,28 +20,20 @@ use {
                     Extractor,
                 },
                 validator::Validator,
-                encoder::Encoder,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::{
-                repository::{
-                    postgresql::{
-                        ChannelBy1,
-                        ChannelSubscriptionInsert,
-                        IsolationLevel,
-                        Postgresql,
-                        Resolver as Resolver_,
-                        Transaction,
-                        ChannelSubscriptionBy,
-                    },
-                    Repository,
+            functionality::repository::{
+                postgresql::{
+                    ChannelBy1,
+                    IsolationLevel,
+                    Postgresql,
+                    Resolver as Resolver_,
+                    Transaction,
+                    ChannelSubscriptionBy,
                 },
-                service::resolver::{
-                    Resolver,
-                    UnixTime,
-                },
+                Repository,
             },
         },
     },
@@ -74,12 +64,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
                     user_device__id: _,
                     user_access_token__expires_at: _,
                 } => user__id_,
-                Extracted::AlreadyExpired => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
-                }
-                Extracted::InUserAccessTokenBlackList => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
-                }
+                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired)),
+                Extracted::InUserAccessTokenBlackList => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList))
             };
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
@@ -102,11 +88,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
             .await?;
             if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::delete(
                 transaction.get_client(),
-                ChannelSubscriptionInsert {
+                ChannelSubscriptionBy {
                     user__id,
                     channel__id: incoming.channel__id,
-                    channel_subscription__created_at: now,
-                }
+                },
             )
             .await
             {

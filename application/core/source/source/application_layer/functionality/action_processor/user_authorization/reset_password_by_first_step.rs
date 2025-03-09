@@ -86,9 +86,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
             .await?
             {
                 Option::Some(user__id_) => user__id_,
-                Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
-                }
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound))
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);

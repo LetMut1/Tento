@@ -73,12 +73,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                     user_device__id: _,
                     user_access_token__expires_at: _,
                 } => user__id_,
-                Extracted::AlreadyExpired => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
-                }
-                Extracted::InUserAccessTokenBlackList => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
-                }
+                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired)),
+                Extracted::InUserAccessTokenBlackList => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList))
             };
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
@@ -97,9 +93,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
-                }
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound))
             };
             if !Encoder::<ChannelSubscriptionToken>::is_valid(
                 user__id,

@@ -80,9 +80,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             .await?
             {
                 Option::Some(user_) => user_,
-                Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
-                }
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound))
             };
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (
@@ -99,9 +97,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound));
-                }
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound))
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_authorization_token__expires_at <= now {

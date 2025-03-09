@@ -63,12 +63,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                     user_device__id: _,
                     user_access_token__expires_at: _,
                 } => user__id_,
-                Extracted::AlreadyExpired => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
-                }
-                Extracted::InUserAccessTokenBlackList => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
-                }
+                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired)),
+                Extracted::InUserAccessTokenBlackList => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList))
             };
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
@@ -90,16 +86,14 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
-                }
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound)),
             };
             if user__id != channel__owner {
                 if Channel_AccessModifier_::Close as i16 == channel__access_modifier {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
                 }
             }
-            let rows = Repository::<Postgresql<ChannelPublication1>>::find(
+            let rows = Repository::<Postgresql<ChannelPublication1>>::find_1(
                 &postgresql_database_3_client,
                 ChannelPublication1By2 {
                     channel__id: incoming.channel__id,

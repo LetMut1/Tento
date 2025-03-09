@@ -102,9 +102,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 .await?
                 {
                     Option::Some(values) => values,
-                    Option::None => {
-                        return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound));
-                    }
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound))
                 };
                 if user_reset_password_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
                     Repository::<Postgresql<UserResetPasswordToken>>::delete(
@@ -159,9 +157,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
-                }
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound))
             };
             if !Validator::<User_Password>::is_valid_part_2(
                 incoming.user__password,

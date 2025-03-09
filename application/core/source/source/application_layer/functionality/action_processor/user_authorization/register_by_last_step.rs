@@ -149,9 +149,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 .await?
                 {
                     Option::Some(values) => values,
-                    Option::None => {
-                        return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
-                    }
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound))
                 };
                 if user_registration_token__expires_at <= now {
                     Repository::<Postgresql<UserRegistrationToken>>::delete(

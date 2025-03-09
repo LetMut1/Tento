@@ -7,15 +7,11 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::{
-                    Channel,
-                    Channel_Id,
-                },
+                channel::Channel,
                 user_access_token::UserAccessToken,
                 channel_publication1::{
                     ChannelPublication1,
-                    ChannelPublication1_ImagesPathes,
-                    ChannelPublication1_Text,
+                    ChannelPublication1_Id,
                 }
             },
             functionality::service::{
@@ -28,36 +24,30 @@ use {
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::{
-                repository::{
-                    postgresql::{
-                        ChannelBy1,
-                        ChannelPublication1Insert,
-                        Postgresql,
-                    },
-                    Repository,
+            functionality::repository::{
+                postgresql::{
+                    ChannelBy1,
+                    Postgresql,
+                    ChannelPublication1By1,
                 },
-                service::resolver::{
-                    Resolver,
-                    UnixTime,
-                }
+                Repository,
             },
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::channel_publication1::create::{
+        action_processor_incoming_outcoming::action_processor::channel_publication1::delete::{
             Incoming,
             Precedent,
-            Outcoming,
         },
         unified_report::UnifiedReport,
+        void::Void,
     },
     std::future::Future,
 };
-pub struct ChannelPublication1_Create;
-impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
+pub struct ChannelPublication1_Delete;
+impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
     type Incoming<'a> = Incoming<'a>;
-    type Outcoming = Outcoming;
+    type Outcoming = Void;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
@@ -74,50 +64,40 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                 Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired)),
                 Extracted::InUserAccessTokenBlackList => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList))
             };
-            if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
-                return Result::Err(crate::new_invalid_argument!());
-            }
-            if !Validator::<ChannelPublication1_Text>::is_valid(incoming.channel_publication1__text) {
-                return Result::Err(crate::new_invalid_argument!());
-            }
-            if !Validator::<ChannelPublication1_ImagesPathes>::is_valid(incoming.channel_publication1__images_pathes.as_slice()) {
+            if !Validator::<ChannelPublication1_Id>::is_valid(incoming.channel_publication1__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+            let channel__id = match Repository::<Postgresql<ChannelPublication1>>::find_2(
+                &postgresql_database_3_client,
+                ChannelPublication1By1 {
+                    channel_publication1__id: incoming.channel_publication1__id,
+                },
+            ).await? {
+                Option::Some(channel__id_) => channel__id_,
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1_NotFound))
+            };
             let channel__owner = match Repository::<Postgresql<Channel>>::find_7(
                 &postgresql_database_3_client,
                 ChannelBy1 {
-                    channel__id: incoming.channel__id,
+                    channel__id,
                 },
             )
             .await?
             {
                 Option::Some(channel__owner_) => channel__owner_,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound))
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_IsNotChannelOwner))
             };
             if user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsNotChannelOwner));
             }
-            let channel_publication1__created_at = Resolver::<UnixTime>::get_now_in_seconds();
-            let channel_publication1__id = Repository::<Postgresql<ChannelPublication1>>::create(
+            Repository::<Postgresql<ChannelPublication1>>::delete(
                 &postgresql_database_3_client,
-                ChannelPublication1Insert {
-                    channel__id: incoming.channel__id,
-                    channel_publication1__images_pathes: incoming.channel_publication1__images_pathes.as_slice(),
-                    channel_publication1__text: incoming.channel_publication1__text,
-                    channel_publication1__marks_quantity: 0,
-                    channel_publication1__viewing_quantity: 0,
-                    channel_publication1__created_at,
+                ChannelPublication1By1 {
+                    channel_publication1__id: incoming.channel_publication1__id,
                 },
             ).await?;
-            return Result::Ok(
-                UnifiedReport::target_filled(
-                    Outcoming {
-                        channel_publication1__id,
-                        channel_publication1__created_at,
-                    }
-                )
-            );
+            return Result::Ok(UnifiedReport::target_empty());
         };
     }
 }

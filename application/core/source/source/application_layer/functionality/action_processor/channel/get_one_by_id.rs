@@ -75,12 +75,8 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     user_device__id: _,
                     user_access_token__expires_at: _,
                 } => user__id_,
-                Extracted::AlreadyExpired => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
-                }
-                Extracted::InUserAccessTokenBlackList => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
-                }
+                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired)),
+                Extracted::InUserAccessTokenBlackList => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList))
             };
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
@@ -109,9 +105,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
-                }
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound))
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user__id != channel__owner {

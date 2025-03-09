@@ -100,9 +100,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 .await?
                 {
                     Option::Some(values) => values,
-                    Option::None => {
-                        return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword));
-                    }
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword)),
                 };
                 (
                     user__id,
@@ -125,9 +123,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                     .await?
                     {
                         Option::Some(values) => values,
-                        Option::None => {
-                            return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword));
-                        }
+                        Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword))
                     };
                     (
                         user__id,

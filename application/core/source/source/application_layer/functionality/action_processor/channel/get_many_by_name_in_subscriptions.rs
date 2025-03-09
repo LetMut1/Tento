@@ -60,12 +60,8 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
                     user_device__id: _,
                     user_access_token__expires_at: _,
                 } => user__id_,
-                Extracted::AlreadyExpired => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
-                }
-                Extracted::InUserAccessTokenBlackList => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
-                }
+                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired)),
+                Extracted::InUserAccessTokenBlackList => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList))
             };
             const LIMIT: i16 = 100;
             if incoming.limit <= 0 || incoming.limit > LIMIT {

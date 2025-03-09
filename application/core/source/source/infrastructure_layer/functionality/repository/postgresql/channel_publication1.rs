@@ -120,7 +120,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(());
         };
     }
-    pub fn find<'a>(database_3_client: &'a Client, by: By2, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
+    pub fn find_1<'a>(database_3_client: &'a Client, by: By2, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -139,15 +139,16 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     cp1.created_at DESC \
                 LIMIT $3";
             let mut parameter_storage = ParameterStorage::new(3);
-            parameter_storage.add(
+            parameter_storage
+            .add(
                 &by.channel__id,
                 Type::INT8,
-            );
-            parameter_storage.add(
+            )
+            .add(
                 &by.channel_publication1__created_at,
                 Type::INT8,
-            );
-            parameter_storage.add(
+            )
+            .add(
                 &limit,
                 Type::INT2,
             );
@@ -166,6 +167,47 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     parameter_storage.get_parameters(),
                 )
                 .await
+            );
+        };
+    }
+    // channel__id: i64
+    pub fn find_2<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
+        return async move {
+            let query = "\
+                SELECT \
+                    cp1.channel__id AS ci \
+                FROM \
+                    public.channel_publication1 cp1 \
+                WHERE \
+                    cp1.id = $1";
+            let mut parameter_storage = ParameterStorage::new(1);
+            parameter_storage.add(
+                &by.channel_publication1__id,
+                Type::INT8,
+            );
+            let statement = crate::result_return_logic!(
+                database_3_client
+                .prepare_typed_cached(
+                    query,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                database_3_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(Option::None);
+            }
+            return Result::Ok(
+                Option::Some(
+                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                ),
             );
         };
     }
