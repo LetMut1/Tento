@@ -1017,6 +1017,31 @@ typedef struct CResult_CUnifiedReport_ChannelPublication1_Create_Outcoming__Chan
 
 typedef struct CResult_CUnifiedReport_ChannelPublication1_Create_Outcoming__ChannelPublication1_Create_Precedent ChannelPublication1_Create_CResult;
 
+typedef struct ChannelPublication1_Delete_Incoming {
+  struct UserAccessTokenSigned user_access_token_signed;
+  long channel_publication1__id;
+} ChannelPublication1_Delete_Incoming;
+
+typedef struct ChannelPublication1_Delete_Precedent {
+  bool user_access_token__already_expired;
+  bool user_access_token__in_user_access_token_black_list;
+  bool user__is_not_channel_owner;
+  bool channel_publication1__not_found;
+} ChannelPublication1_Delete_Precedent;
+
+typedef struct CUnifiedReport_CVoid__ChannelPublication1_Delete_Precedent {
+  struct CData_CVoid target;
+  struct ChannelPublication1_Delete_Precedent precedent;
+  bool is_target;
+} CUnifiedReport_CVoid__ChannelPublication1_Delete_Precedent;
+
+typedef struct CResult_CUnifiedReport_CVoid__ChannelPublication1_Delete_Precedent {
+  struct CUnifiedReport_CVoid__ChannelPublication1_Delete_Precedent data;
+  bool is_data;
+} CResult_CUnifiedReport_CVoid__ChannelPublication1_Delete_Precedent;
+
+typedef struct CResult_CUnifiedReport_CVoid__ChannelPublication1_Delete_Precedent ChannelPublication1_Delete_CResult;
+
 struct CResult_CVector_c_uchar user_authorization__authorize_by_first_step__serialize_allocate(struct UserAuthorization_AuthorizeByFirstStep_Incoming incoming);
 
 void user_authorization__authorize_by_first_step__serialize_deallocate(struct CResult_CVector_c_uchar c_result);
@@ -1232,3 +1257,11 @@ void channel_publication1__create__serialize_deallocate(struct CResult_CVector_c
 ChannelPublication1_Create_CResult channel_publication1__create__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
 
 void channel_publication1__create__deserialize_deallocate(ChannelPublication1_Create_CResult _c_result);
+
+struct CResult_CVector_c_uchar channel_publication1__delete__serialize_allocate(struct ChannelPublication1_Delete_Incoming incoming);
+
+void channel_publication1__delete__serialize_deallocate(struct CResult_CVector_c_uchar c_result);
+
+ChannelPublication1_Delete_CResult channel_publication1__delete__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
+
+void channel_publication1__delete__deserialize_deallocate(ChannelPublication1_Delete_CResult _c_result);
