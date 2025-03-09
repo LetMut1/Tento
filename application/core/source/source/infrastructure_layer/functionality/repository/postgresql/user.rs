@@ -121,7 +121,7 @@ impl Repository<Postgresql<User>> {
                 )
                 .await
             );
-            let rows = crate::result_return_runtime!(
+            crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,

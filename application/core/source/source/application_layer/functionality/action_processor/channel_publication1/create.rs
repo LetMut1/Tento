@@ -83,7 +83,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
             if !Validator::<ChannelPublication1_ImagesPathes>::is_valid(incoming.channel_publication1__images_pathes.as_slice()) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+            let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let channel__owner = match Repository::<Postgresql<Channel>>::find_7(
                 &postgresql_database_3_client,
                 ChannelBy1 {

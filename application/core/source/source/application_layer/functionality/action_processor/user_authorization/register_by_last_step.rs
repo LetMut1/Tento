@@ -287,7 +287,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             let user_device__id = incoming.user_device__id.to_string();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    let user_device = Repository::<Postgresql<UserDevice>>::create(
+                    Repository::<Postgresql<UserDevice>>::create(
                         &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
                         UserDeviceInsert {
                             user_device__id: user_device__id.as_str(),

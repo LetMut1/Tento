@@ -62,7 +62,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 user_access_token__id,
                 user__id,
                 user_device__id,
-                user_access_token__expires_at,
+                _,
             ) = Encoder::<UserAccessToken>::decode(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_signed,

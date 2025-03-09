@@ -73,7 +73,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
             if incoming.limit <= 0 || incoming.limit > LIMIT {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+            let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let (
                 channel__owner,
                 channel__access_modifier,
@@ -105,12 +105,12 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
             '_a: for row in rows.iter() {
                 data_registry.push(
                     Data {
-                        channel_publication1__id: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                        channel_publication1__images_pathes: crate::result_return_logic!(rows[0].try_get::<'_, usize, Vec<String>>(1)),
-                        channel_publication1__text: crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(2)),
-                        channel_publication1__marks_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
-                        channel_publication1__viewing_quantity: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(4)),
-                        channel_publication1__created_at: crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(5)),
+                        channel_publication1__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                        channel_publication1__images_pathes: crate::result_return_logic!(row.try_get::<'_, usize, Vec<String>>(1)),
+                        channel_publication1__text: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(2)),
+                        channel_publication1__marks_quantity: crate::result_return_logic!(row.try_get::<'_, usize, i64>(3)),
+                        channel_publication1__viewing_quantity: crate::result_return_logic!(row.try_get::<'_, usize, i64>(4)),
+                        channel_publication1__created_at: crate::result_return_logic!(row.try_get::<'_, usize, i64>(5)),
                     }
                 );
             }

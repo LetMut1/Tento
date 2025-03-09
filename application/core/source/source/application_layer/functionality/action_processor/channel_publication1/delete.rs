@@ -67,7 +67,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             if !Validator::<ChannelPublication1_Id>::is_valid(incoming.channel_publication1__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+            let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let channel__id = match Repository::<Postgresql<ChannelPublication1>>::find_2(
                 &postgresql_database_3_client,
                 ChannelPublication1By1 {
