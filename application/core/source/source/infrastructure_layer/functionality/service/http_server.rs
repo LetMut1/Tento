@@ -7,6 +7,7 @@ use {
     crate::{
         application_layer::functionality::{
             action_processor::{
+                ChannelPublication1_Delete,
                 ChannelSubscription_Create,
                 ChannelSubscription_Delete,
                 Channel_CheckLinkedNameForExisting,
@@ -504,6 +505,20 @@ impl HttpServer {
                 ActionRoute::ChannelPublication1(ChannelPublication1::Create),
             )
         );
+        crate::result_return_logic!(
+            router
+            .insert(
+                ChannelPublication1::DELETE,
+                ActionRoute::ChannelPublication1(ChannelPublication1::Delete),
+            )
+        );
+        crate::result_return_logic!(
+            router
+            .insert(
+                ChannelPublication1::GET_MANY,
+                ActionRoute::ChannelPublication1(ChannelPublication1::GetMany),
+            )
+        );
         #[cfg(feature = "action_for_manual_test")]
         {
             crate::result_return_logic!(
@@ -685,6 +700,13 @@ impl HttpServer {
                 .insert(
                     ChannelPublication1::CREATE_,
                     ActionRoute::ChannelPublication1(ChannelPublication1::Create_),
+                )
+            );
+            crate::result_return_logic!(
+                router
+                .insert(
+                    ChannelPublication1::DELETE_,
+                    ActionRoute::ChannelPublication1(ChannelPublication1::Delete_),
                 )
             );
             crate::result_return_logic!(
@@ -1157,6 +1179,13 @@ impl HttpServer {
                             )
                             .await;
                         }
+                        (&ChannelPublication1::Delete, &Method::POST) => {
+                            return Action::< ChannelPublication1_Delete>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         (&ChannelPublication1::GetMany, &Method::POST) => {
                             return Action::<ChannelPublication1_GetMany>::run(
                                 &mut action_inner,
@@ -1173,6 +1202,13 @@ impl HttpServer {
                                 ) {
                                     (&ChannelPublication1::Create_, &Method::POST) => {
                                         return Action::< ChannelPublication1_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&ChannelPublication1::Delete_, &Method::POST) => {
+                                        return Action::< ChannelPublication1_Delete>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
@@ -1445,20 +1481,28 @@ impl ChannelSubscription {
 }
 pub enum ChannelPublication1 {
     Create,
+    Delete,
     GetMany,
     #[cfg(feature = "action_for_manual_test")]
     Create_,
+    #[cfg(feature = "action_for_manual_test")]
+    Delete_,
     #[cfg(feature = "action_for_manual_test")]
     GetMany_,
 }
 impl ChannelPublication1 {
     pub const CREATE: &'static str = "/channel_publication1/create";
+    pub const DELETE: &'static str = "/channel_publication1/delete";
     pub const GET_MANY: &'static str = "/channel_publication1/get_many";
 }
 #[cfg(feature = "action_for_manual_test")]
 impl ChannelPublication1 {
     pub const CREATE_: &'static str = const_format::concatcp!(
         ChannelPublication1::CREATE,
+        ActionRoute::PART,
+    );
+    pub const DELETE_: &'static str = const_format::concatcp!(
+        ChannelPublication1::DELETE,
         ActionRoute::PART,
     );
     pub const GET_MANY_: &'static str = const_format::concatcp!(

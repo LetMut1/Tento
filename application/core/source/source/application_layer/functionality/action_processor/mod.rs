@@ -37,6 +37,7 @@ pub use self::{
     channel_publication1::{
         get_many::ChannelPublication1_GetMany,
         create::ChannelPublication1_Create,
+        delete::ChannelPublication1_Delete,
     }
 };
 use {

@@ -400,6 +400,24 @@ enum Precedent {
     User_IsNotChannelOwner,
 }
 ```
+- ## ChannelPublication1_Delete POST /channel_publication1/delete
+```
+Deletes channel publications of type 1.
+```
+```
+struct Incoming {
+    user_access_token_signed: <Data standards>
+    channel_publication1__id: i64,
+}
+```
+```
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+    User_IsNotChannelOwner,
+    ChannelPublication1_NotFound,
+}
+```
  - ## ChannelPublication1_GetMany POST /channel_publication1/get_many
 ```
 Returns channel publications of type 1.
