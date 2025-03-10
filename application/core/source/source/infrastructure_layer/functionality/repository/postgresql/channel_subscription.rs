@@ -29,7 +29,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                         $3\
                     ) \
                 RETURNING \
-                    cs.user__id AS ui;";
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
@@ -75,7 +75,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                     cs.user__id = $1 \
                     AND cs.channel__id = $2 \
                 RETURNING \
-                    cs.user__id AS ui;";
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(

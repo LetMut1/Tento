@@ -28,7 +28,9 @@ impl Repository<Postgresql<UserDevice>> {
                     ) \
                 ON CONFLICT ON CONSTRAINT \
                     user_device_2 \
-                DO NOTHING;";
+                DO NOTHING \
+                RETURNING \
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -47,7 +49,7 @@ impl Repository<Postgresql<UserDevice>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -55,6 +57,9 @@ impl Repository<Postgresql<UserDevice>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }

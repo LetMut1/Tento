@@ -100,7 +100,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 WHERE \
                     cp1.id = $1 \
                 RETURNING \
-                    cp1.id AS i;";
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel_publication1__id,

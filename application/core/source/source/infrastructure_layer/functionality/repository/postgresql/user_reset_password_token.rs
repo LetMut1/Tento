@@ -37,7 +37,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                         $7\
                     ) \
                 RETURNING \
-                    urpt.user__id AS ui;";
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
@@ -99,7 +99,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     urpt.user__id = $1 \
                     AND urpt.user_device__id = $2 \
                 RETURNING \
-                    urpt.user__id AS ui;";
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -154,7 +154,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     urpt.user__id = $6 \
                     AND urpt.user_device__id = $7 \
                 RETURNING \
-                    urpt.user__id AS ui;";
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
@@ -221,7 +221,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     urpt.user__id = $2 \
                     AND urpt.user_device__id = $3 \
                 RETURNING \
-                    urpt.user__id AS ui;";
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
@@ -278,7 +278,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     urpt.user__id = $5 \
                     AND urpt.user_device__id = $6 \
                 RETURNING \
-                    urpt.user__id AS ui;";
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -338,7 +338,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     urpt.user__id = $1 \
                     AND urpt.user_device__id = $2 \
                 RETURNING \
-                    urpt.user__id AS ui;";
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -385,7 +385,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     urpt.user__id = $2 \
                     AND urpt.user_device__id = $3 \
                 RETURNING \
-                    urpt.user__id AS ui;";
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(

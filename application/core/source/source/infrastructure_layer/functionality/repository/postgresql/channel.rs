@@ -156,7 +156,7 @@ impl Repository<Postgresql<Channel>> {
                 WHERE \
                     c.id = $1 \
                 RETURNING \
-                    c.id AS i;";
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel__id,
@@ -194,7 +194,7 @@ impl Repository<Postgresql<Channel>> {
                 WHERE \
                     c.id = $1 \
                 RETURNING \
-                    c.id AS i;";
+                    true AS v;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel__id,
