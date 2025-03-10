@@ -93,7 +93,9 @@ impl Repository<Postgresql<User>> {
                         $3,\
                         $4,\
                         $5\
-                    );";
+                    ) \
+                RETURNING \
+                    u.id AS i;";
             let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
@@ -124,7 +126,7 @@ impl Repository<Postgresql<User>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -132,6 +134,9 @@ impl Repository<Postgresql<User>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -187,7 +192,9 @@ impl Repository<Postgresql<User>> {
                 DELETE FROM ONLY \
                     public.user_ AS u \
                 WHERE \
-                    u.id = $1;";
+                    u.id = $1 \
+                RETURNING \
+                    u.id AS i;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__id,
@@ -201,7 +208,7 @@ impl Repository<Postgresql<User>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -209,6 +216,9 @@ impl Repository<Postgresql<User>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -594,7 +604,7 @@ impl Repository<Postgresql<User>> {
     pub fn get_id<'a>(database_1_client: &'a Client) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
-                SELECT nextval('public.user__1') AS n";
+                SELECT nextval('public.user__1') AS i;";
             let statement = crate::result_return_logic!(
                 database_1_client
                 .prepare_typed_cached(
@@ -611,6 +621,9 @@ impl Repository<Postgresql<User>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)));
         };
     }

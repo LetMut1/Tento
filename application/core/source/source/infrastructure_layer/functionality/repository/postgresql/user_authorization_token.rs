@@ -36,7 +36,9 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                         $4,\
                         $5,\
                         $6\
-                    );";
+                    ) \
+                RETURNING \
+                    uat.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -71,7 +73,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -79,6 +81,9 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -89,7 +94,9 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     public.user_authorization_token AS uat \
                 WHERE \
                     uat.user__id = $1 \
-                    AND uat.user_device__id = $2;";
+                    AND uat.user_device__id = $2 \
+                RETURNING \
+                    uat.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -108,7 +115,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -116,6 +123,9 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -137,7 +147,9 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 ) \
                 WHERE \
                     uat.user__id = $5 \
-                    AND uat.user_device__id = $6;";
+                    AND uat.user_device__id = $6 \
+                RETURNING \
+                    uat.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -172,7 +184,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -180,6 +192,9 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -199,7 +214,9 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 ) \
                 WHERE \
                     uat.user__id = $4 \
-                    AND uat.user_device__id = $5;";
+                    AND uat.user_device__id = $5 \
+                RETURNING \
+                    uat.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
@@ -230,7 +247,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -238,6 +255,9 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -253,7 +273,9 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 ) \
                 WHERE \
                     uat.user__id = $2 \
-                    AND uat.user_device__id = $3;";
+                    AND uat.user_device__id = $3 \
+                RETURNING \
+                    uat.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
@@ -276,7 +298,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -284,6 +306,9 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -296,7 +321,9 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     wrong_enter_tries_quantity = wrong_enter_tries_quantity + 1 \
                 WHERE \
                     uat.user__id = $1 \
-                    AND uat.user_device__id = $2;";
+                    AND uat.user_device__id = $2 \
+                RETURNING \
+                    uat.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -315,7 +342,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -323,6 +350,9 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }

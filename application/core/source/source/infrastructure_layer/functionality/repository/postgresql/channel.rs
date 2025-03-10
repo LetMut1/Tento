@@ -154,7 +154,9 @@ impl Repository<Postgresql<Channel>> {
                 SET \
                     subscribers_quantity = subscribers_quantity + 1 \
                 WHERE \
-                    c.id = $1;";
+                    c.id = $1 \
+                RETURNING \
+                    c.id AS i;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel__id,
@@ -168,7 +170,7 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_3_client
                 .query(
                     &statement,
@@ -176,6 +178,9 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -187,7 +192,9 @@ impl Repository<Postgresql<Channel>> {
                 SET \
                     subscribers_quantity = subscribers_quantity - 1 \
                 WHERE \
-                    c.id = $1;";
+                    c.id = $1 \
+                RETURNING \
+                    c.id AS i;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel__id,
@@ -201,7 +208,7 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_3_client
                 .query(
                     &statement,
@@ -209,6 +216,9 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }

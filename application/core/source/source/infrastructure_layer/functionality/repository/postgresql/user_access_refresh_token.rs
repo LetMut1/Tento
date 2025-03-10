@@ -33,7 +33,9 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                         $4,\
                         $5,\
                         $6\
-                    );";
+                    ) \
+                RETURNING \
+                    uart.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -68,7 +70,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -76,6 +78,9 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -97,7 +102,9 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 ) \
                 WHERE \
                     uart.user__id = $5 \
-                    AND uart.user_device__id = $6;";
+                    AND uart.user_device__id = $6 \
+                RETURNING \
+                    uart.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -132,7 +139,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -140,6 +147,9 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -150,7 +160,9 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 public.user_access_refresh_token AS uart \
             WHERE \
                 uart.user__id = $1 \
-                AND uart.user_device__id = $2;";
+                AND uart.user_device__id = $2 \
+            RETURNING \
+                    uart.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -169,7 +181,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -177,6 +189,9 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -186,7 +201,9 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 DELETE FROM ONLY \
                     public.user_access_refresh_token AS uart \
                 WHERE \
-                    uart.user__id = $1;";
+                    uart.user__id = $1 \
+                RETURNING \
+                    uart.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__id,
@@ -200,7 +217,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -208,6 +225,9 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }

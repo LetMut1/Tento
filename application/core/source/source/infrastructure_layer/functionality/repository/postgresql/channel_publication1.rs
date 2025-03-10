@@ -98,7 +98,9 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 DELETE FROM ONLY \
                     public.channel_publication1 cp1 \
                 WHERE \
-                    cp1.id = $1;";
+                    cp1.id = $1 \
+                RETURNING \
+                    cp1.id AS i;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel_publication1__id,
@@ -112,7 +114,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_3_client
                 .query(
                     &statement,
@@ -120,6 +122,9 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }

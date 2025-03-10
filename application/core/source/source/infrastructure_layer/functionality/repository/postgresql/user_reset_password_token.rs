@@ -35,7 +35,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                         $5,\
                         $6,\
                         $7\
-                    );";
+                    ) \
+                RETURNING \
+                    urpt.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
@@ -74,7 +76,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -82,6 +84,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -92,7 +97,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     public.user_reset_password_token AS urpt \
                 WHERE \
                     urpt.user__id = $1 \
-                    AND urpt.user_device__id = $2;";
+                    AND urpt.user_device__id = $2 \
+                RETURNING \
+                    urpt.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -111,7 +118,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -119,6 +126,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -142,7 +152,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 ) \
                 WHERE \
                     urpt.user__id = $6 \
-                    AND urpt.user_device__id = $7;";
+                    AND urpt.user_device__id = $7 \
+                RETURNING \
+                    urpt.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
@@ -181,7 +193,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -189,6 +201,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -204,7 +219,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 ) \
                 WHERE \
                     urpt.user__id = $2 \
-                    AND urpt.user_device__id = $3;";
+                    AND urpt.user_device__id = $3 \
+                RETURNING \
+                    urpt.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
@@ -227,7 +244,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -235,6 +252,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -256,7 +276,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 ) \
                 WHERE \
                     urpt.user__id = $5 \
-                    AND urpt.user_device__id = $6;";
+                    AND urpt.user_device__id = $6 \
+                RETURNING \
+                    urpt.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -291,7 +313,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -299,6 +321,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -311,7 +336,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     wrong_enter_tries_quantity = wrong_enter_tries_quantity + 1 \
                 WHERE \
                     urpt.user__id = $1 \
-                    AND urpt.user_device__id = $2;";
+                    AND urpt.user_device__id = $2 \
+                RETURNING \
+                    urpt.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -330,7 +357,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -338,6 +365,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
@@ -353,7 +383,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 ) \
                 WHERE \
                     urpt.user__id = $2 \
-                    AND urpt.user_device__id = $3;";
+                    AND urpt.user_device__id = $3 \
+                RETURNING \
+                    urpt.user__id AS ui;";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
@@ -376,7 +408,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_2_client
                 .query(
                     &statement,
@@ -384,6 +416,9 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
