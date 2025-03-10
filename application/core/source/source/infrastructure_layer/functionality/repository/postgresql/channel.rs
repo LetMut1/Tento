@@ -138,6 +138,9 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(
                 crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
             );

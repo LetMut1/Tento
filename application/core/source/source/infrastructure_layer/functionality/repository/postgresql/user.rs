@@ -69,6 +69,9 @@ impl Repository<Postgresql<User>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(
                 crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))
             );
@@ -164,7 +167,7 @@ impl Repository<Postgresql<User>> {
                 )
                 .await
             );
-            crate::result_return_runtime!(
+            let rows = crate::result_return_runtime!(
                 database_1_client
                 .query(
                     &statement,
@@ -172,6 +175,9 @@ impl Repository<Postgresql<User>> {
                 )
                 .await
             );
+            if rows.is_empty() {
+                return Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(());
         };
     }
