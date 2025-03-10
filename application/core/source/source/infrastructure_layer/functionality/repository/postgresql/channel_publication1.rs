@@ -46,7 +46,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             parameter_storage
                 .add(
                     &insert.channel__id,
-                    Type::TEXT,
+                    Type::INT8,
                 )
                 .add(
                     &insert.channel_publication1__images_pathes,
@@ -100,11 +100,11 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 WHERE \
                     cp1.id = $1 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel_publication1__id,
-                Type::TEXT,
+                Type::INT8,
             );
             let statement = crate::result_return_logic!(
                 database_3_client

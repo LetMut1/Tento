@@ -95,7 +95,7 @@ impl Repository<Postgresql<User>> {
                         $5\
                     ) \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
@@ -153,7 +153,7 @@ impl Repository<Postgresql<User>> {
                 WHERE \
                     u.id = $2 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -194,7 +194,7 @@ impl Repository<Postgresql<User>> {
                 WHERE \
                     u.id = $1 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__id,

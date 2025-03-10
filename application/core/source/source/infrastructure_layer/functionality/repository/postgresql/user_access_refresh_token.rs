@@ -35,7 +35,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                         $6\
                     ) \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -104,7 +104,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                     uart.user__id = $5 \
                     AND uart.user_device__id = $6 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -162,7 +162,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 uart.user__id = $1 \
                 AND uart.user_device__id = $2 \
             RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -203,7 +203,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 WHERE \
                     uart.user__id = $1 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.user__id,

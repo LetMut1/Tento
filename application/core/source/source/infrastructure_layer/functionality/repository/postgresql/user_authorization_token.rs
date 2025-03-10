@@ -38,7 +38,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                         $6\
                     ) \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -96,7 +96,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -149,7 +149,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     uat.user__id = $5 \
                     AND uat.user_device__id = $6 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -216,7 +216,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     uat.user__id = $4 \
                     AND uat.user_device__id = $5 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
@@ -275,7 +275,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     uat.user__id = $2 \
                     AND uat.user_device__id = $3 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
@@ -323,7 +323,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(

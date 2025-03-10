@@ -30,7 +30,7 @@ impl Repository<Postgresql<UserDevice>> {
                     user_device_2 \
                 DO NOTHING \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(

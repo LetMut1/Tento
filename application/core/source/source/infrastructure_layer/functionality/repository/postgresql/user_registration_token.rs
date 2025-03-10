@@ -40,7 +40,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                         $7\
                     ) \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
@@ -102,7 +102,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                     urt.user__email = $1 \
                     AND urt.user_device__id = $2 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -157,7 +157,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                     urt.user__email = $6 \
                     AND urt.user_device__id = $7 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
@@ -224,7 +224,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                     urt.user__email = $2 \
                     AND urt.user_device__id = $3 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
@@ -281,7 +281,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                     urt.user__email = $5 AND \
                     urt.user_device__id = $6 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -341,7 +341,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                     urt.user__email = $1 \
                     AND urt.user_device__id = $2 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -388,7 +388,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                     urt.user__email = $2 \
                     AND urt.user_device__id = $3 \
                 RETURNING \
-                    true AS v;";
+                    true AS _;";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(

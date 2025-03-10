@@ -13,3 +13,4 @@ pub mod user_reset_password_token;
 pub mod channel_subscription_token;
 pub mod channel_token;
 pub mod channel_publication1;
+pub mod channel_publication1_mark;
