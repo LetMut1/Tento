@@ -146,7 +146,7 @@ impl Repository<Postgresql<Channel>> {
             );
         };
     }
-    pub fn update_1<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -179,12 +179,12 @@ impl Repository<Postgresql<Channel>> {
                 .await
             );
             if rows.is_empty() {
-                return Err(crate::new_logic_unreachable_state!());
+                return Result::Ok(false);
             }
-            return Result::Ok(());
+            return Result::Ok(true);
         };
     }
-    pub fn update_2<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update_2<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -217,9 +217,9 @@ impl Repository<Postgresql<Channel>> {
                 .await
             );
             if rows.is_empty() {
-                return Err(crate::new_logic_unreachable_state!());
+                return Result::Ok(false);
             }
-            return Result::Ok(());
+            return Result::Ok(true);
         };
     }
     // channel__owner: i64,

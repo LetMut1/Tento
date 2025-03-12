@@ -77,7 +77,7 @@ impl Repository<Postgresql<User>> {
             );
         };
     }
-    pub fn create_2<'a>(database_1_client: &'a Client, insert: Insert2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn create_2<'a>(database_1_client: &'a Client, insert: Insert2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -135,12 +135,12 @@ impl Repository<Postgresql<User>> {
                 .await
             );
             if rows.is_empty() {
-                return Err(crate::new_logic_unreachable_state!());
+                return Result::Ok(false);
             }
-            return Result::Ok(());
+            return Result::Ok(true);
         };
     }
-    pub fn update<'a>(database_1_client: &'a Client, update: Update<'a>, by: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn update<'a>(database_1_client: &'a Client, update: Update<'a>, by: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -181,12 +181,12 @@ impl Repository<Postgresql<User>> {
                 .await
             );
             if rows.is_empty() {
-                return Err(crate::new_logic_unreachable_state!());
+                return Result::Ok(false);
             }
-            return Result::Ok(());
+            return Result::Ok(true);
         };
     }
-    pub fn delete<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn delete<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -217,9 +217,9 @@ impl Repository<Postgresql<User>> {
                 .await
             );
             if rows.is_empty() {
-                return Err(crate::new_logic_unreachable_state!());
+                return Result::Ok(false);
             }
-            return Result::Ok(());
+            return Result::Ok(true);
         };
     }
     // user__id: i64,

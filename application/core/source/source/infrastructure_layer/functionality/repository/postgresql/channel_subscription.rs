@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<ChannelSubscription>> {
-    pub fn create<'a>(database_3_client: &'a Client, insert: Insert) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn create<'a>(database_3_client: &'a Client, insert: Insert) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -61,12 +61,12 @@ impl Repository<Postgresql<ChannelSubscription>> {
                 .await
             );
             if rows.is_empty() {
-                return Err(crate::new_logic_unreachable_state!());
+                return Result::Ok(false);
             }
-            return Result::Ok(());
+            return Result::Ok(true);
         };
     }
-    pub fn delete<'a>(database_3_client: &'a Client, by: By) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn delete<'a>(database_3_client: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -103,9 +103,9 @@ impl Repository<Postgresql<ChannelSubscription>> {
                 .await
             );
             if rows.is_empty() {
-                return Err(crate::new_logic_unreachable_state!());
+                return Result::Ok(false);
             }
-            return Result::Ok(());
+            return Result::Ok(true);
         };
     }
     pub fn is_exist<'a>(database_3_client: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {

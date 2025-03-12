@@ -69,7 +69,7 @@ impl Repository<Postgresql<ChannelPublication1Mark>> {
             return Result::Ok(true);
         };
     }
-    pub fn delete<'a>(database_3_client: &'a Client, by: By) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn delete<'a>(database_3_client: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -106,9 +106,9 @@ impl Repository<Postgresql<ChannelPublication1Mark>> {
                 .await
             );
             if rows.is_empty() {
-                return Err(crate::new_logic_unreachable_state!());
+                return Result::Ok(false);
             }
-            return Result::Ok(());
+            return Result::Ok(true);
         };
     }
 }
