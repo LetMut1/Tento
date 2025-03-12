@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<ChannelPublication1Mark>> {
-    pub fn create<'a>(database_3_client: &'a Client, insert: Insert) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn create<'a>(database_3_client: &'a Client, insert: Insert) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -28,6 +28,9 @@ impl Repository<Postgresql<ChannelPublication1Mark>> {
                         $2,\
                         $3\
                     )\
+                ON CONFLICT ON CONSTRAINT \
+                    channel_publication1_mark_2 \
+                DO NOTHING \
                 RETURNING \
                     true AS _;";
             let mut parameter_storage = ParameterStorage::new(3);
@@ -61,9 +64,9 @@ impl Repository<Postgresql<ChannelPublication1Mark>> {
                 .await
             );
             if rows.is_empty() {
-                return Err(crate::new_logic_unreachable_state!());
+                return Result::Ok(false);
             }
-            return Result::Ok(());
+            return Result::Ok(true);
         };
     }
     pub fn delete<'a>(database_3_client: &'a Client, by: By) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
