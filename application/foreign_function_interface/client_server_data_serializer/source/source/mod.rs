@@ -3245,6 +3245,7 @@ pub struct ChannelPublication1_GetMany_Data {
     pub channel_publication1__marks_quantity: c_long,
     pub channel_publication1__viewing_quantity: c_long,
     pub channel_publication1__created_at: c_long,
+    pub channel_publication1_mark__created_at: COption<c_long>,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -3283,6 +3284,10 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                                     Allocator::<CString>::allocate(channel_publication1__image_pathe),
                                 );
                             }
+                            let channel_publication1_mark__created_at = match data__.channel_publication1_mark__created_at {
+                                Option::Some(channel_publication1_mark__created_at_) => COption::data(channel_publication1_mark__created_at_),
+                                Option::None => COption::none(),
+                            };
                             data_registry.push(
                                 ChannelPublication1_GetMany_Data {
                                     channel_publication1__id: data__.channel_publication1__id,
@@ -3291,6 +3296,7 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                                     channel_publication1__marks_quantity: data__.channel_publication1__marks_quantity,
                                     channel_publication1__viewing_quantity: data__.channel_publication1__viewing_quantity,
                                     channel_publication1__created_at: data__.channel_publication1__created_at,
+                                    channel_publication1_mark__created_at,
                                 }
                             );
                         }
@@ -5488,6 +5494,7 @@ mod test {
                         channel_publication1__marks_quantity: 0,
                         channel_publication1__viewing_quantity: 0,
                         channel_publication1__created_at: 0,
+                        channel_publication1_mark__created_at: Option::Some(0),
                     };
                     data_registry.push(data);
                 }

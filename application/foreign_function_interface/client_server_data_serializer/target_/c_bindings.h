@@ -944,6 +944,7 @@ typedef struct ChannelPublication1_GetMany_Data {
   long channel_publication1__marks_quantity;
   long channel_publication1__viewing_quantity;
   long channel_publication1__created_at;
+  struct COption_c_long channel_publication1_mark__created_at;
 } ChannelPublication1_GetMany_Data;
 
 typedef struct CVector_ChannelPublication1_GetMany_Data {

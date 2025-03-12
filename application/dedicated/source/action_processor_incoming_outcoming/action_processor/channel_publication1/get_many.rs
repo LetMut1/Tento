@@ -32,6 +32,7 @@ pub struct Data {
     pub channel_publication1__marks_quantity: i64,
     pub channel_publication1__viewing_quantity: i64,
     pub channel_publication1__created_at: i64,
+    pub channel_publication1_mark__created_at: Option<i64>,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

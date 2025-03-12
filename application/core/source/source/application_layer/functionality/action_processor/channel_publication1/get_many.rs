@@ -111,6 +111,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                         channel_publication1__marks_quantity: crate::result_return_logic!(row.try_get::<'_, usize, i64>(3)),
                         channel_publication1__viewing_quantity: crate::result_return_logic!(row.try_get::<'_, usize, i64>(4)),
                         channel_publication1__created_at: crate::result_return_logic!(row.try_get::<'_, usize, i64>(5)),
+                        channel_publication1_mark__created_at: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)),
                     }
                 );
             }

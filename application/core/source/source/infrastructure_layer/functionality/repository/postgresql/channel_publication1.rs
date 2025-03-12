@@ -137,15 +137,20 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     cp1.text_ AS t,\
                     cp1.marks_quantity AS mq,\
                     cp1.viewing_quantity AS vq,\
-                    cp1.created_at AS ca \
+                    cp1.created_at AS ca1,\
+                    cp1m.created_at AS ca2 \
                 FROM \
                     public.channel_publication1 cp1 \
+                LEFT OUTER JOIN \
+                    public.channel_publication1_mark cp1m \
+                ON \
+                    cp1.id = cp1m.channel_publication1__id \
                 WHERE \
                     cp1.channel__id = $1 \
                     AND cp1.created_at < $2 \
                 ORDER BY \
                     cp1.created_at DESC \
-                LIMIT $3";
+                LIMIT $3;";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
             .add(
@@ -187,7 +192,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 FROM \
                     public.channel_publication1 cp1 \
                 WHERE \
-                    cp1.id = $1";
+                    cp1.id = $1;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
                 &by.channel_publication1__id,
