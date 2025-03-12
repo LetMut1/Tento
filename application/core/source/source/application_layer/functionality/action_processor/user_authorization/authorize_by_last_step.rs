@@ -170,10 +170,6 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
             let user_access_refresh_token__updated_at = now;
-
-
-            todo!("upsert");
-
             let is_exist = Repository::<Postgresql<UserAccessRefreshToken>>::is_exist(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenBy2 {
