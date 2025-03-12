@@ -118,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::create(
+            let is_created = match Repository::<Postgresql<ChannelSubscription>>::create(
                 transaction.get_client(),
                 ChannelSubscriptionInsert {
                     user__id,
@@ -128,8 +128,15 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             )
             .await
             {
+                Result::Ok(is_created_) => is_created_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
+            };
+            if !is_created {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Err(aggregate_error);
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscription_AlreadyExist));
             }
             if let Result::Err(aggregate_error) = Repository::<Postgresql<Channel>>::update_1(
                 transaction.get_client(),

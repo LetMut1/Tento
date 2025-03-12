@@ -354,6 +354,7 @@ enum Precedent {
     Channel_NotFound,
     Channel_IsClose,
     User_IsChannelOwner,
+    ChannelSubscription_AlreadyExist,
     ChannelSubscriptionToken_AlreadyExpired,
 }
 ```

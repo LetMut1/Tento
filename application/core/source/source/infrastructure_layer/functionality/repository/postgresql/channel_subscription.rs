@@ -28,6 +28,9 @@ impl Repository<Postgresql<ChannelSubscription>> {
                         $2,\
                         $3\
                     ) \
+                ON CONFLICT ON CONSTRAINT \
+                    channel_subscription_4 \
+                DO NOTHING \
                 RETURNING \
                     true AS _;";
             let mut parameter_storage = ParameterStorage::new(3);

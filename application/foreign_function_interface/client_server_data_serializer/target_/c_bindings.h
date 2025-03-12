@@ -885,6 +885,7 @@ typedef struct ChannelSubscription_Create_Precedent {
   bool channel__not_found;
   bool channel__is_close;
   bool user__is_channel__owner;
+  bool channel_subscription_already_exist;
   bool channel_subscription_token__already_expired;
 } ChannelSubscription_Create_Precedent;
 

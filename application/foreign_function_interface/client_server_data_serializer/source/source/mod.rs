@@ -3059,6 +3059,7 @@ pub struct ChannelSubscription_Create_Precedent {
     pub channel__not_found: bool,
     pub channel__is_close: bool,
     pub user__is_channel__owner: bool,
+    pub channel_subscription_already_exist: bool,
     pub channel_subscription_token__already_expired: bool,
 }
 #[unsafe(no_mangle)]
@@ -3095,6 +3096,12 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
                     ChannelSubscription_Create_Precedent_::User_IsChannelOwner => {
                         ChannelSubscription_Create_Precedent {
                             user__is_channel__owner: true,
+                            ..Default::default()
+                        }
+                    }
+                    ChannelSubscription_Create_Precedent_::ChannelSubscription_AlreadyExist => {
+                        ChannelSubscription_Create_Precedent {
+                            channel_subscription_already_exist: true,
                             ..Default::default()
                         }
                     }
@@ -5422,6 +5429,7 @@ mod test {
                     ChannelSubscription_Create_Precedent_::Channel_NotFound => {}
                     ChannelSubscription_Create_Precedent_::Channel_IsClose => {}
                     ChannelSubscription_Create_Precedent_::User_IsChannelOwner => {}
+                    ChannelSubscription_Create_Precedent_::ChannelSubscription_AlreadyExist => {}
                     ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken_AlreadyExpired => {}
                 }
                 let precedents: Vec<ChannelSubscription_Create_Precedent_> = vec![

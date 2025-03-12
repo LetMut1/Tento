@@ -6,6 +6,7 @@ pub enum CommonPrecedent {
     ChannelPublication1_NotFound,
     ChannelPublication1Mark_AlreadyExist,
     ChannelSubscription_NotFound,
+    ChannelSubscription_AlreadyExist,
     ChannelSubscriptionToken_AlreadyExpired,
     ChannelToken_AlreadyExpired,
     ChannelToken_NotFound,
