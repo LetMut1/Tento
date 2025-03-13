@@ -235,7 +235,21 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
     // user_access_refresh_token__obfuscation_value: String,
     // user_access_refresh_token__expires_at: i64,
     // user_access_refresh_token__updated_at: i64,
-    pub fn find<'a>(database_2_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<Option<(String, String, i64, i64)>, AggregateError>> + Send + use<'a> {
+    pub fn find<'a>(
+        database_2_client: &'a Client,
+        by: By2<'a>,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                String,
+                String,
+                i64,
+                i64,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \

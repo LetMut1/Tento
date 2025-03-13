@@ -1,7 +1,7 @@
 use {
     super::{
-        report_variant_1,
         Formatter,
+        report_variant_1,
     },
     crate::infrastructure_layer::data::aggregate_error::{
         Context,

@@ -12,41 +12,41 @@ use {
                     Channel_Name,
                     Channel_VisabilityModifier_,
                 },
-                user_access_token::UserAccessToken,
                 channel_token::{
                     ChannelToken,
                     ChannelToken_ExpiresAt,
-                }
+                },
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
                 encoder::Encoder,
-                validator::Validator,
                 generator::Generator,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelBy4,
                         Postgresql,
                     },
-                    Repository,
                 },
                 service::resolver::{
                     Resolver,
                     UnixTime,
-                }
+                },
             },
         },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel::get_many_public_by_name::{
+            Data,
             Incoming,
             Outcoming,
             Precedent,
-            Data,
         },
         unified_report::UnifiedReport,
     },

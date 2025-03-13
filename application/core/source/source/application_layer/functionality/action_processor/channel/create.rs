@@ -16,20 +16,22 @@ use {
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, generator::Generator, validator::Validator
+                encoder::Encoder,
+                generator::Generator,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelBy2,
                         ChannelBy3,
                         ChannelInsert,
                         Postgresql,
                     },
-                    Repository,
                 },
                 service::resolver::{
                     Resolver,

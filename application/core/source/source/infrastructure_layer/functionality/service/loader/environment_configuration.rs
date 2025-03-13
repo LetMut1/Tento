@@ -1,8 +1,13 @@
+#[cfg(feature = "logging_to_file")]
+use crate::infrastructure_layer::data::environment_configuration::run_server::Logging;
 use {
     super::Loader,
     crate::infrastructure_layer::data::{
         aggregate_error::AggregateError,
         environment_configuration::{
+            EnvironmentConfiguration,
+            Postgresql,
+            PostgresqlInner,
             create_fixtures::{
                 CreateFixtures,
                 EnvironmentConfigurationFile as CreateFixturesEnvironmentConfigurationFile,
@@ -23,9 +28,6 @@ use {
                 Tls,
                 TokioRuntime,
             },
-            EnvironmentConfiguration,
-            Postgresql,
-            PostgresqlInner,
         },
     },
     serde::Deserialize,
@@ -36,8 +38,6 @@ use {
     },
     tokio_postgres::config::Config,
 };
-#[cfg(feature = "logging_to_file")]
-use crate::infrastructure_layer::data::environment_configuration::run_server::Logging;
 impl Loader<EnvironmentConfiguration<RunServer>> {
     pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<RunServer>, AggregateError> {
         let environment_configuration_file = load_from_file::<RunServerEnvironmentConfigurationFile>(environment_configuration_file_path)?;

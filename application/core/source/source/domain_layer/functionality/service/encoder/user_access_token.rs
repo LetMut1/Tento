@@ -55,10 +55,7 @@ impl Encoder<UserAccessToken> {
             },
         );
     }
-    pub fn is_valid<'a>(
-        private_key: &'static PrivateKey,
-        user_access_token_signed: &'a UserAccessTokenSigned<'_>
-    ) -> Result<bool, AggregateError> {
+    pub fn is_valid<'a>(private_key: &'static PrivateKey, user_access_token_signed: &'a UserAccessTokenSigned<'_>) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha3_512>::is_valid(
             private_key.user_access_token.as_bytes(),
             Serializer::<BitCode>::serialize(
@@ -74,7 +71,10 @@ impl Encoder<UserAccessToken> {
         );
     }
 }
-#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize))]
+#[cfg_attr(
+    feature = "serde_for_manual_test",
+    derive(serde::Serialize)
+)]
 #[derive(bitcode::Encode)]
 struct Data<'a> {
     user_access_token__id: &'a str,

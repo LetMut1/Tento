@@ -14,13 +14,19 @@ use {
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::{repository::{
-                postgresql::{
-                    Postgresql,
-                    UserAccessRefreshTokenBy2,
+            functionality::{
+                repository::{
+                    Repository,
+                    postgresql::{
+                        Postgresql,
+                        UserAccessRefreshTokenBy2,
+                    },
                 },
-                Repository,
-            }, service::resolver::{Resolver, UnixTime}},
+                service::resolver::{
+                    Resolver,
+                    UnixTime,
+                },
+            },
         },
     },
     dedicated::{

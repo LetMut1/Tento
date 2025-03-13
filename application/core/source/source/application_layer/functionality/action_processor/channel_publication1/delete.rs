@@ -7,23 +7,34 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::Channel, channel_publication1::{
+                channel::Channel,
+                channel_publication1::{
                     ChannelPublication1,
                     ChannelPublication1_Id,
-                }, user_access_token::UserAccessToken
+                },
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, validator::Validator
+                encoder::Encoder,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::{repository::{
-                postgresql::{
-                    ChannelBy1, ChannelPublication1By1, Postgresql
+            functionality::{
+                repository::{
+                    Repository,
+                    postgresql::{
+                        ChannelBy1,
+                        ChannelPublication1By1,
+                        Postgresql,
+                    },
                 },
-                Repository,
-            }, service::resolver::{Resolver, UnixTime}},
+                service::resolver::{
+                    Resolver,
+                    UnixTime,
+                },
+            },
         },
     },
     dedicated::{
@@ -61,9 +72,11 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
                 ChannelPublication1By1 {
                     channel_publication1__id: incoming.channel_publication1__id,
                 },
-            ).await? {
+            )
+            .await?
+            {
                 Option::Some(channel__id_) => channel__id_,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1_NotFound))
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1_NotFound)),
             };
             let channel__owner = match Repository::<Postgresql<Channel>>::find_7(
                 &postgresql_database_3_client,
@@ -74,7 +87,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             .await?
             {
                 Option::Some(channel__owner_) => channel__owner_,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_IsNotChannelOwner))
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_IsNotChannelOwner)),
             };
             if incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsNotChannelOwner));
@@ -84,7 +97,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
                 ChannelPublication1By1 {
                     channel_publication1__id: incoming.channel_publication1__id,
                 },
-            ).await?;
+            )
+            .await?;
             return Result::Ok(UnifiedReport::target_empty());
         };
     }

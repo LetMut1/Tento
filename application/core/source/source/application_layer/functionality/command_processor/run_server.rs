@@ -1,12 +1,4 @@
 pub use crate::infrastructure_layer::data::environment_configuration::run_server::RunServer;
-#[cfg(feature = "logging_to_file")]
-use {
-    crate::infrastructure_layer::data::environment_configuration::run_server::Logging,
-    tracing_appender::rolling::{
-        RollingFileAppender,
-        Rotation,
-    },
-};
 use {
     super::CommandProcessor,
     crate::infrastructure_layer::{
@@ -31,6 +23,14 @@ use {
         WorkerGuard,
     },
     tracing_subscriber::FmtSubscriber,
+};
+#[cfg(feature = "logging_to_file")]
+use {
+    crate::infrastructure_layer::data::environment_configuration::run_server::Logging,
+    tracing_appender::rolling::{
+        RollingFileAppender,
+        Rotation,
+    },
 };
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration<RunServer>> = OnceLock::new();
 impl CommandProcessor<RunServer> {

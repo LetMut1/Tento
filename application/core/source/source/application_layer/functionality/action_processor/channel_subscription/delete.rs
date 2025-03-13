@@ -15,17 +15,29 @@ use {
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, validator::Validator
+                encoder::Encoder,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::{repository::{
-                postgresql::{
-                    ChannelBy1, ChannelSubscriptionBy, IsolationLevel, Postgresql, Resolver as Resolver_, Transaction
+            functionality::{
+                repository::{
+                    Repository,
+                    postgresql::{
+                        ChannelBy1,
+                        ChannelSubscriptionBy,
+                        IsolationLevel,
+                        Postgresql,
+                        Resolver as Resolver_,
+                        Transaction,
+                    },
                 },
-                Repository,
-            }, service::resolver::{Resolver, UnixTime}},
+                service::resolver::{
+                    Resolver,
+                    UnixTime,
+                },
+            },
         },
     },
     dedicated::{
@@ -65,7 +77,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
                     channel__id: incoming.channel__id,
                 },
             )
-            .await? {
+            .await?
+            {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscription_NotFound));
             }
             let transaction = Resolver_::<Transaction<'_>>::start(

@@ -2,17 +2,17 @@ use {
     super::Encoder,
     crate::infrastructure_layer::data::aggregate_error::AggregateError,
     argon2::{
-        password_hash::{
-            rand_core::OsRng,
-            PasswordHash,
-            PasswordHasher,
-            PasswordVerifier,
-            SaltString,
-        },
         Algorithm,
         Argon2,
         Params,
         Version,
+        password_hash::{
+            PasswordHash,
+            PasswordHasher,
+            PasswordVerifier,
+            SaltString,
+            rand_core::OsRng,
+        },
     },
     std::sync::OnceLock,
 };
@@ -67,7 +67,10 @@ mod test {
     use super::*;
     #[test]
     fn validate() -> Result<(), Box<dyn std::error::Error + 'static>> {
-        let data_for_encode = [0 as u8, 1];
+        let data_for_encode = [
+            0 as u8,
+            1,
+        ];
         if !Encoder::<Argon2Id>::is_valid(
             data_for_encode.as_slice(),
             Encoder::<Argon2Id>::encode(data_for_encode.as_slice())?.as_str(),

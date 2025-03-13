@@ -30,16 +30,16 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         Postgresql,
                         UserBy2,
-                        UserRegistrationTokenInsert,
                         UserRegistrationTokenBy,
+                        UserRegistrationTokenInsert,
                         UserRegistrationTokenUpdate1,
                         UserRegistrationTokenUpdate2,
                         UserRegistrationTokenUpdate3,
                     },
-                    Repository,
                 },
                 service::{
                     resolver::{
@@ -99,15 +99,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                 )
                 .await?
                 {
-                    Option::Some(
-                        (
-                            mut user_registration_token__value_,
-                            mut user_registration_token__wrong_enter_tries_quantity_,
-                            mut user_registration_token__is_approved,
-                            mut user_registration_token__expires_at,
-                            mut user_registration_token__can_be_resent_from_,
-                        )
-                    ) => {
+                    Option::Some((
+                        mut user_registration_token__value_,
+                        mut user_registration_token__wrong_enter_tries_quantity_,
+                        mut user_registration_token__is_approved,
+                        mut user_registration_token__expires_at,
+                        mut user_registration_token__can_be_resent_from_,
+                    )) => {
                         let (can_send_, need_to_update_1) = if user_registration_token__can_be_resent_from_ <= now {
                             user_registration_token__can_be_resent_from_ = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
                             (
@@ -196,8 +194,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                 user_registration_token__wrong_enter_tries_quantity: user_registration_token__wrong_enter_tries_quantity_,
                                 user_registration_token__is_approved: false,
                                 user_registration_token__can_be_resent_from: user_registration_token__can_be_resent_from_,
-                                user_registration_token__expires_at:  Generator::<UserRegistrationToken_ExpiresAt>::generate(now)?,
-                            }
+                                user_registration_token__expires_at: Generator::<UserRegistrationToken_ExpiresAt>::generate(now)?,
+                            },
                         )
                         .await?;
                         (

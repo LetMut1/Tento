@@ -5,6 +5,6 @@ use {
 };
 impl Generator<Channel_ObfuscationValue> {
     pub fn generate() -> i64 {
-       return rand::thread_rng().gen_range::<i64, _>(i64::MIN..=i64::MAX);
+        return rand::thread_rng().gen_range::<i64, _>(i64::MIN..=i64::MAX);
     }
 }

@@ -13,18 +13,19 @@ use {
                     Channel_Id,
                 },
                 channel_subscription::ChannelSubscription,
-                user_access_token::UserAccessToken,
                 channel_subscription_token::ChannelSubscriptionToken,
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
-                validator::Validator,
                 encoder::Encoder,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelBy1,
                         ChannelSubscriptionInsert,
@@ -33,7 +34,6 @@ use {
                         Resolver as Resolver_,
                         Transaction,
                     },
-                    Repository,
                 },
                 service::resolver::{
                     Resolver,
@@ -73,11 +73,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
-            let (
-                channel__owner,
-                channel__access_modifier,
-                channel__obfuscation_value,
-            ) = match Repository::<Postgresql<Channel>>::find_2(
+            let (channel__owner, channel__access_modifier, channel__obfuscation_value) = match Repository::<Postgresql<Channel>>::find_2(
                 &postgresql_database_3_client,
                 ChannelBy1 {
                     channel__id: incoming.channel__id,
@@ -86,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound))
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound)),
             };
             if !Encoder::<ChannelSubscriptionToken>::is_valid(
                 incoming.user_access_token_signed.user__id,
@@ -116,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                     user__id: incoming.user_access_token_signed.user__id,
                     channel__id: incoming.channel__id,
                     channel_subscription__created_at: now,
-                }
+                },
             )
             .await
             {

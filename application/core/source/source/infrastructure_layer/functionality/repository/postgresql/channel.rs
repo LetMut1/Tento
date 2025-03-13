@@ -13,14 +13,14 @@ use {
                     Counter,
                     Counter_,
                 },
-            }
+            },
         },
     },
     deadpool_postgres::Client,
     std::future::Future,
     tokio_postgres::{
-        types::Type,
         Row,
+        types::Type,
     },
 };
 // channel__id: i64,
@@ -141,9 +141,7 @@ impl Repository<Postgresql<Channel>> {
             if rows.is_empty() {
                 return Err(crate::new_logic_unreachable_state!());
             }
-            return Result::Ok(
-                crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-            );
+            return Result::Ok(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)));
         };
     }
     pub fn update_1<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
@@ -236,8 +234,29 @@ impl Repository<Postgresql<Channel>> {
     // channel__viewing_quantity: i64,
     // channel__obfuscation_value: i64,
     pub fn find_1<'a>(
-        database_3_client: &'a Client, by: By1,
-    ) -> impl Future<Output = Result<Option<(i64, String, String, Option<String>, i16, i16, Vec<i16>, Option<String>, Option<String>, i64, i64, i64, i64)>, AggregateError>> + Send + use<'a> {
+        database_3_client: &'a Client,
+        by: By1,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                i64,
+                String,
+                String,
+                Option<String>,
+                i16,
+                i16,
+                Vec<i16>,
+                Option<String>,
+                Option<String>,
+                i64,
+                i64,
+                i64,
+                i64,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -306,7 +325,20 @@ impl Repository<Postgresql<Channel>> {
     // channel__owner: i64,
     // channel__access_modifier: i16,
     // channel__obfuscation_value: i64,
-    pub fn find_2<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<Option<(i64, i16, i64,)>, AggregateError>> + Send + use<'a> {
+    pub fn find_2<'a>(
+        database_3_client: &'a Client,
+        by: By1,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                i64,
+                i16,
+                i64,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -589,7 +621,19 @@ impl Repository<Postgresql<Channel>> {
     }
     // channel__owner: i64,
     // channel__access_modifier: i16,
-    pub fn find_6<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<Option<(i64, i16)>, AggregateError>> + Send + use<'a> {
+    pub fn find_6<'a>(
+        database_3_client: &'a Client,
+        by: By1,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                i64,
+                i16,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -751,8 +795,8 @@ pub struct Insert<'a> {
     pub channel__access_modifier: i16,
     pub channel__visability_modifier: i16,
     pub channel__orientation: &'a [i16],
-    pub channel__cover_image_path: Option<&'a str,>,
-    pub channel__background_image_path: Option<&'a str,>,
+    pub channel__cover_image_path: Option<&'a str>,
+    pub channel__background_image_path: Option<&'a str>,
     pub channel__subscribers_quantity: i64,
     pub channel__marks_quantity: i64,
     pub channel__viewing_quantity: i64,

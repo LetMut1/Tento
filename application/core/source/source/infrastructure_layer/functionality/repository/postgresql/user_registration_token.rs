@@ -15,10 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<UserRegistrationToken>> {
-    pub fn create<'a>(
-        database_2_client: &'a Client,
-        insert: Insert<'a>,
-    ) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn create<'a>(database_2_client: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -430,7 +427,22 @@ impl Repository<Postgresql<UserRegistrationToken>> {
     // user_registration_token__is_approved: bool,
     // user_registration_token__expires_at: i64,
     // user_registration_token__can_be_resent_from: i64,
-    pub fn find_1<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<Option<(String, i16, bool, i64, i64)>, AggregateError>> + Send + use<'a> {
+    pub fn find_1<'a>(
+        database_2_client: &'a Client,
+        by: By<'a>,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                String,
+                i16,
+                bool,
+                i64,
+                i64,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -490,7 +502,21 @@ impl Repository<Postgresql<UserRegistrationToken>> {
     // user_registration_token__wrong_enter_tries_quantity: i16,
     // user_registration_token__is_approved: bool,
     // user_registration_token__expires_at: i64,
-    pub fn find_2<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<Option<(String, i16, bool, i64)>, AggregateError>> + Send + use<'a> {
+    pub fn find_2<'a>(
+        database_2_client: &'a Client,
+        by: By<'a>,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                String,
+                i16,
+                bool,
+                i64,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -548,7 +574,21 @@ impl Repository<Postgresql<UserRegistrationToken>> {
     // user_registration_token__is_approved: bool,
     // user_registration_token__expires_at: i64,
     // user_registration_token__can_be_resent_from: i64,
-    pub fn find_3<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<Option<(String, bool, i64, i64)>, AggregateError>> + Send + use<'a> {
+    pub fn find_3<'a>(
+        database_2_client: &'a Client,
+        by: By<'a>,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                String,
+                bool,
+                i64,
+                i64,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \

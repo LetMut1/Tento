@@ -1,6 +1,7 @@
 mod field;
 use {
     self::field::{
+        AccessModifier,
         AccessModifier_,
         BackgroundImagePath,
         CoverImagePath,
@@ -10,13 +11,12 @@ use {
         LinkedName,
         MarksQuantity,
         Name,
+        ObfuscationValue,
         Orientation,
         SubscribersQuantity,
         ViewingQuantity,
-        VisabilityModifier_,
-        ObfuscationValue,
-        AccessModifier,
         VisabilityModifier,
+        VisabilityModifier_,
     },
     super::user::User_Id,
 };

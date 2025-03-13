@@ -16,11 +16,11 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         Postgresql,
                         UserAccessRefreshTokenBy1,
                     },
-                    Repository,
                 },
                 service::resolver::{
                     CloudMessage,

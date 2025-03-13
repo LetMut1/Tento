@@ -27,13 +27,13 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         Postgresql,
                         UserBy3,
                         UserResetPasswordTokenBy,
                         UserResetPasswordTokenUpdate2,
                     },
-                    Repository,
                 },
                 service::{
                     resolver::{
@@ -80,14 +80,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             .await?
             {
                 Option::Some(user_) => user_,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound))
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound)),
             };
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (
                 user_reset_password_token__value,
                 user_reset_password_token__is_approved,
                 user_reset_password_token__expires_at,
-                mut user_reset_password_token__can_be_resent_from
+                mut user_reset_password_token__can_be_resent_from,
             ) = match Repository::<Postgresql<UserResetPasswordToken>>::find_3(
                 &postgresql_database_2_client,
                 UserResetPasswordTokenBy {
@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound))
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound)),
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_reset_password_token__expires_at <= now {

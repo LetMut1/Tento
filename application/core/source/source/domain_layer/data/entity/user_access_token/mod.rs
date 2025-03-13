@@ -7,7 +7,7 @@ use {
     super::{
         user::User_Id,
         user_device::UserDevice_Id,
-    }
+    },
 };
 pub struct UserAccessToken {
     id: Id,

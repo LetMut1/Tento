@@ -29,6 +29,7 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         IsolationLevel,
                         Postgresql,
@@ -39,7 +40,6 @@ use {
                         UserResetPasswordTokenBy,
                         UserUpdate,
                     },
-                    Repository,
                 },
                 service::{
                     resolver::{
@@ -102,7 +102,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 .await?
                 {
                     Option::Some(values) => values,
-                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound))
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound)),
                 };
                 if user_reset_password_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
                     Repository::<Postgresql<UserResetPasswordToken>>::delete(
@@ -144,11 +144,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_WrongValue));
                 }
             }
-            let (
-                user__email,
-                user__nickname,
-                mut user__password_hash,
-            ) = match Repository::<Postgresql<User>>::find_5(
+            let (user__email, user__nickname, mut user__password_hash) = match Repository::<Postgresql<User>>::find_5(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy3 {
                     user__id: incoming.user__id,
@@ -157,7 +153,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound))
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound)),
             };
             if !Validator::<User_Password>::is_valid_part_2(
                 incoming.user__password,

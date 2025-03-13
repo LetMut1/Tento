@@ -8,28 +8,39 @@ use {
         domain_layer::{
             data::entity::{
                 channel::{
-                    Channel, Channel_Name
+                    Channel,
+                    Channel_Name,
                 },
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, validator::Validator
+                encoder::Encoder,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::{repository::{
-                postgresql::{
-                    ChannelBy5,
-                    Postgresql,
+            functionality::{
+                repository::{
+                    Repository,
+                    postgresql::{
+                        ChannelBy5,
+                        Postgresql,
+                    },
                 },
-                Repository,
-            }, service::resolver::{Resolver, UnixTime}},
+                service::resolver::{
+                    Resolver,
+                    UnixTime,
+                },
+            },
         },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel::get_many_by_name_in_subscriptions::{
-            Data, Incoming, Outcoming, Precedent
+            Data,
+            Incoming,
+            Outcoming,
+            Precedent,
         },
         unified_report::UnifiedReport,
     },

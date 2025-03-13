@@ -42,8 +42,9 @@ impl Encoder<ChannelSubscriptionToken> {
                             channel__id,
                             channel__obfuscation_value,
                             channel_subscription_token__expires_at,
-                        }
-                    )?.as_slice(),
+                        },
+                    )?
+                    .as_slice(),
                 ),
             },
         );
@@ -60,11 +61,16 @@ impl Encoder<ChannelSubscriptionToken> {
                 channel__id,
                 channel__obfuscation_value,
                 channel_subscription_token_hashed.channel_subscription_token__expires_at,
-            )?.hash == channel_subscription_token_hashed.hash,
+            )?
+            .hash
+                == channel_subscription_token_hashed.hash,
         );
     }
 }
-#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize))]
+#[cfg_attr(
+    feature = "serde_for_manual_test",
+    derive(serde::Serialize)
+)]
 #[derive(bitcode::Encode)]
 struct Data {
     user__id: i64,

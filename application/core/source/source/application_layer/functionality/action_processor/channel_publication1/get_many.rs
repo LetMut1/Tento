@@ -11,27 +11,39 @@ use {
                     Channel,
                     Channel_AccessModifier_,
                     Channel_Id,
-                }, channel_publication1::ChannelPublication1, user_access_token::UserAccessToken
+                },
+                channel_publication1::ChannelPublication1,
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, validator::Validator
+                encoder::Encoder,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::{repository::{
-                postgresql::{
-                    ChannelBy1,
-                    ChannelPublication1By2,
-                    Postgresql,
+            functionality::{
+                repository::{
+                    Repository,
+                    postgresql::{
+                        ChannelBy1,
+                        ChannelPublication1By2,
+                        Postgresql,
+                    },
                 },
-                Repository,
-            }, service::resolver::{Resolver, UnixTime}},
+                service::resolver::{
+                    Resolver,
+                    UnixTime,
+                },
+            },
         },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel_publication1::get_many::{
-            Data, Incoming, Outcoming, Precedent
+            Data,
+            Incoming,
+            Outcoming,
+            Precedent,
         },
         unified_report::UnifiedReport,
     },
@@ -61,10 +73,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
-            let (
-                channel__owner,
-                channel__access_modifier,
-            ) = match Repository::<Postgresql<Channel>>::find_6(
+            let (channel__owner, channel__access_modifier) = match Repository::<Postgresql<Channel>>::find_6(
                 &postgresql_database_3_client,
                 ChannelBy1 {
                     channel__id: incoming.channel__id,
@@ -87,7 +96,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                     channel_publication1__created_at: incoming.channel_publication1__created_at,
                 },
                 incoming.limit,
-            ).await?;
+            )
+            .await?;
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
             '_a: for row in rows.iter() {
                 data_registry.push(
@@ -99,15 +109,15 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                         channel_publication1__viewing_quantity: crate::result_return_logic!(row.try_get::<'_, usize, i64>(4)),
                         channel_publication1__created_at: crate::result_return_logic!(row.try_get::<'_, usize, i64>(5)),
                         channel_publication1_mark__created_at: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)),
-                    }
+                    },
                 );
             }
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {
                         data_registry,
-                    }
-                )
+                    },
+                ),
             );
         };
     }

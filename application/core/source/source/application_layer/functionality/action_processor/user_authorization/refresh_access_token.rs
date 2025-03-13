@@ -27,12 +27,12 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         Postgresql,
                         UserAccessRefreshTokenBy2,
                         UserAccessRefreshTokenUpdate,
                     },
-                    Repository,
                 },
                 service::resolver::{
                     Resolver,
@@ -65,23 +65,19 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
-            let (
-                user_access_token__id_,
-                user_access_refresh_token__obfuscation_value,
-                user_access_refresh_token__expires_at,
-                user_access_refresh_token__updated_at,
-            ) = match Repository::<Postgresql<UserAccessRefreshToken>>::find(
-                &postgresql_database_2_client,
-                UserAccessRefreshTokenBy2 {
-                    user__id: incoming.user_access_token_signed.user__id,
-                    user_device__id: incoming.user_access_token_signed.user_device__id,
-                },
-            )
-            .await?
-            {
-                Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken_NotFound))
-            };
+            let (user_access_token__id_, user_access_refresh_token__obfuscation_value, user_access_refresh_token__expires_at, user_access_refresh_token__updated_at) =
+                match Repository::<Postgresql<UserAccessRefreshToken>>::find(
+                    &postgresql_database_2_client,
+                    UserAccessRefreshTokenBy2 {
+                        user__id: incoming.user_access_token_signed.user__id,
+                        user_device__id: incoming.user_access_token_signed.user_device__id,
+                    },
+                )
+                .await?
+                {
+                    Option::Some(values) => values,
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken_NotFound)),
+                };
             let is_valid = Encoder::<UserAccessRefreshToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 incoming.user_access_token_signed.user__id,

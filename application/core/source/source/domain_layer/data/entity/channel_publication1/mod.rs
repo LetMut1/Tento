@@ -2,10 +2,10 @@ mod field;
 use {
     self::field::{
         CreatedAt,
-        ImagesPathes,
-        Text,
         Id,
+        ImagesPathes,
         MarksQuantity,
+        Text,
         ViewingQuantity,
     },
     super::channel::Channel_Id,

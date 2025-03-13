@@ -1,8 +1,8 @@
 use {
     super::{
-        report_variant_2,
         Format,
         Formatter,
+        report_variant_2,
     },
     crate::{
         infrastructure_layer::data::aggregate_error::{

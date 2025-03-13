@@ -427,7 +427,22 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
     // user_reset_password_token__is_approved: bool,
     // user_reset_password_token__expires_at: i64,
     // user_reset_password_token__can_be_resent_from: i64,
-    pub fn find_1<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<Option<(String, i16, bool, i64, i64)>, AggregateError>> + Send + use<'a> {
+    pub fn find_1<'a>(
+        database_2_client: &'a Client,
+        by: By<'a>,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                String,
+                i16,
+                bool,
+                i64,
+                i64,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -487,7 +502,21 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
     // user_reset_password_token__wrong_enter_tries_quantity: i16,
     // user_reset_password_token__is_approved: bool,
     // user_reset_password_token__expires_at: i64,
-    pub fn find_2<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<Option<(String, i16, bool, i64)>, AggregateError>> + Send + use<'a> {
+    pub fn find_2<'a>(
+        database_2_client: &'a Client,
+        by: By<'a>,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                String,
+                i16,
+                bool,
+                i64,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -545,7 +574,21 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
     // user_reset_password_token__is_approved: bool,
     // user_reset_password_token__expires_at: i64,
     // user_reset_password_token__can_be_resent_from: i64,
-    pub fn find_3<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<Option<(String, bool, i64, i64)>, AggregateError>> + Send + use<'a> {
+    pub fn find_3<'a>(
+        database_2_client: &'a Client,
+        by: By<'a>,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                String,
+                bool,
+                i64,
+                i64,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \

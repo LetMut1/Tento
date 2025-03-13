@@ -3,11 +3,11 @@ use {
     crate::infrastructure_layer::data::control_type::Response,
     bytes::Bytes,
     http::{
-        header,
         HeaderMap,
         HeaderValue,
         StatusCode,
         Version,
+        header,
     },
     http_body_util::Full,
     hyper::Response as HyperResponse,

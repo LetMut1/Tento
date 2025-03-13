@@ -15,11 +15,11 @@ use {
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::repository::{
+                Repository,
                 postgresql::{
                     Postgresql,
                     UserBy1,
                 },
-                Repository,
             },
         },
     },

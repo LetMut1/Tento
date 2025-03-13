@@ -13,6 +13,6 @@ impl Validator<User_Nickname> {
                 return false;
             }
         }
-        return !user__nickname.contains('@') && !user__nickname.contains(' ') && !user__nickname.is_empty();      // TODO Проверить символ табуляци TAB            НАПИСАТЬ Через Регекс?
+        return !user__nickname.contains('@') && !user__nickname.contains(' ') && !user__nickname.is_empty(); // TODO Проверить символ табуляци TAB            НАПИСАТЬ Через Регекс?
     }
 }

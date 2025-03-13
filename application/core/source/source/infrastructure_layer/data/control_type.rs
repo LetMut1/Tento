@@ -2,9 +2,9 @@ use {
     bytes::Bytes,
     http_body_util::Full,
     hyper::{
-        body::Incoming,
         Request as HyperRequest,
         Response as HyperResponse,
+        body::Incoming,
     },
 };
 pub type Request = HyperRequest<Incoming>;

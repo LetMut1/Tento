@@ -6,8 +6,8 @@ use {
         environment_configuration::PostgresqlInner,
     },
     deadpool::{
-        managed::QueueMode,
         Runtime,
+        managed::QueueMode,
     },
     deadpool_postgres::{
         Manager,
@@ -21,11 +21,11 @@ use {
         time::Duration,
     },
     tokio_postgres::{
+        Socket,
         tls::{
             MakeTlsConnect,
             TlsConnect,
         },
-        Socket,
     },
 };
 impl Creator<PostgresqlConnectionPool> {

@@ -41,12 +41,24 @@ mod test {
     use super::*;
     #[test]
     fn validate() -> Result<(), Box<dyn std::error::Error + 'static>> {
-        let salt = [0 as u8, 1, 2, 3];
-        let data_for_encode = [0 as u8, 1];
+        let salt = [
+            0 as u8,
+            1,
+            2,
+            3,
+        ];
+        let data_for_encode = [
+            0 as u8,
+            1,
+        ];
         if !Encoder::<HmacSha3_512>::is_valid(
             salt.as_slice(),
             data_for_encode.as_slice(),
-            Encoder::<HmacSha3_512>::encode(salt.as_slice(), data_for_encode.as_slice())?.as_slice(),
+            Encoder::<HmacSha3_512>::encode(
+                salt.as_slice(),
+                data_for_encode.as_slice(),
+            )?
+            .as_slice(),
         )? {
             return Result::Err("".into());
         }

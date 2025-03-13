@@ -10,9 +10,9 @@ use {
                     Channel_Description,
                     Channel_LinkedName,
                     Channel_Name,
+                    Channel_ObfuscationValue,
                     Channel_Orientation,
                     Channel_VisabilityModifier_,
-                    Channel_ObfuscationValue,
                 },
                 user::{
                     User,
@@ -27,8 +27,8 @@ use {
             },
             functionality::service::{
                 encoder::Encoder,
-                validator::Validator,
                 generator::Generator,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
@@ -38,6 +38,7 @@ use {
             },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelBy2,
                         ChannelInsert,
@@ -46,7 +47,6 @@ use {
                         UserDeviceInsert,
                         UserInsert1,
                     },
-                    Repository,
                 },
                 service::{
                     creator::{

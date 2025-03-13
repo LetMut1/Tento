@@ -7,9 +7,6 @@ use {
     crate::{
         application_layer::functionality::{
             action_processor::{
-                ChannelPublication1_Delete,
-                ChannelSubscription_Create,
-                ChannelSubscription_Delete,
                 Channel_CheckLinkedNameForExisting,
                 Channel_CheckNameForExisting,
                 Channel_Create,
@@ -17,6 +14,11 @@ use {
                 Channel_GetManyBySubscription,
                 Channel_GetManyPublicByName,
                 Channel_GetOneById,
+                ChannelPublication1_Create,
+                ChannelPublication1_Delete,
+                ChannelPublication1_GetMany,
+                ChannelSubscription_Create,
+                ChannelSubscription_Delete,
                 Inner as ActionProcessorInner,
                 UserAuthorization_AuthorizeByFirstStep,
                 UserAuthorization_AuthorizeByLastStep,
@@ -34,8 +36,6 @@ use {
                 UserAuthorization_SendEmailForAuthorize,
                 UserAuthorization_SendEmailForRegister,
                 UserAuthorization_SendEmailForResetPassword,
-                ChannelPublication1_GetMany,
-                ChannelPublication1_Create,
             },
             command_processor::RunServer,
         },
@@ -65,12 +65,12 @@ use {
     },
     dedicated::void::Void,
     hyper::{
-        server::conn::http2::Builder as Http2Builder,
         Method,
+        server::conn::http2::Builder as Http2Builder,
     },
     hyper_util::rt::{
-        tokio::TokioExecutor,
         TokioIo,
+        tokio::TokioExecutor,
     },
     matchit::Router,
     std::{
@@ -159,7 +159,6 @@ impl HttpServer {
                     .await?
                 }
             };
-
             let cloned = Arc::new(
                 Cloned {
                     router: Self::create_router()?,
@@ -739,9 +738,7 @@ impl HttpServer {
                 postgresql_connection_pool_database_3: &cloned.postgresql_connection_pool_database_3,
             };
             match *r#match.value {
-                ActionRoute::UserAuthorization(
-                    ref user_authorization,
-                ) => {
+                ActionRoute::UserAuthorization(ref user_authorization) => {
                     match (
                         user_authorization,
                         &parts.method,
@@ -987,9 +984,7 @@ impl HttpServer {
                         }
                     }
                 }
-                ActionRoute::Channel(
-                    ref channel,
-                ) => {
+                ActionRoute::Channel(ref channel) => {
                     match (
                         channel,
                         &parts.method,
@@ -1117,9 +1112,7 @@ impl HttpServer {
                         }
                     }
                 }
-                ActionRoute::ChannelSubscription(
-                    ref channel_subscription,
-                ) => {
+                ActionRoute::ChannelSubscription(ref channel_subscription) => {
                     match (
                         channel_subscription,
                         &parts.method,
@@ -1165,22 +1158,20 @@ impl HttpServer {
                         }
                     }
                 }
-                ActionRoute::ChannelPublication1(
-                    ref channel_publication1,
-                ) => {
+                ActionRoute::ChannelPublication1(ref channel_publication1) => {
                     match (
                         channel_publication1,
                         &parts.method,
                     ) {
                         (&ChannelPublication1::Create, &Method::POST) => {
-                            return Action::< ChannelPublication1_Create>::run(
+                            return Action::<ChannelPublication1_Create>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
                         (&ChannelPublication1::Delete, &Method::POST) => {
-                            return Action::< ChannelPublication1_Delete>::run(
+                            return Action::<ChannelPublication1_Delete>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
@@ -1201,14 +1192,14 @@ impl HttpServer {
                                     &parts.method,
                                 ) {
                                     (&ChannelPublication1::Create_, &Method::POST) => {
-                                        return Action::< ChannelPublication1_Create>::run_(
+                                        return Action::<ChannelPublication1_Create>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
                                     (&ChannelPublication1::Delete_, &Method::POST) => {
-                                        return Action::< ChannelPublication1_Delete>::run_(
+                                        return Action::<ChannelPublication1_Delete>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )

@@ -30,16 +30,16 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         Postgresql,
                         UserBy2,
-                        UserResetPasswordTokenInsert,
                         UserResetPasswordTokenBy,
+                        UserResetPasswordTokenInsert,
                         UserResetPasswordTokenUpdate1,
                         UserResetPasswordTokenUpdate2,
                         UserResetPasswordTokenUpdate3,
                     },
-                    Repository,
                 },
                 service::{
                     resolver::{
@@ -86,7 +86,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
             .await?
             {
                 Option::Some(user__id_) => user__id_,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound))
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound)),
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
@@ -100,15 +100,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                 )
                 .await?
                 {
-                    Option::Some(
-                        (
-                            mut user_reset_password_token__value_,
-                            mut user_reset_password_token__wrong_enter_tries_quantity_,
-                            mut user_reset_password_token__is_approved,
-                            mut user_reset_password_token__expires_at,
-                            mut user_reset_password_token__can_be_resent_from_,
-                        )
-                    ) => {
+                    Option::Some((
+                        mut user_reset_password_token__value_,
+                        mut user_reset_password_token__wrong_enter_tries_quantity_,
+                        mut user_reset_password_token__is_approved,
+                        mut user_reset_password_token__expires_at,
+                        mut user_reset_password_token__can_be_resent_from_,
+                    )) => {
                         let (can_send_, need_to_update_1) = if user_reset_password_token__can_be_resent_from_ <= now {
                             user_reset_password_token__can_be_resent_from_ = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate(now)?;
                             (

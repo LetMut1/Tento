@@ -57,9 +57,7 @@ impl Processor<ActionRound> {
                     inner.incoming.collect().await
                 )
                 .aggregate();
-                let incoming = Serializer::<SS>::deserialize::<'_, <ActionProcessor<AP> as ActionProcessor_>::Incoming<'_>>(
-                    incoming_data.chunk(),
-                )?;
+                let incoming = Serializer::<SS>::deserialize::<'_, <ActionProcessor<AP> as ActionProcessor_>::Incoming<'_>>(incoming_data.chunk())?;
                 let unified_report = <ActionProcessor<AP> as ActionProcessor_>::process(
                     action_processor_inner,
                     incoming,

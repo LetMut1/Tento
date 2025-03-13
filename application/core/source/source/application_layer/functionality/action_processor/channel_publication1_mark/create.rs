@@ -63,12 +63,7 @@
 //     type Precedent = Precedent;
 //     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
 //         return async move {
-
 //             todo!("Do after token creating");
-
-
-
-
 //             // let user__id = match Extractor::<UserAccessToken>::extract(
 //             //     &inner.environment_configuration.subject.encryption.private_key,
 //             //     &incoming.user_access_token_signed,
@@ -85,21 +80,7 @@
 //             // if !Validator::<ChannelPublication1_Id>::is_valid(incoming.channel_publication1__id) {
 //             //     return Result::Err(crate::new_invalid_argument!());
 //             // }
-
-
-
-
-
-
-
-
-
-
-
-
 //             // // let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
-
-
 //             // // let channel__owner = match Repository::<Postgresql<Channel>>::find_7(
 //             // //     &postgresql_database_3_client,
 //             // //     ChannelBy1 {

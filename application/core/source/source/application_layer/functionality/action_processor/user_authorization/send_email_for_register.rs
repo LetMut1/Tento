@@ -24,12 +24,12 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         Postgresql,
                         UserRegistrationTokenBy,
                         UserRegistrationTokenUpdate2,
                     },
-                    Repository,
                 },
                 service::{
                     resolver::{
@@ -68,23 +68,19 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
-            let (
-                user_registration_token__value,
-                user_registration_token__is_approved,
-                user_registration_token__expires_at,
-                mut user_registration_token__can_be_resent_from,
-            ) = match Repository::<Postgresql<UserRegistrationToken>>::find_3(
-                &postgresql_database_2_client,
-                UserRegistrationTokenBy {
-                    user__email: incoming.user__email,
-                    user_device__id: incoming.user_device__id,
-                },
-            )
-            .await?
-            {
-                Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound))
-            };
+            let (user_registration_token__value, user_registration_token__is_approved, user_registration_token__expires_at, mut user_registration_token__can_be_resent_from) =
+                match Repository::<Postgresql<UserRegistrationToken>>::find_3(
+                    &postgresql_database_2_client,
+                    UserRegistrationTokenBy {
+                        user__email: incoming.user__email,
+                        user_device__id: incoming.user_device__id,
+                    },
+                )
+                .await?
+                {
+                    Option::Some(values) => values,
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound)),
+                };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_registration_token__expires_at <= now {
                 Repository::<Postgresql<UserRegistrationToken>>::delete(

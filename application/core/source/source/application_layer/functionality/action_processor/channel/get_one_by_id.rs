@@ -14,28 +14,28 @@ use {
                 },
                 channel_subscription::ChannelSubscription,
                 channel_subscription_token::{
-                    ChannelSubscriptionToken_ExpiresAt,
                     ChannelSubscriptionToken,
+                    ChannelSubscriptionToken_ExpiresAt,
                 },
-                user_access_token::UserAccessToken,
                 channel_token::ChannelToken,
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
-                validator::Validator,
                 encoder::Encoder,
                 generator::Generator,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelBy1,
                         ChannelSubscriptionBy,
                         Postgresql,
                     },
-                    Repository,
                 },
                 service::resolver::{
                     Resolver,
@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound))
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound)),
             };
             if incoming.user_access_token_signed.user__id != channel__owner {
                 match incoming.channel_token_hashed {
@@ -115,14 +115,15 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                             return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken_AlreadyExpired));
                         }
                         if channel__access_modifier == Channel_AccessModifier_::Close as i16
-                        && !Repository::<Postgresql<ChannelSubscription>>::is_exist(
-                            &postgresql_database_3_client,
-                            ChannelSubscriptionBy {
-                                user__id: incoming.user_access_token_signed.user__id,
-                                channel__id: incoming.channel__id,
-                            },
-                        )
-                        .await? {
+                            && !Repository::<Postgresql<ChannelSubscription>>::is_exist(
+                                &postgresql_database_3_client,
+                                ChannelSubscriptionBy {
+                                    user__id: incoming.user_access_token_signed.user__id,
+                                    channel__id: incoming.channel__id,
+                                },
+                            )
+                            .await?
+                        {
                             return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
                         }
                     }

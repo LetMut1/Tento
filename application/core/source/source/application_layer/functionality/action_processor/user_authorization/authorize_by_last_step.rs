@@ -41,19 +41,19 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         IsolationLevel,
                         Postgresql,
                         Resolver as Resolver_,
                         Transaction,
                         UserAccessRefreshTokenBy2,
-                        UserAccessRefreshTokenUpdate,
                         UserAccessRefreshTokenInsert,
+                        UserAccessRefreshTokenUpdate,
                         UserAuthorizationTokenBy,
                         UserBy3,
                         UserDeviceInsert,
                     },
-                    Repository,
                 },
                 service::{
                     resolver::{
@@ -95,22 +95,19 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 return Result::Err(crate::new_invalid_argument!());
             }
             let mut postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
-            let (
-                user_authorization_token__value,
-                mut user_authorization_token__wrong_enter_tries_quantity,
-                user_authorization_token__expires_at,
-            ) = match Repository::<Postgresql<UserAuthorizationToken>>::find_2(
-                &postgresql_database_2_client,
-                UserAuthorizationTokenBy {
-                    user__id: incoming.user__id,
-                    user_device__id: incoming.user_device__id,
-                },
-            )
-            .await?
-            {
-                Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound))
-            };
+            let (user_authorization_token__value, mut user_authorization_token__wrong_enter_tries_quantity, user_authorization_token__expires_at) =
+                match Repository::<Postgresql<UserAuthorizationToken>>::find_2(
+                    &postgresql_database_2_client,
+                    UserAuthorizationTokenBy {
+                        user__id: incoming.user__id,
+                        user_device__id: incoming.user_device__id,
+                    },
+                )
+                .await?
+                {
+                    Option::Some(values) => values,
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound)),
+                };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_authorization_token__expires_at <= now {
                 Repository::<Postgresql<UserAuthorizationToken>>::delete(

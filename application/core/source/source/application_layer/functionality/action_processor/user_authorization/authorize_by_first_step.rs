@@ -33,6 +33,7 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         Postgresql,
                         UserAuthorizationTokenBy,
@@ -43,7 +44,6 @@ use {
                         UserBy1,
                         UserBy2,
                     },
-                    Repository,
                 },
                 service::{
                     resolver::{
@@ -68,8 +68,8 @@ use {
         unified_report::UnifiedReport,
     },
     std::{
-        future::Future,
         borrow::Cow,
+        future::Future,
     },
 };
 pub struct UserAuthorization_AuthorizeByFirstStep;
@@ -87,11 +87,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             }
             let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             let (user__id, user__email, user__nickname, user__password_hash) = if Validator::<User_Email>::is_valid(incoming.user__email___or___user__nickname)? {
-                let (
-                    user__id,
-                    user__nickname,
-                    user__password_hash,
-                ) = match Repository::<Postgresql<User>>::find_3(
+                let (user__id, user__nickname, user__password_hash) = match Repository::<Postgresql<User>>::find_3(
                     &postgresql_database_1_client,
                     UserBy2 {
                         user__email: incoming.user__email___or___user__nickname,
@@ -110,11 +106,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 )
             } else {
                 if Validator::<User_Nickname>::is_valid(incoming.user__email___or___user__nickname) {
-                    let (
-                        user__id,
-                        user__email,
-                        user__password_hash,
-                    ) = match Repository::<Postgresql<User>>::find_2(
+                    let (user__id, user__email, user__password_hash) = match Repository::<Postgresql<User>>::find_2(
                         &postgresql_database_1_client,
                         UserBy1 {
                             user__nickname: incoming.user__email___or___user__nickname,
@@ -123,7 +115,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                     .await?
                     {
                         Option::Some(values) => values,
-                        Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword))
+                        Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword)),
                     };
                     (
                         user__id,
@@ -166,14 +158,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 )
                 .await?
                 {
-                    Option::Some(
-                        (
-                            mut user_authorization_token__value_,
-                            mut user_authorization_token__wrong_enter_tries_quantity_,
-                            mut user_authorization_token__expires_at,
-                            mut user_authorization_token__can_be_resent_from_,
-                        )
-                    ) => {
+                    Option::Some((
+                        mut user_authorization_token__value_,
+                        mut user_authorization_token__wrong_enter_tries_quantity_,
+                        mut user_authorization_token__expires_at,
+                        mut user_authorization_token__can_be_resent_from_,
+                    )) => {
                         let (can_send_, need_to_update_1) = if user_authorization_token__can_be_resent_from_ <= now {
                             user_authorization_token__can_be_resent_from_ = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?;
                             (
@@ -259,7 +249,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                 user_authorization_token__wrong_enter_tries_quantity: user_authorization_token__wrong_enter_tries_quantity_,
                                 user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from_,
                                 user_authorization_token__expires_at: Generator::<UserAuthorizationToken_ExpiresAt>::generate(now)?,
-                            }
+                            },
                         )
                         .await?;
                         (

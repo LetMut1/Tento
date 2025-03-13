@@ -1,13 +1,13 @@
 mod channel;
+mod channel_publication1;
+mod channel_publication1_mark;
 mod channel_subscription;
 mod user;
 mod user_access_refresh_token;
 mod user_authorization_token;
 mod user_device;
 mod user_registration_token;
-mod channel_publication1;
 mod user_reset_password_token;
-mod channel_publication1_mark;
 pub use self::{
     channel::{
         By1 as ChannelBy1,
@@ -18,14 +18,14 @@ pub use self::{
         By6 as ChannelBy6,
         Insert as ChannelInsert,
     },
+    channel_publication1::{
+        By1 as ChannelPublication1By1,
+        By2 as ChannelPublication1By2,
+        Insert as ChannelPublication1Insert,
+    },
     channel_subscription::{
         By as ChannelSubscriptionBy,
         Insert as ChannelSubscriptionInsert,
-    },
-    channel_publication1:: {
-        Insert as ChannelPublication1Insert,
-        By1 as ChannelPublication1By1,
-        By2 as ChannelPublication1By2,
     },
     user::{
         By1 as UserBy1,
@@ -36,30 +36,30 @@ pub use self::{
         Update as UserUpdate,
     },
     user_access_refresh_token::{
-        Insert as UserAccessRefreshTokenInsert,
         By1 as UserAccessRefreshTokenBy1,
         By2 as UserAccessRefreshTokenBy2,
+        Insert as UserAccessRefreshTokenInsert,
         Update as UserAccessRefreshTokenUpdate,
     },
     user_authorization_token::{
-        Insert as UserAuthorizationTokenInsert,
         By as UserAuthorizationTokenBy,
+        Insert as UserAuthorizationTokenInsert,
         Update1 as UserAuthorizationTokenUpdate1,
         Update2 as UserAuthorizationTokenUpdate2,
         Update3 as UserAuthorizationTokenUpdate3,
     },
     user_device::Insert as UserDeviceInsert,
     user_registration_token::{
-        Insert as UserRegistrationTokenInsert,
         By as UserRegistrationTokenBy,
+        Insert as UserRegistrationTokenInsert,
         Update1 as UserRegistrationTokenUpdate1,
         Update2 as UserRegistrationTokenUpdate2,
         Update3 as UserRegistrationTokenUpdate3,
         Update5 as UserRegistrationTokenUpdate5,
     },
     user_reset_password_token::{
-        Insert as UserResetPasswordTokenInsert,
         By as UserResetPasswordTokenBy,
+        Insert as UserResetPasswordTokenInsert,
         Update1 as UserResetPasswordTokenUpdate1,
         Update2 as UserResetPasswordTokenUpdate2,
         Update3 as UserResetPasswordTokenUpdate3,

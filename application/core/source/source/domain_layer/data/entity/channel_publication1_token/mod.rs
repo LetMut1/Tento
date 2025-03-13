@@ -2,8 +2,8 @@ mod field;
 use {
     self::field::ExpiresAt,
     super::{
-        user::User_Id,
         channel_publication1::ChannelPublication1_Id,
+        user::User_Id,
     },
 };
 // It is necessary to prevent User from creation of ChannelPublication1Mark on ChannelPublication1 using

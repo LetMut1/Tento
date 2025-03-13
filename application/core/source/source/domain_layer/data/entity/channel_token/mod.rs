@@ -2,11 +2,11 @@ mod field;
 use {
     self::field::ExpiresAt,
     super::{
-        user::User_Id,
         channel::{
             Channel_Id,
             Channel_ObfuscationValue,
         },
+        user::User_Id,
     },
 };
 // It is necessary to prevent User from receiving information about Channel using

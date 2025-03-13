@@ -43,20 +43,20 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         IsolationLevel,
                         Postgresql,
                         Resolver as Resolver_,
-                        UserInsert2,
                         Transaction,
+                        UserAccessRefreshTokenInsert,
                         UserBy1,
                         UserBy2,
                         UserBy3,
                         UserDeviceInsert,
+                        UserInsert2,
                         UserRegistrationTokenBy,
-                        UserAccessRefreshTokenInsert,
                     },
-                    Repository,
                 },
                 service::{
                     resolver::{
@@ -80,7 +80,7 @@ use {
         },
         unified_report::UnifiedReport,
     },
-    std::future::Future
+    std::future::Future,
 };
 pub struct UserAuthorization_RegisterByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> {
@@ -149,7 +149,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 .await?
                 {
                     Option::Some(values) => values,
-                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound))
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound)),
                 };
                 if user_registration_token__expires_at <= now {
                     Repository::<Postgresql<UserRegistrationToken>>::delete(

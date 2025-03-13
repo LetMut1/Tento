@@ -72,9 +72,7 @@ impl Repository<Postgresql<User>> {
             if rows.is_empty() {
                 return Err(crate::new_logic_unreachable_state!());
             }
-            return Result::Ok(
-                crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))
-            );
+            return Result::Ok(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)));
         };
     }
     pub fn create_2<'a>(database_1_client: &'a Client, insert: Insert2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
@@ -256,17 +254,26 @@ impl Repository<Postgresql<User>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
-            return Result::Ok(
-                Option::Some(
-                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                ),
-            );
+            return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
         };
     }
     // user__id: i64,
     // user__email: String,
     // user__password_hash: String,
-    pub fn find_2<'a>(database_1_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<(i64, String, String)>, AggregateError>> + Send + use<'a> {
+    pub fn find_2<'a>(
+        database_1_client: &'a Client,
+        by: By1<'a>,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                i64,
+                String,
+                String,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -315,7 +322,20 @@ impl Repository<Postgresql<User>> {
     // user__id: i64,
     // user__nickname: String,
     // user__password_hash: String,
-    pub fn find_3<'a>(database_1_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<Option<(i64, String, String)>, AggregateError>> + Send + use<'a> {
+    pub fn find_3<'a>(
+        database_1_client: &'a Client,
+        by: By2<'a>,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                i64,
+                String,
+                String,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -395,17 +415,26 @@ impl Repository<Postgresql<User>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
-            return Result::Ok(
-                Option::Some(
-                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                ),
-            );
+            return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
         };
     }
     // user__email: String,
     // user__nickname: String,
     // user__password_hash: String,
-    pub fn find_5<'a>(database_1_client: &'a Client, by: By3) -> impl Future<Output = Result<Option<(String, String, String)>, AggregateError>> + Send + use<'a> {
+    pub fn find_5<'a>(
+        database_1_client: &'a Client,
+        by: By3,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                String,
+                String,
+                String,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -485,11 +514,7 @@ impl Repository<Postgresql<User>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
-            return Result::Ok(
-                Option::Some(
-                    crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
-                ),
-            );
+            return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0))));
         };
     }
     pub fn is_exist_1<'a>(database_1_client: &'a Client, by: By1<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {

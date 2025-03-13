@@ -1,8 +1,8 @@
 mod channel;
-mod channel_subscription;
-mod user_authorization;
 mod channel_publication1;
 mod channel_publication1_mark;
+mod channel_subscription;
+mod user_authorization;
 pub use self::{
     channel::{
         check_linked_name_for_existing::Channel_CheckLinkedNameForExisting,
@@ -12,6 +12,11 @@ pub use self::{
         get_many_by_subscription::Channel_GetManyBySubscription,
         get_many_public_by_name::Channel_GetManyPublicByName,
         get_one_by_id::Channel_GetOneById,
+    },
+    channel_publication1::{
+        create::ChannelPublication1_Create,
+        delete::ChannelPublication1_Delete,
+        get_many::ChannelPublication1_GetMany,
     },
     channel_subscription::{
         create::ChannelSubscription_Create,
@@ -35,11 +40,6 @@ pub use self::{
         send_email_for_register::UserAuthorization_SendEmailForRegister,
         send_email_for_reset_password::UserAuthorization_SendEmailForResetPassword,
     },
-    channel_publication1::{
-        get_many::ChannelPublication1_GetMany,
-        create::ChannelPublication1_Create,
-        delete::ChannelPublication1_Delete,
-    }
 };
 use {
     super::command_processor::RunServer,

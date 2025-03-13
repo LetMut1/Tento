@@ -13,8 +13,8 @@ use {
     deadpool_postgres::Client,
     std::future::Future,
     tokio_postgres::{
-        types::Type,
         Row,
+        types::Type,
     },
 };
 impl Repository<Postgresql<ChannelPublication1>> {
@@ -87,9 +87,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             if rows.is_empty() {
                 return Err(crate::new_logic_unreachable_state!());
             }
-            return Result::Ok(
-                crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))
-            );
+            return Result::Ok(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)));
         };
     }
     pub fn delete<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
@@ -153,18 +151,18 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 LIMIT $3;";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
-            .add(
-                &by.channel__id,
-                Type::INT8,
-            )
-            .add(
-                &by.channel_publication1__created_at,
-                Type::INT8,
-            )
-            .add(
-                &limit,
-                Type::INT2,
-            );
+                .add(
+                    &by.channel__id,
+                    Type::INT8,
+                )
+                .add(
+                    &by.channel_publication1__created_at,
+                    Type::INT8,
+                )
+                .add(
+                    &limit,
+                    Type::INT2,
+                );
             let statement = crate::result_return_logic!(
                 database_3_client
                 .prepare_typed_cached(
@@ -217,11 +215,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
-            return Result::Ok(
-                Option::Some(
-                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                ),
-            );
+            return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
         };
     }
 }

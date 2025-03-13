@@ -10,37 +10,42 @@ use {
                 channel::{
                     Channel,
                     Channel_Id,
-                }, channel_publication1::{
+                },
+                channel_publication1::{
                     ChannelPublication1,
                     ChannelPublication1_ImagesPathes,
                     ChannelPublication1_Text,
-                }, user_access_token::UserAccessToken
+                },
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, validator::Validator
+                encoder::Encoder,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelBy1,
                         ChannelPublication1Insert,
                         Postgresql,
                     },
-                    Repository,
                 },
                 service::resolver::{
                     Resolver,
                     UnixTime,
-                }
+                },
             },
         },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel_publication1::create::{
-            Incoming, Outcoming, Precedent
+            Incoming,
+            Outcoming,
+            Precedent,
         },
         unified_report::UnifiedReport,
     },
@@ -82,7 +87,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
             .await?
             {
                 Option::Some(channel__owner_) => channel__owner_,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound))
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound)),
             };
             if incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsNotChannelOwner));
@@ -98,14 +103,15 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                     channel_publication1__viewing_quantity: 0,
                     channel_publication1__created_at,
                 },
-            ).await?;
+            )
+            .await?;
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {
                         channel_publication1__id,
                         channel_publication1__created_at,
-                    }
-                )
+                    },
+                ),
             );
         };
     }
