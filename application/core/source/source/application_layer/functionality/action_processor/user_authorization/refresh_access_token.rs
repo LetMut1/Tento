@@ -58,15 +58,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            let (
-                user_access_token__id,
-                user__id,
-                user_device__id,
-                _,
-            ) = Encoder::<UserAccessToken>::decode(
+            if !Encoder::<UserAccessToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_signed,
-            )?;
+            )? {
+                return Result::Err(crate::new_invalid_argument!());
+            }
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (
                 user_access_token__id_,
@@ -76,8 +73,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             ) = match Repository::<Postgresql<UserAccessRefreshToken>>::find(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenBy2 {
-                    user__id,
-                    user_device__id,
+                    user__id: incoming.user_access_token_signed.user__id,
+                    user_device__id: incoming.user_access_token_signed.user_device__id,
                 },
             )
             .await?
@@ -87,15 +84,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             };
             let is_valid = Encoder::<UserAccessRefreshToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
-                user__id,
-                user_device__id,
-                user_access_token__id,
+                incoming.user_access_token_signed.user__id,
+                incoming.user_access_token_signed.user_device__id,
+                incoming.user_access_token_signed.user_access_token__id,
                 user_access_refresh_token__obfuscation_value.as_str(),
                 user_access_refresh_token__expires_at,
                 user_access_refresh_token__updated_at,
                 &incoming.user_access_refresh_token_signed,
             )?;
-            if !is_valid || user_access_token__id != user_access_token__id_.as_str() {
+            if !is_valid || incoming.user_access_token_signed.user_access_token__id != user_access_token__id_.as_str() {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let now = Resolver::<UnixTime>::get_now_in_seconds();
@@ -103,8 +100,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 Repository::<Postgresql<UserAccessRefreshToken>>::delete_1(
                     &postgresql_database_2_client,
                     UserAccessRefreshTokenBy2 {
-                        user__id,
-                        user_device__id,
+                        user__id: incoming.user_access_token_signed.user__id,
+                        user_device__id: incoming.user_access_token_signed.user_device__id,
                     },
                 )
                 .await?;
@@ -124,8 +121,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                     user_access_refresh_token__updated_at: new___user_access_refresh_token__updated_at,
                 },
                 UserAccessRefreshTokenBy2 {
-                    user__id,
-                    user_device__id,
+                    user__id: incoming.user_access_token_signed.user__id,
+                    user_device__id: incoming.user_access_token_signed.user_device__id,
                 },
             )
             .await?;
@@ -133,14 +130,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 user_access_token_signed: Encoder::<UserAccessToken>::encode(
                     &inner.environment_configuration.subject.encryption.private_key,
                     new___user_access_token__id.as_str(),
-                    user__id,
-                    user_device__id,
+                    incoming.user_access_token_signed.user__id,
+                    incoming.user_access_token_signed.user_device__id,
                     new___user_access_token__expires_at,
                 )?,
                 user_access_refresh_token_signed: Encoder::<UserAccessRefreshToken>::encode(
                     &inner.environment_configuration.subject.encryption.private_key,
-                    user__id,
-                    user_device__id,
+                    incoming.user_access_token_signed.user__id,
+                    incoming.user_access_token_signed.user_device__id,
                     new___user_access_token__id.as_str(),
                     new___user_access_refresh_token__obfuscation_value.as_str(),
                     new___user_access_refresh_token__expires_at,

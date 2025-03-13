@@ -55,12 +55,11 @@ impl Encoder<UserAccessToken> {
             },
         );
     }
-    // user_access_token__id: &'a str,
-    // user__id: i64,
-    // user_device__id: &'a str,
-    // user_access_token__expires_at: i64,
-    pub fn decode<'a>(private_key: &'static PrivateKey, user_access_token_signed: &'a UserAccessTokenSigned) -> Result<(&'a str, i64, &'a str, i64), AggregateError> {
-        if !Encoder_::<HmacSha3_512>::is_valid(
+    pub fn is_valid<'a>(
+        private_key: &'static PrivateKey,
+        user_access_token_signed: &'a UserAccessTokenSigned<'_>
+    ) -> Result<bool, AggregateError> {
+        return Encoder_::<HmacSha3_512>::is_valid(
             private_key.user_access_token.as_bytes(),
             Serializer::<BitCode>::serialize(
                 &Data {
@@ -72,17 +71,7 @@ impl Encoder<UserAccessToken> {
             )?
             .as_slice(),
             user_access_token_signed.singature.as_slice(),
-        )? {
-            return Result::Err(crate::new_invalid_argument!());
-        }
-        return Result::Ok(
-            (
-                user_access_token_signed.user_access_token__id,
-                user_access_token_signed.user__id,
-                user_access_token_signed.user_device__id,
-                user_access_token_signed.user_access_token__expires_at,
-            ),
-        )
+        );
     }
 }
 #[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize))]
