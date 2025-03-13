@@ -59,7 +59,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
             }
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
@@ -86,7 +87,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
             if incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsNotChannelOwner));
             }
-            let channel_publication1__created_at = Resolver::<UnixTime>::get_now_in_seconds();
+            let channel_publication1__created_at = now;
             let channel_publication1__id = Repository::<Postgresql<ChannelPublication1>>::create(
                 &postgresql_database_3_client,
                 ChannelPublication1Insert {

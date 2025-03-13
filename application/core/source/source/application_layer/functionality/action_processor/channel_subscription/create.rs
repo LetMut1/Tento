@@ -65,7 +65,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
             }
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
@@ -95,7 +96,6 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let now = Resolver::<UnixTime>::get_now_in_seconds();
             if incoming.channel_subscription_token_hashed.channel_subscription_token__expires_at < now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken_AlreadyExpired));
             }

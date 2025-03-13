@@ -67,7 +67,8 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
             }
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
@@ -99,7 +100,6 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 Option::Some(values) => values,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound))
             };
-            let now = Resolver::<UnixTime>::get_now_in_seconds();
             if incoming.user_access_token_signed.user__id != channel__owner {
                 match incoming.channel_token_hashed {
                     Option::Some(ref channel_token_hashed) => {

@@ -65,7 +65,8 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
             }
             const LIMIT: i16 = 15;
@@ -91,7 +92,6 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                 incoming.limit,
             )
             .await?;
-            let now = Resolver::<UnixTime>::get_now_in_seconds();
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
             '_a: for row in rows.iter() {
                 let channel__id = crate::result_return_logic!(row.try_get::<'_, usize, i64>(0));
