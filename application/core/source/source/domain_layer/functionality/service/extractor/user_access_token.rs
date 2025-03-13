@@ -47,7 +47,4 @@ pub enum Extracted<'a> {
         user_access_token__expires_at: i64,
     },
     AlreadyExpired,
-    // Not yet used due to the fact that there is no such flow yet. More
-    // information in UserAccessTokenBlackList entity.
-    InUserAccessTokenBlackList,
 }

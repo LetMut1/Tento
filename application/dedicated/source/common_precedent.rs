@@ -20,7 +20,6 @@ pub enum CommonPrecedent {
     UserAccessRefreshToken_AlreadyExpired,
     UserAccessRefreshToken_NotFound,
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
     UserAuthorizationToken_AlreadyExpired,
     UserAuthorizationToken_NotFound,
     UserAuthorizationToken_TimeToResendHasNotCome,

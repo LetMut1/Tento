@@ -18,7 +18,6 @@ pub struct Incoming<'a> {
 crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserAccessToken_AlreadyExpired,
-        CommonPrecedent::UserAccessToken_InUserAccessTokenBlackList,
         CommonPrecedent::User_IsNotChannelOwner,
         CommonPrecedent::ChannelPublication1_NotFound,
     }

@@ -5,7 +5,6 @@ pub mod channel_subscription;
 pub mod user;
 pub mod user_access_refresh_token;
 pub mod user_access_token;
-pub mod user_access_token_black_list;
 pub mod user_authorization_token;
 pub mod user_device;
 pub mod user_registration_token;

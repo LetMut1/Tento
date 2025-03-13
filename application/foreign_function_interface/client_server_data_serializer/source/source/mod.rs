@@ -874,7 +874,6 @@ type UserAuthorization_DeauthorizeFromAllDevices_CResult = CResult<CUnifiedRepor
 #[derive(Default)]
 pub struct UserAuthorization_DeauthorizeFromAllDevices_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deserialize_allocate(
@@ -888,12 +887,6 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deser
                     UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired => {
                         UserAuthorization_DeauthorizeFromAllDevices_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        UserAuthorization_DeauthorizeFromAllDevices_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -917,7 +910,6 @@ type UserAuthorization_DeauthorizeFromOneDevice_CResult = CResult<CUnifiedReport
 #[derive(Default)]
 pub struct UserAuthorization_DeauthorizeFromOneDevice_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -964,12 +956,6 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deseri
                     UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired => {
                         UserAuthorization_DeauthorizeFromOneDevice_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        UserAuthorization_DeauthorizeFromOneDevice_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -2118,7 +2104,6 @@ pub struct Channel_GetManyByNameInSubscriptions_Outcoming {
 #[derive(Default)]
 pub struct Channel_GetManyByNameInSubscriptions_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyByNameInSubscriptions_CResult {
@@ -2172,12 +2157,6 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                     Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired => {
                         Channel_GetManyByNameInSubscriptions_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        Channel_GetManyByNameInSubscriptions_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -2270,7 +2249,6 @@ pub struct Channel_GetManyBySubscription_Outcoming {
 #[derive(Default)]
 pub struct Channel_GetManyBySubscription_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyBySubscription_CResult {
@@ -2324,12 +2302,6 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                     Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired => {
                         Channel_GetManyBySubscription_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_GetManyBySubscription_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        Channel_GetManyBySubscription_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -2424,7 +2396,6 @@ pub struct Channel_GetManyPublicByName_Outcoming {
 #[derive(Default)]
 pub struct Channel_GetManyPublicByName_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyPublicByName_CResult {
@@ -2489,12 +2460,6 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                     Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired => {
                         Channel_GetManyPublicByName_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_GetManyPublicByName_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        Channel_GetManyPublicByName_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -2594,7 +2559,6 @@ pub struct Channel_GetOneById_Outcoming {
 #[derive(Default)]
 pub struct Channel_GetOneById_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
     pub channel__not_found: bool,
     pub channel__is_close: bool,
     pub channel_token__not_found: bool,
@@ -2652,12 +2616,6 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                     Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired => {
                         Channel_GetOneById_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_GetOneById_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        Channel_GetOneById_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -2756,7 +2714,6 @@ pub struct Channel_CheckNameForExisting_Outcoming {
 #[derive(Default)]
 pub struct Channel_CheckNameForExisting_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_CheckNameForExisting_CResult {
@@ -2783,12 +2740,6 @@ pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(
                     Channel_CheckNameForExisting_Precedent_::UserAccessToken_AlreadyExpired => {
                         Channel_CheckNameForExisting_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_CheckNameForExisting_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        Channel_CheckNameForExisting_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -2849,7 +2800,6 @@ pub struct Channel_CheckLinkedNameForExisting_Outcoming {
 #[derive(Default)]
 pub struct Channel_CheckLinkedNameForExisting_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_CheckLinkedNameForExisting_CResult {
@@ -2876,12 +2826,6 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_al
                     Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_AlreadyExpired => {
                         Channel_CheckLinkedNameForExisting_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        Channel_CheckLinkedNameForExisting_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -2948,7 +2892,6 @@ pub struct Channel_Create_Outcoming {
 #[derive(Default)]
 pub struct Channel_Create_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
     pub channel__name_already_exist: bool,
     pub channel__linked_name_already_exist: bool,
 }
@@ -2977,12 +2920,6 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
                     Channel_Create_Precedent_::UserAccessToken_AlreadyExpired => {
                         Channel_Create_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        Channel_Create_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -3055,7 +2992,6 @@ type ChannelSubscription_Create_CResult = CResult<CUnifiedReport<CVoid, ChannelS
 #[derive(Default)]
 pub struct ChannelSubscription_Create_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
     pub channel__not_found: bool,
     pub channel__is_close: bool,
     pub user__is_channel__owner: bool,
@@ -3072,12 +3008,6 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
                     ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired => {
                         ChannelSubscription_Create_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelSubscription_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        ChannelSubscription_Create_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -3163,7 +3093,6 @@ type ChannelSubscription_Delete_CResult = CResult<CUnifiedReport<CVoid, ChannelS
 #[derive(Default)]
 pub struct ChannelSubscription_Delete_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
     pub channel_subscription__not_found: bool,
 }
 #[unsafe(no_mangle)]
@@ -3176,12 +3105,6 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_ve
                     ChannelSubscription_Delete_Precedent_::UserAccessToken_AlreadyExpired => {
                         ChannelSubscription_Delete_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelSubscription_Delete_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        ChannelSubscription_Delete_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -3263,7 +3186,6 @@ pub struct ChannelPublication1_GetMany_Outcoming {
 #[derive(Default)]
 pub struct ChannelPublication1_GetMany_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
     pub channel__not_found: bool,
     pub channel__is_close: bool,
 }
@@ -3320,12 +3242,6 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                     ChannelPublication1_GetMany_Precedent_::UserAccessToken_AlreadyExpired => {
                         ChannelPublication1_GetMany_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1_GetMany_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        ChannelPublication1_GetMany_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -3428,7 +3344,6 @@ pub struct ChannelPublication1_Create_Outcoming {
 #[derive(Default)]
 pub struct ChannelPublication1_Create_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
     pub channel__not_found: bool,
     pub user__is_not_channel_owner: bool,
 }
@@ -3458,12 +3373,6 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_ve
                     ChannelPublication1_Create_Precedent_::UserAccessToken_AlreadyExpired => {
                         ChannelPublication1_Create_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        ChannelPublication1_Create_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -3531,7 +3440,6 @@ type ChannelPublication1_Delete_CResult = CResult<CUnifiedReport<CVoid, ChannelP
 #[derive(Default)]
 pub struct ChannelPublication1_Delete_Precedent {
     pub user_access_token__already_expired: bool,
-    pub user_access_token__in_user_access_token_black_list: bool,
     pub user__is_not_channel_owner: bool,
     pub channel_publication1__not_found: bool,
 }
@@ -3545,12 +3453,6 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_ve
                     ChannelPublication1_Delete_Precedent_::UserAccessToken_AlreadyExpired => {
                         ChannelPublication1_Delete_Precedent {
                             user_access_token__already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1_Delete_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        ChannelPublication1_Delete_Precedent {
-                            user_access_token__in_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
@@ -4548,11 +4450,9 @@ mod test {
             pub fn precedent__user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
                 match UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired {
                     UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
                 let precedents: Vec<UserAuthorization_DeauthorizeFromAllDevices_Precedent_> = vec![
                     UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired,
-                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__deauthorize_from_all_devices(precedent)?;
@@ -4583,11 +4483,9 @@ mod test {
             pub fn precedent__user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
                 match UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired {
                     UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
                 let precedents: Vec<UserAuthorization_DeauthorizeFromOneDevice_Precedent_> = vec![
                     UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired,
-                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__deauthorize_from_one_device(precedent)?;
@@ -5088,11 +4986,9 @@ mod test {
             pub fn precedent__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
                 match Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired {
                     Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
                 let precedents: Vec<Channel_GetManyByNameInSubscriptions_Precedent_> = vec![
                     Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired,
-                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_by_name_in_subscriptions(precedent)?;
@@ -5142,11 +5038,9 @@ mod test {
             pub fn precedent__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
                 match Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired {
                     Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    Channel_GetManyBySubscription_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
                 let precedents: Vec<Channel_GetManyBySubscription_Precedent_> = vec![
                     Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired,
-                    Channel_GetManyBySubscription_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_by_subscription(precedent)?;
@@ -5201,11 +5095,9 @@ mod test {
             pub fn precedent__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
                 match Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired {
                     Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    Channel_GetManyPublicByName_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
                 let precedents: Vec<Channel_GetManyPublicByName_Precedent_> = vec![
                     Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired,
-                    Channel_GetManyPublicByName_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_public_by_name(precedent)?;
@@ -5257,7 +5149,6 @@ mod test {
             pub fn precedent__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
                 match Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired {
                     Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    Channel_GetOneById_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                     Channel_GetOneById_Precedent_::Channel_NotFound => {}
                     Channel_GetOneById_Precedent_::Channel_IsClose => {}
                     Channel_GetOneById_Precedent_::ChannelToken_NotFound => {}
@@ -5265,7 +5156,6 @@ mod test {
                 }
                 let precedents: Vec<Channel_GetOneById_Precedent_> = vec![
                     Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired,
-                    Channel_GetOneById_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                     Channel_GetOneById_Precedent_::Channel_NotFound,
                     Channel_GetOneById_Precedent_::Channel_IsClose,
                     Channel_GetOneById_Precedent_::ChannelToken_NotFound,
@@ -5306,11 +5196,9 @@ mod test {
             pub fn precedent__channel__check_name_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
                 match Channel_CheckNameForExisting_Precedent_::UserAccessToken_AlreadyExpired {
                     Channel_CheckNameForExisting_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    Channel_CheckNameForExisting_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
                 let precedents: Vec<Channel_CheckNameForExisting_Precedent_> = vec![
                     Channel_CheckNameForExisting_Precedent_::UserAccessToken_AlreadyExpired,
-                    Channel_CheckNameForExisting_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__check_name_for_existing(precedent)?;
@@ -5347,11 +5235,9 @@ mod test {
             pub fn precedent__channel__check_linked_name_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
                 match Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_AlreadyExpired {
                     Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                 }
                 let precedents: Vec<Channel_CheckLinkedNameForExisting_Precedent_> = vec![
                     Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_AlreadyExpired,
-                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__check_linked_name_for_existing(precedent)?;
@@ -5388,13 +5274,11 @@ mod test {
             pub fn precedent__channel__create() -> Result<(), Box<dyn StdError + 'static>> {
                 match Channel_Create_Precedent_::UserAccessToken_AlreadyExpired {
                     Channel_Create_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    Channel_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                     Channel_Create_Precedent_::Channel_NameAlreadyExist => {}
                     Channel_Create_Precedent_::Channel_LinkedNameAlreadyExist => {}
                 }
                 let precedents: Vec<Channel_Create_Precedent_> = vec![
                     Channel_Create_Precedent_::UserAccessToken_AlreadyExpired,
-                    Channel_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                     Channel_Create_Precedent_::Channel_NameAlreadyExist,
                     Channel_Create_Precedent_::Channel_LinkedNameAlreadyExist,
                 ];
@@ -5425,7 +5309,6 @@ mod test {
             pub fn precedent__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
                 match ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired {
                     ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    ChannelSubscription_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                     ChannelSubscription_Create_Precedent_::Channel_NotFound => {}
                     ChannelSubscription_Create_Precedent_::Channel_IsClose => {}
                     ChannelSubscription_Create_Precedent_::User_IsChannelOwner => {}
@@ -5434,7 +5317,6 @@ mod test {
                 }
                 let precedents: Vec<ChannelSubscription_Create_Precedent_> = vec![
                     ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired,
-                    ChannelSubscription_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                     ChannelSubscription_Create_Precedent_::Channel_NotFound,
                     ChannelSubscription_Create_Precedent_::Channel_IsClose,
                     ChannelSubscription_Create_Precedent_::User_IsChannelOwner,
@@ -5467,12 +5349,10 @@ mod test {
             pub fn precedent__channel_subscription__delete() -> Result<(), Box<dyn StdError + 'static>> {
                 match ChannelSubscription_Delete_Precedent_::UserAccessToken_AlreadyExpired {
                     ChannelSubscription_Delete_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    ChannelSubscription_Delete_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                     ChannelSubscription_Delete_Precedent_::ChannelSubscription_NotFound => {}
                 }
                 let precedents: Vec<ChannelSubscription_Delete_Precedent_> = vec![
                     ChannelSubscription_Delete_Precedent_::UserAccessToken_AlreadyExpired,
-                    ChannelSubscription_Delete_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                     ChannelSubscription_Delete_Precedent_::ChannelSubscription_NotFound,
                 ];
                 '_a: for precedent in precedents {
@@ -5527,13 +5407,11 @@ mod test {
             pub fn precedent__channel_publication1__get_many() -> Result<(), Box<dyn StdError + 'static>> {
                 match ChannelPublication1_GetMany_Precedent_::UserAccessToken_AlreadyExpired {
                     ChannelPublication1_GetMany_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    ChannelPublication1_GetMany_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                     ChannelPublication1_GetMany_Precedent_::Channel_NotFound => {}
                     ChannelPublication1_GetMany_Precedent_::Channel_IsClose => {}
                 }
                 let precedents: Vec<ChannelPublication1_GetMany_Precedent_> = vec![
                     ChannelPublication1_GetMany_Precedent_::UserAccessToken_AlreadyExpired,
-                    ChannelPublication1_GetMany_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                     ChannelPublication1_GetMany_Precedent_::Channel_NotFound,
                     ChannelPublication1_GetMany_Precedent_::Channel_IsClose,
                 ];
@@ -5573,13 +5451,11 @@ mod test {
             pub fn precedent__channel_publication1__create() -> Result<(), Box<dyn StdError + 'static>> {
                 match ChannelPublication1_Create_Precedent_::UserAccessToken_AlreadyExpired {
                     ChannelPublication1_Create_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    ChannelPublication1_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                     ChannelPublication1_Create_Precedent_::Channel_NotFound => {}
                     ChannelPublication1_Create_Precedent_::User_IsNotChannelOwner => {}
                 }
                 let precedents: Vec<ChannelPublication1_Create_Precedent_> = vec![
                     ChannelPublication1_Create_Precedent_::UserAccessToken_AlreadyExpired,
-                    ChannelPublication1_Create_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                     ChannelPublication1_Create_Precedent_::Channel_NotFound,
                     ChannelPublication1_Create_Precedent_::User_IsNotChannelOwner,
                 ];
@@ -5610,13 +5486,11 @@ mod test {
             pub fn precedent__channel_publication1__delete() -> Result<(), Box<dyn StdError + 'static>> {
                 match ChannelPublication1_Delete_Precedent_::UserAccessToken_AlreadyExpired {
                     ChannelPublication1_Delete_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    ChannelPublication1_Delete_Precedent_::UserAccessToken_InUserAccessTokenBlackList => {}
                     ChannelPublication1_Delete_Precedent_::User_IsNotChannelOwner => {}
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1_NotFound => {}
                 }
                 let precedents: Vec<ChannelPublication1_Delete_Precedent_> = vec![
                     ChannelPublication1_Delete_Precedent_::UserAccessToken_AlreadyExpired,
-                    ChannelPublication1_Delete_Precedent_::UserAccessToken_InUserAccessTokenBlackList,
                     ChannelPublication1_Delete_Precedent_::User_IsNotChannelOwner,
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1_NotFound,
                 ];

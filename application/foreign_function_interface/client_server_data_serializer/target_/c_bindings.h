@@ -174,7 +174,6 @@ typedef struct CData_CVoid {
 
 typedef struct UserAuthorization_DeauthorizeFromAllDevices_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
 } UserAuthorization_DeauthorizeFromAllDevices_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_DeauthorizeFromAllDevices_Precedent {
@@ -196,7 +195,6 @@ typedef struct UserAuthorization_DeauthorizeFromOneDevice_Incoming {
 
 typedef struct UserAuthorization_DeauthorizeFromOneDevice_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
 } UserAuthorization_DeauthorizeFromOneDevice_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_DeauthorizeFromOneDevice_Precedent {
@@ -585,7 +583,6 @@ typedef struct CData_Channel_GetManyByNameInSubscriptions_Outcoming {
 
 typedef struct Channel_GetManyByNameInSubscriptions_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
 } Channel_GetManyByNameInSubscriptions_Precedent;
 
 typedef struct CUnifiedReport_Channel_GetManyByNameInSubscriptions_Outcoming__Channel_GetManyByNameInSubscriptions_Precedent {
@@ -638,7 +635,6 @@ typedef struct CData_Channel_GetManyBySubscription_Outcoming {
 
 typedef struct Channel_GetManyBySubscription_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
 } Channel_GetManyBySubscription_Precedent;
 
 typedef struct CUnifiedReport_Channel_GetManyBySubscription_Outcoming__Channel_GetManyBySubscription_Precedent {
@@ -697,7 +693,6 @@ typedef struct CData_Channel_GetManyPublicByName_Outcoming {
 
 typedef struct Channel_GetManyPublicByName_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
 } Channel_GetManyPublicByName_Precedent;
 
 typedef struct CUnifiedReport_Channel_GetManyPublicByName_Outcoming__Channel_GetManyPublicByName_Precedent {
@@ -752,7 +747,6 @@ typedef struct CData_Channel_GetOneById_Outcoming {
 
 typedef struct Channel_GetOneById_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
   bool channel__not_found;
   bool channel__is_close;
   bool channel_token__not_found;
@@ -788,7 +782,6 @@ typedef struct CData_Channel_CheckNameForExisting_Outcoming {
 
 typedef struct Channel_CheckNameForExisting_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
 } Channel_CheckNameForExisting_Precedent;
 
 typedef struct CUnifiedReport_Channel_CheckNameForExisting_Outcoming__Channel_CheckNameForExisting_Precedent {
@@ -820,7 +813,6 @@ typedef struct CData_Channel_CheckLinkedNameForExisting_Outcoming {
 
 typedef struct Channel_CheckLinkedNameForExisting_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
 } Channel_CheckLinkedNameForExisting_Precedent;
 
 typedef struct CUnifiedReport_Channel_CheckLinkedNameForExisting_Outcoming__Channel_CheckLinkedNameForExisting_Precedent {
@@ -855,7 +847,6 @@ typedef struct CData_Channel_Create_Outcoming {
 
 typedef struct Channel_Create_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
   bool channel__name_already_exist;
   bool channel__linked_name_already_exist;
 } Channel_Create_Precedent;
@@ -881,7 +872,6 @@ typedef struct ChannelSubscription_Create_Incoming {
 
 typedef struct ChannelSubscription_Create_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
   bool channel__not_found;
   bool channel__is_close;
   bool user__is_channel__owner;
@@ -909,7 +899,6 @@ typedef struct ChannelSubscription_Delete_Incoming {
 
 typedef struct ChannelSubscription_Delete_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
   bool channel_subscription__not_found;
 } ChannelSubscription_Delete_Precedent;
 
@@ -964,7 +953,6 @@ typedef struct CData_ChannelPublication1_GetMany_Outcoming {
 
 typedef struct ChannelPublication1_GetMany_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
   bool channel__not_found;
   bool channel__is_close;
 } ChannelPublication1_GetMany_Precedent;
@@ -1001,7 +989,6 @@ typedef struct CData_ChannelPublication1_Create_Outcoming {
 
 typedef struct ChannelPublication1_Create_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
   bool channel__not_found;
   bool user__is_not_channel_owner;
 } ChannelPublication1_Create_Precedent;
@@ -1026,7 +1013,6 @@ typedef struct ChannelPublication1_Delete_Incoming {
 
 typedef struct ChannelPublication1_Delete_Precedent {
   bool user_access_token__already_expired;
-  bool user_access_token__in_user_access_token_black_list;
   bool user__is_not_channel_owner;
   bool channel_publication1__not_found;
 } ChannelPublication1_Delete_Precedent;

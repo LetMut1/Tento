@@ -60,8 +60,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
                     user_device__id: _,
                     user_access_token__expires_at: _,
                 } => user__id_,
-                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired)),
-                Extracted::InUserAccessTokenBlackList => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList))
+                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired))
             };
             if let Option::Some(requery___channel__id_) = incoming.requery___channel__id {
                 if !Validator::<Channel_Id>::is_valid(requery___channel__id_) {

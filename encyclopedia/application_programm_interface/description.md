@@ -67,7 +67,6 @@ struct Incoming {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
 }
 ```
  - ## UserAuthorization_DeauthorizeFromAllDevices POST /user_authorization/deauthorize_from_all_devices
@@ -82,7 +81,6 @@ struct Incoming {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
 }
 ```
  - ## Channel_CheckLinkedNameForExisting POST /channel/check_linked_name_for_existing
@@ -98,7 +96,6 @@ struct Incoming {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
 }
 ```
 ```
@@ -119,7 +116,6 @@ struct Incoming {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
 }
 ```
 ```
@@ -143,7 +139,6 @@ struct Incoming {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
     Channel_NameAlreadyExist,
     Channel_LinkedNameAlreadyExist,
 }
@@ -194,7 +189,6 @@ struct ChannelSubscriptionTokenHashed {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
     Channel_NotFound,
     Channel_IsClose,
     ChannelToken_NotFound,
@@ -240,7 +234,6 @@ struct Data {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
 }
 ```
  - ## Channel_GetManyBySubscription POST (GET) /channel/get_many_by_subscription
@@ -281,7 +274,6 @@ struct Data {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
 }
 ```
  - ## Channel_GetManyPublicByName POST (GET) /channel/get_many_public_by_name
@@ -328,7 +320,6 @@ struct ChannelTokenHashed {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
 }
 ```
  - ## ChannelSubscription_Create POST /channel_subscription/create
@@ -350,7 +341,6 @@ struct ChannelSubscriptionTokenHashed {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
     Channel_NotFound,
     Channel_IsClose,
     User_IsChannelOwner,
@@ -371,7 +361,6 @@ struct Incoming {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
     ChannelSubscription_NotFound,
 }
 ```
@@ -396,7 +385,6 @@ struct Outcoming {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
     Channel_NotFound,
     User_IsNotChannelOwner,
 }
@@ -414,7 +402,6 @@ struct Incoming {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
     User_IsNotChannelOwner,
     ChannelPublication1_NotFound,
 }
@@ -456,7 +443,6 @@ struct Data {
 ```
 enum Precedent {
     UserAccessToken_AlreadyExpired,
-    UserAccessToken_InUserAccessTokenBlackList,
     Channel_NotFound,
     Channel_IsClose,
 }
