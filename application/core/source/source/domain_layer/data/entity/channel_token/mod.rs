@@ -9,8 +9,8 @@ use {
         },
     },
 };
-// It is necessary to prevent users from receiving information about channel
-// using a bot-program that will perform ID enumeration.
+// It is necessary to prevent User from receiving information about Channel using
+// a bot-program that will perform ID enumeration.
 pub struct ChannelToken {
     user__id: User_Id,
     channel__id: Channel_Id,

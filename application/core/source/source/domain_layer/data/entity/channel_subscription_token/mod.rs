@@ -9,7 +9,7 @@ use {
         },
     },
 };
-// It is necessary to prevent users from subscribing on channel using
+// It is necessary to prevent User from creation of ChannelSubscription on Channel using
 // a bot-program that will perform ID enumeration.
 pub struct ChannelSubscriptionToken {
     user__id: User_Id,
