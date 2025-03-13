@@ -19,10 +19,6 @@ use {
                 }
             },
             functionality::service::{
-                extractor::{
-                    Extracted,
-                    Extractor,
-                },
                 encoder::Encoder,
                 validator::Validator,
                 generator::Generator,
@@ -63,18 +59,15 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            let user__id = match Extractor::<UserAccessToken>::extract(
+            if !Encoder::<UserAccessToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_signed,
             )? {
-                Extracted::Data {
-                    user_access_token__id: _,
-                    user__id: user__id_,
-                    user_device__id: _,
-                    user_access_token__expires_at: _,
-                } => user__id_,
-                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired))
-            };
+                return Result::Err(crate::new_invalid_argument!());
+            }
+            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+            }
             const LIMIT: i16 = 15;
             if incoming.limit <= 0 || incoming.limit > LIMIT {
                 return Result::Err(crate::new_invalid_argument!());
@@ -90,7 +83,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
             let rows = Repository::<Postgresql<Channel>>::find_3(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),
                 ChannelBy4 {
-                    user__id,
+                    user__id: incoming.user_access_token_signed.user__id,
                     channel__name: incoming.channel__name,
                     requery___channel__name: incoming.requery___channel__name,
                     channel__visability_modifier: Channel_VisabilityModifier_::Public as i16,
@@ -107,7 +100,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                 } else {
                     Option::Some(
                         Encoder::<ChannelToken>::encode(
-                            user__id,
+                            incoming.user_access_token_signed.user__id,
                             channel__id,
                             crate::result_return_logic!(row.try_get::<'_, usize, i64>(6)),
                             Generator::<ChannelToken_ExpiresAt>::generate(now)?,

@@ -7,31 +7,23 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::Channel,
-                user_access_token::UserAccessToken,
-                channel_publication1::{
+                channel::Channel, channel_publication1::{
                     ChannelPublication1,
                     ChannelPublication1_Id,
-                }
+                }, user_access_token::UserAccessToken
             },
             functionality::service::{
-                extractor::{
-                    Extracted,
-                    Extractor,
-                },
-                validator::Validator,
+                encoder::Encoder, validator::Validator
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::repository::{
+            functionality::{repository::{
                 postgresql::{
-                    ChannelBy1,
-                    Postgresql,
-                    ChannelPublication1By1,
+                    ChannelBy1, ChannelPublication1By1, Postgresql
                 },
                 Repository,
-            },
+            }, service::resolver::{Resolver, UnixTime}},
         },
     },
     dedicated::{
@@ -51,18 +43,15 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            let user__id = match Extractor::<UserAccessToken>::extract(
+            if !Encoder::<UserAccessToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_signed,
             )? {
-                Extracted::Data {
-                    user_access_token__id: _,
-                    user__id: user__id_,
-                    user_device__id: _,
-                    user_access_token__expires_at: _,
-                } => user__id_,
-                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired))
-            };
+                return Result::Err(crate::new_invalid_argument!());
+            }
+            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+            }
             if !Validator::<ChannelPublication1_Id>::is_valid(incoming.channel_publication1__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
@@ -87,7 +76,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
                 Option::Some(channel__owner_) => channel__owner_,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_IsNotChannelOwner))
             };
-            if user__id != channel__owner {
+            if incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsNotChannelOwner));
             }
             Repository::<Postgresql<ChannelPublication1>>::delete(

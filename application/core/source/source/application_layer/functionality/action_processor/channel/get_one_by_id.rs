@@ -21,10 +21,6 @@ use {
                 channel_token::ChannelToken,
             },
             functionality::service::{
-                extractor::{
-                    Extracted,
-                    Extractor,
-                },
                 validator::Validator,
                 encoder::Encoder,
                 generator::Generator,
@@ -65,18 +61,15 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            let user__id = match Extractor::<UserAccessToken>::extract(
+            if !Encoder::<UserAccessToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_signed,
             )? {
-                Extracted::Data {
-                    user_access_token__id: _,
-                    user__id: user__id_,
-                    user_device__id: _,
-                    user_access_token__expires_at: _,
-                } => user__id_,
-                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired))
-            };
+                return Result::Err(crate::new_invalid_argument!());
+            }
+            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+            }
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
@@ -107,11 +100,11 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound))
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
-            if user__id != channel__owner {
+            if incoming.user_access_token_signed.user__id != channel__owner {
                 match incoming.channel_token_hashed {
                     Option::Some(ref channel_token_hashed) => {
                         if !Encoder::<ChannelToken>::is_valid(
-                            user__id,
+                            incoming.user_access_token_signed.user__id,
                             incoming.channel__id,
                             channel__obfuscation_value,
                             channel_token_hashed,
@@ -125,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                         && !Repository::<Postgresql<ChannelSubscription>>::is_exist(
                             &postgresql_database_3_client,
                             ChannelSubscriptionBy {
-                                user__id,
+                                user__id: incoming.user_access_token_signed.user__id,
                                 channel__id: incoming.channel__id,
                             },
                         )
@@ -137,7 +130,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                         if !Repository::<Postgresql<ChannelSubscription>>::is_exist(
                             &postgresql_database_3_client,
                             ChannelSubscriptionBy {
-                                user__id,
+                                user__id: incoming.user_access_token_signed.user__id,
                                 channel__id: incoming.channel__id,
                             },
                         )
@@ -160,9 +153,9 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 channel__subscribers_quantity,
                 channel__marks_quantity,
                 channel__viewing_quantity,
-                user_is_channel_owner: user__id == channel__owner,
+                user_is_channel_owner: incoming.user_access_token_signed.user__id == channel__owner,
                 channel_subscription_token_hashed: Encoder::<ChannelSubscriptionToken>::encode(
-                    user__id,
+                    incoming.user_access_token_signed.user__id,
                     incoming.channel__id,
                     channel__obfuscation_value,
                     Generator::<ChannelSubscriptionToken_ExpiresAt>::generate(now)?,

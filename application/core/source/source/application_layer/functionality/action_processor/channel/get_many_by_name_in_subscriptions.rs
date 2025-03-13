@@ -8,36 +8,28 @@ use {
         domain_layer::{
             data::entity::{
                 channel::{
-                    Channel_Name,
-                    Channel,
+                    Channel, Channel_Name
                 },
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
-                extractor::{
-                    Extracted,
-                    Extractor,
-                },
-                validator::Validator,
+                encoder::Encoder, validator::Validator
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::repository::{
+            functionality::{repository::{
                 postgresql::{
                     ChannelBy5,
                     Postgresql,
                 },
                 Repository,
-            },
+            }, service::resolver::{Resolver, UnixTime}},
         },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel::get_many_by_name_in_subscriptions::{
-            Incoming,
-            Outcoming,
-            Precedent,
-            Data,
+            Data, Incoming, Outcoming, Precedent
         },
         unified_report::UnifiedReport,
     },
@@ -50,18 +42,15 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            let user__id = match Extractor::<UserAccessToken>::extract(
+            if !Encoder::<UserAccessToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_signed,
             )? {
-                Extracted::Data {
-                    user_access_token__id: _,
-                    user__id: user__id_,
-                    user_device__id: _,
-                    user_access_token__expires_at: _,
-                } => user__id_,
-                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired))
-            };
+                return Result::Err(crate::new_invalid_argument!());
+            }
+            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+            }
             const LIMIT: i16 = 100;
             if incoming.limit <= 0 || incoming.limit > LIMIT {
                 return Result::Err(crate::new_invalid_argument!());
@@ -77,7 +66,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
             let rows = Repository::<Postgresql<Channel>>::find_4(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),
                 ChannelBy5 {
-                    user__id,
+                    user__id: incoming.user_access_token_signed.user__id,
                     channel__name: incoming.channel__name,
                     requery___channel__name: incoming.requery___channel__name,
                 },

@@ -11,36 +11,27 @@ use {
                     Channel,
                     Channel_AccessModifier_,
                     Channel_Id,
-                },
-                user_access_token::UserAccessToken,
-                channel_publication1::ChannelPublication1,
+                }, channel_publication1::ChannelPublication1, user_access_token::UserAccessToken
             },
             functionality::service::{
-                extractor::{
-                    Extracted,
-                    Extractor,
-                },
-                validator::Validator,
+                encoder::Encoder, validator::Validator
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::repository::{
+            functionality::{repository::{
                 postgresql::{
                     ChannelBy1,
                     ChannelPublication1By2,
                     Postgresql,
                 },
                 Repository,
-            },
+            }, service::resolver::{Resolver, UnixTime}},
         },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel_publication1::get_many::{
-            Incoming,
-            Precedent,
-            Outcoming,
-            Data,
+            Data, Incoming, Outcoming, Precedent
         },
         unified_report::UnifiedReport,
     },
@@ -53,18 +44,15 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            let user__id = match Extractor::<UserAccessToken>::extract(
+            if !Encoder::<UserAccessToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_signed,
             )? {
-                Extracted::Data {
-                    user_access_token__id: _,
-                    user__id: user__id_,
-                    user_device__id: _,
-                    user_access_token__expires_at: _,
-                } => user__id_,
-                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired))
-            };
+                return Result::Err(crate::new_invalid_argument!());
+            }
+            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+            }
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
@@ -87,7 +75,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                 Option::Some(values) => values,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound)),
             };
-            if user__id != channel__owner {
+            if incoming.user_access_token_signed.user__id != channel__owner {
                 if Channel_AccessModifier_::Close as i16 == channel__access_modifier {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
                 }

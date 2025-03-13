@@ -17,10 +17,6 @@ use {
                 channel_subscription_token::ChannelSubscriptionToken,
             },
             functionality::service::{
-                extractor::{
-                    Extracted,
-                    Extractor,
-                },
                 validator::Validator,
                 encoder::Encoder,
             },
@@ -63,18 +59,15 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            let user__id = match Extractor::<UserAccessToken>::extract(
+            if !Encoder::<UserAccessToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_signed,
             )? {
-                Extracted::Data {
-                    user_access_token__id: _,
-                    user__id: user__id_,
-                    user_device__id: _,
-                    user_access_token__expires_at: _,
-                } => user__id_,
-                Extracted::AlreadyExpired => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired))
-            };
+                return Result::Err(crate::new_invalid_argument!());
+            }
+            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+            }
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
@@ -95,7 +88,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound))
             };
             if !Encoder::<ChannelSubscriptionToken>::is_valid(
-                user__id,
+                incoming.user_access_token_signed.user__id,
                 incoming.channel__id,
                 channel__obfuscation_value,
                 &incoming.channel_subscription_token_hashed,
@@ -106,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if incoming.channel_subscription_token_hashed.channel_subscription_token__expires_at < now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken_AlreadyExpired));
             }
-            if user__id == channel__owner {
+            if incoming.user_access_token_signed.user__id == channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
             }
             if Channel_AccessModifier_::Close as i16 == channel__access_modifier {
@@ -120,7 +113,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             let is_created = match Repository::<Postgresql<ChannelSubscription>>::create(
                 transaction.get_client(),
                 ChannelSubscriptionInsert {
-                    user__id,
+                    user__id: incoming.user_access_token_signed.user__id,
                     channel__id: incoming.channel__id,
                     channel_subscription__created_at: now,
                 }
