@@ -3626,153 +3626,219 @@ mod test {
                 )
             };
         }
-        let tests: Vec<(
-            fn() -> Result<(), Box<dyn StdError + 'static>>,
-            &'static str,
-        )> = vec![
-            with_name!(self::deallocation::c_vector_clone),
-            with_name!(self::deallocation::c_string_get_as_str),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__authorize_by_first_step),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__authorize_by_last_step),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__check_email_for_existing),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__check_nickname_for_existing),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__deauthorize_from_all_devices),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__deauthorize_from_one_device),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__refresh_access_token),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__register_by_first_step),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__register_by_second_step),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__register_by_last_step),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__reset_password_by_first_step),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__reset_password_by_second_step),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__reset_password_by_last_step),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__send_email_for_register),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__send_email_for_authorize),
-            with_name!(self::deallocation::server_request_data_serialization::user_authorization__send_email_for_reset_password),
-            with_name!(self::deallocation::server_request_data_serialization::channel__get_many_by_name_in_subscriptions),
-            with_name!(self::deallocation::server_request_data_serialization::channel__get_many_by_subscription),
-            with_name!(self::deallocation::server_request_data_serialization::channel__get_many_public_by_name),
-            with_name!(self::deallocation::server_request_data_serialization::channel__get_one_by_id),
-            with_name!(self::deallocation::server_request_data_serialization::channel__check_name_for_existing),
-            with_name!(self::deallocation::server_request_data_serialization::channel__check_linked_name_for_existing),
-            with_name!(self::deallocation::server_request_data_serialization::channel__create),
-            with_name!(self::deallocation::server_request_data_serialization::channel_subscription__create),
-            with_name!(self::deallocation::server_request_data_serialization::channel_subscription__delete),
-            with_name!(self::deallocation::server_request_data_serialization::channel_publication1__get_many),
-            with_name!(self::deallocation::server_request_data_serialization::channel_publication1__create),
-            with_name!(self::deallocation::server_request_data_serialization::channel_publication1__delete),
-            with_name!(self::deallocation::server_request_data_serialization::channel_publication1_mark__create),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__authorize_by_first_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__authorize_by_first_step),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__authorize_by_first_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__authorize_by_last_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__authorize_by_last_step),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__authorize_by_last_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__check_email_for_existing),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__check_email_for_existing),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__check_email_for_existing),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__check_nickname_for_existing),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__check_nickname_for_existing),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__check_nickname_for_existing),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__deauthorize_from_all_devices),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__deauthorize_from_all_devices),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__deauthorize_from_all_devices),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__deauthorize_from_one_device),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__deauthorize_from_one_device),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__deauthorize_from_one_device),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__refresh_access_token),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__refresh_access_token),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__refresh_access_token),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__register_by_first_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__register_by_first_step),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__register_by_first_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__register_by_second_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__register_by_second_step),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__register_by_second_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__register_by_last_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__register_by_last_step),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__register_by_last_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__reset_password_by_first_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__reset_password_by_first_step),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__reset_password_by_first_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__reset_password_by_second_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__reset_password_by_second_step),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__reset_password_by_second_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__reset_password_by_last_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__reset_password_by_last_step),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__reset_password_by_last_step),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__send_email_for_register),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__send_email_for_register),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__send_email_for_register),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__send_email_for_authorize),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__send_email_for_authorize),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__send_email_for_authorize),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__send_email_for_reset_password),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__send_email_for_reset_password),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__send_email_for_reset_password),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__get_many_by_name_in_subscriptions),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__get_many_by_name_in_subscriptions),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__get_many_by_name_in_subscriptions),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__get_many_by_subscription),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__get_many_by_subscription),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__get_many_by_subscription),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__get_many_public_by_name),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__get_many_public_by_name),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__get_many_public_by_name),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__get_one_by_id),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__get_one_by_id),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__get_one_by_id),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__check_name_for_existing),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__check_name_for_existing),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__check_name_for_existing),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__check_linked_name_for_existing),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__check_linked_name_for_existing),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__check_linked_name_for_existing),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__create),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__create),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__create),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_subscription__create),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_subscription__create),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_subscription__create),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_subscription__delete),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_subscription__delete),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_subscription__delete),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1__get_many),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1__get_many),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1__get_many),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1__create),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1__create),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1__create),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1__delete),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1__delete),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1__delete),
-            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1_mark__create),
-            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1_mark__create),
-            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1_mark__create),
+        let tests: Vec<
+            Vec<(
+                fn() -> Result<(), Box<dyn StdError + 'static>>,
+                &'static str,
+            )>
+        > = vec![
+            vec![
+                with_name!(self::deallocation::c_vector_clone),
+                with_name!(self::deallocation::c_string_get_as_str),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__authorize_by_first_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__authorize_by_first_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__authorize_by_first_step),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__authorize_by_first_step),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__authorize_by_last_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__authorize_by_last_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__authorize_by_last_step),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__authorize_by_last_step),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__check_email_for_existing),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__check_email_for_existing),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__check_email_for_existing),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__check_email_for_existing),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__check_nickname_for_existing),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__check_nickname_for_existing),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__check_nickname_for_existing),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__check_nickname_for_existing),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__deauthorize_from_all_devices),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__deauthorize_from_all_devices),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__deauthorize_from_all_devices),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__deauthorize_from_all_devices),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__deauthorize_from_one_device),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__deauthorize_from_one_device),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__deauthorize_from_one_device),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__deauthorize_from_one_device),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__refresh_access_token),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__refresh_access_token),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__refresh_access_token),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__refresh_access_token),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__register_by_first_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__register_by_first_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__register_by_first_step),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__register_by_first_step),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__register_by_second_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__register_by_second_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__register_by_second_step),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__register_by_second_step),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__register_by_last_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__register_by_last_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__register_by_last_step),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__register_by_last_step),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__reset_password_by_first_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__reset_password_by_first_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__reset_password_by_first_step),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__reset_password_by_first_step),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__reset_password_by_second_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__reset_password_by_second_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__reset_password_by_second_step),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__reset_password_by_second_step),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__reset_password_by_last_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__reset_password_by_last_step),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__reset_password_by_last_step),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__reset_password_by_last_step),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__send_email_for_register),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__send_email_for_register),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__send_email_for_register),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__send_email_for_register),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__send_email_for_authorize),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__send_email_for_authorize),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__send_email_for_authorize),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__send_email_for_authorize),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::user_authorization__send_email_for_reset_password),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__send_email_for_reset_password),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__send_email_for_reset_password),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__send_email_for_reset_password),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel__get_many_by_name_in_subscriptions),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__get_many_by_name_in_subscriptions),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__get_many_by_name_in_subscriptions),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__get_many_by_name_in_subscriptions),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel__get_many_by_subscription),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__get_many_by_subscription),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__get_many_by_subscription),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__get_many_by_subscription),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel__get_many_public_by_name),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__get_many_public_by_name),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__get_many_public_by_name),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__get_many_public_by_name),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel__get_one_by_id),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__get_one_by_id),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__get_one_by_id),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__get_one_by_id),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel__check_name_for_existing),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__check_name_for_existing),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__check_name_for_existing),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__check_name_for_existing),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel__check_linked_name_for_existing),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__check_linked_name_for_existing),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__check_linked_name_for_existing),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__check_linked_name_for_existing),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel__create),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__create),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__create),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__create),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel_subscription__create),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_subscription__create),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_subscription__create),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_subscription__create),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel_subscription__delete),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_subscription__delete),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_subscription__delete),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_subscription__delete),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel_publication1__get_many),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1__get_many),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1__get_many),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1__get_many),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel_publication1__create),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1__create),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1__create),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1__create),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel_publication1__delete),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1__delete),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1__delete),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1__delete),
+            ],
+            vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel_publication1_mark__create),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1_mark__create),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1_mark__create),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1_mark__create),
+            ],
         ];
         // https://docs.rs/bitcode/0.6.3/src/bitcode/derive/mod.rs.html#68
         // When the `bitcode::encode` method is first called for a specific type, an additional byte is allocated and
         // is not deallocated until the program process completes. Accordingly, when the `bitcode::encode` method is called
         // again, no additional byte occurs and it becomes possible to expect that the number of allocated bytes will be
         // equal to the number of deallocated bytes.
-        '_a: for test in tests.iter() {
-            let _ = test.0();
-        }
-        '_a: for test in tests.iter() {
-            let region = Region::new(&GLOBAL_ALLOCATOR);
-            if let Result::Err(error) = test.0() {
-                return Result::Err(format!("{}: {}", test.1, &error).into());
+        '_a: for tests_ in tests.iter() {
+            '_b: for test in tests_.iter() {
+                let _ = test.0();
             }
-            let statistics = region.change();
-            if statistics.bytes_allocated != statistics.bytes_deallocated {
-                return Result::Err(
-                    format!(
-                        "{}: {} Undeallocated bytes: {}",
-                        test.1,
-                        DEALLOCATION_ERROR,
-                        statistics.bytes_allocated - statistics.bytes_deallocated,
-                    )
-                    .into(),
-                );
+        }
+        '_a: for tests_ in tests.iter() {
+            '_b: for test in tests_.iter() {
+                let region = Region::new(&GLOBAL_ALLOCATOR);
+                if let Result::Err(error) = test.0() {
+                    return Result::Err(format!("{}: {}", test.1, &error).into());
+                }
+                let statistics = region.change();
+                if statistics.bytes_allocated != statistics.bytes_deallocated {
+                    return Result::Err(
+                        format!(
+                            "{}: {} Undeallocated bytes: {}",
+                            test.1,
+                            DEALLOCATION_ERROR,
+                            statistics.bytes_allocated - statistics.bytes_deallocated,
+                        )
+                        .into(),
+                    );
+                }
             }
         }
         return Result::Ok(());
