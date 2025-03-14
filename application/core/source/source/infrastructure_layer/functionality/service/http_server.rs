@@ -19,6 +19,7 @@ use {
                 ChannelPublication1_GetMany,
                 ChannelSubscription_Create,
                 ChannelSubscription_Delete,
+                ChannelPublication1Mark_Create,
                 Inner as ActionProcessorInner,
                 UserAuthorization_AuthorizeByFirstStep,
                 UserAuthorization_AuthorizeByLastStep,
@@ -518,6 +519,13 @@ impl HttpServer {
                 ActionRoute::ChannelPublication1(ChannelPublication1::GetMany),
             )
         );
+        crate::result_return_logic!(
+            router
+            .insert(
+                ChannelPublication1Mark::CREATE,
+                ActionRoute::ChannelPublication1Mark(ChannelPublication1Mark::Create),
+            )
+        );
         #[cfg(feature = "action_for_manual_test")]
         {
             crate::result_return_logic!(
@@ -713,6 +721,13 @@ impl HttpServer {
                 .insert(
                     ChannelPublication1::GET_MANY_,
                     ActionRoute::ChannelPublication1(ChannelPublication1::GetMany_),
+                )
+            );
+            crate::result_return_logic!(
+                router
+                .insert(
+                    ChannelPublication1Mark::CREATE_,
+                    ActionRoute::ChannelPublication1Mark(ChannelPublication1Mark::Create_),
                 )
             );
         }
@@ -1218,6 +1233,38 @@ impl HttpServer {
                         }
                     }
                 }
+                ActionRoute::ChannelPublication1Mark(ref channel_publication1_mark) => {
+                    match (
+                        channel_publication1_mark,
+                        &parts.method,
+                    ) {
+                        (&ChannelPublication1Mark::Create, &Method::POST) => {
+                            return Action::<ChannelPublication1Mark_Create>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        _ => {
+                            #[cfg(feature = "action_for_manual_test")]
+                            {
+                                match (
+                                    channel_publication1_mark,
+                                    &parts.method,
+                                ) {
+                                    (&ChannelPublication1Mark::Create_, &Method::POST) => {
+                                        return Action::<ChannelPublication1Mark_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    _ => {}
+                                }
+                            }
+                        }
+                    }
+                }
             }
             return Action::<RouteNotFound>::run(&action_inner);
         };
@@ -1244,6 +1291,7 @@ pub enum ActionRoute {
     Channel(Channel),
     ChannelSubscription(ChannelSubscription),
     ChannelPublication1(ChannelPublication1),
+    ChannelPublication1Mark(ChannelPublication1Mark),
 }
 #[cfg(feature = "action_for_manual_test")]
 impl ActionRoute {
@@ -1498,6 +1546,21 @@ impl ChannelPublication1 {
     );
     pub const GET_MANY_: &'static str = const_format::concatcp!(
         ChannelPublication1::GET_MANY,
+        ActionRoute::PART,
+    );
+}
+pub enum ChannelPublication1Mark {
+    Create,
+    #[cfg(feature = "action_for_manual_test")]
+    Create_,
+}
+impl ChannelPublication1Mark {
+    pub const CREATE: &'static str = "/channel_publication1_mark/create";
+}
+#[cfg(feature = "action_for_manual_test")]
+impl ChannelPublication1Mark {
+    pub const CREATE_: &'static str = const_format::concatcp!(
+        ChannelPublication1Mark::CREATE,
         ActionRoute::PART,
     );
 }

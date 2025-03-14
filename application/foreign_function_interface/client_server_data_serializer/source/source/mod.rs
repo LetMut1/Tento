@@ -145,6 +145,12 @@ use {
                     Precedent as ChannelPublication1_GetMany_Precedent_,
                 },
             },
+            channel_publication1_mark::{
+                create::{
+                    Incoming as ChannelPublication1Mark_Create_Incoming_,
+                    Precedent as ChannelPublication1Mark_Create_Precedent_,
+                },
+            }
         },
         bit_code_serializer::Serializer,
         unified_report::{
@@ -3496,6 +3502,91 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_ve
 pub extern "C-unwind" fn channel_publication1__delete__deserialize_deallocate(_c_result: ChannelPublication1_Delete_CResult) -> () {
     return ();
 }
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ChannelPublication1Mark_Create_Incoming {
+    pub user_access_token_signed: UserAccessTokenSigned,
+    pub channel_publication1__id: c_long,
+    pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel_publication1_mark__create__serialize_allocate(incoming: ChannelPublication1Mark_Create_Incoming) -> CResult<CVector<c_uchar>> {
+    let converter = move |incoming_: &'_ ChannelPublication1Mark_Create_Incoming| -> Result<ChannelPublication1Mark_Create_Incoming_, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            ChannelPublication1Mark_Create_Incoming_ {
+                user_access_token_signed: UserAccessTokenSigned_ {
+                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user__id: incoming_.user_access_token_signed.user__id,
+                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                },
+                channel_publication1__id: incoming_.channel_publication1__id,
+                channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
+                    channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
+                    signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
+                }
+            },
+        );
+    };
+    return Transformer::<ServerRequestData>::transform(
+        incoming,
+        converter,
+    );
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel_publication1_mark__create__serialize_deallocate(c_result: CResult<CVector<c_uchar>>) -> () {
+    Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
+    return ();
+}
+type ChannelPublication1Mark_Create_CResult = CResult<CUnifiedReport<CVoid, ChannelPublication1Mark_Create_Precedent>>;
+#[repr(C)]
+#[derive(Default)]
+pub struct ChannelPublication1Mark_Create_Precedent {
+    pub user_access_token__already_expired: bool,
+    pub channel_publication1_token__already_exist: bool,
+    pub channel_publication1_mark__already_exist: bool,
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1Mark_Create_CResult {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Create_Precedent_>| -> Result<CUnifiedReport<CVoid, ChannelPublication1Mark_Create_Precedent>, Box<dyn StdError + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Precedent { precedent } => {
+                let precedent_ = match precedent {
+                    ChannelPublication1Mark_Create_Precedent_::UserAccessToken_AlreadyExpired => {
+                        ChannelPublication1Mark_Create_Precedent {
+                            user_access_token__already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token_AlreadyExist => {
+                        ChannelPublication1Mark_Create_Precedent {
+                            channel_publication1_token__already_exist: true,
+                            ..Default::default()
+                        }
+                    }
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark_AlreadyExist => {
+                        ChannelPublication1Mark_Create_Precedent {
+                            channel_publication1_mark__already_exist: true,
+                            ..Default::default()
+                        }
+                    }
+                };
+                CUnifiedReport::precedent(precedent_)
+            }
+        };
+        return Result::Ok(unified_report_);
+    };
+    return Transformer::<ServerResponseData>::transform(
+        c_vector_of_bytes,
+        converter,
+    );
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_deallocate(_c_result: ChannelPublication1Mark_Create_CResult) -> () {
+    return ();
+}
 #[cfg(test)]
 mod test {
     use {
@@ -3569,6 +3660,7 @@ mod test {
             with_name!(self::deallocation::server_request_data_serialization::channel_publication1__get_many),
             with_name!(self::deallocation::server_request_data_serialization::channel_publication1__create),
             with_name!(self::deallocation::server_request_data_serialization::channel_publication1__delete),
+            with_name!(self::deallocation::server_request_data_serialization::channel_publication1_mark__create),
             with_name!(self::deallocation::server_response_data_deserialization::target_empty__user_authorization__authorize_by_first_step),
             with_name!(self::deallocation::server_response_data_deserialization::target_filled__user_authorization__authorize_by_first_step),
             with_name!(self::deallocation::server_response_data_deserialization::precedent__user_authorization__authorize_by_first_step),
@@ -3653,6 +3745,9 @@ mod test {
             with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1__delete),
             with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1__delete),
             with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1__delete),
+            with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1_mark__create),
+            with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1_mark__create),
+            with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1_mark__create),
         ];
         // https://docs.rs/bitcode/0.6.3/src/bitcode/derive/mod.rs.html#68
         // When the `bitcode::encode` method is first called for a specific type, an additional byte is allocated and
@@ -4268,6 +4363,33 @@ mod test {
                 Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
                 Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
+                return Result::Ok(());
+            }
+            pub fn channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
+                let incoming = ChannelPublication1Mark_Create_Incoming {
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user_access_token__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user__id: 0,
+                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_access_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
+                    channel_publication1__id: 0,
+                    channel_publication1_token_signed: ChannelPublication1TokenSigned {
+                        channel_publication1_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    }
+                };
+                run_by_template(
+                    incoming,
+                    channel_publication1_mark__create__serialize_allocate,
+                    channel_publication1_mark__create__serialize_deallocate,
+                )?;
+
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
+                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
+                Allocator::<CVector<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
                 return Result::Ok(());
             }
         }
@@ -5513,6 +5635,41 @@ mod test {
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__delete(precedent)?;
+                }
+                return Result::Ok(());
+            }
+            pub fn target_empty__channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Create_Precedent_>::target_empty();
+                return run_by_template(
+                    &unified_report,
+                    channel_publication1_mark__create__deserialize_allocate,
+                    channel_publication1_mark__create__deserialize_deallocate,
+                );
+            }
+            pub fn target_filled__channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
+                return Result::Ok(());
+            }
+            fn _precedent__channel_publication1_mark__create(precedent: ChannelPublication1Mark_Create_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Create_Precedent_>::precedent(precedent);
+                return run_by_template(
+                    &unified_report,
+                    channel_publication1_mark__create__deserialize_allocate,
+                    channel_publication1_mark__create__deserialize_deallocate,
+                );
+            }
+            pub fn precedent__channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
+                match ChannelPublication1Mark_Create_Precedent_::UserAccessToken_AlreadyExpired {
+                    ChannelPublication1Mark_Create_Precedent_::UserAccessToken_AlreadyExpired => {}
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token_AlreadyExist => {}
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark_AlreadyExist => {}
+                }
+                let precedents: Vec<ChannelPublication1Mark_Create_Precedent_> = vec![
+                    ChannelPublication1Mark_Create_Precedent_::UserAccessToken_AlreadyExpired,
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token_AlreadyExist,
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark_AlreadyExist,
+                ];
+                '_a: for precedent in precedents {
+                    _precedent__channel_publication1_mark__create(precedent)?;
                 }
                 return Result::Ok(());
             }

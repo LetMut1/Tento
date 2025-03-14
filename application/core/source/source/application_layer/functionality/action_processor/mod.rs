@@ -40,6 +40,9 @@ pub use self::{
         send_email_for_register::UserAuthorization_SendEmailForRegister,
         send_email_for_reset_password::UserAuthorization_SendEmailForResetPassword,
     },
+    channel_publication1_mark::{
+        create::ChannelPublication1Mark_Create,
+    }
 };
 use {
     super::command_processor::RunServer,

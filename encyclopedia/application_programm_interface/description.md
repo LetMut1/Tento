@@ -148,7 +148,7 @@ struct Outcoming {
     channel__id: i64,
 }
 ```
- - ## Channel_GetOneById POST (GET) /channel/get_one_by_id
+ - ## Channel_GetOneById POST /channel/get_one_by_id
 ```
 Returns channel data by id.
 ```
@@ -195,7 +195,7 @@ enum Precedent {
     ChannelToken_AlreadyExpired,
 }
 ```
- - ## Channel_GetManyByNameInSubscriptions POST (GET) /channel/get_many_by_name_in_subscriptions
+ - ## Channel_GetManyByNameInSubscriptions POST /channel/get_many_by_name_in_subscriptions
 ```
 Returns channels the user is subscribed to by name.
 ```
@@ -236,7 +236,7 @@ enum Precedent {
     UserAccessToken_AlreadyExpired,
 }
 ```
- - ## Channel_GetManyBySubscription POST (GET) /channel/get_many_by_subscription
+ - ## Channel_GetManyBySubscription POST /channel/get_many_by_subscription
 ```
 Returns channels the user is subscribed to.
 ```
@@ -276,7 +276,7 @@ enum Precedent {
     UserAccessToken_AlreadyExpired,
 }
 ```
- - ## Channel_GetManyPublicByName POST (GET) /channel/get_many_public_by_name
+ - ## Channel_GetManyPublicByName POST /channel/get_many_public_by_name
 ```
 Returns public channels by name.
 ```
@@ -453,10 +453,33 @@ enum Precedent {
     Channel_IsClose,
 }
 ```
+ - ## ChannelPublication1Mark_Create POST /channel_publication1/create
+```
+Creates a mark for channel publication.
+```
+```
+struct Incoming {
+    user_access_token_signed: <Data standards>
+    pub channel_publication1__id: i64,
+    pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
+}
+
+struct ChannelPublication1TokenSigned {
+    channel_publication1_token__expires_at: i64,
+    signature: Vec<u8>,
+}
+```
+```
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    ChannelPublication1Token_AlreadyExist,
+    ChannelPublication1Mark_AlreadyExist,
+}
+```
 <br/><br/>
 
 # API for not authorized user.
- - ## UserAuthorization_CheckEmailForExisting POST (GET) /user_authorization/check_email_for_existing
+ - ## UserAuthorization_CheckEmailForExisting POST /user_authorization/check_email_for_existing
 ```
 Checks user email for existing.
 ```
@@ -470,7 +493,7 @@ struct Outcoming {
     result: bool
 }
 ```
- - ## UserAuthorization_CheckNicknameForExisting POST (GET) /user_authorization/check_nickname_for_existing
+ - ## UserAuthorization_CheckNicknameForExisting POST /user_authorization/check_nickname_for_existing
 ```
 Checks user nickname for existing.
 ```
