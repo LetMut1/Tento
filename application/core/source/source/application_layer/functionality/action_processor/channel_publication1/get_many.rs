@@ -122,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                             incoming.user_access_token_signed.user__id,
                             channel_publication1__id,
                             channel_publication1_token__expires_at,
-                        )
+                        )?,
                     },
                 );
             }

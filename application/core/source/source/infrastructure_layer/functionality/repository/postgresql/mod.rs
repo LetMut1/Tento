@@ -23,6 +23,10 @@ pub use self::{
         By2 as ChannelPublication1By2,
         Insert as ChannelPublication1Insert,
     },
+    channel_publication1_mark::{
+        By as ChannelPublication1MarkBy,
+        Insert as ChannelPublication1MarkInsert,
+    },
     channel_subscription::{
         By as ChannelSubscriptionBy,
         Insert as ChannelSubscriptionInsert,
