@@ -1,6 +1,7 @@
 use crate::{
     common_precedent::CommonPrecedent,
     user_access_token_signed::UserAccessTokenSigned,
+    channel_publication1_token_signed::ChannelPublication1TokenSigned,
 };
 #[cfg_attr(
     feature = "serde_for_manual_test",
@@ -33,6 +34,7 @@ pub struct Data {
     pub channel_publication1__viewing_quantity: i64,
     pub channel_publication1__created_at: i64,
     pub channel_publication1_mark__created_at: Option<i64>,
+    pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

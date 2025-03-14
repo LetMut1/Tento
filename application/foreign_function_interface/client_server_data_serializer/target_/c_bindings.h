@@ -927,6 +927,11 @@ typedef struct CVector_CString {
   size_t length;
 } CVector_CString;
 
+typedef struct ChannelPublication1TokenSigned {
+  long channel_publication1_token__expires_at;
+  struct CVector_c_uchar signature;
+} ChannelPublication1TokenSigned;
+
 typedef struct ChannelPublication1_GetMany_Data {
   long channel_publication1__id;
   struct CVector_CString channel_publication1__images_pathes;
@@ -935,6 +940,7 @@ typedef struct ChannelPublication1_GetMany_Data {
   long channel_publication1__viewing_quantity;
   long channel_publication1__created_at;
   struct COption_c_long channel_publication1_mark__created_at;
+  struct ChannelPublication1TokenSigned channel_publication1_token_signed;
 } ChannelPublication1_GetMany_Data;
 
 typedef struct CVector_ChannelPublication1_GetMany_Data {

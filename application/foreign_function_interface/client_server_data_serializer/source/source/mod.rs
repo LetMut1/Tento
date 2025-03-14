@@ -156,6 +156,7 @@ use {
         void::Void,
         channel_subscription_token_hashed::ChannelSubscriptionTokenHashed as ChannelSubscriptionTokenHashed_,
         channel_token_hashed::ChannelTokenHashed as ChannelTokenHashed_,
+        channel_publication1_token_signed::ChannelPublication1TokenSigned as ChannelPublication1TokenSigned_,
     },
     libc::{
         c_char,
@@ -486,6 +487,12 @@ pub struct ChannelSubscriptionTokenHashed {
 pub struct ChannelTokenHashed {
     pub channel_token__expires_at: c_long,
     pub hash: c_ulong,
+}
+#[repr(C)]
+#[derive(Default, Clone, Copy)]
+pub struct ChannelPublication1TokenSigned {
+    pub channel_publication1_token__expires_at: c_long,
+    pub signature: CVector<c_uchar>,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -854,7 +861,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__seria
                         user__id: incoming_.user_access_token_signed.user__id,
                         user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                         user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                        singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                        signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                     },
                 },
             );
@@ -929,7 +936,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__serial
                         user__id: incoming_.user_access_token_signed.user__id,
                         user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                         user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                        singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                        signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                     },
                 },
             );
@@ -990,7 +997,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__serialize_all
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 user_access_refresh_token_signed: UserAccessRefreshTokenSigned_ {
                     user_access_refresh_token__expires_at: incoming_.user_access_refresh_token_signed.user_access_refresh_token__expires_at,
@@ -2065,7 +2072,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__serialize_a
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__name: incoming_.channel__name.get_as_str()?,
                 requery___channel__name,
@@ -2211,7 +2218,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__serialize_allocate(i
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 requery___channel__id,
                 limit: incoming_.limit,
@@ -2357,7 +2364,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_allocate(in
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__name: incoming_.channel__name.get_as_str()?,
                 requery___channel__name,
@@ -2519,7 +2526,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__serialize_allocate(incoming: Ch
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
                 channel_token_hashed,
@@ -2688,7 +2695,7 @@ pub extern "C-unwind" fn channel__check_name_for_existing__serialize_allocate(in
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__name: incoming_.channel__name.get_as_str()?,
             },
@@ -2774,7 +2781,7 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__serialize_allo
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__linked_name: incoming_.channel__linked_name.get_as_str()?,
             },
@@ -2863,7 +2870,7 @@ pub extern "C-unwind" fn channel__create__serialize_allocate(incoming: Channel_C
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__name: incoming_.channel__name.get_as_str()?,
                 channel__linked_name: incoming_.channel__linked_name.get_as_str()?,
@@ -2967,7 +2974,7 @@ pub extern "C-unwind" fn channel_subscription__create__serialize_allocate(incomi
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
                 channel_subscription_token_hashed: ChannelSubscriptionTokenHashed_ {
@@ -3072,7 +3079,7 @@ pub extern "C-unwind" fn channel_subscription__delete__serialize_allocate(incomi
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
             },
@@ -3147,7 +3154,7 @@ pub extern "C-unwind" fn channel_publication1__get_many__serialize_allocate(inco
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
                 channel_publication1__created_at: incoming_.channel_publication1__created_at,
@@ -3176,6 +3183,7 @@ pub struct ChannelPublication1_GetMany_Data {
     pub channel_publication1__viewing_quantity: c_long,
     pub channel_publication1__created_at: c_long,
     pub channel_publication1_mark__created_at: COption<c_long>,
+    pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -3226,6 +3234,10 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                                     channel_publication1__viewing_quantity: data__.channel_publication1__viewing_quantity,
                                     channel_publication1__created_at: data__.channel_publication1__created_at,
                                     channel_publication1_mark__created_at,
+                                    channel_publication1_token_signed: ChannelPublication1TokenSigned {
+                                        channel_publication1_token__expires_at: data__.channel_publication1_token_signed.channel_publication1_token__expires_at,
+                                        signature: Allocator::<CVector<_>>::allocate(data__.channel_publication1_token_signed.signature),
+                                    },
                                 }
                             );
                         }
@@ -3281,6 +3293,7 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_deallocate(
                 Allocator::<CString>::deallocate(*channel_publication1__image_pathe);
             }
             Allocator::<CVector<_>>::deallocate(data.channel_publication1__images_pathes);
+            Allocator::<CVector<_>>::deallocate(data.channel_publication1_token_signed.signature);
         }
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.data_registry);
     }
@@ -3315,7 +3328,7 @@ pub extern "C-unwind" fn channel_publication1__create__serialize_allocate(incomi
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
                 channel_publication1__images_pathes,
@@ -3419,7 +3432,7 @@ pub extern "C-unwind" fn channel_publication1__delete__serialize_allocate(incomi
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    singature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel_publication1__id: incoming_.channel_publication1__id,
             },
@@ -5383,6 +5396,10 @@ mod test {
                         channel_publication1__viewing_quantity: 0,
                         channel_publication1__created_at: 0,
                         channel_publication1_mark__created_at: Option::Some(0),
+                        channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
+                            channel_publication1_token__expires_at: 0,
+                            signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                        }
                     };
                     data_registry.push(data);
                 }

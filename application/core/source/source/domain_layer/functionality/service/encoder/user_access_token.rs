@@ -67,7 +67,7 @@ impl Encoder<UserAccessToken> {
                 },
             )?
             .as_slice(),
-            user_access_token_signed.singature.as_slice(),
+            user_access_token_signed.signature.as_slice(),
         );
     }
 }

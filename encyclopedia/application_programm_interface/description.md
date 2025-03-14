@@ -438,6 +438,12 @@ struct Data {
     channel_publication1__viewing_quantity: i64,
     channel_publication1__created_at: i64,
     channel_publication1_mark__created_at: Option<i64>,
+    channel_publication1_token_signed: ChannelPublication1TokenSigned,
+}
+
+struct ChannelPublication1TokenSigned {
+    channel_publication1_token__expires_at: i64,
+    signature: Vec<u8>,
 }
 ```
 ```

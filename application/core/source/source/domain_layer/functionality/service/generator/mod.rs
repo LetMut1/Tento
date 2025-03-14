@@ -14,6 +14,7 @@ mod user_registration_token__value;
 mod user_reset_password_token__can_be_resent_from;
 mod user_reset_password_token__expires_at;
 mod user_reset_password_token__value;
+mod channel_publication_1_token__expires_at;
 use std::marker::PhantomData;
 pub struct Generator<S> {
     _subject: PhantomData<S>,

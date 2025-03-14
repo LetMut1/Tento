@@ -14,10 +14,15 @@ use {
                 },
                 channel_publication1::ChannelPublication1,
                 user_access_token::UserAccessToken,
+                channel_publication1_token::{
+                    ChannelPublication1Token,
+                    ChannelPublication1Token_ExpiresAt,
+                }
             },
             functionality::service::{
                 encoder::Encoder,
                 validator::Validator,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
@@ -62,7 +67,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
             }
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
@@ -98,17 +104,25 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                 incoming.limit,
             )
             .await?;
+            let channel_publication1_token__expires_at = Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?;
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
             '_a: for row in rows.iter() {
+                let channel_publication1__id = crate::result_return_logic!(row.try_get::<'_, usize, i64>(0));
                 data_registry.push(
                     Data {
-                        channel_publication1__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                        channel_publication1__id,
                         channel_publication1__images_pathes: crate::result_return_logic!(row.try_get::<'_, usize, Vec<String>>(1)),
                         channel_publication1__text: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(2)),
                         channel_publication1__marks_quantity: crate::result_return_logic!(row.try_get::<'_, usize, i64>(3)),
                         channel_publication1__viewing_quantity: crate::result_return_logic!(row.try_get::<'_, usize, i64>(4)),
                         channel_publication1__created_at: crate::result_return_logic!(row.try_get::<'_, usize, i64>(5)),
                         channel_publication1_mark__created_at: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)),
+                        channel_publication1_token_signed: Encoder::<ChannelPublication1Token>::encode(
+                            &inner.environment_configuration.subject.encryption.private_key,
+                            incoming.user_access_token_signed.user__id,
+                            channel_publication1__id,
+                            channel_publication1_token__expires_at,
+                        )
                     },
                 );
             }
