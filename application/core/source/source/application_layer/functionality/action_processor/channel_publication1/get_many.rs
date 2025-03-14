@@ -100,6 +100,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                 ChannelPublication1By2 {
                     channel__id: incoming.channel__id,
                     channel_publication1__created_at: incoming.channel_publication1__created_at,
+                    channel_publication1__is_predeleted: false,
                 },
                 incoming.limit,
             )

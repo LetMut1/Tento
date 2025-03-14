@@ -3461,6 +3461,7 @@ pub struct ChannelPublication1_Delete_Precedent {
     pub user_access_token__already_expired: bool,
     pub user__is_not_channel_owner: bool,
     pub channel_publication1__not_found: bool,
+    pub channel_publication1__is_already_deleted: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1_Delete_CResult {
@@ -3484,6 +3485,12 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_ve
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1_NotFound => {
                         ChannelPublication1_Delete_Precedent {
                             channel_publication1__not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1_IsAlreadyDeleted=> {
+                        ChannelPublication1_Delete_Precedent {
+                            channel_publication1__is_already_deleted: true,
                             ..Default::default()
                         }
                     }
@@ -5693,11 +5700,13 @@ mod test {
                     ChannelPublication1_Delete_Precedent_::UserAccessToken_AlreadyExpired => {}
                     ChannelPublication1_Delete_Precedent_::User_IsNotChannelOwner => {}
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1_NotFound => {}
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1_IsAlreadyDeleted => {}
                 }
                 let precedents: Vec<ChannelPublication1_Delete_Precedent_> = vec![
                     ChannelPublication1_Delete_Precedent_::UserAccessToken_AlreadyExpired,
                     ChannelPublication1_Delete_Precedent_::User_IsNotChannelOwner,
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1_NotFound,
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1_IsAlreadyDeleted,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__delete(precedent)?;

@@ -404,6 +404,7 @@ enum Precedent {
     UserAccessToken_AlreadyExpired,
     User_IsNotChannelOwner,
     ChannelPublication1_NotFound,
+    ChannelPublication1_IsAlreadyDeleted,
 }
 ```
  - ## ChannelPublication1_GetMany POST /channel_publication1/get_many

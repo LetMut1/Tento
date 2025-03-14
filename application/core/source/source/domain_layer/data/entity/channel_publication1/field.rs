@@ -5,3 +5,5 @@ pub struct Text(PhantomData<Option<String>>);
 pub struct MarksQuantity(PhantomData<i64>);
 pub struct ViewingQuantity(PhantomData<i64>);
 pub struct CreatedAt(PhantomData<i64>);
+pub struct IsPredeleted(PhantomData<bool>);
+pub struct CanBeDeletedFrom(PhantomData<i64>);

@@ -30,7 +30,9 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         text_,\
                         marks_quantity,\
                         viewing_quantity,\
-                        created_at\
+                        created_at,\
+                        is_predeleted,\
+                        can_be_deleted_from\
                     ) VALUES (\
                         nextval('public.channel_publication1_1'),\
                         $1,\
@@ -38,11 +40,13 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         $3,\
                         $4,\
                         $5,\
-                        $6\
+                        $6,\
+                        $7,\
+                        $8\
                     )\
                 RETURNING \
                     u.id AS i;";
-            let mut parameter_storage = ParameterStorage::new(6);
+            let mut parameter_storage = ParameterStorage::new(8);
             parameter_storage
                 .add(
                     &insert.channel__id,
@@ -66,6 +70,14 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 )
                 .add(
                     &insert.channel_publication1__created_at,
+                    Type::INT8,
+                )
+                .add(
+                    &insert.channel_publication1__is_predeleted,
+                    Type::BOOL,
+                )
+                .add(
+                    &insert.channel_publication1__can_be_deleted_from,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
@@ -126,6 +138,52 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
+    pub fn update<'a>(database_3_client: &'a Client, update: Update, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+        return async move {
+            let query = "\
+                UPDATE ONLY \
+                    public.channel_publication1 AS cp1 \
+                SET (\
+                    is_predeleted\
+                ) = ROW(\
+                    $1\
+                ) \
+                WHERE \
+                    cp1.id = $2 \
+                RETURNING \
+                    true AS _;";
+            let mut parameter_storage = ParameterStorage::new(2);
+            parameter_storage
+                .add(
+                    &update.channel_publication1__is_predeleted,
+                    Type::BOOL,
+                )
+                .add(
+                    &by.channel_publication1__id,
+                    Type::INT8,
+                );
+            let statement = crate::result_return_logic!(
+                database_3_client
+                .prepare_typed_cached(
+                    query,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                database_3_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(false);
+            }
+            return Result::Ok(true);
+        };
+    }
     pub fn find_1<'a>(database_3_client: &'a Client, by: By2, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
@@ -145,15 +203,20 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     cp1.id = cp1m.channel_publication1__id \
                 WHERE \
                     cp1.channel__id = $1 \
-                    AND cp1.created_at < $2 \
+                    AND cp1.is_predeleted = $2 \
+                    AND cp1.created_at < $3 \
                 ORDER BY \
                     cp1.created_at DESC \
-                LIMIT $3;";
-            let mut parameter_storage = ParameterStorage::new(3);
+                LIMIT $4;";
+            let mut parameter_storage = ParameterStorage::new(4);
             parameter_storage
                 .add(
                     &by.channel__id,
                     Type::INT8,
+                )
+                .add(
+                    &by.channel_publication1__is_predeleted,
+                    Type::BOOL,
                 )
                 .add(
                     &by.channel_publication1__created_at,
@@ -181,12 +244,14 @@ impl Repository<Postgresql<ChannelPublication1>> {
             );
         };
     }
-    // channel__id: i64
-    pub fn find_2<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
+    // channel__id: i64,
+    // channel_publication1__is_predeleted: bool,
+    pub fn find_2<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<Option<(i64, bool)>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
-                    cp1.channel__id AS ci \
+                    cp1.channel__id AS ci,\
+                    cp1.is_predeleted AS ip \
                 FROM \
                     public.channel_publication1 cp1 \
                 WHERE \
@@ -215,7 +280,14 @@ impl Repository<Postgresql<ChannelPublication1>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
-            return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
+            return Result::Ok(
+                Option::Some(
+                    (
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(1)),
+                    )
+                )
+            );
         };
     }
 }
@@ -226,6 +298,11 @@ pub struct Insert<'a, 'b> {
     pub channel_publication1__marks_quantity: i64,
     pub channel_publication1__viewing_quantity: i64,
     pub channel_publication1__created_at: i64,
+    pub channel_publication1__is_predeleted: bool,
+    pub channel_publication1__can_be_deleted_from: i64,
+}
+pub struct Update {
+    pub channel_publication1__is_predeleted: bool,
 }
 pub struct By1 {
     pub channel_publication1__id: i64,
@@ -233,4 +310,5 @@ pub struct By1 {
 pub struct By2 {
     pub channel__id: i64,
     pub channel_publication1__created_at: i64,
+    pub channel_publication1__is_predeleted: bool,
 }

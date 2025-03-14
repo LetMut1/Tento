@@ -1021,6 +1021,7 @@ typedef struct ChannelPublication1_Delete_Precedent {
   bool user_access_token__already_expired;
   bool user__is_not_channel_owner;
   bool channel_publication1__not_found;
+  bool channel_publication1__is_already_deleted;
 } ChannelPublication1_Delete_Precedent;
 
 typedef struct CUnifiedReport_CVoid__ChannelPublication1_Delete_Precedent {

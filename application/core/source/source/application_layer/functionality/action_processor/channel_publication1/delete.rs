@@ -27,6 +27,7 @@ use {
                     postgresql::{
                         ChannelBy1,
                         ChannelPublication1By1,
+                        ChannelPublication1Update,
                         Postgresql,
                     },
                 },
@@ -67,7 +68,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
-            let channel__id = match Repository::<Postgresql<ChannelPublication1>>::find_2(
+            let (channel__id, channel_publication1__is_predeleted) = match Repository::<Postgresql<ChannelPublication1>>::find_2(
                 &postgresql_database_3_client,
                 ChannelPublication1By1 {
                     channel_publication1__id: incoming.channel_publication1__id,
@@ -75,9 +76,12 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             )
             .await?
             {
-                Option::Some(channel__id_) => channel__id_,
+                Option::Some(values) => values,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1_NotFound)),
             };
+            if channel_publication1__is_predeleted {
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1_IsAlreadyDeleted));
+            }
             let channel__owner = match Repository::<Postgresql<Channel>>::find_7(
                 &postgresql_database_3_client,
                 ChannelBy1 {
@@ -92,8 +96,11 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             if incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsNotChannelOwner));
             }
-            Repository::<Postgresql<ChannelPublication1>>::delete(
+            Repository::<Postgresql<ChannelPublication1>>::update(
                 &postgresql_database_3_client,
+                ChannelPublication1Update {
+                    channel_publication1__is_predeleted: true,
+                },
                 ChannelPublication1By1 {
                     channel_publication1__id: incoming.channel_publication1__id,
                 },

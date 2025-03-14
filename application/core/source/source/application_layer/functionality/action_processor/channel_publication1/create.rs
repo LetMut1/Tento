@@ -102,6 +102,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                     channel_publication1__marks_quantity: 0,
                     channel_publication1__viewing_quantity: 0,
                     channel_publication1__created_at,
+                    channel_publication1__is_predeleted: false,
+                    channel_publication1__can_be_deleted_from: 0
                 },
             )
             .await?;
