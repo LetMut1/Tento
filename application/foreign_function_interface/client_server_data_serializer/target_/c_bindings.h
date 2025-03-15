@@ -37,7 +37,7 @@ typedef struct CData_UserAuthorization_AuthorizeByFirstStep_Outcoming {
 } CData_UserAuthorization_AuthorizeByFirstStep_Outcoming;
 
 typedef struct UserAuthorization_AuthorizeByFirstStep_Precedent {
-  bool user__wrong_email_or_nickname_or_password;
+  bool user___wrong_email_or_nickname_or_password;
 } UserAuthorization_AuthorizeByFirstStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_AuthorizeByFirstStep_Outcoming__UserAuthorization_AuthorizeByFirstStep_Precedent {
@@ -88,10 +88,10 @@ typedef struct UserAuthorizationToken__WrongValue {
 } UserAuthorizationToken__WrongValue;
 
 typedef struct UserAuthorization_AuthorizeByLastStep_Precedent {
-  bool user_authorization_token__not_found;
-  bool user_authorization_token__already_expired;
-  struct UserAuthorizationToken__WrongValue user_authorization_token__wrong_value;
-  bool user__not_found;
+  bool user_authorization_token___not_found;
+  bool user_authorization_token___already_expired;
+  struct UserAuthorizationToken__WrongValue user_authorization_token___wrong_value;
+  bool user___not_found;
 } UserAuthorization_AuthorizeByLastStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_AuthorizeByLastStep_Outcoming__UserAuthorization_AuthorizeByLastStep_Precedent {
@@ -173,7 +173,7 @@ typedef struct CData_CVoid {
 } CData_CVoid;
 
 typedef struct UserAuthorization_DeauthorizeFromAllDevices_Precedent {
-  bool user_access_token__already_expired;
+  bool user_access_token___already_expired;
 } UserAuthorization_DeauthorizeFromAllDevices_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_DeauthorizeFromAllDevices_Precedent {
@@ -194,7 +194,7 @@ typedef struct UserAuthorization_DeauthorizeFromOneDevice_Incoming {
 } UserAuthorization_DeauthorizeFromOneDevice_Incoming;
 
 typedef struct UserAuthorization_DeauthorizeFromOneDevice_Precedent {
-  bool user_access_token__already_expired;
+  bool user_access_token___already_expired;
 } UserAuthorization_DeauthorizeFromOneDevice_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_DeauthorizeFromOneDevice_Precedent {
@@ -226,8 +226,8 @@ typedef struct CData_UserAuthorization_RefreshAccessToken_Outcoming {
 } CData_UserAuthorization_RefreshAccessToken_Outcoming;
 
 typedef struct UserAuthorization_RefreshAccessToken_Precedent {
-  bool user_access_refresh_token__not_found;
-  bool user_access_refresh_token__already_expired;
+  bool user_access_refresh_token___not_found;
+  bool user_access_refresh_token___already_expired;
 } UserAuthorization_RefreshAccessToken_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_RefreshAccessToken_Outcoming__UserAuthorization_RefreshAccessToken_Precedent {
@@ -261,7 +261,7 @@ typedef struct CData_UserAuthorization_RegisterByFirstStep_Outcoming {
 } CData_UserAuthorization_RegisterByFirstStep_Outcoming;
 
 typedef struct UserAuthorization_RegisterByFirstStep_Precedent {
-  bool user__email_already_exist;
+  bool user___email_already_exist;
 } UserAuthorization_RegisterByFirstStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_RegisterByFirstStep_Outcoming__UserAuthorization_RegisterByFirstStep_Precedent {
@@ -289,10 +289,10 @@ typedef struct UserRegistrationToken__WrongValue {
 } UserRegistrationToken__WrongValue;
 
 typedef struct UserAuthorization_RegisterBySecondStep_Precedent {
-  bool user_registration_token__not_found;
-  bool user_registration_token__already_expired;
-  bool user_registration_token__already_approved;
-  struct UserRegistrationToken__WrongValue user_registration_token__wrong_value;
+  bool user_registration_token___not_found;
+  bool user_registration_token___already_expired;
+  bool user_registration_token___already_approved;
+  struct UserRegistrationToken__WrongValue user_registration_token___wrong_value;
 } UserAuthorization_RegisterBySecondStep_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_RegisterBySecondStep_Precedent {
@@ -327,12 +327,12 @@ typedef struct CData_UserAuthorization_RegisterByLastStep_Outcoming {
 } CData_UserAuthorization_RegisterByLastStep_Outcoming;
 
 typedef struct UserAuthorization_RegisterByLastStep_Precedent {
-  bool user__nickname_already_exist;
-  bool user__email_already_exist;
-  bool user_registration_token__not_found;
-  bool user_registration_token__already_expired;
-  bool user_registration_token__is_not_approved;
-  bool user_registration_token__wrong_value;
+  bool user___nickname_already_exist;
+  bool user___email_already_exist;
+  bool user_registration_token___not_found;
+  bool user_registration_token___already_expired;
+  bool user_registration_token___is_not_approved;
+  bool user_registration_token___wrong_value;
 } UserAuthorization_RegisterByLastStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_RegisterByLastStep_Outcoming__UserAuthorization_RegisterByLastStep_Precedent {
@@ -367,7 +367,7 @@ typedef struct CData_UserAuthorization_ResetPasswordByFirstStep_Outcoming {
 } CData_UserAuthorization_ResetPasswordByFirstStep_Outcoming;
 
 typedef struct UserAuthorization_ResetPasswordByFirstStep_Precedent {
-  bool user__not_found;
+  bool user___not_found;
 } UserAuthorization_ResetPasswordByFirstStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_ResetPasswordByFirstStep_Outcoming__UserAuthorization_ResetPasswordByFirstStep_Precedent {
@@ -395,10 +395,10 @@ typedef struct UserResetPasswordToken__WrongValue {
 } UserResetPasswordToken__WrongValue;
 
 typedef struct UserAuthorization_ResetPasswordBySecondStep_Precedent {
-  bool user_reset_password_token__not_found;
-  bool user_reset_password_token__already_expired;
-  bool user_reset_password_token__already_approved;
-  struct UserResetPasswordToken__WrongValue user_reset_password_token__wrong_value;
+  bool user_reset_password_token___not_found;
+  bool user_reset_password_token___already_expired;
+  bool user_reset_password_token___already_approved;
+  struct UserResetPasswordToken__WrongValue user_reset_password_token___wrong_value;
 } UserAuthorization_ResetPasswordBySecondStep_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_ResetPasswordBySecondStep_Precedent {
@@ -422,11 +422,11 @@ typedef struct UserAuthorization_ResetPasswordByLastStep_Incoming {
 } UserAuthorization_ResetPasswordByLastStep_Incoming;
 
 typedef struct UserAuthorization_ResetPasswordByLastStep_Precedent {
-  bool user__not_found;
-  bool user_reset_password_token__not_found;
-  bool user_reset_password_token__already_expired;
-  bool user_reset_password_token__is_not_approved;
-  bool user_reset_password_token__wrong_value;
+  bool user___not_found;
+  bool user_reset_password_token___not_found;
+  bool user_reset_password_token___already_expired;
+  bool user_reset_password_token___is_not_approved;
+  bool user_reset_password_token___wrong_value;
 } UserAuthorization_ResetPasswordByLastStep_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_ResetPasswordByLastStep_Precedent {
@@ -457,10 +457,10 @@ typedef struct CData_UserAuthorization_SendEmailForRegister_Outcoming {
 } CData_UserAuthorization_SendEmailForRegister_Outcoming;
 
 typedef struct UserAuthorization_SendEmailForRegister_Precedent {
-  bool user_registration_token__not_found;
-  bool user_registration_token__already_expired;
-  bool user_registration_token__already_approved;
-  bool user_registration_token__time_to_resend_has_not_come;
+  bool user_registration_token___not_found;
+  bool user_registration_token___already_expired;
+  bool user_registration_token___already_approved;
+  bool user_registration_token___time_to_resend_has_not_come;
 } UserAuthorization_SendEmailForRegister_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_SendEmailForRegister_Outcoming__UserAuthorization_SendEmailForRegister_Precedent {
@@ -491,10 +491,10 @@ typedef struct CData_UserAuthorization_SendEmailForAuthorize_Outcoming {
 } CData_UserAuthorization_SendEmailForAuthorize_Outcoming;
 
 typedef struct UserAuthorization_SendEmailForAuthorize_Precedent {
-  bool user__not_found;
-  bool user_authorization_token__not_found;
-  bool user_authorization_token__already_expired;
-  bool user_authorization_token__time_to_resend_has_not_come;
+  bool user___not_found;
+  bool user_authorization_token___not_found;
+  bool user_authorization_token___already_expired;
+  bool user_authorization_token___time_to_resend_has_not_come;
 } UserAuthorization_SendEmailForAuthorize_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_SendEmailForAuthorize_Outcoming__UserAuthorization_SendEmailForAuthorize_Precedent {
@@ -525,11 +525,11 @@ typedef struct CData_UserAuthorization_SendEmailForResetPassword_Outcoming {
 } CData_UserAuthorization_SendEmailForResetPassword_Outcoming;
 
 typedef struct UserAuthorization_SendEmailForResetPassword_Precedent {
-  bool user__not_found;
-  bool user_reset_password_token__not_found;
-  bool user_reset_password_token__already_expired;
-  bool user_reset_password_token__already_approved;
-  bool user_reset_password_token__time_to_resend_has_not_come;
+  bool user___not_found;
+  bool user_reset_password_token___not_found;
+  bool user_reset_password_token___already_expired;
+  bool user_reset_password_token___already_approved;
+  bool user_reset_password_token___time_to_resend_has_not_come;
 } UserAuthorization_SendEmailForResetPassword_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_SendEmailForResetPassword_Outcoming__UserAuthorization_SendEmailForResetPassword_Precedent {
@@ -582,7 +582,7 @@ typedef struct CData_Channel_GetManyByNameInSubscriptions_Outcoming {
 } CData_Channel_GetManyByNameInSubscriptions_Outcoming;
 
 typedef struct Channel_GetManyByNameInSubscriptions_Precedent {
-  bool user_access_token__already_expired;
+  bool user_access_token___already_expired;
 } Channel_GetManyByNameInSubscriptions_Precedent;
 
 typedef struct CUnifiedReport_Channel_GetManyByNameInSubscriptions_Outcoming__Channel_GetManyByNameInSubscriptions_Precedent {
@@ -634,7 +634,7 @@ typedef struct CData_Channel_GetManyBySubscription_Outcoming {
 } CData_Channel_GetManyBySubscription_Outcoming;
 
 typedef struct Channel_GetManyBySubscription_Precedent {
-  bool user_access_token__already_expired;
+  bool user_access_token___already_expired;
 } Channel_GetManyBySubscription_Precedent;
 
 typedef struct CUnifiedReport_Channel_GetManyBySubscription_Outcoming__Channel_GetManyBySubscription_Precedent {
@@ -692,7 +692,7 @@ typedef struct CData_Channel_GetManyPublicByName_Outcoming {
 } CData_Channel_GetManyPublicByName_Outcoming;
 
 typedef struct Channel_GetManyPublicByName_Precedent {
-  bool user_access_token__already_expired;
+  bool user_access_token___already_expired;
 } Channel_GetManyPublicByName_Precedent;
 
 typedef struct CUnifiedReport_Channel_GetManyPublicByName_Outcoming__Channel_GetManyPublicByName_Precedent {
@@ -746,11 +746,11 @@ typedef struct CData_Channel_GetOneById_Outcoming {
 } CData_Channel_GetOneById_Outcoming;
 
 typedef struct Channel_GetOneById_Precedent {
-  bool user_access_token__already_expired;
-  bool channel__not_found;
-  bool channel__is_close;
-  bool channel_token__not_found;
-  bool channel_token__already_expired;
+  bool user_access_token___already_expired;
+  bool channel___not_found;
+  bool channel___is_close;
+  bool channel_token___not_found;
+  bool channel_token___already_expired;
 } Channel_GetOneById_Precedent;
 
 typedef struct CUnifiedReport_Channel_GetOneById_Outcoming__Channel_GetOneById_Precedent {
@@ -781,7 +781,7 @@ typedef struct CData_Channel_CheckNameForExisting_Outcoming {
 } CData_Channel_CheckNameForExisting_Outcoming;
 
 typedef struct Channel_CheckNameForExisting_Precedent {
-  bool user_access_token__already_expired;
+  bool user_access_token___already_expired;
 } Channel_CheckNameForExisting_Precedent;
 
 typedef struct CUnifiedReport_Channel_CheckNameForExisting_Outcoming__Channel_CheckNameForExisting_Precedent {
@@ -812,7 +812,7 @@ typedef struct CData_Channel_CheckLinkedNameForExisting_Outcoming {
 } CData_Channel_CheckLinkedNameForExisting_Outcoming;
 
 typedef struct Channel_CheckLinkedNameForExisting_Precedent {
-  bool user_access_token__already_expired;
+  bool user_access_token___already_expired;
 } Channel_CheckLinkedNameForExisting_Precedent;
 
 typedef struct CUnifiedReport_Channel_CheckLinkedNameForExisting_Outcoming__Channel_CheckLinkedNameForExisting_Precedent {
@@ -846,9 +846,9 @@ typedef struct CData_Channel_Create_Outcoming {
 } CData_Channel_Create_Outcoming;
 
 typedef struct Channel_Create_Precedent {
-  bool user_access_token__already_expired;
-  bool channel__name_already_exist;
-  bool channel__linked_name_already_exist;
+  bool user_access_token___already_expired;
+  bool channel___name_already_exist;
+  bool channel___linked_name_already_exist;
 } Channel_Create_Precedent;
 
 typedef struct CUnifiedReport_Channel_Create_Outcoming__Channel_Create_Precedent {
@@ -871,12 +871,12 @@ typedef struct ChannelSubscription_Create_Incoming {
 } ChannelSubscription_Create_Incoming;
 
 typedef struct ChannelSubscription_Create_Precedent {
-  bool user_access_token__already_expired;
-  bool channel__not_found;
-  bool channel__is_close;
-  bool user__is_channel__owner;
-  bool channel_subscription_already_exist;
-  bool channel_subscription_token__already_expired;
+  bool user_access_token___already_expired;
+  bool channel___not_found;
+  bool channel___is_close;
+  bool user___is_channel__owner;
+  bool channel_subscription___already_exist;
+  bool channel_subscription_token___already_expired;
 } ChannelSubscription_Create_Precedent;
 
 typedef struct CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent {
@@ -898,8 +898,8 @@ typedef struct ChannelSubscription_Delete_Incoming {
 } ChannelSubscription_Delete_Incoming;
 
 typedef struct ChannelSubscription_Delete_Precedent {
-  bool user_access_token__already_expired;
-  bool channel_subscription__not_found;
+  bool user_access_token___already_expired;
+  bool channel_subscription___not_found;
 } ChannelSubscription_Delete_Precedent;
 
 typedef struct CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent {
@@ -959,9 +959,9 @@ typedef struct CData_ChannelPublication1_GetMany_Outcoming {
 } CData_ChannelPublication1_GetMany_Outcoming;
 
 typedef struct ChannelPublication1_GetMany_Precedent {
-  bool user_access_token__already_expired;
-  bool channel__not_found;
-  bool channel__is_close;
+  bool user_access_token___already_expired;
+  bool channel___not_found;
+  bool channel___is_close;
 } ChannelPublication1_GetMany_Precedent;
 
 typedef struct CUnifiedReport_ChannelPublication1_GetMany_Outcoming__ChannelPublication1_GetMany_Precedent {
@@ -995,9 +995,9 @@ typedef struct CData_ChannelPublication1_Create_Outcoming {
 } CData_ChannelPublication1_Create_Outcoming;
 
 typedef struct ChannelPublication1_Create_Precedent {
-  bool user_access_token__already_expired;
-  bool channel__not_found;
-  bool user__is_not_channel_owner;
+  bool user_access_token___already_expired;
+  bool channel___not_found;
+  bool user___is_not_channel_owner;
 } ChannelPublication1_Create_Precedent;
 
 typedef struct CUnifiedReport_ChannelPublication1_Create_Outcoming__ChannelPublication1_Create_Precedent {
@@ -1019,10 +1019,10 @@ typedef struct ChannelPublication1_Delete_Incoming {
 } ChannelPublication1_Delete_Incoming;
 
 typedef struct ChannelPublication1_Delete_Precedent {
-  bool user_access_token__already_expired;
-  bool user__is_not_channel_owner;
-  bool channel_publication1__not_found;
-  bool channel_publication1__is_already_deleted;
+  bool user_access_token___already_expired;
+  bool user___is_not_channel_owner;
+  bool channel_publication1___not_found;
+  bool channel_publication1___is_already_deleted;
 } ChannelPublication1_Delete_Precedent;
 
 typedef struct CUnifiedReport_CVoid__ChannelPublication1_Delete_Precedent {
@@ -1045,9 +1045,9 @@ typedef struct ChannelPublication1Mark_Create_Incoming {
 } ChannelPublication1Mark_Create_Incoming;
 
 typedef struct ChannelPublication1Mark_Create_Precedent {
-  bool user_access_token__already_expired;
-  bool channel_publication1_token__already_exist;
-  bool channel_publication1_mark__already_exist;
+  bool user_access_token___already_expired;
+  bool channel_publication1_token___already_exist;
+  bool channel_publication1_mark___already_exist;
 } ChannelPublication1Mark_Create_Precedent;
 
 typedef struct CUnifiedReport_CVoid__ChannelPublication1Mark_Create_Precedent {

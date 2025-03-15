@@ -542,7 +542,7 @@ pub struct UserAuthorization_AuthorizeByFirstStep_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_AuthorizeByFirstStep_Precedent {
-    pub user__wrong_email_or_nickname_or_password: bool,
+    pub user___wrong_email_or_nickname_or_password: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_AuthorizeByFirstStep_CResult {
@@ -578,7 +578,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserializ
                     UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword => {}
                 };
                 let precedent_ = UserAuthorization_AuthorizeByFirstStep_Precedent {
-                    user__wrong_email_or_nickname_or_password: true,
+                    user___wrong_email_or_nickname_or_password: true,
                 };
                 CUnifiedReport::precedent(precedent_)
             }
@@ -632,10 +632,10 @@ pub struct UserAuthorization_AuthorizeByLastStep_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_AuthorizeByLastStep_Precedent {
-    pub user_authorization_token__not_found: bool,
-    pub user_authorization_token__already_expired: bool,
-    pub user_authorization_token__wrong_value: UserAuthorizationToken__WrongValue,
-    pub user__not_found: bool,
+    pub user_authorization_token___not_found: bool,
+    pub user_authorization_token___already_expired: bool,
+    pub user_authorization_token___wrong_value: UserAuthorizationToken__WrongValue,
+    pub user___not_found: bool,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -682,13 +682,13 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                 let precedent_ = match precedent {
                     UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__AlreadyExpired => {
                         UserAuthorization_AuthorizeByLastStep_Precedent {
-                            user_authorization_token__already_expired: true,
+                            user_authorization_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__NotFound => {
                         UserAuthorization_AuthorizeByLastStep_Precedent {
-                            user_authorization_token__not_found: true,
+                            user_authorization_token___not_found: true,
                             ..Default::default()
                         }
                     }
@@ -696,7 +696,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                         user_authorization_token__wrong_enter_tries_quantity,
                     } => {
                         UserAuthorization_AuthorizeByLastStep_Precedent {
-                            user_authorization_token__wrong_value: UserAuthorizationToken__WrongValue {
+                            user_authorization_token___wrong_value: UserAuthorizationToken__WrongValue {
                                 is_exist: true,
                                 user_authorization_token__wrong_enter_tries_quantity,
                             },
@@ -705,7 +705,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                     }
                     UserAuthorization_AuthorizeByLastStep_Precedent_::User__NotFound => {
                         UserAuthorization_AuthorizeByLastStep_Precedent {
-                            user__not_found: true,
+                            user___not_found: true,
                             ..Default::default()
                         }
                     }
@@ -887,7 +887,7 @@ type UserAuthorization_DeauthorizeFromAllDevices_CResult = CResult<CUnifiedRepor
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_DeauthorizeFromAllDevices_Precedent {
-    pub user_access_token__already_expired: bool,
+    pub user_access_token___already_expired: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deserialize_allocate(
@@ -900,7 +900,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deser
                 let precedent_ = match precedent {
                     UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken__AlreadyExpired => {
                         UserAuthorization_DeauthorizeFromAllDevices_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
@@ -923,7 +923,7 @@ type UserAuthorization_DeauthorizeFromOneDevice_CResult = CResult<CUnifiedReport
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_DeauthorizeFromOneDevice_Precedent {
-    pub user_access_token__already_expired: bool,
+    pub user_access_token___already_expired: bool,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -969,7 +969,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deseri
                 let precedent_ = match precedent {
                     UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken__AlreadyExpired => {
                         UserAuthorization_DeauthorizeFromOneDevice_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
@@ -1033,8 +1033,8 @@ pub struct UserAuthorization_RefreshAccessToken_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_RefreshAccessToken_Precedent {
-    pub user_access_refresh_token__not_found: bool,
-    pub user_access_refresh_token__already_expired: bool,
+    pub user_access_refresh_token___not_found: bool,
+    pub user_access_refresh_token___already_expired: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RefreshAccessToken_CResult {
@@ -1075,13 +1075,13 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
                 let precedent_ = match precedent {
                     UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__AlreadyExpired => {
                         UserAuthorization_RefreshAccessToken_Precedent {
-                            user_access_refresh_token__already_expired: true,
+                            user_access_refresh_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__NotFound => {
                         UserAuthorization_RefreshAccessToken_Precedent {
-                            user_access_refresh_token__not_found: true,
+                            user_access_refresh_token___not_found: true,
                             ..Default::default()
                         }
                     }
@@ -1144,7 +1144,7 @@ pub struct UserAuthorization_RegisterByFirstStep_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_RegisterByFirstStep_Precedent {
-    pub user__email_already_exist: bool,
+    pub user___email_already_exist: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterByFirstStep_CResult {
@@ -1179,7 +1179,7 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize
                     UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist => {}
                 };
                 let precedent_ = UserAuthorization_RegisterByFirstStep_Precedent {
-                    user__email_already_exist: true,
+                    user___email_already_exist: true,
                 };
                 CUnifiedReport::precedent(precedent_)
             }
@@ -1227,10 +1227,10 @@ type UserAuthorization_RegisterBySecondStep_CResult = CResult<CUnifiedReport<CVo
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_RegisterBySecondStep_Precedent {
-    pub user_registration_token__not_found: bool,
-    pub user_registration_token__already_expired: bool,
-    pub user_registration_token__already_approved: bool,
-    pub user_registration_token__wrong_value: UserRegistrationToken__WrongValue,
+    pub user_registration_token___not_found: bool,
+    pub user_registration_token___already_expired: bool,
+    pub user_registration_token___already_approved: bool,
+    pub user_registration_token___wrong_value: UserRegistrationToken__WrongValue,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -1247,25 +1247,25 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__deserializ
                 let precedent_ = match precedent {
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__NotFound => {
                         UserAuthorization_RegisterBySecondStep_Precedent {
-                            user_registration_token__not_found: true,
+                            user_registration_token___not_found: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyExpired => {
                         UserAuthorization_RegisterBySecondStep_Precedent {
-                            user_registration_token__already_expired: true,
+                            user_registration_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyApproved => {
                         UserAuthorization_RegisterBySecondStep_Precedent {
-                            user_registration_token__already_approved: true,
+                            user_registration_token___already_approved: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__WrongValue { user_registration_token__wrong_enter_tries_quantity } => {
                         UserAuthorization_RegisterBySecondStep_Precedent {
-                            user_registration_token__wrong_value: UserRegistrationToken__WrongValue {
+                            user_registration_token___wrong_value: UserRegistrationToken__WrongValue {
                                 is_exist: true,
                                 user_registration_token__wrong_enter_tries_quantity,
                             },
@@ -1329,12 +1329,12 @@ pub struct UserAuthorization_RegisterByLastStep_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_RegisterByLastStep_Precedent {
-    pub user__nickname_already_exist: bool,
-    pub user__email_already_exist: bool,
-    pub user_registration_token__not_found: bool,
-    pub user_registration_token__already_expired: bool,
-    pub user_registration_token__is_not_approved: bool,
-    pub user_registration_token__wrong_value: bool,
+    pub user___nickname_already_exist: bool,
+    pub user___email_already_exist: bool,
+    pub user_registration_token___not_found: bool,
+    pub user_registration_token___already_expired: bool,
+    pub user_registration_token___is_not_approved: bool,
+    pub user_registration_token___wrong_value: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterByLastStep_CResult {
@@ -1375,37 +1375,37 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
                 let precedent_ = match precedent {
                     UserAuthorization_RegisterByLastStep_Precedent_::User__NicknameAlreadyExist => {
                         UserAuthorization_RegisterByLastStep_Precedent {
-                            user__nickname_already_exist: true,
+                            user___nickname_already_exist: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_RegisterByLastStep_Precedent_::User__EmailAlreadyExist => {
                         UserAuthorization_RegisterByLastStep_Precedent {
-                            user__email_already_exist: true,
+                            user___email_already_exist: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__NotFound => {
                         UserAuthorization_RegisterByLastStep_Precedent {
-                            user_registration_token__not_found: true,
+                            user_registration_token___not_found: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__AlreadyExpired => {
                         UserAuthorization_RegisterByLastStep_Precedent {
-                            user_registration_token__already_expired: true,
+                            user_registration_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__IsNotApproved => {
                         UserAuthorization_RegisterByLastStep_Precedent {
-                            user_registration_token__is_not_approved: true,
+                            user_registration_token___is_not_approved: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__WrongValue => {
                         UserAuthorization_RegisterByLastStep_Precedent {
-                            user_registration_token__wrong_value: true,
+                            user_registration_token___wrong_value: true,
                             ..Default::default()
                         }
                     }
@@ -1473,7 +1473,7 @@ pub struct UserAuthorization_ResetPasswordByFirstStep_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_ResetPasswordByFirstStep_Precedent {
-    pub user__not_found: bool,
+    pub user___not_found: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deserialize_allocate(
@@ -1511,7 +1511,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deser
                     UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound => {}
                 };
                 let precedent_ = UserAuthorization_ResetPasswordByFirstStep_Precedent {
-                    user__not_found: true,
+                    user___not_found: true,
                 };
                 CUnifiedReport::precedent(precedent_)
             }
@@ -1562,10 +1562,10 @@ type UserAuthorization_ResetPasswordBySecondStep_CResult = CResult<CUnifiedRepor
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_ResetPasswordBySecondStep_Precedent {
-    pub user_reset_password_token__not_found: bool,
-    pub user_reset_password_token__already_expired: bool,
-    pub user_reset_password_token__already_approved: bool,
-    pub user_reset_password_token__wrong_value: UserResetPasswordToken__WrongValue,
+    pub user_reset_password_token___not_found: bool,
+    pub user_reset_password_token___already_expired: bool,
+    pub user_reset_password_token___already_approved: bool,
+    pub user_reset_password_token___wrong_value: UserResetPasswordToken__WrongValue,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -1584,25 +1584,25 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__dese
                 let precedent_ = match precedent {
                     UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__NotFound => {
                         UserAuthorization_ResetPasswordBySecondStep_Precedent {
-                            user_reset_password_token__not_found: true,
+                            user_reset_password_token___not_found: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__AlreadyExpired => {
                         UserAuthorization_ResetPasswordBySecondStep_Precedent {
-                            user_reset_password_token__already_expired: true,
+                            user_reset_password_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__AlreadyApproved => {
                         UserAuthorization_ResetPasswordBySecondStep_Precedent {
-                            user_reset_password_token__already_approved: true,
+                            user_reset_password_token___already_approved: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__WrongValue { user_reset_password_token__wrong_enter_tries_quantity } => {
                         UserAuthorization_ResetPasswordBySecondStep_Precedent {
-                            user_reset_password_token__wrong_value: UserResetPasswordToken__WrongValue {
+                            user_reset_password_token___wrong_value: UserResetPasswordToken__WrongValue {
                                 is_exist: true,
                                 user_reset_password_token__wrong_enter_tries_quantity,
                             },
@@ -1661,11 +1661,11 @@ type UserAuthorization_ResetPasswordByLastStep_CResult = CResult<CUnifiedReport<
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_ResetPasswordByLastStep_Precedent {
-    pub user__not_found: bool,
-    pub user_reset_password_token__not_found: bool,
-    pub user_reset_password_token__already_expired: bool,
-    pub user_reset_password_token__is_not_approved: bool,
-    pub user_reset_password_token__wrong_value: bool,
+    pub user___not_found: bool,
+    pub user_reset_password_token___not_found: bool,
+    pub user_reset_password_token___already_expired: bool,
+    pub user_reset_password_token___is_not_approved: bool,
+    pub user_reset_password_token___wrong_value: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deserialize_allocate(
@@ -1678,31 +1678,31 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deseri
                 let precedent_ = match precedent {
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::User__NotFound => {
                         UserAuthorization_ResetPasswordByLastStep_Precedent {
-                            user__not_found: true,
+                            user___not_found: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__NotFound => {
                         UserAuthorization_ResetPasswordByLastStep_Precedent {
-                            user_reset_password_token__not_found: true,
+                            user_reset_password_token___not_found: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__AlreadyExpired => {
                         UserAuthorization_ResetPasswordByLastStep_Precedent {
-                            user_reset_password_token__already_expired: true,
+                            user_reset_password_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__IsNotApproved => {
                         UserAuthorization_ResetPasswordByLastStep_Precedent {
-                            user_reset_password_token__is_not_approved: true,
+                            user_reset_password_token___is_not_approved: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__WrongValue => {
                         UserAuthorization_ResetPasswordByLastStep_Precedent {
-                            user_reset_password_token__wrong_value: true,
+                            user_reset_password_token___wrong_value: true,
                             ..Default::default()
                         }
                     }
@@ -1756,10 +1756,10 @@ pub struct UserAuthorization_SendEmailForRegister_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_SendEmailForRegister_Precedent {
-    pub user_registration_token__not_found: bool,
-    pub user_registration_token__already_expired: bool,
-    pub user_registration_token__already_approved: bool,
-    pub user_registration_token__time_to_resend_has_not_come: bool,
+    pub user_registration_token___not_found: bool,
+    pub user_registration_token___already_expired: bool,
+    pub user_registration_token___already_approved: bool,
+    pub user_registration_token___time_to_resend_has_not_come: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__send_email_for_register__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_SendEmailForRegister_CResult {
@@ -1790,25 +1790,25 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__deserializ
                 let precedent_ = match precedent {
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__NotFound => {
                         UserAuthorization_SendEmailForRegister_Precedent {
-                            user_registration_token__not_found: true,
+                            user_registration_token___not_found: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyExpired => {
                         UserAuthorization_SendEmailForRegister_Precedent {
-                            user_registration_token__already_expired: true,
+                            user_registration_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyApproved => {
                         UserAuthorization_SendEmailForRegister_Precedent {
-                            user_registration_token__already_approved: true,
+                            user_registration_token___already_approved: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__TimeToResendHasNotCome => {
                         UserAuthorization_SendEmailForRegister_Precedent {
-                            user_registration_token__time_to_resend_has_not_come: true,
+                            user_registration_token___time_to_resend_has_not_come: true,
                             ..Default::default()
                         }
                     }
@@ -1864,10 +1864,10 @@ pub struct UserAuthorization_SendEmailForAuthorize_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_SendEmailForAuthorize_Precedent {
-    pub user__not_found: bool,
-    pub user_authorization_token__not_found: bool,
-    pub user_authorization_token__already_expired: bool,
-    pub user_authorization_token__time_to_resend_has_not_come: bool,
+    pub user___not_found: bool,
+    pub user_authorization_token___not_found: bool,
+    pub user_authorization_token___already_expired: bool,
+    pub user_authorization_token___time_to_resend_has_not_come: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deserialize_allocate(
@@ -1900,25 +1900,25 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deseriali
                 let precedent_ = match precedent {
                     UserAuthorization_SendEmailForAuthorize_Precedent_::User__NotFound => {
                         UserAuthorization_SendEmailForAuthorize_Precedent {
-                            user__not_found: true,
+                            user___not_found: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__NotFound => {
                         UserAuthorization_SendEmailForAuthorize_Precedent {
-                            user_authorization_token__not_found: true,
+                            user_authorization_token___not_found: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__AlreadyExpired => {
                         UserAuthorization_SendEmailForAuthorize_Precedent {
-                            user_authorization_token__already_expired: true,
+                            user_authorization_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__TimeToResendHasNotCome => {
                         UserAuthorization_SendEmailForAuthorize_Precedent {
-                            user_authorization_token__time_to_resend_has_not_come: true,
+                            user_authorization_token___time_to_resend_has_not_come: true,
                             ..Default::default()
                         }
                     }
@@ -1976,11 +1976,11 @@ pub struct UserAuthorization_SendEmailForResetPassword_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_SendEmailForResetPassword_Precedent {
-    pub user__not_found: bool,
-    pub user_reset_password_token__not_found: bool,
-    pub user_reset_password_token__already_expired: bool,
-    pub user_reset_password_token__already_approved: bool,
-    pub user_reset_password_token__time_to_resend_has_not_come: bool,
+    pub user___not_found: bool,
+    pub user_reset_password_token___not_found: bool,
+    pub user_reset_password_token___already_expired: bool,
+    pub user_reset_password_token___already_approved: bool,
+    pub user_reset_password_token___time_to_resend_has_not_come: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__deserialize_allocate(
@@ -2013,31 +2013,31 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
                 let precedent_ = match precedent {
                     UserAuthorization_SendEmailForResetPassword_Precedent_::User__NotFound => {
                         UserAuthorization_SendEmailForResetPassword_Precedent {
-                            user__not_found: true,
+                            user___not_found: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__NotFound => {
                         UserAuthorization_SendEmailForResetPassword_Precedent {
-                            user_reset_password_token__not_found: true,
+                            user_reset_password_token___not_found: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyExpired => {
                         UserAuthorization_SendEmailForResetPassword_Precedent {
-                            user_reset_password_token__already_expired: true,
+                            user_reset_password_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyApproved => {
                         UserAuthorization_SendEmailForResetPassword_Precedent {
-                            user_reset_password_token__already_approved: true,
+                            user_reset_password_token___already_approved: true,
                             ..Default::default()
                         }
                     }
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__TimeToResendHasNotCome => {
                         UserAuthorization_SendEmailForResetPassword_Precedent {
-                            user_reset_password_token__time_to_resend_has_not_come: true,
+                            user_reset_password_token___time_to_resend_has_not_come: true,
                             ..Default::default()
                         }
                     }
@@ -2117,7 +2117,7 @@ pub struct Channel_GetManyByNameInSubscriptions_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyByNameInSubscriptions_Precedent {
-    pub user_access_token__already_expired: bool,
+    pub user_access_token___already_expired: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyByNameInSubscriptions_CResult {
@@ -2170,7 +2170,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                 let precedent_ = match precedent {
                     Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_GetManyByNameInSubscriptions_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
@@ -2262,7 +2262,7 @@ pub struct Channel_GetManyBySubscription_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyBySubscription_Precedent {
-    pub user_access_token__already_expired: bool,
+    pub user_access_token___already_expired: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyBySubscription_CResult {
@@ -2315,7 +2315,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                 let precedent_ = match precedent {
                     Channel_GetManyBySubscription_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_GetManyBySubscription_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
@@ -2409,7 +2409,7 @@ pub struct Channel_GetManyPublicByName_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyPublicByName_Precedent {
-    pub user_access_token__already_expired: bool,
+    pub user_access_token___already_expired: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyPublicByName_CResult {
@@ -2473,7 +2473,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                 let precedent_ = match precedent {
                     Channel_GetManyPublicByName_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_GetManyPublicByName_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
@@ -2572,11 +2572,11 @@ pub struct Channel_GetOneById_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetOneById_Precedent {
-    pub user_access_token__already_expired: bool,
-    pub channel__not_found: bool,
-    pub channel__is_close: bool,
-    pub channel_token__not_found: bool,
-    pub channel_token__already_expired: bool,
+    pub user_access_token___already_expired: bool,
+    pub channel___not_found: bool,
+    pub channel___is_close: bool,
+    pub channel_token___not_found: bool,
+    pub channel_token___already_expired: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetOneById_CResult {
@@ -2629,31 +2629,31 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                 let precedent_ = match precedent {
                     Channel_GetOneById_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_GetOneById_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     Channel_GetOneById_Precedent_::Channel__NotFound => {
                         Channel_GetOneById_Precedent {
-                            channel__not_found: true,
+                            channel___not_found: true,
                             ..Default::default()
                         }
                     }
                     Channel_GetOneById_Precedent_::Channel__IsClose => {
                         Channel_GetOneById_Precedent {
-                            channel__is_close: true,
+                            channel___is_close: true,
                             ..Default::default()
                         }
                     }
                     Channel_GetOneById_Precedent_::ChannelToken__NotFound => {
                         Channel_GetOneById_Precedent {
-                            channel_token__not_found: true,
+                            channel_token___not_found: true,
                             ..Default::default()
                         }
                     }
                     Channel_GetOneById_Precedent_::ChannelToken__AlreadyExpired => {
                         Channel_GetOneById_Precedent {
-                            channel_token__already_expired: true,
+                            channel_token___already_expired: true,
                             ..Default::default()
                         }
                     }
@@ -2727,7 +2727,7 @@ pub struct Channel_CheckNameForExisting_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_CheckNameForExisting_Precedent {
-    pub user_access_token__already_expired: bool,
+    pub user_access_token___already_expired: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_CheckNameForExisting_CResult {
@@ -2753,7 +2753,7 @@ pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(
                 let precedent_ = match precedent {
                     Channel_CheckNameForExisting_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_CheckNameForExisting_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
@@ -2813,7 +2813,7 @@ pub struct Channel_CheckLinkedNameForExisting_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_CheckLinkedNameForExisting_Precedent {
-    pub user_access_token__already_expired: bool,
+    pub user_access_token___already_expired: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_CheckLinkedNameForExisting_CResult {
@@ -2839,7 +2839,7 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_al
                 let precedent_ = match precedent {
                     Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_CheckLinkedNameForExisting_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
@@ -2905,9 +2905,9 @@ pub struct Channel_Create_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_Create_Precedent {
-    pub user_access_token__already_expired: bool,
-    pub channel__name_already_exist: bool,
-    pub channel__linked_name_already_exist: bool,
+    pub user_access_token___already_expired: bool,
+    pub channel___name_already_exist: bool,
+    pub channel___linked_name_already_exist: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_Create_CResult {
@@ -2933,19 +2933,19 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
                 let precedent_ = match precedent {
                     Channel_Create_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_Create_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     Channel_Create_Precedent_::Channel__NameAlreadyExist => {
                         Channel_Create_Precedent {
-                            channel__name_already_exist: true,
+                            channel___name_already_exist: true,
                             ..Default::default()
                         }
                     }
                     Channel_Create_Precedent_::Channel__LinkedNameAlreadyExist => {
                         Channel_Create_Precedent {
-                            channel__linked_name_already_exist: true,
+                            channel___linked_name_already_exist: true,
                             ..Default::default()
                         }
                     }
@@ -3005,12 +3005,12 @@ type ChannelSubscription_Create_CResult = CResult<CUnifiedReport<CVoid, ChannelS
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelSubscription_Create_Precedent {
-    pub user_access_token__already_expired: bool,
-    pub channel__not_found: bool,
-    pub channel__is_close: bool,
-    pub user__is_channel__owner: bool,
-    pub channel_subscription_already_exist: bool,
-    pub channel_subscription_token__already_expired: bool,
+    pub user_access_token___already_expired: bool,
+    pub channel___not_found: bool,
+    pub channel___is_close: bool,
+    pub user___is_channel__owner: bool,
+    pub channel_subscription___already_exist: bool,
+    pub channel_subscription_token___already_expired: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Create_CResult {
@@ -3021,37 +3021,37 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
                 let precedent_ = match precedent {
                     ChannelSubscription_Create_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelSubscription_Create_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     ChannelSubscription_Create_Precedent_::Channel__NotFound => {
                         ChannelSubscription_Create_Precedent {
-                            channel__not_found: true,
+                            channel___not_found: true,
                             ..Default::default()
                         }
                     }
                     ChannelSubscription_Create_Precedent_::Channel__IsClose => {
                         ChannelSubscription_Create_Precedent {
-                            channel__is_close: true,
+                            channel___is_close: true,
                             ..Default::default()
                         }
                     }
                     ChannelSubscription_Create_Precedent_::User__IsChannelOwner => {
                         ChannelSubscription_Create_Precedent {
-                            user__is_channel__owner: true,
+                            user___is_channel__owner: true,
                             ..Default::default()
                         }
                     }
                     ChannelSubscription_Create_Precedent_::ChannelSubscription__AlreadyExist => {
                         ChannelSubscription_Create_Precedent {
-                            channel_subscription_already_exist: true,
+                            channel_subscription___already_exist: true,
                             ..Default::default()
                         }
                     }
                     ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken__AlreadyExpired => {
                         ChannelSubscription_Create_Precedent {
-                            channel_subscription_token__already_expired: true,
+                            channel_subscription_token___already_expired: true,
                             ..Default::default()
                         }
                     }
@@ -3106,8 +3106,8 @@ type ChannelSubscription_Delete_CResult = CResult<CUnifiedReport<CVoid, ChannelS
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelSubscription_Delete_Precedent {
-    pub user_access_token__already_expired: bool,
-    pub channel_subscription__not_found: bool,
+    pub user_access_token___already_expired: bool,
+    pub channel_subscription___not_found: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Delete_CResult {
@@ -3118,13 +3118,13 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_ve
                 let precedent_ = match precedent {
                     ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelSubscription_Delete_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     ChannelSubscription_Delete_Precedent_::ChannelSubscription__NotFound => {
                         ChannelSubscription_Delete_Precedent {
-                            channel_subscription__not_found: true,
+                            channel_subscription___not_found: true,
                             ..Default::default()
                         }
                     }
@@ -3200,9 +3200,9 @@ pub struct ChannelPublication1_GetMany_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1_GetMany_Precedent {
-    pub user_access_token__already_expired: bool,
-    pub channel__not_found: bool,
-    pub channel__is_close: bool,
+    pub user_access_token___already_expired: bool,
+    pub channel___not_found: bool,
+    pub channel___is_close: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1_GetMany_CResult {
@@ -3261,19 +3261,19 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                 let precedent_ = match precedent {
                     ChannelPublication1_GetMany_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelPublication1_GetMany_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     ChannelPublication1_GetMany_Precedent_::Channel__NotFound => {
                         ChannelPublication1_GetMany_Precedent {
-                            channel__not_found: true,
+                            channel___not_found: true,
                             ..Default::default()
                         }
                     }
                     ChannelPublication1_GetMany_Precedent_::Channel__IsClose => {
                         ChannelPublication1_GetMany_Precedent {
-                            channel__is_close: true,
+                            channel___is_close: true,
                             ..Default::default()
                         }
                     }
@@ -3364,9 +3364,9 @@ pub struct ChannelPublication1_Create_Outcoming {
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1_Create_Precedent {
-    pub user_access_token__already_expired: bool,
-    pub channel__not_found: bool,
-    pub user__is_not_channel_owner: bool,
+    pub user_access_token___already_expired: bool,
+    pub channel___not_found: bool,
+    pub user___is_not_channel_owner: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1_Create_CResult {
@@ -3393,19 +3393,19 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_ve
                 let precedent_ = match precedent {
                     ChannelPublication1_Create_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelPublication1_Create_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     ChannelPublication1_Create_Precedent_::Channel__NotFound => {
                         ChannelPublication1_Create_Precedent {
-                            channel__not_found: true,
+                            channel___not_found: true,
                             ..Default::default()
                         }
                     }
                     ChannelPublication1_Create_Precedent_::User__IsNotChannelOwner => {
                         ChannelPublication1_Create_Precedent {
-                            user__is_not_channel_owner: true,
+                            user___is_not_channel_owner: true,
                             ..Default::default()
                         }
                     }
@@ -3460,10 +3460,10 @@ type ChannelPublication1_Delete_CResult = CResult<CUnifiedReport<CVoid, ChannelP
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1_Delete_Precedent {
-    pub user_access_token__already_expired: bool,
-    pub user__is_not_channel_owner: bool,
-    pub channel_publication1__not_found: bool,
-    pub channel_publication1__is_already_deleted: bool,
+    pub user_access_token___already_expired: bool,
+    pub user___is_not_channel_owner: bool,
+    pub channel_publication1___not_found: bool,
+    pub channel_publication1___is_already_deleted: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1_Delete_CResult {
@@ -3474,25 +3474,25 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_ve
                 let precedent_ = match precedent {
                     ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelPublication1_Delete_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner => {
                         ChannelPublication1_Delete_Precedent {
-                            user__is_not_channel_owner: true,
+                            user___is_not_channel_owner: true,
                             ..Default::default()
                         }
                     }
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1__NotFound => {
                         ChannelPublication1_Delete_Precedent {
-                            channel_publication1__not_found: true,
+                            channel_publication1___not_found: true,
                             ..Default::default()
                         }
                     }
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted=> {
                         ChannelPublication1_Delete_Precedent {
-                            channel_publication1__is_already_deleted: true,
+                            channel_publication1___is_already_deleted: true,
                             ..Default::default()
                         }
                     }
@@ -3553,9 +3553,9 @@ type ChannelPublication1Mark_Create_CResult = CResult<CUnifiedReport<CVoid, Chan
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1Mark_Create_Precedent {
-    pub user_access_token__already_expired: bool,
-    pub channel_publication1_token__already_exist: bool,
-    pub channel_publication1_mark__already_exist: bool,
+    pub user_access_token___already_expired: bool,
+    pub channel_publication1_token___already_exist: bool,
+    pub channel_publication1_mark___already_exist: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1Mark_Create_CResult {
@@ -3566,19 +3566,19 @@ pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate
                 let precedent_ = match precedent {
                     ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelPublication1Mark_Create_Precedent {
-                            user_access_token__already_expired: true,
+                            user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
                     ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExist => {
                         ChannelPublication1Mark_Create_Precedent {
-                            channel_publication1_token__already_exist: true,
+                            channel_publication1_token___already_exist: true,
                             ..Default::default()
                         }
                     }
                     ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark__AlreadyExist => {
                         ChannelPublication1Mark_Create_Precedent {
-                            channel_publication1_mark__already_exist: true,
+                            channel_publication1_mark___already_exist: true,
                             ..Default::default()
                         }
                     }
