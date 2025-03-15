@@ -98,18 +98,16 @@ impl CommandProcessor<ResolveIncompliteState> {
     }
     fn resolve_incomplite_state<'a>(environment_configuration: &'a EnvironmentConfiguration<ResolveIncompliteState>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
-
-
-
-            // TODO УДалять из БД состояние с вышедшим сроком экспирации:
+            // --------------------------------------------------------------------------
+            // TODO УДалять с вышедшим сроком экспирации (expires_at) (удалять очень редно, так как нет индекса на поле, по которому будет идти поиск кандидатов.)
             // UserRegistrationToken
             // UserAuthorizationToken
             // UserResetPasswordToken
-            // user_access_refresh_token   - удалять очень редно, так как нет индекса на поле, по которому будет идти поиск кандидатов.
-
-
-
-
+            // UserAccessRefreshToken
+            // ------------------------------------------------------------------------------
+            // ------------------------------------------------------------------------------
+            // TODO Удалять ChannelPublication1 по can_be_deleted_from и зависимые сущности. Комментарии, Лайки, и т.п
+            // ------------------------------------------------------------------------------
             return Result::Ok(());
         };
     }
