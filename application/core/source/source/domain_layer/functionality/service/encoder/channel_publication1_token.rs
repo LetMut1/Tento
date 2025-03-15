@@ -27,12 +27,14 @@ impl Encoder<ChannelPublication1Token> {
         private_key: &'static PrivateKey,
         user__id: i64,
         channel_publication1__id: i64,
+        channel_publication1__obfuscation_value: i64,
         channel_publication1_token__expires_at: i64,
     ) -> Result<ChannelPublication1TokenSigned, AggregateError> {
         let serialized = Serializer::<BitCode>::serialize(
             &Data {
                 user__id,
                 channel_publication1__id,
+                channel_publication1__obfuscation_value,
                 channel_publication1_token__expires_at,
             },
         )?;
@@ -42,6 +44,7 @@ impl Encoder<ChannelPublication1Token> {
         )?;
         return Result::Ok(
             ChannelPublication1TokenSigned {
+                channel_publication1__obfuscation_value,
                 channel_publication1_token__expires_at,
                 signature,
             },
@@ -59,6 +62,7 @@ impl Encoder<ChannelPublication1Token> {
                 &Data {
                     user__id,
                     channel_publication1__id,
+                    channel_publication1__obfuscation_value: user_access_token_signed.channel_publication1__obfuscation_value,
                     channel_publication1_token__expires_at: user_access_token_signed.channel_publication1_token__expires_at,
                 },
             )?
@@ -75,5 +79,6 @@ impl Encoder<ChannelPublication1Token> {
 struct Data {
     user__id: i64,
     channel_publication1__id: i64,
+    channel_publication1__obfuscation_value: i64,
     channel_publication1_token__expires_at: i64,
 }

@@ -497,6 +497,7 @@ pub struct ChannelTokenHashed {
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
 pub struct ChannelPublication1TokenSigned {
+    pub channel_publication1__obfuscation_value: c_long,
     pub channel_publication1_token__expires_at: c_long,
     pub signature: CVector<c_uchar>,
 }
@@ -3241,6 +3242,7 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                                     channel_publication1__created_at: data__.channel_publication1__created_at,
                                     channel_publication1_mark__created_at,
                                     channel_publication1_token_signed: ChannelPublication1TokenSigned {
+                                        channel_publication1__obfuscation_value: data__.channel_publication1_token_signed.channel_publication1__obfuscation_value,
                                         channel_publication1_token__expires_at: data__.channel_publication1_token_signed.channel_publication1_token__expires_at,
                                         signature: Allocator::<CVector<_>>::allocate(data__.channel_publication1_token_signed.signature),
                                     },
@@ -3530,6 +3532,7 @@ pub extern "C-unwind" fn channel_publication1_mark__create__serialize_allocate(i
                 },
                 channel_publication1__id: incoming_.channel_publication1__id,
                 channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
+                    channel_publication1__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1__obfuscation_value,
                     channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
                     signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
                 }
@@ -4449,6 +4452,7 @@ mod test {
                     },
                     channel_publication1__id: 0,
                     channel_publication1_token_signed: ChannelPublication1TokenSigned {
+                        channel_publication1__obfuscation_value: 0,
                         channel_publication1_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     }
@@ -5592,6 +5596,7 @@ mod test {
                         channel_publication1__created_at: 0,
                         channel_publication1_mark__created_at: Option::Some(0),
                         channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
+                            channel_publication1__obfuscation_value: 0,
                             channel_publication1_token__expires_at: 0,
                             signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         }

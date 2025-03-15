@@ -30,6 +30,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         text_,\
                         marks_quantity,\
                         viewing_quantity,\
+                        obfuscation_value,\
                         created_at,\
                         is_predeleted,\
                         can_be_deleted_from\
@@ -42,11 +43,12 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         $5,\
                         $6,\
                         $7,\
-                        $8\
+                        $8,\
+                        $9\
                     )\
                 RETURNING \
                     u.id AS i;";
-            let mut parameter_storage = ParameterStorage::new(8);
+            let mut parameter_storage = ParameterStorage::new(9);
             parameter_storage
                 .add(
                     &insert.channel__id,
@@ -66,6 +68,10 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 )
                 .add(
                     &insert.channel_publication1__viewing_quantity,
+                    Type::INT8,
+                )
+                .add(
+                    &insert.channel_publication1__obfuscation_value,
                     Type::INT8,
                 )
                 .add(
@@ -199,6 +205,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     cp1.text_ AS t,\
                     cp1.marks_quantity AS mq,\
                     cp1.viewing_quantity AS vq,\
+                    cp1.obfuscation_value AS ov,\
                     cp1.created_at AS ca1,\
                     cp1m.created_at AS ca2 \
                 FROM \
@@ -303,6 +310,7 @@ pub struct Insert<'a, 'b> {
     pub channel_publication1__text: Option<&'a str>,
     pub channel_publication1__marks_quantity: i64,
     pub channel_publication1__viewing_quantity: i64,
+    pub channel_publication1__obfuscation_value: i64,
     pub channel_publication1__created_at: i64,
     pub channel_publication1__is_predeleted: bool,
     pub channel_publication1__can_be_deleted_from: i64,

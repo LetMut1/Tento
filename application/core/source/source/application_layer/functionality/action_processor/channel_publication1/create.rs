@@ -15,12 +15,14 @@ use {
                     ChannelPublication1,
                     ChannelPublication1_ImagesPathes,
                     ChannelPublication1_Text,
+                    ChannelPublication1_ObfuscationValue,
                 },
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
                 encoder::Encoder,
                 validator::Validator,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
@@ -101,6 +103,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                     channel_publication1__text: incoming.channel_publication1__text,
                     channel_publication1__marks_quantity: 0,
                     channel_publication1__viewing_quantity: 0,
+                    channel_publication1__obfuscation_value: Generator::<ChannelPublication1_ObfuscationValue>::generate(),
                     channel_publication1__created_at,
                     channel_publication1__is_predeleted: false,
                     channel_publication1__can_be_deleted_from: 0
