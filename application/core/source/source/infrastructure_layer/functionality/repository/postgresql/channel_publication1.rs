@@ -144,19 +144,25 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 UPDATE ONLY \
                     public.channel_publication1 AS cp1 \
                 SET (\
-                    is_predeleted\
+                    is_predeleted,\
+                    can_be_deleted_from\
                 ) = ROW(\
-                    $1\
+                    $1,\
+                    $2\
                 ) \
                 WHERE \
-                    cp1.id = $2 \
+                    cp1.id = $3 \
                 RETURNING \
                     true AS _;";
-            let mut parameter_storage = ParameterStorage::new(2);
+            let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
                     &update.channel_publication1__is_predeleted,
                     Type::BOOL,
+                )
+                .add(
+                    &update.channel_publication1__can_be_deleted_from,
+                    Type::INT8,
                 )
                 .add(
                     &by.channel_publication1__id,
@@ -303,6 +309,7 @@ pub struct Insert<'a, 'b> {
 }
 pub struct Update {
     pub channel_publication1__is_predeleted: bool,
+    pub channel_publication1__can_be_deleted_from: i64,
 }
 pub struct By1 {
     pub channel_publication1__id: i64,

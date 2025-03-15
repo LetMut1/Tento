@@ -11,12 +11,14 @@ use {
                 channel_publication1::{
                     ChannelPublication1,
                     ChannelPublication1_Id,
+                    ChannelPublication1_CanBeDeletedFrom,
                 },
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
                 encoder::Encoder,
                 validator::Validator,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
@@ -61,7 +63,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
             }
             if !Validator::<ChannelPublication1_Id>::is_valid(incoming.channel_publication1__id) {
@@ -100,6 +103,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
                 &postgresql_database_3_client,
                 ChannelPublication1Update {
                     channel_publication1__is_predeleted: true,
+                    channel_publication1__can_be_deleted_from: Generator::<ChannelPublication1_CanBeDeletedFrom>::generate(now)?,
                 },
                 ChannelPublication1By1 {
                     channel_publication1__id: incoming.channel_publication1__id,

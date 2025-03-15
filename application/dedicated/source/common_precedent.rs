@@ -45,7 +45,7 @@ macro_rules! enum_from {
             $(
                 let _ = move |r#enum: $enum| -> () {
                     match r#enum {
-                        $enum :: $enum_variant => (),
+                        $enum::$enum_variant => (),
                         _ => (),
                     }
                 };
