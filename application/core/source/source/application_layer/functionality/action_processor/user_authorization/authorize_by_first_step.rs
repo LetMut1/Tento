@@ -96,7 +96,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 .await?
                 {
                     Option::Some(values) => values,
-                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword)),
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User__WrongEmailOrNicknameOrPassword)),
                 };
                 (
                     user__id,
@@ -115,7 +115,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                     .await?
                     {
                         Option::Some(values) => values,
-                        Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword)),
+                        Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User__WrongEmailOrNicknameOrPassword)),
                     };
                     (
                         user__id,
@@ -144,7 +144,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 },
             );
             if !crate::result_return_runtime!(is_valid_join_handle.await)? {
-                return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword));
+                return Result::Ok(UnifiedReport::precedent(Precedent::User__WrongEmailOrNicknameOrPassword));
             }
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);

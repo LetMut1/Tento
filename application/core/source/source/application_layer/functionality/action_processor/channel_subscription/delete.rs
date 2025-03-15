@@ -64,7 +64,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
@@ -79,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
             )
             .await?
             {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscription_NotFound));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscription__NotFound));
             }
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_database_3_client,

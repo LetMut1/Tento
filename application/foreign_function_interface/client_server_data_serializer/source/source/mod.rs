@@ -575,7 +575,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserializ
                 precedent,
             } => {
                 match precedent {
-                    UserAuthorization_AuthorizeByFirstStep_Precedent_::User_WrongEmailOrNicknameOrPassword => {}
+                    UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword => {}
                 };
                 let precedent_ = UserAuthorization_AuthorizeByFirstStep_Precedent {
                     user__wrong_email_or_nickname_or_password: true,
@@ -634,12 +634,12 @@ pub struct UserAuthorization_AuthorizeByLastStep_Outcoming {
 pub struct UserAuthorization_AuthorizeByLastStep_Precedent {
     pub user_authorization_token__not_found: bool,
     pub user_authorization_token__already_expired: bool,
-    pub user_authorization_token__wrong_value: UserAuthorizationToken_WrongValue,
+    pub user_authorization_token__wrong_value: UserAuthorizationToken__WrongValue,
     pub user__not_found: bool,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct UserAuthorizationToken_WrongValue {
+pub struct UserAuthorizationToken__WrongValue {
     pub is_exist: bool,
     pub user_authorization_token__wrong_enter_tries_quantity: c_short,
 }
@@ -680,30 +680,30 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_AlreadyExpired => {
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__AlreadyExpired => {
                         UserAuthorization_AuthorizeByLastStep_Precedent {
                             user_authorization_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_NotFound => {
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__NotFound => {
                         UserAuthorization_AuthorizeByLastStep_Precedent {
                             user_authorization_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_WrongValue {
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__WrongValue {
                         user_authorization_token__wrong_enter_tries_quantity,
                     } => {
                         UserAuthorization_AuthorizeByLastStep_Precedent {
-                            user_authorization_token__wrong_value: UserAuthorizationToken_WrongValue {
+                            user_authorization_token__wrong_value: UserAuthorizationToken__WrongValue {
                                 is_exist: true,
                                 user_authorization_token__wrong_enter_tries_quantity,
                             },
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::User_NotFound => {
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::User__NotFound => {
                         UserAuthorization_AuthorizeByLastStep_Precedent {
                             user__not_found: true,
                             ..Default::default()
@@ -898,7 +898,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deser
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired => {
+                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken__AlreadyExpired => {
                         UserAuthorization_DeauthorizeFromAllDevices_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
@@ -967,7 +967,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deseri
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired => {
+                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken__AlreadyExpired => {
                         UserAuthorization_DeauthorizeFromOneDevice_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
@@ -1073,13 +1073,13 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_AlreadyExpired => {
+                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__AlreadyExpired => {
                         UserAuthorization_RefreshAccessToken_Precedent {
                             user_access_refresh_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_NotFound => {
+                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__NotFound => {
                         UserAuthorization_RefreshAccessToken_Precedent {
                             user_access_refresh_token__not_found: true,
                             ..Default::default()
@@ -1176,7 +1176,7 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize
                 precedent,
             } => {
                 match precedent {
-                    UserAuthorization_RegisterByFirstStep_Precedent_::User_EmailAlreadyExist => {}
+                    UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist => {}
                 };
                 let precedent_ = UserAuthorization_RegisterByFirstStep_Precedent {
                     user__email_already_exist: true,
@@ -1230,11 +1230,11 @@ pub struct UserAuthorization_RegisterBySecondStep_Precedent {
     pub user_registration_token__not_found: bool,
     pub user_registration_token__already_expired: bool,
     pub user_registration_token__already_approved: bool,
-    pub user_registration_token__wrong_value: UserRegistrationToken_WrongValue,
+    pub user_registration_token__wrong_value: UserRegistrationToken__WrongValue,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct UserRegistrationToken_WrongValue {
+pub struct UserRegistrationToken__WrongValue {
     pub is_exist: bool,
     pub user_registration_token__wrong_enter_tries_quantity: c_short,
 }
@@ -1245,27 +1245,27 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__deserializ
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_NotFound => {
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__NotFound => {
                         UserAuthorization_RegisterBySecondStep_Precedent {
                             user_registration_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyExpired => {
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyExpired => {
                         UserAuthorization_RegisterBySecondStep_Precedent {
                             user_registration_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyApproved => {
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyApproved => {
                         UserAuthorization_RegisterBySecondStep_Precedent {
                             user_registration_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_WrongValue { user_registration_token__wrong_enter_tries_quantity } => {
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__WrongValue { user_registration_token__wrong_enter_tries_quantity } => {
                         UserAuthorization_RegisterBySecondStep_Precedent {
-                            user_registration_token__wrong_value: UserRegistrationToken_WrongValue {
+                            user_registration_token__wrong_value: UserRegistrationToken__WrongValue {
                                 is_exist: true,
                                 user_registration_token__wrong_enter_tries_quantity,
                             },
@@ -1373,37 +1373,37 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_RegisterByLastStep_Precedent_::User_NicknameAlreadyExist => {
+                    UserAuthorization_RegisterByLastStep_Precedent_::User__NicknameAlreadyExist => {
                         UserAuthorization_RegisterByLastStep_Precedent {
                             user__nickname_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterByLastStep_Precedent_::User_EmailAlreadyExist => {
+                    UserAuthorization_RegisterByLastStep_Precedent_::User__EmailAlreadyExist => {
                         UserAuthorization_RegisterByLastStep_Precedent {
                             user__email_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_NotFound => {
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__NotFound => {
                         UserAuthorization_RegisterByLastStep_Precedent {
                             user_registration_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_AlreadyExpired => {
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__AlreadyExpired => {
                         UserAuthorization_RegisterByLastStep_Precedent {
                             user_registration_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_IsNotApproved => {
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__IsNotApproved => {
                         UserAuthorization_RegisterByLastStep_Precedent {
                             user_registration_token__is_not_approved: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_WrongValue => {
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__WrongValue => {
                         UserAuthorization_RegisterByLastStep_Precedent {
                             user_registration_token__wrong_value: true,
                             ..Default::default()
@@ -1508,7 +1508,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deser
                 precedent,
             } => {
                 match precedent {
-                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::User_NotFound => {}
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound => {}
                 };
                 let precedent_ = UserAuthorization_ResetPasswordByFirstStep_Precedent {
                     user__not_found: true,
@@ -1565,11 +1565,11 @@ pub struct UserAuthorization_ResetPasswordBySecondStep_Precedent {
     pub user_reset_password_token__not_found: bool,
     pub user_reset_password_token__already_expired: bool,
     pub user_reset_password_token__already_approved: bool,
-    pub user_reset_password_token__wrong_value: UserResetPasswordToken_WrongValue,
+    pub user_reset_password_token__wrong_value: UserResetPasswordToken__WrongValue,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct UserResetPasswordToken_WrongValue {
+pub struct UserResetPasswordToken__WrongValue {
     pub is_exist: bool,
     pub user_reset_password_token__wrong_enter_tries_quantity: c_short,
 }
@@ -1582,27 +1582,27 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__dese
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_NotFound => {
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__NotFound => {
                         UserAuthorization_ResetPasswordBySecondStep_Precedent {
                             user_reset_password_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyExpired => {
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__AlreadyExpired => {
                         UserAuthorization_ResetPasswordBySecondStep_Precedent {
                             user_reset_password_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyApproved => {
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__AlreadyApproved => {
                         UserAuthorization_ResetPasswordBySecondStep_Precedent {
                             user_reset_password_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_WrongValue { user_reset_password_token__wrong_enter_tries_quantity } => {
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__WrongValue { user_reset_password_token__wrong_enter_tries_quantity } => {
                         UserAuthorization_ResetPasswordBySecondStep_Precedent {
-                            user_reset_password_token__wrong_value: UserResetPasswordToken_WrongValue {
+                            user_reset_password_token__wrong_value: UserResetPasswordToken__WrongValue {
                                 is_exist: true,
                                 user_reset_password_token__wrong_enter_tries_quantity,
                             },
@@ -1676,31 +1676,31 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deseri
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::User_NotFound => {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::User__NotFound => {
                         UserAuthorization_ResetPasswordByLastStep_Precedent {
                             user__not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_NotFound => {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__NotFound => {
                         UserAuthorization_ResetPasswordByLastStep_Precedent {
                             user_reset_password_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_AlreadyExpired => {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__AlreadyExpired => {
                         UserAuthorization_ResetPasswordByLastStep_Precedent {
                             user_reset_password_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_IsNotApproved => {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__IsNotApproved => {
                         UserAuthorization_ResetPasswordByLastStep_Precedent {
                             user_reset_password_token__is_not_approved: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_WrongValue => {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__WrongValue => {
                         UserAuthorization_ResetPasswordByLastStep_Precedent {
                             user_reset_password_token__wrong_value: true,
                             ..Default::default()
@@ -1788,25 +1788,25 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__deserializ
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_NotFound => {
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__NotFound => {
                         UserAuthorization_SendEmailForRegister_Precedent {
                             user_registration_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyExpired => {
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyExpired => {
                         UserAuthorization_SendEmailForRegister_Precedent {
                             user_registration_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyApproved => {
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyApproved => {
                         UserAuthorization_SendEmailForRegister_Precedent {
                             user_registration_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_TimeToResendHasNotCome => {
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__TimeToResendHasNotCome => {
                         UserAuthorization_SendEmailForRegister_Precedent {
                             user_registration_token__time_to_resend_has_not_come: true,
                             ..Default::default()
@@ -1898,25 +1898,25 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deseriali
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::User_NotFound => {
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::User__NotFound => {
                         UserAuthorization_SendEmailForAuthorize_Precedent {
                             user__not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_NotFound => {
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__NotFound => {
                         UserAuthorization_SendEmailForAuthorize_Precedent {
                             user_authorization_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_AlreadyExpired => {
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__AlreadyExpired => {
                         UserAuthorization_SendEmailForAuthorize_Precedent {
                             user_authorization_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_TimeToResendHasNotCome => {
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__TimeToResendHasNotCome => {
                         UserAuthorization_SendEmailForAuthorize_Precedent {
                             user_authorization_token__time_to_resend_has_not_come: true,
                             ..Default::default()
@@ -2011,31 +2011,31 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::User_NotFound => {
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::User__NotFound => {
                         UserAuthorization_SendEmailForResetPassword_Precedent {
                             user__not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_NotFound => {
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__NotFound => {
                         UserAuthorization_SendEmailForResetPassword_Precedent {
                             user_reset_password_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyExpired => {
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyExpired => {
                         UserAuthorization_SendEmailForResetPassword_Precedent {
                             user_reset_password_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyApproved => {
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyApproved => {
                         UserAuthorization_SendEmailForResetPassword_Precedent {
                             user_reset_password_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_TimeToResendHasNotCome => {
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__TimeToResendHasNotCome => {
                         UserAuthorization_SendEmailForResetPassword_Precedent {
                             user_reset_password_token__time_to_resend_has_not_come: true,
                             ..Default::default()
@@ -2168,7 +2168,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired => {
+                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_GetManyByNameInSubscriptions_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
@@ -2313,7 +2313,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired => {
+                    Channel_GetManyBySubscription_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_GetManyBySubscription_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
@@ -2471,7 +2471,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired => {
+                    Channel_GetManyPublicByName_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_GetManyPublicByName_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
@@ -2627,31 +2627,31 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired => {
+                    Channel_GetOneById_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_GetOneById_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Channel_GetOneById_Precedent_::Channel_NotFound => {
+                    Channel_GetOneById_Precedent_::Channel__NotFound => {
                         Channel_GetOneById_Precedent {
                             channel__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Channel_GetOneById_Precedent_::Channel_IsClose => {
+                    Channel_GetOneById_Precedent_::Channel__IsClose => {
                         Channel_GetOneById_Precedent {
                             channel__is_close: true,
                             ..Default::default()
                         }
                     }
-                    Channel_GetOneById_Precedent_::ChannelToken_NotFound => {
+                    Channel_GetOneById_Precedent_::ChannelToken__NotFound => {
                         Channel_GetOneById_Precedent {
                             channel_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Channel_GetOneById_Precedent_::ChannelToken_AlreadyExpired => {
+                    Channel_GetOneById_Precedent_::ChannelToken__AlreadyExpired => {
                         Channel_GetOneById_Precedent {
                             channel_token__already_expired: true,
                             ..Default::default()
@@ -2751,7 +2751,7 @@ pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Channel_CheckNameForExisting_Precedent_::UserAccessToken_AlreadyExpired => {
+                    Channel_CheckNameForExisting_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_CheckNameForExisting_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
@@ -2837,7 +2837,7 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_al
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_AlreadyExpired => {
+                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_CheckLinkedNameForExisting_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
@@ -2931,19 +2931,19 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Channel_Create_Precedent_::UserAccessToken_AlreadyExpired => {
+                    Channel_Create_Precedent_::UserAccessToken__AlreadyExpired => {
                         Channel_Create_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Channel_Create_Precedent_::Channel_NameAlreadyExist => {
+                    Channel_Create_Precedent_::Channel__NameAlreadyExist => {
                         Channel_Create_Precedent {
                             channel__name_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    Channel_Create_Precedent_::Channel_LinkedNameAlreadyExist => {
+                    Channel_Create_Precedent_::Channel__LinkedNameAlreadyExist => {
                         Channel_Create_Precedent {
                             channel__linked_name_already_exist: true,
                             ..Default::default()
@@ -3019,37 +3019,37 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired => {
+                    ChannelSubscription_Create_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelSubscription_Create_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ChannelSubscription_Create_Precedent_::Channel_NotFound => {
+                    ChannelSubscription_Create_Precedent_::Channel__NotFound => {
                         ChannelSubscription_Create_Precedent {
                             channel__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ChannelSubscription_Create_Precedent_::Channel_IsClose => {
+                    ChannelSubscription_Create_Precedent_::Channel__IsClose => {
                         ChannelSubscription_Create_Precedent {
                             channel__is_close: true,
                             ..Default::default()
                         }
                     }
-                    ChannelSubscription_Create_Precedent_::User_IsChannelOwner => {
+                    ChannelSubscription_Create_Precedent_::User__IsChannelOwner => {
                         ChannelSubscription_Create_Precedent {
                             user__is_channel__owner: true,
                             ..Default::default()
                         }
                     }
-                    ChannelSubscription_Create_Precedent_::ChannelSubscription_AlreadyExist => {
+                    ChannelSubscription_Create_Precedent_::ChannelSubscription__AlreadyExist => {
                         ChannelSubscription_Create_Precedent {
                             channel_subscription_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken_AlreadyExpired => {
+                    ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken__AlreadyExpired => {
                         ChannelSubscription_Create_Precedent {
                             channel_subscription_token__already_expired: true,
                             ..Default::default()
@@ -3116,13 +3116,13 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_ve
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelSubscription_Delete_Precedent_::UserAccessToken_AlreadyExpired => {
+                    ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelSubscription_Delete_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ChannelSubscription_Delete_Precedent_::ChannelSubscription_NotFound => {
+                    ChannelSubscription_Delete_Precedent_::ChannelSubscription__NotFound => {
                         ChannelSubscription_Delete_Precedent {
                             channel_subscription__not_found: true,
                             ..Default::default()
@@ -3259,19 +3259,19 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
             },
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1_GetMany_Precedent_::UserAccessToken_AlreadyExpired => {
+                    ChannelPublication1_GetMany_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelPublication1_GetMany_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1_GetMany_Precedent_::Channel_NotFound => {
+                    ChannelPublication1_GetMany_Precedent_::Channel__NotFound => {
                         ChannelPublication1_GetMany_Precedent {
                             channel__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1_GetMany_Precedent_::Channel_IsClose => {
+                    ChannelPublication1_GetMany_Precedent_::Channel__IsClose => {
                         ChannelPublication1_GetMany_Precedent {
                             channel__is_close: true,
                             ..Default::default()
@@ -3391,19 +3391,19 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_ve
             },
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1_Create_Precedent_::UserAccessToken_AlreadyExpired => {
+                    ChannelPublication1_Create_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelPublication1_Create_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1_Create_Precedent_::Channel_NotFound => {
+                    ChannelPublication1_Create_Precedent_::Channel__NotFound => {
                         ChannelPublication1_Create_Precedent {
                             channel__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1_Create_Precedent_::User_IsNotChannelOwner => {
+                    ChannelPublication1_Create_Precedent_::User__IsNotChannelOwner => {
                         ChannelPublication1_Create_Precedent {
                             user__is_not_channel_owner: true,
                             ..Default::default()
@@ -3472,25 +3472,25 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_ve
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1_Delete_Precedent_::UserAccessToken_AlreadyExpired => {
+                    ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelPublication1_Delete_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1_Delete_Precedent_::User_IsNotChannelOwner => {
+                    ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner => {
                         ChannelPublication1_Delete_Precedent {
                             user__is_not_channel_owner: true,
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1_Delete_Precedent_::ChannelPublication1_NotFound => {
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__NotFound => {
                         ChannelPublication1_Delete_Precedent {
                             channel_publication1__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1_Delete_Precedent_::ChannelPublication1_IsAlreadyDeleted=> {
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted=> {
                         ChannelPublication1_Delete_Precedent {
                             channel_publication1__is_already_deleted: true,
                             ..Default::default()
@@ -3564,19 +3564,19 @@ pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1Mark_Create_Precedent_::UserAccessToken_AlreadyExpired => {
+                    ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelPublication1Mark_Create_Precedent {
                             user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token_AlreadyExist => {
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExist => {
                         ChannelPublication1Mark_Create_Precedent {
                             channel_publication1_token__already_exist: true,
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark_AlreadyExist => {
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark__AlreadyExist => {
                         ChannelPublication1Mark_Create_Precedent {
                             channel_publication1_mark__already_exist: true,
                             ..Default::default()
@@ -4524,10 +4524,10 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_AuthorizeByFirstStep_Precedent_::User_WrongEmailOrNicknameOrPassword {
-                    UserAuthorization_AuthorizeByFirstStep_Precedent_::User_WrongEmailOrNicknameOrPassword => {}
+                match UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword {
+                    UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword => {}
                 }
-                let precedent = UserAuthorization_AuthorizeByFirstStep_Precedent_::User_WrongEmailOrNicknameOrPassword;
+                let precedent = UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword;
                 let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming_, UserAuthorization_AuthorizeByFirstStep_Precedent_>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
@@ -4573,21 +4573,21 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_NotFound {
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_NotFound => {}
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_AlreadyExpired => {}
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_WrongValue {
+                match UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__NotFound {
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__NotFound => {}
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__AlreadyExpired => {}
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__WrongValue {
                         user_authorization_token__wrong_enter_tries_quantity: _,
                     } => {}
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::User_NotFound => {}
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::User__NotFound => {}
                 }
                 let precedents: Vec<UserAuthorization_AuthorizeByLastStep_Precedent_> = vec![
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_NotFound,
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_AlreadyExpired,
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken_WrongValue {
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__NotFound,
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__AlreadyExpired,
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__WrongValue {
                         user_authorization_token__wrong_enter_tries_quantity: 0,
                     },
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::User_NotFound
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::User__NotFound
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__authorize_by_last_step(precedent)?;
@@ -4660,11 +4660,11 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired {
-                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired => {}
+                match UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken__AlreadyExpired {
+                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken__AlreadyExpired => {}
                 }
                 let precedents: Vec<UserAuthorization_DeauthorizeFromAllDevices_Precedent_> = vec![
-                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken_AlreadyExpired,
+                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__deauthorize_from_all_devices(precedent)?;
@@ -4693,11 +4693,11 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired {
-                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired => {}
+                match UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken__AlreadyExpired {
+                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken__AlreadyExpired => {}
                 }
                 let precedents: Vec<UserAuthorization_DeauthorizeFromOneDevice_Precedent_> = vec![
-                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken_AlreadyExpired,
+                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__deauthorize_from_one_device(precedent)?;
@@ -4742,13 +4742,13 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_NotFound {
-                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_NotFound => {}
-                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_AlreadyExpired => {}
+                match UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__NotFound {
+                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__NotFound => {}
+                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__AlreadyExpired => {}
                 }
                 let precedents: Vec<UserAuthorization_RefreshAccessToken_Precedent_> = vec![
-                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_NotFound,
-                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken_AlreadyExpired,
+                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__NotFound,
+                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__refresh_access_token(precedent)?;
@@ -4778,10 +4778,10 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_RegisterByFirstStep_Precedent_::User_EmailAlreadyExist {
-                    UserAuthorization_RegisterByFirstStep_Precedent_::User_EmailAlreadyExist => {}
+                match UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist {
+                    UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist => {}
                 }
-                let precedent = UserAuthorization_RegisterByFirstStep_Precedent_::User_EmailAlreadyExist;
+                let precedent = UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist;
                 let unified_report = UnifiedReport::<UserAuthorization_RegisterByFirstStep_Outcoming_, UserAuthorization_RegisterByFirstStep_Precedent_>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
@@ -4809,20 +4809,20 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_NotFound {
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_NotFound => {}
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyExpired => {}
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyApproved => {}
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_WrongValue {
+                match UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__NotFound {
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__NotFound => {}
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyExpired => {}
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyApproved => {}
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__WrongValue {
                         user_registration_token__wrong_enter_tries_quantity: _,
                     } => {}
                 }
                 let precedents: Vec<UserAuthorization_RegisterBySecondStep_Precedent_> = vec![
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_NotFound,
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyExpired,
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_AlreadyApproved,
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__NotFound,
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyExpired,
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyApproved,
 
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken_WrongValue {
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__WrongValue {
                         user_registration_token__wrong_enter_tries_quantity: 0,
                     },
                 ];
@@ -4869,21 +4869,21 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_RegisterByLastStep_Precedent_::User_NicknameAlreadyExist {
-                    UserAuthorization_RegisterByLastStep_Precedent_::User_NicknameAlreadyExist => {}
-                    UserAuthorization_RegisterByLastStep_Precedent_::User_EmailAlreadyExist => {}
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_NotFound => {}
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_AlreadyExpired => {}
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_IsNotApproved => {}
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_WrongValue => {}
+                match UserAuthorization_RegisterByLastStep_Precedent_::User__NicknameAlreadyExist {
+                    UserAuthorization_RegisterByLastStep_Precedent_::User__NicknameAlreadyExist => {}
+                    UserAuthorization_RegisterByLastStep_Precedent_::User__EmailAlreadyExist => {}
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__NotFound => {}
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__AlreadyExpired => {}
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__IsNotApproved => {}
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__WrongValue => {}
                 }
                 let precedents: Vec<UserAuthorization_RegisterByLastStep_Precedent_> = vec![
-                    UserAuthorization_RegisterByLastStep_Precedent_::User_NicknameAlreadyExist,
-                    UserAuthorization_RegisterByLastStep_Precedent_::User_EmailAlreadyExist,
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_NotFound,
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_AlreadyExpired,
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_IsNotApproved,
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken_WrongValue,
+                    UserAuthorization_RegisterByLastStep_Precedent_::User__NicknameAlreadyExist,
+                    UserAuthorization_RegisterByLastStep_Precedent_::User__EmailAlreadyExist,
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__NotFound,
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__AlreadyExpired,
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__IsNotApproved,
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__WrongValue,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__register_by_last_step(precedent)?;
@@ -4915,10 +4915,10 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_ResetPasswordByFirstStep_Precedent_::User_NotFound {
-                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::User_NotFound => {}
+                match UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound {
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound => {}
                 }
-                let precedent = UserAuthorization_ResetPasswordByFirstStep_Precedent_::User_NotFound;
+                let precedent = UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound;
                 let unified_report =
                     UnifiedReport::<UserAuthorization_ResetPasswordByFirstStep_Outcoming_, UserAuthorization_ResetPasswordByFirstStep_Precedent_>::precedent(precedent);
                 return run_by_template(
@@ -4949,19 +4949,19 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_NotFound {
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_NotFound => {}
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyExpired => {}
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyApproved => {}
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_WrongValue {
+                match UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__NotFound {
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__NotFound => {}
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__AlreadyExpired => {}
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__AlreadyApproved => {}
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__WrongValue {
                         user_reset_password_token__wrong_enter_tries_quantity: _,
                     } => {}
                 }
                 let precedents: Vec<UserAuthorization_ResetPasswordBySecondStep_Precedent_> = vec![
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_NotFound,
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyExpired,
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_AlreadyApproved,
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken_WrongValue {
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__NotFound,
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__AlreadyExpired,
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__AlreadyApproved,
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__WrongValue {
                         user_reset_password_token__wrong_enter_tries_quantity: 0,
                     },
                 ];
@@ -4992,19 +4992,19 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_ResetPasswordByLastStep_Precedent_::User_NotFound {
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::User_NotFound => {}
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_NotFound => {}
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_AlreadyExpired => {}
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_IsNotApproved => {}
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_WrongValue => {}
+                match UserAuthorization_ResetPasswordByLastStep_Precedent_::User__NotFound {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::User__NotFound => {}
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__NotFound => {}
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__AlreadyExpired => {}
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__IsNotApproved => {}
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__WrongValue => {}
                 }
                 let precedents: Vec<UserAuthorization_ResetPasswordByLastStep_Precedent_> = vec![
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::User_NotFound,
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_NotFound,
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_AlreadyExpired,
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_IsNotApproved,
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken_WrongValue,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::User__NotFound,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__NotFound,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__AlreadyExpired,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__IsNotApproved,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__WrongValue,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__reset_password_by_last_step(precedent)?;
@@ -5040,17 +5040,17 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_NotFound {
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_NotFound => {}
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyExpired => {}
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyApproved => {}
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_TimeToResendHasNotCome => {}
+                match UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__NotFound {
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__NotFound => {}
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyExpired => {}
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyApproved => {}
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__TimeToResendHasNotCome => {}
                 }
                 let precedents: Vec<UserAuthorization_SendEmailForRegister_Precedent_> = vec![
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_NotFound,
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyExpired,
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_AlreadyApproved,
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken_TimeToResendHasNotCome
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__NotFound,
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyExpired,
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyApproved,
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__TimeToResendHasNotCome
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_register(precedent)?;
@@ -5086,17 +5086,17 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_SendEmailForAuthorize_Precedent_::User_NotFound {
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::User_NotFound => {}
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_NotFound => {}
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_AlreadyExpired => {}
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_TimeToResendHasNotCome => {}
+                match UserAuthorization_SendEmailForAuthorize_Precedent_::User__NotFound {
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::User__NotFound => {}
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__NotFound => {}
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__AlreadyExpired => {}
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__TimeToResendHasNotCome => {}
                 }
                 let precedents: Vec<UserAuthorization_SendEmailForAuthorize_Precedent_> = vec![
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::User_NotFound,
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_NotFound,
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_AlreadyExpired,
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken_TimeToResendHasNotCome,
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::User__NotFound,
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__NotFound,
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__AlreadyExpired,
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__TimeToResendHasNotCome,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_authorize(precedent)?;
@@ -5136,19 +5136,19 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_SendEmailForResetPassword_Precedent_::User_NotFound {
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::User_NotFound => {}
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_NotFound => {}
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyExpired => {}
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyApproved => {}
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_TimeToResendHasNotCome => {}
+                match UserAuthorization_SendEmailForResetPassword_Precedent_::User__NotFound {
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::User__NotFound => {}
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__NotFound => {}
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyExpired => {}
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyApproved => {}
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__TimeToResendHasNotCome => {}
                 }
                 let precedents: Vec<UserAuthorization_SendEmailForResetPassword_Precedent_> = vec![
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::User_NotFound,
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_NotFound,
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyExpired,
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_AlreadyApproved,
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken_TimeToResendHasNotCome,
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::User__NotFound,
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__NotFound,
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyExpired,
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyApproved,
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__TimeToResendHasNotCome,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_reset_password(precedent)?;
@@ -5196,11 +5196,11 @@ mod test {
                 );
             }
             pub fn precedent__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired {
-                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired => {}
+                match Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken__AlreadyExpired {
+                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken__AlreadyExpired => {}
                 }
                 let precedents: Vec<Channel_GetManyByNameInSubscriptions_Precedent_> = vec![
-                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken_AlreadyExpired,
+                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_by_name_in_subscriptions(precedent)?;
@@ -5248,11 +5248,11 @@ mod test {
                 );
             }
             pub fn precedent__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired {
-                    Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired => {}
+                match Channel_GetManyBySubscription_Precedent_::UserAccessToken__AlreadyExpired {
+                    Channel_GetManyBySubscription_Precedent_::UserAccessToken__AlreadyExpired => {}
                 }
                 let precedents: Vec<Channel_GetManyBySubscription_Precedent_> = vec![
-                    Channel_GetManyBySubscription_Precedent_::UserAccessToken_AlreadyExpired,
+                    Channel_GetManyBySubscription_Precedent_::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_by_subscription(precedent)?;
@@ -5305,11 +5305,11 @@ mod test {
                 );
             }
             pub fn precedent__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired {
-                    Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired => {}
+                match Channel_GetManyPublicByName_Precedent_::UserAccessToken__AlreadyExpired {
+                    Channel_GetManyPublicByName_Precedent_::UserAccessToken__AlreadyExpired => {}
                 }
                 let precedents: Vec<Channel_GetManyPublicByName_Precedent_> = vec![
-                    Channel_GetManyPublicByName_Precedent_::UserAccessToken_AlreadyExpired,
+                    Channel_GetManyPublicByName_Precedent_::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_public_by_name(precedent)?;
@@ -5359,19 +5359,19 @@ mod test {
                 );
             }
             pub fn precedent__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired {
-                    Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    Channel_GetOneById_Precedent_::Channel_NotFound => {}
-                    Channel_GetOneById_Precedent_::Channel_IsClose => {}
-                    Channel_GetOneById_Precedent_::ChannelToken_NotFound => {}
-                    Channel_GetOneById_Precedent_::ChannelToken_AlreadyExpired => {}
+                match Channel_GetOneById_Precedent_::UserAccessToken__AlreadyExpired {
+                    Channel_GetOneById_Precedent_::UserAccessToken__AlreadyExpired => {}
+                    Channel_GetOneById_Precedent_::Channel__NotFound => {}
+                    Channel_GetOneById_Precedent_::Channel__IsClose => {}
+                    Channel_GetOneById_Precedent_::ChannelToken__NotFound => {}
+                    Channel_GetOneById_Precedent_::ChannelToken__AlreadyExpired => {}
                 }
                 let precedents: Vec<Channel_GetOneById_Precedent_> = vec![
-                    Channel_GetOneById_Precedent_::UserAccessToken_AlreadyExpired,
-                    Channel_GetOneById_Precedent_::Channel_NotFound,
-                    Channel_GetOneById_Precedent_::Channel_IsClose,
-                    Channel_GetOneById_Precedent_::ChannelToken_NotFound,
-                    Channel_GetOneById_Precedent_::ChannelToken_AlreadyExpired,
+                    Channel_GetOneById_Precedent_::UserAccessToken__AlreadyExpired,
+                    Channel_GetOneById_Precedent_::Channel__NotFound,
+                    Channel_GetOneById_Precedent_::Channel__IsClose,
+                    Channel_GetOneById_Precedent_::ChannelToken__NotFound,
+                    Channel_GetOneById_Precedent_::ChannelToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_one_by_id(precedent)?;
@@ -5406,11 +5406,11 @@ mod test {
                 );
             }
             pub fn precedent__channel__check_name_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_CheckNameForExisting_Precedent_::UserAccessToken_AlreadyExpired {
-                    Channel_CheckNameForExisting_Precedent_::UserAccessToken_AlreadyExpired => {}
+                match Channel_CheckNameForExisting_Precedent_::UserAccessToken__AlreadyExpired {
+                    Channel_CheckNameForExisting_Precedent_::UserAccessToken__AlreadyExpired => {}
                 }
                 let precedents: Vec<Channel_CheckNameForExisting_Precedent_> = vec![
-                    Channel_CheckNameForExisting_Precedent_::UserAccessToken_AlreadyExpired,
+                    Channel_CheckNameForExisting_Precedent_::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__check_name_for_existing(precedent)?;
@@ -5445,11 +5445,11 @@ mod test {
                 );
             }
             pub fn precedent__channel__check_linked_name_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_AlreadyExpired {
-                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_AlreadyExpired => {}
+                match Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken__AlreadyExpired {
+                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken__AlreadyExpired => {}
                 }
                 let precedents: Vec<Channel_CheckLinkedNameForExisting_Precedent_> = vec![
-                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken_AlreadyExpired,
+                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__check_linked_name_for_existing(precedent)?;
@@ -5484,15 +5484,15 @@ mod test {
                 );
             }
             pub fn precedent__channel__create() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_Create_Precedent_::UserAccessToken_AlreadyExpired {
-                    Channel_Create_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    Channel_Create_Precedent_::Channel_NameAlreadyExist => {}
-                    Channel_Create_Precedent_::Channel_LinkedNameAlreadyExist => {}
+                match Channel_Create_Precedent_::UserAccessToken__AlreadyExpired {
+                    Channel_Create_Precedent_::UserAccessToken__AlreadyExpired => {}
+                    Channel_Create_Precedent_::Channel__NameAlreadyExist => {}
+                    Channel_Create_Precedent_::Channel__LinkedNameAlreadyExist => {}
                 }
                 let precedents: Vec<Channel_Create_Precedent_> = vec![
-                    Channel_Create_Precedent_::UserAccessToken_AlreadyExpired,
-                    Channel_Create_Precedent_::Channel_NameAlreadyExist,
-                    Channel_Create_Precedent_::Channel_LinkedNameAlreadyExist,
+                    Channel_Create_Precedent_::UserAccessToken__AlreadyExpired,
+                    Channel_Create_Precedent_::Channel__NameAlreadyExist,
+                    Channel_Create_Precedent_::Channel__LinkedNameAlreadyExist,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__create(precedent)?;
@@ -5519,20 +5519,20 @@ mod test {
                 );
             }
             pub fn precedent__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired {
-                    ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    ChannelSubscription_Create_Precedent_::Channel_NotFound => {}
-                    ChannelSubscription_Create_Precedent_::Channel_IsClose => {}
-                    ChannelSubscription_Create_Precedent_::User_IsChannelOwner => {}
-                    ChannelSubscription_Create_Precedent_::ChannelSubscription_AlreadyExist => {}
-                    ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken_AlreadyExpired => {}
+                match ChannelSubscription_Create_Precedent_::UserAccessToken__AlreadyExpired {
+                    ChannelSubscription_Create_Precedent_::UserAccessToken__AlreadyExpired => {}
+                    ChannelSubscription_Create_Precedent_::Channel__NotFound => {}
+                    ChannelSubscription_Create_Precedent_::Channel__IsClose => {}
+                    ChannelSubscription_Create_Precedent_::User__IsChannelOwner => {}
+                    ChannelSubscription_Create_Precedent_::ChannelSubscription__AlreadyExist => {}
+                    ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken__AlreadyExpired => {}
                 }
                 let precedents: Vec<ChannelSubscription_Create_Precedent_> = vec![
-                    ChannelSubscription_Create_Precedent_::UserAccessToken_AlreadyExpired,
-                    ChannelSubscription_Create_Precedent_::Channel_NotFound,
-                    ChannelSubscription_Create_Precedent_::Channel_IsClose,
-                    ChannelSubscription_Create_Precedent_::User_IsChannelOwner,
-                    ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken_AlreadyExpired,
+                    ChannelSubscription_Create_Precedent_::UserAccessToken__AlreadyExpired,
+                    ChannelSubscription_Create_Precedent_::Channel__NotFound,
+                    ChannelSubscription_Create_Precedent_::Channel__IsClose,
+                    ChannelSubscription_Create_Precedent_::User__IsChannelOwner,
+                    ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_subscription__create(precedent)?;
@@ -5559,13 +5559,13 @@ mod test {
                 );
             }
             pub fn precedent__channel_subscription__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelSubscription_Delete_Precedent_::UserAccessToken_AlreadyExpired {
-                    ChannelSubscription_Delete_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    ChannelSubscription_Delete_Precedent_::ChannelSubscription_NotFound => {}
+                match ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired {
+                    ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired => {}
+                    ChannelSubscription_Delete_Precedent_::ChannelSubscription__NotFound => {}
                 }
                 let precedents: Vec<ChannelSubscription_Delete_Precedent_> = vec![
-                    ChannelSubscription_Delete_Precedent_::UserAccessToken_AlreadyExpired,
-                    ChannelSubscription_Delete_Precedent_::ChannelSubscription_NotFound,
+                    ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired,
+                    ChannelSubscription_Delete_Precedent_::ChannelSubscription__NotFound,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_subscription__delete(precedent)?;
@@ -5622,15 +5622,15 @@ mod test {
                 );
             }
             pub fn precedent__channel_publication1__get_many() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1_GetMany_Precedent_::UserAccessToken_AlreadyExpired {
-                    ChannelPublication1_GetMany_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    ChannelPublication1_GetMany_Precedent_::Channel_NotFound => {}
-                    ChannelPublication1_GetMany_Precedent_::Channel_IsClose => {}
+                match ChannelPublication1_GetMany_Precedent_::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1_GetMany_Precedent_::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1_GetMany_Precedent_::Channel__NotFound => {}
+                    ChannelPublication1_GetMany_Precedent_::Channel__IsClose => {}
                 }
                 let precedents: Vec<ChannelPublication1_GetMany_Precedent_> = vec![
-                    ChannelPublication1_GetMany_Precedent_::UserAccessToken_AlreadyExpired,
-                    ChannelPublication1_GetMany_Precedent_::Channel_NotFound,
-                    ChannelPublication1_GetMany_Precedent_::Channel_IsClose,
+                    ChannelPublication1_GetMany_Precedent_::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1_GetMany_Precedent_::Channel__NotFound,
+                    ChannelPublication1_GetMany_Precedent_::Channel__IsClose,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__get_many(precedent)?;
@@ -5666,15 +5666,15 @@ mod test {
                 );
             }
             pub fn precedent__channel_publication1__create() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1_Create_Precedent_::UserAccessToken_AlreadyExpired {
-                    ChannelPublication1_Create_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    ChannelPublication1_Create_Precedent_::Channel_NotFound => {}
-                    ChannelPublication1_Create_Precedent_::User_IsNotChannelOwner => {}
+                match ChannelPublication1_Create_Precedent_::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1_Create_Precedent_::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1_Create_Precedent_::Channel__NotFound => {}
+                    ChannelPublication1_Create_Precedent_::User__IsNotChannelOwner => {}
                 }
                 let precedents: Vec<ChannelPublication1_Create_Precedent_> = vec![
-                    ChannelPublication1_Create_Precedent_::UserAccessToken_AlreadyExpired,
-                    ChannelPublication1_Create_Precedent_::Channel_NotFound,
-                    ChannelPublication1_Create_Precedent_::User_IsNotChannelOwner,
+                    ChannelPublication1_Create_Precedent_::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1_Create_Precedent_::Channel__NotFound,
+                    ChannelPublication1_Create_Precedent_::User__IsNotChannelOwner,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__create(precedent)?;
@@ -5701,17 +5701,17 @@ mod test {
                 );
             }
             pub fn precedent__channel_publication1__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1_Delete_Precedent_::UserAccessToken_AlreadyExpired {
-                    ChannelPublication1_Delete_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    ChannelPublication1_Delete_Precedent_::User_IsNotChannelOwner => {}
-                    ChannelPublication1_Delete_Precedent_::ChannelPublication1_NotFound => {}
-                    ChannelPublication1_Delete_Precedent_::ChannelPublication1_IsAlreadyDeleted => {}
+                match ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner => {}
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__NotFound => {}
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted => {}
                 }
                 let precedents: Vec<ChannelPublication1_Delete_Precedent_> = vec![
-                    ChannelPublication1_Delete_Precedent_::UserAccessToken_AlreadyExpired,
-                    ChannelPublication1_Delete_Precedent_::User_IsNotChannelOwner,
-                    ChannelPublication1_Delete_Precedent_::ChannelPublication1_NotFound,
-                    ChannelPublication1_Delete_Precedent_::ChannelPublication1_IsAlreadyDeleted,
+                    ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner,
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__NotFound,
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__delete(precedent)?;
@@ -5738,15 +5738,15 @@ mod test {
                 );
             }
             pub fn precedent__channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1Mark_Create_Precedent_::UserAccessToken_AlreadyExpired {
-                    ChannelPublication1Mark_Create_Precedent_::UserAccessToken_AlreadyExpired => {}
-                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token_AlreadyExist => {}
-                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark_AlreadyExist => {}
+                match ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExist => {}
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark__AlreadyExist => {}
                 }
                 let precedents: Vec<ChannelPublication1Mark_Create_Precedent_> = vec![
-                    ChannelPublication1Mark_Create_Precedent_::UserAccessToken_AlreadyExpired,
-                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token_AlreadyExist,
-                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark_AlreadyExist,
+                    ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExist,
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark__AlreadyExist,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1_mark__create(precedent)?;

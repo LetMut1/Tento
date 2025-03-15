@@ -27,6 +27,6 @@ pub struct Outcoming {
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
-        CommonPrecedent::User_EmailAlreadyExist,
+        CommonPrecedent::User__EmailAlreadyExist,
     }
 );

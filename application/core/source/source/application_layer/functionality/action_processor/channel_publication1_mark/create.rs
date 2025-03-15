@@ -62,7 +62,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Create> {
             }
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
             if !Validator::<ChannelPublication1_Id>::is_valid(incoming.channel_publication1__id) {
                 return Result::Err(crate::new_invalid_argument!());
@@ -76,7 +76,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Create> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             if incoming.channel_publication1_token_signed.channel_publication1_token__expires_at < now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Token_AlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Token__AlreadyExist));
             }
 
 
@@ -99,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Create> {
                     channel_publication1_mark__created_at: now,
                 }
             ).await? {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Mark_AlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Mark__AlreadyExist));
             }
             return Result::Ok(UnifiedReport::target_empty());
         };

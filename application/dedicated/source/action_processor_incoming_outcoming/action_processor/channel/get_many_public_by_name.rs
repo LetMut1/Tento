@@ -48,6 +48,6 @@ pub struct Outcoming {
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
-        CommonPrecedent::UserAccessToken_AlreadyExpired,
+        CommonPrecedent::UserAccessToken__AlreadyExpired,
     }
 );

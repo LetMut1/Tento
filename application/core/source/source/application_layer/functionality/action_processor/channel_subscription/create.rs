@@ -67,7 +67,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             }
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound)),
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
             };
             if !Encoder::<ChannelSubscriptionToken>::is_valid(
                 incoming.user_access_token_signed.user__id,
@@ -93,13 +93,13 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             if incoming.channel_subscription_token_hashed.channel_subscription_token__expires_at < now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken__AlreadyExpired));
             }
             if incoming.user_access_token_signed.user__id == channel__owner {
-                return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
+                return Result::Ok(UnifiedReport::precedent(Precedent::User__IsChannelOwner));
             }
             if Channel_AccessModifier_::Close as i16 == channel__access_modifier {
-                return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
+                return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));
             }
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_database_3_client,
@@ -124,7 +124,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             };
             if !is_created {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscription_AlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscription__AlreadyExist));
             }
             if let Result::Err(aggregate_error) = Repository::<Postgresql<Channel>>::update_1(
                 transaction.get_client(),

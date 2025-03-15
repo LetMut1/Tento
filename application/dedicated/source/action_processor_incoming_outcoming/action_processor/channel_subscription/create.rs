@@ -19,11 +19,11 @@ pub struct Incoming<'a> {
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
-        CommonPrecedent::UserAccessToken_AlreadyExpired,
-        CommonPrecedent::Channel_NotFound,
-        CommonPrecedent::Channel_IsClose,
-        CommonPrecedent::User_IsChannelOwner,
-        CommonPrecedent::ChannelSubscription_AlreadyExist,
-        CommonPrecedent::ChannelSubscriptionToken_AlreadyExpired,
+        CommonPrecedent::UserAccessToken__AlreadyExpired,
+        CommonPrecedent::Channel__NotFound,
+        CommonPrecedent::Channel__IsClose,
+        CommonPrecedent::User__IsChannelOwner,
+        CommonPrecedent::ChannelSubscription__AlreadyExist,
+        CommonPrecedent::ChannelSubscriptionToken__AlreadyExpired,
     }
 );

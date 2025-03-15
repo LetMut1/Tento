@@ -17,7 +17,7 @@ pub struct Incoming<'a> {
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
-        CommonPrecedent::UserAccessToken_AlreadyExpired,
-        CommonPrecedent::ChannelSubscription_NotFound,
+        CommonPrecedent::UserAccessToken__AlreadyExpired,
+        CommonPrecedent::ChannelSubscription__NotFound,
     }
 );

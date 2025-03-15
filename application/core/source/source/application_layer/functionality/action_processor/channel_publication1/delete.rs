@@ -65,7 +65,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             }
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
             if !Validator::<ChannelPublication1_Id>::is_valid(incoming.channel_publication1__id) {
                 return Result::Err(crate::new_invalid_argument!());
@@ -80,10 +80,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1_NotFound)),
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1__NotFound)),
             };
             if channel_publication1__is_predeleted {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1_IsAlreadyDeleted));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1__IsAlreadyDeleted));
             }
             let channel__owner = match Repository::<Postgresql<Channel>>::find_7(
                 &postgresql_database_3_client,
@@ -94,10 +94,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             .await?
             {
                 Option::Some(channel__owner_) => channel__owner_,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_IsNotChannelOwner)),
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner)),
             };
             if incoming.user_access_token_signed.user__id != channel__owner {
-                return Result::Ok(UnifiedReport::precedent(Precedent::User_IsNotChannelOwner));
+                return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
             Repository::<Postgresql<ChannelPublication1>>::update(
                 &postgresql_database_3_client,

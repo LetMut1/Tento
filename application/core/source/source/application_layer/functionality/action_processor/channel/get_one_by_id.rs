@@ -69,7 +69,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             }
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound)),
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
             };
             if incoming.user_access_token_signed.user__id != channel__owner {
                 match incoming.channel_token_hashed {
@@ -112,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                             return Result::Err(crate::new_invalid_argument!());
                         }
                         if channel_token_hashed.channel_token__expires_at < now {
-                            return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken_AlreadyExpired));
+                            return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__AlreadyExpired));
                         }
                         if channel__access_modifier == Channel_AccessModifier_::Close as i16
                             && !Repository::<Postgresql<ChannelSubscription>>::is_exist(
@@ -124,7 +124,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                             )
                             .await?
                         {
-                            return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
+                            return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));
                         }
                     }
                     Option::None => {
@@ -137,7 +137,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                         )
                         .await?
                         {
-                            return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken_NotFound));
+                            return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__NotFound));
                         }
                     }
                 }

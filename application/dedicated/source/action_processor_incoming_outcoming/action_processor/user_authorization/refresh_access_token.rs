@@ -33,7 +33,7 @@ pub struct Outcoming {
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
-        CommonPrecedent::UserAccessRefreshToken_NotFound,
-        CommonPrecedent::UserAccessRefreshToken_AlreadyExpired,
+        CommonPrecedent::UserAccessRefreshToken__NotFound,
+        CommonPrecedent::UserAccessRefreshToken__AlreadyExpired,
     }
 );

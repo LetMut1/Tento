@@ -28,6 +28,6 @@ pub struct Outcoming {
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
-        CommonPrecedent::User_NotFound,
+        CommonPrecedent::User__NotFound,
     }
 );

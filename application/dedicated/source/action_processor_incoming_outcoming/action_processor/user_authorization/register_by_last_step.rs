@@ -32,11 +32,11 @@ pub struct Outcoming {
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
-        CommonPrecedent::User_NicknameAlreadyExist,
-        CommonPrecedent::User_EmailAlreadyExist,
-        CommonPrecedent::UserRegistrationToken_NotFound,
-        CommonPrecedent::UserRegistrationToken_AlreadyExpired,
-        CommonPrecedent::UserRegistrationToken_IsNotApproved,
-        CommonPrecedent::UserRegistrationToken_WrongValue,
+        CommonPrecedent::User__NicknameAlreadyExist,
+        CommonPrecedent::User__EmailAlreadyExist,
+        CommonPrecedent::UserRegistrationToken__NotFound,
+        CommonPrecedent::UserRegistrationToken__AlreadyExpired,
+        CommonPrecedent::UserRegistrationToken__IsNotApproved,
+        CommonPrecedent::UserRegistrationToken__WrongValue,
     }
 );

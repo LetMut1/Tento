@@ -106,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 .await?
                 {
                     Option::Some(values) => values,
-                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound)),
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken__NotFound)),
                 };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_authorization_token__expires_at <= now {
@@ -118,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken__AlreadyExpired));
             }
             if user_authorization_token__value != incoming.user_authorization_token__value {
                 if user_authorization_token__wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
@@ -145,7 +145,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 }
                 return Result::Ok(
                     UnifiedReport::precedent(
-                        Precedent::UserAuthorizationToken_WrongValue {
+                        Precedent::UserAuthorizationToken__WrongValue {
                             user_authorization_token__wrong_enter_tries_quantity,
                         },
                     ),
@@ -160,7 +160,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             )
             .await?
             {
-                return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
+                return Result::Ok(UnifiedReport::precedent(Precedent::User__NotFound));
             }
             let user_access_token__id = Generator::<UserAccessToken_Id>::generate();
             let user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;

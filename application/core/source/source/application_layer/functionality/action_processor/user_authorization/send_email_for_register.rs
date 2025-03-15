@@ -79,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 .await?
                 {
                     Option::Some(values) => values,
-                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound)),
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__NotFound)),
                 };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_registration_token__expires_at <= now {
@@ -91,13 +91,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__AlreadyExpired));
             }
             if user_registration_token__is_approved {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyApproved));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__AlreadyApproved));
             }
             if user_registration_token__can_be_resent_from > now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_TimeToResendHasNotCome));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__TimeToResendHasNotCome));
             }
             user_registration_token__can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
             Repository::<Postgresql<UserRegistrationToken>>::update_2(

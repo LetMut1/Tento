@@ -118,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 )
                 .await?
                 {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::User_NicknameAlreadyExist));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::User__NicknameAlreadyExist));
                 }
                 if Repository::<Postgresql<User>>::is_exist_2(
                     &postgresql_database_1_client,
@@ -128,7 +128,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 )
                 .await?
                 {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::User_EmailAlreadyExist));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::User__EmailAlreadyExist));
                 }
             }
             let now = Resolver::<UnixTime>::get_now_in_seconds();
@@ -149,7 +149,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 .await?
                 {
                     Option::Some(values) => values,
-                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound)),
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__NotFound)),
                 };
                 if user_registration_token__expires_at <= now {
                     Repository::<Postgresql<UserRegistrationToken>>::delete(
@@ -160,10 +160,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                         },
                     )
                     .await?;
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyExpired));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__AlreadyExpired));
                 }
                 if !user_registration_token__is_approved {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_IsNotApproved));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__IsNotApproved));
                 }
                 if user_registration_token__value != incoming.user_registration_token__value {
                     if user_registration_token__wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
@@ -188,7 +188,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                         )
                         .await?;
                     }
-                    return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_WrongValue));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__WrongValue));
                 }
             }
             let user__password = incoming.user__password.to_string();

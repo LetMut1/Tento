@@ -65,7 +65,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             }
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
             if !Validator::<Channel_Name>::is_valid(incoming.channel__name) {
                 return Result::Err(crate::new_invalid_argument!());
@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             )
             .await?
             {
-                return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NameAlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NameAlreadyExist));
             }
             if Repository::<Postgresql<Channel>>::is_exist_2(
                 &postgresql_database_3_client,
@@ -92,7 +92,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             )
             .await?
             {
-                return Result::Ok(UnifiedReport::precedent(Precedent::Channel_LinkedNameAlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::Channel__LinkedNameAlreadyExist));
             }
             let channel__id = Repository::<Postgresql<Channel>>::create(
                 &postgresql_database_3_client,

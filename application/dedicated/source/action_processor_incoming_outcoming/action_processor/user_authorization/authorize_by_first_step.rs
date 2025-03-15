@@ -29,6 +29,6 @@ pub struct Outcoming {
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
-        CommonPrecedent::User_WrongEmailOrNicknameOrPassword,
+        CommonPrecedent::User__WrongEmailOrNicknameOrPassword,
     }
 );

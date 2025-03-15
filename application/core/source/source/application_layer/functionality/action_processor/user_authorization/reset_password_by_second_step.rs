@@ -77,7 +77,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound)),
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__NotFound)),
             };
             if user_reset_password_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
                 Repository::<Postgresql<UserResetPasswordToken>>::delete(
@@ -88,10 +88,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__AlreadyExpired));
             }
             if user_reset_password_token__is_approved {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyApproved));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__AlreadyApproved));
             }
             if user_reset_password_token__value != incoming.user_reset_password_token__value {
                 if user_reset_password_token__wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
@@ -118,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 }
                 return Result::Ok(
                     UnifiedReport::precedent(
-                        Precedent::UserResetPasswordToken_WrongValue {
+                        Precedent::UserResetPasswordToken__WrongValue {
                             user_reset_password_token__wrong_enter_tries_quantity,
                         },
                     ),

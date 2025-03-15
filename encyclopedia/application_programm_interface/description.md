@@ -66,7 +66,7 @@ struct Incoming {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
+    UserAccessToken__AlreadyExpired,
 }
 ```
  - ## UserAuthorization_DeauthorizeFromAllDevices POST /user_authorization/deauthorize_from_all_devices
@@ -80,7 +80,7 @@ struct Incoming {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
+    UserAccessToken__AlreadyExpired,
 }
 ```
  - ## Channel_CheckLinkedNameForExisting POST /channel/check_linked_name_for_existing
@@ -95,7 +95,7 @@ struct Incoming {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
+    UserAccessToken__AlreadyExpired,
 }
 ```
 ```
@@ -115,7 +115,7 @@ struct Incoming {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
+    UserAccessToken__AlreadyExpired,
 }
 ```
 ```
@@ -138,9 +138,9 @@ struct Incoming {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
-    Channel_NameAlreadyExist,
-    Channel_LinkedNameAlreadyExist,
+    UserAccessToken__AlreadyExpired,
+    Channel__NameAlreadyExist,
+    Channel__LinkedNameAlreadyExist,
 }
 ```
 ```
@@ -188,11 +188,11 @@ struct ChannelSubscriptionTokenHashed {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
-    Channel_NotFound,
-    Channel_IsClose,
-    ChannelToken_NotFound,
-    ChannelToken_AlreadyExpired,
+    UserAccessToken__AlreadyExpired,
+    Channel__NotFound,
+    Channel__IsClose,
+    ChannelToken__NotFound,
+    ChannelToken__AlreadyExpired,
 }
 ```
  - ## Channel_GetManyByNameInSubscriptions POST /channel/get_many_by_name_in_subscriptions
@@ -233,7 +233,7 @@ struct Data {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
+    UserAccessToken__AlreadyExpired,
 }
 ```
  - ## Channel_GetManyBySubscription POST /channel/get_many_by_subscription
@@ -273,7 +273,7 @@ struct Data {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
+    UserAccessToken__AlreadyExpired,
 }
 ```
  - ## Channel_GetManyPublicByName POST /channel/get_many_public_by_name
@@ -319,7 +319,7 @@ struct ChannelTokenHashed {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
+    UserAccessToken__AlreadyExpired,
 }
 ```
  - ## ChannelSubscription_Create POST /channel_subscription/create
@@ -340,12 +340,12 @@ struct ChannelSubscriptionTokenHashed {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
-    Channel_NotFound,
-    Channel_IsClose,
-    User_IsChannelOwner,
-    ChannelSubscription_AlreadyExist,
-    ChannelSubscriptionToken_AlreadyExpired,
+    UserAccessToken__AlreadyExpired,
+    Channel__NotFound,
+    Channel__IsClose,
+    User__IsChannelOwner,
+    ChannelSubscription__AlreadyExist,
+    ChannelSubscriptionToken__AlreadyExpired,
 }
 ```
  - ## ChannelSubscription_Delete POST /channel_subscription/delete
@@ -360,8 +360,8 @@ struct Incoming {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
-    ChannelSubscription_NotFound,
+    UserAccessToken__AlreadyExpired,
+    ChannelSubscription__NotFound,
 }
 ```
  - ## ChannelPublication1_Create POST /channel_publication1/create
@@ -384,9 +384,9 @@ struct Outcoming {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
-    Channel_NotFound,
-    User_IsNotChannelOwner,
+    UserAccessToken__AlreadyExpired,
+    Channel__NotFound,
+    User__IsNotChannelOwner,
 }
 ```
 - ## ChannelPublication1_Delete POST /channel_publication1/delete
@@ -401,10 +401,10 @@ struct Incoming {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
-    User_IsNotChannelOwner,
-    ChannelPublication1_NotFound,
-    ChannelPublication1_IsAlreadyDeleted,
+    UserAccessToken__AlreadyExpired,
+    User__IsNotChannelOwner,
+    ChannelPublication1__NotFound,
+    ChannelPublication1__IsAlreadyDeleted,
 }
 ```
  - ## ChannelPublication1_GetMany POST /channel_publication1/get_many
@@ -450,9 +450,9 @@ struct ChannelPublication1TokenSigned {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
-    Channel_NotFound,
-    Channel_IsClose,
+    UserAccessToken__AlreadyExpired,
+    Channel__NotFound,
+    Channel__IsClose,
 }
 ```
  - ## ChannelPublication1Mark_Create POST /channel_publication1/create
@@ -474,9 +474,9 @@ struct ChannelPublication1TokenSigned {
 ```
 ```
 enum Precedent {
-    UserAccessToken_AlreadyExpired,
-    ChannelPublication1Token_AlreadyExist,
-    ChannelPublication1Mark_AlreadyExist,
+    UserAccessToken__AlreadyExpired,
+    ChannelPublication1Token__AlreadyExist,
+    ChannelPublication1Mark__AlreadyExist,
 }
 ```
 <br/><br/>
@@ -536,7 +536,7 @@ user_registration_token__can_be_resent_from - unixtime after wich it will be all
 ```
 ```
 Precedent {
-    User_EmailAlreadyExist,
+    User__EmailAlreadyExist,
 }
 ```
 - ## UserAuthorization_RegisterBySecondStep POST /user_authorization/register_by_second_step
@@ -552,10 +552,10 @@ struct Incoming {
 ```
 ```
 enum Precedent {
-    UserRegistrationToken_NotFound,
-    UserRegistrationToken_AlreadyExpired,
-    UserRegistrationToken_AlreadyApproved,
-    UserRegistrationToken_WrongValue {
+    UserRegistrationToken__NotFound,
+    UserRegistrationToken__AlreadyExpired,
+    UserRegistrationToken__AlreadyApproved,
+    UserRegistrationToken__WrongValue {
         user_registration_token__wrong_enter_tries_quantity: i16,
     },
 }
@@ -582,12 +582,12 @@ struct Outcoming {
 ```
 ```
 enum Precedent {
-    User_NicknameAlreadyExist,
-    User_EmailAlreadyExist,
-    UserRegistrationToken_NotFound,
-    UserRegistrationToken_AlreadyExpired,
-    UserRegistrationToken_IsNotApproved,
-    UserRegistrationToken_WrongValue,
+    User__NicknameAlreadyExist,
+    User__EmailAlreadyExist,
+    UserRegistrationToken__NotFound,
+    UserRegistrationToken__AlreadyExpired,
+    UserRegistrationToken__IsNotApproved,
+    UserRegistrationToken__WrongValue,
 }
 ```
  - ## UserAuthorization_SendEmailForRegister POST /user_authorization/send_email_for_register
@@ -610,10 +610,10 @@ user_registration_token__can_be_resent_from - unixtime after wich it will be all
 ```
 ```
 enum Precedent {
-    UserRegistrationToken_NotFound,
-    UserRegistrationToken_AlreadyExpired,
-    UserRegistrationToken_AlreadyApproved,
-    UserRegistrationToken_TimeToResendHasNotCome,
+    UserRegistrationToken__NotFound,
+    UserRegistrationToken__AlreadyExpired,
+    UserRegistrationToken__AlreadyApproved,
+    UserRegistrationToken__TimeToResendHasNotCome,
 }
 ```
  - ## UserAuthorization_AuthorizeByFirstStep POST /user_authorization/authorize_by_first_step
@@ -641,7 +641,7 @@ user_authorization_token__can_be_resent_from - unixtime after wich it will be al
 ```
 ```
 enum Precedent {
-    User_WrongEmailOrNicknameOrPassword,
+    User__WrongEmailOrNicknameOrPassword,
 }
 ```
  - ## UserAuthorization_AuthorizeByLastStep POST /user_authorization/authorize_by_last_step
@@ -663,12 +663,12 @@ struct Outcoming {
 ```
 ```
 enum Precedent {
-    UserAuthorizationToken_NotFound,
-    UserAuthorizationToken_AlreadyExpired,
-    UserAuthorizationToken_WrongValue {
+    UserAuthorizationToken__NotFound,
+    UserAuthorizationToken__AlreadyExpired,
+    UserAuthorizationToken__WrongValue {
         user_authorization_token__wrong_enter_tries_quantity: i16,
     },
-    User_NotFound,
+    User__NotFound,
 }
 ```
  - ## UserAuthorization_SendEmailForAuthorize POST /user_authorization/send_email_for_authorize
@@ -688,10 +688,10 @@ struct Outcoming {
 ```
 ```
 enum Precedent {
-    User_NotFound,
-    UserAuthorizationToken_NotFound,
-    UserAuthorizationToken_AlreadyExpired,
-    UserAuthorizationToken_TimeToResendHasNotCome,
+    User__NotFound,
+    UserAuthorizationToken__NotFound,
+    UserAuthorizationToken__AlreadyExpired,
+    UserAuthorizationToken__TimeToResendHasNotCome,
 }
 ```
  - ## UserAuthorization_ResetPasswordByFirstStep POST /user_authorization/reset_password_by_first_step
@@ -715,7 +715,7 @@ struct Outcoming {
 ```
 ```
 enum Precedent {
-    User_NotFound,
+    User__NotFound,
 }
 ```
  - ## UserAuthorization_ResetPasswordBySecondStep POST /user_authorization/reset_password_by_second_step
@@ -731,10 +731,10 @@ struct Incoming {
 ```
 ```
 enum Precedent {
-    UserResetPasswordToken_NotFound,
-    UserResetPasswordToken_AlreadyExpired,
-    UserResetPasswordToken_AlreadyApproved,
-    UserResetPasswordToken_WrongValue {
+    UserResetPasswordToken__NotFound,
+    UserResetPasswordToken__AlreadyExpired,
+    UserResetPasswordToken__AlreadyApproved,
+    UserResetPasswordToken__WrongValue {
         user_reset_password_token__wrong_enter_tries_quantity: i16,
     },
 }
@@ -753,11 +753,11 @@ struct Incoming {
 ```
 ```
 enum Precedent {
-    User_NotFound,
-    UserResetPasswordToken_NotFound,
-    UserResetPasswordToken_AlreadyExpired,
-    UserResetPasswordToken_IsNotApproved,
-    UserResetPasswordToken_WrongValue,
+    User__NotFound,
+    UserResetPasswordToken__NotFound,
+    UserResetPasswordToken__AlreadyExpired,
+    UserResetPasswordToken__IsNotApproved,
+    UserResetPasswordToken__WrongValue,
 }
 ```
  - ## UserAuthorization_SendEmailForResetPassword POST /user_authorization/send_email_for_reset_password
@@ -777,11 +777,11 @@ struct Outcoming {
 ```
 ```
 enum Precedent {
-    User_NotFound,
-    UserResetPasswordToken_NotFound,
-    UserResetPasswordToken_AlreadyExpired,
-    UserResetPasswordToken_AlreadyApproved,
-    UserResetPasswordToken_TimeToResendHasNotCome,
+    User__NotFound,
+    UserResetPasswordToken__NotFound,
+    UserResetPasswordToken__AlreadyExpired,
+    UserResetPasswordToken__AlreadyApproved,
+    UserResetPasswordToken__TimeToResendHasNotCome,
 }
 ```
  - ## UserAuthorization_RefreshAccessToken POST /user_authorization/refresh_access_token
@@ -802,8 +802,8 @@ struct Outcoming {
 ```
 ```
 enum Precedent {
-    UserAccessRefreshToken_NotFound,
-    UserAccessRefreshToken_AlreadyExpired,
+    UserAccessRefreshToken__NotFound,
+    UserAccessRefreshToken__AlreadyExpired,
 }
 ```
 # Parameters validation rule.

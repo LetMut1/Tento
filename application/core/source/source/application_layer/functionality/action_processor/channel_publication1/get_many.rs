@@ -69,7 +69,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
             }
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
@@ -88,11 +88,11 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound)),
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
             };
             if incoming.user_access_token_signed.user__id != channel__owner {
                 if Channel_AccessModifier_::Close as i16 == channel__access_modifier {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));
                 }
             }
             let rows = Repository::<Postgresql<ChannelPublication1>>::find_1(

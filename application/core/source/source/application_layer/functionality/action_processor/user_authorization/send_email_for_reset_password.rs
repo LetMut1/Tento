@@ -80,7 +80,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             .await?
             {
                 Option::Some(user_) => user_,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound)),
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User__NotFound)),
             };
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (
@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             .await?
             {
                 Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound)),
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__NotFound)),
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_reset_password_token__expires_at <= now {
@@ -110,13 +110,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__AlreadyExpired));
             }
             if user_reset_password_token__is_approved {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyApproved));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__AlreadyApproved));
             }
             if user_reset_password_token__can_be_resent_from > now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_TimeToResendHasNotCome));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__TimeToResendHasNotCome));
             }
             user_reset_password_token__can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate(now)?;
             Repository::<Postgresql<UserResetPasswordToken>>::update_2(

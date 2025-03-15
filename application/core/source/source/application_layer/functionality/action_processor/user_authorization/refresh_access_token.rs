@@ -76,7 +76,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 .await?
                 {
                     Option::Some(values) => values,
-                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken_NotFound)),
+                    Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken__NotFound)),
                 };
             let is_valid = Encoder::<UserAccessRefreshToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
@@ -101,7 +101,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken__AlreadyExpired));
             }
             let new___user_access_token__id = Generator::<UserAccessToken_Id>::generate();
             let new___user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;

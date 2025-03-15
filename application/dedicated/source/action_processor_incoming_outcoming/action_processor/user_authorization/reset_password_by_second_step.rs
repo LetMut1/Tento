@@ -14,10 +14,10 @@ pub struct Incoming<'a> {
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
-        CommonPrecedent::UserResetPasswordToken_NotFound,
-        CommonPrecedent::UserResetPasswordToken_AlreadyExpired,
-        CommonPrecedent::UserResetPasswordToken_AlreadyApproved,
-        CommonPrecedent::UserResetPasswordToken_WrongValue {
+        CommonPrecedent::UserResetPasswordToken__NotFound,
+        CommonPrecedent::UserResetPasswordToken__AlreadyExpired,
+        CommonPrecedent::UserResetPasswordToken__AlreadyApproved,
+        CommonPrecedent::UserResetPasswordToken__WrongValue {
             user_reset_password_token__wrong_enter_tries_quantity: i16,
         },
     }

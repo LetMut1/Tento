@@ -14,10 +14,10 @@ pub struct Incoming<'a> {
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
-        CommonPrecedent::UserRegistrationToken_NotFound,
-        CommonPrecedent::UserRegistrationToken_AlreadyExpired,
-        CommonPrecedent::UserRegistrationToken_AlreadyApproved,
-        CommonPrecedent::UserRegistrationToken_WrongValue {
+        CommonPrecedent::UserRegistrationToken__NotFound,
+        CommonPrecedent::UserRegistrationToken__AlreadyExpired,
+        CommonPrecedent::UserRegistrationToken__AlreadyApproved,
+        CommonPrecedent::UserRegistrationToken__WrongValue {
             user_registration_token__wrong_enter_tries_quantity: i16,
         },
     }

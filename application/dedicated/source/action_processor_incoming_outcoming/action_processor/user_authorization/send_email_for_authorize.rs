@@ -24,9 +24,9 @@ pub struct Outcoming {
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
-        CommonPrecedent::User_NotFound,
-        CommonPrecedent::UserAuthorizationToken_NotFound,
-        CommonPrecedent::UserAuthorizationToken_AlreadyExpired,
-        CommonPrecedent::UserAuthorizationToken_TimeToResendHasNotCome,
+        CommonPrecedent::User__NotFound,
+        CommonPrecedent::UserAuthorizationToken__NotFound,
+        CommonPrecedent::UserAuthorizationToken__AlreadyExpired,
+        CommonPrecedent::UserAuthorizationToken__TimeToResendHasNotCome,
     }
 );

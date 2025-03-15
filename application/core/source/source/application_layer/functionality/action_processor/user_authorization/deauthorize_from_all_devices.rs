@@ -54,7 +54,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromAllDe
                 return Result::Err(crate::new_invalid_argument!());
             }
             if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
             Repository::<Postgresql<UserAccessRefreshToken>>::delete_2(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await),
