@@ -1,8 +1,8 @@
 use crate::infrastructure_layer::data::environment_configuration::{
-    Postgresql_,
     Value,
     ValueExist,
 };
+use crate::infrastructure_layer::data::environment_configuration::PostgresqlInner_;
 #[derive(serde::Deserialize)]
 pub struct EnvironmentConfigurationFile {
     pub tokio_runtime: TokioRuntime,
@@ -69,8 +69,14 @@ pub struct Logging {
 }
 #[derive(serde::Deserialize)]
 pub struct Resource {
-    pub postgresql: Postgresql_,
+    pub postgresql: Postgresql,
     pub email_server: EmailServer,
+}
+#[derive(serde::Deserialize)]
+pub struct Postgresql {
+    pub database_1: PostgresqlInner_,
+    pub database_2: PostgresqlInner_,
+    pub database_3: PostgresqlInner_,
 }
 #[derive(serde::Deserialize)]
 pub struct EmailServer {

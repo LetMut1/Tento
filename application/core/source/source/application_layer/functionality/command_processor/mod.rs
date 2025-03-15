@@ -1,12 +1,13 @@
 mod create_fixtures;
-mod remove_incomplite_state;
+mod resolve_incomplite_state;
 mod run_server;
 pub use self::{
     create_fixtures::CreateFixtures,
-    remove_incomplite_state::RemoveIncompliteState,
+    resolve_incomplite_state::ResolveIncompliteState,
     run_server::RunServer,
 };
 use std::marker::PhantomData;
+pub const TOKIO_RUNTIME_CONFUGURATION_ERROR_MESSAGE: &'static str = "Invalid Tokio runtime configuration.";
 pub struct CommandProcessor<S> {
     _subject: PhantomData<S>,
 }

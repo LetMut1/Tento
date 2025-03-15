@@ -1,5 +1,5 @@
-pub use crate::infrastructure_layer::data::environment_configuration::run_server::RunServer;
-use crate::infrastructure_layer::data::environment_configuration::run_server::TokioRuntime;
+pub use crate::infrastructure_layer::data::environment_configuration::resolve_incomplite_state::ResolveIncompliteState;
+use crate::infrastructure_layer::data::environment_configuration::resolve_incomplite_state::TokioRuntime;
 use {
     super::{
         CommandProcessor,
@@ -10,12 +10,8 @@ use {
             aggregate_error::AggregateError,
             environment_configuration::EnvironmentConfiguration,
         },
-        functionality::service::{
-            http_server::HttpServer,
-            loader::Loader,
-        },
+        functionality::service::loader::Loader,
     },
-    std::sync::OnceLock,
     tokio::runtime::{
         Builder as RuntimeBuilder,
         Runtime,
@@ -27,19 +23,19 @@ use {
         WorkerGuard,
     },
     tracing_subscriber::FmtSubscriber,
+    std::future::Future,
 };
 #[cfg(feature = "logging_to_file")]
 use {
-    crate::infrastructure_layer::data::environment_configuration::run_server::Logging,
+    crate::infrastructure_layer::data::environment_configuration::resolve_incomplite_state::Logging,
     tracing_appender::rolling::{
         RollingFileAppender,
         Rotation,
     },
 };
-static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration<RunServer>> = OnceLock::new();
-impl CommandProcessor<RunServer> {
+impl CommandProcessor<ResolveIncompliteState> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
-        let environment_configuration = Self::initialize_environment(environment_configuration_file_path)?;
+        let environment_configuration = Loader::<EnvironmentConfiguration<ResolveIncompliteState>>::load_from_file(environment_configuration_file_path)?;
         let _worker_guard = {
             #[cfg(feature = "logging_to_file")]
             {
@@ -51,20 +47,8 @@ impl CommandProcessor<RunServer> {
             }
         };
         let runtime = Self::initialize_runtime(&environment_configuration.subject.tokio_runtime)?;
-        runtime.block_on(HttpServer::run(environment_configuration))?;
+        runtime.block_on(Self::resolve_incomplite_state(&environment_configuration))?;
         return Result::Ok(());
-    }
-    fn initialize_environment<'a>(environment_configuration_file_path: &'a str) -> Result<&'static EnvironmentConfiguration<RunServer>, AggregateError> {
-        let environment_configuration = Loader::<EnvironmentConfiguration<RunServer>>::load_from_file(environment_configuration_file_path)?;
-        return match ENVIRONMENT_CONFIGURATION.get() {
-            Option::Some(environment_configuration__) => Result::Ok(environment_configuration__),
-            Option::None => {
-                if ENVIRONMENT_CONFIGURATION.set(environment_configuration).is_err() {
-                    return Result::Err(crate::new_logic_value_already_exist!());
-                }
-                crate::option_into_logic_value_does_not_exist!(ENVIRONMENT_CONFIGURATION.get())
-            }
-        };
     }
     #[cfg(feature = "logging_to_file")]
     fn initialize_logging_to_fileger<'a>(logging: &'a Logging) -> Result<WorkerGuard, AggregateError> {
@@ -111,5 +95,22 @@ impl CommandProcessor<RunServer> {
             .enable_all()
             .build()
         );
+    }
+    fn resolve_incomplite_state<'a>(environment_configuration: &'a EnvironmentConfiguration<ResolveIncompliteState>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+        return async move {
+
+
+
+            // TODO УДалять из БД состояние с вышедшим сроком экспирации:
+            // UserRegistrationToken
+            // UserAuthorizationToken
+            // UserResetPasswordToken
+            // user_access_refresh_token   - удалять очень редно, так как нет индекса на поле, по которому будет идти поиск кандидатов.
+
+
+
+
+            return Result::Ok(());
+        };
     }
 }

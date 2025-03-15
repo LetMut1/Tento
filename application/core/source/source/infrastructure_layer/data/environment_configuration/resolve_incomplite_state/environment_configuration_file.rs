@@ -1,0 +1,31 @@
+use crate::infrastructure_layer::data::environment_configuration::Value;
+use crate::infrastructure_layer::data::environment_configuration::PostgresqlInner_;
+#[derive(serde::Deserialize)]
+pub struct EnvironmentConfigurationFile {
+    pub tokio_runtime: TokioRuntime,
+    #[cfg(feature = "logging_to_file")]
+    pub logging: Logging,
+    pub resource: Resource,
+}
+#[derive(serde::Deserialize)]
+pub struct TokioRuntime {
+    pub maximum_blocking_threads_quantity: Value<usize>,
+    pub worker_threads_quantity: Value<usize>,
+    pub worker_thread_stack_size: Value<usize>,
+}
+#[cfg(feature = "logging_to_file")]
+#[derive(serde::Deserialize)]
+pub struct Logging {
+    pub directory_path: Value<String>,
+    pub file_name_prefix: Value<String>,
+}
+#[derive(serde::Deserialize)]
+pub struct Resource {
+    pub postgresql: Postgresql,
+}
+#[derive(serde::Deserialize)]
+pub struct Postgresql {
+    pub database_1: PostgresqlInner_,
+    pub database_2: PostgresqlInner_,
+    pub database_3: PostgresqlInner_,
+}

@@ -1,7 +1,7 @@
 mod environment_configuration_file;
 pub use self::environment_configuration_file::EnvironmentConfigurationFile;
 use {
-    super::Postgresql,
+    super::PostgresqlInner,
     std::net::SocketAddr,
 };
 pub struct RunServer {
@@ -60,6 +60,11 @@ pub struct Logging {
 pub struct Resource {
     pub postgresql: Postgresql,
     pub email_server: EmailServer,
+}
+pub struct Postgresql {
+    pub database_1: PostgresqlInner,
+    pub database_2: PostgresqlInner,
+    pub database_3: PostgresqlInner,
 }
 pub struct EmailServer {
     pub socket_address: SocketAddr,
