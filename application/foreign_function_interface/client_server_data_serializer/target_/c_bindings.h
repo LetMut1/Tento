@@ -719,10 +719,11 @@ typedef struct CVector_c_short {
   size_t length;
 } CVector_c_short;
 
-typedef struct ChannelSubscriptionTokenHashed {
+typedef struct ChannelSubscriptionTokenSigned {
+  long channel__obfuscation_value;
   long channel_subscription_token__expires_at;
-  unsigned long hash;
-} ChannelSubscriptionTokenHashed;
+  struct CVector_c_uchar signature;
+} ChannelSubscriptionTokenSigned;
 
 typedef struct Channel_GetOneById_Outcoming {
   struct CString channel__name;
@@ -737,7 +738,7 @@ typedef struct Channel_GetOneById_Outcoming {
   long channel__marks_quantity;
   long channel__viewing_quantity;
   bool user_is_channel_owner;
-  struct ChannelSubscriptionTokenHashed channel_subscription_token_hashed;
+  struct ChannelSubscriptionTokenSigned channel_subscription_token_signed;
 } Channel_GetOneById_Outcoming;
 
 typedef struct CData_Channel_GetOneById_Outcoming {
@@ -867,7 +868,7 @@ typedef struct CResult_CUnifiedReport_Channel_Create_Outcoming__Channel_Create_P
 typedef struct ChannelSubscription_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   long channel__id;
-  struct ChannelSubscriptionTokenHashed channel_subscription_token_hashed;
+  struct ChannelSubscriptionTokenSigned channel_subscription_token_signed;
 } ChannelSubscription_Create_Incoming;
 
 typedef struct ChannelSubscription_Create_Precedent {

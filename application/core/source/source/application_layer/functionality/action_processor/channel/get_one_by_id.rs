@@ -155,7 +155,8 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 channel__marks_quantity,
                 channel__viewing_quantity,
                 user_is_channel_owner: incoming.user_access_token_signed.user__id == channel__owner,
-                channel_subscription_token_hashed: Encoder::<ChannelSubscriptionToken>::encode(
+                channel_subscription_token_signed: Encoder::<ChannelSubscriptionToken>::encode(
+                    &inner.environment_configuration.subject.encryption.private_key,
                     incoming.user_access_token_signed.user__id,
                     incoming.channel__id,
                     channel__obfuscation_value,

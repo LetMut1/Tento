@@ -85,14 +85,14 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
             };
             if !Encoder::<ChannelSubscriptionToken>::is_valid(
+                &inner.environment_configuration.subject.encryption.private_key,
                 incoming.user_access_token_signed.user__id,
                 incoming.channel__id,
-                channel__obfuscation_value,
-                &incoming.channel_subscription_token_hashed,
+                &incoming.channel_subscription_token_signed,
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if incoming.channel_subscription_token_hashed.channel_subscription_token__expires_at < now {
+            if incoming.channel_subscription_token_signed.channel_subscription_token__expires_at < now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken__AlreadyExpired));
             }
             if incoming.user_access_token_signed.user__id == channel__owner {

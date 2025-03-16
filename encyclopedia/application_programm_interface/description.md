@@ -178,12 +178,12 @@ struct Outcoming {
     channel__marks_quantity: i64,
     channel__viewing_quantity: i64,
     user_is_channel_owner: bool,
-    channel_subscription_token_hashed: ChannelSubscriptionTokenHashed,
+    channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
 }
 
-struct ChannelSubscriptionTokenHashed {
+struct ChannelSubscriptionTokenSigned {
     channel_subscription_token__expires_at: i64,
-    hash: u64,
+    signature: Vec<u8>,
 }
 ```
 ```
@@ -330,12 +330,12 @@ Subscribes user to channel.
 struct Incoming {
     user_access_token_signed: <Data standards>
     channel__id: i64,
-    channel_subscription_token_hashed: ChannelSubscriptionTokenHashed,
+    channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
 }
 
-struct ChannelSubscriptionTokenHashed {
+struct ChannelSubscriptionTokenSigned {
     channel_subscription_token__expires_at: i64,
-    hash: u64,
+    signature: Vec<u8>,
 }
 ```
 ```

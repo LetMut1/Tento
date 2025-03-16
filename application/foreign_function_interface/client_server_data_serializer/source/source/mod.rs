@@ -160,7 +160,7 @@ use {
         user_access_refresh_token_signed::UserAccessRefreshTokenSigned as UserAccessRefreshTokenSigned_,
         user_access_token_signed::UserAccessTokenSigned as UserAccessTokenSigned_,
         void::Void,
-        channel_subscription_token_hashed::ChannelSubscriptionTokenHashed as ChannelSubscriptionTokenHashed_,
+        channel_subscription_token_signed::ChannelSubscriptionTokenSigned as ChannelSubscriptionTokenSigned_,
         channel_token_hashed::ChannelTokenHashed as ChannelTokenHashed_,
         channel_publication1_token_signed::ChannelPublication1TokenSigned as ChannelPublication1TokenSigned_,
     },
@@ -484,9 +484,10 @@ pub struct UserAccessRefreshTokenSigned {
 }
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
-pub struct ChannelSubscriptionTokenHashed {
+pub struct ChannelSubscriptionTokenSigned {
+    pub channel__obfuscation_value: c_long,
     pub channel_subscription_token__expires_at: c_long,
-    pub hash: c_ulong,
+    pub signature: CVector<c_uchar>,
 }
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
@@ -2566,7 +2567,7 @@ pub struct Channel_GetOneById_Outcoming {
     pub channel__marks_quantity: c_long,
     pub channel__viewing_quantity: c_long,
     pub user_is_channel_owner: bool,
-    pub channel_subscription_token_hashed: ChannelSubscriptionTokenHashed,
+    pub channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
 
 }
 #[repr(C)]
@@ -2615,9 +2616,10 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                             channel__marks_quantity: data_.channel__marks_quantity,
                             channel__viewing_quantity: data_.channel__viewing_quantity,
                             user_is_channel_owner: data_.user_is_channel_owner,
-                            channel_subscription_token_hashed: ChannelSubscriptionTokenHashed {
-                                channel_subscription_token__expires_at: data_.channel_subscription_token_hashed.channel_subscription_token__expires_at,
-                                hash: data_.channel_subscription_token_hashed.hash,
+                            channel_subscription_token_signed: ChannelSubscriptionTokenSigned {
+                                channel__obfuscation_value: data_.channel_subscription_token_signed.channel__obfuscation_value,
+                                channel_subscription_token__expires_at: data_.channel_subscription_token_signed.channel_subscription_token__expires_at,
+                                signature: Allocator::<CVector<_>>::allocate(data_.channel_subscription_token_signed.signature),
                             },
                         };
                         CData::filled(outcoming)
@@ -2683,6 +2685,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_deallocate(c_result
             Allocator::<CString>::deallocate(c_result.data.target.filled.channel__cover_image_path.data);
         }
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel__orientation);
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_subscription_token_signed.signature);
     }
     return ();
 }
@@ -2969,7 +2972,7 @@ pub extern "C-unwind" fn channel__create__deserialize_deallocate(_c_result: Chan
 pub struct ChannelSubscription_Create_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__id: c_long,
-    pub channel_subscription_token_hashed: ChannelSubscriptionTokenHashed,
+    pub channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__create__serialize_allocate(incoming: ChannelSubscription_Create_Incoming) -> CResult<CVector<c_uchar>> {
@@ -2984,9 +2987,10 @@ pub extern "C-unwind" fn channel_subscription__create__serialize_allocate(incomi
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
-                channel_subscription_token_hashed: ChannelSubscriptionTokenHashed_ {
-                    channel_subscription_token__expires_at: incoming_.channel_subscription_token_hashed.channel_subscription_token__expires_at,
-                    hash: incoming_.channel_subscription_token_hashed.hash,
+                channel_subscription_token_signed: ChannelSubscriptionTokenSigned_ {
+                    channel__obfuscation_value: incoming_.channel_subscription_token_signed.channel__obfuscation_value,
+                    channel_subscription_token__expires_at: incoming_.channel_subscription_token_signed.channel_subscription_token__expires_at,
+                    signature: incoming_.channel_subscription_token_signed.signature.clone_as_vec()?,
                 },
             },
         );
@@ -4322,9 +4326,10 @@ mod test {
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel__id: 0,
-                    channel_subscription_token_hashed: ChannelSubscriptionTokenHashed {
+                    channel_subscription_token_signed: ChannelSubscriptionTokenSigned {
+                        channel__obfuscation_value: 0,
                         channel_subscription_token__expires_at: 0,
-                        hash: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                 };
                 run_by_template(
@@ -4335,6 +4340,7 @@ mod test {
                 Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
                 Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
+                Allocator::<CVector<_>>::deallocate(incoming.channel_subscription_token_signed.signature);
                 return Result::Ok(());
             }
             pub fn channel_subscription__delete() -> Result<(), Box<dyn StdError + 'static>> {
@@ -5338,9 +5344,10 @@ mod test {
                     channel__marks_quantity: 0,
                     channel__viewing_quantity: 0,
                     user_is_channel_owner: true,
-                    channel_subscription_token_hashed: ChannelSubscriptionTokenHashed_ {
+                    channel_subscription_token_signed: ChannelSubscriptionTokenSigned_ {
+                        channel__obfuscation_value: 0,
                         channel_subscription_token__expires_at: 0,
-                        hash: 0,
+                        signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                 };
                 let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>::target_filled(outcoming);

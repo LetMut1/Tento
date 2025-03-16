@@ -54,7 +54,7 @@ impl Encoder<ChannelPublication1Token> {
         private_key: &'static PrivateKey,
         user__id: i64,
         channel_publication1__id: i64,
-        user_access_token_signed: &'a ChannelPublication1TokenSigned
+        channel_publication1_token_signed: &'a ChannelPublication1TokenSigned
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha2_256>::is_valid(
             private_key.channel_publication1_token.as_bytes(),
@@ -62,12 +62,12 @@ impl Encoder<ChannelPublication1Token> {
                 &Data {
                     user__id,
                     channel_publication1__id,
-                    channel_publication1__obfuscation_value: user_access_token_signed.channel_publication1__obfuscation_value,
-                    channel_publication1_token__expires_at: user_access_token_signed.channel_publication1_token__expires_at,
+                    channel_publication1__obfuscation_value: channel_publication1_token_signed.channel_publication1__obfuscation_value,
+                    channel_publication1_token__expires_at: channel_publication1_token_signed.channel_publication1_token__expires_at,
                 },
             )?
             .as_slice(),
-            user_access_token_signed.signature.as_slice(),
+            channel_publication1_token_signed.signature.as_slice(),
         );
     }
 }
