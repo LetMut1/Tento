@@ -83,23 +83,12 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken__AlreadyExpired));
             }
             let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
-            if !Repository::<Postgresql<ChannelSubscription>>::is_exist(
-                &postgresql_database_3_client,
-                ChannelSubscriptionBy {
-                    user__id: incoming.user_access_token_signed.user__id,
-                    channel__id: incoming.channel__id,
-                },
-            )
-            .await?
-            {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscription__NotFound));
-            }
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_database_3_client,
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::delete(
+            let is_deleted = match Repository::<Postgresql<ChannelSubscription>>::delete(
                 transaction.get_client(),
                 ChannelSubscriptionBy {
                     user__id: incoming.user_access_token_signed.user__id,
@@ -108,8 +97,15 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
             )
             .await
             {
+                Result::Ok(is_deleted_) => is_deleted_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
+            };
+            if !is_deleted {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Err(aggregate_error);
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscription__NotFound));
             }
             if let Result::Err(aggregate_error) = Repository::<Postgresql<Channel>>::update_2(
                 transaction.get_client(),
