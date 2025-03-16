@@ -12,8 +12,7 @@ use {
                     Channel_Id,
                 }, channel_publication1::{
                     ChannelPublication1, ChannelPublication1_Id, ChannelPublication1_ImagesPathes, ChannelPublication1_Text
-                }, channel_publication1_mark::ChannelPublication1Mark, user_access_token::UserAccessToken,
-                channel_publication1_token::ChannelPublication1Token,
+                }, channel_publication1_mark::ChannelPublication1Mark, channel_publication1_token::ChannelPublication1Token, user_access_token::UserAccessToken
             },
             functionality::service::{
                 encoder::Encoder, validator::Validator
@@ -24,9 +23,7 @@ use {
             functionality::{
                 repository::{
                     postgresql::{
-                        ChannelBy1,
-                        ChannelPublication1MarkInsert,
-                        Postgresql,
+                        ChannelBy1, ChannelPublication1MarkInsert, IsolationLevel, Postgresql, Resolver as Resolver_, Transaction, ChannelPublication1By1,
                     },
                     Repository,
                 },
@@ -78,29 +75,47 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Create> {
             if incoming.channel_publication1_token_signed.channel_publication1_token__expires_at < now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Token__AlreadyExist));
             }
-
-
-
-
-
-            todo!("транзакция на увелиение лайков, либо бесконечные таски");
-
-
-
-
-
-
-
-            if !Repository::<Postgresql<ChannelPublication1Mark>>::create(
-                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),
+            let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+            let transaction = Resolver_::<Transaction<'_>>::start(
+                &mut postgresql_database_3_client,
+                IsolationLevel::ReadCommitted,
+            )
+            .await?;
+            let is_created = match Repository::<Postgresql<ChannelPublication1Mark>>::create(
+                transaction.get_client(),
                 ChannelPublication1MarkInsert {
                     user__id: incoming.user_access_token_signed.user__id,
                     channel_publication1__id: incoming.channel_publication1__id,
                     channel_publication1_mark__created_at: now,
                 }
-            ).await? {
+            ).await {
+                Result::Ok(is_created_) => is_created_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
+            };
+            if !is_created {
+                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Mark__AlreadyExist));
             }
+            let is_updated = match Repository::<Postgresql<ChannelPublication1>>::update_2(
+                transaction.get_client(),
+                ChannelPublication1By1 {
+                    channel_publication1__id: incoming.channel_publication1__id,
+                }
+            ).await {
+                Result::Ok(is_updated_) => is_updated_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
+            };
+            if !is_updated {
+                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1__NotFound));
+            }
+            Resolver_::<Transaction<'_>>::commit(transaction).await?;
             return Result::Ok(UnifiedReport::target_empty());
         };
     }

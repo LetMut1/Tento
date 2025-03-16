@@ -3573,6 +3573,7 @@ pub struct ChannelPublication1Mark_Create_Precedent {
     pub user_access_token___already_expired: bool,
     pub channel_publication1_token___already_exist: bool,
     pub channel_publication1_mark___already_exist: bool,
+    pub channel_publication1__not_found: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1Mark_Create_CResult {
@@ -3596,6 +3597,12 @@ pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate
                     ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark__AlreadyExist => {
                         ChannelPublication1Mark_Create_Precedent {
                             channel_publication1_mark___already_exist: true,
+                            ..Default::default()
+                        }
+                    }
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1__NotFound => {
+                        ChannelPublication1Mark_Create_Precedent {
+                            channel_publication1__not_found: true,
                             ..Default::default()
                         }
                     }
@@ -5770,11 +5777,13 @@ mod test {
                     ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired => {}
                     ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExist => {}
                     ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark__AlreadyExist => {}
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1__NotFound => {}
                 }
                 let precedents: Vec<ChannelPublication1Mark_Create_Precedent_> = vec![
                     ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired,
                     ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExist,
                     ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark__AlreadyExist,
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1__NotFound,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1_mark__create(precedent)?;

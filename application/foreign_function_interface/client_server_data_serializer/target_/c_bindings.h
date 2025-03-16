@@ -1051,6 +1051,7 @@ typedef struct ChannelPublication1Mark_Create_Precedent {
   bool user_access_token___already_expired;
   bool channel_publication1_token___already_exist;
   bool channel_publication1_mark___already_exist;
+  bool channel_publication1__not_found;
 } ChannelPublication1Mark_Create_Precedent;
 
 typedef struct CUnifiedReport_CVoid__ChannelPublication1Mark_Create_Precedent {
