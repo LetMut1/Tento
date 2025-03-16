@@ -107,8 +107,6 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     channel__cover_image_path: Option::None,
                     channel__background_image_path: Option::None,
                     channel__subscribers_quantity: 0,
-                    channel__marks_quantity: 0,
-                    channel__viewing_quantity: 0,
                     channel__obfuscation_value: Generator::<Channel_ObfuscationValue>::generate(),
                     channel__created_at: now,
                 },

@@ -41,8 +41,6 @@ impl Repository<Postgresql<Channel>> {
                         cover_image_path,\
                         background_image_path,\
                         subscribers_quantity,\
-                        marks_quantity,\
-                        viewing_quantity,\
                         obfuscation_value,\
                         created_at\
                     ) VALUES (\
@@ -58,13 +56,11 @@ impl Repository<Postgresql<Channel>> {
                         $9,\
                         $10,\
                         $11,\
-                        $12,\
-                        $13,\
-                        $14\
+                        $12\
                     ) \
                 RETURNING \
                     c.id AS i;";
-            let mut parameter_storage = ParameterStorage::new(14);
+            let mut parameter_storage = ParameterStorage::new(12);
             parameter_storage
                 .add(
                     &insert.channel__owner,
@@ -104,14 +100,6 @@ impl Repository<Postgresql<Channel>> {
                 )
                 .add(
                     &insert.channel__subscribers_quantity,
-                    Type::INT8,
-                )
-                .add(
-                    &insert.channel__marks_quantity,
-                    Type::INT8,
-                )
-                .add(
-                    &insert.channel__viewing_quantity,
                     Type::INT8,
                 )
                 .add(
@@ -230,8 +218,6 @@ impl Repository<Postgresql<Channel>> {
     // channel__cover_image_path: Option<String>,
     // channel__background_image_path: Option<String>,
     // channel__subscribers_quantity: i64,
-    // channel__marks_quantity: i64,
-    // channel__viewing_quantity: i64,
     // channel__obfuscation_value: i64,
     pub fn find_1<'a>(
         database_3_client: &'a Client,
@@ -248,8 +234,6 @@ impl Repository<Postgresql<Channel>> {
                 Vec<i16>,
                 Option<String>,
                 Option<String>,
-                i64,
-                i64,
                 i64,
                 i64,
             )>,
@@ -270,8 +254,6 @@ impl Repository<Postgresql<Channel>> {
                     c.cover_image_path AS cip,\
                     c.background_image_path AS bip,\
                     c.subscribers_quantity,\
-                    c.marks_quantity AS mq,\
-                    c.viewing_quantity AS vq,\
                     c.obfuscation_value AS ov \
                 FROM \
                     public.channel c \
@@ -315,8 +297,6 @@ impl Repository<Postgresql<Channel>> {
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(8)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(9)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(10)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(11)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(12)),
                     ),
                 ),
             );
@@ -794,8 +774,6 @@ pub struct Insert<'a> {
     pub channel__cover_image_path: Option<&'a str>,
     pub channel__background_image_path: Option<&'a str>,
     pub channel__subscribers_quantity: i64,
-    pub channel__marks_quantity: i64,
-    pub channel__viewing_quantity: i64,
     pub channel__obfuscation_value: i64,
     pub channel__created_at: i64,
 }

@@ -2564,8 +2564,6 @@ pub struct Channel_GetOneById_Outcoming {
     pub channel__cover_image_path: COption<CString>,
     pub channel__background_image_path: COption<CString>,
     pub channel__subscribers_quantity: c_long,
-    pub channel__marks_quantity: c_long,
-    pub channel__viewing_quantity: c_long,
     pub user_is_channel_owner: bool,
     pub channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
 
@@ -2613,8 +2611,6 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                             channel__cover_image_path,
                             channel__background_image_path,
                             channel__subscribers_quantity: data_.channel__subscribers_quantity,
-                            channel__marks_quantity: data_.channel__marks_quantity,
-                            channel__viewing_quantity: data_.channel__viewing_quantity,
                             user_is_channel_owner: data_.user_is_channel_owner,
                             channel_subscription_token_signed: ChannelSubscriptionTokenSigned {
                                 channel__obfuscation_value: data_.channel_subscription_token_signed.channel__obfuscation_value,
@@ -5367,8 +5363,6 @@ mod test {
                     channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                     channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                     channel__subscribers_quantity: 0,
-                    channel__marks_quantity: 0,
-                    channel__viewing_quantity: 0,
                     user_is_channel_owner: true,
                     channel_subscription_token_signed: ChannelSubscriptionTokenSigned_ {
                         channel__obfuscation_value: 0,

@@ -37,8 +37,6 @@ pub struct Outcoming {
     pub channel__cover_image_path: Option<String>,
     pub channel__background_image_path: Option<String>,
     pub channel__subscribers_quantity: i64,
-    pub channel__marks_quantity: i64,
-    pub channel__viewing_quantity: i64,
     pub user_is_channel_owner: bool,
     pub channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
 }

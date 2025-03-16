@@ -735,8 +735,6 @@ typedef struct Channel_GetOneById_Outcoming {
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
   long channel__subscribers_quantity;
-  long channel__marks_quantity;
-  long channel__viewing_quantity;
   bool user_is_channel_owner;
   struct ChannelSubscriptionTokenSigned channel_subscription_token_signed;
 } Channel_GetOneById_Outcoming;

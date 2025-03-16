@@ -25,7 +25,5 @@ pub struct Orientation(PhantomData<Vec<i16>>);
 pub struct CoverImagePath(PhantomData<Option<String>>);
 pub struct BackgroundImagePath(PhantomData<Option<String>>);
 pub struct SubscribersQuantity(PhantomData<i64>);
-pub struct MarksQuantity(PhantomData<i64>);
-pub struct ViewingQuantity(PhantomData<i64>);
 pub struct ObfuscationValue(PhantomData<i64>);
 pub struct CreatedAt(PhantomData<i64>);

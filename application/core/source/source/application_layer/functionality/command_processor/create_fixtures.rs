@@ -241,8 +241,6 @@ impl CommandProcessor<CreateFixtures> {
                                 channel__cover_image_path: Option::Some(STUB),
                                 channel__background_image_path: Option::Some(STUB),
                                 channel__subscribers_quantity: 0,
-                                channel__marks_quantity: 0,
-                                channel__viewing_quantity: 0,
                                 channel__obfuscation_value: Generator::<Channel_ObfuscationValue>::generate(),
                                 channel__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
                             },

@@ -10,8 +10,6 @@ CREATE TABLE public.channel (
     cover_image_path TEXT,
     background_image_path TEXT,
     subscribers_quantity BIGINT,
-    marks_quantity BIGINT,
-    viewing_quantity BIGINT,
     obfuscation_value BIGINT,
     created_at BIGINT
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
@@ -38,8 +36,6 @@ ALTER COLUMN access_modifier SET NOT NULL,
 ALTER COLUMN visability_modifier SET NOT NULL,
 ALTER COLUMN orientation SET NOT NULL,
 ALTER COLUMN subscribers_quantity SET NOT NULL,
-ALTER COLUMN marks_quantity SET NOT NULL,
-ALTER COLUMN viewing_quantity SET NOT NULL,
 ALTER COLUMN obfuscation_value SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT channel_8 PRIMARY KEY USING INDEX channel_2,
