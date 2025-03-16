@@ -152,13 +152,3 @@ FOREIGN KEY УДАЛить все  и делать через флаг из_де
 
 
 Репозиторий, который возвращает bool. Проверить, что везде этот булл обработан.
-
-
-
-
-
-
-
-
-
-ChannelPublication1Token__AlreadyExist -> ChannelPublication1Token__AlreadyExpired.

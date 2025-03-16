@@ -3571,7 +3571,7 @@ type ChannelPublication1Mark_Create_CResult = CResult<CUnifiedReport<CVoid, Chan
 #[derive(Default)]
 pub struct ChannelPublication1Mark_Create_Precedent {
     pub user_access_token___already_expired: bool,
-    pub channel_publication1_token___already_exist: bool,
+    pub channel_publication1_token___already_expired: bool,
     pub channel_publication1_mark___already_exist: bool,
     pub channel_publication1__not_found: bool,
 }
@@ -3588,9 +3588,9 @@ pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExist => {
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExpired => {
                         ChannelPublication1Mark_Create_Precedent {
-                            channel_publication1_token___already_exist: true,
+                            channel_publication1_token___already_expired: true,
                             ..Default::default()
                         }
                     }
@@ -5775,13 +5775,13 @@ mod test {
             pub fn precedent__channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
                 match ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired {
                     ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired => {}
-                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExist => {}
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExpired => {}
                     ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark__AlreadyExist => {}
                     ChannelPublication1Mark_Create_Precedent_::ChannelPublication1__NotFound => {}
                 }
                 let precedents: Vec<ChannelPublication1Mark_Create_Precedent_> = vec![
                     ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired,
-                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExist,
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExpired,
                     ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark__AlreadyExist,
                     ChannelPublication1Mark_Create_Precedent_::ChannelPublication1__NotFound,
                 ];

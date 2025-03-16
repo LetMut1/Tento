@@ -482,7 +482,7 @@ struct ChannelPublication1TokenSigned {
 ```
 enum Precedent {
     UserAccessToken__AlreadyExpired,
-    ChannelPublication1Token__AlreadyExist,
+    ChannelPublication1Token__AlreadyExpired,
     ChannelPublication1Mark__AlreadyExist,
     ChannelPublication1__NotFound,
 }
