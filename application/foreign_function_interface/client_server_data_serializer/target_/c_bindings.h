@@ -38,7 +38,6 @@ typedef struct CData_UserAuthorization_AuthorizeByFirstStep_Outcoming {
 
 typedef struct UserAuthorization_AuthorizeByFirstStep_Precedent {
   bool user___wrong_email_or_nickname_or_password;
-  bool created_in_parallel_execution;
   bool deleted_in_parallel_execution;
 } UserAuthorization_AuthorizeByFirstStep_Precedent;
 
@@ -94,7 +93,6 @@ typedef struct UserAuthorization_AuthorizeByLastStep_Precedent {
   bool user_authorization_token___already_expired;
   struct UserAuthorizationToken__WrongValue user_authorization_token___wrong_value;
   bool user___not_found;
-  bool created_in_parallel_execution;
   bool deleted_in_parallel_execution;
 } UserAuthorization_AuthorizeByLastStep_Precedent;
 
@@ -267,7 +265,6 @@ typedef struct CData_UserAuthorization_RegisterByFirstStep_Outcoming {
 
 typedef struct UserAuthorization_RegisterByFirstStep_Precedent {
   bool user___email_already_exist;
-  bool created_in_parallel_execution;
   bool deleted_in_parallel_execution;
 } UserAuthorization_RegisterByFirstStep_Precedent;
 
@@ -341,7 +338,6 @@ typedef struct UserAuthorization_RegisterByLastStep_Precedent {
   bool user_registration_token___already_expired;
   bool user_registration_token___is_not_approved;
   bool user_registration_token___wrong_value;
-  bool created_in_parallel_execution;
   bool deleted_in_parallel_execution;
 } UserAuthorization_RegisterByLastStep_Precedent;
 
@@ -378,7 +374,6 @@ typedef struct CData_UserAuthorization_ResetPasswordByFirstStep_Outcoming {
 
 typedef struct UserAuthorization_ResetPasswordByFirstStep_Precedent {
   bool user___not_found;
-  bool created_in_parallel_execution;
   bool deleted_in_parallel_execution;
 } UserAuthorization_ResetPasswordByFirstStep_Precedent;
 

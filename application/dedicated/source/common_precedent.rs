@@ -38,7 +38,6 @@ pub enum CommonPrecedent {
     UserResetPasswordToken__NotFound,
     UserResetPasswordToken__TimeToResendHasNotCome,
     UserResetPasswordToken__WrongValue,
-    CreatedInParallelExecution,
     DeletedInParallelExecution,
 }
 macro_rules! enum_from {

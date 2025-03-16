@@ -568,7 +568,6 @@ user_registration_token__can_be_resent_from - unixtime after wich it will be all
 ```
 Precedent {
     User__EmailAlreadyExist,
-    CreatedInParallelExecution,
     DeletedInParallelExecution,
 }
 ```
@@ -622,7 +621,6 @@ enum Precedent {
     UserRegistrationToken__AlreadyExpired,
     UserRegistrationToken__IsNotApproved,
     UserRegistrationToken__WrongValue,
-    CreatedInParallelExecution,
     DeletedInParallelExecution,
 }
 ```
@@ -679,7 +677,6 @@ user_authorization_token__can_be_resent_from - unixtime after wich it will be al
 ```
 enum Precedent {
     User__WrongEmailOrNicknameOrPassword,
-    CreatedInParallelExecution,
     DeletedInParallelExecution,
 }
 ```
@@ -708,7 +705,6 @@ enum Precedent {
         user_authorization_token__wrong_enter_tries_quantity: i16,
     },
     User__NotFound,
-    CreatedInParallelExecution
     DeletedInParallelExecution,
 }
 ```
@@ -758,7 +754,6 @@ struct Outcoming {
 ```
 enum Precedent {
     User__NotFound,
-    CreatedInParallelExecution,
     DeletedInParallelExecution,
 }
 ```

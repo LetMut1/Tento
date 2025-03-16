@@ -234,7 +234,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 };
                 if !is_created {
                     Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                    return Result::Ok(UnifiedReport::precedent(Precedent::CreatedInParallelExecution));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
                 }
             };
             let is_deleted = match Repository::<Postgresql<UserAuthorizationToken>>::delete(

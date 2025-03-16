@@ -258,7 +258,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             },
                         )
                         .await? {
-                            return Result::Ok(UnifiedReport::precedent(Precedent::CreatedInParallelExecution));
+                            return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
                         }
                         (
                             user_authorization_token__value_,
