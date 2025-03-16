@@ -860,6 +860,7 @@ typedef struct Channel_Create_Precedent {
   bool user_access_token___already_expired;
   bool channel___name_already_exist;
   bool channel___linked_name_already_exist;
+  bool parallel_execution;
 } Channel_Create_Precedent;
 
 typedef struct CUnifiedReport_Channel_Create_Outcoming__Channel_Create_Precedent {
@@ -1013,6 +1014,7 @@ typedef struct ChannelPublication1_Create_Precedent {
   bool user_access_token___already_expired;
   bool channel___not_found;
   bool user___is_not_channel_owner;
+  bool parallel_execution;
 } ChannelPublication1_Create_Precedent;
 
 typedef struct CUnifiedReport_ChannelPublication1_Create_Outcoming__ChannelPublication1_Create_Precedent {

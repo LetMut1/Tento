@@ -16,7 +16,7 @@ use {
 };
 impl Repository<Postgresql<User>> {
     // user__id: i64,
-    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1<'a>) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert: Insert1<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -33,6 +33,7 @@ impl Repository<Postgresql<User>> {
                         $3,\
                         $4\
                     ) \
+                ON CONFLICT DO NOTHING \
                 RETURNING \
                     u.id AS i;";
             let mut parameter_storage = ParameterStorage::new(4);
@@ -70,9 +71,13 @@ impl Repository<Postgresql<User>> {
                 .await
             );
             if rows.is_empty() {
-                return Err(crate::new_logic_unreachable_state!());
+                return Result::Ok(Option::None);
             }
-            return Result::Ok(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)));
+            return Result::Ok(
+                Option::Some(
+                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))
+                )
+            );
         };
     }
     pub fn create_2<'a>(database_1_client: &'a Client, insert: Insert2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
@@ -647,7 +652,7 @@ impl Repository<Postgresql<User>> {
                 .await
             );
             if rows.is_empty() {
-                return Err(crate::new_logic_unreachable_state!());
+                return Result::Err(crate::new_logic_unreachable_state!());
             }
             return Result::Ok(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)));
         };

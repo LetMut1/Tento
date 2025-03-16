@@ -95,7 +95,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
             let channel_publication1__created_at = now;
-            let channel_publication1__id = Repository::<Postgresql<ChannelPublication1>>::create(
+            let channel_publication1__id = match Repository::<Postgresql<ChannelPublication1>>::create(
                 &postgresql_database_3_client,
                 ChannelPublication1Insert {
                     channel__id: incoming.channel__id,
@@ -109,7 +109,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                     channel_publication1__can_be_deleted_from: 0
                 },
             )
-            .await?;
+            .await? {
+                Option::Some(channel_publication1__id_) => channel_publication1__id_,
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution)),
+            };
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {

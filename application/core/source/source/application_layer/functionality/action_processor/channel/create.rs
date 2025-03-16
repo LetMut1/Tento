@@ -94,7 +94,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__LinkedNameAlreadyExist));
             }
-            let channel__id = Repository::<Postgresql<Channel>>::create(
+            let channel__id = match Repository::<Postgresql<Channel>>::create(
                 &postgresql_database_3_client,
                 ChannelInsert {
                     channel__owner: incoming.user_access_token_signed.user__id,
@@ -110,8 +110,10 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     channel__obfuscation_value: Generator::<Channel_ObfuscationValue>::generate(),
                     channel__created_at: now,
                 },
-            )
-            .await?;
+            ).await? {
+                Option::Some(channel__id_) => channel__id_,
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution)),
+            };
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {

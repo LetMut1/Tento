@@ -25,7 +25,7 @@ use {
 };
 // channel__id: i64,
 impl Repository<Postgresql<Channel>> {
-    pub fn create<'a>(database_3_client: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
+    pub fn create<'a>(database_3_client: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -58,6 +58,7 @@ impl Repository<Postgresql<Channel>> {
                         $11,\
                         $12\
                     ) \
+                ON CONFLICT DO NOTHING \
                 RETURNING \
                     c.id AS i;";
             let mut parameter_storage = ParameterStorage::new(12);
@@ -127,9 +128,13 @@ impl Repository<Postgresql<Channel>> {
                 .await
             );
             if rows.is_empty() {
-                return Err(crate::new_logic_unreachable_state!());
+                return Result::Ok(Option::None);
             }
-            return Result::Ok(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)));
+            return Result::Ok(
+                Option::Some(
+                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))
+                )
+            );
         };
     }
     pub fn update_1<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {

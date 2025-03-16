@@ -160,7 +160,7 @@ impl CommandProcessor<CreateFixtures> {
                 {
                     Option::Some(user__id_) => user__id_,
                     Option::None => {
-                        Repository::<Postgresql<User>>::create_1(
+                        let user__id_ = match Repository::<Postgresql<User>>::create_1(
                             &postgresql_database_1_client,
                             UserInsert1 {
                                 user__email: user__email.as_str(),
@@ -169,7 +169,11 @@ impl CommandProcessor<CreateFixtures> {
                                 user__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
                             },
                         )
-                        .await?
+                        .await? {
+                            Option::Some(user__id__) => user__id__,
+                            Option::None => return Result::Err(crate::new_logic_unreachable_state!())
+                        };
+                        user__id_
                     }
                 };
                 let user_device__id = format!(

@@ -2989,6 +2989,7 @@ pub struct Channel_Create_Precedent {
     pub user_access_token___already_expired: bool,
     pub channel___name_already_exist: bool,
     pub channel___linked_name_already_exist: bool,
+    pub parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_Create_CResult {
@@ -3027,6 +3028,12 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
                     Channel_Create_Precedent_::Channel__LinkedNameAlreadyExist => {
                         Channel_Create_Precedent {
                             channel___linked_name_already_exist: true,
+                            ..Default::default()
+                        }
+                    }
+                    Channel_Create_Precedent_::ParallelExecution => {
+                        Channel_Create_Precedent {
+                            parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -3476,6 +3483,7 @@ pub struct ChannelPublication1_Create_Precedent {
     pub user_access_token___already_expired: bool,
     pub channel___not_found: bool,
     pub user___is_not_channel_owner: bool,
+    pub parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1_Create_CResult {
@@ -3515,6 +3523,12 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_ve
                     ChannelPublication1_Create_Precedent_::User__IsNotChannelOwner => {
                         ChannelPublication1_Create_Precedent {
                             user___is_not_channel_owner: true,
+                            ..Default::default()
+                        }
+                    }
+                    ChannelPublication1_Create_Precedent_::ParallelExecution => {
+                        ChannelPublication1_Create_Precedent {
+                            parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -5804,11 +5818,13 @@ mod test {
                     Channel_Create_Precedent_::UserAccessToken__AlreadyExpired => {}
                     Channel_Create_Precedent_::Channel__NameAlreadyExist => {}
                     Channel_Create_Precedent_::Channel__LinkedNameAlreadyExist => {}
+                    Channel_Create_Precedent_::ParallelExecution => {}
                 }
                 let precedents: Vec<Channel_Create_Precedent_> = vec![
                     Channel_Create_Precedent_::UserAccessToken__AlreadyExpired,
                     Channel_Create_Precedent_::Channel__NameAlreadyExist,
                     Channel_Create_Precedent_::Channel__LinkedNameAlreadyExist,
+                    Channel_Create_Precedent_::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__create(precedent)?;
@@ -5992,11 +6008,13 @@ mod test {
                     ChannelPublication1_Create_Precedent_::UserAccessToken__AlreadyExpired => {}
                     ChannelPublication1_Create_Precedent_::Channel__NotFound => {}
                     ChannelPublication1_Create_Precedent_::User__IsNotChannelOwner => {}
+                    ChannelPublication1_Create_Precedent_::ParallelExecution => {}
                 }
                 let precedents: Vec<ChannelPublication1_Create_Precedent_> = vec![
                     ChannelPublication1_Create_Precedent_::UserAccessToken__AlreadyExpired,
                     ChannelPublication1_Create_Precedent_::Channel__NotFound,
                     ChannelPublication1_Create_Precedent_::User__IsNotChannelOwner,
+                    ChannelPublication1_Create_Precedent_::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__create(precedent)?;

@@ -141,6 +141,7 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     Channel__NameAlreadyExist,
     Channel__LinkedNameAlreadyExist,
+    ParallelExecution,
 }
 ```
 ```
@@ -394,6 +395,7 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     Channel__NotFound,
     User__IsNotChannelOwner,
+    ParallelExecution,
 }
 ```
 - ## ChannelPublication1_Delete POST /channel_publication1/delete

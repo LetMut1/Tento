@@ -34,6 +34,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                         $5,\
                         $6\
                     ) \
+                ON CONFLICT DO NOTHING \
                 RETURNING \
                     true AS _;";
             let mut parameter_storage = ParameterStorage::new(6);

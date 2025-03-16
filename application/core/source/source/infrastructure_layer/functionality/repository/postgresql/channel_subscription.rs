@@ -28,9 +28,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                         $2,\
                         $3\
                     ) \
-                ON CONFLICT ON CONSTRAINT \
-                    channel_subscription_2 \
-                DO NOTHING \
+                ON CONFLICT DO NOTHING \
                 RETURNING \
                     true AS _;";
             let mut parameter_storage = ParameterStorage::new(3);

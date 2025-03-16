@@ -36,6 +36,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                         $6,\
                         $7\
                     ) \
+                ON CONFLICT DO NOTHING \
                 RETURNING \
                     true AS _;";
             let mut parameter_storage = ParameterStorage::new(7);
