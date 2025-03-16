@@ -30,5 +30,5 @@ ALTER COLUMN obfuscation_value SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ALTER COLUMN is_predeleted SET NOT NULL,
 ALTER COLUMN can_be_deleted_from SET NOT NULL,
-ADD CONSTRAINT channel_publication1_4 PRIMARY KEY USING INDEX channel_publication1_2,
+ADD CONSTRAINT channel_publication1_4 UNIQUE USING INDEX channel_publication1_2,
 ADD CONSTRAINT channel_publication1_5 UNIQUE USING INDEX channel_publication1_3;

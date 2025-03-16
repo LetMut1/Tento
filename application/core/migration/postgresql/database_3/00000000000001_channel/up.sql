@@ -23,7 +23,7 @@ USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 CREATE UNIQUE INDEX channel_3 ON public.channel
 USING btree (name COLLATE "C" ASC NULLS LAST) WITH (fillfactor = 80, deduplicate_items = on);
 
-CREATE INDEX channel_5 ON public.channel
+CREATE INDEX channel_4 ON public.channel
 USING btree (visability_modifier ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 ALTER TABLE ONLY public.channel
@@ -38,7 +38,5 @@ ALTER COLUMN orientation SET NOT NULL,
 ALTER COLUMN subscribers_quantity SET NOT NULL,
 ALTER COLUMN obfuscation_value SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ADD CONSTRAINT channel_8 PRIMARY KEY USING INDEX channel_2,
-ADD CONSTRAINT channel_9 FOREIGN KEY (owner)
-REFERENCES public.user_ (id) ON DELETE RESTRICT,
-ADD CONSTRAINT channel_10 UNIQUE USING INDEX channel_3;
+ADD CONSTRAINT channel_5 UNIQUE USING INDEX channel_2,
+ADD CONSTRAINT channel_6 UNIQUE USING INDEX channel_3;

@@ -29,7 +29,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                         $3\
                     ) \
                 ON CONFLICT ON CONSTRAINT \
-                    channel_subscription_4 \
+                    channel_subscription_2 \
                 DO NOTHING \
                 RETURNING \
                     true AS _;";

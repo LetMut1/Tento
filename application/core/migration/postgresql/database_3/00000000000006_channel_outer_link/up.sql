@@ -12,6 +12,4 @@ ALTER TABLE ONLY public.channel_outer_link
 ALTER COLUMN from_ SET NOT NULL,
 ALTER COLUMN alias SET NOT NULL,
 ALTER COLUMN address SET NOT NULL,
-ALTER COLUMN created_at SET NOT NULL,
-ADD CONSTRAINT channel_outer_link_2 FOREIGN KEY (from_)
-REFERENCES public.channel (id) ON DELETE CASCADE;
+ALTER COLUMN created_at SET NOT NULL;

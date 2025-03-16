@@ -14,8 +14,4 @@ ALTER TABLE ONLY public.channel_inner_link
 ALTER COLUMN from_ SET NOT NULL,
 ALTER COLUMN to_ SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ADD CONSTRAINT channel_inner_link_3 FOREIGN KEY (from_)
-REFERENCES public.channel (id) ON DELETE CASCADE,
-ADD CONSTRAINT channel_inner_link_4 FOREIGN KEY (to_)
-REFERENCES public.channel (id) ON DELETE CASCADE,
-ADD CONSTRAINT channel_inner_link_5 UNIQUE USING INDEX channel_inner_link_1;
+ADD CONSTRAINT channel_inner_link_3 UNIQUE USING INDEX channel_inner_link_1;
