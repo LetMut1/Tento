@@ -102,14 +102,16 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_reset_password_token__expires_at <= now {
-                Repository::<Postgresql<UserResetPasswordToken>>::delete(
+                if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
-                .await?;
+                .await? {
+                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__AlreadyExpired));
             }
             if user_reset_password_token__is_approved {
@@ -119,7 +121,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__TimeToResendHasNotCome));
             }
             user_reset_password_token__can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate(now)?;
-            Repository::<Postgresql<UserResetPasswordToken>>::update_2(
+            if Repository::<Postgresql<UserResetPasswordToken>>::update_2(
                 &postgresql_database_2_client,
                 UserResetPasswordTokenUpdate2 {
                     user_reset_password_token__can_be_resent_from,
@@ -129,7 +131,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                     user_device__id: incoming.user_device__id,
                 },
             )
-            .await?;
+            .await? {
+                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+            }
             let environment_configuration = inner.environment_configuration;
             let user_device__id = incoming.user_device__id.to_string();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(

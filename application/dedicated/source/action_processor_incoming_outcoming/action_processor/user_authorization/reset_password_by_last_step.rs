@@ -20,5 +20,6 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::UserResetPasswordToken__AlreadyExpired,
         CommonPrecedent::UserResetPasswordToken__IsNotApproved,
         CommonPrecedent::UserResetPasswordToken__WrongValue,
+        CommonPrecedent::DeletedInParallelExecution,
     }
 );

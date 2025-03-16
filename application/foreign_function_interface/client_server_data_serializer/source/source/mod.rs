@@ -1340,6 +1340,8 @@ pub struct UserAuthorization_RegisterByLastStep_Precedent {
     pub user_registration_token___already_expired: bool,
     pub user_registration_token___is_not_approved: bool,
     pub user_registration_token___wrong_value: bool,
+    pub created_in_parallel_execution: bool,
+    pub deleted_in_parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterByLastStep_CResult {
@@ -1414,6 +1416,18 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
                             ..Default::default()
                         }
                     }
+                    UserAuthorization_RegisterByLastStep_Precedent_::CreatedInParallelExecution => {
+                        UserAuthorization_RegisterByLastStep_Precedent {
+                            created_in_parallel_execution: true,
+                            ..Default::default()
+                        }
+                    }
+                    UserAuthorization_RegisterByLastStep_Precedent_::DeletedInParallelExecution => {
+                        UserAuthorization_RegisterByLastStep_Precedent {
+                            deleted_in_parallel_execution: true,
+                            ..Default::default()
+                        }
+                    }
                 };
                 CUnifiedReport::precedent(precedent_)
             }
@@ -1479,6 +1493,8 @@ pub struct UserAuthorization_ResetPasswordByFirstStep_Outcoming {
 #[derive(Default)]
 pub struct UserAuthorization_ResetPasswordByFirstStep_Precedent {
     pub user___not_found: bool,
+    pub created_in_parallel_execution: bool,
+    pub deleted_in_parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deserialize_allocate(
@@ -1512,11 +1528,19 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deser
             UnifiedReport::Precedent {
                 precedent,
             } => {
-                match precedent {
-                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound => {}
-                };
-                let precedent_ = UserAuthorization_ResetPasswordByFirstStep_Precedent {
-                    user___not_found: true,
+                let precedent_ = match precedent {
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound => UserAuthorization_ResetPasswordByFirstStep_Precedent {
+                        user___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::CreatedInParallelExecution=> UserAuthorization_ResetPasswordByFirstStep_Precedent {
+                        created_in_parallel_execution: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::DeletedInParallelExecution => UserAuthorization_ResetPasswordByFirstStep_Precedent {
+                        deleted_in_parallel_execution: true,
+                        ..Default::default()
+                    }
                 };
                 CUnifiedReport::precedent(precedent_)
             }
@@ -1571,6 +1595,7 @@ pub struct UserAuthorization_ResetPasswordBySecondStep_Precedent {
     pub user_reset_password_token___already_expired: bool,
     pub user_reset_password_token___already_approved: bool,
     pub user_reset_password_token___wrong_value: UserResetPasswordToken__WrongValue,
+    pub deleted_in_parallel_execution: bool,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -1611,6 +1636,12 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__dese
                                 is_exist: true,
                                 user_reset_password_token__wrong_enter_tries_quantity,
                             },
+                            ..Default::default()
+                        }
+                    }
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::DeletedInParallelExecution => {
+                        UserAuthorization_ResetPasswordBySecondStep_Precedent {
+                            deleted_in_parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -1671,6 +1702,7 @@ pub struct UserAuthorization_ResetPasswordByLastStep_Precedent {
     pub user_reset_password_token___already_expired: bool,
     pub user_reset_password_token___is_not_approved: bool,
     pub user_reset_password_token___wrong_value: bool,
+    pub deleted_in_parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deserialize_allocate(
@@ -1708,6 +1740,12 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deseri
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__WrongValue => {
                         UserAuthorization_ResetPasswordByLastStep_Precedent {
                             user_reset_password_token___wrong_value: true,
+                            ..Default::default()
+                        }
+                    }
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::DeletedInParallelExecution => {
+                        UserAuthorization_ResetPasswordByLastStep_Precedent {
+                            deleted_in_parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -1986,6 +2024,7 @@ pub struct UserAuthorization_SendEmailForResetPassword_Precedent {
     pub user_reset_password_token___already_expired: bool,
     pub user_reset_password_token___already_approved: bool,
     pub user_reset_password_token___time_to_resend_has_not_come: bool,
+    pub deleted_in_parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__deserialize_allocate(
@@ -2043,6 +2082,12 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__TimeToResendHasNotCome => {
                         UserAuthorization_SendEmailForResetPassword_Precedent {
                             user_reset_password_token___time_to_resend_has_not_come: true,
+                            ..Default::default()
+                        }
+                    }
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::DeletedInParallelExecution => {
+                        UserAuthorization_SendEmailForResetPassword_Precedent {
+                            deleted_in_parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -5046,6 +5091,8 @@ mod test {
                     UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__AlreadyExpired => {}
                     UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__IsNotApproved => {}
                     UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__WrongValue => {}
+                    UserAuthorization_RegisterByLastStep_Precedent_::CreatedInParallelExecution => {}
+                    UserAuthorization_RegisterByLastStep_Precedent_::DeletedInParallelExecution => {}
                 }
                 let precedents: Vec<UserAuthorization_RegisterByLastStep_Precedent_> = vec![
                     UserAuthorization_RegisterByLastStep_Precedent_::User__NicknameAlreadyExist,
@@ -5054,6 +5101,8 @@ mod test {
                     UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__AlreadyExpired,
                     UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__IsNotApproved,
                     UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__WrongValue,
+                    UserAuthorization_RegisterByLastStep_Precedent_::CreatedInParallelExecution,
+                    UserAuthorization_RegisterByLastStep_Precedent_::DeletedInParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__register_by_last_step(precedent)?;
@@ -5084,18 +5133,31 @@ mod test {
                     user_authorization__reset_password_by_first_step__deserialize_deallocate,
                 );
             }
-            pub fn precedent__user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound {
-                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound => {}
-                }
-                let precedent = UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound;
-                let unified_report =
-                    UnifiedReport::<UserAuthorization_ResetPasswordByFirstStep_Outcoming_, UserAuthorization_ResetPasswordByFirstStep_Precedent_>::precedent(precedent);
+            fn _precedent__user_authorization__reset_password_by_first_step(
+                precedent: UserAuthorization_ResetPasswordByFirstStep_Precedent_,
+            ) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordByFirstStep_Precedent_>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__reset_password_by_first_step__deserialize_allocate,
                     user_authorization__reset_password_by_first_step__deserialize_deallocate,
                 );
+            }
+            pub fn precedent__user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+                match UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound {
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound => {}
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::CreatedInParallelExecution => {}
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::DeletedInParallelExecution => {}
+                }
+                let precedents: Vec<UserAuthorization_ResetPasswordByFirstStep_Precedent_> = vec![
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::User__NotFound,
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::CreatedInParallelExecution,
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent_::DeletedInParallelExecution,
+                ];
+                '_a: for precedent in precedents {
+                    _precedent__user_authorization__reset_password_by_first_step(precedent)?;
+                }
+                return Result::Ok(());
             }
             pub fn target_empty__user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_>::target_empty();
@@ -5126,6 +5188,7 @@ mod test {
                     UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__WrongValue {
                         user_reset_password_token__wrong_enter_tries_quantity: _,
                     } => {}
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::DeletedInParallelExecution => {}
                 }
                 let precedents: Vec<UserAuthorization_ResetPasswordBySecondStep_Precedent_> = vec![
                     UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__NotFound,
@@ -5134,6 +5197,7 @@ mod test {
                     UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__WrongValue {
                         user_reset_password_token__wrong_enter_tries_quantity: 0,
                     },
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::DeletedInParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__reset_password_by_second_step(precedent)?;
@@ -5168,6 +5232,7 @@ mod test {
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__AlreadyExpired => {}
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__IsNotApproved => {}
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__WrongValue => {}
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::DeletedInParallelExecution => {}
                 }
                 let precedents: Vec<UserAuthorization_ResetPasswordByLastStep_Precedent_> = vec![
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::User__NotFound,
@@ -5175,6 +5240,7 @@ mod test {
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__AlreadyExpired,
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__IsNotApproved,
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__WrongValue,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::DeletedInParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__reset_password_by_last_step(precedent)?;
@@ -5312,6 +5378,7 @@ mod test {
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyExpired => {}
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyApproved => {}
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__TimeToResendHasNotCome => {}
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::DeletedInParallelExecution => {}
                 }
                 let precedents: Vec<UserAuthorization_SendEmailForResetPassword_Precedent_> = vec![
                     UserAuthorization_SendEmailForResetPassword_Precedent_::User__NotFound,
@@ -5319,6 +5386,7 @@ mod test {
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyExpired,
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyApproved,
                     UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__TimeToResendHasNotCome,
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::DeletedInParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_reset_password(precedent)?;

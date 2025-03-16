@@ -80,14 +80,16 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__NotFound)),
             };
             if user_reset_password_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
-                Repository::<Postgresql<UserResetPasswordToken>>::delete(
+                if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
                     &postgresql_database_2_client,
                     UserResetPasswordTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
-                .await?;
+                .await? {
+                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__AlreadyExpired));
             }
             if user_reset_password_token__is_approved {
@@ -98,23 +100,27 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                     user_reset_password_token__wrong_enter_tries_quantity += 1;
                 }
                 if user_reset_password_token__wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
-                    Repository::<Postgresql<UserResetPasswordToken>>::update_4(
+                    if !Repository::<Postgresql<UserResetPasswordToken>>::update_4(
                         &postgresql_database_2_client,
                         UserResetPasswordTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id,
                         },
                     )
-                    .await?;
+                    .await? {
+                        return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    }
                 } else {
-                    Repository::<Postgresql<UserResetPasswordToken>>::delete(
+                    if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
                         &postgresql_database_2_client,
                         UserResetPasswordTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id,
                         },
                     )
-                    .await?;
+                    .await? {
+                        return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    }
                 }
                 return Result::Ok(
                     UnifiedReport::precedent(
@@ -124,7 +130,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                     ),
                 );
             }
-            Repository::<Postgresql<UserResetPasswordToken>>::update_5(
+            if !Repository::<Postgresql<UserResetPasswordToken>>::update_5(
                 &postgresql_database_2_client,
                 UserResetPasswordTokenUpdate5 {
                     user_reset_password_token__is_approved: true,
@@ -134,7 +140,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                     user_device__id: incoming.user_device__id,
                 },
             )
-            .await?;
+            .await? {
+                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+            }
             return Result::Ok(UnifiedReport::target_empty());
         };
     }

@@ -129,7 +129,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                             false
                         };
                         if need_to_update_1 && need_to_update_2 {
-                            Repository::<Postgresql<UserResetPasswordToken>>::update_1(
+                            if !Repository::<Postgresql<UserResetPasswordToken>>::update_1(
                                 &postgresql_database_2_client,
                                 UserResetPasswordTokenUpdate1 {
                                     user_reset_password_token__value: user_reset_password_token__value_.as_str(),
@@ -143,10 +143,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                     user_device__id: incoming.user_device__id,
                                 },
                             )
-                            .await?;
+                            .await? {
+                                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                            }
                         } else {
                             if need_to_update_1 {
-                                Repository::<Postgresql<UserResetPasswordToken>>::update_2(
+                                if !Repository::<Postgresql<UserResetPasswordToken>>::update_2(
                                     &postgresql_database_2_client,
                                     UserResetPasswordTokenUpdate2 {
                                         user_reset_password_token__can_be_resent_from: user_reset_password_token__can_be_resent_from_,
@@ -156,10 +158,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                         user_device__id: incoming.user_device__id,
                                     },
                                 )
-                                .await?;
+                                .await? {
+                                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                                }
                             }
                             if need_to_update_2 {
-                                Repository::<Postgresql<UserResetPasswordToken>>::update_3(
+                                if !Repository::<Postgresql<UserResetPasswordToken>>::update_3(
                                     &postgresql_database_2_client,
                                     UserResetPasswordTokenUpdate3 {
                                         user_reset_password_token__value: user_reset_password_token__value_.as_str(),
@@ -172,7 +176,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                         user_device__id: incoming.user_device__id,
                                     },
                                 )
-                                .await?;
+                                .await? {
+                                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                                }
                             }
                         }
                         (
@@ -186,7 +192,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                         let user_reset_password_token__value_ = Generator::<UserResetPasswordToken_Value>::generate();
                         let user_reset_password_token__wrong_enter_tries_quantity_ = 0;
                         let user_reset_password_token__can_be_resent_from_ = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate(now)?;
-                        Repository::<Postgresql<UserResetPasswordToken>>::create(
+                        if !Repository::<Postgresql<UserResetPasswordToken>>::create(
                             &postgresql_database_2_client,
                             UserResetPasswordTokenInsert {
                                 user__id,
@@ -198,7 +204,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                 user_reset_password_token__expires_at: Generator::<UserResetPasswordToken_ExpiresAt>::generate(now)?,
                             },
                         )
-                        .await?;
+                        .await? {
+                            return Result::Ok(UnifiedReport::precedent(Precedent::CreatedInParallelExecution));
+                        }
                         (
                             user_reset_password_token__value_,
                             user_reset_password_token__can_be_resent_from_,

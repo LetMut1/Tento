@@ -333,6 +333,8 @@ typedef struct UserAuthorization_RegisterByLastStep_Precedent {
   bool user_registration_token___already_expired;
   bool user_registration_token___is_not_approved;
   bool user_registration_token___wrong_value;
+  bool created_in_parallel_execution;
+  bool deleted_in_parallel_execution;
 } UserAuthorization_RegisterByLastStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_RegisterByLastStep_Outcoming__UserAuthorization_RegisterByLastStep_Precedent {
@@ -368,6 +370,8 @@ typedef struct CData_UserAuthorization_ResetPasswordByFirstStep_Outcoming {
 
 typedef struct UserAuthorization_ResetPasswordByFirstStep_Precedent {
   bool user___not_found;
+  bool created_in_parallel_execution;
+  bool deleted_in_parallel_execution;
 } UserAuthorization_ResetPasswordByFirstStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_ResetPasswordByFirstStep_Outcoming__UserAuthorization_ResetPasswordByFirstStep_Precedent {
@@ -399,6 +403,7 @@ typedef struct UserAuthorization_ResetPasswordBySecondStep_Precedent {
   bool user_reset_password_token___already_expired;
   bool user_reset_password_token___already_approved;
   struct UserResetPasswordToken__WrongValue user_reset_password_token___wrong_value;
+  bool deleted_in_parallel_execution;
 } UserAuthorization_ResetPasswordBySecondStep_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_ResetPasswordBySecondStep_Precedent {
@@ -427,6 +432,7 @@ typedef struct UserAuthorization_ResetPasswordByLastStep_Precedent {
   bool user_reset_password_token___already_expired;
   bool user_reset_password_token___is_not_approved;
   bool user_reset_password_token___wrong_value;
+  bool deleted_in_parallel_execution;
 } UserAuthorization_ResetPasswordByLastStep_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_ResetPasswordByLastStep_Precedent {
@@ -530,6 +536,7 @@ typedef struct UserAuthorization_SendEmailForResetPassword_Precedent {
   bool user_reset_password_token___already_expired;
   bool user_reset_password_token___already_approved;
   bool user_reset_password_token___time_to_resend_has_not_come;
+  bool deleted_in_parallel_execution;
 } UserAuthorization_SendEmailForResetPassword_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_SendEmailForResetPassword_Outcoming__UserAuthorization_SendEmailForResetPassword_Precedent {

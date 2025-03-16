@@ -242,7 +242,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Err(aggregate_error);
             }
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<User>>::create_2(
+            let is_created = match Repository::<Postgresql<User>>::create_2(
                 &postgresql_database_1_client,
                 UserInsert2 {
                     user__id,
@@ -254,17 +254,26 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             )
             .await
             {
+                Result::Ok(is_created_) => is_created_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
+            };
+            if !is_created {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Err(aggregate_error);
+                return Result::Ok(UnifiedReport::precedent(Precedent::CreatedInParallelExecution));
             }
             if let Result::Err(aggregate_error) = Resolver_::<Transaction<'_>>::commit(transaction).await {
-                Repository::<Postgresql<User>>::delete(
+                if !Repository::<Postgresql<User>>::delete(
                     &postgresql_database_1_client,
                     UserBy3 {
                         user__id,
                     },
                 )
-                .await?;
+                .await? {
+                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                }
                 return Result::Err(aggregate_error);
             }
             let user_access_token_signed = Encoder::<UserAccessToken>::encode(
