@@ -72,18 +72,6 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
-            let (channel__owner, channel__access_modifier, channel__obfuscation_value) = match Repository::<Postgresql<Channel>>::find_2(
-                &postgresql_database_3_client,
-                ChannelBy1 {
-                    channel__id: incoming.channel__id,
-                },
-            )
-            .await?
-            {
-                Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
-            };
             if !Encoder::<ChannelSubscriptionToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 incoming.user_access_token_signed.user__id,
@@ -95,6 +83,18 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if incoming.channel_subscription_token_signed.channel_subscription_token__expires_at < now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken__AlreadyExpired));
             }
+            let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+            let (channel__owner, channel__access_modifier) = match Repository::<Postgresql<Channel>>::find_2(
+                &postgresql_database_3_client,
+                ChannelBy1 {
+                    channel__id: incoming.channel__id,
+                },
+            )
+            .await?
+            {
+                Option::Some(values) => values,
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
+            };
             if incoming.user_access_token_signed.user__id == channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsChannelOwner));
             }

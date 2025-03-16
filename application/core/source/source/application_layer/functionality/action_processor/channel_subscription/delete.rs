@@ -63,11 +63,23 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
                 return Result::Err(crate::new_invalid_argument!());
+            }
+            if !Encoder::<ChannelSubscriptionToken>::is_valid(
+                &inner.environment_configuration.subject.encryption.private_key,
+                incoming.user_access_token_signed.user__id,
+                incoming.channel__id,
+                &incoming.channel_subscription_token_signed,
+            )? {
+                return Result::Err(crate::new_invalid_argument!());
+            }
+            if incoming.channel_subscription_token_signed.channel_subscription_token__expires_at < now {
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken__AlreadyExpired));
             }
             let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             if !Repository::<Postgresql<ChannelSubscription>>::is_exist(

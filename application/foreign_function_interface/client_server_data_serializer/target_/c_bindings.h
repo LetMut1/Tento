@@ -896,10 +896,12 @@ typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Create_Preceden
 typedef struct ChannelSubscription_Delete_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   long channel__id;
+  struct ChannelSubscriptionTokenSigned channel_subscription_token_signed;
 } ChannelSubscription_Delete_Incoming;
 
 typedef struct ChannelSubscription_Delete_Precedent {
   bool user_access_token___already_expired;
+  bool channel_subscription_token___already_expired;
   bool channel_subscription___not_found;
 } ChannelSubscription_Delete_Precedent;
 

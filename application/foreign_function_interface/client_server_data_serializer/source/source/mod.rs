@@ -3079,6 +3079,7 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_deallocate(_c
 pub struct ChannelSubscription_Delete_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__id: c_long,
+    pub channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__delete__serialize_allocate(incoming: ChannelSubscription_Delete_Incoming) -> CResult<CVector<c_uchar>> {
@@ -3093,6 +3094,11 @@ pub extern "C-unwind" fn channel_subscription__delete__serialize_allocate(incomi
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
+                channel_subscription_token_signed: ChannelSubscriptionTokenSigned_ {
+                    channel__obfuscation_value: incoming_.channel_subscription_token_signed.channel__obfuscation_value,
+                    channel_subscription_token__expires_at: incoming_.channel_subscription_token_signed.channel_subscription_token__expires_at,
+                    signature: incoming_.channel_subscription_token_signed.signature.clone_as_vec()?,
+                },
             },
         );
     };
@@ -3111,6 +3117,7 @@ type ChannelSubscription_Delete_CResult = CResult<CUnifiedReport<CVoid, ChannelS
 #[derive(Default)]
 pub struct ChannelSubscription_Delete_Precedent {
     pub user_access_token___already_expired: bool,
+    pub channel_subscription_token___already_expired: bool,
     pub channel_subscription___not_found: bool,
 }
 #[unsafe(no_mangle)]
@@ -3123,6 +3130,12 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_ve
                     ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired => {
                         ChannelSubscription_Delete_Precedent {
                             user_access_token___already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    ChannelSubscription_Delete_Precedent_::ChannelSubscriptionToken__AlreadyExpired => {
+                        ChannelSubscription_Delete_Precedent {
+                            channel_subscription_token___already_expired: true,
                             ..Default::default()
                         }
                     }
@@ -4353,6 +4366,11 @@ mod test {
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel__id: 0,
+                    channel_subscription_token_signed: ChannelSubscriptionTokenSigned {
+                        channel__obfuscation_value: 0,
+                        channel_subscription_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
                 };
                 run_by_template(
                     incoming,
@@ -4362,6 +4380,7 @@ mod test {
                 Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
                 Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
+                Allocator::<CVector<_>>::deallocate(incoming.channel_subscription_token_signed.signature);
                 return Result::Ok(());
             }
             pub fn channel_publication1__get_many() -> Result<(), Box<dyn StdError + 'static>> {
@@ -5568,10 +5587,12 @@ mod test {
             pub fn precedent__channel_subscription__delete() -> Result<(), Box<dyn StdError + 'static>> {
                 match ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired {
                     ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired => {}
+                    ChannelSubscription_Delete_Precedent_::ChannelSubscriptionToken__AlreadyExpired => {}
                     ChannelSubscription_Delete_Precedent_::ChannelSubscription__NotFound => {}
                 }
                 let precedents: Vec<ChannelSubscription_Delete_Precedent_> = vec![
                     ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired,
+                    ChannelSubscription_Delete_Precedent_::ChannelSubscriptionToken__AlreadyExpired,
                     ChannelSubscription_Delete_Precedent_::ChannelSubscription__NotFound,
                 ];
                 '_a: for precedent in precedents {

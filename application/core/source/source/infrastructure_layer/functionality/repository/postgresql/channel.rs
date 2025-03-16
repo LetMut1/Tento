@@ -324,7 +324,6 @@ impl Repository<Postgresql<Channel>> {
     }
     // channel__owner: i64,
     // channel__access_modifier: i16,
-    // channel__obfuscation_value: i64,
     pub fn find_2<'a>(
         database_3_client: &'a Client,
         by: By1,
@@ -343,8 +342,7 @@ impl Repository<Postgresql<Channel>> {
             let query = "\
                 SELECT \
                     c.owner AS ow,\
-                    c.access_modifier AS am,\
-                    c.obfuscation_value AS ov \
+                    c.access_modifier AS am \
                 FROM \
                     public.channel c \
                 WHERE \
@@ -378,7 +376,6 @@ impl Repository<Postgresql<Channel>> {
                     (
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
                     ),
                 ),
             );

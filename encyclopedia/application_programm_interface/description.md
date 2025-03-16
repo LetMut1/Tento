@@ -356,11 +356,18 @@ Unsubscribes user from channel.
 struct Incoming {
     user_access_token_signed: <Data standards>
     channel__id: i64,
+    channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
+}
+
+struct ChannelSubscriptionTokenSigned {
+    channel_subscription_token__expires_at: i64,
+    signature: Vec<u8>,
 }
 ```
 ```
 enum Precedent {
     UserAccessToken__AlreadyExpired,
+    ChannelSubscriptionToken__AlreadyExpired,
     ChannelSubscription__NotFound,
 }
 ```
