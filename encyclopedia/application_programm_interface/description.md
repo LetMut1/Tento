@@ -462,7 +462,7 @@ enum Precedent {
 ```
  - ## ChannelPublication1Mark_Create POST /channel_publication1/create
 ```
-Creates a mark for channel publication.
+Creates a mark for channel publication1.
 ```
 ```
 struct Incoming {
@@ -482,6 +482,31 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelPublication1Token__AlreadyExpired,
     ChannelPublication1Mark__AlreadyExist,
+    ChannelPublication1__NotFound,
+}
+```
+ - ## ChannelPublication1Mark_Delete POST /channel_publication1/delete
+```
+Deletes a mark from channel publication1.
+```
+```
+struct Incoming {
+    user_access_token_signed: <Data standards>
+    pub channel_publication1__id: i64,
+    pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
+}
+
+struct ChannelPublication1TokenSigned {
+    channel_publication1__obfuscation_value: i64,
+    channel_publication1_token__expires_at: i64,
+    signature: Vec<u8>,
+}
+```
+```
+enum Precedent {
+    UserAccessToken__AlreadyExpired,
+    ChannelPublication1Token__AlreadyExpired,
+    ChannelPublication1Mark__NotFound,
     ChannelPublication1__NotFound,
 }
 ```

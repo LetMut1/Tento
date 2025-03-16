@@ -20,7 +20,7 @@ use {
             functionality::{
                 repository::{
                     postgresql::{
-                        ChannelPublication1MarkInsert, IsolationLevel, Postgresql, Resolver as Resolver_, Transaction, ChannelPublication1By1,
+                        ChannelPublication1MarkBy, IsolationLevel, Postgresql, Resolver as Resolver_, Transaction, ChannelPublication1By1,
                     },
                     Repository,
                 },
@@ -32,7 +32,7 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::channel_publication1_mark::create::{
+        action_processor_incoming_outcoming::action_processor::channel_publication1_mark::delete::{
             Incoming,
             Precedent,
         },
@@ -41,8 +41,8 @@ use {
     },
     std::future::Future,
 };
-pub struct ChannelPublication1Mark_Create;
-impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Create> {
+pub struct ChannelPublication1Mark_Delete;
+impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Delete> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;
@@ -78,25 +78,24 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Create> {
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            let is_created = match Repository::<Postgresql<ChannelPublication1Mark>>::create(
+            let is_deleted = match Repository::<Postgresql<ChannelPublication1Mark>>::delete(
                 transaction.get_client(),
-                ChannelPublication1MarkInsert {
+                ChannelPublication1MarkBy {
                     user__id: incoming.user_access_token_signed.user__id,
                     channel_publication1__id: incoming.channel_publication1__id,
-                    channel_publication1_mark__created_at: now,
                 }
             ).await {
-                Result::Ok(is_created_) => is_created_,
+                Result::Ok(is_deleted_) => is_deleted_,
                 Result::Err(aggregate_error) => {
                     Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                     return Result::Err(aggregate_error);
                 }
             };
-            if !is_created {
+            if !is_deleted {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Mark__AlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Mark__NotFound));
             }
-            let is_updated = match Repository::<Postgresql<ChannelPublication1>>::update_2(
+            let is_updated = match Repository::<Postgresql<ChannelPublication1>>::update_3(
                 transaction.get_client(),
                 ChannelPublication1By1 {
                     channel_publication1__id: incoming.channel_publication1__id,

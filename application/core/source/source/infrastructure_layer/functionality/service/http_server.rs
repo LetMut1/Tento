@@ -11,6 +11,7 @@ use {
                 Channel_CheckNameForExisting,
                 Channel_Create,
                 Channel_GetManyByNameInSubscriptions,
+                ChannelPublication1Mark_Delete,
                 Channel_GetManyBySubscription,
                 Channel_GetManyPublicByName,
                 Channel_GetOneById,
@@ -526,6 +527,13 @@ impl HttpServer {
                 ActionRoute::ChannelPublication1Mark(ChannelPublication1Mark::Create),
             )
         );
+        crate::result_return_logic!(
+            router
+            .insert(
+                ChannelPublication1Mark::DELETE,
+                ActionRoute::ChannelPublication1Mark(ChannelPublication1Mark::Delete),
+            )
+        );
         #[cfg(feature = "action_for_manual_test")]
         {
             crate::result_return_logic!(
@@ -728,6 +736,13 @@ impl HttpServer {
                 .insert(
                     ChannelPublication1Mark::CREATE_,
                     ActionRoute::ChannelPublication1Mark(ChannelPublication1Mark::Create_),
+                )
+            );
+            crate::result_return_logic!(
+                router
+                .insert(
+                    ChannelPublication1Mark::DELETE_,
+                    ActionRoute::ChannelPublication1Mark(ChannelPublication1Mark::Delete_),
                 )
             );
         }
@@ -1245,6 +1260,13 @@ impl HttpServer {
                             )
                             .await;
                         }
+                        (&ChannelPublication1Mark::Delete, &Method::POST) => {
+                            return Action::<ChannelPublication1Mark_Delete>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -1252,8 +1274,8 @@ impl HttpServer {
                                     channel_publication1_mark,
                                     &parts.method,
                                 ) {
-                                    (&ChannelPublication1Mark::Create_, &Method::POST) => {
-                                        return Action::<ChannelPublication1Mark_Create>::run_(
+                                    (&ChannelPublication1Mark::Delete_, &Method::POST) => {
+                                        return Action::<ChannelPublication1Mark_Delete>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
@@ -1551,16 +1573,24 @@ impl ChannelPublication1 {
 }
 pub enum ChannelPublication1Mark {
     Create,
+    Delete,
     #[cfg(feature = "action_for_manual_test")]
     Create_,
+    #[cfg(feature = "action_for_manual_test")]
+    Delete_,
 }
 impl ChannelPublication1Mark {
     pub const CREATE: &'static str = "/channel_publication1_mark/create";
+    pub const DELETE: &'static str = "/channel_publication1_mark/delete";
 }
 #[cfg(feature = "action_for_manual_test")]
 impl ChannelPublication1Mark {
     pub const CREATE_: &'static str = const_format::concatcp!(
         ChannelPublication1Mark::CREATE,
+        ActionRoute::PART,
+    );
+    pub const DELETE_: &'static str = const_format::concatcp!(
+        ChannelPublication1Mark::DELETE,
         ActionRoute::PART,
     );
 }

@@ -42,6 +42,7 @@ pub use self::{
     },
     channel_publication1_mark::{
         create::ChannelPublication1Mark_Create,
+        delete::ChannelPublication1Mark_Delete,
     }
 };
 use {
