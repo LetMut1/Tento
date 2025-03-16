@@ -185,7 +185,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::delete_2(
+            let mut is_deleted = match Repository::<Postgresql<UserAccessRefreshToken>>::delete_2(
                 transaction.get_client(),
                 UserAccessRefreshTokenBy1 {
                     user__id: incoming.user__id,
@@ -193,10 +193,17 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             )
             .await
             {
+                Result::Ok(is_deleted_) => is_deleted_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
+            };
+            if !is_deleted {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Err(aggregate_error);
+                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
             }
-            let is_deleted = match Repository::<Postgresql<UserResetPasswordToken>>::delete(
+            is_deleted = match Repository::<Postgresql<UserResetPasswordToken>>::delete(
                 transaction.get_client(),
                 UserResetPasswordTokenBy {
                     user__id: incoming.user__id,

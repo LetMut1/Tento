@@ -187,7 +187,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             )
             .await?;
             if is_exist {
-                if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::update(
+                let is_updated = match Repository::<Postgresql<UserAccessRefreshToken>>::update(
                     transaction.get_client(),
                     UserAccessRefreshTokenUpdate {
                         user_access_token__id: user_access_token__id.as_str(),
@@ -202,11 +202,18 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 )
                 .await
                 {
+                    Result::Ok(is_updated_) => is_updated_,
+                    Result::Err(aggregate_error) => {
+                        Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                        return Result::Err(aggregate_error);
+                    }
+                };
+                if !is_updated {
                     Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                    return Result::Err(aggregate_error);
+                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
                 }
             } else {
-                if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::create(
+                let is_created = match Repository::<Postgresql<UserAccessRefreshToken>>::create(
                     transaction.get_client(),
                     UserAccessRefreshTokenInsert {
                         user__id: incoming.user__id,
@@ -219,9 +226,16 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 )
                 .await
                 {
-                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                    return Result::Err(aggregate_error);
+                    Result::Ok(is_created_) => is_created_,
+                    Result::Err(aggregate_error) => {
+                        Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                        return Result::Err(aggregate_error);
+                    }
                 };
+                if !is_created {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Ok(UnifiedReport::precedent(Precedent::CreatedInParallelExecution));
+                }
             };
             let is_deleted = match Repository::<Postgresql<UserAuthorizationToken>>::delete(
                 transaction.get_client(),

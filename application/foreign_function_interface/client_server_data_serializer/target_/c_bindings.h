@@ -94,6 +94,7 @@ typedef struct UserAuthorization_AuthorizeByLastStep_Precedent {
   bool user_authorization_token___already_expired;
   struct UserAuthorizationToken__WrongValue user_authorization_token___wrong_value;
   bool user___not_found;
+  bool created_in_parallel_execution;
   bool deleted_in_parallel_execution;
 } UserAuthorization_AuthorizeByLastStep_Precedent;
 
@@ -231,6 +232,7 @@ typedef struct CData_UserAuthorization_RefreshAccessToken_Outcoming {
 typedef struct UserAuthorization_RefreshAccessToken_Precedent {
   bool user_access_refresh_token___not_found;
   bool user_access_refresh_token___already_expired;
+  bool deleted_in_parallel_execution;
 } UserAuthorization_RefreshAccessToken_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_RefreshAccessToken_Outcoming__UserAuthorization_RefreshAccessToken_Precedent {

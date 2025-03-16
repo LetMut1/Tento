@@ -708,7 +708,8 @@ enum Precedent {
         user_authorization_token__wrong_enter_tries_quantity: i16,
     },
     User__NotFound,
-    DeletedInParallelExecution
+    CreatedInParallelExecution
+    DeletedInParallelExecution,
 }
 ```
  - ## UserAuthorization_SendEmailForAuthorize POST /user_authorization/send_email_for_authorize
@@ -850,6 +851,7 @@ struct Outcoming {
 enum Precedent {
     UserAccessRefreshToken__NotFound,
     UserAccessRefreshToken__AlreadyExpired,
+    DeletedInParallelExecution,
 }
 ```
 # Parameters validation rule.

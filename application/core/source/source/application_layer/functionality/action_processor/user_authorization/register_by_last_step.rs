@@ -220,7 +220,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken>>::create(
+            let is_created = match Repository::<Postgresql<UserAccessRefreshToken>>::create(
                 transaction.get_client(),
                 UserAccessRefreshTokenInsert {
                     user__id,
@@ -233,9 +233,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             )
             .await
             {
-                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Err(aggregate_error);
+                Result::Ok(is_created_) => is_created_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
             };
+            if !is_created {
+                return Result::Ok(UnifiedReport::precedent(Precedent::CreatedInParallelExecution));
+            }
             let is_deleted = match Repository::<Postgresql<UserRegistrationToken>>::delete(
                 transaction.get_client(),
                 UserRegistrationTokenBy {

@@ -35,5 +35,6 @@ crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserAccessRefreshToken__NotFound,
         CommonPrecedent::UserAccessRefreshToken__AlreadyExpired,
+        CommonPrecedent::DeletedInParallelExecution,
     }
 );

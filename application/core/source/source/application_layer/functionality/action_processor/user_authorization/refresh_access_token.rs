@@ -93,14 +93,16 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             }
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_access_refresh_token__expires_at <= now {
-                Repository::<Postgresql<UserAccessRefreshToken>>::delete_1(
+                if !Repository::<Postgresql<UserAccessRefreshToken>>::delete_1(
                     &postgresql_database_2_client,
                     UserAccessRefreshTokenBy2 {
                         user__id: incoming.user_access_token_signed.user__id,
                         user_device__id: incoming.user_access_token_signed.user_device__id,
                     },
                 )
-                .await?;
+                .await? {
+                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken__AlreadyExpired));
             }
             let new___user_access_token__id = Generator::<UserAccessToken_Id>::generate();
@@ -108,7 +110,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             let new___user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let new___user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
             let new___user_access_refresh_token__updated_at = now;
-            Repository::<Postgresql<UserAccessRefreshToken>>::update(
+            if !Repository::<Postgresql<UserAccessRefreshToken>>::update(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenUpdate {
                     user_access_token__id: new___user_access_token__id.as_str(),
@@ -121,7 +123,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                     user_device__id: incoming.user_access_token_signed.user_device__id,
                 },
             )
-            .await?;
+            .await? {
+                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+            }
             let outcoming = Outcoming {
                 user_access_token_signed: Encoder::<UserAccessToken>::encode(
                     &inner.environment_configuration.subject.encryption.private_key,

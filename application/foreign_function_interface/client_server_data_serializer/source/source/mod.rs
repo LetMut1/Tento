@@ -651,6 +651,7 @@ pub struct UserAuthorization_AuthorizeByLastStep_Precedent {
     pub user_authorization_token___already_expired: bool,
     pub user_authorization_token___wrong_value: UserAuthorizationToken__WrongValue,
     pub user___not_found: bool,
+    pub created_in_parallel_execution: bool,
     pub deleted_in_parallel_execution: bool,
 }
 #[repr(C)]
@@ -728,6 +729,12 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                     UserAuthorization_AuthorizeByLastStep_Precedent_::DeletedInParallelExecution => {
                         UserAuthorization_AuthorizeByLastStep_Precedent {
                             deleted_in_parallel_execution: true,
+                            ..Default::default()
+                        }
+                    }
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::CreatedInParallelExecution => {
+                        UserAuthorization_AuthorizeByLastStep_Precedent {
+                            created_in_parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -1057,6 +1064,7 @@ pub struct UserAuthorization_RefreshAccessToken_Outcoming {
 pub struct UserAuthorization_RefreshAccessToken_Precedent {
     pub user_access_refresh_token___not_found: bool,
     pub user_access_refresh_token___already_expired: bool,
+    pub deleted_in_parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RefreshAccessToken_CResult {
@@ -1104,6 +1112,12 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
                     UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__NotFound => {
                         UserAuthorization_RefreshAccessToken_Precedent {
                             user_access_refresh_token___not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    UserAuthorization_RefreshAccessToken_Precedent_::DeletedInParallelExecution => {
+                        UserAuthorization_RefreshAccessToken_Precedent {
+                            deleted_in_parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -4856,6 +4870,7 @@ mod test {
                     } => {}
                     UserAuthorization_AuthorizeByLastStep_Precedent_::User__NotFound => {}
                     UserAuthorization_AuthorizeByLastStep_Precedent_::DeletedInParallelExecution => {}
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::CreatedInParallelExecution => {}
                 }
                 let precedents: Vec<UserAuthorization_AuthorizeByLastStep_Precedent_> = vec![
                     UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__NotFound,
@@ -4865,6 +4880,7 @@ mod test {
                     },
                     UserAuthorization_AuthorizeByLastStep_Precedent_::User__NotFound,
                     UserAuthorization_AuthorizeByLastStep_Precedent_::DeletedInParallelExecution,
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::CreatedInParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__authorize_by_last_step(precedent)?;
@@ -5022,10 +5038,12 @@ mod test {
                 match UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__NotFound {
                     UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__NotFound => {}
                     UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__AlreadyExpired => {}
+                    UserAuthorization_RefreshAccessToken_Precedent_::DeletedInParallelExecution => {}
                 }
                 let precedents: Vec<UserAuthorization_RefreshAccessToken_Precedent_> = vec![
                     UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__NotFound,
                     UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__AlreadyExpired,
+                    UserAuthorization_RefreshAccessToken_Precedent_::DeletedInParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__refresh_access_token(precedent)?;
