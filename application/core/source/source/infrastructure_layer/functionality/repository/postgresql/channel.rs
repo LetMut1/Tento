@@ -332,7 +332,6 @@ impl Repository<Postgresql<Channel>> {
             Option<(
                 i64,
                 i16,
-                i64,
             )>,
             AggregateError,
         >,

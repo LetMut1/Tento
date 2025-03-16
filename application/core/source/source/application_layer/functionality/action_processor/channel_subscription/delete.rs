@@ -12,6 +12,7 @@ use {
                     Channel_Id,
                 },
                 channel_subscription::ChannelSubscription,
+                channel_subscription_token::ChannelSubscriptionToken,
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
