@@ -568,6 +568,8 @@ user_registration_token__can_be_resent_from - unixtime after wich it will be all
 ```
 Precedent {
     User__EmailAlreadyExist,
+    CreatedInParallelExecution,
+    DeletedInParallelExecution,
 }
 ```
 - ## UserAuthorization_RegisterBySecondStep POST /user_authorization/register_by_second_step
@@ -589,6 +591,7 @@ enum Precedent {
     UserRegistrationToken__WrongValue {
         user_registration_token__wrong_enter_tries_quantity: i16,
     },
+    DeletedInParallelExecution,
 }
 ```
 
@@ -647,6 +650,7 @@ enum Precedent {
     UserRegistrationToken__AlreadyExpired,
     UserRegistrationToken__AlreadyApproved,
     UserRegistrationToken__TimeToResendHasNotCome,
+    DeletedInParallelExecution,
 }
 ```
  - ## UserAuthorization_AuthorizeByFirstStep POST /user_authorization/authorize_by_first_step

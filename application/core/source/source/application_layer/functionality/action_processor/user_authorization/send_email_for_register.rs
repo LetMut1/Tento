@@ -83,14 +83,16 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_registration_token__expires_at <= now {
-                Repository::<Postgresql<UserRegistrationToken>>::delete(
+                if !Repository::<Postgresql<UserRegistrationToken>>::delete(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy {
                         user__email: incoming.user__email,
                         user_device__id: incoming.user_device__id,
                     },
                 )
-                .await?;
+                .await? {
+                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__AlreadyExpired));
             }
             if user_registration_token__is_approved {
@@ -100,7 +102,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__TimeToResendHasNotCome));
             }
             user_registration_token__can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
-            Repository::<Postgresql<UserRegistrationToken>>::update_2(
+            if !Repository::<Postgresql<UserRegistrationToken>>::update_2(
                 &postgresql_database_2_client,
                 UserRegistrationTokenUpdate2 {
                     user_registration_token__can_be_resent_from,
@@ -110,7 +112,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     user_device__id: incoming.user_device__id,
                 },
             )
-            .await?;
+            .await? {
+                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+            }
             let environment_configuration = inner.environment_configuration;
             let user__email = incoming.user__email.to_string();
             let user_device__id = incoming.user_device__id.to_string();

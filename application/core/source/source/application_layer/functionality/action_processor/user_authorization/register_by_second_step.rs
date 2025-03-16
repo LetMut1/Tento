@@ -80,14 +80,16 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__NotFound)),
             };
             if user_registration_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
-                Repository::<Postgresql<UserRegistrationToken>>::delete(
+                if !Repository::<Postgresql<UserRegistrationToken>>::delete(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy {
                         user__email: incoming.user__email,
                         user_device__id: incoming.user_device__id,
                     },
                 )
-                .await?;
+                .await? {
+                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__AlreadyExpired));
             }
             if user_registration_token__is_approved {
@@ -98,23 +100,27 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                     user_registration_token__wrong_enter_tries_quantity += 1;
                 }
                 if user_registration_token__wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
-                    Repository::<Postgresql<UserRegistrationToken>>::update_4(
+                    if !Repository::<Postgresql<UserRegistrationToken>>::update_4(
                         &postgresql_database_2_client,
                         UserRegistrationTokenBy {
                             user__email: incoming.user__email,
                             user_device__id: incoming.user_device__id,
                         },
                     )
-                    .await?;
+                    .await? {
+                        return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    }
                 } else {
-                    Repository::<Postgresql<UserRegistrationToken>>::delete(
+                    if !Repository::<Postgresql<UserRegistrationToken>>::delete(
                         &postgresql_database_2_client,
                         UserRegistrationTokenBy {
                             user__email: incoming.user__email,
                             user_device__id: incoming.user_device__id,
                         },
                     )
-                    .await?;
+                    .await? {
+                        return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    }
                 }
                 return Result::Ok(
                     UnifiedReport::precedent(
@@ -125,7 +131,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                 );
             }
             user_registration_token__is_approved = true;
-            Repository::<Postgresql<UserRegistrationToken>>::update_5(
+            if !Repository::<Postgresql<UserRegistrationToken>>::update_5(
                 &postgresql_database_2_client,
                 UserRegistrationTokenUpdate5 {
                     user_registration_token__is_approved,
@@ -135,7 +141,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                     user_device__id: incoming.user_device__id,
                 },
             )
-            .await?;
+            .await? {
+                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+            }
             return Result::Ok(UnifiedReport::target_empty());
         };
     }

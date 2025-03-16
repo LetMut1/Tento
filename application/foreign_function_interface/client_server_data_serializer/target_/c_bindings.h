@@ -262,6 +262,8 @@ typedef struct CData_UserAuthorization_RegisterByFirstStep_Outcoming {
 
 typedef struct UserAuthorization_RegisterByFirstStep_Precedent {
   bool user___email_already_exist;
+  bool created_in_parallel_execution;
+  bool deleted_in_parallel_execution;
 } UserAuthorization_RegisterByFirstStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_RegisterByFirstStep_Outcoming__UserAuthorization_RegisterByFirstStep_Precedent {
@@ -293,6 +295,7 @@ typedef struct UserAuthorization_RegisterBySecondStep_Precedent {
   bool user_registration_token___already_expired;
   bool user_registration_token___already_approved;
   struct UserRegistrationToken__WrongValue user_registration_token___wrong_value;
+  bool deleted_in_parallel_execution;
 } UserAuthorization_RegisterBySecondStep_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_RegisterBySecondStep_Precedent {
@@ -467,6 +470,7 @@ typedef struct UserAuthorization_SendEmailForRegister_Precedent {
   bool user_registration_token___already_expired;
   bool user_registration_token___already_approved;
   bool user_registration_token___time_to_resend_has_not_come;
+  bool deleted_in_parallel_execution;
 } UserAuthorization_SendEmailForRegister_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_SendEmailForRegister_Outcoming__UserAuthorization_SendEmailForRegister_Precedent {

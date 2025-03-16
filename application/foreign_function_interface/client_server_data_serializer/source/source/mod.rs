@@ -1150,6 +1150,8 @@ pub struct UserAuthorization_RegisterByFirstStep_Outcoming {
 #[derive(Default)]
 pub struct UserAuthorization_RegisterByFirstStep_Precedent {
     pub user___email_already_exist: bool,
+    pub created_in_parallel_execution: bool,
+    pub deleted_in_parallel_execution: bool
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterByFirstStep_CResult {
@@ -1180,11 +1182,19 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize
             UnifiedReport::Precedent {
                 precedent,
             } => {
-                match precedent {
-                    UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist => {}
-                };
-                let precedent_ = UserAuthorization_RegisterByFirstStep_Precedent {
-                    user___email_already_exist: true,
+                let precedent_ = match precedent {
+                    UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist => UserAuthorization_RegisterByFirstStep_Precedent {
+                        user___email_already_exist: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RegisterByFirstStep_Precedent_::CreatedInParallelExecution => UserAuthorization_RegisterByFirstStep_Precedent {
+                        created_in_parallel_execution: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RegisterByFirstStep_Precedent_::DeletedInParallelExecution => UserAuthorization_RegisterByFirstStep_Precedent {
+                        deleted_in_parallel_execution: true,
+                        ..Default::default()
+                    },
                 };
                 CUnifiedReport::precedent(precedent_)
             }
@@ -1236,6 +1246,7 @@ pub struct UserAuthorization_RegisterBySecondStep_Precedent {
     pub user_registration_token___already_expired: bool,
     pub user_registration_token___already_approved: bool,
     pub user_registration_token___wrong_value: UserRegistrationToken__WrongValue,
+    pub deleted_in_parallel_execution: bool,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -1274,6 +1285,12 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__deserializ
                                 is_exist: true,
                                 user_registration_token__wrong_enter_tries_quantity,
                             },
+                            ..Default::default()
+                        }
+                    }
+                    UserAuthorization_RegisterBySecondStep_Precedent_::DeletedInParallelExecution => {
+                        UserAuthorization_RegisterBySecondStep_Precedent {
+                            deleted_in_parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -1803,6 +1820,7 @@ pub struct UserAuthorization_SendEmailForRegister_Precedent {
     pub user_registration_token___already_expired: bool,
     pub user_registration_token___already_approved: bool,
     pub user_registration_token___time_to_resend_has_not_come: bool,
+    pub deleted_in_parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__send_email_for_register__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_SendEmailForRegister_CResult {
@@ -1852,6 +1870,12 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__deserializ
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__TimeToResendHasNotCome => {
                         UserAuthorization_SendEmailForRegister_Precedent {
                             user_registration_token___time_to_resend_has_not_come: true,
+                            ..Default::default()
+                        }
+                    }
+                    UserAuthorization_SendEmailForRegister_Precedent_::DeletedInParallelExecution => {
+                        UserAuthorization_SendEmailForRegister_Precedent {
+                            deleted_in_parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -4992,17 +5016,29 @@ mod test {
                     user_authorization__register_by_first_step__deserialize_deallocate,
                 );
             }
-            pub fn precedent__user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist {
-                    UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist => {}
-                }
-                let precedent = UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist;
-                let unified_report = UnifiedReport::<UserAuthorization_RegisterByFirstStep_Outcoming_, UserAuthorization_RegisterByFirstStep_Precedent_>::precedent(precedent);
+            fn _precedent__user_authorization__register_by_first_step(precedent: UserAuthorization_RegisterByFirstStep_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, UserAuthorization_RegisterByFirstStep_Precedent_>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__register_by_first_step__deserialize_allocate,
                     user_authorization__register_by_first_step__deserialize_deallocate,
                 );
+            }
+            pub fn precedent__user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+                match UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist {
+                    UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist => {}
+                    UserAuthorization_RegisterByFirstStep_Precedent_::CreatedInParallelExecution => {}
+                    UserAuthorization_RegisterByFirstStep_Precedent_::DeletedInParallelExecution => {}
+                }
+                let precedents: Vec<UserAuthorization_RegisterByFirstStep_Precedent_> = vec![
+                    UserAuthorization_RegisterByFirstStep_Precedent_::User__EmailAlreadyExist,
+                    UserAuthorization_RegisterByFirstStep_Precedent_::CreatedInParallelExecution,
+                    UserAuthorization_RegisterByFirstStep_Precedent_::DeletedInParallelExecution,
+                ];
+                '_a: for precedent in precedents {
+                    _precedent__user_authorization__register_by_first_step(precedent)?;
+                }
+                return Result::Ok(());
             }
             pub fn target_empty__user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let unified_report = UnifiedReport::<Void, UserAuthorization_RegisterBySecondStep_Precedent_>::target_empty();
@@ -5031,15 +5067,16 @@ mod test {
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__WrongValue {
                         user_registration_token__wrong_enter_tries_quantity: _,
                     } => {}
+                    UserAuthorization_RegisterBySecondStep_Precedent_::DeletedInParallelExecution => {}
                 }
                 let precedents: Vec<UserAuthorization_RegisterBySecondStep_Precedent_> = vec![
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__NotFound,
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyExpired,
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyApproved,
-
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__WrongValue {
                         user_registration_token__wrong_enter_tries_quantity: 0,
                     },
+                    UserAuthorization_RegisterBySecondStep_Precedent_::DeletedInParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__register_by_second_step(precedent)?;
@@ -5281,12 +5318,14 @@ mod test {
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyExpired => {}
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyApproved => {}
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__TimeToResendHasNotCome => {}
+                    UserAuthorization_SendEmailForRegister_Precedent_::DeletedInParallelExecution => {}
                 }
                 let precedents: Vec<UserAuthorization_SendEmailForRegister_Precedent_> = vec![
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__NotFound,
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyExpired,
                     UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyApproved,
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__TimeToResendHasNotCome
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__TimeToResendHasNotCome,
+                    UserAuthorization_SendEmailForRegister_Precedent_::DeletedInParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_register(precedent)?;

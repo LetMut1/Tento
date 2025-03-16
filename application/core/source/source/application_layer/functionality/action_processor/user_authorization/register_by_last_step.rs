@@ -152,14 +152,16 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__NotFound)),
                 };
                 if user_registration_token__expires_at <= now {
-                    Repository::<Postgresql<UserRegistrationToken>>::delete(
+                    if !Repository::<Postgresql<UserRegistrationToken>>::delete(
                         &postgresql_database_2_client,
                         UserRegistrationTokenBy {
                             user__email: incoming.user__email,
                             user_device__id: incoming.user_device__id,
                         },
                     )
-                    .await?;
+                    .await? {
+                        return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    }
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__AlreadyExpired));
                 }
                 if !user_registration_token__is_approved {
@@ -170,23 +172,27 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                         user_registration_token__wrong_enter_tries_quantity += 1;
                     }
                     if user_registration_token__wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
-                        Repository::<Postgresql<UserRegistrationToken>>::update_4(
+                        if !Repository::<Postgresql<UserRegistrationToken>>::update_4(
                             &postgresql_database_2_client,
                             UserRegistrationTokenBy {
                                 user__email: incoming.user__email,
                                 user_device__id: incoming.user_device__id,
                             },
                         )
-                        .await?;
+                        .await? {
+                            return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                        }
                     } else {
-                        Repository::<Postgresql<UserRegistrationToken>>::delete(
+                        if !Repository::<Postgresql<UserRegistrationToken>>::delete(
                             &postgresql_database_2_client,
                             UserRegistrationTokenBy {
                                 user__email: incoming.user__email,
                                 user_device__id: incoming.user_device__id,
                             },
                         )
-                        .await?;
+                        .await? {
+                            return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                        }
                     }
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__WrongValue));
                 }
@@ -230,7 +236,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Err(aggregate_error);
             };
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserRegistrationToken>>::delete(
+            let is_deleted = match Repository::<Postgresql<UserRegistrationToken>>::delete(
                 transaction.get_client(),
                 UserRegistrationTokenBy {
                     user__email: incoming.user__email,
@@ -239,8 +245,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             )
             .await
             {
+                Result::Ok(is_deleted_) => is_deleted_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
+            };
+            if !is_deleted {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Err(aggregate_error);
+                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
             }
             let is_created = match Repository::<Postgresql<User>>::create_2(
                 &postgresql_database_1_client,
