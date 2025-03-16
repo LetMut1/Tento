@@ -679,6 +679,8 @@ user_authorization_token__can_be_resent_from - unixtime after wich it will be al
 ```
 enum Precedent {
     User__WrongEmailOrNicknameOrPassword,
+    CreatedInParallelExecution,
+    DeletedInParallelExecution,
 }
 ```
  - ## UserAuthorization_AuthorizeByLastStep POST /user_authorization/authorize_by_last_step
@@ -706,6 +708,7 @@ enum Precedent {
         user_authorization_token__wrong_enter_tries_quantity: i16,
     },
     User__NotFound,
+    DeletedInParallelExecution
 }
 ```
  - ## UserAuthorization_SendEmailForAuthorize POST /user_authorization/send_email_for_authorize
@@ -729,6 +732,7 @@ enum Precedent {
     UserAuthorizationToken__NotFound,
     UserAuthorizationToken__AlreadyExpired,
     UserAuthorizationToken__TimeToResendHasNotCome,
+    DeletedInParallelExecution,
 }
 ```
  - ## UserAuthorization_ResetPasswordByFirstStep POST /user_authorization/reset_password_by_first_step

@@ -548,6 +548,8 @@ pub struct UserAuthorization_AuthorizeByFirstStep_Outcoming {
 #[derive(Default)]
 pub struct UserAuthorization_AuthorizeByFirstStep_Precedent {
     pub user___wrong_email_or_nickname_or_password: bool,
+    pub created_in_parallel_execution: bool,
+    pub deleted_in_parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_AuthorizeByFirstStep_CResult {
@@ -579,11 +581,19 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserializ
             UnifiedReport::Precedent {
                 precedent,
             } => {
-                match precedent {
-                    UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword => {}
-                };
-                let precedent_ = UserAuthorization_AuthorizeByFirstStep_Precedent {
-                    user___wrong_email_or_nickname_or_password: true,
+                let precedent_ = match precedent {
+                    UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword => UserAuthorization_AuthorizeByFirstStep_Precedent {
+                        user___wrong_email_or_nickname_or_password: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_AuthorizeByFirstStep_Precedent_::CreatedInParallelExecution => UserAuthorization_AuthorizeByFirstStep_Precedent {
+                        created_in_parallel_execution: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_AuthorizeByFirstStep_Precedent_::DeletedInParallelExecution => UserAuthorization_AuthorizeByFirstStep_Precedent {
+                        deleted_in_parallel_execution: true,
+                        ..Default::default()
+                    },
                 };
                 CUnifiedReport::precedent(precedent_)
             }
@@ -641,6 +651,7 @@ pub struct UserAuthorization_AuthorizeByLastStep_Precedent {
     pub user_authorization_token___already_expired: bool,
     pub user_authorization_token___wrong_value: UserAuthorizationToken__WrongValue,
     pub user___not_found: bool,
+    pub deleted_in_parallel_execution: bool,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -711,6 +722,12 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                     UserAuthorization_AuthorizeByLastStep_Precedent_::User__NotFound => {
                         UserAuthorization_AuthorizeByLastStep_Precedent {
                             user___not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::DeletedInParallelExecution => {
+                        UserAuthorization_AuthorizeByLastStep_Precedent {
+                            deleted_in_parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -1935,6 +1952,7 @@ pub struct UserAuthorization_SendEmailForAuthorize_Precedent {
     pub user_authorization_token___not_found: bool,
     pub user_authorization_token___already_expired: bool,
     pub user_authorization_token___time_to_resend_has_not_come: bool,
+    pub deleted_in_parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deserialize_allocate(
@@ -1986,6 +2004,12 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deseriali
                     UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__TimeToResendHasNotCome => {
                         UserAuthorization_SendEmailForAuthorize_Precedent {
                             user_authorization_token___time_to_resend_has_not_come: true,
+                            ..Default::default()
+                        }
+                    }
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::DeletedInParallelExecution => {
+                        UserAuthorization_SendEmailForAuthorize_Precedent {
+                            deleted_in_parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -4762,17 +4786,29 @@ mod test {
                     user_authorization__authorize_by_first_step__deserialize_deallocate,
                 );
             }
-            pub fn precedent__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword {
-                    UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword => {}
-                }
-                let precedent = UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword;
+            fn _precedent__user_authorization__authorize_by_first_step(precedent: UserAuthorization_AuthorizeByFirstStep_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
                 let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming_, UserAuthorization_AuthorizeByFirstStep_Precedent_>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__authorize_by_first_step__deserialize_allocate,
                     user_authorization__authorize_by_first_step__deserialize_deallocate,
                 );
+            }
+            pub fn precedent__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
+                match UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword {
+                    UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword => {}
+                    UserAuthorization_AuthorizeByFirstStep_Precedent_::CreatedInParallelExecution => {}
+                    UserAuthorization_AuthorizeByFirstStep_Precedent_::DeletedInParallelExecution => {}
+                }
+                let precedents: Vec<UserAuthorization_AuthorizeByFirstStep_Precedent_> = vec![
+                    UserAuthorization_AuthorizeByFirstStep_Precedent_::User__WrongEmailOrNicknameOrPassword,
+                    UserAuthorization_AuthorizeByFirstStep_Precedent_::CreatedInParallelExecution,
+                    UserAuthorization_AuthorizeByFirstStep_Precedent_::DeletedInParallelExecution,
+                ];
+                '_a: for precedent in precedents {
+                    _precedent__user_authorization__authorize_by_first_step(precedent)?;
+                }
+                return Result::Ok(());
             }
             pub fn target_empty__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming_, UserAuthorization_AuthorizeByLastStep_Precedent_>::target_empty();
@@ -4819,6 +4855,7 @@ mod test {
                         user_authorization_token__wrong_enter_tries_quantity: _,
                     } => {}
                     UserAuthorization_AuthorizeByLastStep_Precedent_::User__NotFound => {}
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::DeletedInParallelExecution => {}
                 }
                 let precedents: Vec<UserAuthorization_AuthorizeByLastStep_Precedent_> = vec![
                     UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__NotFound,
@@ -4826,7 +4863,8 @@ mod test {
                     UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__WrongValue {
                         user_authorization_token__wrong_enter_tries_quantity: 0,
                     },
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::User__NotFound
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::User__NotFound,
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::DeletedInParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__authorize_by_last_step(precedent)?;
@@ -5366,12 +5404,14 @@ mod test {
                     UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__NotFound => {}
                     UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__AlreadyExpired => {}
                     UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__TimeToResendHasNotCome => {}
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::DeletedInParallelExecution => {}
                 }
                 let precedents: Vec<UserAuthorization_SendEmailForAuthorize_Precedent_> = vec![
                     UserAuthorization_SendEmailForAuthorize_Precedent_::User__NotFound,
                     UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__NotFound,
                     UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__AlreadyExpired,
                     UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__TimeToResendHasNotCome,
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::DeletedInParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_authorize(precedent)?;

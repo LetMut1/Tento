@@ -180,7 +180,7 @@ impl CommandProcessor<CreateFixtures> {
                 if !Validator::<UserDevice_Id>::is_valid(&user_device__id) {
                     return Result::Err(crate::new_invalid_argument!());
                 }
-                Repository::<Postgresql<UserDevice>>::create(
+                let _ = Repository::<Postgresql<UserDevice>>::create(
                     &postgresql_database_1_client,
                     UserDeviceInsert {
                         user_device__id: user_device__id.as_str(),

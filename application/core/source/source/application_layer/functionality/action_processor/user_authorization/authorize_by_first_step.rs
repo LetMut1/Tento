@@ -185,7 +185,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             false
                         };
                         if need_to_update_1 && need_to_update_2 {
-                            Repository::<Postgresql<UserAuthorizationToken>>::update_1(
+                            if !Repository::<Postgresql<UserAuthorizationToken>>::update_1(
                                 &postgresql_database_2_client,
                                 UserAuthorizationTokenUpdate1 {
                                     user_authorization_token__value: user_authorization_token__value_.as_str(),
@@ -198,10 +198,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                     user_device__id: incoming.user_device__id,
                                 },
                             )
-                            .await?;
+                            .await? {
+                                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                            }
                         } else {
                             if need_to_update_1 {
-                                Repository::<Postgresql<UserAuthorizationToken>>::update_3(
+                                if !Repository::<Postgresql<UserAuthorizationToken>>::update_3(
                                     &postgresql_database_2_client,
                                     UserAuthorizationTokenUpdate3 {
                                         user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from_,
@@ -211,10 +213,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                         user_device__id: incoming.user_device__id,
                                     },
                                 )
-                                .await?;
+                                .await? {
+                                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                                }
                             }
                             if need_to_update_2 {
-                                Repository::<Postgresql<UserAuthorizationToken>>::update_2(
+                                if !Repository::<Postgresql<UserAuthorizationToken>>::update_2(
                                     &postgresql_database_2_client,
                                     UserAuthorizationTokenUpdate2 {
                                         user_authorization_token__value: user_authorization_token__value_.as_str(),
@@ -226,7 +230,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                         user_device__id: incoming.user_device__id,
                                     },
                                 )
-                                .await?;
+                                .await? {
+                                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                                }
                             }
                         }
                         (
@@ -240,7 +246,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                         let user_authorization_token__value_ = Generator::<UserAuthorizationToken_Value>::generate();
                         let user_authorization_token__wrong_enter_tries_quantity_ = 0;
                         let user_authorization_token__can_be_resent_from_ = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?;
-                        Repository::<Postgresql<UserAuthorizationToken>>::create(
+                        if !Repository::<Postgresql<UserAuthorizationToken>>::create(
                             &postgresql_database_2_client,
                             UserAuthorizationTokenInsert {
                                 user__id,
@@ -251,7 +257,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                 user_authorization_token__expires_at: Generator::<UserAuthorizationToken_ExpiresAt>::generate(now)?,
                             },
                         )
-                        .await?;
+                        .await? {
+                            return Result::Ok(UnifiedReport::precedent(Precedent::CreatedInParallelExecution));
+                        }
                         (
                             user_authorization_token__value_,
                             user_authorization_token__can_be_resent_from_,

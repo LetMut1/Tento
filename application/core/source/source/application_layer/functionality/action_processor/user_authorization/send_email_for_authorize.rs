@@ -98,21 +98,23 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_authorization_token__expires_at <= now {
-                Repository::<Postgresql<UserAuthorizationToken>>::delete(
+                if !Repository::<Postgresql<UserAuthorizationToken>>::delete(
                     &postgresql_database_2_client,
                     UserAuthorizationTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
-                .await?;
+                .await? {
+                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken__AlreadyExpired));
             }
             if user_authorization_token__can_be_resent_from > now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken__TimeToResendHasNotCome));
             }
             user_authorization_token__can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate(now)?;
-            Repository::<Postgresql<UserAuthorizationToken>>::update_3(
+            if !Repository::<Postgresql<UserAuthorizationToken>>::update_3(
                 &postgresql_database_2_client,
                 UserAuthorizationTokenUpdate3 {
                     user_authorization_token__can_be_resent_from,
@@ -122,7 +124,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                     user_device__id: incoming.user_device__id,
                 },
             )
-            .await?;
+            .await? {
+                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+            }
             let environment_configuration = inner.environment_configuration;
             let user_device__id = incoming.user_device__id.to_string();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(

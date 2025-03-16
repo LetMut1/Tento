@@ -110,14 +110,16 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 };
             let now = Resolver::<UnixTime>::get_now_in_seconds();
             if user_authorization_token__expires_at <= now {
-                Repository::<Postgresql<UserAuthorizationToken>>::delete(
+                if !Repository::<Postgresql<UserAuthorizationToken>>::delete(
                     &postgresql_database_2_client,
                     UserAuthorizationTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
-                .await?;
+                .await? {
+                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken__AlreadyExpired));
             }
             if user_authorization_token__value != incoming.user_authorization_token__value {
@@ -125,23 +127,27 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     user_authorization_token__wrong_enter_tries_quantity += 1;
                 }
                 if user_authorization_token__wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
-                    Repository::<Postgresql<UserAuthorizationToken>>::update_4(
+                    if !Repository::<Postgresql<UserAuthorizationToken>>::update_4(
                         &postgresql_database_2_client,
                         UserAuthorizationTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id,
                         },
                     )
-                    .await?;
+                    .await? {
+                        return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    }
                 } else {
-                    Repository::<Postgresql<UserAuthorizationToken>>::delete(
+                    if !Repository::<Postgresql<UserAuthorizationToken>>::delete(
                         &postgresql_database_2_client,
                         UserAuthorizationTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id,
                         },
                     )
-                    .await?;
+                    .await? {
+                        return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    }
                 }
                 return Result::Ok(
                     UnifiedReport::precedent(
@@ -217,7 +223,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     return Result::Err(aggregate_error);
                 };
             };
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAuthorizationToken>>::delete(
+            let is_deleted = match Repository::<Postgresql<UserAuthorizationToken>>::delete(
                 transaction.get_client(),
                 UserAuthorizationTokenBy {
                     user__id: incoming.user__id,
@@ -226,8 +232,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             )
             .await
             {
-                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Err(aggregate_error);
+                Result::Ok(is_deleted_) => is_deleted_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
+            };
+            if !is_deleted {
+                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
             }
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
             let user_access_token_signed = Encoder::<UserAccessToken>::encode(
@@ -250,7 +262,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             let user_device__id = incoming.user_device__id.to_string();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    Repository::<Postgresql<UserDevice>>::create(
+                    let _ = Repository::<Postgresql<UserDevice>>::create(
                         &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
                         UserDeviceInsert {
                             user_device__id: user_device__id.as_str(),

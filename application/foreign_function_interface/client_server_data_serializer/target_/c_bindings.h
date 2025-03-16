@@ -38,6 +38,8 @@ typedef struct CData_UserAuthorization_AuthorizeByFirstStep_Outcoming {
 
 typedef struct UserAuthorization_AuthorizeByFirstStep_Precedent {
   bool user___wrong_email_or_nickname_or_password;
+  bool created_in_parallel_execution;
+  bool deleted_in_parallel_execution;
 } UserAuthorization_AuthorizeByFirstStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_AuthorizeByFirstStep_Outcoming__UserAuthorization_AuthorizeByFirstStep_Precedent {
@@ -92,6 +94,7 @@ typedef struct UserAuthorization_AuthorizeByLastStep_Precedent {
   bool user_authorization_token___already_expired;
   struct UserAuthorizationToken__WrongValue user_authorization_token___wrong_value;
   bool user___not_found;
+  bool deleted_in_parallel_execution;
 } UserAuthorization_AuthorizeByLastStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_AuthorizeByLastStep_Outcoming__UserAuthorization_AuthorizeByLastStep_Precedent {
@@ -505,6 +508,7 @@ typedef struct UserAuthorization_SendEmailForAuthorize_Precedent {
   bool user_authorization_token___not_found;
   bool user_authorization_token___already_expired;
   bool user_authorization_token___time_to_resend_has_not_come;
+  bool deleted_in_parallel_execution;
 } UserAuthorization_SendEmailForAuthorize_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_SendEmailForAuthorize_Outcoming__UserAuthorization_SendEmailForAuthorize_Precedent {

@@ -30,5 +30,7 @@ pub struct Outcoming {
 crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::User__WrongEmailOrNicknameOrPassword,
+        CommonPrecedent::CreatedInParallelExecution,
+        CommonPrecedent::DeletedInParallelExecution,
     }
 );

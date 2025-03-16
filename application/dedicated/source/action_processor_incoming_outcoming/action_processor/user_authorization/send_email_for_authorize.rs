@@ -28,5 +28,6 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::UserAuthorizationToken__NotFound,
         CommonPrecedent::UserAuthorizationToken__AlreadyExpired,
         CommonPrecedent::UserAuthorizationToken__TimeToResendHasNotCome,
+        CommonPrecedent::DeletedInParallelExecution,
     }
 );
