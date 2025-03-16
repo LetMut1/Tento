@@ -88,7 +88,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                     },
                 )
                 .await? {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                 }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__AlreadyExpired));
             }
@@ -108,7 +108,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                         },
                     )
                     .await? {
-                        return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                        return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                     }
                 } else {
                     if !Repository::<Postgresql<UserRegistrationToken>>::delete(
@@ -119,7 +119,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                         },
                     )
                     .await? {
-                        return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                        return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                     }
                 }
                 return Result::Ok(
@@ -142,7 +142,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                 },
             )
             .await? {
-                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             return Result::Ok(UnifiedReport::target_empty());
         };

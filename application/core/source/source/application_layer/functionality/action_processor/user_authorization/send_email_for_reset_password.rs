@@ -110,7 +110,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                     },
                 )
                 .await? {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                 }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__AlreadyExpired));
             }
@@ -132,7 +132,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 },
             )
             .await? {
-                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             let environment_configuration = inner.environment_configuration;
             let user_device__id = incoming.user_device__id.to_string();

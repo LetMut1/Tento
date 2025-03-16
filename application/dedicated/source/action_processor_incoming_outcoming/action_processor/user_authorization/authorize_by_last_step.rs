@@ -36,6 +36,6 @@ crate::common_precedent::enum_from!(
             user_authorization_token__wrong_enter_tries_quantity: i16,
         },
         CommonPrecedent::User__NotFound,
-        CommonPrecedent::DeletedInParallelExecution,
+        CommonPrecedent::ParallelExecution,
     }
 );

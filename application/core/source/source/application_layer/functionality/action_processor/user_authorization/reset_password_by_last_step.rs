@@ -113,7 +113,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                         },
                     )
                     .await? {
-                        return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                        return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                     }
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__AlreadyExpired));
                 }
@@ -133,7 +133,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                             },
                         )
                         .await? {
-                            return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                            return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                         }
                     } else {
                         if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
@@ -144,7 +144,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                             },
                         )
                         .await? {
-                            return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                            return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                         }
                     }
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__WrongValue));
@@ -201,7 +201,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             };
             if !is_deleted {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             is_deleted = match Repository::<Postgresql<UserResetPasswordToken>>::delete(
                 transaction.get_client(),
@@ -220,7 +220,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             };
             if !is_deleted {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             let is_updated = match Repository::<Postgresql<User>>::update(
                 &postgresql_database_1_client,
@@ -241,7 +241,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             };
             if !is_updated {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             if let Result::Err(aggregate_error) = Resolver_::<Transaction<'_>>::commit(transaction).await {
                 if !Repository::<Postgresql<User>>::update(
@@ -254,7 +254,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     },
                 )
                 .await? {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                 }
                 return Result::Err(aggregate_error);
             }

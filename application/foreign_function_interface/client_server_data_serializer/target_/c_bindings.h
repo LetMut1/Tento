@@ -38,7 +38,7 @@ typedef struct CData_UserAuthorization_AuthorizeByFirstStep_Outcoming {
 
 typedef struct UserAuthorization_AuthorizeByFirstStep_Precedent {
   bool user___wrong_email_or_nickname_or_password;
-  bool deleted_in_parallel_execution;
+  bool parallel_execution;
 } UserAuthorization_AuthorizeByFirstStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_AuthorizeByFirstStep_Outcoming__UserAuthorization_AuthorizeByFirstStep_Precedent {
@@ -93,7 +93,7 @@ typedef struct UserAuthorization_AuthorizeByLastStep_Precedent {
   bool user_authorization_token___already_expired;
   struct UserAuthorizationToken__WrongValue user_authorization_token___wrong_value;
   bool user___not_found;
-  bool deleted_in_parallel_execution;
+  bool parallel_execution;
 } UserAuthorization_AuthorizeByLastStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_AuthorizeByLastStep_Outcoming__UserAuthorization_AuthorizeByLastStep_Precedent {
@@ -230,7 +230,7 @@ typedef struct CData_UserAuthorization_RefreshAccessToken_Outcoming {
 typedef struct UserAuthorization_RefreshAccessToken_Precedent {
   bool user_access_refresh_token___not_found;
   bool user_access_refresh_token___already_expired;
-  bool deleted_in_parallel_execution;
+  bool parallel_execution;
 } UserAuthorization_RefreshAccessToken_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_RefreshAccessToken_Outcoming__UserAuthorization_RefreshAccessToken_Precedent {
@@ -265,7 +265,7 @@ typedef struct CData_UserAuthorization_RegisterByFirstStep_Outcoming {
 
 typedef struct UserAuthorization_RegisterByFirstStep_Precedent {
   bool user___email_already_exist;
-  bool deleted_in_parallel_execution;
+  bool parallel_execution;
 } UserAuthorization_RegisterByFirstStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_RegisterByFirstStep_Outcoming__UserAuthorization_RegisterByFirstStep_Precedent {
@@ -297,7 +297,7 @@ typedef struct UserAuthorization_RegisterBySecondStep_Precedent {
   bool user_registration_token___already_expired;
   bool user_registration_token___already_approved;
   struct UserRegistrationToken__WrongValue user_registration_token___wrong_value;
-  bool deleted_in_parallel_execution;
+  bool parallel_execution;
 } UserAuthorization_RegisterBySecondStep_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_RegisterBySecondStep_Precedent {
@@ -338,7 +338,7 @@ typedef struct UserAuthorization_RegisterByLastStep_Precedent {
   bool user_registration_token___already_expired;
   bool user_registration_token___is_not_approved;
   bool user_registration_token___wrong_value;
-  bool deleted_in_parallel_execution;
+  bool parallel_execution;
 } UserAuthorization_RegisterByLastStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_RegisterByLastStep_Outcoming__UserAuthorization_RegisterByLastStep_Precedent {
@@ -374,7 +374,7 @@ typedef struct CData_UserAuthorization_ResetPasswordByFirstStep_Outcoming {
 
 typedef struct UserAuthorization_ResetPasswordByFirstStep_Precedent {
   bool user___not_found;
-  bool deleted_in_parallel_execution;
+  bool parallel_execution;
 } UserAuthorization_ResetPasswordByFirstStep_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_ResetPasswordByFirstStep_Outcoming__UserAuthorization_ResetPasswordByFirstStep_Precedent {
@@ -406,7 +406,7 @@ typedef struct UserAuthorization_ResetPasswordBySecondStep_Precedent {
   bool user_reset_password_token___already_expired;
   bool user_reset_password_token___already_approved;
   struct UserResetPasswordToken__WrongValue user_reset_password_token___wrong_value;
-  bool deleted_in_parallel_execution;
+  bool parallel_execution;
 } UserAuthorization_ResetPasswordBySecondStep_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_ResetPasswordBySecondStep_Precedent {
@@ -435,7 +435,7 @@ typedef struct UserAuthorization_ResetPasswordByLastStep_Precedent {
   bool user_reset_password_token___already_expired;
   bool user_reset_password_token___is_not_approved;
   bool user_reset_password_token___wrong_value;
-  bool deleted_in_parallel_execution;
+  bool parallel_execution;
 } UserAuthorization_ResetPasswordByLastStep_Precedent;
 
 typedef struct CUnifiedReport_CVoid__UserAuthorization_ResetPasswordByLastStep_Precedent {
@@ -470,7 +470,7 @@ typedef struct UserAuthorization_SendEmailForRegister_Precedent {
   bool user_registration_token___already_expired;
   bool user_registration_token___already_approved;
   bool user_registration_token___time_to_resend_has_not_come;
-  bool deleted_in_parallel_execution;
+  bool parallel_execution;
 } UserAuthorization_SendEmailForRegister_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_SendEmailForRegister_Outcoming__UserAuthorization_SendEmailForRegister_Precedent {
@@ -505,7 +505,7 @@ typedef struct UserAuthorization_SendEmailForAuthorize_Precedent {
   bool user_authorization_token___not_found;
   bool user_authorization_token___already_expired;
   bool user_authorization_token___time_to_resend_has_not_come;
-  bool deleted_in_parallel_execution;
+  bool parallel_execution;
 } UserAuthorization_SendEmailForAuthorize_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_SendEmailForAuthorize_Outcoming__UserAuthorization_SendEmailForAuthorize_Precedent {
@@ -541,7 +541,7 @@ typedef struct UserAuthorization_SendEmailForResetPassword_Precedent {
   bool user_reset_password_token___already_expired;
   bool user_reset_password_token___already_approved;
   bool user_reset_password_token___time_to_resend_has_not_come;
-  bool deleted_in_parallel_execution;
+  bool parallel_execution;
 } UserAuthorization_SendEmailForResetPassword_Precedent;
 
 typedef struct CUnifiedReport_UserAuthorization_SendEmailForResetPassword_Outcoming__UserAuthorization_SendEmailForResetPassword_Precedent {

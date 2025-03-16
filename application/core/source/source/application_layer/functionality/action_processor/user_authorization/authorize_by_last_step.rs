@@ -118,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     },
                 )
                 .await? {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                 }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken__AlreadyExpired));
             }
@@ -135,7 +135,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                         },
                     )
                     .await? {
-                        return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                        return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                     }
                 } else {
                     if !Repository::<Postgresql<UserAuthorizationToken>>::delete(
@@ -146,7 +146,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                         },
                     )
                     .await? {
-                        return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                        return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                     }
                 }
                 return Result::Ok(
@@ -210,7 +210,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 };
                 if !is_updated {
                     Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                 }
             } else {
                 let is_created = match Repository::<Postgresql<UserAccessRefreshToken>>::create(
@@ -234,7 +234,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 };
                 if !is_created {
                     Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                 }
             };
             let is_deleted = match Repository::<Postgresql<UserAuthorizationToken>>::delete(
@@ -253,7 +253,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 }
             };
             if !is_deleted {
-                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
             let user_access_token_signed = Encoder::<UserAccessToken>::encode(

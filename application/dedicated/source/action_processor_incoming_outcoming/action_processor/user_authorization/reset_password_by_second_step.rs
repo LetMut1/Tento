@@ -20,6 +20,6 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::UserResetPasswordToken__WrongValue {
             user_reset_password_token__wrong_enter_tries_quantity: i16,
         },
-        CommonPrecedent::DeletedInParallelExecution,
+        CommonPrecedent::ParallelExecution,
     }
 );

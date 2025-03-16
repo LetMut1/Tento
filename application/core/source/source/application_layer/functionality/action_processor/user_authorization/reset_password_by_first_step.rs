@@ -144,7 +144,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                 },
                             )
                             .await? {
-                                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                             }
                         } else {
                             if need_to_update_1 {
@@ -159,7 +159,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                     },
                                 )
                                 .await? {
-                                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                                    return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                                 }
                             }
                             if need_to_update_2 {
@@ -177,7 +177,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                     },
                                 )
                                 .await? {
-                                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                                    return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                                 }
                             }
                         }
@@ -205,7 +205,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                             },
                         )
                         .await? {
-                            return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                            return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                         }
                         (
                             user_reset_password_token__value_,

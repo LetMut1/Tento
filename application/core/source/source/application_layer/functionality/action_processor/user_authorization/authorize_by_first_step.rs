@@ -199,7 +199,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                 },
                             )
                             .await? {
-                                return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                             }
                         } else {
                             if need_to_update_1 {
@@ -214,7 +214,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                     },
                                 )
                                 .await? {
-                                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                                    return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                                 }
                             }
                             if need_to_update_2 {
@@ -231,7 +231,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                     },
                                 )
                                 .await? {
-                                    return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                                    return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                                 }
                             }
                         }
@@ -258,7 +258,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             },
                         )
                         .await? {
-                            return Result::Ok(UnifiedReport::precedent(Precedent::DeletedInParallelExecution));
+                            return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                         }
                         (
                             user_authorization_token__value_,

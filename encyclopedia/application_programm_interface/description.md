@@ -568,7 +568,7 @@ user_registration_token__can_be_resent_from - unixtime after wich it will be all
 ```
 Precedent {
     User__EmailAlreadyExist,
-    DeletedInParallelExecution,
+    ParallelExecution,
 }
 ```
 - ## UserAuthorization_RegisterBySecondStep POST /user_authorization/register_by_second_step
@@ -590,7 +590,7 @@ enum Precedent {
     UserRegistrationToken__WrongValue {
         user_registration_token__wrong_enter_tries_quantity: i16,
     },
-    DeletedInParallelExecution,
+    ParallelExecution,
 }
 ```
 
@@ -621,7 +621,7 @@ enum Precedent {
     UserRegistrationToken__AlreadyExpired,
     UserRegistrationToken__IsNotApproved,
     UserRegistrationToken__WrongValue,
-    DeletedInParallelExecution,
+    ParallelExecution,
 }
 ```
  - ## UserAuthorization_SendEmailForRegister POST /user_authorization/send_email_for_register
@@ -648,7 +648,7 @@ enum Precedent {
     UserRegistrationToken__AlreadyExpired,
     UserRegistrationToken__AlreadyApproved,
     UserRegistrationToken__TimeToResendHasNotCome,
-    DeletedInParallelExecution,
+    ParallelExecution,
 }
 ```
  - ## UserAuthorization_AuthorizeByFirstStep POST /user_authorization/authorize_by_first_step
@@ -677,7 +677,7 @@ user_authorization_token__can_be_resent_from - unixtime after wich it will be al
 ```
 enum Precedent {
     User__WrongEmailOrNicknameOrPassword,
-    DeletedInParallelExecution,
+    ParallelExecution,
 }
 ```
  - ## UserAuthorization_AuthorizeByLastStep POST /user_authorization/authorize_by_last_step
@@ -705,7 +705,7 @@ enum Precedent {
         user_authorization_token__wrong_enter_tries_quantity: i16,
     },
     User__NotFound,
-    DeletedInParallelExecution,
+    ParallelExecution,
 }
 ```
  - ## UserAuthorization_SendEmailForAuthorize POST /user_authorization/send_email_for_authorize
@@ -729,7 +729,7 @@ enum Precedent {
     UserAuthorizationToken__NotFound,
     UserAuthorizationToken__AlreadyExpired,
     UserAuthorizationToken__TimeToResendHasNotCome,
-    DeletedInParallelExecution,
+    ParallelExecution,
 }
 ```
  - ## UserAuthorization_ResetPasswordByFirstStep POST /user_authorization/reset_password_by_first_step
@@ -754,7 +754,7 @@ struct Outcoming {
 ```
 enum Precedent {
     User__NotFound,
-    DeletedInParallelExecution,
+    ParallelExecution,
 }
 ```
  - ## UserAuthorization_ResetPasswordBySecondStep POST /user_authorization/reset_password_by_second_step
@@ -776,7 +776,7 @@ enum Precedent {
     UserResetPasswordToken__WrongValue {
         user_reset_password_token__wrong_enter_tries_quantity: i16,
     },
-    DeletedInParallelExecution,
+    ParallelExecution,
 }
 ```
  - ## UserAuthorization_ResetPasswordByLastStep POST /user_authorization/reset_password_by_last_step
@@ -798,7 +798,7 @@ enum Precedent {
     UserResetPasswordToken__AlreadyExpired,
     UserResetPasswordToken__IsNotApproved,
     UserResetPasswordToken__WrongValue,
-    DeletedInParallelExecution,
+    ParallelExecution,
 }
 ```
  - ## UserAuthorization_SendEmailForResetPassword POST /user_authorization/send_email_for_reset_password
@@ -823,7 +823,7 @@ enum Precedent {
     UserResetPasswordToken__AlreadyExpired,
     UserResetPasswordToken__AlreadyApproved,
     UserResetPasswordToken__TimeToResendHasNotCome,
-    DeletedInParallelExecution,
+    ParallelExecution,
 }
 ```
  - ## UserAuthorization_RefreshAccessToken POST /user_authorization/refresh_access_token
@@ -846,7 +846,7 @@ struct Outcoming {
 enum Precedent {
     UserAccessRefreshToken__NotFound,
     UserAccessRefreshToken__AlreadyExpired,
-    DeletedInParallelExecution,
+    ParallelExecution,
 }
 ```
 # Parameters validation rule.

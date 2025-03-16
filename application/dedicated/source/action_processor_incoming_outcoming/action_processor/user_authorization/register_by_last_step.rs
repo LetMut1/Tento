@@ -38,6 +38,6 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::UserRegistrationToken__AlreadyExpired,
         CommonPrecedent::UserRegistrationToken__IsNotApproved,
         CommonPrecedent::UserRegistrationToken__WrongValue,
-        CommonPrecedent::DeletedInParallelExecution,
+        CommonPrecedent::ParallelExecution,
     }
 );
