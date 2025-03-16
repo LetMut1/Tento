@@ -344,6 +344,7 @@ enum Precedent {
     User__IsChannelOwner,
     ChannelSubscription__AlreadyExist,
     ChannelSubscriptionToken__AlreadyExpired,
+    ParallelExecution,
 }
 ```
  - ## ChannelSubscription_Delete POST /channel_subscription/delete
@@ -367,6 +368,7 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelSubscriptionToken__AlreadyExpired,
     ChannelSubscription__NotFound,
+    Channel__NotFound,
 }
 ```
  - ## ChannelPublication1_Create POST /channel_publication1/create
@@ -410,6 +412,7 @@ enum Precedent {
     User__IsNotChannelOwner,
     ChannelPublication1__NotFound,
     ChannelPublication1__IsAlreadyDeleted,
+    ParallelExecution,
 }
 ```
  - ## ChannelPublication1_GetMany POST /channel_publication1/get_many

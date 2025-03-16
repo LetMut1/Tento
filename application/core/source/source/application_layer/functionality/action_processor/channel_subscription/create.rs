@@ -126,7 +126,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscription__AlreadyExist));
             }
-            if let Result::Err(aggregate_error) = Repository::<Postgresql<Channel>>::update_1(
+            let is_updated = match Repository::<Postgresql<Channel>>::update_1(
                 transaction.get_client(),
                 ChannelBy1 {
                     channel__id: incoming.channel__id,
@@ -134,8 +134,15 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             )
             .await
             {
+                Result::Ok(is_updated_) => is_updated_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
+            };
+            if !is_updated {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Err(aggregate_error);
+                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
             return Result::Ok(UnifiedReport::target_empty());

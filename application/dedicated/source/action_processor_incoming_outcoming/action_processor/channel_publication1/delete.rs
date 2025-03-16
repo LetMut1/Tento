@@ -21,5 +21,6 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::User__IsNotChannelOwner,
         CommonPrecedent::ChannelPublication1__NotFound,
         CommonPrecedent::ChannelPublication1__IsAlreadyDeleted,
+        CommonPrecedent::ParallelExecution,
     }
 );

@@ -22,6 +22,6 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::UserAccessToken__AlreadyExpired,
         CommonPrecedent::ChannelSubscriptionToken__AlreadyExpired,
         CommonPrecedent::ChannelSubscription__NotFound,
-
+        CommonPrecedent::Channel__NotFound,
     }
 );

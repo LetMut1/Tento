@@ -99,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             if incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
-            Repository::<Postgresql<ChannelPublication1>>::update_1(
+            if !Repository::<Postgresql<ChannelPublication1>>::update_1(
                 &postgresql_database_3_client,
                 ChannelPublication1Update {
                     channel_publication1__is_predeleted: true,
@@ -109,7 +109,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
                     channel_publication1__id: incoming.channel_publication1__id,
                 },
             )
-            .await?;
+            .await? {
+                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
+            }
             return Result::Ok(UnifiedReport::target_empty());
         };
     }

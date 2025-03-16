@@ -888,6 +888,7 @@ typedef struct ChannelSubscription_Create_Precedent {
   bool user___is_channel__owner;
   bool channel_subscription___already_exist;
   bool channel_subscription_token___already_expired;
+  bool parallel_execution;
 } ChannelSubscription_Create_Precedent;
 
 typedef struct CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent {
@@ -913,6 +914,7 @@ typedef struct ChannelSubscription_Delete_Precedent {
   bool user_access_token___already_expired;
   bool channel_subscription_token___already_expired;
   bool channel_subscription___not_found;
+  bool channel___not_found;
 } ChannelSubscription_Delete_Precedent;
 
 typedef struct CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent {
@@ -1036,6 +1038,7 @@ typedef struct ChannelPublication1_Delete_Precedent {
   bool user___is_not_channel_owner;
   bool channel_publication1___not_found;
   bool channel_publication1___is_already_deleted;
+  bool parallel_execution;
 } ChannelPublication1_Delete_Precedent;
 
 typedef struct CUnifiedReport_CVoid__ChannelPublication1_Delete_Precedent {

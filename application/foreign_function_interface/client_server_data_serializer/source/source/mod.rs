@@ -3093,6 +3093,7 @@ pub struct ChannelSubscription_Create_Precedent {
     pub user___is_channel__owner: bool,
     pub channel_subscription___already_exist: bool,
     pub channel_subscription_token___already_expired: bool,
+    pub parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Create_CResult {
@@ -3134,6 +3135,12 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
                     ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken__AlreadyExpired => {
                         ChannelSubscription_Create_Precedent {
                             channel_subscription_token___already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    ChannelSubscription_Create_Precedent_::ParallelExecution => {
+                        ChannelSubscription_Create_Precedent {
+                            parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -3197,6 +3204,7 @@ pub struct ChannelSubscription_Delete_Precedent {
     pub user_access_token___already_expired: bool,
     pub channel_subscription_token___already_expired: bool,
     pub channel_subscription___not_found: bool,
+    pub channel___not_found: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Delete_CResult {
@@ -3220,6 +3228,12 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_ve
                     ChannelSubscription_Delete_Precedent_::ChannelSubscription__NotFound => {
                         ChannelSubscription_Delete_Precedent {
                             channel_subscription___not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    ChannelSubscription_Delete_Precedent_::Channel__NotFound => {
+                        ChannelSubscription_Delete_Precedent {
+                            channel___not_found: true,
                             ..Default::default()
                         }
                     }
@@ -3559,6 +3573,7 @@ pub struct ChannelPublication1_Delete_Precedent {
     pub user___is_not_channel_owner: bool,
     pub channel_publication1___not_found: bool,
     pub channel_publication1___is_already_deleted: bool,
+    pub parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1_Delete_CResult {
@@ -3585,9 +3600,15 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_ve
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted=> {
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted => {
                         ChannelPublication1_Delete_Precedent {
                             channel_publication1___is_already_deleted: true,
+                            ..Default::default()
+                        }
+                    }
+                    ChannelPublication1_Delete_Precedent_::ParallelExecution => {
+                        ChannelPublication1_Delete_Precedent {
+                            parallel_execution: true,
                             ..Default::default()
                         }
                     }
@@ -5821,6 +5842,7 @@ mod test {
                     ChannelSubscription_Create_Precedent_::User__IsChannelOwner => {}
                     ChannelSubscription_Create_Precedent_::ChannelSubscription__AlreadyExist => {}
                     ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken__AlreadyExpired => {}
+                    ChannelSubscription_Create_Precedent_::ParallelExecution => {}
                 }
                 let precedents: Vec<ChannelSubscription_Create_Precedent_> = vec![
                     ChannelSubscription_Create_Precedent_::UserAccessToken__AlreadyExpired,
@@ -5828,6 +5850,7 @@ mod test {
                     ChannelSubscription_Create_Precedent_::Channel__IsClose,
                     ChannelSubscription_Create_Precedent_::User__IsChannelOwner,
                     ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken__AlreadyExpired,
+                    ChannelSubscription_Create_Precedent_::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_subscription__create(precedent)?;
@@ -5858,11 +5881,13 @@ mod test {
                     ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired => {}
                     ChannelSubscription_Delete_Precedent_::ChannelSubscriptionToken__AlreadyExpired => {}
                     ChannelSubscription_Delete_Precedent_::ChannelSubscription__NotFound => {}
+                    ChannelSubscription_Delete_Precedent_::Channel__NotFound => {}
                 }
                 let precedents: Vec<ChannelSubscription_Delete_Precedent_> = vec![
                     ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired,
                     ChannelSubscription_Delete_Precedent_::ChannelSubscriptionToken__AlreadyExpired,
                     ChannelSubscription_Delete_Precedent_::ChannelSubscription__NotFound,
+                    ChannelSubscription_Delete_Precedent_::Channel__NotFound,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_subscription__delete(precedent)?;
@@ -6003,12 +6028,14 @@ mod test {
                     ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner => {}
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1__NotFound => {}
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted => {}
+                    ChannelPublication1_Delete_Precedent_::ParallelExecution => {}
                 }
                 let precedents: Vec<ChannelPublication1_Delete_Precedent_> = vec![
                     ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired,
                     ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner,
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1__NotFound,
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted,
+                    ChannelPublication1_Delete_Precedent_::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__delete(precedent)?;
