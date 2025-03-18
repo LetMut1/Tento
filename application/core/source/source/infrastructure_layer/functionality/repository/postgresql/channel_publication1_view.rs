@@ -73,7 +73,3 @@ pub struct Insert {
     pub channel_publication1__id: i64,
     pub channel_publication1_view__created_at: i64,
 }
-pub struct By {
-    pub user__id: i64,
-    pub channel_publication1__id: i64,
-}

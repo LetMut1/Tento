@@ -29,6 +29,7 @@ pub use self::{
         By as ChannelPublication1MarkBy,
         Insert as ChannelPublication1MarkInsert,
     },
+    channel_publication1_view::Insert as ChannelPublication1ViewInsert,
     channel_subscription::{
         By as ChannelSubscriptionBy,
         Insert as ChannelSubscriptionInsert,

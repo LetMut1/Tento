@@ -465,7 +465,7 @@ enum Precedent {
     Channel__IsClose,
 }
 ```
- - ## ChannelPublication1Mark_Create POST /channel_publication1/create
+ - ## ChannelPublication1Mark_Create POST /channel_publication1_mark/create
 ```
 Creates a mark for channel publication1.
 ```
@@ -490,7 +490,7 @@ enum Precedent {
     ChannelPublication1__NotFound,
 }
 ```
- - ## ChannelPublication1Mark_Delete POST /channel_publication1/delete
+ - ## ChannelPublication1Mark_Delete POST /channel_publication1_mark/delete
 ```
 Deletes a mark from channel publication1.
 ```
@@ -513,6 +513,29 @@ enum Precedent {
     ChannelPublication1Token__AlreadyExpired,
     ChannelPublication1Mark__NotFound,
     ChannelPublication1__NotFound,
+}
+```
+ - ## ChannelPublication1View_Create POST /channel_publication1_view/create
+```
+Creates a views for channel publication1.
+```
+```
+struct Incoming {
+    user_access_token_signed: <Data standards>
+    pub channel_publication1__id: i64,
+    pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
+}
+
+struct ChannelPublication1TokenSigned {
+    channel_publication1__obfuscation_value: i64,
+    channel_publication1_token__expires_at: i64,
+    signature: Vec<u8>,
+}
+```
+```
+enum Precedent {
+    UserAccessToken__AlreadyExpired,
+    ChannelPublication1Token__AlreadyExpired,
 }
 ```
 <br/><br/>

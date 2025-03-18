@@ -13,6 +13,7 @@ use {
                 Channel_GetManyByNameInSubscriptions,
                 ChannelPublication1Mark_Delete,
                 Channel_GetManyBySubscription,
+                ChannelPublication1View_Create,
                 Channel_GetManyPublicByName,
                 Channel_GetOneById,
                 ChannelPublication1_Create,
@@ -534,6 +535,13 @@ impl HttpServer {
                 ActionRoute::ChannelPublication1Mark(ChannelPublication1Mark::Delete),
             )
         );
+        crate::result_return_logic!(
+            router
+            .insert(
+                ChannelPublication1View::CREATE,
+                ActionRoute::ChannelPublication1View(ChannelPublication1View::Create),
+            )
+        );
         #[cfg(feature = "action_for_manual_test")]
         {
             crate::result_return_logic!(
@@ -743,6 +751,13 @@ impl HttpServer {
                 .insert(
                     ChannelPublication1Mark::DELETE_,
                     ActionRoute::ChannelPublication1Mark(ChannelPublication1Mark::Delete_),
+                )
+            );
+            crate::result_return_logic!(
+                router
+                .insert(
+                    ChannelPublication1View::CREATE_,
+                    ActionRoute::ChannelPublication1View(ChannelPublication1View::Create_),
                 )
             );
         }
@@ -1287,6 +1302,38 @@ impl HttpServer {
                         }
                     }
                 }
+                ActionRoute::ChannelPublication1View(ref channel_publication1_view) => {
+                    match (
+                        channel_publication1_view,
+                        &parts.method,
+                    ) {
+                        (&ChannelPublication1View::Create, &Method::POST) => {
+                            return Action::<ChannelPublication1View_Create>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        _ => {
+                            #[cfg(feature = "action_for_manual_test")]
+                            {
+                                match (
+                                    channel_publication1_view,
+                                    &parts.method,
+                                ) {
+                                    (&ChannelPublication1View::Create_, &Method::POST) => {
+                                        return Action::<ChannelPublication1View_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    _ => {}
+                                }
+                            }
+                        }
+                    }
+                }
             }
             return Action::<RouteNotFound>::run(&action_inner);
         };
@@ -1314,6 +1361,7 @@ pub enum ActionRoute {
     ChannelSubscription(ChannelSubscription),
     ChannelPublication1(ChannelPublication1),
     ChannelPublication1Mark(ChannelPublication1Mark),
+    ChannelPublication1View(ChannelPublication1View),
 }
 #[cfg(feature = "action_for_manual_test")]
 impl ActionRoute {
@@ -1591,6 +1639,21 @@ impl ChannelPublication1Mark {
     );
     pub const DELETE_: &'static str = const_format::concatcp!(
         ChannelPublication1Mark::DELETE,
+        ActionRoute::PART,
+    );
+}
+pub enum ChannelPublication1View {
+    Create,
+    #[cfg(feature = "action_for_manual_test")]
+    Create_,
+}
+impl ChannelPublication1View {
+    pub const CREATE: &'static str = "/channel_publication1_view/create";
+}
+#[cfg(feature = "action_for_manual_test")]
+impl ChannelPublication1View {
+    pub const CREATE_: &'static str = const_format::concatcp!(
+        ChannelPublication1View::CREATE,
         ActionRoute::PART,
     );
 }
