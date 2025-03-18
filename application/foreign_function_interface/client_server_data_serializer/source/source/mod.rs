@@ -691,41 +691,31 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__AlreadyExpired => {
-                        UserAuthorization_AuthorizeByLastStep_Precedent {
-                            user_authorization_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__NotFound => {
-                        UserAuthorization_AuthorizeByLastStep_Precedent {
-                            user_authorization_token___not_found: true,
-                            ..Default::default()
-                        }
-                    }
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__AlreadyExpired =>UserAuthorization_AuthorizeByLastStep_Precedent {
+                        user_authorization_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__NotFound => UserAuthorization_AuthorizeByLastStep_Precedent {
+                        user_authorization_token___not_found: true,
+                        ..Default::default()
+                    },
                     UserAuthorization_AuthorizeByLastStep_Precedent_::UserAuthorizationToken__WrongValue {
                         user_authorization_token__wrong_enter_tries_quantity,
-                    } => {
-                        UserAuthorization_AuthorizeByLastStep_Precedent {
-                            user_authorization_token___wrong_value: UserAuthorizationToken__WrongValue {
-                                is_exist: true,
-                                user_authorization_token__wrong_enter_tries_quantity,
-                            },
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::User__NotFound => {
-                        UserAuthorization_AuthorizeByLastStep_Precedent {
-                            user___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_AuthorizeByLastStep_Precedent_::ParallelExecution => {
-                        UserAuthorization_AuthorizeByLastStep_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
-                    }
+                    } => UserAuthorization_AuthorizeByLastStep_Precedent {
+                        user_authorization_token___wrong_value: UserAuthorizationToken__WrongValue {
+                            is_exist: true,
+                            user_authorization_token__wrong_enter_tries_quantity,
+                        },
+                        ..Default::default()
+                    },
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::User__NotFound => UserAuthorization_AuthorizeByLastStep_Precedent {
+                        user___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_AuthorizeByLastStep_Precedent_::ParallelExecution => UserAuthorization_AuthorizeByLastStep_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
+                    },
                 };
                 CUnifiedReport::precedent(precedent_)
             }
@@ -1091,23 +1081,17 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__AlreadyExpired => {
-                        UserAuthorization_RefreshAccessToken_Precedent {
-                            user_access_refresh_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__NotFound => {
-                        UserAuthorization_RefreshAccessToken_Precedent {
-                            user_access_refresh_token___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_RefreshAccessToken_Precedent_::ParallelExecution => {
-                        UserAuthorization_RefreshAccessToken_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__AlreadyExpired => UserAuthorization_RefreshAccessToken_Precedent {
+                        user_access_refresh_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RefreshAccessToken_Precedent_::UserAccessRefreshToken__NotFound => UserAuthorization_RefreshAccessToken_Precedent {
+                        user_access_refresh_token___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RefreshAccessToken_Precedent_::ParallelExecution => UserAuthorization_RefreshAccessToken_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -1275,38 +1259,31 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__deserializ
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__NotFound => {
-                        UserAuthorization_RegisterBySecondStep_Precedent {
-                            user_registration_token___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyExpired => {
-                        UserAuthorization_RegisterBySecondStep_Precedent {
-                            user_registration_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyApproved => {
-                        UserAuthorization_RegisterBySecondStep_Precedent {
-                            user_registration_token___already_approved: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__WrongValue { user_registration_token__wrong_enter_tries_quantity } => {
-                        UserAuthorization_RegisterBySecondStep_Precedent {
-                            user_registration_token___wrong_value: UserRegistrationToken__WrongValue {
-                                is_exist: true,
-                                user_registration_token__wrong_enter_tries_quantity,
-                            },
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_RegisterBySecondStep_Precedent_::ParallelExecution => {
-                        UserAuthorization_RegisterBySecondStep_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__NotFound => UserAuthorization_RegisterBySecondStep_Precedent {
+                        user_registration_token___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyExpired => UserAuthorization_RegisterBySecondStep_Precedent {
+                        user_registration_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__AlreadyApproved =>
+                    UserAuthorization_RegisterBySecondStep_Precedent {
+                        user_registration_token___already_approved: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__WrongValue {
+                        user_registration_token__wrong_enter_tries_quantity
+                    } => UserAuthorization_RegisterBySecondStep_Precedent {
+                        user_registration_token___wrong_value: UserRegistrationToken__WrongValue {
+                            is_exist: true,
+                            user_registration_token__wrong_enter_tries_quantity,
+                        },
+                        ..Default::default()
+                    },
+                    UserAuthorization_RegisterBySecondStep_Precedent_::ParallelExecution => UserAuthorization_RegisterBySecondStep_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -1410,47 +1387,33 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_RegisterByLastStep_Precedent_::User__NicknameAlreadyExist => {
-                        UserAuthorization_RegisterByLastStep_Precedent {
-                            user___nickname_already_exist: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_RegisterByLastStep_Precedent_::User__EmailAlreadyExist => {
-                        UserAuthorization_RegisterByLastStep_Precedent {
-                            user___email_already_exist: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__NotFound => {
-                        UserAuthorization_RegisterByLastStep_Precedent {
-                            user_registration_token___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__AlreadyExpired => {
-                        UserAuthorization_RegisterByLastStep_Precedent {
-                            user_registration_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__IsNotApproved => {
-                        UserAuthorization_RegisterByLastStep_Precedent {
-                            user_registration_token___is_not_approved: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__WrongValue => {
-                        UserAuthorization_RegisterByLastStep_Precedent {
-                            user_registration_token___wrong_value: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_RegisterByLastStep_Precedent_::ParallelExecution => {
-                        UserAuthorization_RegisterByLastStep_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    UserAuthorization_RegisterByLastStep_Precedent_::User__NicknameAlreadyExist => UserAuthorization_RegisterByLastStep_Precedent {
+                        user___nickname_already_exist: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RegisterByLastStep_Precedent_::User__EmailAlreadyExist => UserAuthorization_RegisterByLastStep_Precedent {
+                        user___email_already_exist: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__NotFound => UserAuthorization_RegisterByLastStep_Precedent {
+                        user_registration_token___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__AlreadyExpired => UserAuthorization_RegisterByLastStep_Precedent {
+                        user_registration_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__IsNotApproved => UserAuthorization_RegisterByLastStep_Precedent {
+                        user_registration_token___is_not_approved: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RegisterByLastStep_Precedent_::UserRegistrationToken__WrongValue => UserAuthorization_RegisterByLastStep_Precedent {
+                        user_registration_token___wrong_value: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_RegisterByLastStep_Precedent_::ParallelExecution => UserAuthorization_RegisterByLastStep_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -1631,38 +1594,30 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__dese
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__NotFound => {
-                        UserAuthorization_ResetPasswordBySecondStep_Precedent {
-                            user_reset_password_token___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__AlreadyExpired => {
-                        UserAuthorization_ResetPasswordBySecondStep_Precedent {
-                            user_reset_password_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__AlreadyApproved => {
-                        UserAuthorization_ResetPasswordBySecondStep_Precedent {
-                            user_reset_password_token___already_approved: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__WrongValue { user_reset_password_token__wrong_enter_tries_quantity } => {
-                        UserAuthorization_ResetPasswordBySecondStep_Precedent {
-                            user_reset_password_token___wrong_value: UserResetPasswordToken__WrongValue {
-                                is_exist: true,
-                                user_reset_password_token__wrong_enter_tries_quantity,
-                            },
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::ParallelExecution => {
-                        UserAuthorization_ResetPasswordBySecondStep_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__NotFound => UserAuthorization_ResetPasswordBySecondStep_Precedent {
+                        user_reset_password_token___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__AlreadyExpired => UserAuthorization_ResetPasswordBySecondStep_Precedent {
+                        user_reset_password_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__AlreadyApproved => UserAuthorization_ResetPasswordBySecondStep_Precedent {
+                        user_reset_password_token___already_approved: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__WrongValue {
+                        user_reset_password_token__wrong_enter_tries_quantity
+                    } => UserAuthorization_ResetPasswordBySecondStep_Precedent {
+                        user_reset_password_token___wrong_value: UserResetPasswordToken__WrongValue {
+                            is_exist: true,
+                            user_reset_password_token__wrong_enter_tries_quantity,
+                        },
+                        ..Default::default()
+                    },
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent_::ParallelExecution => UserAuthorization_ResetPasswordBySecondStep_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -1732,41 +1687,29 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deseri
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::User__NotFound => {
-                        UserAuthorization_ResetPasswordByLastStep_Precedent {
-                            user___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__NotFound => {
-                        UserAuthorization_ResetPasswordByLastStep_Precedent {
-                            user_reset_password_token___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__AlreadyExpired => {
-                        UserAuthorization_ResetPasswordByLastStep_Precedent {
-                            user_reset_password_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__IsNotApproved => {
-                        UserAuthorization_ResetPasswordByLastStep_Precedent {
-                            user_reset_password_token___is_not_approved: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__WrongValue => {
-                        UserAuthorization_ResetPasswordByLastStep_Precedent {
-                            user_reset_password_token___wrong_value: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_::ParallelExecution => {
-                        UserAuthorization_ResetPasswordByLastStep_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::User__NotFound => UserAuthorization_ResetPasswordByLastStep_Precedent {
+                        user___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__NotFound => UserAuthorization_ResetPasswordByLastStep_Precedent {
+                        user_reset_password_token___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__AlreadyExpired => UserAuthorization_ResetPasswordByLastStep_Precedent {
+                        user_reset_password_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__IsNotApproved => UserAuthorization_ResetPasswordByLastStep_Precedent {
+                        user_reset_password_token___is_not_approved: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::UserResetPasswordToken__WrongValue => UserAuthorization_ResetPasswordByLastStep_Precedent {
+                        user_reset_password_token___wrong_value: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_ResetPasswordByLastStep_Precedent_::ParallelExecution => UserAuthorization_ResetPasswordByLastStep_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -1851,35 +1794,25 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__deserializ
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__NotFound => {
-                        UserAuthorization_SendEmailForRegister_Precedent {
-                            user_registration_token___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyExpired => {
-                        UserAuthorization_SendEmailForRegister_Precedent {
-                            user_registration_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyApproved => {
-                        UserAuthorization_SendEmailForRegister_Precedent {
-                            user_registration_token___already_approved: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__TimeToResendHasNotCome => {
-                        UserAuthorization_SendEmailForRegister_Precedent {
-                            user_registration_token___time_to_resend_has_not_come: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForRegister_Precedent_::ParallelExecution => {
-                        UserAuthorization_SendEmailForRegister_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__NotFound => UserAuthorization_SendEmailForRegister_Precedent {
+                        user_registration_token___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyExpired => UserAuthorization_SendEmailForRegister_Precedent {
+                        user_registration_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__AlreadyApproved => UserAuthorization_SendEmailForRegister_Precedent {
+                        user_registration_token___already_approved: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForRegister_Precedent_::UserRegistrationToken__TimeToResendHasNotCome => UserAuthorization_SendEmailForRegister_Precedent {
+                        user_registration_token___time_to_resend_has_not_come: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForRegister_Precedent_::ParallelExecution => UserAuthorization_SendEmailForRegister_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -1968,35 +1901,25 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deseriali
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::User__NotFound => {
-                        UserAuthorization_SendEmailForAuthorize_Precedent {
-                            user___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__NotFound => {
-                        UserAuthorization_SendEmailForAuthorize_Precedent {
-                            user_authorization_token___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__AlreadyExpired => {
-                        UserAuthorization_SendEmailForAuthorize_Precedent {
-                            user_authorization_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__TimeToResendHasNotCome => {
-                        UserAuthorization_SendEmailForAuthorize_Precedent {
-                            user_authorization_token___time_to_resend_has_not_come: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForAuthorize_Precedent_::ParallelExecution => {
-                        UserAuthorization_SendEmailForAuthorize_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::User__NotFound => UserAuthorization_SendEmailForAuthorize_Precedent {
+                        user___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__NotFound => UserAuthorization_SendEmailForAuthorize_Precedent {
+                        user_authorization_token___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__AlreadyExpired => UserAuthorization_SendEmailForAuthorize_Precedent {
+                        user_authorization_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::UserAuthorizationToken__TimeToResendHasNotCome => UserAuthorization_SendEmailForAuthorize_Precedent {
+                        user_authorization_token___time_to_resend_has_not_come: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForAuthorize_Precedent_::ParallelExecution => UserAuthorization_SendEmailForAuthorize_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -2088,41 +2011,29 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::User__NotFound => {
-                        UserAuthorization_SendEmailForResetPassword_Precedent {
-                            user___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__NotFound => {
-                        UserAuthorization_SendEmailForResetPassword_Precedent {
-                            user_reset_password_token___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyExpired => {
-                        UserAuthorization_SendEmailForResetPassword_Precedent {
-                            user_reset_password_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyApproved => {
-                        UserAuthorization_SendEmailForResetPassword_Precedent {
-                            user_reset_password_token___already_approved: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__TimeToResendHasNotCome => {
-                        UserAuthorization_SendEmailForResetPassword_Precedent {
-                            user_reset_password_token___time_to_resend_has_not_come: true,
-                            ..Default::default()
-                        }
-                    }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_::ParallelExecution => {
-                        UserAuthorization_SendEmailForResetPassword_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::User__NotFound => UserAuthorization_SendEmailForResetPassword_Precedent {
+                        user___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__NotFound => UserAuthorization_SendEmailForResetPassword_Precedent {
+                        user_reset_password_token___not_found: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyExpired => UserAuthorization_SendEmailForResetPassword_Precedent {
+                        user_reset_password_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__AlreadyApproved => UserAuthorization_SendEmailForResetPassword_Precedent {
+                        user_reset_password_token___already_approved: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::UserResetPasswordToken__TimeToResendHasNotCome => UserAuthorization_SendEmailForResetPassword_Precedent {
+                        user_reset_password_token___time_to_resend_has_not_come: true,
+                        ..Default::default()
+                    },
+                    UserAuthorization_SendEmailForResetPassword_Precedent_::ParallelExecution => UserAuthorization_SendEmailForResetPassword_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -2251,11 +2162,9 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken__AlreadyExpired => {
-                        Channel_GetManyByNameInSubscriptions_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
+                    Channel_GetManyByNameInSubscriptions_Precedent_::UserAccessToken__AlreadyExpired => Channel_GetManyByNameInSubscriptions_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -2396,11 +2305,9 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_GetManyBySubscription_Precedent_::UserAccessToken__AlreadyExpired => {
-                        Channel_GetManyBySubscription_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
+                    Channel_GetManyBySubscription_Precedent_::UserAccessToken__AlreadyExpired => Channel_GetManyBySubscription_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -2554,11 +2461,9 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_GetManyPublicByName_Precedent_::UserAccessToken__AlreadyExpired => {
-                        Channel_GetManyPublicByName_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
+                    Channel_GetManyPublicByName_Precedent_::UserAccessToken__AlreadyExpired => Channel_GetManyPublicByName_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -2707,35 +2612,25 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Channel_GetOneById_Precedent_::UserAccessToken__AlreadyExpired => {
-                        Channel_GetOneById_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_GetOneById_Precedent_::Channel__NotFound => {
-                        Channel_GetOneById_Precedent {
-                            channel___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_GetOneById_Precedent_::Channel__IsClose => {
-                        Channel_GetOneById_Precedent {
-                            channel___is_close: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_GetOneById_Precedent_::ChannelToken__NotFound => {
-                        Channel_GetOneById_Precedent {
-                            channel_token___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_GetOneById_Precedent_::ChannelToken__AlreadyExpired => {
-                        Channel_GetOneById_Precedent {
-                            channel_token___already_expired: true,
-                            ..Default::default()
-                        }
+                    Channel_GetOneById_Precedent_::UserAccessToken__AlreadyExpired => Channel_GetOneById_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    Channel_GetOneById_Precedent_::Channel__NotFound => Channel_GetOneById_Precedent {
+                        channel___not_found: true,
+                        ..Default::default()
+                    },
+                    Channel_GetOneById_Precedent_::Channel__IsClose => Channel_GetOneById_Precedent {
+                        channel___is_close: true,
+                        ..Default::default()
+                    },
+                    Channel_GetOneById_Precedent_::ChannelToken__NotFound => Channel_GetOneById_Precedent {
+                        channel_token___not_found: true,
+                        ..Default::default()
+                    },
+                    Channel_GetOneById_Precedent_::ChannelToken__AlreadyExpired => Channel_GetOneById_Precedent {
+                        channel_token___already_expired: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -2832,11 +2727,9 @@ pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Channel_CheckNameForExisting_Precedent_::UserAccessToken__AlreadyExpired => {
-                        Channel_CheckNameForExisting_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
+                    Channel_CheckNameForExisting_Precedent_::UserAccessToken__AlreadyExpired => Channel_CheckNameForExisting_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -2918,12 +2811,10 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_al
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken__AlreadyExpired => {
-                        Channel_CheckLinkedNameForExisting_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
+                    Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken__AlreadyExpired => Channel_CheckLinkedNameForExisting_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
                 };
                 CUnifiedReport::precedent(precedent_)
             }
@@ -3013,29 +2904,21 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Channel_Create_Precedent_::UserAccessToken__AlreadyExpired => {
-                        Channel_Create_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_Create_Precedent_::Channel__NameAlreadyExist => {
-                        Channel_Create_Precedent {
-                            channel___name_already_exist: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_Create_Precedent_::Channel__LinkedNameAlreadyExist => {
-                        Channel_Create_Precedent {
-                            channel___linked_name_already_exist: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_Create_Precedent_::ParallelExecution => {
-                        Channel_Create_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    Channel_Create_Precedent_::UserAccessToken__AlreadyExpired => Channel_Create_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    Channel_Create_Precedent_::Channel__NameAlreadyExist => Channel_Create_Precedent {
+                        channel___name_already_exist: true,
+                        ..Default::default()
+                    },
+                    Channel_Create_Precedent_::Channel__LinkedNameAlreadyExist => Channel_Create_Precedent {
+                        channel___linked_name_already_exist: true,
+                        ..Default::default()
+                    },
+                    Channel_Create_Precedent_::ParallelExecution => Channel_Create_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -3109,47 +2992,33 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelSubscription_Create_Precedent_::UserAccessToken__AlreadyExpired => {
-                        ChannelSubscription_Create_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelSubscription_Create_Precedent_::Channel__NotFound => {
-                        ChannelSubscription_Create_Precedent {
-                            channel___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelSubscription_Create_Precedent_::Channel__IsClose => {
-                        ChannelSubscription_Create_Precedent {
-                            channel___is_close: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelSubscription_Create_Precedent_::User__IsChannelOwner => {
-                        ChannelSubscription_Create_Precedent {
-                            user___is_channel__owner: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelSubscription_Create_Precedent_::ChannelSubscription__AlreadyExist => {
-                        ChannelSubscription_Create_Precedent {
-                            channel_subscription___already_exist: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken__AlreadyExpired => {
-                        ChannelSubscription_Create_Precedent {
-                            channel_subscription_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelSubscription_Create_Precedent_::ParallelExecution => {
-                        ChannelSubscription_Create_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    ChannelSubscription_Create_Precedent_::UserAccessToken__AlreadyExpired => ChannelSubscription_Create_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelSubscription_Create_Precedent_::Channel__NotFound => ChannelSubscription_Create_Precedent {
+                        channel___not_found: true,
+                        ..Default::default()
+                    },
+                    ChannelSubscription_Create_Precedent_::Channel__IsClose => ChannelSubscription_Create_Precedent {
+                        channel___is_close: true,
+                        ..Default::default()
+                    },
+                    ChannelSubscription_Create_Precedent_::User__IsChannelOwner => ChannelSubscription_Create_Precedent {
+                        user___is_channel__owner: true,
+                        ..Default::default()
+                    },
+                    ChannelSubscription_Create_Precedent_::ChannelSubscription__AlreadyExist => ChannelSubscription_Create_Precedent {
+                        channel_subscription___already_exist: true,
+                        ..Default::default()
+                    },
+                    ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken__AlreadyExpired => ChannelSubscription_Create_Precedent {
+                        channel_subscription_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelSubscription_Create_Precedent_::ParallelExecution => ChannelSubscription_Create_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -3220,29 +3089,21 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_ve
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired => {
-                        ChannelSubscription_Delete_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelSubscription_Delete_Precedent_::ChannelSubscriptionToken__AlreadyExpired => {
-                        ChannelSubscription_Delete_Precedent {
-                            channel_subscription_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelSubscription_Delete_Precedent_::ChannelSubscription__NotFound => {
-                        ChannelSubscription_Delete_Precedent {
-                            channel_subscription___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelSubscription_Delete_Precedent_::Channel__NotFound => {
-                        ChannelSubscription_Delete_Precedent {
-                            channel___not_found: true,
-                            ..Default::default()
-                        }
+                    ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired => ChannelSubscription_Delete_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelSubscription_Delete_Precedent_::ChannelSubscriptionToken__AlreadyExpired => ChannelSubscription_Delete_Precedent {
+                        channel_subscription_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelSubscription_Delete_Precedent_::ChannelSubscription__NotFound => ChannelSubscription_Delete_Precedent {
+                        channel_subscription___not_found: true,
+                        ..Default::default()
+                    },
+                    ChannelSubscription_Delete_Precedent_::Channel__NotFound => ChannelSubscription_Delete_Precedent {
+                        channel___not_found: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -3375,23 +3236,17 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
             },
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1_GetMany_Precedent_::UserAccessToken__AlreadyExpired => {
-                        ChannelPublication1_GetMany_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1_GetMany_Precedent_::Channel__NotFound => {
-                        ChannelPublication1_GetMany_Precedent {
-                            channel___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1_GetMany_Precedent_::Channel__IsClose => {
-                        ChannelPublication1_GetMany_Precedent {
-                            channel___is_close: true,
-                            ..Default::default()
-                        }
+                    ChannelPublication1_GetMany_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1_GetMany_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1_GetMany_Precedent_::Channel__NotFound => ChannelPublication1_GetMany_Precedent {
+                        channel___not_found: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1_GetMany_Precedent_::Channel__IsClose => ChannelPublication1_GetMany_Precedent {
+                        channel___is_close: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -3508,29 +3363,21 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_ve
             },
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1_Create_Precedent_::UserAccessToken__AlreadyExpired => {
-                        ChannelPublication1_Create_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1_Create_Precedent_::Channel__NotFound => {
-                        ChannelPublication1_Create_Precedent {
-                            channel___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1_Create_Precedent_::User__IsNotChannelOwner => {
-                        ChannelPublication1_Create_Precedent {
-                            user___is_not_channel_owner: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1_Create_Precedent_::ParallelExecution => {
-                        ChannelPublication1_Create_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    ChannelPublication1_Create_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1_Create_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1_Create_Precedent_::Channel__NotFound => ChannelPublication1_Create_Precedent {
+                        channel___not_found: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1_Create_Precedent_::User__IsNotChannelOwner => ChannelPublication1_Create_Precedent {
+                        user___is_not_channel_owner: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1_Create_Precedent_::ParallelExecution => ChannelPublication1_Create_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -3596,35 +3443,25 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_ve
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired => {
-                        ChannelPublication1_Delete_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner => {
-                        ChannelPublication1_Delete_Precedent {
-                            user___is_not_channel_owner: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__NotFound => {
-                        ChannelPublication1_Delete_Precedent {
-                            channel_publication1___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted => {
-                        ChannelPublication1_Delete_Precedent {
-                            channel_publication1___is_already_deleted: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1_Delete_Precedent_::ParallelExecution => {
-                        ChannelPublication1_Delete_Precedent {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1_Delete_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner => ChannelPublication1_Delete_Precedent {
+                        user___is_not_channel_owner: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__NotFound => ChannelPublication1_Delete_Precedent {
+                        channel_publication1___not_found: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted => ChannelPublication1_Delete_Precedent {
+                        channel_publication1___is_already_deleted: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1_Delete_Precedent_::ParallelExecution => ChannelPublication1_Delete_Precedent {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -3695,30 +3532,22 @@ pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired => {
-                        ChannelPublication1Mark_Create_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExpired => {
-                        ChannelPublication1Mark_Create_Precedent {
-                            channel_publication1_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark__AlreadyExist => {
-                        ChannelPublication1Mark_Create_Precedent {
-                            channel_publication1_mark___already_exist: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1__NotFound => {
-                        ChannelPublication1Mark_Create_Precedent {
-                            channel_publication1__not_found: true,
-                            ..Default::default()
-                        }
-                    }
+                    ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Create_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Mark_Create_Precedent {
+                        channel_publication1_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1Mark__AlreadyExist => ChannelPublication1Mark_Create_Precedent {
+                        channel_publication1_mark___already_exist: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Mark_Create_Precedent_::ChannelPublication1__NotFound => ChannelPublication1Mark_Create_Precedent {
+                        channel_publication1__not_found: true,
+                        ..Default::default()
+                    },
                 };
                 CUnifiedReport::precedent(precedent_)
             }
@@ -3788,29 +3617,21 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_allocate
             UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1Mark_Delete_Precedent_::UserAccessToken__AlreadyExpired => {
-                        ChannelPublication1Mark_Delete_Precedent {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1Mark_Delete_Precedent_::ChannelPublication1Token__AlreadyExpired => {
-                        ChannelPublication1Mark_Delete_Precedent {
-                            channel_publication1_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1Mark_Delete_Precedent_::ChannelPublication1Mark__NotFound => {
-                        ChannelPublication1Mark_Delete_Precedent {
-                            channel_publication1_mark___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1Mark_Delete_Precedent_::ChannelPublication1__NotFound => {
-                        ChannelPublication1Mark_Delete_Precedent {
-                            channel_publication1__not_found: true,
-                            ..Default::default()
-                        }
+                    ChannelPublication1Mark_Delete_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Delete_Precedent {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Mark_Delete_Precedent_::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Mark_Delete_Precedent {
+                        channel_publication1_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Mark_Delete_Precedent_::ChannelPublication1Mark__NotFound => ChannelPublication1Mark_Delete_Precedent {
+                        channel_publication1_mark___not_found: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Mark_Delete_Precedent_::ChannelPublication1__NotFound => ChannelPublication1Mark_Delete_Precedent {
+                        channel_publication1__not_found: true,
+                        ..Default::default()
                     }
                 };
                 CUnifiedReport::precedent(precedent_)
@@ -3827,17 +3648,6 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_allocate
 pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_deallocate(_c_result: ChannelPublication1Mark_Delete_CResult) -> () {
     return ();
 }
-
-
-
-
-
-
-
-
-
-
-
 #[cfg(test)]
 mod test {
     use {
