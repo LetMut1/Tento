@@ -102,7 +102,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                     channel_publication1__images_pathes: incoming.channel_publication1__images_pathes.as_slice(),
                     channel_publication1__text: incoming.channel_publication1__text,
                     channel_publication1__marks_quantity: 0,
-                    channel_publication1__viewing_quantity: 0,
+                    channel_publication1__view_quantity: 0,
                     channel_publication1__obfuscation_value: Generator::<ChannelPublication1_ObfuscationValue>::generate(),
                     channel_publication1__created_at,
                     channel_publication1__is_predeleted: false,

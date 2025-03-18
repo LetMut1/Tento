@@ -954,7 +954,7 @@ typedef struct ChannelPublication1_GetMany_Data {
   struct CVector_CString channel_publication1__images_pathes;
   struct COption_CString channel_publication1__text;
   long channel_publication1__marks_quantity;
-  long channel_publication1__viewing_quantity;
+  long channel_publication1__view_quantity;
   long channel_publication1__created_at;
   struct COption_c_long channel_publication1_mark__created_at;
   struct ChannelPublication1TokenSigned channel_publication1_token_signed;

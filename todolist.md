@@ -144,4 +144,4 @@
 Там, где идет Спавн таски для Бд, сделать лог для ошибки и ретрай на 10 раз по слипу
 
 
-viewing_quantity - > view_quantity
+view_quantity - > view_quantity

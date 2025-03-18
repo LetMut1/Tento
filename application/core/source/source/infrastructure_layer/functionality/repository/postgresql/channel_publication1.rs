@@ -29,7 +29,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         images_pathes,\
                         text_,\
                         marks_quantity,\
-                        viewing_quantity,\
+                        view_quantity,\
                         obfuscation_value,\
                         created_at,\
                         is_predeleted,\
@@ -68,7 +68,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     Type::INT8,
                 )
                 .add(
-                    &insert.channel_publication1__viewing_quantity,
+                    &insert.channel_publication1__view_quantity,
                     Type::INT8,
                 )
                 .add(
@@ -283,7 +283,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 UPDATE ONLY \
                     public.channel_publication1 AS cp1 \
                 SET \
-                    viewing_quantity = viewing_quantity + 1 \
+                    view_quantity = view_quantity + 1 \
                 WHERE \
                     cp1.id = $1 \
                 RETURNING \
@@ -323,7 +323,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     cp1.images_pathes AS ip,\
                     cp1.text_ AS t,\
                     cp1.marks_quantity AS mq,\
-                    cp1.viewing_quantity AS vq,\
+                    cp1.view_quantity AS vq,\
                     cp1.obfuscation_value AS ov,\
                     cp1.created_at AS ca1,\
                     cp1m.created_at AS ca2 \
@@ -428,7 +428,7 @@ pub struct Insert<'a, 'b> {
     pub channel_publication1__images_pathes: &'a [&'b str],
     pub channel_publication1__text: Option<&'a str>,
     pub channel_publication1__marks_quantity: i64,
-    pub channel_publication1__viewing_quantity: i64,
+    pub channel_publication1__view_quantity: i64,
     pub channel_publication1__obfuscation_value: i64,
     pub channel_publication1__created_at: i64,
     pub channel_publication1__is_predeleted: bool,

@@ -115,7 +115,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                         channel_publication1__images_pathes: crate::result_return_logic!(row.try_get::<'_, usize, Vec<String>>(1)),
                         channel_publication1__text: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(2)),
                         channel_publication1__marks_quantity: crate::result_return_logic!(row.try_get::<'_, usize, i64>(3)),
-                        channel_publication1__viewing_quantity: crate::result_return_logic!(row.try_get::<'_, usize, i64>(4)),
+                        channel_publication1__view_quantity: crate::result_return_logic!(row.try_get::<'_, usize, i64>(4)),
                         channel_publication1__created_at: crate::result_return_logic!(row.try_get::<'_, usize, i64>(6)),
                         channel_publication1_mark__created_at: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7)),
                         channel_publication1_token_signed: Encoder::<ChannelPublication1Token>::encode(
