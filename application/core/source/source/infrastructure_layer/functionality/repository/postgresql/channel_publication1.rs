@@ -48,7 +48,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     )\
                 ON CONFLICT DO NOTHING \
                 RETURNING \
-                    u.id AS i;";
+                    cp1.id AS i;";
             let mut parameter_storage = ParameterStorage::new(9);
             parameter_storage
                 .add(

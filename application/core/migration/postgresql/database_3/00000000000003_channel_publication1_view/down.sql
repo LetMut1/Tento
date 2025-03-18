@@ -1,1 +1,1 @@
-DROP TABLE public.channel_publication1_mark;
+DROP TABLE public.channel_publication1_view;

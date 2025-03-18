@@ -19,7 +19,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
         return async move {
             let query = "\
                 INSERT INTO \
-                    public.user_authorization_token AS uat (\
+                    public.user_authorization_token (\
                         user__id,\
                         user_device__id,\
                         value,\

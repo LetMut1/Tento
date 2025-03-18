@@ -19,7 +19,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
         return async move {
             let query = "\
                 INSERT INTO \
-                    public.channel_subscription AS cs (\
+                    public.channel_subscription (\
                         user__id,\
                         channel__id,\
                         created_at\

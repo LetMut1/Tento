@@ -19,7 +19,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
         return async move {
             let query = "\
                 INSERT INTO \
-                    public.user_access_refresh_token AS uart (\
+                    public.user_access_refresh_token (\
                         user__id,\
                         user_device__id,\
                         user_access_token__id,\

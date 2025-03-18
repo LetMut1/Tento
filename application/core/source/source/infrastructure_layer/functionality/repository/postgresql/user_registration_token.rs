@@ -19,7 +19,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
         return async move {
             let query = "\
                 INSERT INTO \
-                    public.user_registration_token AS urt (\
+                    public.user_registration_token (\
                         user__email,\
                         user_device__id,\
                         value,\

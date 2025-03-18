@@ -84,7 +84,7 @@ impl Repository<Postgresql<User>> {
         return async move {
             let query = "\
                 INSERT INTO \
-                    public.user_ AS u (\
+                    public.user_ (\
                         id,\
                         email,\
                         nickname,\

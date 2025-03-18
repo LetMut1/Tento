@@ -8,6 +8,7 @@ mod user_authorization_token;
 mod user_device;
 mod user_registration_token;
 mod user_reset_password_token;
+mod channel_publication1_view;
 pub use self::{
     channel::{
         By1 as ChannelBy1,

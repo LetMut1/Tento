@@ -19,7 +19,7 @@ impl Repository<Postgresql<UserDevice>> {
         return async move {
             let query = "\
                 INSERT INTO \
-                    public.user_device AS ud (\
+                    public.user_device (\
                         id,\
                         user__id\
                     ) VALUES (\

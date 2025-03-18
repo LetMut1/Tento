@@ -19,7 +19,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
         return async move {
             let query = "\
                 INSERT INTO \
-                    public.user_reset_password_token AS urpt (\
+                    public.user_reset_password_token (\
                         user__id,\
                         user_device__id,\
                         value,\
