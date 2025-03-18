@@ -11,7 +11,7 @@ use {
 };
 pub struct Email;
 impl Sender<Email> {
-    pub fn repeatable_send<'a>(
+    pub fn send<'a>(
         _email_server: &'static EmailServer,
         _subject: &'a str,
         _body: String,

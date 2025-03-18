@@ -16,7 +16,7 @@ use {
     std::future::Future,
 };
 impl EmailSender<UserRegistrationToken> {
-    pub fn repeatable_send<'a>(
+    pub fn send<'a>(
         email_server: &'static EmailServer,
         user_registration_token__value: &'a str,
         user__email: &'a str,
@@ -28,7 +28,7 @@ impl EmailSender<UserRegistrationToken> {
                 user_registration_token__value,
                 user_device__id,
             );
-            Sender::<Email>::repeatable_send(
+            Sender::<Email>::send(
                 email_server,
                 "Registration confirmation",
                 message_body,

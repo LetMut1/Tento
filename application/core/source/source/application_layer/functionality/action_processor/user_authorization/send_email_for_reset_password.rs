@@ -27,13 +27,12 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
                         Postgresql,
                         UserBy3,
                         UserResetPasswordTokenBy,
                         UserResetPasswordTokenUpdate2,
-                    },
+                    }, Repository
                 },
                 service::{
                     resolver::{
@@ -46,7 +45,7 @@ use {
                     },
                 },
             },
-        },
+        }, BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY,
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_reset_password::{
@@ -56,7 +55,7 @@ use {
         },
         unified_report::UnifiedReport,
     },
-    std::future::Future,
+    std::{future::Future, time::Duration},
 };
 pub struct UserAuthorization_SendEmailForResetPassword;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPassword> {
@@ -134,17 +133,30 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             .await? {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
-            let environment_configuration = inner.environment_configuration;
+            let email_server = &inner.environment_configuration.subject.resource.email_server;
             let user_device__id = incoming.user_device__id.to_string();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    EmailSender::<UserResetPasswordToken>::repeatable_send(
-                        &environment_configuration.subject.resource.email_server,
-                        user_reset_password_token__value.as_str(),
-                        user__email.as_str(),
-                        user_device__id.as_str(),
-                    )
-                    .await?;
+                    let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
+                    let mut counter: usize = 0;
+                    'a: loop {
+                        interval.tick().await;
+                        match EmailSender::<UserResetPasswordToken>::send(
+                            email_server,
+                            user_reset_password_token__value.as_str(),
+                            user__email.as_str(),
+                            user_device__id.as_str(),
+                        ).await {
+                            Ok(_) => return Result::Ok(()),
+                            Err(aggregate_error) => {
+                                counter += 1;
+                                if counter == BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY {
+                                    return Err(aggregate_error)
+                                }
+                                continue 'a;
+                            }
+                        }
+                    }
                     return Result::Ok(());
                 },
             );

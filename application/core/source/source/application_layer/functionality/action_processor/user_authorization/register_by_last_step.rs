@@ -43,7 +43,6 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
                         IsolationLevel,
                         Postgresql,
@@ -56,7 +55,7 @@ use {
                         UserDeviceInsert,
                         UserInsert2,
                         UserRegistrationTokenBy,
-                    },
+                    }, Repository
                 },
                 service::{
                     resolver::{
@@ -70,7 +69,7 @@ use {
                     },
                 },
             },
-        },
+        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user_authorization::register_by_last_step::{
@@ -80,7 +79,7 @@ use {
         },
         unified_report::UnifiedReport,
     },
-    std::future::Future,
+    std::{future::Future, time::Duration},
 };
 pub struct UserAuthorization_RegisterByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> {
@@ -315,14 +314,27 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             let user_device__id = incoming.user_device__id.to_string();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    let _ = Repository::<Postgresql<UserDevice>>::create(
-                        &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
-                        UserDeviceInsert {
-                            user_device__id: user_device__id.as_str(),
-                            user__id,
-                        },
-                    )
-                    .await?;
+                    let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
+                    let mut counter: usize = 0;
+                    'a: loop {
+                        interval.tick().await;
+                        match Repository::<Postgresql<UserDevice>>::create(
+                            &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
+                            UserDeviceInsert {
+                                user_device__id: user_device__id.as_str(),
+                                user__id,
+                            },
+                        ).await {
+                            Ok(_) => return Result::Ok(()),
+                            Err(aggregate_error) => {
+                                counter += 1;
+                                if counter == BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
+                                    return Err(aggregate_error)
+                                }
+                                continue 'a;
+                            }
+                        }
+                    }
                     return Result::Ok(());
                 },
             );

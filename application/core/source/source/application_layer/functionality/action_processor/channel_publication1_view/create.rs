@@ -29,7 +29,7 @@ use {
                     UnixTime,
                 }, spawner::{Spawner, TokioNonBlockingTask}}
             },
-        },
+        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel_publication1_view::create::{
@@ -39,7 +39,7 @@ use {
         unified_report::UnifiedReport,
         void::Void,
     },
-    std::future::Future,
+    std::{future::Future, time::Duration},
 };
 pub struct ChannelPublication1View_Create;
 impl ActionProcessor_ for ActionProcessor<ChannelPublication1View_Create> {
@@ -75,26 +75,54 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1View_Create> {
             let mut postgresql_connection_pool_database_3 = inner.postgresql_connection_pool_database_3.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    let _ = Repository::<Postgresql<ChannelPublication1View>>::create(
-                        &crate::result_return_runtime!(postgresql_connection_pool_database_3.get().await),
-                        ChannelPublication1ViewInsert {
-                            user__id: incoming.user_access_token_signed.user__id,
-                            channel_publication1__id: incoming.channel_publication1__id,
-                            channel_publication1_view__created_at: now,
+                    let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
+                    let mut counter: usize = 0;
+                    'a: loop {
+                        interval.tick().await;
+                        match Repository::<Postgresql<ChannelPublication1View>>::create(
+                            &crate::result_return_runtime!(postgresql_connection_pool_database_3.get().await),
+                            ChannelPublication1ViewInsert {
+                                user__id: incoming.user_access_token_signed.user__id,
+                                channel_publication1__id: incoming.channel_publication1__id,
+                                channel_publication1_view__created_at: now,
+                            }
+                        ).await {
+                            Ok(_) => return Result::Ok(()),
+                            Err(aggregate_error) => {
+                                counter += 1;
+                                if counter == BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
+                                    return Err(aggregate_error)
+                                }
+                                continue 'a;
+                            }
                         }
-                    ).await?;
+                    }
                     return Result::Ok(());
                 },
             );
             postgresql_connection_pool_database_3 = inner.postgresql_connection_pool_database_3.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    let _ = Repository::<Postgresql<ChannelPublication1>>::update_4(
-                        &crate::result_return_runtime!(postgresql_connection_pool_database_3.get().await),
-                        ChannelPublication1By1 {
-                            channel_publication1__id: incoming.channel_publication1__id,
+                    let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
+                    let mut counter: usize = 0;
+                    'a: loop {
+                        interval.tick().await;
+                        match Repository::<Postgresql<ChannelPublication1>>::update_4(
+                            &crate::result_return_runtime!(postgresql_connection_pool_database_3.get().await),
+                            ChannelPublication1By1 {
+                                channel_publication1__id: incoming.channel_publication1__id,
+                            }
+                        ).await {
+                            Ok(_) => return Result::Ok(()),
+                            Err(aggregate_error) => {
+                                counter += 1;
+                                if counter == BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
+                                    return Err(aggregate_error)
+                                }
+                                continue 'a;
+                            }
                         }
-                    ).await?;
+                    }
                     return Result::Ok(());
                 },
             );

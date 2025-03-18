@@ -16,7 +16,7 @@ use {
     std::future::Future,
 };
 impl EmailSender<UserAuthorizationToken> {
-    pub fn repeatable_send<'a>(
+    pub fn send<'a>(
         email_server: &'static EmailServer,
         user_authorization_token__value: &'a str,
         user__email: &'a str,
@@ -28,7 +28,7 @@ impl EmailSender<UserAuthorizationToken> {
                 user_authorization_token__value,
                 user_device__id,
             );
-            Sender::<Email>::repeatable_send(
+            Sender::<Email>::send(
                 email_server,
                 "Authorization confirmation",
                 message_body,

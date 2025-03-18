@@ -33,7 +33,6 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
                         Postgresql,
                         UserAuthorizationTokenBy,
@@ -43,7 +42,7 @@ use {
                         UserAuthorizationTokenUpdate3,
                         UserBy1,
                         UserBy2,
-                    },
+                    }, Repository
                 },
                 service::{
                     resolver::{
@@ -57,7 +56,7 @@ use {
                     },
                 },
             },
-        },
+        }, BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY,
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user_authorization::authorize_by_first_step::{
@@ -69,7 +68,7 @@ use {
     },
     std::{
         borrow::Cow,
-        future::Future,
+        future::Future, time::Duration,
     },
 };
 pub struct UserAuthorization_AuthorizeByFirstStep;
@@ -269,18 +268,31 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                     }
                 };
             if can_send {
-                let environment_configuration = inner.environment_configuration;
+                let email_server = &inner.environment_configuration.subject.resource.email_server;
                 let user__email_ = user__email.into_owned();
                 let user_device__id = incoming.user_device__id.to_string();
                 Spawner::<TokioNonBlockingTask>::spawn_into_background(
                     async move {
-                        EmailSender::<UserAuthorizationToken>::repeatable_send(
-                            &environment_configuration.subject.resource.email_server,
-                            user_authorization_token__value.as_str(),
-                            user__email_.as_str(),
-                            user_device__id.as_str(),
-                        )
-                        .await?;
+                        let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
+                        let mut counter: usize = 0;
+                        'a: loop {
+                            interval.tick().await;
+                            match EmailSender::<UserAuthorizationToken>::send(
+                                email_server,
+                                user_authorization_token__value.as_str(),
+                                user__email_.as_str(),
+                                user_device__id.as_str(),
+                            ).await {
+                                Ok(_) => return Result::Ok(()),
+                                Err(aggregate_error) => {
+                                    counter += 1;
+                                    if counter == BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY {
+                                        return Err(aggregate_error)
+                                    }
+                                    continue 'a;
+                                }
+                            }
+                        }
                         return Result::Ok(());
                     },
                 );
