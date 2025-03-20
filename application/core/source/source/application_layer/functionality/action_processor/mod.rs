@@ -4,6 +4,7 @@ mod channel_publication1_mark;
 mod channel_subscription;
 mod user_authorization;
 mod channel_publication1_view;
+mod channel_publication1_commentary;
 pub use self::{
     channel::{
         check_linked_name_for_existing::Channel_CheckLinkedNameForExisting,
@@ -46,6 +47,9 @@ pub use self::{
         delete::ChannelPublication1Mark_Delete,
     },
     channel_publication1_view::create::ChannelPublication1View_Create,
+    channel_publication1_commentary::{
+        create::ChannelPublication1Commentary_Create,
+    },
 };
 use {
     super::command_processor::RunServer,
@@ -76,4 +80,5 @@ pub struct Inner<'a> {
     pub postgresql_connection_pool_database_1: &'a PostgresqlConnectionPool,
     pub postgresql_connection_pool_database_2: &'a PostgresqlConnectionPool,
     pub postgresql_connection_pool_database_3: &'a PostgresqlConnectionPool,
+    pub postgresql_connection_pool_database_4: &'a PostgresqlConnectionPool,
 }

@@ -65,6 +65,7 @@ pub struct Postgresql {
     pub database_1: PostgresqlInner,
     pub database_2: PostgresqlInner,
     pub database_3: PostgresqlInner,
+    pub database_4: PostgresqlInner,
 }
 pub struct EmailServer {
     pub socket_address: SocketAddr,

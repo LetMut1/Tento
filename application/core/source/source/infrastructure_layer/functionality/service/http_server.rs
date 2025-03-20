@@ -22,6 +22,7 @@ use {
                 ChannelSubscription_Create,
                 ChannelSubscription_Delete,
                 ChannelPublication1Mark_Create,
+                ChannelPublication1Commentary_Create,
                 Inner as ActionProcessorInner,
                 UserAuthorization_AuthorizeByFirstStep,
                 UserAuthorization_AuthorizeByLastStep,
@@ -120,54 +121,65 @@ impl HttpServer {
                 },
             );
             let mut graceful_shutdown_signal_future_join_handle_ = std::pin::pin!(graceful_shutdown_signal_future_join_handle);
-            let postgresql_connection_pool_database_1 = {
-                #[cfg(feature = "postgresql_connection_with_tls")]
-                {
-                    todo!();
-                }
-                #[cfg(not(feature = "postgresql_connection_with_tls"))]
-                {
-                    Creator::<PostgresqlConnectionPool>::create(
-                        &environment_configuration.subject.resource.postgresql.database_1,
-                        NoTls,
-                    )
-                    .await?
-                }
-            };
-            let postgresql_connection_pool_database_2 = {
-                #[cfg(feature = "postgresql_connection_with_tls")]
-                {
-                    todo!();
-                }
-                #[cfg(not(feature = "postgresql_connection_with_tls"))]
-                {
-                    Creator::<PostgresqlConnectionPool>::create(
-                        &environment_configuration.subject.resource.postgresql.database_2,
-                        NoTls,
-                    )
-                    .await?
-                }
-            };
-            let postgresql_connection_pool_database_3 = {
-                #[cfg(feature = "postgresql_connection_with_tls")]
-                {
-                    todo!();
-                }
-                #[cfg(not(feature = "postgresql_connection_with_tls"))]
-                {
-                    Creator::<PostgresqlConnectionPool>::create(
-                        &environment_configuration.subject.resource.postgresql.database_3,
-                        NoTls,
-                    )
-                    .await?
-                }
-            };
             let cloned = Arc::new(
                 Cloned {
                     router: Self::create_router()?,
-                    postgresql_connection_pool_database_1,
-                    postgresql_connection_pool_database_2,
-                    postgresql_connection_pool_database_3,
+                    postgresql_connection_pool_database_1: {
+                        #[cfg(feature = "postgresql_connection_with_tls")]
+                        {
+                            todo!();
+                        }
+                        #[cfg(not(feature = "postgresql_connection_with_tls"))]
+                        {
+                            Creator::<PostgresqlConnectionPool>::create(
+                                &environment_configuration.subject.resource.postgresql.database_1,
+                                NoTls,
+                            )
+                            .await?
+                        }
+                    },
+                    postgresql_connection_pool_database_2: {
+                        #[cfg(feature = "postgresql_connection_with_tls")]
+                        {
+                            todo!();
+                        }
+                        #[cfg(not(feature = "postgresql_connection_with_tls"))]
+                        {
+                            Creator::<PostgresqlConnectionPool>::create(
+                                &environment_configuration.subject.resource.postgresql.database_2,
+                                NoTls,
+                            )
+                            .await?
+                        }
+                    },
+                    postgresql_connection_pool_database_3: {
+                        #[cfg(feature = "postgresql_connection_with_tls")]
+                        {
+                            todo!();
+                        }
+                        #[cfg(not(feature = "postgresql_connection_with_tls"))]
+                        {
+                            Creator::<PostgresqlConnectionPool>::create(
+                                &environment_configuration.subject.resource.postgresql.database_3,
+                                NoTls,
+                            )
+                            .await?
+                        }
+                    },
+                    postgresql_connection_pool_database_4: {
+                        #[cfg(feature = "postgresql_connection_with_tls")]
+                        {
+                            todo!();
+                        }
+                        #[cfg(not(feature = "postgresql_connection_with_tls"))]
+                        {
+                            Creator::<PostgresqlConnectionPool>::create(
+                                &environment_configuration.subject.resource.postgresql.database_4,
+                                NoTls,
+                            )
+                            .await?
+                        }
+                    },
                 },
             );
             'a: loop {
@@ -534,6 +546,13 @@ impl HttpServer {
                 ActionRoute::ChannelPublication1View(ChannelPublication1View::Create),
             )
         );
+        crate::result_return_logic!(
+            router
+            .insert(
+                ChannelPublication1Commentary::CREATE,
+                ActionRoute::ChannelPublication1Commentary(ChannelPublication1Commentary::Create),
+            )
+        );
         #[cfg(feature = "action_for_manual_test")]
         {
             crate::result_return_logic!(
@@ -752,6 +771,13 @@ impl HttpServer {
                     ActionRoute::ChannelPublication1View(ChannelPublication1View::Create_),
                 )
             );
+            crate::result_return_logic!(
+                router
+                .insert(
+                    ChannelPublication1Commentary::CREATE_,
+                    ActionRoute::ChannelPublication1Commentary(ChannelPublication1Commentary::Create_),
+                )
+            );
         }
         return Result::Ok(router);
     }
@@ -771,6 +797,7 @@ impl HttpServer {
                 postgresql_connection_pool_database_1: &cloned.postgresql_connection_pool_database_1,
                 postgresql_connection_pool_database_2: &cloned.postgresql_connection_pool_database_2,
                 postgresql_connection_pool_database_3: &cloned.postgresql_connection_pool_database_3,
+                postgresql_connection_pool_database_4: &cloned.postgresql_connection_pool_database_4,
             };
             match *r#match.value {
                 ActionRoute::UserAuthorization(ref user_authorization) => {
@@ -1191,6 +1218,34 @@ impl HttpServer {
                         }
                     }
                 }
+                ActionRoute::ChannelPublication1Commentary(ref channel_publication1_commentary) => {
+                    match (
+                        channel_publication1_commentary,
+                        &parts.method,
+                    ) {
+                        (&ChannelPublication1Commentary::Create, &Method::POST) => return Action::<ChannelPublication1Commentary_Create>::run(
+                            &mut action_inner,
+                            &action_processor_inner,
+                        )
+                        .await,
+                        _ => {
+                            #[cfg(feature = "action_for_manual_test")]
+                            {
+                                match (
+                                    channel_publication1_commentary,
+                                    &parts.method,
+                                ) {
+                                    (&ChannelPublication1Commentary::Create_, &Method::POST) => return Action::<ChannelPublication1Commentary_Create>::run_(
+                                        &mut action_inner,
+                                        &action_processor_inner,
+                                    )
+                                    .await,
+                                    _ => {}
+                                }
+                            }
+                        }
+                    }
+                }
             }
             return Action::<RouteNotFound>::run(&action_inner);
         };
@@ -1211,6 +1266,7 @@ struct Cloned {
     postgresql_connection_pool_database_1: PostgresqlConnectionPool,
     postgresql_connection_pool_database_2: PostgresqlConnectionPool,
     postgresql_connection_pool_database_3: PostgresqlConnectionPool,
+    postgresql_connection_pool_database_4: PostgresqlConnectionPool,
 }
 pub enum ActionRoute {
     UserAuthorization(UserAuthorization),
@@ -1219,6 +1275,7 @@ pub enum ActionRoute {
     ChannelPublication1(ChannelPublication1),
     ChannelPublication1Mark(ChannelPublication1Mark),
     ChannelPublication1View(ChannelPublication1View),
+    ChannelPublication1Commentary(ChannelPublication1Commentary),
 }
 #[cfg(feature = "action_for_manual_test")]
 impl ActionRoute {
@@ -1511,6 +1568,21 @@ impl ChannelPublication1View {
 impl ChannelPublication1View {
     pub const CREATE_: &'static str = const_format::concatcp!(
         ChannelPublication1View::CREATE,
+        ActionRoute::PART,
+    );
+}
+pub enum ChannelPublication1Commentary {
+    Create,
+    #[cfg(feature = "action_for_manual_test")]
+    Create_,
+}
+impl ChannelPublication1Commentary {
+    pub const CREATE: &'static str = "/channel_publication1_commentary/create";
+}
+#[cfg(feature = "action_for_manual_test")]
+impl ChannelPublication1Commentary {
+    pub const CREATE_: &'static str = const_format::concatcp!(
+        ChannelPublication1Commentary::CREATE,
         ActionRoute::PART,
     );
 }

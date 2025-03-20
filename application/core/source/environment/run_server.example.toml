@@ -134,6 +134,18 @@ value = 1
 [resource.postgresql.database_3.connection_pool_waiting_timeout_duration]
 value = 300
 
+[resource.postgresql.database_4]
+
+[resource.postgresql.database_4.url]
+value = "postgres://root:password@postgresql_database_4/tento"
+
+[resource.postgresql.database_4.maximum_connection_pool_size]
+value = 1
+
+# In milliseconds.
+[resource.postgresql.database_4.connection_pool_waiting_timeout_duration]
+value = 300
+
 [resource.email_server]
 
 [resource.email_server.socket_address]

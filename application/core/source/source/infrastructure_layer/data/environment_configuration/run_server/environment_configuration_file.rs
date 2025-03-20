@@ -77,6 +77,7 @@ pub struct Postgresql {
     pub database_1: PostgresqlInner_,
     pub database_2: PostgresqlInner_,
     pub database_3: PostgresqlInner_,
+    pub database_4: PostgresqlInner_,
 }
 #[derive(serde::Deserialize)]
 pub struct EmailServer {

@@ -40,9 +40,9 @@ use self::{
     },
     presentation_layer::functionality::command::Command,
 };
-pub const BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY: u64 = 3;
-pub const BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY: usize = 300;
-pub const BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY: u64 = 1;
+pub const BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY: u64 = 5;
+pub const BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY: usize = 5000;
+pub const BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY: u64 = 3;
 pub const BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY: usize = 10;
 // The type is 'Result<(), ()>' but not '()' to return a success/error exit code but not only success exit code.
 fn main() -> Result<(), ()> {

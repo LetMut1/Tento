@@ -473,8 +473,8 @@ Creates a mark for channel publication1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    pub channel_publication1__id: i64,
-    pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
+    channel_publication1__id: i64,
+    channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 
 struct ChannelPublication1TokenSigned {
@@ -498,8 +498,8 @@ Deletes a mark from channel publication1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    pub channel_publication1__id: i64,
-    pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
+    channel_publication1__id: i64,
+    channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 
 struct ChannelPublication1TokenSigned {
@@ -518,13 +518,13 @@ enum Precedent {
 ```
  - ## ChannelPublication1View_Create POST /channel_publication1_view/create
 ```
-Creates a views for channel publication1.
+Creates a view for channel publication1.
 ```
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    pub channel_publication1__id: i64,
-    pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
+    channel_publication1__id: i64,
+    channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 
 struct ChannelPublication1TokenSigned {
@@ -537,6 +537,37 @@ struct ChannelPublication1TokenSigned {
 enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelPublication1Token__AlreadyExpired,
+}
+```
+ - ## ChannelPublication1Commentary_Create POST /channel_publication1_commentary/create
+```
+Creates a commentary for channel publication1.
+```
+```
+struct Incoming {
+    user_access_token_signed: <Data standards>
+    channel_publication1__id: i64,
+    channel_publication1_commentary__text: &'a str,
+    channel_publication1_token_signed: ChannelPublication1TokenSigned,
+}
+
+struct ChannelPublication1TokenSigned {
+    channel_publication1__obfuscation_value: i64,
+    channel_publication1_token__expires_at: i64,
+    signature: Vec<u8>,
+}
+```
+```
+struct Outcoming {
+    channel_publication1_commentary__id: i64,
+    channel_publication1_commentary__created_at: i64,
+}
+```
+```
+enum Precedent {
+    UserAccessToken__AlreadyExpired,
+    ChannelPublication1Token__AlreadyExpired,
+    ParallelExecution,
 }
 ```
 <br/><br/>

@@ -15,17 +15,20 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<ChannelPublication1Commentary>> {
-    pub fn create<'a>(database_4_client: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    // channel_publication1_commentary__id: i64,
+    pub fn create<'a>(database_4_client: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
-                    public.channel_publication1_commentary (\
+                    public.channel_publication1_commentary AS cp1c (\
+                        id,\
                         user__id,\
                         channel_publication1__id,\
                         text_,\
                         marks_quantity,\
                         created_at\
                     ) VALUES (\
+                        nextval('public.channel_publication1_commentary_1'),\
                         $1,\
                         $2,\
                         $3,\
@@ -34,7 +37,7 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
                     ) \
                 ON CONFLICT DO NOTHING \
                 RETURNING \
-                    true AS _;";
+                    cp1c.id AS i;";
             let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
@@ -74,9 +77,13 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
                 .await
             );
             if rows.is_empty() {
-                return Result::Ok(false);
+                return Result::Ok(Option::None);
             }
-            return Result::Ok(true);
+            return Result::Ok(
+                Option::Some(
+                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))
+                )
+            );
         };
     }
 }

@@ -178,6 +178,18 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
                                     .connection_pool_waiting_timeout_duration
                                     .value,
                             },
+                            database_4: PostgresqlInner {
+                                configuration: crate::result_return_logic!(
+                                    Config::from_str(environment_configuration_file.resource.postgresql.database_4.url.value.as_str())
+                                ),
+                                maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_4.maximum_connection_pool_size.value,
+                                connection_pool_waiting_timeout_duration: environment_configuration_file
+                                    .resource
+                                    .postgresql
+                                    .database_4
+                                    .connection_pool_waiting_timeout_duration
+                                    .value,
+                            },
                         },
                         email_server: EmailServer {
                             socket_address: {
