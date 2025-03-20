@@ -5,7 +5,7 @@ CREATE TABLE public.channel_publication1_view (
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE UNIQUE INDEX channel_publication1_view_1 ON public.channel_publication1_view
-USING btree (user__id, channel_publication1__id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
+USING btree (user__id, channel_publication1__id ASC NULLS LAST) WITH (fillfactor = 75, deduplicate_items = on);
 
 ALTER TABLE ONLY public.channel_publication1_view
 ALTER COLUMN user__id SET NOT NULL,

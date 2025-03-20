@@ -15,3 +15,4 @@ pub mod user_device;
 pub mod user_registration_token;
 pub mod user_reset_password_token;
 pub mod channel_publication1_view;
+pub mod channel_publication1_commentary;

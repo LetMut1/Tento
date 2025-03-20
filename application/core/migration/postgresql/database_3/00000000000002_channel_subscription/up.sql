@@ -2,7 +2,7 @@ CREATE TABLE public.channel_subscription (
     user__id BIGINT,
     channel__id BIGINT,
     created_at BIGINT
-) WITH (oids = false, fillfactor = 80, autovacuum_enabled = true);
+) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE UNIQUE INDEX channel_subscription_1 ON public.channel_subscription
 USING btree (user__id, channel__id ASC NULLS LAST) WITH (fillfactor = 80);

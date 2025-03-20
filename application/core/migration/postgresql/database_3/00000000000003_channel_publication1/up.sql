@@ -18,7 +18,7 @@ CREATE UNIQUE INDEX channel_publication1_2 ON public.channel_publication1
 USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE UNIQUE INDEX channel_publication1_3 ON public.channel_publication1
-USING btree (channel__id, is_predeleted, created_at ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
+USING btree (channel__id, is_predeleted, created_at ASC NULLS LAST) WITH (fillfactor = 80, deduplicate_items = on);
 
 ALTER TABLE ONLY public.channel_publication1
 ALTER COLUMN id SET NOT NULL,
