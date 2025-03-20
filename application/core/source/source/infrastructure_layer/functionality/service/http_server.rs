@@ -113,8 +113,8 @@ impl HttpServer {
             let graceful_shutdown_signal_future_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(
                 async move {
                     tokio::select! {
-                        _ = signal_interrupt_future => {},
-                        _ = signal_terminate_future => {},
+                        _ = signal_interrupt_future => (),
+                        _ = signal_terminate_future => (),
                     }
                     return ();
                 },
@@ -297,14 +297,10 @@ impl HttpServer {
                             },
                         }
                     }
-                    print!("Remaining time in seconds before shutdown:");
-                    '_b: for seconds_quantity in 15..=1 {
-                        if seconds_quantity != 1 {
-                            print!(" {},", seconds_quantity);
-                        } else {
-                            print!("{}.", seconds_quantity);
-                        }
-                        tokio::time::sleep(Duration::from_secs(1)).await;
+                    let mut interval = tokio::time::interval(Duration::from_secs(1));
+                    '_b: for seconds_quantity in (1..=15).rev() {
+                        interval.tick().await;
+                        println!("Remaining time in seconds before shutdown: {},", seconds_quantity);
                     }
                     return Result::<_, AggregateError>::Ok(());
                 }
