@@ -13,14 +13,6 @@ services:
         volumes:
             - postgresql_database_1_data:/var/lib/postgresql/data
         restart: always
-    postgresql_database_1_client:
-        container_name: tento_postgresql_database_1_client
-        build:
-            context: ./service/postgresql_client
-            dockerfile: dockerfile
-        ports:
-        - 8081:8080
-        restart: always
     postgresql_database_2:
         container_name: tento_postgresql_database_2
         build:
@@ -34,14 +26,6 @@ services:
             POSTGRES_DB: 'tento'
         volumes:
             - postgresql_database_2_data:/var/lib/postgresql/data
-        restart: always
-    postgresql_database_2_client:
-        container_name: tento_postgresql_database_2_client
-        build:
-            context: ./service/postgresql_client
-            dockerfile: dockerfile
-        ports:
-        - 8082:8080
         restart: always
     postgresql_database_3:
         container_name: tento_postgresql_database_3
@@ -57,8 +41,22 @@ services:
         volumes:
             - postgresql_database_3_data:/var/lib/postgresql/data
         restart: always
-    postgresql_database_3_client:
-        container_name: tento_postgresql_database_3_client
+    postgresql_database_4:
+        container_name: tento_postgresql_database_4
+        build:
+            context: ./service/postgresql
+            dockerfile: dockerfile
+        environment:
+            PGDATA: '/var/lib/postgresql/data'
+            POSTGRES_HOST_AUTH_METHOD: 'md5'
+            POSTGRES_USER: 'root'
+            POSTGRES_PASSWORD: 'password'
+            POSTGRES_DB: 'tento'
+        volumes:
+            - postgresql_database_4_data:/var/lib/postgresql/data
+        restart: always
+    postgresql_database_client:
+        container_name: tento_postgresql_database_client
         build:
             context: ./service/postgresql_client
             dockerfile: dockerfile
@@ -89,6 +87,8 @@ volumes:
     postgresql_database_2_data:
         driver: local
     postgresql_database_3_data:
+        driver: local
+    postgresql_database_4_data:
         driver: local
 networks:
     default:
