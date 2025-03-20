@@ -276,8 +276,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
-                    let mut counter: usize = 0;
-                    'a: loop {
+                    '_a: for quantity in 1..=BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
                         interval.tick().await;
                         match Repository::<Postgresql<UserDevice>>::create(
                             &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
@@ -288,11 +287,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                         ).await {
                             Ok(_) => return Result::Ok(()),
                             Err(aggregate_error) => {
-                                counter += 1;
-                                if counter == BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
-                                    return Err(aggregate_error)
+                                if quantity == BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
+                                    return Err(aggregate_error);
                                 }
-                                continue 'a;
                             }
                         }
                     }
