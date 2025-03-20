@@ -953,6 +953,7 @@ typedef struct ChannelPublication1_GetMany_Data {
   long channel_publication1__id;
   struct CVector_CString channel_publication1__images_pathes;
   struct COption_CString channel_publication1__text;
+  long channel_publication1__commentaries_quantity;
   long channel_publication1__marks_quantity;
   long channel_publication1__view_quantity;
   long channel_publication1__created_at;

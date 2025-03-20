@@ -28,6 +28,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         channel__id,\
                         images_pathes,\
                         text_,\
+                        commentaries_quantity,\
                         marks_quantity,\
                         view_quantity,\
                         obfuscation_value,\
@@ -44,12 +45,13 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         $6,\
                         $7,\
                         $8,\
-                        $9\
+                        $9,\
+                        $10\
                     )\
                 ON CONFLICT DO NOTHING \
                 RETURNING \
                     cp1.id AS i;";
-            let mut parameter_storage = ParameterStorage::new(9);
+            let mut parameter_storage = ParameterStorage::new(10);
             parameter_storage
                 .add(
                     &insert.channel__id,
@@ -62,6 +64,10 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 .add(
                     &insert.channel_publication1__text,
                     Type::TEXT,
+                )
+                .add(
+                    &insert.channel_publication1__commentaries_quantity,
+                    Type::INT8,
                 )
                 .add(
                     &insert.channel_publication1__marks_quantity,
@@ -322,6 +328,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     cp1.id AS i,\
                     cp1.images_pathes AS ip,\
                     cp1.text_ AS t,\
+                    cp1.commentaries_quantity AS cq,\
                     cp1.marks_quantity AS mq,\
                     cp1.view_quantity AS vq,\
                     cp1.obfuscation_value AS ov,\
@@ -427,6 +434,7 @@ pub struct Insert<'a, 'b> {
     pub channel__id: i64,
     pub channel_publication1__images_pathes: &'a [&'b str],
     pub channel_publication1__text: Option<&'a str>,
+    pub channel_publication1__commentaries_quantity: i64,
     pub channel_publication1__marks_quantity: i64,
     pub channel_publication1__view_quantity: i64,
     pub channel_publication1__obfuscation_value: i64,
