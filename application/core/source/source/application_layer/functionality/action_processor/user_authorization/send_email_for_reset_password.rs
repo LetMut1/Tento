@@ -99,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 Option::Some(values) => values,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__NotFound)),
             };
-            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
             if user_reset_password_token__expires_at <= now {
                 if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
                     &postgresql_database_2_client,

@@ -14,7 +14,7 @@ use {
 impl Generator<UserAuthorizationToken_CanBeResentFrom> {
     pub fn generate(now: i64) -> Result<i64, AggregateError> {
         return Resolver::<UnixTime>::add_interval(
-            UserAuthorizationToken_CanBeResentFrom::QUANTITY_OF_SECONDS_BEFORE_RESENDING,
+            UserAuthorizationToken_CanBeResentFrom::QUANTITY_OF_MICROSECONDS_BEFORE_RESENDING,
             now,
         );
     }

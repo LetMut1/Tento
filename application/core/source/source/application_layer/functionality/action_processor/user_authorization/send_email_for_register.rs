@@ -80,7 +80,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     Option::Some(values) => values,
                     Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__NotFound)),
                 };
-            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
             if user_registration_token__expires_at <= now {
                 if !Repository::<Postgresql<UserRegistrationToken>>::delete(
                     &postgresql_database_2_client,

@@ -86,7 +86,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__EmailAlreadyExist));
             }
-            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_registration_token__value, user_registration_token__can_be_resent_from, user_registration_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserRegistrationToken>>::find_1(

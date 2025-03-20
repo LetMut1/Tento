@@ -14,7 +14,7 @@ use {
 impl Generator<UserResetPasswordToken_ExpiresAt> {
     pub fn generate(now: i64) -> Result<i64, AggregateError> {
         return Resolver::<UnixTime>::add_interval(
-            UserResetPasswordToken_ExpiresAt::QUANTITY_OF_SECONDS_FOR_EXPIRATION,
+            UserResetPasswordToken_ExpiresAt::QUANTITY_OF_MICROSECONDS_FOR_EXPIRATION,
             now,
         );
     }

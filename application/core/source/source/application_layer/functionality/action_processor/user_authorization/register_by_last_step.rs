@@ -130,7 +130,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     return Result::Ok(UnifiedReport::precedent(Precedent::User__EmailAlreadyExist));
                 }
             }
-            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
             {
                 let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
                 let (

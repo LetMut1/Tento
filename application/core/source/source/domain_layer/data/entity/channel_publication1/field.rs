@@ -12,10 +12,10 @@ pub struct CreatedAt(PhantomData<i64>);
 pub struct IsPredeleted(PhantomData<bool>);
 pub struct CanBeDeletedFrom(PhantomData<i64>);
 impl CanBeDeletedFrom {
-    pub const QUANTITY_OF_SECONDS_BEFORE_DELETION: i64 = 2 * ChannelPublication1Token_ExpiresAt::QUANTITY_OF_SECONDS_FOR_EXPIRATION;
+    pub const QUANTITY_OF_MICROSECONDS_BEFORE_DELETION: i64 = 2 * ChannelPublication1Token_ExpiresAt::QUANTITY_OF_MICROSECONDS_FOR_EXPIRATION;
     const _GUARD: () = {
         static_assertions::const_assert!(
-            CanBeDeletedFrom::QUANTITY_OF_SECONDS_BEFORE_DELETION > ChannelPublication1Token_ExpiresAt::QUANTITY_OF_SECONDS_FOR_EXPIRATION
+            CanBeDeletedFrom::QUANTITY_OF_MICROSECONDS_BEFORE_DELETION > ChannelPublication1Token_ExpiresAt::QUANTITY_OF_MICROSECONDS_FOR_EXPIRATION
         );
         ()
     };

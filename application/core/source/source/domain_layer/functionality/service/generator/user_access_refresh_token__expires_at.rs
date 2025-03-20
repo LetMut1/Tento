@@ -14,7 +14,7 @@ use {
 impl Generator<UserAccessRefreshToken_ExpiresAt> {
     pub fn generate(now: i64) -> Result<i64, AggregateError> {
         return Resolver::<UnixTime>::add_interval(
-            UserAccessRefreshToken_ExpiresAt::QUANTITY_OF_SECONDS_FOR_EXPIRATION,
+            UserAccessRefreshToken_ExpiresAt::QUANTITY_OF_MICROSECONDS_FOR_EXPIRATION,
             now,
         );
     }

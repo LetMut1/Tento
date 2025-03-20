@@ -91,7 +91,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             if !is_valid || incoming.user_access_token_signed.user_access_token__id != user_access_token__id_.as_str() {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
             if user_access_refresh_token__expires_at <= now {
                 if !Repository::<Postgresql<UserAccessRefreshToken>>::delete_1(
                     &postgresql_database_2_client,

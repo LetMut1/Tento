@@ -166,7 +166,7 @@ impl CommandProcessor<CreateFixtures> {
                                 user__email: user__email.as_str(),
                                 user__nickname: user__nickname.as_str(),
                                 user__password_hash: user__password_hash.as_str(),
-                                user__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
+                                user__created_at: Resolver::<UnixTime>::get_now_in_microseconds(),
                             },
                         )
                         .await? {
@@ -246,7 +246,7 @@ impl CommandProcessor<CreateFixtures> {
                                 channel__background_image_path: Option::Some(STUB),
                                 channel__subscribers_quantity: 0,
                                 channel__obfuscation_value: Generator::<Channel_ObfuscationValue>::generate(),
-                                channel__created_at: Resolver::<UnixTime>::get_now_in_seconds(),
+                                channel__created_at: Resolver::<UnixTime>::get_now_in_microseconds(),
                             },
                         )
                         .await?;

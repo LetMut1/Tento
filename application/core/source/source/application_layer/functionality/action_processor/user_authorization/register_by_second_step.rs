@@ -79,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                 Option::Some(values) => values,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__NotFound)),
             };
-            if user_registration_token__expires_at <= Resolver::<UnixTime>::get_now_in_seconds() {
+            if user_registration_token__expires_at <= Resolver::<UnixTime>::get_now_in_microseconds() {
                 if !Repository::<Postgresql<UserRegistrationToken>>::delete(
                     &postgresql_database_2_client,
                     UserRegistrationTokenBy {

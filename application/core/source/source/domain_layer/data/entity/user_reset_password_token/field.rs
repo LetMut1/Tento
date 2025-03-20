@@ -10,9 +10,9 @@ impl WrongEnterTriesQuantity {
 pub struct IsApproved(PhantomData<bool>);
 pub struct ExpiresAt(PhantomData<i64>);
 impl ExpiresAt {
-    pub const QUANTITY_OF_SECONDS_FOR_EXPIRATION: i64 = 60 * 30;
+    pub const QUANTITY_OF_MICROSECONDS_FOR_EXPIRATION: i64 = 1000000 * 60 * 30;
 }
 pub struct CanBeResentFrom(PhantomData<i64>);
 impl CanBeResentFrom {
-    pub const QUANTITY_OF_SECONDS_BEFORE_RESENDING: i64 = 60;
+    pub const QUANTITY_OF_MICROSECONDS_BEFORE_RESENDING: i64 = 1000000 * 60;
 }

@@ -14,7 +14,7 @@ use {
 impl Generator<ChannelPublication1Token_ExpiresAt> {
     pub fn generate(now: i64) -> Result<i64, AggregateError> {
         return Resolver::<UnixTime>::add_interval(
-            ChannelPublication1Token_ExpiresAt::QUANTITY_OF_SECONDS_FOR_EXPIRATION,
+            ChannelPublication1Token_ExpiresAt::QUANTITY_OF_MICROSECONDS_FOR_EXPIRATION,
             now,
         );
     }

@@ -95,7 +95,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                     Option::Some(values) => values,
                     Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken__NotFound)),
                 };
-            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
             if user_authorization_token__expires_at <= now {
                 if !Repository::<Postgresql<UserAuthorizationToken>>::delete(
                     &postgresql_database_2_client,

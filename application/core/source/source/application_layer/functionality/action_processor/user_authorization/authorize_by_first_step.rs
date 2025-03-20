@@ -145,7 +145,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             if !crate::result_return_runtime!(is_valid_join_handle.await)? {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__WrongEmailOrNicknameOrPassword));
             }
-            let now = Resolver::<UnixTime>::get_now_in_seconds();
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_authorization_token__value, user_authorization_token__can_be_resent_from, user_authorization_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserAuthorizationToken>>::find_1(
