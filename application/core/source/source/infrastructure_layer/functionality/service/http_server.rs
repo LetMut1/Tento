@@ -23,6 +23,7 @@ use {
                 ChannelSubscription_Delete,
                 ChannelPublication1Mark_Create,
                 ChannelPublication1Commentary_Create,
+                ChannelPublication1Commentary_Delete,
                 Inner as ActionProcessorInner,
                 UserAuthorization_AuthorizeByFirstStep,
                 UserAuthorization_AuthorizeByLastStep,
@@ -553,6 +554,13 @@ impl HttpServer {
                 ActionRoute::ChannelPublication1Commentary(ChannelPublication1Commentary::Create),
             )
         );
+        crate::result_return_logic!(
+            router
+            .insert(
+                ChannelPublication1Commentary::DELETE,
+                ActionRoute::ChannelPublication1Commentary(ChannelPublication1Commentary::Delete),
+            )
+        );
         #[cfg(feature = "action_for_manual_test")]
         {
             crate::result_return_logic!(
@@ -776,6 +784,13 @@ impl HttpServer {
                 .insert(
                     ChannelPublication1Commentary::CREATE_,
                     ActionRoute::ChannelPublication1Commentary(ChannelPublication1Commentary::Create_),
+                )
+            );
+            crate::result_return_logic!(
+                router
+                .insert(
+                    ChannelPublication1Commentary::DELETE_,
+                    ActionRoute::ChannelPublication1Commentary(ChannelPublication1Commentary::Delete_),
                 )
             );
         }
@@ -1228,6 +1243,11 @@ impl HttpServer {
                             &action_processor_inner,
                         )
                         .await,
+                        (&ChannelPublication1Commentary::Delete, &Method::POST) => return Action::<ChannelPublication1Commentary_Delete>::run(
+                            &mut action_inner,
+                            &action_processor_inner,
+                        )
+                        .await,
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -1236,6 +1256,11 @@ impl HttpServer {
                                     &parts.method,
                                 ) {
                                     (&ChannelPublication1Commentary::Create_, &Method::POST) => return Action::<ChannelPublication1Commentary_Create>::run_(
+                                        &mut action_inner,
+                                        &action_processor_inner,
+                                    )
+                                    .await,
+                                    (&ChannelPublication1Commentary::Delete_, &Method::POST) => return Action::<ChannelPublication1Commentary_Delete>::run_(
                                         &mut action_inner,
                                         &action_processor_inner,
                                     )
@@ -1573,16 +1598,24 @@ impl ChannelPublication1View {
 }
 pub enum ChannelPublication1Commentary {
     Create,
+    Delete,
     #[cfg(feature = "action_for_manual_test")]
     Create_,
+    #[cfg(feature = "action_for_manual_test")]
+    Delete_,
 }
 impl ChannelPublication1Commentary {
     pub const CREATE: &'static str = "/channel_publication1_commentary/create";
+    pub const DELETE: &'static str = "/channel_publication1_commentary/delete";
 }
 #[cfg(feature = "action_for_manual_test")]
 impl ChannelPublication1Commentary {
     pub const CREATE_: &'static str = const_format::concatcp!(
         ChannelPublication1Commentary::CREATE,
+        ActionRoute::PART,
+    );
+    pub const DELETE_: &'static str = const_format::concatcp!(
+        ChannelPublication1Commentary::DELETE,
         ActionRoute::PART,
     );
 }

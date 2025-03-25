@@ -49,6 +49,7 @@ pub use self::{
     channel_publication1_view::create::ChannelPublication1View_Create,
     channel_publication1_commentary::{
         create::ChannelPublication1Commentary_Create,
+        delete::ChannelPublication1Commentary_Delete,
     },
 };
 use {
