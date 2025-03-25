@@ -15,7 +15,7 @@ use {
 };
 pub struct ChannelPublication1Commentary {
     id: Id,
-    user__id: User_Id,
+    author: User_Id,
     channel_publication1__id: ChannelPublication1_Id,
     text: Text,
     marks_quantity: MarksQuantity,

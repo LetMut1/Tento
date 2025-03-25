@@ -85,6 +85,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Commentary_Delete> 
                     channel_publication1_commentary__can_be_deleted_from: Generator::<ChannelPublication1Commentary_CanBeDeletedFrom>::generate(now)?,
                 },
                 ChannelPublication1CommentaryBy {
+                    channel_publication1_commentary__author: incoming.user_access_token_signed.user__id,
                     channel_publication1_commentary__id: incoming.channel_publication1_commentary__id,
                     channel_publication1_commentary__is_predeleted: false,
                 },

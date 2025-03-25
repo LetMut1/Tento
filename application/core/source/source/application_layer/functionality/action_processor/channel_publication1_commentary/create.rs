@@ -79,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Commentary_Create> 
             let channel_publication1_commentary__id = match Repository::<Postgresql<ChannelPublication1Commentary>>::create(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_4.get().await),
                 ChannelPublication1CommentaryInsert {
-                    user__id: incoming.user_access_token_signed.user__id,
+                    channel_publication1_commentary__author: incoming.user_access_token_signed.user__id,
                     channel_publication1__id: incoming.channel_publication1__id,
                     channel_publication1_commentary__text: incoming.channel_publication1_commentary__text,
                     channel_publication1_commentary__marks_quantity: 0,

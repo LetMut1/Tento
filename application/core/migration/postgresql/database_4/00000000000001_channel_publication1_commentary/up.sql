@@ -1,6 +1,6 @@
 CREATE TABLE public.channel_publication1_commentary (
     id BIGINT,
-    user__id BIGINT,
+    author BIGINT,
     channel_publication1__id BIGINT,
     text_ TEXT,
     marks_quantity BIGINT,
@@ -19,7 +19,7 @@ CREATE INDEX channel_publication1_commentary_3 ON public.channel_publication1_co
 USING btree (channel_publication1__id, created_at ASC NULLS LAST) WITH (fillfactor = 75, deduplicate_items = on);
 
 ALTER TABLE ONLY public.channel_publication1_commentary
-ALTER COLUMN user__id SET NOT NULL,
+ALTER COLUMN author SET NOT NULL,
 ALTER COLUMN channel_publication1__id SET NOT NULL,
 ALTER COLUMN text_ SET NOT NULL,
 ALTER COLUMN marks_quantity SET NOT NULL,

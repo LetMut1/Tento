@@ -22,7 +22,7 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
                 INSERT INTO \
                     public.channel_publication1_commentary AS cp1c (\
                         id,\
-                        user__id,\
+                        author,\
                         channel_publication1__id,\
                         text_,\
                         marks_quantity,\
@@ -45,7 +45,7 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
             let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
-                    &insert.user__id,
+                    &insert.channel_publication1_commentary__author,
                     Type::INT8,
                 )
                 .add(
@@ -112,10 +112,11 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
                 ) \
                 WHERE \
                     cp1c.id = $3 \
-                    AND cp1c.is_predeleted = $4 \
+                    AND cp1c.author = $4 \
+                    AND cp1c.is_predeleted = $5 \
                 RETURNING \
                     true AS _;";
-            let mut parameter_storage = ParameterStorage::new(4);
+            let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
                     &update.channel_publication1_commentary__is_predeleted,
@@ -127,6 +128,10 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
                 )
                 .add(
                     &by.channel_publication1_commentary__id,
+                    Type::INT8,
+                )
+                .add(
+                    &by.channel_publication1_commentary__author,
                     Type::INT8,
                 )
                 .add(
@@ -157,7 +162,7 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
     }
 }
 pub struct Insert<'a> {
-    pub user__id: i64,
+    pub channel_publication1_commentary__author: i64,
     pub channel_publication1__id: i64,
     pub channel_publication1_commentary__text: &'a str,
     pub channel_publication1_commentary__marks_quantity: i64,
@@ -170,6 +175,7 @@ pub struct Update {
     pub channel_publication1_commentary__can_be_deleted_from: i64,
 }
 pub struct By {
+    pub channel_publication1_commentary__author: i64,
     pub channel_publication1_commentary__id: i64,
     pub channel_publication1_commentary__is_predeleted: bool,
 }
