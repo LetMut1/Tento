@@ -105,7 +105,6 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                 incoming.limit,
             )
             .await?;
-            let channel_publication1_token__expires_at = Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?;
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
             '_a: for row in rows.iter() {
                 data_registry.push(
@@ -122,7 +121,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                             incoming.user_access_token_signed.user__id,
                             crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                             crate::result_return_logic!(row.try_get::<'_, usize, i64>(6)),
-                            channel_publication1_token__expires_at,
+                            Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?,
                         )?,
                     },
                 );

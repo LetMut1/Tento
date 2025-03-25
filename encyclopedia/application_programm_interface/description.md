@@ -386,8 +386,15 @@ struct Incoming {
 ```
 ```
 struct Outcoming {
-    channel_publication1__id: i64,
     channel_publication1__created_at: i64,
+    channel_publication1_token_signed: ChannelPublication1TokenSigned
+}
+
+struct ChannelPublication1TokenSigned {
+    channel_publication1__id: i64,
+    channel_publication1__obfuscation_value: i64,
+    channel_publication1_token__expires_at: i64,
+    signature: Vec<u8>,
 }
 ```
 ```

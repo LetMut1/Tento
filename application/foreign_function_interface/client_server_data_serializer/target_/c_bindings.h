@@ -1002,8 +1002,8 @@ typedef struct ChannelPublication1_Create_Incoming {
 } ChannelPublication1_Create_Incoming;
 
 typedef struct ChannelPublication1_Create_Outcoming {
-  long channel_publication1__id;
   long channel_publication1__created_at;
+  struct ChannelPublication1TokenSigned channel_publication1_token_signed;
 } ChannelPublication1_Create_Outcoming;
 
 typedef struct CData_ChannelPublication1_Create_Outcoming {
@@ -1404,7 +1404,7 @@ void channel_publication1__create__serialize_deallocate(struct CResult_CVector_c
 
 ChannelPublication1_Create_CResult channel_publication1__create__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
 
-void channel_publication1__create__deserialize_deallocate(ChannelPublication1_Create_CResult _c_result);
+void channel_publication1__create__deserialize_deallocate(ChannelPublication1_Create_CResult c_result);
 
 struct CResult_CVector_c_uchar channel_publication1__delete__serialize_allocate(struct ChannelPublication1_Delete_Incoming incoming);
 

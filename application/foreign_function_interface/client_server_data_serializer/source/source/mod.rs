@@ -3346,8 +3346,8 @@ type ChannelPublication1_Create_CResult = CResult<CUnifiedReport<ChannelPublicat
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1_Create_Outcoming {
-    pub channel_publication1__id: c_long,
     pub channel_publication1__created_at: c_long,
+    pub channel_publication1_token_signed: ChannelPublication1TokenSigned
 }
 #[repr(C)]
 #[derive(Default)]
@@ -3370,8 +3370,13 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_ve
                         data: data_,
                     } => {
                         let outcoming = ChannelPublication1_Create_Outcoming {
-                            channel_publication1__id: data_.channel_publication1__id,
                             channel_publication1__created_at: data_.channel_publication1__created_at,
+                            channel_publication1_token_signed: ChannelPublication1TokenSigned {
+                                channel_publication1__id: data_.channel_publication1_token_signed.channel_publication1__id,
+                                channel_publication1__obfuscation_value: data_.channel_publication1_token_signed.channel_publication1__obfuscation_value,
+                                channel_publication1_token__expires_at: data_.channel_publication1_token_signed.channel_publication1_token__expires_at,
+                                signature: Allocator::<CVector<_>>::allocate(data_.channel_publication1_token_signed.signature),
+                            },
                         };
                         CData::filled(outcoming)
                     }
@@ -3408,7 +3413,10 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_ve
     );
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1__create__deserialize_deallocate(_c_result: ChannelPublication1_Create_CResult) -> () {
+pub extern "C-unwind" fn channel_publication1__create__deserialize_deallocate(c_result: ChannelPublication1_Create_CResult) -> () {
+    if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_publication1_token_signed.signature);
+    }
     return ();
 }
 #[repr(C)]
@@ -6170,8 +6178,13 @@ mod test {
             }
             pub fn target_filled__channel_publication1__create() -> Result<(), Box<dyn StdError + 'static>> {
                 let outcoming = ChannelPublication1_Create_Outcoming_ {
-                    channel_publication1__id: 0,
                     channel_publication1__created_at: 0,
+                    channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
+                        channel_publication1__id: 0,
+                        channel_publication1__obfuscation_value: 0,
+                        channel_publication1_token__expires_at: 0,
+                        signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                    }
                 };
                 let unified_report = UnifiedReport::<ChannelPublication1_Create_Outcoming_, ChannelPublication1_Create_Precedent_>::target_filled(outcoming);
                 return run_by_template(
