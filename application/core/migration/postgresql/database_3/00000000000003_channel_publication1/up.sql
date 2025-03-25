@@ -18,7 +18,7 @@ START WITH 1 CACHE 1 NO CYCLE OWNED BY public.channel_publication1.id;
 CREATE UNIQUE INDEX channel_publication1_2 ON public.channel_publication1
 USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
-CREATE UNIQUE INDEX channel_publication1_3 ON public.channel_publication1
+CREATE INDEX channel_publication1_3 ON public.channel_publication1
 USING btree (channel__id, is_predeleted, created_at ASC NULLS LAST) WITH (fillfactor = 80, deduplicate_items = on);
 
 ALTER TABLE ONLY public.channel_publication1
@@ -32,5 +32,4 @@ ALTER COLUMN obfuscation_value SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ALTER COLUMN is_predeleted SET NOT NULL,
 ALTER COLUMN can_be_deleted_from SET NOT NULL,
-ADD CONSTRAINT channel_publication1_4 UNIQUE USING INDEX channel_publication1_2,
-ADD CONSTRAINT channel_publication1_5 UNIQUE USING INDEX channel_publication1_3;
+ADD CONSTRAINT channel_publication1_4 UNIQUE USING INDEX channel_publication1_2;

@@ -5,6 +5,8 @@ use {
         CreatedAt,
         Text,
         MarksQuantity,
+        CanBeDeletedFrom,
+        IsPredeleted,
     },
     super::{
         channel_publication1::ChannelPublication1_Id,
@@ -18,5 +20,7 @@ pub struct ChannelPublication1Commentary {
     text: Text,
     marks_quantity: MarksQuantity,
     created_at: CreatedAt,
+    is_predeleted: IsPredeleted,
+    can_be_deleted_from: CanBeDeletedFrom,
 }
 pub type ChannelPublication1Commentary_Text = Text;

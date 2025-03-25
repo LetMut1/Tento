@@ -26,19 +26,23 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
                         channel_publication1__id,\
                         text_,\
                         marks_quantity,\
-                        created_at\
+                        created_at,\
+                        is_predeleted,\
+                        can_be_deleted_from\
                     ) VALUES (\
                         nextval('public.channel_publication1_commentary_1'),\
                         $1,\
                         $2,\
                         $3,\
                         $4,\
-                        $5\
+                        $5,\
+                        $6,\
+                        $7\
                     ) \
                 ON CONFLICT DO NOTHING \
                 RETURNING \
                     cp1c.id AS i;";
-            let mut parameter_storage = ParameterStorage::new(5);
+            let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
                     &insert.user__id,
@@ -59,7 +63,22 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
                 .add(
                     &insert.channel_publication1_commentary__created_at,
                     Type::INT8,
+                )
+                .add(
+                    &insert.channel_publication1_commentary__is_predeleted,
+                    Type::BOOL,
+                )
+                .add(
+                    &insert.channel_publication1_commentary__can_be_deleted_from,
+                    Type::INT8,
                 );
+
+
+
+
+
+
+
             let statement = crate::result_return_logic!(
                 database_4_client
                 .prepare_typed_cached(
@@ -93,4 +112,6 @@ pub struct Insert<'a> {
     pub channel_publication1_commentary__text: &'a str,
     pub channel_publication1_commentary__marks_quantity: i64,
     pub channel_publication1_commentary__created_at: i64,
+    pub channel_publication1_commentary__is_predeleted: bool,
+    pub channel_publication1_commentary__can_be_deleted_from: i64,
 }

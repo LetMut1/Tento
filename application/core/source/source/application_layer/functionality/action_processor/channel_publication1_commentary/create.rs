@@ -84,6 +84,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Commentary_Create> 
                     channel_publication1_commentary__text: incoming.channel_publication1_commentary__text,
                     channel_publication1_commentary__marks_quantity: 0,
                     channel_publication1_commentary__created_at: now,
+                    channel_publication1_commentary__is_predeleted: false,
+                    channel_publication1_commentary__can_be_deleted_from: 0,
                 },
             ).await? {
                 Option::Some(channel_publication1_commentary__id_) => channel_publication1_commentary__id_,
