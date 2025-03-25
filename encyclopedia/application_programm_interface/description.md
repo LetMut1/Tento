@@ -442,7 +442,6 @@ struct Outcoming {
 }
 
 struct Data {
-    channel_publication1__id: i64,
     channel_publication1__images_pathes: Vec<String>,
     channel_publication1__text: Option<String>,
     channel_publication1__commentaries_quantity: i64,
@@ -454,6 +453,7 @@ struct Data {
 }
 
 struct ChannelPublication1TokenSigned {
+    channel_publication1__id: i64,
     channel_publication1__obfuscation_value: i64,
     channel_publication1_token__expires_at: i64,
     signature: Vec<u8>,
@@ -473,11 +473,11 @@ Creates a mark for channel publication1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    channel_publication1__id: i64,
     channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 
 struct ChannelPublication1TokenSigned {
+    channel_publication1__id: i64,
     channel_publication1__obfuscation_value: i64,
     channel_publication1_token__expires_at: i64,
     signature: Vec<u8>,
@@ -498,11 +498,11 @@ Deletes a mark from channel publication1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    channel_publication1__id: i64,
     channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 
 struct ChannelPublication1TokenSigned {
+    channel_publication1__id: i64,
     channel_publication1__obfuscation_value: i64,
     channel_publication1_token__expires_at: i64,
     signature: Vec<u8>,
@@ -523,11 +523,11 @@ Creates a view for channel publication1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    channel_publication1__id: i64,
     channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 
 struct ChannelPublication1TokenSigned {
+    channel_publication1__id: i64,
     channel_publication1__obfuscation_value: i64,
     channel_publication1_token__expires_at: i64,
     signature: Vec<u8>,
@@ -546,12 +546,12 @@ Creates a commentary for channel publication1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    channel_publication1__id: i64,
     channel_publication1_commentary__text: String,
     channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 
 struct ChannelPublication1TokenSigned {
+    channel_publication1__id: i64,
     channel_publication1__obfuscation_value: i64,
     channel_publication1_token__expires_at: i64,
     signature: Vec<u8>,
@@ -577,12 +577,12 @@ Deletes a commentary for channel publication1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    channel_publication1__id: i64,
     channel_publication1_commentary__id: i64,
     channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 
 struct ChannelPublication1TokenSigned {
+    channel_publication1__id: i64,
     channel_publication1__obfuscation_value: i64,
     channel_publication1_token__expires_at: i64,
     signature: Vec<u8>,

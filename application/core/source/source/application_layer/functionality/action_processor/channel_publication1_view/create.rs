@@ -58,13 +58,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1View_Create> {
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
-            if !Validator::<ChannelPublication1_Id>::is_valid(incoming.channel_publication1__id) {
-                return Result::Err(crate::new_invalid_argument!());
-            }
             if !Encoder::<ChannelPublication1Token>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 incoming.user_access_token_signed.user__id,
-                incoming.channel_publication1__id,
                 &incoming.channel_publication1_token_signed,
             )? {
                 return Result::Err(crate::new_invalid_argument!());
@@ -82,7 +78,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1View_Create> {
                             &crate::result_return_runtime!(postgresql_connection_pool_database_3.get().await),
                             ChannelPublication1ViewInsert {
                                 user__id: incoming.user_access_token_signed.user__id,
-                                channel_publication1__id: incoming.channel_publication1__id,
+                                channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
                                 channel_publication1_view__created_at: now,
                             }
                         ).await {
@@ -106,7 +102,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1View_Create> {
                         match Repository::<Postgresql<ChannelPublication1>>::update_4(
                             &crate::result_return_runtime!(postgresql_connection_pool_database_3.get().await),
                             ChannelPublication1By1 {
-                                channel_publication1__id: incoming.channel_publication1__id,
+                                channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
                             }
                         ).await {
                             Ok(_) => return Result::Ok(()),

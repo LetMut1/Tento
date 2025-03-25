@@ -14,7 +14,6 @@ use crate::{
 pub struct Incoming<'a> {
     #[cfg_attr(feature = "serde_for_manual_test", serde(borrow))]
     pub user_access_token_signed: UserAccessTokenSigned<'a>,
-    pub channel_publication1__id: i64,
     pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 crate::common_precedent::enum_from!(

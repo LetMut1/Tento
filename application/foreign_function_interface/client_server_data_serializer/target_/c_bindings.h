@@ -944,13 +944,13 @@ typedef struct CVector_CString {
 } CVector_CString;
 
 typedef struct ChannelPublication1TokenSigned {
+  long channel_publication1__id;
   long channel_publication1__obfuscation_value;
   long channel_publication1_token__expires_at;
   struct CVector_c_uchar signature;
 } ChannelPublication1TokenSigned;
 
 typedef struct ChannelPublication1_GetMany_Data {
-  long channel_publication1__id;
   struct CVector_CString channel_publication1__images_pathes;
   struct COption_CString channel_publication1__text;
   long channel_publication1__commentaries_quantity;
@@ -1059,7 +1059,6 @@ typedef struct CResult_CUnifiedReport_CVoid__ChannelPublication1_Delete_Preceden
 
 typedef struct ChannelPublication1Mark_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  long channel_publication1__id;
   struct ChannelPublication1TokenSigned channel_publication1_token_signed;
 } ChannelPublication1Mark_Create_Incoming;
 
@@ -1085,7 +1084,6 @@ typedef struct CResult_CUnifiedReport_CVoid__ChannelPublication1Mark_Create_Prec
 
 typedef struct ChannelPublication1Mark_Delete_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  long channel_publication1__id;
   struct ChannelPublication1TokenSigned channel_publication1_token_signed;
 } ChannelPublication1Mark_Delete_Incoming;
 
@@ -1111,7 +1109,6 @@ typedef struct CResult_CUnifiedReport_CVoid__ChannelPublication1Mark_Delete_Prec
 
 typedef struct ChannelPublication1View_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  long channel_publication1__id;
   struct ChannelPublication1TokenSigned channel_publication1_token_signed;
 } ChannelPublication1View_Create_Incoming;
 
@@ -1135,7 +1132,6 @@ typedef struct CResult_CUnifiedReport_CVoid__ChannelPublication1View_Create_Prec
 
 typedef struct ChannelPublication1Commentary_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  long channel_publication1__id;
   struct CString channel_publication1_commentary__text;
   struct ChannelPublication1TokenSigned channel_publication1_token_signed;
 } ChannelPublication1Commentary_Create_Incoming;
@@ -1171,7 +1167,6 @@ typedef struct CResult_CUnifiedReport_ChannelPublication1Commentary_Create_Outco
 
 typedef struct ChannelPublication1Commentary_Delete_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  long channel_publication1__id;
   int64_t channel_publication1_commentary__id;
   struct ChannelPublication1TokenSigned channel_publication1_token_signed;
 } ChannelPublication1Commentary_Delete_Incoming;

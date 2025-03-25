@@ -58,13 +58,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Delete> {
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
-            if !Validator::<ChannelPublication1_Id>::is_valid(incoming.channel_publication1__id) {
-                return Result::Err(crate::new_invalid_argument!());
-            }
             if !Encoder::<ChannelPublication1Token>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 incoming.user_access_token_signed.user__id,
-                incoming.channel_publication1__id,
                 &incoming.channel_publication1_token_signed,
             )? {
                 return Result::Err(crate::new_invalid_argument!());
@@ -82,7 +78,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Delete> {
                 transaction.get_client(),
                 ChannelPublication1MarkBy {
                     user__id: incoming.user_access_token_signed.user__id,
-                    channel_publication1__id: incoming.channel_publication1__id,
+                    channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
                 }
             ).await {
                 Result::Ok(is_deleted_) => is_deleted_,
@@ -98,7 +94,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Delete> {
             let is_updated = match Repository::<Postgresql<ChannelPublication1>>::update_3(
                 transaction.get_client(),
                 ChannelPublication1By1 {
-                    channel_publication1__id: incoming.channel_publication1__id,
+                    channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
                 }
             ).await {
                 Result::Ok(is_updated_) => is_updated_,
