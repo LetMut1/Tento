@@ -26,7 +26,11 @@ pub use self::{
         Insert as ChannelPublication1Insert,
         Update as ChannelPublication1Update,
     },
-    channel_publication1_commentary::Insert as ChannelPublication1CommentaryInsert,
+    channel_publication1_commentary::{
+        Insert as ChannelPublication1CommentaryInsert,
+        Update as ChannelPublication1CommentaryUpdate,
+        By as ChannelPublication1CommentaryBy,
+    },
     channel_publication1_mark::{
         By as ChannelPublication1MarkBy,
         Insert as ChannelPublication1MarkInsert,

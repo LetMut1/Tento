@@ -23,4 +23,6 @@ pub struct ChannelPublication1Commentary {
     is_predeleted: IsPredeleted,
     can_be_deleted_from: CanBeDeletedFrom,
 }
+pub type ChannelPublication1Commentary_Id = Id;
 pub type ChannelPublication1Commentary_Text = Text;
+pub type ChannelPublication1Commentary_CanBeDeletedFrom = CanBeDeletedFrom;

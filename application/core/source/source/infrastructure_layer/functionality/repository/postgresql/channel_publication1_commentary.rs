@@ -72,13 +72,6 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
                     &insert.channel_publication1_commentary__can_be_deleted_from,
                     Type::INT8,
                 );
-
-
-
-
-
-
-
             let statement = crate::result_return_logic!(
                 database_4_client
                 .prepare_typed_cached(
@@ -105,6 +98,63 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
             );
         };
     }
+    pub fn update<'a>(database_4_client: &'a Client, update: Update, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+        return async move {
+            let query = "\
+                UPDATE ONLY \
+                    public.channel_publication1_commentary AS cp1c \
+                SET (\
+                    is_predeleted,\
+                    can_be_deleted_from\
+                ) = ROW(\
+                    $1,\
+                    $2\
+                ) \
+                WHERE \
+                    cp1c.id = $3 \
+                    AND cp1c.is_predeleted = $4 \
+                RETURNING \
+                    true AS _;";
+            let mut parameter_storage = ParameterStorage::new(4);
+            parameter_storage
+                .add(
+                    &update.channel_publication1_commentary__is_predeleted,
+                    Type::BOOL,
+                )
+                .add(
+                    &update.channel_publication1_commentary__can_be_deleted_from,
+                    Type::INT8,
+                )
+                .add(
+                    &by.channel_publication1_commentary__id,
+                    Type::INT8,
+                )
+                .add(
+                    &by.channel_publication1_commentary__is_predeleted,
+                    Type::BOOL,
+                );
+            let statement = crate::result_return_logic!(
+                database_4_client
+                .prepare_typed_cached(
+                    query,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                database_4_client
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(false);
+            }
+            return Result::Ok(true);
+        };
+    }
 }
 pub struct Insert<'a> {
     pub user__id: i64,
@@ -114,4 +164,12 @@ pub struct Insert<'a> {
     pub channel_publication1_commentary__created_at: i64,
     pub channel_publication1_commentary__is_predeleted: bool,
     pub channel_publication1_commentary__can_be_deleted_from: i64,
+}
+pub struct Update {
+    pub channel_publication1_commentary__is_predeleted: bool,
+    pub channel_publication1_commentary__can_be_deleted_from: i64,
+}
+pub struct By {
+    pub channel_publication1_commentary__id: i64,
+    pub channel_publication1_commentary__is_predeleted: bool,
 }
