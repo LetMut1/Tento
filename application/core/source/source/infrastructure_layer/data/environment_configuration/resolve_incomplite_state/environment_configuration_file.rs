@@ -1,5 +1,7 @@
-use crate::infrastructure_layer::data::environment_configuration::Value;
-use crate::infrastructure_layer::data::environment_configuration::PostgresqlInner_;
+use crate::infrastructure_layer::data::environment_configuration::{
+    PostgresqlInner_,
+    Value,
+};
 #[derive(serde::Deserialize)]
 pub struct EnvironmentConfigurationFile {
     pub tokio_runtime: TokioRuntime,

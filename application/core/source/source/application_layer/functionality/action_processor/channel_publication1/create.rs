@@ -10,23 +10,35 @@ use {
                 channel::{
                     Channel,
                     Channel_Id,
-                }, channel_publication1::{
-                    ChannelPublication1, ChannelPublication1_ImagesPathes, ChannelPublication1_ObfuscationValue, ChannelPublication1_Text
-                }, channel_publication1_token::{ChannelPublication1Token, ChannelPublication1Token_ExpiresAt}, user_access_token::UserAccessToken
+                },
+                channel_publication1::{
+                    ChannelPublication1,
+                    ChannelPublication1_ImagesPathes,
+                    ChannelPublication1_ObfuscationValue,
+                    ChannelPublication1_Text,
+                },
+                channel_publication1_token::{
+                    ChannelPublication1Token,
+                    ChannelPublication1Token_ExpiresAt,
+                },
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, generator::Generator, validator::Validator
+                encoder::Encoder,
+                generator::Generator,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelBy1,
                         ChannelPublication1Insert,
                         Postgresql,
-                    }, Repository
+                    },
                 },
                 service::resolver::{
                     Resolver,
@@ -100,10 +112,11 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                     channel_publication1__obfuscation_value,
                     channel_publication1__created_at,
                     channel_publication1__is_predeleted: false,
-                    channel_publication1__can_be_deleted_from: 0
+                    channel_publication1__can_be_deleted_from: 0,
                 },
             )
-            .await? {
+            .await?
+            {
                 Option::Some(channel_publication1__id_) => channel_publication1__id_,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution)),
             };
@@ -116,7 +129,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                             incoming.user_access_token_signed.user__id,
                             channel_publication1__id,
                             channel_publication1__obfuscation_value,
-                            Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?
+                            Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?,
                         )?,
                     },
                 ),

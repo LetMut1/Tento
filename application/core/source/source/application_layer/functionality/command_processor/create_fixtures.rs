@@ -169,9 +169,10 @@ impl CommandProcessor<CreateFixtures> {
                                 user__created_at: Resolver::<UnixTime>::get_now_in_microseconds(),
                             },
                         )
-                        .await? {
+                        .await?
+                        {
                             Option::Some(user__id__) => user__id__,
-                            Option::None => return Result::Err(crate::new_logic_unreachable_state!())
+                            Option::None => return Result::Err(crate::new_logic_unreachable_state!()),
                         };
                         user__id_
                     }

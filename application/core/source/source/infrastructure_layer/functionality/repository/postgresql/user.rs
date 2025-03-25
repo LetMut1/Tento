@@ -73,11 +73,7 @@ impl Repository<Postgresql<User>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
-            return Result::Ok(
-                Option::Some(
-                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))
-                )
-            );
+            return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
         };
     }
     pub fn create_2<'a>(database_1_client: &'a Client, insert: Insert2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {

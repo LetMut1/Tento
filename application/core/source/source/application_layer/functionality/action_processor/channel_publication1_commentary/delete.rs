@@ -1,5 +1,7 @@
 use {
     crate::{
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
@@ -7,42 +9,58 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel_publication1::{
-                    ChannelPublication1,
-                }, channel_publication1_commentary::{
+                channel_publication1::ChannelPublication1,
+                channel_publication1_commentary::{
                     ChannelPublication1Commentary,
-                    ChannelPublication1Commentary_Id,
                     ChannelPublication1Commentary_CanBeDeletedFrom,
-                }, channel_publication1_token::ChannelPublication1Token, user_access_token::UserAccessToken
+                    ChannelPublication1Commentary_Id,
+                },
+                channel_publication1_token::ChannelPublication1Token,
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, validator::Validator, generator::Generator,
+                encoder::Encoder,
+                generator::Generator,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    postgresql::{
-                        ChannelPublication1By1, ChannelPublication1CommentaryUpdate, Postgresql, ChannelPublication1CommentaryBy,
-                    },
                     Repository,
+                    postgresql::{
+                        ChannelPublication1By1,
+                        ChannelPublication1CommentaryBy,
+                        ChannelPublication1CommentaryUpdate,
+                        Postgresql,
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, spawner::{Spawner, TokioNonBlockingTask}}
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    spawner::{
+                        Spawner,
+                        TokioNonBlockingTask,
+                    },
+                },
             },
-        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
+        },
     },
     dedicated::{
-        void::Void,
         action_processor_incoming_outcoming::action_processor::channel_publication1_commentary::delete::{
-            Incoming, Precedent,
+            Incoming,
+            Precedent,
         },
         unified_report::UnifiedReport,
+        void::Void,
     },
-    std::{future::Future, time::Duration},
+    std::{
+        future::Future,
+        time::Duration,
+    },
 };
 pub struct ChannelPublication1Commentary_Delete;
 impl ActionProcessor_ for ActionProcessor<ChannelPublication1Commentary_Delete> {
@@ -85,7 +103,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Commentary_Delete> 
                     channel_publication1_commentary__id: incoming.channel_publication1_commentary__id,
                     channel_publication1_commentary__is_predeleted: false,
                 },
-            ).await? {
+            )
+            .await?
+            {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Commentary__NotFound));
             }
             let postgresql_connection_pool_database_3 = inner.postgresql_connection_pool_database_3.clone();
@@ -99,7 +119,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Commentary_Delete> 
                             ChannelPublication1By1 {
                                 channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
                             },
-                        ).await {
+                        )
+                        .await
+                        {
                             Ok(_) => return Result::Ok(()),
                             Err(aggregate_error) => {
                                 if quantity == BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {

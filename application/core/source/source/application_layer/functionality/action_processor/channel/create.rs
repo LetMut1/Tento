@@ -110,7 +110,9 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     channel__obfuscation_value: Generator::<Channel_ObfuscationValue>::generate(),
                     channel__created_at: now,
                 },
-            ).await? {
+            )
+            .await?
+            {
                 Option::Some(channel__id_) => channel__id_,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution)),
             };

@@ -1,16 +1,16 @@
 mod field;
 use {
     self::field::{
+        CanBeDeletedFrom,
+        CommentariesQuantity,
         CreatedAt,
         Id,
         ImagesPathes,
-        CommentariesQuantity,
+        IsPredeleted,
         MarksQuantity,
+        ObfuscationValue,
         Text,
         ViewQuantity,
-        CanBeDeletedFrom,
-        IsPredeleted,
-        ObfuscationValue,
     },
     super::channel::Channel_Id,
 };

@@ -7,27 +7,31 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel_publication1::{
-                    ChannelPublication1,
-                }, channel_publication1_mark::ChannelPublication1Mark, channel_publication1_token::ChannelPublication1Token, user_access_token::UserAccessToken
+                channel_publication1::ChannelPublication1,
+                channel_publication1_mark::ChannelPublication1Mark,
+                channel_publication1_token::ChannelPublication1Token,
+                user_access_token::UserAccessToken,
             },
-            functionality::service::{
-                encoder::Encoder,
-            },
+            functionality::service::encoder::Encoder,
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    postgresql::{
-                        ChannelPublication1MarkInsert, IsolationLevel, Postgresql, Resolver as Resolver_, Transaction, ChannelPublication1By1,
-                    },
                     Repository,
+                    postgresql::{
+                        ChannelPublication1By1,
+                        ChannelPublication1MarkInsert,
+                        IsolationLevel,
+                        Postgresql,
+                        Resolver as Resolver_,
+                        Transaction,
+                    },
                 },
                 service::resolver::{
                     Resolver,
                     UnixTime,
-                }
+                },
             },
         },
     },
@@ -80,8 +84,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Create> {
                     user__id: incoming.user_access_token_signed.user__id,
                     channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_mark__created_at: now,
-                }
-            ).await {
+                },
+            )
+            .await
+            {
                 Result::Ok(is_created_) => is_created_,
                 Result::Err(aggregate_error) => {
                     Resolver_::<Transaction<'_>>::rollback(transaction).await?;
@@ -96,8 +102,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Create> {
                 transaction.get_client(),
                 ChannelPublication1By1 {
                     channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
-                }
-            ).await {
+                },
+            )
+            .await
+            {
                 Result::Ok(is_updated_) => is_updated_,
                 Result::Err(aggregate_error) => {
                     Resolver_::<Transaction<'_>>::rollback(transaction).await?;

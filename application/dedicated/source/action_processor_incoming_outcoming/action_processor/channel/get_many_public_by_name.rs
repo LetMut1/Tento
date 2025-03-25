@@ -1,7 +1,7 @@
 use crate::{
+    channel_token_hashed::ChannelTokenHashed,
     common_precedent::CommonPrecedent,
     user_access_token_signed::UserAccessTokenSigned,
-    channel_token_hashed::ChannelTokenHashed,
 };
 #[cfg_attr(
     feature = "serde_for_manual_test",

@@ -100,7 +100,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                         user_device__id: incoming.user_access_token_signed.user_device__id,
                     },
                 )
-                .await? {
+                .await?
+                {
                     return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                 }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken__AlreadyExpired));
@@ -123,7 +124,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                     user_device__id: incoming.user_access_token_signed.user_device__id,
                 },
             )
-            .await? {
+            .await?
+            {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             let outcoming = Outcoming {

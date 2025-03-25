@@ -54,7 +54,7 @@ impl Encoder<ChannelSubscriptionToken> {
         private_key: &'static PrivateKey,
         user__id: i64,
         channel__id: i64,
-        channel_subscription_token_signed: &'a ChannelSubscriptionTokenSigned
+        channel_subscription_token_signed: &'a ChannelSubscriptionTokenSigned,
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha2_256>::is_valid(
             private_key.channel_publication1_token.as_bytes(),

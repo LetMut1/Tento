@@ -1,8 +1,8 @@
 use crate::{
-    common_precedent::CommonPrecedent,
-    user_access_token_signed::UserAccessTokenSigned,
     channel_subscription_token_signed::ChannelSubscriptionTokenSigned,
     channel_token_hashed::ChannelTokenHashed,
+    common_precedent::CommonPrecedent,
+    user_access_token_signed::UserAccessTokenSigned,
 };
 #[cfg_attr(
     feature = "serde_for_manual_test",
@@ -13,7 +13,10 @@ use crate::{
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Incoming<'a> {
-    #[cfg_attr(feature = "serde_for_manual_test", serde(borrow))]
+    #[cfg_attr(
+        feature = "serde_for_manual_test",
+        serde(borrow)
+    )]
     pub user_access_token_signed: UserAccessTokenSigned<'a>,
     pub channel__id: i64,
     // It CAN (not MUST) be Option::None for users already subscribed on this channel

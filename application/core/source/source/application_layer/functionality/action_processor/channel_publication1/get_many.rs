@@ -13,16 +13,16 @@ use {
                     Channel_Id,
                 },
                 channel_publication1::ChannelPublication1,
-                user_access_token::UserAccessToken,
                 channel_publication1_token::{
                     ChannelPublication1Token,
                     ChannelPublication1Token_ExpiresAt,
-                }
+                },
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
                 encoder::Encoder,
-                validator::Validator,
                 generator::Generator,
+                validator::Validator,
             },
         },
         infrastructure_layer::{

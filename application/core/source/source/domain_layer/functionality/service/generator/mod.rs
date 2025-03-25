@@ -1,4 +1,8 @@
 mod channel__obfuscation_value;
+mod channel_publication1__can_be_deleted_from;
+mod channel_publication1__obfuscation_value;
+mod channel_publication1_commentary__can_be_deleted_from;
+mod channel_publication1_token__expires_at;
 mod channel_subscription_token__expires_at;
 mod channel_token__expires_at;
 mod user_access_refresh_token__expires_at;
@@ -14,10 +18,6 @@ mod user_registration_token__value;
 mod user_reset_password_token__can_be_resent_from;
 mod user_reset_password_token__expires_at;
 mod user_reset_password_token__value;
-mod channel_publication1_token__expires_at;
-mod channel_publication1__can_be_deleted_from;
-mod channel_publication1__obfuscation_value;
-mod channel_publication1_commentary__can_be_deleted_from;
 use std::marker::PhantomData;
 pub struct Generator<S> {
     _subject: PhantomData<S>,

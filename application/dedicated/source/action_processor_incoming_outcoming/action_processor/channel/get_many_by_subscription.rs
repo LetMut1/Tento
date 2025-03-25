@@ -11,7 +11,10 @@ use crate::{
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Incoming<'a> {
-    #[cfg_attr(feature = "serde_for_manual_test", serde(borrow))]
+    #[cfg_attr(
+        feature = "serde_for_manual_test",
+        serde(borrow)
+    )]
     pub user_access_token_signed: UserAccessTokenSigned<'a>,
     pub requery___channel__id: Option<i64>,
     pub limit: i16,

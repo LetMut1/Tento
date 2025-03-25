@@ -1,5 +1,4 @@
 pub use crate::infrastructure_layer::data::environment_configuration::resolve_incomplite_state::ResolveIncompliteState;
-use crate::infrastructure_layer::data::environment_configuration::resolve_incomplite_state::TokioRuntime;
 use {
     super::{
         CommandProcessor,
@@ -8,10 +7,14 @@ use {
     crate::infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
-            environment_configuration::EnvironmentConfiguration,
+            environment_configuration::{
+                EnvironmentConfiguration,
+                resolve_incomplite_state::TokioRuntime,
+            },
         },
         functionality::service::loader::Loader,
     },
+    std::future::Future,
     tokio::runtime::{
         Builder as RuntimeBuilder,
         Runtime,
@@ -23,7 +26,6 @@ use {
         WorkerGuard,
     },
     tracing_subscriber::FmtSubscriber,
-    std::future::Future,
 };
 #[cfg(feature = "logging_to_file")]
 use {
@@ -81,10 +83,7 @@ impl CommandProcessor<ResolveIncompliteState> {
         return Result::Ok(());
     }
     fn initialize_runtime<'a>(tokio_runtime: &'a TokioRuntime) -> Result<Runtime, AggregateError> {
-        if tokio_runtime.maximum_blocking_threads_quantity == 0
-            || tokio_runtime.worker_threads_quantity == 0
-            || tokio_runtime.worker_thread_stack_size < (1024 * 1024)
-        {
+        if tokio_runtime.maximum_blocking_threads_quantity == 0 || tokio_runtime.worker_threads_quantity == 0 || tokio_runtime.worker_thread_stack_size < (1024 * 1024) {
             return Result::Err(crate::new_logic!(TOKIO_RUNTIME_CONFUGURATION_ERROR_MESSAGE));
         }
         return crate::result_into_runtime!(
@@ -96,7 +95,9 @@ impl CommandProcessor<ResolveIncompliteState> {
             .build()
         );
     }
-    fn resolve_incomplite_state<'a>(environment_configuration: &'a EnvironmentConfiguration<ResolveIncompliteState>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    fn resolve_incomplite_state<'a>(
+        environment_configuration: &'a EnvironmentConfiguration<ResolveIncompliteState>,
+    ) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             // --------------------------------------------------------------------------
             // TODO УДалять с вышедшим сроком экспирации (expires_at) (удалять очень редно, так как нет индекса на поле, по которому будет идти поиск кандидатов.)

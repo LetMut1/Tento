@@ -11,12 +11,7 @@ use {
 };
 pub struct Email;
 impl Sender<Email> {
-    pub fn send<'a>(
-        _email_server: &'static EmailServer,
-        _subject: &'a str,
-        _body: String,
-        _to: &'a str,
-    ) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
+    pub fn send<'a>(_email_server: &'static EmailServer, _subject: &'a str, _body: String, _to: &'a str) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {
         return async move {
             // TODO сделать посторяему отправку при ошибке на количество времени (отправлять через секунду, пока не выйдет время) или раз.
             return Result::Ok(());

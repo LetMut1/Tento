@@ -112,7 +112,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                             user_device__id: incoming.user_device__id,
                         },
                     )
-                    .await? {
+                    .await?
+                    {
                         return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                     }
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__AlreadyExpired));
@@ -132,7 +133,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                                 user_device__id: incoming.user_device__id,
                             },
                         )
-                        .await? {
+                        .await?
+                        {
                             return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                         }
                     } else {
@@ -143,7 +145,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                                 user_device__id: incoming.user_device__id,
                             },
                         )
-                        .await? {
+                        .await?
+                        {
                             return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                         }
                     }
@@ -253,7 +256,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                         user__id: incoming.user__id,
                     },
                 )
-                .await? {
+                .await?
+                {
                     return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                 }
                 return Result::Err(aggregate_error);

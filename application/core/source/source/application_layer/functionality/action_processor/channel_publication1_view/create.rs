@@ -1,5 +1,7 @@
 use {
     crate::{
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
@@ -7,29 +9,36 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel_publication1::{
-                    ChannelPublication1,
-                }, channel_publication1_token::ChannelPublication1Token, channel_publication1_view::ChannelPublication1View, user_access_token::UserAccessToken
+                channel_publication1::ChannelPublication1,
+                channel_publication1_token::ChannelPublication1Token,
+                channel_publication1_view::ChannelPublication1View,
+                user_access_token::UserAccessToken,
             },
-            functionality::service::{
-                encoder::Encoder,
-            },
+            functionality::service::encoder::Encoder,
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    postgresql::{
-                        ChannelPublication1By1, ChannelPublication1ViewInsert, Postgresql,
-                    },
                     Repository,
+                    postgresql::{
+                        ChannelPublication1By1,
+                        ChannelPublication1ViewInsert,
+                        Postgresql,
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, spawner::{Spawner, TokioNonBlockingTask}}
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    spawner::{
+                        Spawner,
+                        TokioNonBlockingTask,
+                    },
+                },
             },
-        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
+        },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel_publication1_view::create::{
@@ -39,7 +48,10 @@ use {
         unified_report::UnifiedReport,
         void::Void,
     },
-    std::{future::Future, time::Duration},
+    std::{
+        future::Future,
+        time::Duration,
+    },
 };
 pub struct ChannelPublication1View_Create;
 impl ActionProcessor_ for ActionProcessor<ChannelPublication1View_Create> {
@@ -80,8 +92,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1View_Create> {
                                 user__id: incoming.user_access_token_signed.user__id,
                                 channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
                                 channel_publication1_view__created_at: now,
-                            }
-                        ).await {
+                            },
+                        )
+                        .await
+                        {
                             Ok(_) => return Result::Ok(()),
                             Err(aggregate_error) => {
                                 if quantity == BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
@@ -103,8 +117,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1View_Create> {
                             &crate::result_return_runtime!(postgresql_connection_pool_database_3.get().await),
                             ChannelPublication1By1 {
                                 channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
-                            }
-                        ).await {
+                            },
+                        )
+                        .await
+                        {
                             Ok(_) => return Result::Ok(()),
                             Err(aggregate_error) => {
                                 if quantity == BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {

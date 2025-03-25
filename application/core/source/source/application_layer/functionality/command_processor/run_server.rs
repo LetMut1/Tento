@@ -1,5 +1,4 @@
 pub use crate::infrastructure_layer::data::environment_configuration::run_server::RunServer;
-use crate::infrastructure_layer::data::environment_configuration::run_server::TokioRuntime;
 use {
     super::{
         CommandProcessor,
@@ -8,7 +7,10 @@ use {
     crate::infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
-            environment_configuration::EnvironmentConfiguration,
+            environment_configuration::{
+                EnvironmentConfiguration,
+                run_server::TokioRuntime,
+            },
         },
         functionality::service::{
             http_server::HttpServer,
@@ -97,10 +99,7 @@ impl CommandProcessor<RunServer> {
         return Result::Ok(());
     }
     fn initialize_runtime<'a>(tokio_runtime: &'a TokioRuntime) -> Result<Runtime, AggregateError> {
-        if tokio_runtime.maximum_blocking_threads_quantity == 0
-            || tokio_runtime.worker_threads_quantity == 0
-            || tokio_runtime.worker_thread_stack_size < (1024 * 1024)
-        {
+        if tokio_runtime.maximum_blocking_threads_quantity == 0 || tokio_runtime.worker_threads_quantity == 0 || tokio_runtime.worker_thread_stack_size < (1024 * 1024) {
             return Result::Err(crate::new_logic!(TOKIO_RUNTIME_CONFUGURATION_ERROR_MESSAGE));
         }
         return crate::result_into_runtime!(

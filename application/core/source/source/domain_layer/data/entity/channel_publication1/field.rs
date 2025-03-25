@@ -1,6 +1,6 @@
 use {
-    std::marker::PhantomData,
     crate::domain_layer::data::entity::channel_publication1_token::ChannelPublication1Token_ExpiresAt,
+    std::marker::PhantomData,
 };
 pub struct Id(PhantomData<i64>);
 pub struct ImagesPathes(PhantomData<Vec<String>>);

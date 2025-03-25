@@ -1,8 +1,8 @@
 use crate::infrastructure_layer::data::environment_configuration::{
+    PostgresqlInner_,
     Value,
     ValueExist,
 };
-use crate::infrastructure_layer::data::environment_configuration::PostgresqlInner_;
 #[derive(serde::Deserialize)]
 pub struct EnvironmentConfigurationFile {
     pub tokio_runtime: TokioRuntime,

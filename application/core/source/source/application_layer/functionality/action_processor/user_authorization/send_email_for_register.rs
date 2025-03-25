@@ -1,5 +1,7 @@
 use {
     crate::{
+        BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
@@ -24,11 +26,12 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         Postgresql,
                         UserRegistrationTokenBy,
                         UserRegistrationTokenUpdate2,
-                    }, Repository
+                    },
                 },
                 service::{
                     resolver::{
@@ -41,7 +44,7 @@ use {
                     },
                 },
             },
-        }, BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY,
+        },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_register::{
@@ -51,7 +54,10 @@ use {
         },
         unified_report::UnifiedReport,
     },
-    std::{future::Future, time::Duration},
+    std::{
+        future::Future,
+        time::Duration,
+    },
 };
 pub struct UserAuthorization_SendEmailForRegister;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister> {
@@ -89,7 +95,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                         user_device__id: incoming.user_device__id,
                     },
                 )
-                .await? {
+                .await?
+                {
                     return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                 }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__AlreadyExpired));
@@ -111,7 +118,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     user_device__id: incoming.user_device__id,
                 },
             )
-            .await? {
+            .await?
+            {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             let email_server = &inner.environment_configuration.subject.resource.email_server;
@@ -127,11 +135,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                             user_registration_token__value.as_str(),
                             user__email.as_str(),
                             user_device__id.as_str(),
-                        ).await {
+                        )
+                        .await
+                        {
                             Ok(_) => return Result::Ok(()),
                             Err(aggregate_error) => {
                                 if quantity == BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY {
-                                    return Err(aggregate_error)
+                                    return Err(aggregate_error);
                                 }
                             }
                         }

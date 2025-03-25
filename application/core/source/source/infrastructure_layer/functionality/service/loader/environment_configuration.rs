@@ -1,7 +1,7 @@
 #[cfg(feature = "logging_to_file")]
 use crate::infrastructure_layer::data::environment_configuration::{
-    run_server::Logging as RunServerLogging,
     resolve_incomplite_state::Logging as ResolveIncompliteStateLogging,
+    run_server::Logging as RunServerLogging,
 };
 use {
     super::Loader,
@@ -13,14 +13,14 @@ use {
             create_fixtures::{
                 CreateFixtures,
                 EnvironmentConfigurationFile as CreateFixturesEnvironmentConfigurationFile,
-                Resource as CreateFixturesResource,
                 Postgresql as CreateFixturesPostgresql,
+                Resource as CreateFixturesResource,
             },
             resolve_incomplite_state::{
-                ResolveIncompliteState,
                 EnvironmentConfigurationFile as ResolveIncompliteStateEnvironmentConfigurationFile,
-                Resource as ResolveIncompliteStateResource,
                 Postgresql as ResolveIncompliteStatePostgresql,
+                ResolveIncompliteState,
+                Resource as ResolveIncompliteStateResource,
                 TokioRuntime as ResolveIncompliteStateTokioRuntime,
             },
             run_server::{
@@ -30,9 +30,9 @@ use {
                 EnvironmentConfigurationFile as RunServerEnvironmentConfigurationFile,
                 Http,
                 HttpKeepalive,
+                Postgresql as RunServerPostgresql,
                 PrivateKey,
                 Resource as RunServerResource,
-                Postgresql as RunServerPostgresql,
                 RunServer,
                 Tcp,
                 TcpKeepalive,

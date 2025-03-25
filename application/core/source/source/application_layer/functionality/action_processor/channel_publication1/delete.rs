@@ -7,24 +7,30 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::Channel, channel_publication1::{
-                    ChannelPublication1, ChannelPublication1_CanBeDeletedFrom,
-                }, channel_publication1_token::ChannelPublication1Token, user_access_token::UserAccessToken
+                channel::Channel,
+                channel_publication1::{
+                    ChannelPublication1,
+                    ChannelPublication1_CanBeDeletedFrom,
+                },
+                channel_publication1_token::ChannelPublication1Token,
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, generator::Generator,
+                encoder::Encoder,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelBy1,
                         ChannelPublication1By1,
                         ChannelPublication1Update,
                         Postgresql,
-                    }, Repository
+                    },
                 },
                 service::resolver::{
                     Resolver,
@@ -71,8 +77,6 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Token__AlreadyExpired));
             }
             let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
-
-
             // TODO TODO TODO siuvhusdmvpkosokvoijsidmjniuvneriunsdjincjinrv
             let (channel__id, channel_publication1__is_predeleted) = match Repository::<Postgresql<ChannelPublication1>>::find_2(
                 &postgresql_database_3_client,
@@ -112,7 +116,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
                     channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
                 },
             )
-            .await? {
+            .await?
+            {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             return Result::Ok(UnifiedReport::target_empty());

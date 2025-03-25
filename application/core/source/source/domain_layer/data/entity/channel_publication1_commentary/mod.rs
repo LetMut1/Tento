@@ -1,12 +1,12 @@
 mod field;
 use {
     self::field::{
-        Id,
-        CreatedAt,
-        Text,
-        MarksQuantity,
         CanBeDeletedFrom,
+        CreatedAt,
+        Id,
         IsPredeleted,
+        MarksQuantity,
+        Text,
     },
     super::{
         channel_publication1::ChannelPublication1_Id,

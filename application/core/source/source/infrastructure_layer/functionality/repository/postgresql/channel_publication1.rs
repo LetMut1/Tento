@@ -112,11 +112,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
-            return Result::Ok(
-                Option::Some(
-                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))
-                ),
-            );
+            return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
         };
     }
     pub fn delete<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
@@ -461,7 +457,19 @@ impl Repository<Postgresql<ChannelPublication1>> {
     }
     // channel__id: i64,
     // channel_publication1__is_predeleted: bool,
-    pub fn find_2<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<Option<(i64, bool)>, AggregateError>> + Send + use<'a> {
+    pub fn find_2<'a>(
+        database_3_client: &'a Client,
+        by: By1,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                i64,
+                bool,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -500,8 +508,8 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     (
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(1)),
-                    )
-                )
+                    ),
+                ),
             );
         };
     }

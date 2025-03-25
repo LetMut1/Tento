@@ -130,11 +130,7 @@ impl Repository<Postgresql<Channel>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
-            return Result::Ok(
-                Option::Some(
-                    crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))
-                )
-            );
+            return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
         };
     }
     pub fn update_1<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {

@@ -1,5 +1,7 @@
 use {
     crate::{
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
@@ -43,6 +45,7 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         IsolationLevel,
                         Postgresql,
@@ -55,7 +58,7 @@ use {
                         UserDeviceInsert,
                         UserInsert2,
                         UserRegistrationTokenBy,
-                    }, Repository
+                    },
                 },
                 service::{
                     resolver::{
@@ -69,7 +72,7 @@ use {
                     },
                 },
             },
-        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
+        },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user_authorization::register_by_last_step::{
@@ -79,7 +82,10 @@ use {
         },
         unified_report::UnifiedReport,
     },
-    std::{future::Future, time::Duration},
+    std::{
+        future::Future,
+        time::Duration,
+    },
 };
 pub struct UserAuthorization_RegisterByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> {
@@ -158,7 +164,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                             user_device__id: incoming.user_device__id,
                         },
                     )
-                    .await? {
+                    .await?
+                    {
                         return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                     }
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken__AlreadyExpired));
@@ -178,7 +185,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                                 user_device__id: incoming.user_device__id,
                             },
                         )
-                        .await? {
+                        .await?
+                        {
                             return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                         }
                     } else {
@@ -189,7 +197,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                                 user_device__id: incoming.user_device__id,
                             },
                         )
-                        .await? {
+                        .await?
+                        {
                             return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                         }
                     }
@@ -289,7 +298,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                         user__id,
                     },
                 )
-                .await? {
+                .await?
+                {
                     return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                 }
                 return Result::Err(aggregate_error);
@@ -323,7 +333,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                                 user_device__id: user_device__id.as_str(),
                                 user__id,
                             },
-                        ).await {
+                        )
+                        .await
+                        {
                             Ok(_) => return Result::Ok(()),
                             Err(aggregate_error) => {
                                 if quantity == BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {

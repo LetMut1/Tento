@@ -1,10 +1,10 @@
 mod channel;
 mod channel_publication1;
+mod channel_publication1_commentary;
 mod channel_publication1_mark;
+mod channel_publication1_view;
 mod channel_subscription;
 mod user_authorization;
-mod channel_publication1_view;
-mod channel_publication1_commentary;
 pub use self::{
     channel::{
         check_linked_name_for_existing::Channel_CheckLinkedNameForExisting,
@@ -20,6 +20,15 @@ pub use self::{
         delete::ChannelPublication1_Delete,
         get_many::ChannelPublication1_GetMany,
     },
+    channel_publication1_commentary::{
+        create::ChannelPublication1Commentary_Create,
+        delete::ChannelPublication1Commentary_Delete,
+    },
+    channel_publication1_mark::{
+        create::ChannelPublication1Mark_Create,
+        delete::ChannelPublication1Mark_Delete,
+    },
+    channel_publication1_view::create::ChannelPublication1View_Create,
     channel_subscription::{
         create::ChannelSubscription_Create,
         delete::ChannelSubscription_Delete,
@@ -41,15 +50,6 @@ pub use self::{
         send_email_for_authorize::UserAuthorization_SendEmailForAuthorize,
         send_email_for_register::UserAuthorization_SendEmailForRegister,
         send_email_for_reset_password::UserAuthorization_SendEmailForResetPassword,
-    },
-    channel_publication1_mark::{
-        create::ChannelPublication1Mark_Create,
-        delete::ChannelPublication1Mark_Delete,
-    },
-    channel_publication1_view::create::ChannelPublication1View_Create,
-    channel_publication1_commentary::{
-        create::ChannelPublication1Commentary_Create,
-        delete::ChannelPublication1Commentary_Delete,
     },
 };
 use {

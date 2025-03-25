@@ -11,19 +11,19 @@ use {
                 Channel_CheckNameForExisting,
                 Channel_Create,
                 Channel_GetManyByNameInSubscriptions,
-                ChannelPublication1Mark_Delete,
                 Channel_GetManyBySubscription,
-                ChannelPublication1View_Create,
                 Channel_GetManyPublicByName,
                 Channel_GetOneById,
                 ChannelPublication1_Create,
                 ChannelPublication1_Delete,
                 ChannelPublication1_GetMany,
-                ChannelSubscription_Create,
-                ChannelSubscription_Delete,
-                ChannelPublication1Mark_Create,
                 ChannelPublication1Commentary_Create,
                 ChannelPublication1Commentary_Delete,
+                ChannelPublication1Mark_Create,
+                ChannelPublication1Mark_Delete,
+                ChannelPublication1View_Create,
+                ChannelSubscription_Create,
+                ChannelSubscription_Delete,
                 Inner as ActionProcessorInner,
                 UserAuthorization_AuthorizeByFirstStep,
                 UserAuthorization_AuthorizeByLastStep,
@@ -820,86 +820,118 @@ impl HttpServer {
                         user_authorization,
                         &parts.method,
                     ) {
-                        (&UserAuthorization::CheckNicknameForExisting, &Method::POST) => return Action::<UserAuthorization_CheckNicknameForExisting>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::CheckEmailForExisting, &Method::POST) => return Action::<UserAuthorization_CheckEmailForExisting>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::RegisterByFirstStep, &Method::POST) => return Action::<UserAuthorization_RegisterByFirstStep>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::RegisterBySecondStep, &Method::POST) => return Action::<UserAuthorization_RegisterBySecondStep>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::RegisterByLastStep, &Method::POST) => return Action::<UserAuthorization_RegisterByLastStep>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::SendEmailForRegister, &Method::POST) => return Action::<UserAuthorization_SendEmailForRegister>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::AuthorizeByFirstStep, &Method::POST) => return Action::<UserAuthorization_AuthorizeByFirstStep>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::AuthorizeByLastStep, &Method::POST) => return Action::<UserAuthorization_AuthorizeByLastStep>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::SendEmailForAuthorize, &Method::POST) => return Action::<UserAuthorization_SendEmailForAuthorize>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::ResetPasswordByFirstStep, &Method::POST) => return Action::<UserAuthorization_ResetPasswordByFirstStep>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::ResetPasswordBySecondStep, &Method::POST) => return Action::<UserAuthorization_ResetPasswordBySecondStep>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::ResetPasswordByLastStep, &Method::POST) => return Action::<UserAuthorization_ResetPasswordByLastStep>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::SendEmailForResetPassword, &Method::POST) => return Action::<UserAuthorization_SendEmailForResetPassword>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::RefreshAccessToken, &Method::POST) => return Action::<UserAuthorization_RefreshAccessToken>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::DeauthorizeFromOneDevice, &Method::POST) => return Action::<UserAuthorization_DeauthorizeFromOneDevice>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&UserAuthorization::DeauthorizeFromAllDevices, &Method::POST) => return Action::<UserAuthorization_DeauthorizeFromAllDevices>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
+                        (&UserAuthorization::CheckNicknameForExisting, &Method::POST) => {
+                            return Action::<UserAuthorization_CheckNicknameForExisting>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::CheckEmailForExisting, &Method::POST) => {
+                            return Action::<UserAuthorization_CheckEmailForExisting>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::RegisterByFirstStep, &Method::POST) => {
+                            return Action::<UserAuthorization_RegisterByFirstStep>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::RegisterBySecondStep, &Method::POST) => {
+                            return Action::<UserAuthorization_RegisterBySecondStep>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::RegisterByLastStep, &Method::POST) => {
+                            return Action::<UserAuthorization_RegisterByLastStep>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::SendEmailForRegister, &Method::POST) => {
+                            return Action::<UserAuthorization_SendEmailForRegister>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::AuthorizeByFirstStep, &Method::POST) => {
+                            return Action::<UserAuthorization_AuthorizeByFirstStep>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::AuthorizeByLastStep, &Method::POST) => {
+                            return Action::<UserAuthorization_AuthorizeByLastStep>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::SendEmailForAuthorize, &Method::POST) => {
+                            return Action::<UserAuthorization_SendEmailForAuthorize>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::ResetPasswordByFirstStep, &Method::POST) => {
+                            return Action::<UserAuthorization_ResetPasswordByFirstStep>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::ResetPasswordBySecondStep, &Method::POST) => {
+                            return Action::<UserAuthorization_ResetPasswordBySecondStep>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::ResetPasswordByLastStep, &Method::POST) => {
+                            return Action::<UserAuthorization_ResetPasswordByLastStep>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::SendEmailForResetPassword, &Method::POST) => {
+                            return Action::<UserAuthorization_SendEmailForResetPassword>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::RefreshAccessToken, &Method::POST) => {
+                            return Action::<UserAuthorization_RefreshAccessToken>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::DeauthorizeFromOneDevice, &Method::POST) => {
+                            return Action::<UserAuthorization_DeauthorizeFromOneDevice>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&UserAuthorization::DeauthorizeFromAllDevices, &Method::POST) => {
+                            return Action::<UserAuthorization_DeauthorizeFromAllDevices>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -907,86 +939,118 @@ impl HttpServer {
                                     user_authorization,
                                     &parts.method,
                                 ) {
-                                    (&UserAuthorization::CheckNicknameForExisting_, &Method::POST) => return Action::<UserAuthorization_CheckNicknameForExisting>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::CheckEmailForExisting_, &Method::POST) => return Action::<UserAuthorization_CheckEmailForExisting>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::RegisterByFirstStep_, &Method::POST) => return Action::<UserAuthorization_RegisterByFirstStep>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::RegisterBySecondStep_, &Method::POST) => return Action::<UserAuthorization_RegisterBySecondStep>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::RegisterByLastStep_, &Method::POST) => return Action::<UserAuthorization_RegisterByLastStep>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::SendEmailForRegister_, &Method::POST) => return Action::<UserAuthorization_SendEmailForRegister>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::AuthorizeByFirstStep_, &Method::POST) => return Action::<UserAuthorization_AuthorizeByFirstStep>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::AuthorizeByLastStep_, &Method::POST) => return Action::<UserAuthorization_AuthorizeByLastStep>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::SendEmailForAuthorize_, &Method::POST) => return Action::<UserAuthorization_SendEmailForAuthorize>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::ResetPasswordByFirstStep_, &Method::POST) => return Action::<UserAuthorization_ResetPasswordByFirstStep>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::ResetPasswordBySecondStep_, &Method::POST) => return Action::<UserAuthorization_ResetPasswordBySecondStep>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::ResetPasswordByLastStep_, &Method::POST) => return Action::<UserAuthorization_ResetPasswordByLastStep>::run_(
+                                    (&UserAuthorization::CheckNicknameForExisting_, &Method::POST) => {
+                                        return Action::<UserAuthorization_CheckNicknameForExisting>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
-                                    .await,
-                                    (&UserAuthorization::SendEmailForResetPassword_, &Method::POST) => return Action::<UserAuthorization_SendEmailForResetPassword>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::RefreshAccessToken_, &Method::POST) => return Action::<UserAuthorization_RefreshAccessToken>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::DeauthorizeFromOneDevice_, &Method::POST) => return Action::<UserAuthorization_DeauthorizeFromOneDevice>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&UserAuthorization::DeauthorizeFromAllDevices_, &Method::POST) => return Action::<UserAuthorization_DeauthorizeFromAllDevices>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
+                                        .await;
+                                    }
+                                    (&UserAuthorization::CheckEmailForExisting_, &Method::POST) => {
+                                        return Action::<UserAuthorization_CheckEmailForExisting>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::RegisterByFirstStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_RegisterByFirstStep>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::RegisterBySecondStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_RegisterBySecondStep>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::RegisterByLastStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_RegisterByLastStep>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::SendEmailForRegister_, &Method::POST) => {
+                                        return Action::<UserAuthorization_SendEmailForRegister>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::AuthorizeByFirstStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_AuthorizeByFirstStep>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::AuthorizeByLastStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_AuthorizeByLastStep>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::SendEmailForAuthorize_, &Method::POST) => {
+                                        return Action::<UserAuthorization_SendEmailForAuthorize>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::ResetPasswordByFirstStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_ResetPasswordByFirstStep>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::ResetPasswordBySecondStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_ResetPasswordBySecondStep>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::ResetPasswordByLastStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_ResetPasswordByLastStep>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::SendEmailForResetPassword_, &Method::POST) => {
+                                        return Action::<UserAuthorization_SendEmailForResetPassword>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::RefreshAccessToken_, &Method::POST) => {
+                                        return Action::<UserAuthorization_RefreshAccessToken>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::DeauthorizeFromOneDevice_, &Method::POST) => {
+                                        return Action::<UserAuthorization_DeauthorizeFromOneDevice>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&UserAuthorization::DeauthorizeFromAllDevices_, &Method::POST) => {
+                                        return Action::<UserAuthorization_DeauthorizeFromAllDevices>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
                                     _ => {}
                                 }
                             }
@@ -998,41 +1062,55 @@ impl HttpServer {
                         channel,
                         &parts.method,
                     ) {
-                        (&Channel::CheckLinkedNameForExisting, &Method::POST) => return Action::<Channel_CheckLinkedNameForExisting>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&Channel::CheckNameForExisting, &Method::POST) => return Action::<Channel_CheckNameForExisting>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&Channel::Create, &Method::POST) => return Action::<Channel_Create>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&Channel::GetOneById, &Method::POST) => return Action::<Channel_GetOneById>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&Channel::GetManyByNameInSubscriptions, &Method::POST) => return Action::<Channel_GetManyByNameInSubscriptions>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&Channel::GetManyBySubscription, &Method::POST) => return Action::<Channel_GetManyBySubscription>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&Channel::GetManyPublicByName, &Method::POST) => return Action::<Channel_GetManyPublicByName>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
+                        (&Channel::CheckLinkedNameForExisting, &Method::POST) => {
+                            return Action::<Channel_CheckLinkedNameForExisting>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&Channel::CheckNameForExisting, &Method::POST) => {
+                            return Action::<Channel_CheckNameForExisting>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&Channel::Create, &Method::POST) => {
+                            return Action::<Channel_Create>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&Channel::GetOneById, &Method::POST) => {
+                            return Action::<Channel_GetOneById>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&Channel::GetManyByNameInSubscriptions, &Method::POST) => {
+                            return Action::<Channel_GetManyByNameInSubscriptions>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&Channel::GetManyBySubscription, &Method::POST) => {
+                            return Action::<Channel_GetManyBySubscription>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&Channel::GetManyPublicByName, &Method::POST) => {
+                            return Action::<Channel_GetManyPublicByName>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -1040,41 +1118,55 @@ impl HttpServer {
                                     channel,
                                     &parts.method,
                                 ) {
-                                    (&Channel::CheckLinkedNameForExisting_, &Method::POST) => return Action::<Channel_CheckLinkedNameForExisting>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&Channel::CheckNameForExisting_, &Method::POST) => return Action::<Channel_CheckNameForExisting>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&Channel::Create_, &Method::POST) => return Action::<Channel_Create>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&Channel::GetOneById_, &Method::POST) => return Action::<Channel_GetOneById>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&Channel::GetManyByNameInSubscriptions_, &Method::POST) => return Action::<Channel_GetManyByNameInSubscriptions>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&Channel::GetManyBySubscription_, &Method::POST) => return Action::<Channel_GetManyBySubscription>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&Channel::GetManyPublicByName_, &Method::POST) => return Action::<Channel_GetManyPublicByName>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
+                                    (&Channel::CheckLinkedNameForExisting_, &Method::POST) => {
+                                        return Action::<Channel_CheckLinkedNameForExisting>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&Channel::CheckNameForExisting_, &Method::POST) => {
+                                        return Action::<Channel_CheckNameForExisting>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&Channel::Create_, &Method::POST) => {
+                                        return Action::<Channel_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&Channel::GetOneById_, &Method::POST) => {
+                                        return Action::<Channel_GetOneById>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&Channel::GetManyByNameInSubscriptions_, &Method::POST) => {
+                                        return Action::<Channel_GetManyByNameInSubscriptions>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&Channel::GetManyBySubscription_, &Method::POST) => {
+                                        return Action::<Channel_GetManyBySubscription>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&Channel::GetManyPublicByName_, &Method::POST) => {
+                                        return Action::<Channel_GetManyPublicByName>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
                                     _ => {}
                                 }
                             }
@@ -1086,16 +1178,20 @@ impl HttpServer {
                         channel_subscription,
                         &parts.method,
                     ) {
-                        (&ChannelSubscription::Create, &Method::POST) => return Action::<ChannelSubscription_Create>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&ChannelSubscription::Delete, &Method::POST) => return Action::<ChannelSubscription_Delete>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
+                        (&ChannelSubscription::Create, &Method::POST) => {
+                            return Action::<ChannelSubscription_Create>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&ChannelSubscription::Delete, &Method::POST) => {
+                            return Action::<ChannelSubscription_Delete>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -1103,16 +1199,20 @@ impl HttpServer {
                                     channel_subscription,
                                     &parts.method,
                                 ) {
-                                    (&ChannelSubscription::Create_, &Method::POST) => return Action::<ChannelSubscription_Create>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&ChannelSubscription::Delete_, &Method::POST) => return Action::<ChannelSubscription_Delete>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
+                                    (&ChannelSubscription::Create_, &Method::POST) => {
+                                        return Action::<ChannelSubscription_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&ChannelSubscription::Delete_, &Method::POST) => {
+                                        return Action::<ChannelSubscription_Delete>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
                                     _ => {}
                                 }
                             }
@@ -1124,21 +1224,27 @@ impl HttpServer {
                         channel_publication1,
                         &parts.method,
                     ) {
-                        (&ChannelPublication1::Create, &Method::POST) => return Action::<ChannelPublication1_Create>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&ChannelPublication1::Delete, &Method::POST) => return Action::<ChannelPublication1_Delete>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&ChannelPublication1::GetMany, &Method::POST) => return Action::<ChannelPublication1_GetMany>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
+                        (&ChannelPublication1::Create, &Method::POST) => {
+                            return Action::<ChannelPublication1_Create>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&ChannelPublication1::Delete, &Method::POST) => {
+                            return Action::<ChannelPublication1_Delete>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&ChannelPublication1::GetMany, &Method::POST) => {
+                            return Action::<ChannelPublication1_GetMany>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -1146,21 +1252,27 @@ impl HttpServer {
                                     channel_publication1,
                                     &parts.method,
                                 ) {
-                                    (&ChannelPublication1::Create_, &Method::POST) => return Action::<ChannelPublication1_Create>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&ChannelPublication1::Delete_, &Method::POST) => return Action::<ChannelPublication1_Delete>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&ChannelPublication1::GetMany_, &Method::POST) => return Action::<ChannelPublication1_GetMany>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
+                                    (&ChannelPublication1::Create_, &Method::POST) => {
+                                        return Action::<ChannelPublication1_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&ChannelPublication1::Delete_, &Method::POST) => {
+                                        return Action::<ChannelPublication1_Delete>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&ChannelPublication1::GetMany_, &Method::POST) => {
+                                        return Action::<ChannelPublication1_GetMany>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
                                     _ => {}
                                 }
                             }
@@ -1172,16 +1284,20 @@ impl HttpServer {
                         channel_publication1_mark,
                         &parts.method,
                     ) {
-                        (&ChannelPublication1Mark::Create, &Method::POST) => return Action::<ChannelPublication1Mark_Create>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&ChannelPublication1Mark::Delete, &Method::POST) => return Action::<ChannelPublication1Mark_Delete>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
+                        (&ChannelPublication1Mark::Create, &Method::POST) => {
+                            return Action::<ChannelPublication1Mark_Create>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&ChannelPublication1Mark::Delete, &Method::POST) => {
+                            return Action::<ChannelPublication1Mark_Delete>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -1189,16 +1305,20 @@ impl HttpServer {
                                     channel_publication1_mark,
                                     &parts.method,
                                 ) {
-                                    (&ChannelPublication1Mark::Create_, &Method::POST) => return Action::<ChannelPublication1Mark_Create>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&ChannelPublication1Mark::Delete_, &Method::POST) => return Action::<ChannelPublication1Mark_Delete>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
+                                    (&ChannelPublication1Mark::Create_, &Method::POST) => {
+                                        return Action::<ChannelPublication1Mark_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&ChannelPublication1Mark::Delete_, &Method::POST) => {
+                                        return Action::<ChannelPublication1Mark_Delete>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
                                     _ => {}
                                 }
                             }
@@ -1210,11 +1330,13 @@ impl HttpServer {
                         channel_publication1_view,
                         &parts.method,
                     ) {
-                        (&ChannelPublication1View::Create, &Method::POST) => return Action::<ChannelPublication1View_Create>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
+                        (&ChannelPublication1View::Create, &Method::POST) => {
+                            return Action::<ChannelPublication1View_Create>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -1222,11 +1344,13 @@ impl HttpServer {
                                     channel_publication1_view,
                                     &parts.method,
                                 ) {
-                                    (&ChannelPublication1View::Create_, &Method::POST) => return Action::<ChannelPublication1View_Create>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
+                                    (&ChannelPublication1View::Create_, &Method::POST) => {
+                                        return Action::<ChannelPublication1View_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
                                     _ => {}
                                 }
                             }
@@ -1238,16 +1362,20 @@ impl HttpServer {
                         channel_publication1_commentary,
                         &parts.method,
                     ) {
-                        (&ChannelPublication1Commentary::Create, &Method::POST) => return Action::<ChannelPublication1Commentary_Create>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
-                        (&ChannelPublication1Commentary::Delete, &Method::POST) => return Action::<ChannelPublication1Commentary_Delete>::run(
-                            &mut action_inner,
-                            &action_processor_inner,
-                        )
-                        .await,
+                        (&ChannelPublication1Commentary::Create, &Method::POST) => {
+                            return Action::<ChannelPublication1Commentary_Create>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&ChannelPublication1Commentary::Delete, &Method::POST) => {
+                            return Action::<ChannelPublication1Commentary_Delete>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -1255,16 +1383,20 @@ impl HttpServer {
                                     channel_publication1_commentary,
                                     &parts.method,
                                 ) {
-                                    (&ChannelPublication1Commentary::Create_, &Method::POST) => return Action::<ChannelPublication1Commentary_Create>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
-                                    (&ChannelPublication1Commentary::Delete_, &Method::POST) => return Action::<ChannelPublication1Commentary_Delete>::run_(
-                                        &mut action_inner,
-                                        &action_processor_inner,
-                                    )
-                                    .await,
+                                    (&ChannelPublication1Commentary::Create_, &Method::POST) => {
+                                        return Action::<ChannelPublication1Commentary_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&ChannelPublication1Commentary::Delete_, &Method::POST) => {
+                                        return Action::<ChannelPublication1Commentary_Delete>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
                                     _ => {}
                                 }
                             }

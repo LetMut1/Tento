@@ -1,6 +1,8 @@
 mod channel;
 mod channel_publication1;
+mod channel_publication1_commentary;
 mod channel_publication1_mark;
+mod channel_publication1_view;
 mod channel_subscription;
 mod user;
 mod user_access_refresh_token;
@@ -8,8 +10,6 @@ mod user_authorization_token;
 mod user_device;
 mod user_registration_token;
 mod user_reset_password_token;
-mod channel_publication1_view;
-mod channel_publication1_commentary;
 pub use self::{
     channel::{
         By1 as ChannelBy1,
@@ -27,9 +27,9 @@ pub use self::{
         Update as ChannelPublication1Update,
     },
     channel_publication1_commentary::{
+        By as ChannelPublication1CommentaryBy,
         Insert as ChannelPublication1CommentaryInsert,
         Update as ChannelPublication1CommentaryUpdate,
-        By as ChannelPublication1CommentaryBy,
     },
     channel_publication1_mark::{
         By as ChannelPublication1MarkBy,
