@@ -8,11 +8,11 @@ use {
         domain_layer::{
             data::entity::{
                 channel_publication1::{
-                    ChannelPublication1, ChannelPublication1_Id,
+                    ChannelPublication1,
                 }, channel_publication1_mark::ChannelPublication1Mark, channel_publication1_token::ChannelPublication1Token, user_access_token::UserAccessToken
             },
             functionality::service::{
-                encoder::Encoder, validator::Validator
+                encoder::Encoder,
             },
         },
         infrastructure_layer::{

@@ -8,7 +8,7 @@ use {
         domain_layer::{
             data::entity::{
                 channel_publication1::{
-                    ChannelPublication1, ChannelPublication1_Id,
+                    ChannelPublication1,
                 }, channel_publication1_commentary::{
                     ChannelPublication1Commentary,
                     ChannelPublication1Commentary_Id,

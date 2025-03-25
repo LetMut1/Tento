@@ -1033,11 +1033,12 @@ typedef struct CResult_CUnifiedReport_ChannelPublication1_Create_Outcoming__Chan
 
 typedef struct ChannelPublication1_Delete_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  long channel_publication1__id;
+  struct ChannelPublication1TokenSigned channel_publication1_token_signed;
 } ChannelPublication1_Delete_Incoming;
 
 typedef struct ChannelPublication1_Delete_Precedent {
   bool user_access_token___already_expired;
+  bool channel_publication1_token___already_expired;
   bool user___is_not_channel_owner;
   bool channel_publication1___not_found;
   bool channel_publication1___is_already_deleted;

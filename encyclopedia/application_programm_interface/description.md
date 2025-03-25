@@ -412,12 +412,20 @@ Deletes channel publications of type 1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
+    channel_publication1_token_signed: ChannelPublication1TokenSigned,
+}
+
+struct ChannelPublication1TokenSigned {
     channel_publication1__id: i64,
+    channel_publication1__obfuscation_value: i64,
+    channel_publication1_token__expires_at: i64,
+    signature: Vec<u8>,
 }
 ```
 ```
 enum Precedent {
     UserAccessToken__AlreadyExpired,
+    ChannelPublication1Token__AlreadyExpired,
     User__IsNotChannelOwner,
     ChannelPublication1__NotFound,
     ChannelPublication1__IsAlreadyDeleted,

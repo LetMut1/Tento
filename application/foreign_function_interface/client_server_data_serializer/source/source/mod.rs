@@ -3423,7 +3423,7 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_deallocate(c_
 #[derive(Clone, Copy)]
 pub struct ChannelPublication1_Delete_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
-    pub channel_publication1__id: c_long,
+    pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__delete__serialize_allocate(incoming: ChannelPublication1_Delete_Incoming) -> CResult<CVector<c_uchar>> {
@@ -3437,7 +3437,12 @@ pub extern "C-unwind" fn channel_publication1__delete__serialize_allocate(incomi
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                channel_publication1__id: incoming_.channel_publication1__id,
+                channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
+                    channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
+                    channel_publication1__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1__obfuscation_value,
+                    channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
+                    signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
+                },
             },
         );
     };
@@ -3456,6 +3461,7 @@ type ChannelPublication1_Delete_CResult = CResult<CUnifiedReport<CVoid, ChannelP
 #[derive(Default)]
 pub struct ChannelPublication1_Delete_Precedent {
     pub user_access_token___already_expired: bool,
+    pub channel_publication1_token___already_expired: bool,
     pub user___is_not_channel_owner: bool,
     pub channel_publication1___not_found: bool,
     pub channel_publication1___is_already_deleted: bool,
@@ -3470,6 +3476,10 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_ve
                 let precedent_ = match precedent {
                     ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1_Delete_Precedent {
                         user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1Token__AlreadyExpired => ChannelPublication1_Delete_Precedent {
+                        channel_publication1_token___already_expired: true,
                         ..Default::default()
                     },
                     ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner => ChannelPublication1_Delete_Precedent {
@@ -3610,7 +3620,7 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__serialize_allocate(i
                     channel_publication1__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1__obfuscation_value,
                     channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
                     signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
-                }
+                },
             },
         );
     };
@@ -4780,9 +4790,6 @@ mod test {
                 return Result::Ok(());
             }
             pub fn channel_publication1__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                let c_string_1 = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
-                let c_string_2 = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
-                let c_string_3 = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
                 let incoming = ChannelPublication1_Delete_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user_access_token__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
@@ -4791,18 +4798,21 @@ mod test {
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    channel_publication1__id: 0,
+                    channel_publication1_token_signed: ChannelPublication1TokenSigned {
+                        channel_publication1__id: 0,
+                        channel_publication1__obfuscation_value: 0,
+                        channel_publication1_token__expires_at: 0,
+                        signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    }
                 };
                 run_by_template(
                     incoming,
                     channel_publication1__delete__serialize_allocate,
                     channel_publication1__delete__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(c_string_1);
-                Allocator::<CString>::deallocate(c_string_2);
-                Allocator::<CString>::deallocate(c_string_3);
                 Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_access_token__id);
                 Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<CVector<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 return Result::Ok(());
             }
@@ -6241,6 +6251,7 @@ mod test {
             pub fn precedent__channel_publication1__delete() -> Result<(), Box<dyn StdError + 'static>> {
                 match ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired {
                     ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1Token__AlreadyExpired => {}
                     ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner => {}
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1__NotFound => {}
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted => {}
@@ -6248,6 +6259,7 @@ mod test {
                 }
                 let precedents: Vec<ChannelPublication1_Delete_Precedent_> = vec![
                     ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1_Delete_Precedent_::ChannelPublication1Token__AlreadyExpired,
                     ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner,
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1__NotFound,
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted,
