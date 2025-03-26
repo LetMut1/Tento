@@ -1,21 +1,3 @@
-# Data standards
-- `user_access_token_signed`:
-```
-struct UserAccessTokenEncoded {
-    user_access_token__id: String,
-    user__id: i64,
-    user_device__id: String,
-    user_access_token__expires_at: i64,
-    signature: Vec<u8>,
-}
-```
-- `user_access_refresh_token_signed`:
-```
-struct UserAccessRefreshTokenSigned {
-    user_access_refresh_token__expires_at: i64,
-    signature: Vec<u8>,
-}
-```
 # Request standards
 - All payload data is transferred in `HTTP Body` and described under each API endpoint as `Incoming`.
 - Every request should contain this `HTTP Header`s:
@@ -23,6 +5,9 @@ struct UserAccessRefreshTokenSigned {
 - content-type: application/octet-stream
 - content-length: <calculate>
 ```
+
+<br/><br/>
+
 # Response standards
 - All payload data is transferred in `HTTP Body` and described under each API endpoint as `Outcoming` and `Precedent`.
 - Every response should contain this `HTTP Header`s:
@@ -53,6 +38,50 @@ enum Data<D> {
 
 <br/><br/>
 
+# Data standards
+- `user_access_token_signed`:
+```
+struct UserAccessTokenSigned {
+    user_access_token__id: String,
+    user__id: i64,
+    user_device__id: String,
+    user_access_token__expires_at: i64,
+    signature: Vec<u8>,
+}
+```
+- `user_access_refresh_token_signed`:
+```
+struct UserAccessRefreshTokenSigned {
+    user_access_refresh_token__expires_at: i64,
+    signature: Vec<u8>,
+}
+```
+- `channel_subscription_token_signed`:
+```
+struct ChannelSubscriptionTokenSigned {
+    channel_subscription_token__expires_at: i64,
+    signature: Vec<u8>,
+}
+```
+- `channel_publication1_token_signed`:
+```
+struct ChannelPublication1TokenSigned {
+    channel_publication1__id: i64,
+    channel_publication1__obfuscation_value: i64,
+    channel_publication1_token__expires_at: i64,
+    signature: Vec<u8>,
+}
+```
+- `channel_token_hashed`:
+```
+struct ChannelTokenHashed {
+    channel_token__expires_at: i64,
+    hash: u64,
+}
+```
+
+<br/><br/>
+
 # API for authorized user.
  Every endpoint at this area requires an existing of `user_access_token_signed`.
  - ## UserAuthorization_DeauthorizeFromOneDevice POST /user_authorization/deauthorize_from_one_device
@@ -61,7 +90,7 @@ Deauthorizes user from one device.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
 }
 ```
 ```
@@ -75,7 +104,7 @@ Deauthorizes user from all devices.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
 }
 ```
 ```
@@ -157,12 +186,7 @@ Returns channel data by id.
 struct Incoming {
     user_access_token_signed: <Data standards>
     channel__id: i64,
-    channel_token_hashed: Option<ChannelTokenHashed>
-}
-
-struct ChannelTokenHashed {
-    channel_token__expires_at: i64,
-    hash: u64,
+    channel_token_hashed: Option<<Data standards>>
 }
 ```
 ```
@@ -177,12 +201,7 @@ struct Outcoming {
     channel__background_image_path: Option<String>,
     channel__subscribers_quantity: i64,
     user_is_channel_owner: bool,
-    channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
-}
-
-struct ChannelSubscriptionTokenSigned {
-    channel_subscription_token__expires_at: i64,
-    signature: Vec<u8>,
+    channel_subscription_token_signed: <Data standards>,
 }
 ```
 ```
@@ -308,12 +327,7 @@ struct Data {
     channel__access_modifier: i16,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
-    channel_token_hashed_for_unsubscribed_users: Option<ChannelTokenHashed>,
-}
-
-struct ChannelTokenHashed {
-    channel_token__expires_at: i64,
-    hash: u64,
+    channel_token_hashed_for_unsubscribed_users: Option<<Data standards>,>,
 }
 ```
 ```
@@ -329,12 +343,7 @@ Subscribes user to channel.
 struct Incoming {
     user_access_token_signed: <Data standards>
     channel__id: i64,
-    channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
-}
-
-struct ChannelSubscriptionTokenSigned {
-    channel_subscription_token__expires_at: i64,
-    signature: Vec<u8>,
+    channel_subscription_token_signed: <Data standards>,
 }
 ```
 ```
@@ -356,12 +365,7 @@ Unsubscribes user from channel.
 struct Incoming {
     user_access_token_signed: <Data standards>
     channel__id: i64,
-    channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
-}
-
-struct ChannelSubscriptionTokenSigned {
-    channel_subscription_token__expires_at: i64,
-    signature: Vec<u8>,
+    channel_subscription_token_signed: <Data standards>,
 }
 ```
 ```
@@ -387,14 +391,7 @@ struct Incoming {
 ```
 struct Outcoming {
     channel_publication1__created_at: i64,
-    channel_publication1_token_signed: ChannelPublication1TokenSigned
-}
-
-struct ChannelPublication1TokenSigned {
-    channel_publication1__id: i64,
-    channel_publication1__obfuscation_value: i64,
-    channel_publication1_token__expires_at: i64,
-    signature: Vec<u8>,
+    channel_publication1_token_signed: <Data standards>,
 }
 ```
 ```
@@ -412,14 +409,7 @@ Deletes channel publications of type 1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    channel_publication1_token_signed: ChannelPublication1TokenSigned,
-}
-
-struct ChannelPublication1TokenSigned {
-    channel_publication1__id: i64,
-    channel_publication1__obfuscation_value: i64,
-    channel_publication1_token__expires_at: i64,
-    signature: Vec<u8>,
+    channel_publication1_token_signed: <Data standards>,
 }
 ```
 ```
@@ -464,14 +454,7 @@ struct Data {
     channel_publication1__view_quantity: i64,
     channel_publication1__created_at: i64,
     channel_publication1_mark__created_at: Option<i64>,
-    channel_publication1_token_signed: ChannelPublication1TokenSigned,
-}
-
-struct ChannelPublication1TokenSigned {
-    channel_publication1__id: i64,
-    channel_publication1__obfuscation_value: i64,
-    channel_publication1_token__expires_at: i64,
-    signature: Vec<u8>,
+    channel_publication1_token_signed: <Data standards>,
 }
 ```
 ```
@@ -488,14 +471,7 @@ Creates a mark for channel publication1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    channel_publication1_token_signed: ChannelPublication1TokenSigned,
-}
-
-struct ChannelPublication1TokenSigned {
-    channel_publication1__id: i64,
-    channel_publication1__obfuscation_value: i64,
-    channel_publication1_token__expires_at: i64,
-    signature: Vec<u8>,
+    channel_publication1_token_signed: <Data standards>,
 }
 ```
 ```
@@ -513,14 +489,7 @@ Deletes a mark from channel publication1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    channel_publication1_token_signed: ChannelPublication1TokenSigned,
-}
-
-struct ChannelPublication1TokenSigned {
-    channel_publication1__id: i64,
-    channel_publication1__obfuscation_value: i64,
-    channel_publication1_token__expires_at: i64,
-    signature: Vec<u8>,
+    channel_publication1_token_signed: <Data standards>,
 }
 ```
 ```
@@ -538,14 +507,7 @@ Creates a view for channel publication1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    channel_publication1_token_signed: ChannelPublication1TokenSigned,
-}
-
-struct ChannelPublication1TokenSigned {
-    channel_publication1__id: i64,
-    channel_publication1__obfuscation_value: i64,
-    channel_publication1_token__expires_at: i64,
-    signature: Vec<u8>,
+    channel_publication1_token_signed: <Data standards>,
 }
 ```
 ```
@@ -562,14 +524,7 @@ Creates a commentary for channel publication1.
 struct Incoming {
     user_access_token_signed: <Data standards>
     channel_publication1_commentary__text: String,
-    channel_publication1_token_signed: ChannelPublication1TokenSigned,
-}
-
-struct ChannelPublication1TokenSigned {
-    channel_publication1__id: i64,
-    channel_publication1__obfuscation_value: i64,
-    channel_publication1_token__expires_at: i64,
-    signature: Vec<u8>,
+    channel_publication1_token_signed: <Data standards>,
 }
 ```
 ```
@@ -593,14 +548,7 @@ Deletes a commentary for channel publication1.
 struct Incoming {
     user_access_token_signed: <Data standards>
     channel_publication1_commentary__id: i64,
-    channel_publication1_token_signed: ChannelPublication1TokenSigned,
-}
-
-struct ChannelPublication1TokenSigned {
-    channel_publication1__id: i64,
-    channel_publication1__obfuscation_value: i64,
-    channel_publication1_token__expires_at: i64,
-    signature: Vec<u8>,
+    channel_publication1_token_signed: <Data standards>,
 }
 ```
 ```
@@ -610,6 +558,7 @@ enum Precedent {
     ChannelPublication1Commentary__NotFound,
 }
 ```
+
 <br/><br/>
 
 # API for not authorized user.
