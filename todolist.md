@@ -141,3 +141,11 @@
 ChannelTokenHashed - не Сигнед ли?
 
 siuvhusdmvpkosokvoijsidmjniuvneriunsdjincjinrv - просто обновлять и проверять, скольк строк вернулось, а не отдельным запросом.
+
+
+
+
+Uuid ти ввести в домен. Передавать как байты. В Бд держать как UUID.
+
+
+https://www.reddit.com/r/rust/comments/85qp50/how_to_disable_logging_for_certain_crates/         disable logging from other crates.

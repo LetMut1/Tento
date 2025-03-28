@@ -45,7 +45,7 @@ impl CommandProcessor<RunServer> {
         let _worker_guard = {
             #[cfg(feature = "logging_to_file")]
             {
-                Self::initialize_logging_to_fileger(&environment_configuration.subject.logging)?
+                Self::initialize_file_logger(&environment_configuration.subject.logging)?
             }
             #[cfg(not(feature = "logging_to_file"))]
             {
@@ -69,7 +69,7 @@ impl CommandProcessor<RunServer> {
         };
     }
     #[cfg(feature = "logging_to_file")]
-    fn initialize_logging_to_fileger<'a>(logging: &'a Logging) -> Result<WorkerGuard, AggregateError> {
+    fn initialize_file_logger<'a>(logging: &'a Logging) -> Result<WorkerGuard, AggregateError> {
         let rolling_file_appender = RollingFileAppender::new(
             Rotation::DAILY,
             logging.directory_path.as_str(),
