@@ -28,7 +28,7 @@ impl Encoder<UserAccessRefreshToken> {
         user__id: i64,
         user_device__id: &'a str,
         user_access_token__id: &'a str,
-        user_access_refresh_token__obfuscation_value: &'a str,
+        user_access_refresh_token__obfuscation_value: i64,
         user_access_refresh_token__expires_at: i64,
         user_access_refresh_token__updated_at: i64,
     ) -> Result<UserAccessRefreshTokenSigned, AggregateError> {
@@ -57,7 +57,7 @@ impl Encoder<UserAccessRefreshToken> {
         user__id: i64,
         user_device__id: &'a str,
         user_access_token__id: &'a str,
-        user_access_refresh_token__obfuscation_value: &'a str,
+        user_access_refresh_token__obfuscation_value: i64,
         user_access_refresh_token__expires_at: i64,
         user_access_refresh_token__updated_at: i64,
         user_access_refresh_token_signed: &'a UserAccessRefreshTokenSigned,
@@ -88,7 +88,7 @@ struct Data<'a> {
     user__id: i64,
     user_device__id: &'a str,
     user_access_token__id: &'a str,
-    user_access_refresh_token__obfuscation_value: &'a str,
+    user_access_refresh_token__obfuscation_value: i64,
     user_access_refresh_token__expires_at: i64,
     user_access_refresh_token__updated_at: i64,
 }

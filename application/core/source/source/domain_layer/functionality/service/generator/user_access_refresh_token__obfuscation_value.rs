@@ -1,10 +1,10 @@
 use {
     super::Generator,
     crate::domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken_ObfuscationValue,
-    uuid::Uuid,
+    rand::Rng,
 };
 impl Generator<UserAccessRefreshToken_ObfuscationValue> {
-    pub fn generate() -> String {
-        return Uuid::new_v4().to_string();
+    pub fn generate() -> i64 {
+        return rand::thread_rng().gen_range::<i64, _>(i64::MIN..=i64::MAX);
     }
 }

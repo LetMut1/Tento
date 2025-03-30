@@ -145,7 +145,7 @@ siuvhusdmvpkosokvoijsidmjniuvneriunsdjincjinrv - просто обновлять
 
 
 
-Uuid ти ввести в домен. Передавать как байты. В Бд держать как UUID.
-
-
 https://www.reddit.com/r/rust/comments/85qp50/how_to_disable_logging_for_certain_crates/         disable logging from other crates.
+
+
+в запросах на забор канало везде лм нужно отдавать хешед?

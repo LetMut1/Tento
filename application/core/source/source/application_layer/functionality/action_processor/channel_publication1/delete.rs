@@ -78,6 +78,14 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             }
             let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             // TODO TODO TODO siuvhusdmvpkosokvoijsidmjniuvneriunsdjincjinrv
+
+
+
+
+
+
+
+            // в запрос на апдейт.  siuvhusdmvpkosokvoijsidmjniuvneriunsdjincjinrv
             let (channel__id, channel_publication1__is_predeleted) = match Repository::<Postgresql<ChannelPublication1>>::find_2(
                 &postgresql_database_3_client,
                 ChannelPublication1By1 {
@@ -92,6 +100,12 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             if channel_publication1__is_predeleted {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1__IsAlreadyDeleted));
             }
+
+
+
+
+
+
             let channel__owner = match Repository::<Postgresql<Channel>>::find_7(
                 &postgresql_database_3_client,
                 ChannelBy1 {

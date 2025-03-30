@@ -53,7 +53,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 )
                 .add(
                     &insert.user_access_refresh_token__obfuscation_value,
-                    Type::TEXT,
+                    Type::INT8,
                 )
                 .add(
                     &insert.user_access_refresh_token__expires_at,
@@ -114,7 +114,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 )
                 .add(
                     &update.user_access_refresh_token__obfuscation_value,
-                    Type::TEXT,
+                    Type::INT8,
                 )
                 .add(
                     &update.user_access_refresh_token__expires_at,
@@ -233,7 +233,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
         };
     }
     // user_access_token__id: String,
-    // user_access_refresh_token__obfuscation_value: String,
+    // user_access_refresh_token__obfuscation_value: i64,
     // user_access_refresh_token__expires_at: i64,
     // user_access_refresh_token__updated_at: i64,
     pub fn find<'a>(
@@ -243,7 +243,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
         Output = Result<
             Option<(
                 String,
-                String,
+                i64,
                 i64,
                 i64,
             )>,
@@ -296,7 +296,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 Option::Some(
                     (
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(1)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
                     ),
@@ -351,13 +351,13 @@ pub struct Insert<'a> {
     pub user__id: i64,
     pub user_device__id: &'a str,
     pub user_access_token__id: &'a str,
-    pub user_access_refresh_token__obfuscation_value: &'a str,
+    pub user_access_refresh_token__obfuscation_value: i64,
     pub user_access_refresh_token__expires_at: i64,
     pub user_access_refresh_token__updated_at: i64,
 }
 pub struct Update<'a> {
     pub user_access_token__id: &'a str,
-    pub user_access_refresh_token__obfuscation_value: &'a str,
+    pub user_access_refresh_token__obfuscation_value: i64,
     pub user_access_refresh_token__expires_at: i64,
     pub user_access_refresh_token__updated_at: i64,
 }

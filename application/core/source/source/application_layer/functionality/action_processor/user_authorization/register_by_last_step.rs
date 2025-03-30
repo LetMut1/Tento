@@ -234,7 +234,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     user__id,
                     user_device__id: incoming.user_device__id,
                     user_access_token__id: user_access_token__id.as_str(),
-                    user_access_refresh_token__obfuscation_value: user_access_refresh_token__obfuscation_value.as_str(),
+                    user_access_refresh_token__obfuscation_value,
                     user_access_refresh_token__expires_at,
                     user_access_refresh_token__updated_at,
                 },
@@ -316,7 +316,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 user__id,
                 incoming.user_device__id,
                 user_access_token__id.as_str(),
-                user_access_refresh_token__obfuscation_value.as_str(),
+                user_access_refresh_token__obfuscation_value,
                 user_access_refresh_token__expires_at,
                 user_access_refresh_token__updated_at,
             )?;

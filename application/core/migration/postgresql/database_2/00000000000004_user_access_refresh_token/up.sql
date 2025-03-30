@@ -2,7 +2,7 @@ CREATE TABLE public.user_access_refresh_token (
     user__id BIGINT,
     user_device__id TEXT,
     user_access_token__id TEXT,
-    obfuscation_value TEXT,
+    obfuscation_value BIGINT,
     expires_at BIGINT,
     updated_at BIGINT
 ) WITH (oids = false, fillfactor = 95, autovacuum_enabled = true);
