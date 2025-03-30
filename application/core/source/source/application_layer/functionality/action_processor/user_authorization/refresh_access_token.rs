@@ -131,9 +131,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             let outcoming = Outcoming {
                 user_access_token_signed: Encoder::<UserAccessToken>::encode(
                     &inner.environment_configuration.subject.encryption.private_key,
-                    new___user_access_token__obfuscation_value,
                     incoming.user_access_token_signed.user__id,
                     incoming.user_access_token_signed.user_device__id,
+                    new___user_access_token__obfuscation_value,
                     new___user_access_token__expires_at,
                 )?,
                 user_access_refresh_token_signed: Encoder::<UserAccessRefreshToken>::encode(

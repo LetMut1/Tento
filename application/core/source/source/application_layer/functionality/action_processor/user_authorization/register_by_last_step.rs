@@ -306,9 +306,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             }
             let user_access_token_signed = Encoder::<UserAccessToken>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
-                user_access_token__obfuscation_value,
                 user__id,
                 incoming.user_device__id,
+                user_access_token__obfuscation_value,
                 user_access_token__expires_at,
             )?;
             let user_access_refresh_token_signed = Encoder::<UserAccessRefreshToken>::encode(

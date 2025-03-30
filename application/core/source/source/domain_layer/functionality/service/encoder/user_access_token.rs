@@ -28,9 +28,9 @@ use {
 impl Encoder<UserAccessToken> {
     pub fn encode<'a>(
         private_key: &'static PrivateKey,
-        user_access_token__obfuscation_value: i64,
         user__id: i64,
         user_device__id: &'a str,
+        user_access_token__obfuscation_value: i64,
         user_access_token__expires_at: i64,
     ) -> Result<UserAccessTokenSigned_, AggregateError> {
         let serialized = Serializer::<BitCode>::serialize(
