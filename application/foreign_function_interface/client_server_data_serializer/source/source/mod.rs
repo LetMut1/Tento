@@ -901,7 +901,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__seria
             return Result::Ok(
                 UserAuthorization_DeauthorizeFromAllDevices_Incoming_ {
                     user_access_token_signed: UserAccessTokenSigned_ {
-                        user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                        user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                         user__id: incoming_.user_access_token_signed.user__id,
                         user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                         user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -976,7 +976,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__serial
             return Result::Ok(
                 UserAuthorization_DeauthorizeFromOneDevice_Incoming_ {
                     user_access_token_signed: UserAccessTokenSigned_ {
-                        user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                        user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                         user__id: incoming_.user_access_token_signed.user__id,
                         user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                         user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -1037,7 +1037,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__serialize_all
         return Result::Ok(
             UserAuthorization_RefreshAccessToken_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -2159,7 +2159,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__serialize_a
         return Result::Ok(
             Channel_GetManyByNameInSubscriptions_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -2305,7 +2305,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__serialize_allocate(i
         return Result::Ok(
             Channel_GetManyBySubscription_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -2449,7 +2449,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_allocate(in
         return Result::Ok(
             Channel_GetManyPublicByName_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -2609,7 +2609,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__serialize_allocate(incoming: Ch
         return Result::Ok(
             Channel_GetOneById_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -2765,7 +2765,7 @@ pub extern "C-unwind" fn channel__check_name_for_existing__serialize_allocate(in
         return Result::Ok(
             Channel_CheckNameForExisting_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -2849,7 +2849,7 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__serialize_allo
         return Result::Ok(
             Channel_CheckLinkedNameForExisting_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -2936,7 +2936,7 @@ pub extern "C-unwind" fn channel__create__serialize_allocate(incoming: Channel_C
         return Result::Ok(
             Channel_Create_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -3039,7 +3039,7 @@ pub extern "C-unwind" fn channel_subscription__create__serialize_allocate(incomi
         return Result::Ok(
             ChannelSubscription_Create_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -3139,7 +3139,7 @@ pub extern "C-unwind" fn channel_subscription__delete__serialize_allocate(incomi
         return Result::Ok(
             ChannelSubscription_Delete_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -3225,7 +3225,7 @@ pub extern "C-unwind" fn channel_publication1__get_many__serialize_allocate(inco
         return Result::Ok(
             ChannelPublication1_GetMany_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -3393,7 +3393,7 @@ pub extern "C-unwind" fn channel_publication1__create__serialize_allocate(incomi
         return Result::Ok(
             ChannelPublication1_Create_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -3504,7 +3504,7 @@ pub extern "C-unwind" fn channel_publication1__delete__serialize_allocate(incomi
         return Result::Ok(
             ChannelPublication1_Delete_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -3598,7 +3598,7 @@ pub extern "C-unwind" fn channel_publication1_mark__create__serialize_allocate(i
         return Result::Ok(
             ChannelPublication1Mark_Create_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -3682,7 +3682,7 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__serialize_allocate(i
         return Result::Ok(
             ChannelPublication1Mark_Delete_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -3766,7 +3766,7 @@ pub extern "C-unwind" fn channel_publication1_view__create__serialize_allocate(i
         return Result::Ok(
             ChannelPublication1View_Create_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -3841,7 +3841,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__serialize_allo
         return Result::Ok(
             ChannelPublication1Commentary_Create_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
@@ -3955,7 +3955,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__delete__serialize_allo
         return Result::Ok(
             ChannelPublication1Commentary_Delete_Incoming_ {
                 user_access_token_signed: UserAccessTokenSigned_ {
-                    user_access_token__id: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__id.get_as_str()?,
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,

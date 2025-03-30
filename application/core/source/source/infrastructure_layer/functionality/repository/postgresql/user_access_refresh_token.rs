@@ -22,7 +22,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                     public.user_access_refresh_token (\
                         user__id,\
                         user_device__id,\
-                        user_access_token__id,\
+                        user_access_token__obfuscation_value,\
                         obfuscation_value,\
                         expires_at,\
                         updated_at\
@@ -48,8 +48,8 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                     Type::TEXT,
                 )
                 .add(
-                    &insert.user_access_token__id,
-                    Type::TEXT,
+                    &insert.user_access_token__obfuscation_value,
+                    Type::INT8,
                 )
                 .add(
                     &insert.user_access_refresh_token__obfuscation_value,
@@ -85,13 +85,13 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             return Result::Ok(true);
         };
     }
-    pub fn update<'a>(database_2_client: &'a Client, update: Update<'a>, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update<'a>(database_2_client: &'a Client, update: Update, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
                     public.user_access_refresh_token AS uart \
                 SET (\
-                    user_access_token__id,\
+                    user_access_token__obfuscation_value,\
                     obfuscation_value,\
                     expires_at,\
                     updated_at\
@@ -109,8 +109,8 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
-                    &update.user_access_token__id,
-                    Type::TEXT,
+                    &update.user_access_token__obfuscation_value,
+                    Type::INT8,
                 )
                 .add(
                     &update.user_access_refresh_token__obfuscation_value,
@@ -232,7 +232,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             return Result::Ok(true);
         };
     }
-    // user_access_token__id: String,
+    // user_access_token__obfuscation_value: i64,
     // user_access_refresh_token__obfuscation_value: i64,
     // user_access_refresh_token__expires_at: i64,
     // user_access_refresh_token__updated_at: i64,
@@ -242,7 +242,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
     ) -> impl Future<
         Output = Result<
             Option<(
-                String,
+                i64,
                 i64,
                 i64,
                 i64,
@@ -254,7 +254,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
         return async move {
             let query = "\
                 SELECT \
-                    uart.user_access_token__id AS uati,\
+                    uart.user_access_token__obfuscation_value AS uatov,\
                     uart.obfuscation_value AS ov,\
                     uart.expires_at AS ea,\
                     uart.updated_at AS ua \
@@ -295,7 +295,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             return Result::Ok(
                 Option::Some(
                     (
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(1)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
@@ -350,13 +350,13 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
 pub struct Insert<'a> {
     pub user__id: i64,
     pub user_device__id: &'a str,
-    pub user_access_token__id: &'a str,
+    pub user_access_token__obfuscation_value: i64,
     pub user_access_refresh_token__obfuscation_value: i64,
     pub user_access_refresh_token__expires_at: i64,
     pub user_access_refresh_token__updated_at: i64,
 }
-pub struct Update<'a> {
-    pub user_access_token__id: &'a str,
+pub struct Update {
+    pub user_access_token__obfuscation_value: i64,
     pub user_access_refresh_token__obfuscation_value: i64,
     pub user_access_refresh_token__expires_at: i64,
     pub user_access_refresh_token__updated_at: i64,

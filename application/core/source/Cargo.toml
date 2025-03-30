@@ -54,7 +54,6 @@ toml = { package = "toml", version = "=0.8.19", default-features = true, feature
 tracing = { package = "tracing", version = "=0.1.40", default-features = true, features = [], optional = false }
 tracing_appender = { package = "tracing-appender", version = "=0.2.3", default-features = true, features = [], optional = false }
 tracing_subscriber = { package = "tracing-subscriber", version = "=0.3.18", default-features = true, features = [], optional = false }
-uuid = { workspace = true }
 
 [build-dependencies]
 cargo-emit = { workspace = true }

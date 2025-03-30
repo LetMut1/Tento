@@ -21,7 +21,7 @@ use {
                 user_access_token::{
                     UserAccessToken,
                     UserAccessToken_ExpiresAt,
-                    UserAccessToken_Id,
+                    UserAccessToken_ObfuscationValue,
                 },
                 user_authorization_token::{
                     UserAuthorizationToken,
@@ -176,7 +176,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__NotFound));
             }
-            let user_access_token__id = Generator::<UserAccessToken_Id>::generate();
+            let user_access_token__obfuscation_value = Generator::<UserAccessToken_ObfuscationValue>::generate();
             let user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
@@ -198,7 +198,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 let is_updated = match Repository::<Postgresql<UserAccessRefreshToken>>::update(
                     transaction.get_client(),
                     UserAccessRefreshTokenUpdate {
-                        user_access_token__id: user_access_token__id.as_str(),
+                        user_access_token__obfuscation_value,
                         user_access_refresh_token__obfuscation_value,
                         user_access_refresh_token__expires_at,
                         user_access_refresh_token__updated_at,
@@ -226,7 +226,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     UserAccessRefreshTokenInsert {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id,
-                        user_access_token__id: user_access_token__id.as_str(),
+                        user_access_token__obfuscation_value,
                         user_access_refresh_token__obfuscation_value,
                         user_access_refresh_token__expires_at,
                         user_access_refresh_token__updated_at,
@@ -266,7 +266,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
             let user_access_token_signed = Encoder::<UserAccessToken>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
-                user_access_token__id.as_str(),
+                user_access_token__obfuscation_value,
                 incoming.user__id,
                 incoming.user_device__id,
                 user_access_token__expires_at,
@@ -275,7 +275,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 &inner.environment_configuration.subject.encryption.private_key,
                 incoming.user__id,
                 incoming.user_device__id,
-                user_access_token__id.as_str(),
+                user_access_token__obfuscation_value,
                 user_access_refresh_token__obfuscation_value,
                 user_access_refresh_token__expires_at,
                 user_access_refresh_token__updated_at,

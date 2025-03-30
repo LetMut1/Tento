@@ -15,7 +15,7 @@ use {
                 user_access_token::{
                     UserAccessToken,
                     UserAccessToken_ExpiresAt,
-                    UserAccessToken_Id,
+                    UserAccessToken_ObfuscationValue,
                 },
             },
             functionality::service::{
@@ -65,7 +65,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
-            let (user_access_token__id_, user_access_refresh_token__obfuscation_value, user_access_refresh_token__expires_at, user_access_refresh_token__updated_at) =
+            let (user_access_token__obfuscation_value_, user_access_refresh_token__obfuscation_value, user_access_refresh_token__expires_at, user_access_refresh_token__updated_at) =
                 match Repository::<Postgresql<UserAccessRefreshToken>>::find(
                     &postgresql_database_2_client,
                     UserAccessRefreshTokenBy2 {
@@ -82,13 +82,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 &inner.environment_configuration.subject.encryption.private_key,
                 incoming.user_access_token_signed.user__id,
                 incoming.user_access_token_signed.user_device__id,
-                incoming.user_access_token_signed.user_access_token__id,
+                incoming.user_access_token_signed.user_access_token__obfuscation_value,
                 user_access_refresh_token__obfuscation_value,
                 user_access_refresh_token__expires_at,
                 user_access_refresh_token__updated_at,
                 &incoming.user_access_refresh_token_signed,
             )?;
-            if !is_valid || incoming.user_access_token_signed.user_access_token__id != user_access_token__id_.as_str() {
+            if !is_valid || incoming.user_access_token_signed.user_access_token__obfuscation_value != user_access_token__obfuscation_value_ {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let now = Resolver::<UnixTime>::get_now_in_microseconds();
@@ -106,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken__AlreadyExpired));
             }
-            let new___user_access_token__id = Generator::<UserAccessToken_Id>::generate();
+            let new___user_access_token__obfuscation_value = Generator::<UserAccessToken_ObfuscationValue>::generate();
             let new___user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
             let new___user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let new___user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
@@ -114,7 +114,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             if !Repository::<Postgresql<UserAccessRefreshToken>>::update(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenUpdate {
-                    user_access_token__id: new___user_access_token__id.as_str(),
+                    user_access_token__obfuscation_value: new___user_access_token__obfuscation_value,
                     user_access_refresh_token__obfuscation_value: new___user_access_refresh_token__obfuscation_value,
                     user_access_refresh_token__expires_at: new___user_access_refresh_token__expires_at,
                     user_access_refresh_token__updated_at: new___user_access_refresh_token__updated_at,
@@ -131,7 +131,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             let outcoming = Outcoming {
                 user_access_token_signed: Encoder::<UserAccessToken>::encode(
                     &inner.environment_configuration.subject.encryption.private_key,
-                    new___user_access_token__id.as_str(),
+                    new___user_access_token__obfuscation_value,
                     incoming.user_access_token_signed.user__id,
                     incoming.user_access_token_signed.user_device__id,
                     new___user_access_token__expires_at,
@@ -140,7 +140,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                     &inner.environment_configuration.subject.encryption.private_key,
                     incoming.user_access_token_signed.user__id,
                     incoming.user_access_token_signed.user_device__id,
-                    new___user_access_token__id.as_str(),
+                    new___user_access_token__obfuscation_value,
                     new___user_access_refresh_token__obfuscation_value,
                     new___user_access_refresh_token__expires_at,
                     new___user_access_refresh_token__updated_at,

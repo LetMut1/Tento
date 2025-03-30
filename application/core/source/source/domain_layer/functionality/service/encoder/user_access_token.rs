@@ -28,16 +28,16 @@ use {
 impl Encoder<UserAccessToken> {
     pub fn encode<'a>(
         private_key: &'static PrivateKey,
-        user_access_token__id: &'a str,
+        user_access_token__obfuscation_value: i64,
         user__id: i64,
         user_device__id: &'a str,
         user_access_token__expires_at: i64,
     ) -> Result<UserAccessTokenSigned_, AggregateError> {
         let serialized = Serializer::<BitCode>::serialize(
             &Data {
-                user_access_token__id,
                 user__id,
                 user_device__id,
+                user_access_token__obfuscation_value,
                 user_access_token__expires_at,
             },
         )?;
@@ -47,9 +47,9 @@ impl Encoder<UserAccessToken> {
         )?;
         return Result::Ok(
             UserAccessTokenSigned_ {
-                user_access_token__id: user_access_token__id.to_string(),
                 user__id,
                 user_device__id: user_device__id.to_string(),
+                user_access_token__obfuscation_value,
                 user_access_token__expires_at,
                 signature,
             },
@@ -60,9 +60,9 @@ impl Encoder<UserAccessToken> {
             private_key.user_access_token.as_bytes(),
             Serializer::<BitCode>::serialize(
                 &Data {
-                    user_access_token__id: user_access_token_signed.user_access_token__id,
                     user__id: user_access_token_signed.user__id,
                     user_device__id: user_access_token_signed.user_device__id,
+                    user_access_token__obfuscation_value: user_access_token_signed.user_access_token__obfuscation_value,
                     user_access_token__expires_at: user_access_token_signed.user_access_token__expires_at,
                 },
             )?
@@ -77,8 +77,8 @@ impl Encoder<UserAccessToken> {
 )]
 #[derive(bitcode::Encode)]
 struct Data<'a> {
-    user_access_token__id: &'a str,
     user__id: i64,
     user_device__id: &'a str,
+    user_access_token__obfuscation_value: i64,
     user_access_token__expires_at: i64,
 }

@@ -2,7 +2,7 @@ mod field;
 use {
     self::field::{
         ExpiresAt,
-        Id,
+        ObfuscationValue,
     },
     super::{
         user::User_Id,
@@ -10,10 +10,10 @@ use {
     },
 };
 pub struct UserAccessToken {
-    id: Id,
     user__id: User_Id,
     user_device__id: UserDevice_Id,
+    obfuscation_value: ObfuscationValue,
     expires_at: ExpiresAt,
 }
-pub type UserAccessToken_Id = Id;
+pub type UserAccessToken_ObfuscationValue = ObfuscationValue;
 pub type UserAccessToken_ExpiresAt = ExpiresAt;

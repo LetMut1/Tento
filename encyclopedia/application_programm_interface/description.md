@@ -42,9 +42,9 @@ enum Data<D> {
 - `user_access_token_signed`:
 ```
 struct UserAccessTokenSigned {
-    user_access_token__id: String,
     user__id: i64,
     user_device__id: String,
+    user_access_token__obfuscation_value: i64,
     user_access_token__expires_at: i64,
     signature: Vec<u8>,
 }
