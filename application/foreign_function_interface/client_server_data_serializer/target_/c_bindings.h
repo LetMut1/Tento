@@ -61,9 +61,9 @@ typedef struct UserAuthorization_AuthorizeByLastStep_Incoming {
 } UserAuthorization_AuthorizeByLastStep_Incoming;
 
 typedef struct UserAccessTokenSigned {
-  struct CString user_access_token__id;
   long user__id;
   struct CString user_device__id;
+  long user_access_token__obfuscation_value;
   long user_access_token__expires_at;
   struct CVector_c_uchar signature;
 } UserAccessTokenSigned;
