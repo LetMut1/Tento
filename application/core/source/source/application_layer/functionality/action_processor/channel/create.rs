@@ -11,7 +11,6 @@ use {
                     Channel,
                     Channel_LinkedName,
                     Channel_Name,
-                    Channel_ObfuscationValue,
                 },
                 user_access_token::UserAccessToken,
             },
@@ -107,7 +106,6 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     channel__cover_image_path: Option::None,
                     channel__background_image_path: Option::None,
                     channel__subscribers_quantity: 0,
-                    channel__obfuscation_value: Generator::<Channel_ObfuscationValue>::generate(),
                     channel__created_at: now,
                 },
             )

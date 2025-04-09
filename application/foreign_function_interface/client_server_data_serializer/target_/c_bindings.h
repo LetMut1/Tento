@@ -669,24 +669,21 @@ typedef struct Channel_GetManyPublicByName_Incoming {
   short limit;
 } Channel_GetManyPublicByName_Incoming;
 
-typedef struct ChannelTokenHashed {
+typedef struct ChannelTokenSigned {
+  long channel__id;
+  long channel_token__obfuscation_value;
   long channel_token__expires_at;
-  unsigned long hash;
-} ChannelTokenHashed;
-
-typedef struct COption_ChannelTokenHashed {
-  struct ChannelTokenHashed data;
-  bool is_data;
-} COption_ChannelTokenHashed;
+  bool channel_token__is_channel_subscription_exist;
+  struct CVector_c_uchar signature;
+} ChannelTokenSigned;
 
 typedef struct Channel_GetManyPublicByName_Data {
-  long channel__id;
   struct CString channel__name;
   struct CString channel__linked_name;
   short channel__access_modifier;
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
-  struct COption_ChannelTokenHashed channel_token_hashed_for_unsubscribed_users;
+  struct ChannelTokenSigned channel_token_signed;
 } Channel_GetManyPublicByName_Data;
 
 typedef struct CVector_Channel_GetManyPublicByName_Data {
@@ -722,8 +719,7 @@ typedef struct CResult_CUnifiedReport_Channel_GetManyPublicByName_Outcoming__Cha
 
 typedef struct Channel_GetOneById_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  long channel__id;
-  struct COption_ChannelTokenHashed channel_token_hashed;
+  struct ChannelTokenSigned channel_token_signed;
 } Channel_GetOneById_Incoming;
 
 typedef struct CVector_c_short {
@@ -732,7 +728,8 @@ typedef struct CVector_c_short {
 } CVector_c_short;
 
 typedef struct ChannelSubscriptionTokenSigned {
-  long channel__obfuscation_value;
+  long channel__id;
+  long channel_subscription_token__obfuscation_value;
   long channel_subscription_token__expires_at;
   struct CVector_c_uchar signature;
 } ChannelSubscriptionTokenSigned;
@@ -760,7 +757,6 @@ typedef struct Channel_GetOneById_Precedent {
   bool user_access_token___already_expired;
   bool channel___not_found;
   bool channel___is_close;
-  bool channel_token___not_found;
   bool channel_token___already_expired;
 } Channel_GetOneById_Precedent;
 

@@ -27,14 +27,14 @@ impl Encoder<ChannelSubscriptionToken> {
         private_key: &'static PrivateKey,
         user__id: i64,
         channel__id: i64,
-        channel__obfuscation_value: i64,
+        channel_subscription_token__obfuscation_value: i64,
         channel_subscription_token__expires_at: i64,
     ) -> Result<ChannelSubscriptionTokenSigned, AggregateError> {
         let serialized = Serializer::<BitCode>::serialize(
             &Data {
                 user__id,
                 channel__id,
-                channel__obfuscation_value,
+                channel_subscription_token__obfuscation_value,
                 channel_subscription_token__expires_at,
             },
         )?;
@@ -44,7 +44,8 @@ impl Encoder<ChannelSubscriptionToken> {
         )?;
         return Result::Ok(
             ChannelSubscriptionTokenSigned {
-                channel__obfuscation_value,
+                channel__id,
+                channel_subscription_token__obfuscation_value,
                 channel_subscription_token__expires_at,
                 signature,
             },
@@ -53,7 +54,6 @@ impl Encoder<ChannelSubscriptionToken> {
     pub fn is_valid<'a>(
         private_key: &'static PrivateKey,
         user__id: i64,
-        channel__id: i64,
         channel_subscription_token_signed: &'a ChannelSubscriptionTokenSigned,
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha2_256>::is_valid(
@@ -61,8 +61,8 @@ impl Encoder<ChannelSubscriptionToken> {
             Serializer::<BitCode>::serialize(
                 &Data {
                     user__id,
-                    channel__id,
-                    channel__obfuscation_value: channel_subscription_token_signed.channel__obfuscation_value,
+                    channel__id: channel_subscription_token_signed.channel__id,
+                    channel_subscription_token__obfuscation_value: channel_subscription_token_signed.channel_subscription_token__obfuscation_value,
                     channel_subscription_token__expires_at: channel_subscription_token_signed.channel_subscription_token__expires_at,
                 },
             )?
@@ -79,6 +79,6 @@ impl Encoder<ChannelSubscriptionToken> {
 struct Data {
     user__id: i64,
     channel__id: i64,
-    channel__obfuscation_value: i64,
+    channel_subscription_token__obfuscation_value: i64,
     channel_subscription_token__expires_at: i64,
 }

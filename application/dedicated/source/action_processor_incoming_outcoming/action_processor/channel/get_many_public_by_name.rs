@@ -1,5 +1,5 @@
 use crate::{
-    channel_token_hashed::ChannelTokenHashed,
+    channel_token_signed::ChannelTokenSigned,
     common_precedent::CommonPrecedent,
     user_access_token_signed::UserAccessTokenSigned,
 };
@@ -27,13 +27,12 @@ pub struct Incoming<'a> {
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Data {
-    pub channel__id: i64,
     pub channel__name: String,
     pub channel__linked_name: String,
     pub channel__access_modifier: i16,
     pub channel__cover_image_path: Option<String>,
     pub channel__background_image_path: Option<String>,
-    pub channel_token_hashed_for_unsubscribed_users: Option<ChannelTokenHashed>,
+    pub channel_token_signed: ChannelTokenSigned,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

@@ -74,7 +74,6 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
             if !Encoder::<ChannelSubscriptionToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 incoming.user_access_token_signed.user__id,
-                incoming.channel__id,
                 &incoming.channel_subscription_token_signed,
             )? {
                 return Result::Err(crate::new_invalid_argument!());

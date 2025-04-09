@@ -59,6 +59,8 @@ struct UserAccessRefreshTokenSigned {
 - `channel_subscription_token_signed`:
 ```
 struct ChannelSubscriptionTokenSigned {
+    channel__id: i64,
+    channel_subscription_token__obfuscation_value: i64,
     channel_subscription_token__expires_at: i64,
     signature: Vec<u8>,
 }
@@ -73,11 +75,14 @@ struct ChannelPublication1TokenSigned {
     signature: Vec<u8>,
 }
 ```
-- `channel_token_hashed`:
+- `channel_token_signed`:
 ```
-struct ChannelTokenHashed {
+struct ChannelTokenSigned {
+    channel__id: i64,
+    channel_token__obfuscation_value
     channel_token__expires_at: i64,
-    hash: u64,
+    channel_token__is_channel_subscription_exist: bool,
+    signature: Vec<u8>,
 }
 ```
 
@@ -186,8 +191,7 @@ Returns channel data by id.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>
-    channel__id: i64,
-    channel_token_hashed: Option<<Data standards>>
+    channel_token_signed: <Data standards>
 }
 ```
 ```
@@ -210,7 +214,6 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     Channel__NotFound,
     Channel__IsClose,
-    ChannelToken__NotFound,
     ChannelToken__AlreadyExpired,
 }
 ```
@@ -322,13 +325,12 @@ struct Outcoming {
 }
 
 struct Data {
-    channel__id: i64,
     channel__name: String,
     channel__linked_name: String,
     channel__access_modifier: i16,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
-    channel_token_hashed_for_unsubscribed_users: Option<<Data standards>,>,
+    channel_token_signed: <Data standards>,
 }
 ```
 ```

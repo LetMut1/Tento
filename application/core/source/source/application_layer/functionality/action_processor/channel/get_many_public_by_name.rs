@@ -15,6 +15,7 @@ use {
                 channel_token::{
                     ChannelToken,
                     ChannelToken_ExpiresAt,
+                    ChannelToken_ObfuscationValue,
                 },
                 user_access_token::UserAccessToken,
             },
@@ -94,27 +95,19 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
             .await?;
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
             '_a: for row in rows.iter() {
-                let channel__id = crate::result_return_logic!(row.try_get::<'_, usize, i64>(0));
-                let channel_token_hashed_for_unsubscribed_users = if crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7)).is_some() {
-                    Option::None
-                } else {
-                    Option::Some(
-                        Encoder::<ChannelToken>::encode(
-                            incoming.user_access_token_signed.user__id,
-                            channel__id,
-                            crate::result_return_logic!(row.try_get::<'_, usize, i64>(6)),
-                            Generator::<ChannelToken_ExpiresAt>::generate(now)?,
-                        )?,
-                    )
-                };
                 let data = Data {
-                    channel__id,
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
                     channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
                     channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(4)),
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
-                    channel_token_hashed_for_unsubscribed_users,
+                    channel_token_signed: Encoder::<ChannelToken>::encode(
+                        incoming.user_access_token_signed.user__id,
+                        crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                        Generator::<ChannelToken_ObfuscationValue>::generate(),
+                        Generator::<ChannelToken_ExpiresAt>::generate(now)?,
+                        crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(6)).is_some()
+                    )?,
                 };
                 data_registry.push(data);
             }

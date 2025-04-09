@@ -4,7 +4,7 @@ pub mod action_processor_incoming_outcoming;
 pub mod bit_code_serializer;
 pub mod channel_publication1_token_signed;
 pub mod channel_subscription_token_signed;
-pub mod channel_token_hashed;
+pub mod channel_token_signed;
 pub mod common_precedent;
 pub mod unified_report;
 pub mod user_access_refresh_token_signed;

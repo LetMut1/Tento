@@ -10,7 +10,6 @@ use {
         Id,
         LinkedName,
         Name,
-        ObfuscationValue,
         Orientation,
         SubscribersQuantity,
         VisabilityModifier,
@@ -30,7 +29,6 @@ pub struct Channel {
     cover_image_path: CoverImagePath,
     background_image_path: BackgroundImagePath,
     subscribers_quantity: SubscribersQuantity,
-    obfuscation_value: ObfuscationValue,
     created_at: CreatedAt,
 }
 pub type Channel_Orientation = Orientation;
@@ -40,4 +38,3 @@ pub type Channel_Id = Id;
 pub type Channel_LinkedName = LinkedName;
 pub type Channel_Name = Name;
 pub type Channel_VisabilityModifier_ = VisabilityModifier_;
-pub type Channel_ObfuscationValue = ObfuscationValue;

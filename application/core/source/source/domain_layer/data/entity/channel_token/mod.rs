@@ -1,11 +1,12 @@
 mod field;
 use {
-    self::field::ExpiresAt,
+    self::field::{
+        ExpiresAt,
+        ObfuscationValue,
+        IsChannelSubscriptionExist,
+    },
     super::{
-        channel::{
-            Channel_Id,
-            Channel_ObfuscationValue,
-        },
+        channel::Channel_Id,
         user::User_Id,
     },
 };
@@ -14,7 +15,9 @@ use {
 pub struct ChannelToken {
     user__id: User_Id,
     channel__id: Channel_Id,
-    channel__obfuscation_value: Channel_ObfuscationValue,
+    obfuscation_value: ObfuscationValue,
     expires_at: ExpiresAt,
+    is_channel_subscription_exist: IsChannelSubscriptionExist,
 }
+pub type ChannelToken_ObfuscationValue = ObfuscationValue;
 pub type ChannelToken_ExpiresAt = ExpiresAt;
