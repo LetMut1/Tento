@@ -151,7 +151,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_1<'a>(database_3_client: &'a Client, update: Update, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(database_3_client: &'a Client, update: Update, by: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -165,9 +165,10 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 ) \
                 WHERE \
                     cp1.id = $3 \
+                    AND cp1.is_predeleted = $4 \
                 RETURNING \
                     true AS _;";
-            let mut parameter_storage = ParameterStorage::new(3);
+            let mut parameter_storage = ParameterStorage::new(4);
             parameter_storage
                 .add(
                     &update.channel_publication1__is_predeleted,
@@ -180,6 +181,10 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 .add(
                     &by.channel_publication1__id,
                     Type::INT8,
+                )
+                .add(
+                    &by.channel_publication1__is_predeleted,
+                    Type::BOOL,
                 );
             let statement = crate::result_return_logic!(
                 database_3_client
@@ -455,64 +460,6 @@ impl Repository<Postgresql<ChannelPublication1>> {
             );
         };
     }
-    // channel__id: i64,
-    // channel_publication1__is_predeleted: bool,
-    pub fn find_2<'a>(
-        database_3_client: &'a Client,
-        by: By1,
-    ) -> impl Future<
-        Output = Result<
-            Option<(
-                i64,
-                bool,
-            )>,
-            AggregateError,
-        >,
-    > + Send
-    + use<'a> {
-        return async move {
-            let query = "\
-                SELECT \
-                    cp1.channel__id AS ci,\
-                    cp1.is_predeleted AS ip \
-                FROM \
-                    public.channel_publication1 cp1 \
-                WHERE \
-                    cp1.id = $1;";
-            let mut parameter_storage = ParameterStorage::new(1);
-            parameter_storage.add(
-                &by.channel_publication1__id,
-                Type::INT8,
-            );
-            let statement = crate::result_return_logic!(
-                database_3_client
-                .prepare_typed_cached(
-                    query,
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
-            let rows = crate::result_return_runtime!(
-                database_3_client
-                .query(
-                    &statement,
-                    parameter_storage.get_parameters(),
-                )
-                .await
-            );
-            if rows.is_empty() {
-                return Result::Ok(Option::None);
-            }
-            return Result::Ok(
-                Option::Some(
-                    (
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(1)),
-                    ),
-                ),
-            );
-        };
-    }
 }
 pub struct Insert<'a, 'b> {
     pub channel__id: i64,
@@ -536,5 +483,9 @@ pub struct By1 {
 pub struct By2 {
     pub channel__id: i64,
     pub channel_publication1__created_at: i64,
+    pub channel_publication1__is_predeleted: bool,
+}
+pub struct By3 {
+    pub channel_publication1__id: i64,
     pub channel_publication1__is_predeleted: bool,
 }

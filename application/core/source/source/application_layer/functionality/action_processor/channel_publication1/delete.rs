@@ -27,7 +27,7 @@ use {
                     Repository,
                     postgresql::{
                         ChannelBy1,
-                        ChannelPublication1By1,
+                        ChannelPublication1By3,
                         ChannelPublication1Update,
                         Postgresql,
                     },
@@ -77,80 +77,34 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Token__AlreadyExpired));
             }
             let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
-
-
-
-            // TODO TODO TODO siuvhusdmvpkosokvoijsidmjniuvneriunsdjincjinrv
-
-
-
-            todo!();
-
-
-
-
-
-            // в запрос на апдейт.  siuvhusdmvpkosokvoijsidmjniuvneriunsdjincjinrv
-            let (channel__id, channel_publication1__is_predeleted) = match Repository::<Postgresql<ChannelPublication1>>::find_2(
-                &postgresql_database_3_client,
-                ChannelPublication1By1 {
-                    channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
-                },
-            )
-            .await?
-            {
-                Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1__NotFound)),
-            };
-            if channel_publication1__is_predeleted {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1__IsAlreadyDeleted));
-            }
-
-
-
-
-
-
             let channel__owner = match Repository::<Postgresql<Channel>>::find_7(
                 &postgresql_database_3_client,
                 ChannelBy1 {
-                    channel__id,
+                    channel__id: incoming.channel_publication1_token_signed.channel__id,
                 },
             )
             .await?
             {
                 Option::Some(channel__owner_) => channel__owner_,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner)),
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
             };
             if incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
             if !Repository::<Postgresql<ChannelPublication1>>::update_1(
                 &postgresql_database_3_client,
                 ChannelPublication1Update {
                     channel_publication1__is_predeleted: true,
                     channel_publication1__can_be_deleted_from: Generator::<ChannelPublication1_CanBeDeletedFrom>::generate(now)?,
                 },
-                ChannelPublication1By1 {
+                ChannelPublication1By3 {
                     channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
+                    channel_publication1__is_predeleted: false,
                 },
             )
             .await?
             {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1__NotFound));
             }
             return Result::Ok(UnifiedReport::target_empty());
         };

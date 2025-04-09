@@ -417,10 +417,9 @@ struct Incoming {
 enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelPublication1Token__AlreadyExpired,
+    Channel__NotFound,
     User__IsNotChannelOwner,
     ChannelPublication1__NotFound,
-    ChannelPublication1__IsAlreadyDeleted,
-    ParallelExecution,
 }
 ```
  - ## ChannelPublication1_GetMany POST /channel_publication1/get_many

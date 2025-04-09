@@ -3536,9 +3536,9 @@ type ChannelPublication1_Delete_CResult = CResult<CUnifiedReport<CVoid, ChannelP
 pub struct ChannelPublication1_Delete_Precedent {
     pub user_access_token___already_expired: bool,
     pub channel_publication1_token___already_expired: bool,
+    pub channel___not_found: bool,
     pub user___is_not_channel_owner: bool,
     pub channel_publication1___not_found: bool,
-    pub channel_publication1___is_already_deleted: bool,
     pub parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
@@ -3556,6 +3556,10 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_ve
                         channel_publication1_token___already_expired: true,
                         ..Default::default()
                     },
+                    ChannelPublication1_Delete_Precedent_::Channel__NotFound => ChannelPublication1_Delete_Precedent {
+                        channel___not_found: true,
+                        ..Default::default()
+                    },
                     ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner => ChannelPublication1_Delete_Precedent {
                         user___is_not_channel_owner: true,
                         ..Default::default()
@@ -3564,14 +3568,6 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_ve
                         channel_publication1___not_found: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted => ChannelPublication1_Delete_Precedent {
-                        channel_publication1___is_already_deleted: true,
-                        ..Default::default()
-                    },
-                    ChannelPublication1_Delete_Precedent_::ParallelExecution => ChannelPublication1_Delete_Precedent {
-                        parallel_execution: true,
-                        ..Default::default()
-                    }
                 };
                 CUnifiedReport::precedent(precedent_)
             }
@@ -6327,18 +6323,16 @@ mod test {
                 match ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired {
                     ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired => {}
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1Token__AlreadyExpired => {}
+                    ChannelPublication1_Delete_Precedent_::Channel__NotFound => {}
                     ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner => {}
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1__NotFound => {}
-                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted => {}
-                    ChannelPublication1_Delete_Precedent_::ParallelExecution => {}
                 }
                 let precedents: Vec<ChannelPublication1_Delete_Precedent_> = vec![
                     ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired,
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1Token__AlreadyExpired,
+                    ChannelPublication1_Delete_Precedent_::Channel__NotFound,
                     ChannelPublication1_Delete_Precedent_::User__IsNotChannelOwner,
                     ChannelPublication1_Delete_Precedent_::ChannelPublication1__NotFound,
-                    ChannelPublication1_Delete_Precedent_::ChannelPublication1__IsAlreadyDeleted,
-                    ChannelPublication1_Delete_Precedent_::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__delete(precedent)?;

@@ -1040,9 +1040,9 @@ typedef struct ChannelPublication1_Delete_Incoming {
 typedef struct ChannelPublication1_Delete_Precedent {
   bool user_access_token___already_expired;
   bool channel_publication1_token___already_expired;
+  bool channel___not_found;
   bool user___is_not_channel_owner;
   bool channel_publication1___not_found;
-  bool channel_publication1___is_already_deleted;
   bool parallel_execution;
 } ChannelPublication1_Delete_Precedent;
 

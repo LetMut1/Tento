@@ -23,6 +23,7 @@ pub use self::{
     channel_publication1::{
         By1 as ChannelPublication1By1,
         By2 as ChannelPublication1By2,
+        By3 as ChannelPublication1By3,
         Insert as ChannelPublication1Insert,
         Update as ChannelPublication1Update,
     },
