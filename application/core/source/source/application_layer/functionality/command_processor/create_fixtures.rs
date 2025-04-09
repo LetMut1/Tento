@@ -26,7 +26,6 @@ use {
             },
             functionality::service::{
                 encoder::Encoder,
-                generator::Generator,
                 validator::Validator,
             },
         },

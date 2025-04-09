@@ -10,9 +10,7 @@ use {
                 channel::{
                     Channel,
                     Channel_AccessModifier_,
-                    Channel_Id,
                 },
-                channel_subscription::ChannelSubscription,
                 channel_subscription_token::{
                     ChannelSubscriptionToken,
                     ChannelSubscriptionToken_ExpiresAt,
@@ -24,7 +22,6 @@ use {
             functionality::service::{
                 encoder::Encoder,
                 generator::Generator,
-                validator::Validator,
             },
         },
         infrastructure_layer::{
@@ -34,7 +31,6 @@ use {
                     Repository,
                     postgresql::{
                         ChannelBy1,
-                        ChannelSubscriptionBy,
                         Postgresql,
                     },
                 },

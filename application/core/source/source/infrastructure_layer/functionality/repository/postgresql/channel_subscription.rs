@@ -109,48 +109,6 @@ impl Repository<Postgresql<ChannelSubscription>> {
             return Result::Ok(true);
         };
     }
-    pub fn is_exist<'a>(database_3_client: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
-        return async move {
-            let query = "\
-                SELECT \
-                    cs.user__id AS ui \
-                FROM \
-                    public.channel_subscription cs \
-                WHERE \
-                    cs.user__id = $1 \
-                    AND cs.channel__id = $2;";
-            let mut parameter_storage = ParameterStorage::new(2);
-            parameter_storage
-                .add(
-                    &by.user__id,
-                    Type::INT8,
-                )
-                .add(
-                    &by.channel__id,
-                    Type::INT8,
-                );
-            let statement = crate::result_return_logic!(
-                database_3_client
-                .prepare_typed_cached(
-                    query,
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
-            let rows = crate::result_return_runtime!(
-                database_3_client
-                .query(
-                    &statement,
-                    parameter_storage.get_parameters(),
-                )
-                .await
-            );
-            if rows.is_empty() {
-                return Result::Ok(false);
-            }
-            return Result::Ok(true);
-        };
-    }
 }
 pub struct Insert {
     pub user__id: i64,
