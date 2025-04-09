@@ -77,6 +77,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Token__AlreadyExpired));
             }
             let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+
+
+
             // TODO TODO TODO siuvhusdmvpkosokvoijsidmjniuvneriunsdjincjinrv
 
 
@@ -120,6 +123,19 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             if incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
+
+
+
+
+
+
+
+
+
+
+
+
+
             if !Repository::<Postgresql<ChannelPublication1>>::update_1(
                 &postgresql_database_3_client,
                 ChannelPublication1Update {

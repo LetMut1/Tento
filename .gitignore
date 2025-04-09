@@ -1,6 +1,4 @@
-# For developer:
 .vscode
-# For application:
 00000000000000_diesel_initial_setup
 docker-compose.override.yaml
 run_server.toml
