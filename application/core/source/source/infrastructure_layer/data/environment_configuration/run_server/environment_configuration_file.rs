@@ -92,5 +92,6 @@ pub struct PrivateKey {
     pub user_access_token: Value<String>,
     pub user_access_refresh_token: Value<String>,
     pub channel_token: Value<String>,
+    pub channel_subscription_token: Value<String>,
     pub channel_publication1_token: Value<String>,
 }

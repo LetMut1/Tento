@@ -205,6 +205,7 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
                             user_access_token: environment_configuration_file.encryption.private_key.user_access_token.value,
                             user_access_refresh_token: environment_configuration_file.encryption.private_key.user_access_refresh_token.value,
                             channel_token: environment_configuration_file.encryption.private_key.channel_token.value,
+                            channel_subscription_token: environment_configuration_file.encryption.private_key.channel_subscription_token.value,
                             channel_publication1_token: environment_configuration_file.encryption.private_key.channel_publication1_token.value,
                         },
                     },

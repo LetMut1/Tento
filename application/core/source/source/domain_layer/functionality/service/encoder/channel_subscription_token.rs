@@ -39,7 +39,7 @@ impl Encoder<ChannelSubscriptionToken> {
             },
         )?;
         let signature = Encoder_::<HmacSha2_256>::encode(
-            private_key.channel_publication1_token.as_bytes(),
+            private_key.channel_subscription_token.as_bytes(),
             serialized.as_slice(),
         )?;
         return Result::Ok(
@@ -57,7 +57,7 @@ impl Encoder<ChannelSubscriptionToken> {
         channel_subscription_token_signed: &'a ChannelSubscriptionTokenSigned,
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha2_256>::is_valid(
-            private_key.channel_publication1_token.as_bytes(),
+            private_key.channel_subscription_token.as_bytes(),
             Serializer::<BitCode>::serialize(
                 &Data {
                     user__id,
