@@ -119,6 +119,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                         channel_publication1_token_signed: Encoder::<ChannelPublication1Token>::encode(
                             &inner.environment_configuration.subject.encryption.private_key,
                             incoming.user_access_token_signed.user__id,
+                            incoming.channel__id,
                             crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                             crate::result_return_logic!(row.try_get::<'_, usize, i64>(6)),
                             Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?,

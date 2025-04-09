@@ -149,3 +149,6 @@ https://www.reddit.com/r/rust/comments/85qp50/how_to_disable_logging_for_certain
 
 
 в запросах на забор канало везде лм нужно отдавать хешед?
+
+
+channel__id: i64, - в какие ТокенСигнед можно положить?

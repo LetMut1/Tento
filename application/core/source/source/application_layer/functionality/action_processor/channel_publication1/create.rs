@@ -127,6 +127,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                         channel_publication1_token_signed: Encoder::<ChannelPublication1Token>::encode(
                             &inner.environment_configuration.subject.encryption.private_key,
                             incoming.user_access_token_signed.user__id,
+                            incoming.channel__id,
                             channel_publication1__id,
                             channel_publication1__obfuscation_value,
                             Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?,

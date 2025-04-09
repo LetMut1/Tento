@@ -944,6 +944,7 @@ typedef struct CVector_CString {
 } CVector_CString;
 
 typedef struct ChannelPublication1TokenSigned {
+  long channel__id;
   long channel_publication1__id;
   long channel_publication1__obfuscation_value;
   long channel_publication1_token__expires_at;

@@ -66,6 +66,7 @@ struct ChannelSubscriptionTokenSigned {
 - `channel_publication1_token_signed`:
 ```
 struct ChannelPublication1TokenSigned {
+    channel__id: i64,
     channel_publication1__id: i64,
     channel_publication1__obfuscation_value: i64,
     channel_publication1_token__expires_at: i64,

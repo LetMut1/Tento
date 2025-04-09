@@ -26,6 +26,7 @@ impl Encoder<ChannelPublication1Token> {
     pub fn encode(
         private_key: &'static PrivateKey,
         user__id: i64,
+        channel__id: i64,
         channel_publication1__id: i64,
         channel_publication1__obfuscation_value: i64,
         channel_publication1_token__expires_at: i64,
@@ -33,6 +34,7 @@ impl Encoder<ChannelPublication1Token> {
         let serialized = Serializer::<BitCode>::serialize(
             &Data {
                 user__id,
+                channel__id,
                 channel_publication1__id,
                 channel_publication1__obfuscation_value,
                 channel_publication1_token__expires_at,
@@ -44,6 +46,7 @@ impl Encoder<ChannelPublication1Token> {
         )?;
         return Result::Ok(
             ChannelPublication1TokenSigned {
+                channel__id,
                 channel_publication1__id,
                 channel_publication1__obfuscation_value,
                 channel_publication1_token__expires_at,
@@ -57,6 +60,7 @@ impl Encoder<ChannelPublication1Token> {
             Serializer::<BitCode>::serialize(
                 &Data {
                     user__id,
+                    channel__id: channel_publication1_token_signed.channel__id,
                     channel_publication1__id: channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1__obfuscation_value: channel_publication1_token_signed.channel_publication1__obfuscation_value,
                     channel_publication1_token__expires_at: channel_publication1_token_signed.channel_publication1_token__expires_at,
@@ -74,6 +78,7 @@ impl Encoder<ChannelPublication1Token> {
 #[derive(bitcode::Encode)]
 struct Data {
     user__id: i64,
+    channel__id: i64,
     channel_publication1__id: i64,
     channel_publication1__obfuscation_value: i64,
     channel_publication1_token__expires_at: i64,
