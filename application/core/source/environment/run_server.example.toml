@@ -161,5 +161,8 @@ value = "JJJDffsFi3sc8Mz2udB0qRbz8zH12asu4S1ksSsZ6e2v8cs5fFm6dcfLksWeYY2i"
 [encryption.private_key.user_access_refresh_token]
 value = "SSSDffsFi3sc8Mz2idB0qRbz8zH12asu4S1wsSsZ6e2v8cs5fFm6dcfLksWeYY0i"
 
+[encryption.private_key.channel_token]
+value = "Sx8shsdc212asu4S1wsjdncuic0wjbhhjdfviijvisjdjvurnad[ckiW2jwdmkmi"
+
 [encryption.private_key.channel_publication1_token]
 value = "SSUshsdc212asu4S1wsSsZ6e2v8cf0wjbhhjdfviijvisjdjvurnad[ckiWeYY0i"

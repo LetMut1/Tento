@@ -102,6 +102,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                     channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(4)),
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
                     channel_token_signed: Encoder::<ChannelToken>::encode(
+                        &inner.environment_configuration.subject.encryption.private_key,
                         incoming.user_access_token_signed.user__id,
                         crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                         Generator::<ChannelToken_ObfuscationValue>::generate(),

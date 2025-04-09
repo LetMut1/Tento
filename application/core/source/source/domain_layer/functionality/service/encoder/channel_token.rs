@@ -22,10 +22,9 @@ use {
     },
     dedicated::channel_token_signed::ChannelTokenSigned,
 };
-const CT: &'static str = "sdsdc";
 impl Encoder<ChannelToken> {
     pub fn encode(
-        // private_key: &'static PrivateKey,
+        private_key: &'static PrivateKey,
         user__id: i64,
         channel__id: i64,
         channel_token__obfuscation_value: i64,
@@ -42,8 +41,7 @@ impl Encoder<ChannelToken> {
             },
         )?;
         let signature = Encoder_::<HmacSha2_256>::encode(
-            // private_key.channel_publication1_token.as_bytes(),
-            CT.as_bytes(),
+            private_key.channel_token.as_bytes(),
             serialized.as_slice(),
         )?;
         return Result::Ok(
@@ -57,13 +55,12 @@ impl Encoder<ChannelToken> {
         );
     }
     pub fn is_valid<'a>(
-        // private_key: &'static PrivateKey,
+        private_key: &'static PrivateKey,
         user__id: i64,
         channel_token_signed: &'a ChannelTokenSigned,
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha2_256>::is_valid(
-            // private_key.channel_publication1_token.as_bytes(),
-            CT.as_bytes(),
+            private_key.channel_token.as_bytes(),
             Serializer::<BitCode>::serialize(
                 &Data {
                     user__id,

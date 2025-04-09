@@ -69,6 +69,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
             if !Encoder::<ChannelToken>::is_valid(
+                &inner.environment_configuration.subject.encryption.private_key,
                 incoming.user_access_token_signed.user__id,
                 &incoming.channel_token_signed,
             )? {
