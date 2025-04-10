@@ -13,7 +13,7 @@ use {
 };
 impl Generator<ChannelPublication1_CanBeDeletedFrom> {
     pub fn generate(now: i64) -> Result<i64, AggregateError> {
-        return Resolver::<UnixTime>::add_interval(
+        return Resolver::<UnixTime>::add_interval_microseconds(
             ChannelPublication1_CanBeDeletedFrom::QUANTITY_OF_MICROSECONDS_BEFORE_DELETION,
             now,
         );

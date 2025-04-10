@@ -13,7 +13,7 @@ use {
 };
 impl Generator<UserAuthorizationToken_ExpiresAt> {
     pub fn generate(now: i64) -> Result<i64, AggregateError> {
-        return Resolver::<UnixTime>::add_interval(
+        return Resolver::<UnixTime>::add_interval_microseconds(
             UserAuthorizationToken_ExpiresAt::QUANTITY_OF_MICROSECONDS_FOR_EXPIRATION,
             now,
         );

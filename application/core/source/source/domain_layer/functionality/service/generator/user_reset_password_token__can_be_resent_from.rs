@@ -13,7 +13,7 @@ use {
 };
 impl Generator<UserResetPasswordToken_CanBeResentFrom> {
     pub fn generate(now: i64) -> Result<i64, AggregateError> {
-        return Resolver::<UnixTime>::add_interval(
+        return Resolver::<UnixTime>::add_interval_microseconds(
             UserResetPasswordToken_CanBeResentFrom::QUANTITY_OF_MICROSECONDS_BEFORE_RESENDING,
             now,
         );

@@ -181,7 +181,7 @@ enum Precedent {
 ```
 ```
 struct Outcoming {
-    channel__id: i64,
+    channel_token_signed: <Data standards>
 }
 ```
  - ## Channel_GetOneById POST /channel/get_one_by_id

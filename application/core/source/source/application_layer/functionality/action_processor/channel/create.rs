@@ -12,11 +12,17 @@ use {
                     Channel_LinkedName,
                     Channel_Name,
                 },
+                channel_token::{
+                    ChannelToken,
+                    ChannelToken_ExpiresAt,
+                    ChannelToken_ObfuscationValue,
+                },
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
                 encoder::Encoder,
                 validator::Validator,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
@@ -116,7 +122,14 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {
-                        channel__id,
+                        channel_token_signed: Encoder::<ChannelToken>::encode(
+                            &inner.environment_configuration.subject.encryption.private_key,
+                            incoming.user_access_token_signed.user__id,
+                            channel__id,
+                            Generator::<ChannelToken_ObfuscationValue>::generate(),
+                            Generator::<ChannelToken_ExpiresAt>::generate(now)?,
+                            false,
+                        )?,
                     },
                 ),
             );

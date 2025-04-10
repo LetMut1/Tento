@@ -2948,7 +2948,7 @@ type Channel_Create_CResult = CResult<CUnifiedReport<Channel_Create_Outcoming, C
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_Create_Outcoming {
-    pub channel__id: i64,
+    pub channel_token_signed: ChannelTokenSigned
 }
 #[repr(C)]
 #[derive(Default)]
@@ -2971,7 +2971,13 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
                         data: data_
                     } => {
                         let outcoming = Channel_Create_Outcoming {
-                            channel__id: data_.channel__id,
+                            channel_token_signed: ChannelTokenSigned {
+                                channel__id: data_.channel_token_signed.channel__id,
+                                channel_token__obfuscation_value: data_.channel_token_signed.channel_token__obfuscation_value,
+                                channel_token__expires_at: data_.channel_token_signed.channel_token__expires_at,
+                                channel_token__is_channel_subscription_exist: data_.channel_token_signed.channel_token__is_channel_subscription_exist,
+                                signature: Allocator::<CVector<_>>::allocate(data_.channel_token_signed.signature),
+                            },
                         };
                         CData::filled(outcoming)
                     }
@@ -3008,7 +3014,10 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
     );
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel__create__deserialize_deallocate(_c_result: Channel_Create_CResult) -> () {
+pub extern "C-unwind" fn channel__create__deserialize_deallocate(c_result: Channel_Create_CResult) -> () {
+    if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_token_signed.signature);
+    }
     return ();
 }
 #[repr(C)]
@@ -6058,7 +6067,13 @@ mod test {
             }
             pub fn target_filled__channel__create() -> Result<(), Box<dyn StdError + 'static>> {
                 let outcoming = Channel_Create_Outcoming_ {
-                    channel__id: 0,
+                    channel_token_signed: ChannelTokenSigned_ {
+                        channel__id: 0,
+                        channel_token__obfuscation_value: 0,
+                        channel_token__expires_at: 0,
+                        channel_token__is_channel_subscription_exist: false,
+                        signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                    },
                 };
                 let unified_report = UnifiedReport::<Channel_Create_Outcoming_, Channel_Create_Precedent_>::target_filled(outcoming);
                 return run_by_template(
