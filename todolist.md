@@ -158,3 +158,4 @@ channel__id: i64, НЕ ДОЛЖен Передаваться вне ChnnaelToken
 
 
 channel delete route
+взять все каналы овнера.

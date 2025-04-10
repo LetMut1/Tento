@@ -1,12 +1,13 @@
 use crate::{
     common_precedent::CommonPrecedent,
     user_access_token_signed::UserAccessTokenSigned,
+    channel_token_signed::ChannelTokenSigned,
 };
 #[cfg_attr(
     feature = "serde_for_manual_test",
     derive(
         serde::Serialize,
-        serde::Deserialize
+        serde::Deserialize,
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
@@ -21,24 +22,24 @@ pub struct Incoming<'a> {
     feature = "serde_for_manual_test",
     derive(
         serde::Serialize,
-        serde::Deserialize
+        serde::Deserialize,
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Data {
-    pub channel__id: i64,
     pub channel__name: String,
     pub channel__linked_name: String,
     pub channel__access_modifier: i16,
     pub channel__visability_modifier: i16,
     pub channel__cover_image_path: Option<String>,
     pub channel__background_image_path: Option<String>,
+    pub channel_token_signed: ChannelTokenSigned,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",
     derive(
         serde::Serialize,
-        serde::Deserialize
+        serde::Deserialize,
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]

@@ -569,14 +569,22 @@ typedef struct Channel_GetManyByNameInSubscriptions_Incoming {
   short limit;
 } Channel_GetManyByNameInSubscriptions_Incoming;
 
-typedef struct Channel_GetManyByNameInSubscriptions_Data {
+typedef struct ChannelTokenSigned {
   long channel__id;
+  long channel_token__obfuscation_value;
+  long channel_token__expires_at;
+  bool channel_token__is_channel_subscription_exist;
+  struct CVector_c_uchar signature;
+} ChannelTokenSigned;
+
+typedef struct Channel_GetManyByNameInSubscriptions_Data {
   struct CString channel__name;
   struct CString channel__linked_name;
   short channel__access_modifier;
   short channel__visability_modifier;
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
+  struct ChannelTokenSigned channel_token_signed;
 } Channel_GetManyByNameInSubscriptions_Data;
 
 typedef struct CVector_Channel_GetManyByNameInSubscriptions_Data {
@@ -668,14 +676,6 @@ typedef struct Channel_GetManyPublicByName_Incoming {
   struct COption_CString requery___channel__name;
   short limit;
 } Channel_GetManyPublicByName_Incoming;
-
-typedef struct ChannelTokenSigned {
-  long channel__id;
-  long channel_token__obfuscation_value;
-  long channel_token__expires_at;
-  bool channel_token__is_channel_subscription_exist;
-  struct CVector_c_uchar signature;
-} ChannelTokenSigned;
 
 typedef struct Channel_GetManyPublicByName_Data {
   struct CString channel__name;

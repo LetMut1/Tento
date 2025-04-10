@@ -2186,13 +2186,13 @@ type Channel_GetManyByNameInSubscriptions_CResult = CResult<CUnifiedReport<Chann
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyByNameInSubscriptions_Data {
-    pub channel__id: c_long,
     pub channel__name: CString,
     pub channel__linked_name: CString,
     pub channel__access_modifier: c_short,
     pub channel__visability_modifier: c_short,
     pub channel__cover_image_path: COption<CString>,
     pub channel__background_image_path: COption<CString>,
+    pub channel_token_signed: ChannelTokenSigned,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -2231,13 +2231,19 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                             };
                             data_registry.push(
                                 Channel_GetManyByNameInSubscriptions_Data {
-                                    channel__id: data__.channel__id,
                                     channel__name: Allocator::<CString>::allocate(data__.channel__name),
                                     channel__linked_name: Allocator::<CString>::allocate(data__.channel__linked_name),
                                     channel__access_modifier: data__.channel__access_modifier,
                                     channel__visability_modifier: data__.channel__visability_modifier,
                                     channel__cover_image_path,
                                     channel__background_image_path,
+                                    channel_token_signed: ChannelTokenSigned {
+                                        channel__id: data__.channel_token_signed.channel__id,
+                                        channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
+                                        channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
+                                        channel_token__is_channel_subscription_exist: data__.channel_token_signed.channel_token__is_channel_subscription_exist,
+                                        signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
+                                    },
                                 },
                             );
                         }
@@ -2283,6 +2289,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
             if data.channel__cover_image_path.is_data {
                 Allocator::<CString>::deallocate(data.channel__cover_image_path.data);
             }
+            Allocator::<CVector<_>>::deallocate(data.channel_token_signed.signature);
         }
         Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.data_registry);
     }
@@ -5770,13 +5777,19 @@ mod test {
                 let mut data_registry: Vec<Channel_GetManyByNameInSubscriptions_Data_> = vec![];
                 '_a: for _ in 1..=5 {
                     let data = Channel_GetManyByNameInSubscriptions_Data_ {
-                        channel__id: 0,
                         channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel__access_modifier: 0,
                         channel__visability_modifier: 0,
                         channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        channel_token_signed: ChannelTokenSigned_ {
+                            channel__id: 0,
+                            channel_token__obfuscation_value: 0,
+                            channel_token__expires_at: 0,
+                            channel_token__is_channel_subscription_exist: false,
+                            signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                        },
                     };
                     data_registry.push(data);
                 }

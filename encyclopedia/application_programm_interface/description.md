@@ -244,13 +244,13 @@ struct Outcoming {
 }
 
 struct Data {
-    channel__id: i64,
     channel__name: String,
     channel__linked_name: String,
     channel__access_modifier: i16,
     channel__visability_modifier: i16,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
+    channel_token_signed: <Data standards>
 }
 ```
 ```

@@ -3,7 +3,7 @@ use crate::common_precedent::CommonPrecedent;
     feature = "serde_for_manual_test",
     derive(
         serde::Serialize,
-        serde::Deserialize
+        serde::Deserialize,
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]

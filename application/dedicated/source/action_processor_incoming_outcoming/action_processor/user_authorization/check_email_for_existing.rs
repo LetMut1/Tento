@@ -2,7 +2,7 @@
     feature = "serde_for_manual_test",
     derive(
         serde::Serialize,
-        serde::Deserialize
+        serde::Deserialize,
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
@@ -13,7 +13,7 @@ pub struct Incoming<'a> {
     feature = "serde_for_manual_test",
     derive(
         serde::Serialize,
-        serde::Deserialize
+        serde::Deserialize,
     )
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
