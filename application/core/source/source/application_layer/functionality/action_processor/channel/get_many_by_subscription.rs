@@ -11,11 +11,17 @@ use {
                     Channel,
                     Channel_Id,
                 },
+                channel_token::{
+                    ChannelToken,
+                    ChannelToken_ExpiresAt,
+                    ChannelToken_ObfuscationValue,
+                },
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
                 encoder::Encoder,
                 validator::Validator,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
@@ -59,7 +65,8 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_microseconds() {
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
+            if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
             if let Option::Some(requery___channel__id_) = incoming.requery___channel__id {
@@ -83,13 +90,20 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
             '_a: for row in rows.iter() {
                 let data = Data {
-                    channel__id: crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
                     channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
                     channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
                     channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
+                    channel_token_signed: Encoder::<ChannelToken>::encode(
+                        &inner.environment_configuration.subject.encryption.private_key,
+                        incoming.user_access_token_signed.user__id,
+                        crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                        Generator::<ChannelToken_ObfuscationValue>::generate(),
+                        Generator::<ChannelToken_ExpiresAt>::generate(now)?,
+                        true,
+                    )?,
                 };
                 data_registry.push(data);
             }

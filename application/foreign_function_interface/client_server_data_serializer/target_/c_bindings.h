@@ -630,13 +630,13 @@ typedef struct Channel_GetManyBySubscription_Incoming {
 } Channel_GetManyBySubscription_Incoming;
 
 typedef struct Channel_GetManyBySubscription_Data {
-  long channel__id;
   struct CString channel__name;
   struct CString channel__linked_name;
   short channel__access_modifier;
   short channel__visability_modifier;
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
+  struct ChannelTokenSigned channel_token_signed;
 } Channel_GetManyBySubscription_Data;
 
 typedef struct CVector_Channel_GetManyBySubscription_Data {
