@@ -1,5 +1,4 @@
 mod channel_publication1__can_be_deleted_from;
-mod channel_publication1__obfuscation_value;
 mod channel_publication1_commentary__can_be_deleted_from;
 mod channel_publication1_token__expires_at;
 mod channel_subscription_token__expires_at;
@@ -8,6 +7,7 @@ mod user_access_refresh_token__expires_at;
 mod user_access_refresh_token__obfuscation_value;
 mod user_access_token__expires_at;
 mod user_access_token__obfuscation_value;
+mod channel_publication1_token__obfuscation_value;
 mod user_authorization_token__can_be_resent_from;
 mod user_authorization_token__expires_at;
 mod user_authorization_token__value;

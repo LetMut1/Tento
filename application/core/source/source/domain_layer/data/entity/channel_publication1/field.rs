@@ -8,7 +8,6 @@ pub struct Text(PhantomData<Option<String>>);
 pub struct CommentariesQuantity(PhantomData<i64>);
 pub struct MarksQuantity(PhantomData<i64>);
 pub struct ViewQuantity(PhantomData<i64>);
-pub struct ObfuscationValue(PhantomData<i64>);
 pub struct CreatedAt(PhantomData<i64>);
 pub struct IsPredeleted(PhantomData<bool>);
 pub struct CanBeDeletedFrom(PhantomData<i64>);

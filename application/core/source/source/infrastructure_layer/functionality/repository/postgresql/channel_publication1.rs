@@ -31,7 +31,6 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         commentaries_quantity,\
                         marks_quantity,\
                         view_quantity,\
-                        obfuscation_value,\
                         created_at,\
                         is_predeleted,\
                         can_be_deleted_from\
@@ -45,13 +44,12 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         $6,\
                         $7,\
                         $8,\
-                        $9,\
-                        $10\
+                        $9\
                     )\
                 ON CONFLICT DO NOTHING \
                 RETURNING \
                     cp1.id AS i;";
-            let mut parameter_storage = ParameterStorage::new(10);
+            let mut parameter_storage = ParameterStorage::new(9);
             parameter_storage
                 .add(
                     &insert.channel__id,
@@ -75,10 +73,6 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 )
                 .add(
                     &insert.channel_publication1__view_quantity,
-                    Type::INT8,
-                )
-                .add(
-                    &insert.channel_publication1__obfuscation_value,
                     Type::INT8,
                 )
                 .add(
@@ -408,7 +402,6 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     cp1.commentaries_quantity AS cq,\
                     cp1.marks_quantity AS mq,\
                     cp1.view_quantity AS vq,\
-                    cp1.obfuscation_value AS ov,\
                     cp1.created_at AS ca1,\
                     cp1m.created_at AS ca2 \
                 FROM \
@@ -468,7 +461,6 @@ pub struct Insert<'a, 'b> {
     pub channel_publication1__commentaries_quantity: i64,
     pub channel_publication1__marks_quantity: i64,
     pub channel_publication1__view_quantity: i64,
-    pub channel_publication1__obfuscation_value: i64,
     pub channel_publication1__created_at: i64,
     pub channel_publication1__is_predeleted: bool,
     pub channel_publication1__can_be_deleted_from: i64,

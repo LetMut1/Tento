@@ -28,7 +28,7 @@ impl Encoder<ChannelPublication1Token> {
         user__id: i64,
         channel__id: i64,
         channel_publication1__id: i64,
-        channel_publication1__obfuscation_value: i64,
+        channel_publication1_token__obfuscation_value: i64,
         channel_publication1_token__expires_at: i64,
     ) -> Result<ChannelPublication1TokenSigned, AggregateError> {
         let serialized = Serializer::<BitCode>::serialize(
@@ -36,7 +36,7 @@ impl Encoder<ChannelPublication1Token> {
                 user__id,
                 channel__id,
                 channel_publication1__id,
-                channel_publication1__obfuscation_value,
+                channel_publication1_token__obfuscation_value,
                 channel_publication1_token__expires_at,
             },
         )?;
@@ -48,7 +48,7 @@ impl Encoder<ChannelPublication1Token> {
             ChannelPublication1TokenSigned {
                 channel__id,
                 channel_publication1__id,
-                channel_publication1__obfuscation_value,
+                channel_publication1_token__obfuscation_value,
                 channel_publication1_token__expires_at,
                 signature,
             },
@@ -62,7 +62,7 @@ impl Encoder<ChannelPublication1Token> {
                     user__id,
                     channel__id: channel_publication1_token_signed.channel__id,
                     channel_publication1__id: channel_publication1_token_signed.channel_publication1__id,
-                    channel_publication1__obfuscation_value: channel_publication1_token_signed.channel_publication1__obfuscation_value,
+                    channel_publication1_token__obfuscation_value: channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
                     channel_publication1_token__expires_at: channel_publication1_token_signed.channel_publication1_token__expires_at,
                 },
             )?
@@ -80,6 +80,6 @@ struct Data {
     user__id: i64,
     channel__id: i64,
     channel_publication1__id: i64,
-    channel_publication1__obfuscation_value: i64,
+    channel_publication1_token__obfuscation_value: i64,
     channel_publication1_token__expires_at: i64,
 }

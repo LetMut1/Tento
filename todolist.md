@@ -137,10 +137,6 @@ https://www.reddit.com/r/rust/comments/85qp50/how_to_disable_logging_for_certain
 
 
 
-
-channel_publication1__obfuscation_value: ChannelPublication1_ObfuscationValue, - почему не к токену, зачем нужен
-
-
 обновлять ChnnaelTokenSigned (channel_token__is_channel_subscription_exist) при подписке - отписке
 
 продлевать ChnnaelTokenSigned отдельным запросом.

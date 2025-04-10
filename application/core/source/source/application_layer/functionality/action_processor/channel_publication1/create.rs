@@ -14,12 +14,12 @@ use {
                 channel_publication1::{
                     ChannelPublication1,
                     ChannelPublication1_ImagesPathes,
-                    ChannelPublication1_ObfuscationValue,
                     ChannelPublication1_Text,
                 },
                 channel_publication1_token::{
                     ChannelPublication1Token,
                     ChannelPublication1Token_ExpiresAt,
+                    ChannelPublication1Token_ObfuscationValue,
                 },
                 user_access_token::UserAccessToken,
             },
@@ -99,7 +99,6 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
             let channel_publication1__created_at = now;
-            let channel_publication1__obfuscation_value = Generator::<ChannelPublication1_ObfuscationValue>::generate();
             let channel_publication1__id = match Repository::<Postgresql<ChannelPublication1>>::create(
                 &postgresql_database_3_client,
                 ChannelPublication1Insert {
@@ -109,7 +108,6 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                     channel_publication1__commentaries_quantity: 0,
                     channel_publication1__marks_quantity: 0,
                     channel_publication1__view_quantity: 0,
-                    channel_publication1__obfuscation_value,
                     channel_publication1__created_at,
                     channel_publication1__is_predeleted: false,
                     channel_publication1__can_be_deleted_from: 0,
@@ -129,7 +127,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                             incoming.user_access_token_signed.user__id,
                             incoming.channel__id,
                             channel_publication1__id,
-                            channel_publication1__obfuscation_value,
+                            Generator::<ChannelPublication1Token_ObfuscationValue>::generate(),
                             Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?,
                         )?,
                     },
