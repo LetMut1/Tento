@@ -180,7 +180,6 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             let user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
-            let user_access_refresh_token__updated_at = now;
             let is_exist = Repository::<Postgresql<UserAccessRefreshToken>>::is_exist(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenBy2 {
@@ -201,7 +200,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                         user_access_token__obfuscation_value,
                         user_access_refresh_token__obfuscation_value,
                         user_access_refresh_token__expires_at,
-                        user_access_refresh_token__updated_at,
+                        user_access_refresh_token__updated_at: now,
                     },
                     UserAccessRefreshTokenBy2 {
                         user__id: incoming.user__id,
@@ -229,7 +228,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                         user_access_token__obfuscation_value,
                         user_access_refresh_token__obfuscation_value,
                         user_access_refresh_token__expires_at,
-                        user_access_refresh_token__updated_at,
+                        user_access_refresh_token__updated_at: now,
                     },
                 )
                 .await
@@ -278,7 +277,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 user_access_token__obfuscation_value,
                 user_access_refresh_token__obfuscation_value,
                 user_access_refresh_token__expires_at,
-                user_access_refresh_token__updated_at,
+                now,
             )?;
             let postgresql_connection_pool_database_1 = inner.postgresql_connection_pool_database_1.clone();
             let user_device__id = incoming.user_device__id.to_string();

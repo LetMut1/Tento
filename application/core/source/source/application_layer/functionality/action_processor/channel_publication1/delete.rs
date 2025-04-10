@@ -8,10 +8,8 @@ use {
         domain_layer::{
             data::entity::{
                 channel::Channel,
-                channel_publication1::{
-                    ChannelPublication1,
-                    ChannelPublication1_CanBeDeletedFrom,
-                },
+                channel_publication1::ChannelPublication1,
+                channel_publication1_delayed_deletion::{ChannelPublication1DelayedDeletion, ChannelPublication1DelayedDeletion_CanBeDeletedFrom},
                 channel_publication1_token::ChannelPublication1Token,
                 user_access_token::UserAccessToken,
             },
@@ -24,13 +22,9 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
-                        ChannelBy1,
-                        ChannelPublication1By3,
-                        ChannelPublication1Update,
-                        Postgresql,
-                    },
+                        ChannelBy1, ChannelPublication1By1, ChannelPublication1DelayedDeletionInsert, IsolationLevel, Postgresql, Resolver as Resolver_, Transaction
+                    }, Repository,
                 },
                 service::resolver::{
                     Resolver,
@@ -76,7 +70,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             if incoming.channel_publication1_token_signed.channel_publication1_token__expires_at < now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Token__AlreadyExpired));
             }
-            let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+            let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let channel__owner = match Repository::<Postgresql<Channel>>::find_7(
                 &postgresql_database_3_client,
                 ChannelBy1 {
@@ -91,21 +85,50 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             if incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
-            if !Repository::<Postgresql<ChannelPublication1>>::update_1(
-                &postgresql_database_3_client,
-                ChannelPublication1Update {
-                    channel_publication1__is_predeleted: true,
-                    channel_publication1__can_be_deleted_from: Generator::<ChannelPublication1_CanBeDeletedFrom>::generate(now)?,
-                },
-                ChannelPublication1By3 {
-                    channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
-                    channel_publication1__is_predeleted: false,
-                },
+            let transaction = Resolver_::<Transaction<'_>>::start(
+                &mut postgresql_database_3_client,
+                IsolationLevel::ReadCommitted,
             )
-            .await?
+            .await?;
+            let is_deleted = match Repository::<Postgresql<ChannelPublication1>>::delete(
+                transaction.get_client(),
+                ChannelPublication1By1 {
+                    channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
+                }
+            )
+            .await
             {
+                Result::Ok(is_deleted_) => is_deleted_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
+            };
+            if !is_deleted {
+                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1__NotFound));
             }
+            let is_created = match Repository::<Postgresql<ChannelPublication1DelayedDeletion>>::create(
+                transaction.get_client(),
+                ChannelPublication1DelayedDeletionInsert {
+                    channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
+                    channel_publication1_delayed_deletion__can_be_deleted_from: Generator::<ChannelPublication1DelayedDeletion_CanBeDeletedFrom>::generate(now)?,
+                    channel_publication1_delayed_deletion__created_at: now,
+                },
+            )
+            .await
+            {
+                Result::Ok(is_created_) => is_created_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
+            };
+            if !is_created {
+                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1__NotFound));
+            }
+            Resolver_::<Transaction<'_>>::commit(transaction).await?;
             return Result::Ok(UnifiedReport::target_empty());
         };
     }

@@ -32,7 +32,6 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         marks_quantity,\
                         view_quantity,\
                         created_at,\
-                        is_predeleted,\
                         can_be_deleted_from\
                     ) VALUES (\
                         nextval('public.channel_publication1_1'),\
@@ -43,13 +42,12 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         $5,\
                         $6,\
                         $7,\
-                        $8,\
-                        $9\
+                        $8\
                     )\
                 ON CONFLICT DO NOTHING \
                 RETURNING \
                     cp1.id AS i;";
-            let mut parameter_storage = ParameterStorage::new(9);
+            let mut parameter_storage = ParameterStorage::new(8);
             parameter_storage
                 .add(
                     &insert.channel__id,
@@ -78,10 +76,6 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 .add(
                     &insert.channel_publication1__created_at,
                     Type::INT8,
-                )
-                .add(
-                    &insert.channel_publication1__is_predeleted,
-                    Type::BOOL,
                 )
                 .add(
                     &insert.channel_publication1__can_be_deleted_from,
@@ -123,63 +117,6 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 &by.channel_publication1__id,
                 Type::INT8,
             );
-            let statement = crate::result_return_logic!(
-                database_3_client
-                .prepare_typed_cached(
-                    query,
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
-            let rows = crate::result_return_runtime!(
-                database_3_client
-                .query(
-                    &statement,
-                    parameter_storage.get_parameters(),
-                )
-                .await
-            );
-            if rows.is_empty() {
-                return Result::Ok(false);
-            }
-            return Result::Ok(true);
-        };
-    }
-    pub fn update_1<'a>(database_3_client: &'a Client, update: Update, by: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
-        return async move {
-            let query = "\
-                UPDATE ONLY \
-                    public.channel_publication1 AS cp1 \
-                SET (\
-                    is_predeleted,\
-                    can_be_deleted_from\
-                ) = ROW(\
-                    $1,\
-                    $2\
-                ) \
-                WHERE \
-                    cp1.id = $3 \
-                    AND cp1.is_predeleted = $4 \
-                RETURNING \
-                    true AS _;";
-            let mut parameter_storage = ParameterStorage::new(4);
-            parameter_storage
-                .add(
-                    &update.channel_publication1__is_predeleted,
-                    Type::BOOL,
-                )
-                .add(
-                    &update.channel_publication1__can_be_deleted_from,
-                    Type::INT8,
-                )
-                .add(
-                    &by.channel_publication1__id,
-                    Type::INT8,
-                )
-                .add(
-                    &by.channel_publication1__is_predeleted,
-                    Type::BOOL,
-                );
             let statement = crate::result_return_logic!(
                 database_3_client
                 .prepare_typed_cached(
@@ -412,20 +349,15 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     cp1.id = cp1m.channel_publication1__id \
                 WHERE \
                     cp1.channel__id = $1 \
-                    AND cp1.is_predeleted = $2 \
-                    AND cp1.created_at < $3 \
+                    AND cp1.created_at < $2 \
                 ORDER BY \
                     cp1.created_at DESC \
-                LIMIT $4;";
-            let mut parameter_storage = ParameterStorage::new(4);
+                LIMIT $3;";
+            let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
                     &by.channel__id,
                     Type::INT8,
-                )
-                .add(
-                    &by.channel_publication1__is_predeleted,
-                    Type::BOOL,
                 )
                 .add(
                     &by.channel_publication1__created_at,
@@ -462,11 +394,6 @@ pub struct Insert<'a, 'b> {
     pub channel_publication1__marks_quantity: i64,
     pub channel_publication1__view_quantity: i64,
     pub channel_publication1__created_at: i64,
-    pub channel_publication1__is_predeleted: bool,
-    pub channel_publication1__can_be_deleted_from: i64,
-}
-pub struct Update {
-    pub channel_publication1__is_predeleted: bool,
     pub channel_publication1__can_be_deleted_from: i64,
 }
 pub struct By1 {
@@ -475,9 +402,4 @@ pub struct By1 {
 pub struct By2 {
     pub channel__id: i64,
     pub channel_publication1__created_at: i64,
-    pub channel_publication1__is_predeleted: bool,
-}
-pub struct By3 {
-    pub channel_publication1__id: i64,
-    pub channel_publication1__is_predeleted: bool,
 }

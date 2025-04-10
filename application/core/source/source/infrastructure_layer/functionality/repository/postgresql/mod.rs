@@ -10,6 +10,7 @@ mod user_authorization_token;
 mod user_device;
 mod user_registration_token;
 mod user_reset_password_token;
+mod channel_publication1_delayed_deletion;
 pub use self::{
     channel::{
         By1 as ChannelBy1,
@@ -23,10 +24,9 @@ pub use self::{
     channel_publication1::{
         By1 as ChannelPublication1By1,
         By2 as ChannelPublication1By2,
-        By3 as ChannelPublication1By3,
         Insert as ChannelPublication1Insert,
-        Update as ChannelPublication1Update,
     },
+    channel_publication1_delayed_deletion::Insert as ChannelPublication1DelayedDeletionInsert,
     channel_publication1_commentary::{
         By as ChannelPublication1CommentaryBy,
         Insert as ChannelPublication1CommentaryInsert,

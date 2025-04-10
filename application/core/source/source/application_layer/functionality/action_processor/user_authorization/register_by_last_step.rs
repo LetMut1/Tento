@@ -216,12 +216,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             )?;
             let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             let user__id = Repository::<Postgresql<User>>::get_id(&postgresql_database_1_client).await?;
-            let user__created_at = now;
             let user_access_token__obfuscation_value = Generator::<UserAccessToken_ObfuscationValue>::generate();
             let user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
-            let user_access_refresh_token__updated_at = now;
             let mut postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_database_2_client,
@@ -236,7 +234,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     user_access_token__obfuscation_value,
                     user_access_refresh_token__obfuscation_value,
                     user_access_refresh_token__expires_at,
-                    user_access_refresh_token__updated_at,
+                    user_access_refresh_token__updated_at: now,
                 },
             )
             .await
@@ -276,7 +274,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     user__email: incoming.user__email,
                     user__nickname: incoming.user__nickname,
                     user__password_hash: user__password_hash.as_str(),
-                    user__created_at,
+                    user__created_at: now,
                 },
             )
             .await
@@ -318,7 +316,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 user_access_token__obfuscation_value,
                 user_access_refresh_token__obfuscation_value,
                 user_access_refresh_token__expires_at,
-                user_access_refresh_token__updated_at,
+                now,
             )?;
             let postgresql_connection_pool_database_1 = inner.postgresql_connection_pool_database_1.clone();
             let user_device__id = incoming.user_device__id.to_string();

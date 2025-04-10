@@ -110,14 +110,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             let new___user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
             let new___user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let new___user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
-            let new___user_access_refresh_token__updated_at = now;
             if !Repository::<Postgresql<UserAccessRefreshToken>>::update(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenUpdate {
                     user_access_token__obfuscation_value: new___user_access_token__obfuscation_value,
                     user_access_refresh_token__obfuscation_value: new___user_access_refresh_token__obfuscation_value,
                     user_access_refresh_token__expires_at: new___user_access_refresh_token__expires_at,
-                    user_access_refresh_token__updated_at: new___user_access_refresh_token__updated_at,
+                    user_access_refresh_token__updated_at: now,
                 },
                 UserAccessRefreshTokenBy2 {
                     user__id: incoming.user_access_token_signed.user__id,
@@ -143,7 +142,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                     new___user_access_token__obfuscation_value,
                     new___user_access_refresh_token__obfuscation_value,
                     new___user_access_refresh_token__expires_at,
-                    new___user_access_refresh_token__updated_at,
+                    now,
                 )?,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));

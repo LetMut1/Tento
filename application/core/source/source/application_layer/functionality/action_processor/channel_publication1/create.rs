@@ -98,7 +98,6 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
             if incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
-            let channel_publication1__created_at = now;
             let channel_publication1__id = match Repository::<Postgresql<ChannelPublication1>>::create(
                 &postgresql_database_3_client,
                 ChannelPublication1Insert {
@@ -108,8 +107,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                     channel_publication1__commentaries_quantity: 0,
                     channel_publication1__marks_quantity: 0,
                     channel_publication1__view_quantity: 0,
-                    channel_publication1__created_at,
-                    channel_publication1__is_predeleted: false,
+                    channel_publication1__created_at: now,
                     channel_publication1__can_be_deleted_from: 0,
                 },
             )
@@ -121,7 +119,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {
-                        channel_publication1__created_at,
+                        channel_publication1__created_at: now,
                         channel_publication1_token_signed: Encoder::<ChannelPublication1Token>::encode(
                             &inner.environment_configuration.subject.encryption.private_key,
                             incoming.user_access_token_signed.user__id,

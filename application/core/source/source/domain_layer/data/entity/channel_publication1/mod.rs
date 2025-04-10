@@ -1,12 +1,10 @@
 mod field;
 use {
     self::field::{
-        CanBeDeletedFrom,
         CommentariesQuantity,
         CreatedAt,
         Id,
         ImagesPathes,
-        IsPredeleted,
         MarksQuantity,
         Text,
         ViewQuantity,
@@ -22,10 +20,7 @@ pub struct ChannelPublication1 {
     marks_quantity: MarksQuantity,
     view_quantity: ViewQuantity,
     created_at: CreatedAt,
-    is_predeleted: IsPredeleted,
-    can_be_deleted_from: CanBeDeletedFrom,
 }
 pub type ChannelPublication1_Id = Id;
 pub type ChannelPublication1_ImagesPathes = ImagesPathes;
 pub type ChannelPublication1_Text = Text;
-pub type ChannelPublication1_CanBeDeletedFrom = CanBeDeletedFrom;

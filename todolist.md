@@ -138,6 +138,7 @@ https://www.reddit.com/r/rust/comments/85qp50/how_to_disable_logging_for_certain
 
 
 обновлять ChnnaelTokenSigned (channel_token__is_channel_subscription_exist) при подписке - отписке
+что делать с другими устройствами? Нужно триггерить их обновить токен. Или же вообще убрать channel_token__is_channel_subscription_exist из токена.
 
 продлевать ChnnaelTokenSigned отдельным запросом.
 
@@ -156,4 +157,4 @@ channel delete route
 
 
 
-Убрать is_predeleted и перенести все в новую Бд. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+Убрать is_predeleted и перенести все в новую таблицу. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
