@@ -134,9 +134,6 @@
 
 https://www.reddit.com/r/rust/comments/85qp50/how_to_disable_logging_for_certain_crates/         disable logging from other crates.
 
-выдавать токен овнера канала при запросе. То есть, при запросе канала отдается токен овнера, если это овнер?
-
-
 
 
 
@@ -150,12 +147,17 @@ channel_publication1__obfuscation_value: ChannelPublication1_ObfuscationValue, -
 
 
 
-
-в 3 запросах на забор каналв и в 1 создании канала нужно отдавать ChnnaelTokenSigned
-
 channel__id: i64, НЕ ДОЛЖен Передаваться вне ChnnaelTokenSigned.  в какие ТокенСигнед можно положить, чтобы не брать из Бд для проверки существования канала.
 
 
 
 channel delete route
 взять все каналы овнера.
+
+
+
+
+
+
+
+Убрать is_predeleted и перенести все в новую Бд. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
