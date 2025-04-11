@@ -205,7 +205,6 @@ struct Outcoming {
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
     channel__subscribers_quantity: i64,
-    user_is_channel_owner: bool,
     channel_subscription_token_signed: <Data standards>,
 }
 ```

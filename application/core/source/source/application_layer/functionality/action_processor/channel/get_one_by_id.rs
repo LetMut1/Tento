@@ -116,7 +116,6 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 channel__cover_image_path,
                 channel__background_image_path,
                 channel__subscribers_quantity,
-                user_is_channel_owner: incoming.user_access_token_signed.user__id == channel__owner,
                 channel_subscription_token_signed: Encoder::<ChannelSubscriptionToken>::encode(
                     &inner.environment_configuration.subject.encryption.private_key,
                     incoming.user_access_token_signed.user__id,
