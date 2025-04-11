@@ -77,9 +77,9 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             if !Validator::<Channel_LinkedName>::is_valid(incoming.channel__linked_name) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+            let postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             if Repository::<Postgresql<Channel>>::is_exist_1(
-                &postgresql_database_3_client,
+                &postgresql_client_database_3,
                 ChannelBy2 {
                     channel__name: incoming.channel__name,
                 },
@@ -89,7 +89,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NameAlreadyExist));
             }
             if Repository::<Postgresql<Channel>>::is_exist_2(
-                &postgresql_database_3_client,
+                &postgresql_client_database_3,
                 ChannelBy3 {
                     channel__linked_name: incoming.channel__linked_name,
                 },
@@ -99,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__LinkedNameAlreadyExist));
             }
             let channel__id = match Repository::<Postgresql<Channel>>::create(
-                &postgresql_database_3_client,
+                &postgresql_client_database_3,
                 ChannelInsert {
                     channel__owner: incoming.user_access_token_signed.user__id,
                     channel__name: incoming.channel__name,

@@ -122,10 +122,10 @@ impl CommandProcessor<CreateFixtures> {
             .await?;
             let user__password = APPLICATION_USER__PASSWORD.to_string();
             let user__password_hash = Encoder::<User_Password>::encode(user__password.as_str())?;
-            let postgresql_database_1_client = crate::result_return_runtime!(
+            let postgresql_client_database_1 = crate::result_return_runtime!(
                 postgresql_connection_pool_database_1.get().await
             );
-            let postgresql_database_3_client = crate::result_return_runtime!(
+            let postgresql_client_database_3 = crate::result_return_runtime!(
                 postgresql_connection_pool_database_1.get().await
             );
             '_a: for _ in 1..=QUANTITY_OF_APPLICATION_USERS {
@@ -149,7 +149,7 @@ impl CommandProcessor<CreateFixtures> {
                     return Result::Err(crate::new_invalid_argument!());
                 }
                 let user__id = match Repository::<Postgresql<User>>::find_1(
-                    &postgresql_database_1_client,
+                    &postgresql_client_database_1,
                     UserBy1 {
                         user__nickname: user__nickname.as_str(),
                     },
@@ -159,7 +159,7 @@ impl CommandProcessor<CreateFixtures> {
                     Option::Some(user__id_) => user__id_,
                     Option::None => {
                         let user__id_ = match Repository::<Postgresql<User>>::create_1(
-                            &postgresql_database_1_client,
+                            &postgresql_client_database_1,
                             UserInsert1 {
                                 user__email: user__email.as_str(),
                                 user__nickname: user__nickname.as_str(),
@@ -184,7 +184,7 @@ impl CommandProcessor<CreateFixtures> {
                     return Result::Err(crate::new_invalid_argument!());
                 }
                 let _ = Repository::<Postgresql<UserDevice>>::create(
-                    &postgresql_database_1_client,
+                    &postgresql_client_database_1,
                     UserDeviceInsert {
                         user_device__id: user_device__id.as_str(),
                         user__id,
@@ -222,7 +222,7 @@ impl CommandProcessor<CreateFixtures> {
                         return Result::Err(crate::new_invalid_argument!());
                     }
                     if Repository::<Postgresql<Channel>>::is_exist_1(
-                        &postgresql_database_3_client,
+                        &postgresql_client_database_3,
                         ChannelBy2 {
                             channel__name: channel__name.as_str(),
                         },
@@ -232,7 +232,7 @@ impl CommandProcessor<CreateFixtures> {
                         continue 'b;
                     } else {
                         Repository::<Postgresql<Channel>>::create(
-                            &postgresql_database_3_client,
+                            &postgresql_client_database_3,
                             ChannelInsert {
                                 channel__owner: user__id,
                                 channel__name: channel__name.as_str(),

@@ -87,14 +87,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 Option::Some(user_) => user_,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User__NotFound)),
             };
-            let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_client_database_2 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (
                 user_reset_password_token__value,
                 user_reset_password_token__is_approved,
                 user_reset_password_token__expires_at,
                 mut user_reset_password_token__can_be_resent_from,
             ) = match Repository::<Postgresql<UserResetPasswordToken>>::find_3(
-                &postgresql_database_2_client,
+                &postgresql_client_database_2,
                 UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id,
@@ -108,7 +108,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             let now = Resolver::<UnixTime>::get_now_in_microseconds();
             if user_reset_password_token__expires_at <= now {
                 if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
-                    &postgresql_database_2_client,
+                    &postgresql_client_database_2,
                     UserResetPasswordTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id,
@@ -128,7 +128,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             }
             user_reset_password_token__can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate(now)?;
             if Repository::<Postgresql<UserResetPasswordToken>>::update_2(
-                &postgresql_database_2_client,
+                &postgresql_client_database_2,
                 UserResetPasswordTokenUpdate2 {
                     user_reset_password_token__can_be_resent_from,
                 },

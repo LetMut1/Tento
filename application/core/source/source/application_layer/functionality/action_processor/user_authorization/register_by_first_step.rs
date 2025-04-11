@@ -93,10 +93,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__EmailAlreadyExist));
             }
             let now = Resolver::<UnixTime>::get_now_in_microseconds();
-            let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_client_database_2 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_registration_token__value, user_registration_token__can_be_resent_from, user_registration_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserRegistrationToken>>::find_1(
-                    &postgresql_database_2_client,
+                    &postgresql_client_database_2,
                     UserRegistrationTokenBy {
                         user__email: incoming.user__email,
                         user_device__id: incoming.user_device__id,
@@ -134,7 +134,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         };
                         if need_to_update_1 && need_to_update_2 {
                             if !Repository::<Postgresql<UserRegistrationToken>>::update_1(
-                                &postgresql_database_2_client,
+                                &postgresql_client_database_2,
                                 UserRegistrationTokenUpdate1 {
                                     user_registration_token__value: user_registration_token__value_.as_str(),
                                     user_registration_token__wrong_enter_tries_quantity: user_registration_token__wrong_enter_tries_quantity_,
@@ -154,7 +154,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         } else {
                             if need_to_update_1 {
                                 if !Repository::<Postgresql<UserRegistrationToken>>::update_2(
-                                    &postgresql_database_2_client,
+                                    &postgresql_client_database_2,
                                     UserRegistrationTokenUpdate2 {
                                         user_registration_token__can_be_resent_from: user_registration_token__can_be_resent_from_,
                                     },
@@ -170,7 +170,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             }
                             if need_to_update_2 {
                                 if !Repository::<Postgresql<UserRegistrationToken>>::update_3(
-                                    &postgresql_database_2_client,
+                                    &postgresql_client_database_2,
                                     UserRegistrationTokenUpdate3 {
                                         user_registration_token__value: user_registration_token__value_.as_str(),
                                         user_registration_token__wrong_enter_tries_quantity: user_registration_token__wrong_enter_tries_quantity_,
@@ -200,7 +200,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         let user_registration_token__wrong_enter_tries_quantity_ = 0;
                         let user_registration_token__can_be_resent_from_ = Generator::<UserRegistrationToken_CanBeResentFrom>::generate(now)?;
                         if !Repository::<Postgresql<UserRegistrationToken>>::create(
-                            &postgresql_database_2_client,
+                            &postgresql_client_database_2,
                             UserRegistrationTokenInsert {
                                 user__email: incoming.user__email,
                                 user_device__id: incoming.user_device__id,

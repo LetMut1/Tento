@@ -83,9 +83,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
             if !Validator::<ChannelPublication1_ImagesPathes>::is_valid(incoming.channel_publication1__images_pathes.as_slice()) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+            let postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let channel__owner = match Repository::<Postgresql<Channel>>::find_7(
-                &postgresql_database_3_client,
+                &postgresql_client_database_3,
                 ChannelBy1 {
                     channel__id: incoming.channel__id,
                 },
@@ -99,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
             let channel_publication1__id = match Repository::<Postgresql<ChannelPublication1>>::create(
-                &postgresql_database_3_client,
+                &postgresql_client_database_3,
                 ChannelPublication1Insert {
                     channel__id: incoming.channel__id,
                     channel_publication1__images_pathes: incoming.channel_publication1__images_pathes.as_slice(),

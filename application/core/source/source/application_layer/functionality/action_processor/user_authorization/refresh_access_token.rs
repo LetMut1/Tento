@@ -64,10 +64,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_client_database_2 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_access_token__obfuscation_value_, user_access_refresh_token__obfuscation_value, user_access_refresh_token__expires_at, user_access_refresh_token__updated_at) =
                 match Repository::<Postgresql<UserAccessRefreshToken>>::find(
-                    &postgresql_database_2_client,
+                    &postgresql_client_database_2,
                     UserAccessRefreshTokenBy2 {
                         user__id: incoming.user_access_token_signed.user__id,
                         user_device__id: incoming.user_access_token_signed.user_device__id,
@@ -94,7 +94,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             let now = Resolver::<UnixTime>::get_now_in_microseconds();
             if user_access_refresh_token__expires_at <= now {
                 if !Repository::<Postgresql<UserAccessRefreshToken>>::delete_1(
-                    &postgresql_database_2_client,
+                    &postgresql_client_database_2,
                     UserAccessRefreshTokenBy2 {
                         user__id: incoming.user_access_token_signed.user__id,
                         user_device__id: incoming.user_access_token_signed.user_device__id,
@@ -111,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             let new___user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let new___user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
             if !Repository::<Postgresql<UserAccessRefreshToken>>::update(
-                &postgresql_database_2_client,
+                &postgresql_client_database_2,
                 UserAccessRefreshTokenUpdate {
                     user_access_token__obfuscation_value: new___user_access_token__obfuscation_value,
                     user_access_refresh_token__obfuscation_value: new___user_access_refresh_token__obfuscation_value,

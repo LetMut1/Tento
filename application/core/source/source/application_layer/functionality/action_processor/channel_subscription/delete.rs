@@ -81,9 +81,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
             if incoming.channel_subscription_token_signed.channel_subscription_token__expires_at < now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken__AlreadyExpired));
             }
-            let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+            let mut postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(
-                &mut postgresql_database_3_client,
+                &mut postgresql_client_database_3,
                 IsolationLevel::ReadCommitted,
             )
             .await?;

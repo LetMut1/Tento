@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<ChannelPublication1CommentaryDelayedDeletion>> {
-    pub fn create<'a>(database_4_client: &'a Client, insert: Insert) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn create<'a>(client_database_4: &'a Client, insert: Insert) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -46,7 +46,7 @@ impl Repository<Postgresql<ChannelPublication1CommentaryDelayedDeletion>> {
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
-                database_4_client
+                client_database_4
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -54,7 +54,7 @@ impl Repository<Postgresql<ChannelPublication1CommentaryDelayedDeletion>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_4_client
+                client_database_4
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),

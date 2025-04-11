@@ -61,14 +61,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_client_database_2 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (
                 user_reset_password_token__value,
                 mut user_reset_password_token__wrong_enter_tries_quantity,
                 user_reset_password_token__is_approved,
                 user_reset_password_token__expires_at,
             ) = match Repository::<Postgresql<UserResetPasswordToken>>::find_2(
-                &postgresql_database_2_client,
+                &postgresql_client_database_2,
                 UserResetPasswordTokenBy {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id,
@@ -81,7 +81,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
             };
             if user_reset_password_token__expires_at <= Resolver::<UnixTime>::get_now_in_microseconds() {
                 if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
-                    &postgresql_database_2_client,
+                    &postgresql_client_database_2,
                     UserResetPasswordTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id,
@@ -102,7 +102,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 }
                 if user_reset_password_token__wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                     if !Repository::<Postgresql<UserResetPasswordToken>>::update_4(
-                        &postgresql_database_2_client,
+                        &postgresql_client_database_2,
                         UserResetPasswordTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id,
@@ -114,7 +114,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                     }
                 } else {
                     if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
-                        &postgresql_database_2_client,
+                        &postgresql_client_database_2,
                         UserResetPasswordTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id,
@@ -134,7 +134,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 );
             }
             if !Repository::<Postgresql<UserResetPasswordToken>>::update_5(
-                &postgresql_database_2_client,
+                &postgresql_client_database_2,
                 UserResetPasswordTokenUpdate5 {
                     user_reset_password_token__is_approved: true,
                 },

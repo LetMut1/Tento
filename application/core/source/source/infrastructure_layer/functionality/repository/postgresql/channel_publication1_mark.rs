@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<ChannelPublication1Mark>> {
-    pub fn create<'a>(database_3_client: &'a Client, insert: Insert) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn create<'a>(client_database_3: &'a Client, insert: Insert) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -46,7 +46,7 @@ impl Repository<Postgresql<ChannelPublication1Mark>> {
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
-                database_3_client
+                client_database_3
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -54,7 +54,7 @@ impl Repository<Postgresql<ChannelPublication1Mark>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_3_client
+                client_database_3
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -67,7 +67,7 @@ impl Repository<Postgresql<ChannelPublication1Mark>> {
             return Result::Ok(true);
         };
     }
-    pub fn delete<'a>(database_3_client: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn delete<'a>(client_database_3: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -88,7 +88,7 @@ impl Repository<Postgresql<ChannelPublication1Mark>> {
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
-                database_3_client
+                client_database_3
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -96,7 +96,7 @@ impl Repository<Postgresql<ChannelPublication1Mark>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_3_client
+                client_database_3
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),

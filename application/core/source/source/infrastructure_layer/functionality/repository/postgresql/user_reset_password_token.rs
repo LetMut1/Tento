@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<UserResetPasswordToken>> {
-    pub fn create<'a>(database_2_client: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn create<'a>(client_database_2: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -70,7 +70,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -78,7 +78,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -91,7 +91,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
             return Result::Ok(true);
         };
     }
-    pub fn delete<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn delete<'a>(client_database_2: &'a Client, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -112,7 +112,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -120,7 +120,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -133,7 +133,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_1<'a>(database_2_client: &'a Client, update: Update1<'a>, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(client_database_2: &'a Client, update: Update1<'a>, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -187,7 +187,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -195,7 +195,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -208,7 +208,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_2<'a>(database_2_client: &'a Client, update: Update2, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_2<'a>(client_database_2: &'a Client, update: Update2, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -238,7 +238,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -246,7 +246,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -259,7 +259,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_3<'a>(database_2_client: &'a Client, update: Update3<'a>, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_3<'a>(client_database_2: &'a Client, update: Update3<'a>, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -307,7 +307,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -315,7 +315,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -328,7 +328,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_4<'a>(database_2_client: &'a Client, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_4<'a>(client_database_2: &'a Client, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -351,7 +351,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -359,7 +359,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -372,7 +372,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_5<'a>(database_2_client: &'a Client, update: Update5, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_5<'a>(client_database_2: &'a Client, update: Update5, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -402,7 +402,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -410,7 +410,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -429,7 +429,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
     // user_reset_password_token__expires_at: i64,
     // user_reset_password_token__can_be_resent_from: i64,
     pub fn find_1<'a>(
-        database_2_client: &'a Client,
+        client_database_2: &'a Client,
         by: By<'a>,
     ) -> impl Future<
         Output = Result<
@@ -468,7 +468,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -476,7 +476,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -504,7 +504,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
     // user_reset_password_token__is_approved: bool,
     // user_reset_password_token__expires_at: i64,
     pub fn find_2<'a>(
-        database_2_client: &'a Client,
+        client_database_2: &'a Client,
         by: By<'a>,
     ) -> impl Future<
         Output = Result<
@@ -541,7 +541,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -549,7 +549,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -576,7 +576,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
     // user_reset_password_token__expires_at: i64,
     // user_reset_password_token__can_be_resent_from: i64,
     pub fn find_3<'a>(
-        database_2_client: &'a Client,
+        client_database_2: &'a Client,
         by: By<'a>,
     ) -> impl Future<
         Output = Result<
@@ -613,7 +613,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -621,7 +621,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),

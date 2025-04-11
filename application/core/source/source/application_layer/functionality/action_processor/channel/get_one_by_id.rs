@@ -78,7 +78,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             if incoming.channel_token_signed.channel_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__AlreadyExpired));
             }
-            let postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+            let postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let (
                 channel__owner,
                 channel__name,
@@ -91,7 +91,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 channel__background_image_path,
                 channel__subscribers_quantity,
             ) = match Repository::<Postgresql<Channel>>::find_1(
-                &postgresql_database_3_client,
+                &postgresql_client_database_3,
                 ChannelBy1 {
                     channel__id: incoming.channel_token_signed.channel__id,
                 },

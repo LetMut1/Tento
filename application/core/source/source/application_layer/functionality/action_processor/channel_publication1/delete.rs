@@ -70,9 +70,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             if incoming.channel_publication1_token_signed.channel_publication1_token__expires_at < now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Token__AlreadyExpired));
             }
-            let mut postgresql_database_3_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
+            let mut postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let channel__owner = match Repository::<Postgresql<Channel>>::find_7(
-                &postgresql_database_3_client,
+                &postgresql_client_database_3,
                 ChannelBy1 {
                     channel__id: incoming.channel_publication1_token_signed.channel__id,
                 },
@@ -86,7 +86,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
             let transaction = Resolver_::<Transaction<'_>>::start(
-                &mut postgresql_database_3_client,
+                &mut postgresql_client_database_3,
                 IsolationLevel::ReadCommitted,
             )
             .await?;

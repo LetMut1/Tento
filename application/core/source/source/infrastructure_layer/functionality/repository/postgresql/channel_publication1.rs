@@ -19,7 +19,7 @@ use {
 };
 impl Repository<Postgresql<ChannelPublication1>> {
     // channel_publication1__id: i64
-    pub fn create<'a, 'b>(database_3_client: &'a Client, insert: Insert<'a, 'b>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a, 'b> {
+    pub fn create<'a, 'b>(client_database_3: &'a Client, insert: Insert<'a, 'b>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a, 'b> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -82,7 +82,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
-                database_3_client
+                client_database_3
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -90,7 +90,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_3_client
+                client_database_3
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -103,7 +103,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
         };
     }
-    pub fn delete<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn delete<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -118,7 +118,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
-                database_3_client
+                client_database_3
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -126,7 +126,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_3_client
+                client_database_3
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -139,7 +139,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_2<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_2<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -156,7 +156,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
-                database_3_client
+                client_database_3
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -164,7 +164,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_3_client
+                client_database_3
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -177,7 +177,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_3<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_3<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -194,7 +194,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
-                database_3_client
+                client_database_3
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -202,7 +202,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_3_client
+                client_database_3
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -215,7 +215,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_4<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_4<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -232,7 +232,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
-                database_3_client
+                client_database_3
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -240,7 +240,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_3_client
+                client_database_3
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -253,7 +253,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_5<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_5<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -270,7 +270,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
-                database_3_client
+                client_database_3
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -278,7 +278,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_3_client
+                client_database_3
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -291,7 +291,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_6<'a>(database_3_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_6<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -308,7 +308,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
-                database_3_client
+                client_database_3
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -316,7 +316,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_3_client
+                client_database_3
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -329,7 +329,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
-    pub fn find_1<'a>(database_3_client: &'a Client, by: By2, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
+    pub fn find_1<'a>(client_database_3: &'a Client, by: By2, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -368,7 +368,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     Type::INT2,
                 );
             let statement = crate::result_return_logic!(
-                database_3_client
+                client_database_3
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -376,7 +376,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 .await
             );
             return crate::result_into_runtime!(
-                database_3_client
+                client_database_3
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),

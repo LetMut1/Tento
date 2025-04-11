@@ -99,10 +99,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let mut postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let mut postgresql_client_database_2 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_authorization_token__value, mut user_authorization_token__wrong_enter_tries_quantity, user_authorization_token__expires_at) =
                 match Repository::<Postgresql<UserAuthorizationToken>>::find_2(
-                    &postgresql_database_2_client,
+                    &postgresql_client_database_2,
                     UserAuthorizationTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id,
@@ -116,7 +116,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             let now = Resolver::<UnixTime>::get_now_in_microseconds();
             if user_authorization_token__expires_at <= now {
                 if !Repository::<Postgresql<UserAuthorizationToken>>::delete(
-                    &postgresql_database_2_client,
+                    &postgresql_client_database_2,
                     UserAuthorizationTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id,
@@ -134,7 +134,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 }
                 if user_authorization_token__wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
                     if !Repository::<Postgresql<UserAuthorizationToken>>::update_4(
-                        &postgresql_database_2_client,
+                        &postgresql_client_database_2,
                         UserAuthorizationTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id,
@@ -146,7 +146,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     }
                 } else {
                     if !Repository::<Postgresql<UserAuthorizationToken>>::delete(
-                        &postgresql_database_2_client,
+                        &postgresql_client_database_2,
                         UserAuthorizationTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id,
@@ -165,9 +165,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     ),
                 );
             }
-            let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
+            let postgresql_client_database_1 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
             if !Repository::<Postgresql<User>>::is_exist_3(
-                &postgresql_database_1_client,
+                &postgresql_client_database_1,
                 UserBy3 {
                     user__id: incoming.user__id,
                 },
@@ -181,7 +181,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
             let is_exist = Repository::<Postgresql<UserAccessRefreshToken>>::is_exist(
-                &postgresql_database_2_client,
+                &postgresql_client_database_2,
                 UserAccessRefreshTokenBy2 {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id,
@@ -189,7 +189,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             )
             .await?;
             let transaction = Resolver_::<Transaction<'_>>::start(
-                &mut postgresql_database_2_client,
+                &mut postgresql_client_database_2,
                 IsolationLevel::ReadCommitted,
             )
             .await?;

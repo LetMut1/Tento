@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<UserAccessRefreshToken>> {
-    pub fn create<'a>(database_2_client: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn create<'a>(client_database_2: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -64,7 +64,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -72,7 +72,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -85,7 +85,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             return Result::Ok(true);
         };
     }
-    pub fn update<'a>(database_2_client: &'a Client, update: Update, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update<'a>(client_database_2: &'a Client, update: Update, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -133,7 +133,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -141,7 +141,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -154,7 +154,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             return Result::Ok(true);
         };
     }
-    pub fn delete_1<'a>(database_2_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn delete_1<'a>(client_database_2: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
             DELETE FROM ONLY \
@@ -175,7 +175,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -183,7 +183,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -196,7 +196,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             return Result::Ok(true);
         };
     }
-    pub fn delete_2<'a>(database_2_client: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn delete_2<'a>(client_database_2: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -211,7 +211,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -219,7 +219,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -237,7 +237,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
     // user_access_refresh_token__expires_at: i64,
     // user_access_refresh_token__updated_at: i64,
     pub fn find<'a>(
-        database_2_client: &'a Client,
+        client_database_2: &'a Client,
         by: By2<'a>,
     ) -> impl Future<
         Output = Result<
@@ -274,7 +274,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -282,7 +282,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -304,7 +304,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             );
         };
     }
-    pub fn is_exist<'a>(database_2_client: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn is_exist<'a>(client_database_2: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 SELECT \
@@ -325,7 +325,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                     Type::TEXT,
                 );
             let statement = crate::result_return_logic!(
-                database_2_client
+                client_database_2
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -333,7 +333,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_2_client
+                client_database_2
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),

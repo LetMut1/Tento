@@ -86,14 +86,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 return Result::Err(crate::new_invalid_argument!());
             }
             {
-                let postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+                let postgresql_client_database_2 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
                 let (
                     user_reset_password_token__value,
                     mut user_reset_password_token__wrong_enter_tries_quantity,
                     user_reset_password_token__is_approved,
                     user_reset_password_token__expires_at,
                 ) = match Repository::<Postgresql<UserResetPasswordToken>>::find_2(
-                    &postgresql_database_2_client,
+                    &postgresql_client_database_2,
                     UserResetPasswordTokenBy {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id,
@@ -106,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 };
                 if user_reset_password_token__expires_at <= Resolver::<UnixTime>::get_now_in_microseconds() {
                     if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
-                        &postgresql_database_2_client,
+                        &postgresql_client_database_2,
                         UserResetPasswordTokenBy {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id,
@@ -127,7 +127,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     }
                     if user_reset_password_token__wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                         if !Repository::<Postgresql<UserResetPasswordToken>>::update_4(
-                            &postgresql_database_2_client,
+                            &postgresql_client_database_2,
                             UserResetPasswordTokenBy {
                                 user__id: incoming.user__id,
                                 user_device__id: incoming.user_device__id,
@@ -139,7 +139,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                         }
                     } else {
                         if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
-                            &postgresql_database_2_client,
+                            &postgresql_client_database_2,
                             UserResetPasswordTokenBy {
                                 user__id: incoming.user__id,
                                 user_device__id: incoming.user_device__id,
@@ -181,10 +181,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 )
                 .await
             )?;
-            let postgresql_database_1_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
-            let mut postgresql_database_2_client = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
+            let postgresql_client_database_1 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
+            let mut postgresql_client_database_2 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(
-                &mut postgresql_database_2_client,
+                &mut postgresql_client_database_2,
                 IsolationLevel::ReadCommitted,
             )
             .await?;
@@ -226,7 +226,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             let is_updated = match Repository::<Postgresql<User>>::update(
-                &postgresql_database_1_client,
+                &postgresql_client_database_1,
                 UserUpdate {
                     user__password_hash: user__password_hash.as_str(),
                 },
@@ -248,7 +248,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             }
             if let Result::Err(aggregate_error) = Resolver_::<Transaction<'_>>::commit(transaction).await {
                 if !Repository::<Postgresql<User>>::update(
-                    &postgresql_database_1_client,
+                    &postgresql_client_database_1,
                     UserUpdate {
                         user__password_hash: user__password_hash___old.as_str(),
                     },
