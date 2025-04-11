@@ -1,0 +1,1 @@
+DROP TABLE public.channel_publication1_commentary_delayed_deletion;

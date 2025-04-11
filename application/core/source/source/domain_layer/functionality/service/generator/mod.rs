@@ -1,5 +1,5 @@
 mod channel_publication1_delayed_deletion__can_be_deleted_from;
-mod channel_publication1_commentary__can_be_deleted_from;
+mod channel_publication1_commentary_delayed_deletion__can_be_deleted_from;
 mod channel_publication1_token__expires_at;
 mod channel_subscription_token__expires_at;
 mod channel_token__expires_at;

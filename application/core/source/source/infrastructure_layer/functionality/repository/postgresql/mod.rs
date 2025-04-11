@@ -11,6 +11,7 @@ mod user_device;
 mod user_registration_token;
 mod user_reset_password_token;
 mod channel_publication1_delayed_deletion;
+mod channel_publication1_commentary_delayed_deletion;
 pub use self::{
     channel::{
         By1 as ChannelBy1,
@@ -27,10 +28,10 @@ pub use self::{
         Insert as ChannelPublication1Insert,
     },
     channel_publication1_delayed_deletion::Insert as ChannelPublication1DelayedDeletionInsert,
+    channel_publication1_commentary_delayed_deletion::Insert as ChannelPublication1CommentaryDelayedDeletionInsert,
     channel_publication1_commentary::{
         By as ChannelPublication1CommentaryBy,
         Insert as ChannelPublication1CommentaryInsert,
-        Update as ChannelPublication1CommentaryUpdate,
     },
     channel_publication1_mark::{
         By as ChannelPublication1MarkBy,

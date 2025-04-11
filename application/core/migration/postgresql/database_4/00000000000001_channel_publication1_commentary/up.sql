@@ -4,9 +4,7 @@ CREATE TABLE public.channel_publication1_commentary (
     channel_publication1__id BIGINT,
     text_ TEXT,
     marks_quantity BIGINT,
-    created_at BIGINT,
-    is_predeleted BOOLEAN,
-    can_be_deleted_from BIGINT
+    created_at BIGINT
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.channel_publication1_commentary_1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
@@ -24,6 +22,4 @@ ALTER COLUMN channel_publication1__id SET NOT NULL,
 ALTER COLUMN text_ SET NOT NULL,
 ALTER COLUMN marks_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ALTER COLUMN is_predeleted SET NOT NULL,
-ALTER COLUMN can_be_deleted_from SET NOT NULL,
 ADD CONSTRAINT channel_publication1_commentary_4 UNIQUE USING INDEX channel_publication1_commentary_2;

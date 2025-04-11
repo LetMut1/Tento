@@ -136,6 +136,9 @@ https://www.reddit.com/r/rust/comments/85qp50/how_to_disable_logging_for_certain
 
 
 
+!!!!!!!!!!!!!!!!!11
+ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom - поменять константу после того, как сделаю Токен.
+
 
 обновлять ChnnaelTokenSigned (channel_token__is_channel_subscription_exist) при подписке - отписке
 что делать с другими устройствами? Нужно триггерить их обновить токен. Или же вообще убрать channel_token__is_channel_subscription_exist из токена.
@@ -150,11 +153,3 @@ channel__id: i64, НЕ ДОЛЖен Передаваться вне ChnnaelToken
 
 channel delete route
 взять все каналы овнера.
-
-
-
-
-
-
-
-Убрать is_predeleted и перенести все в новую таблицу. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1

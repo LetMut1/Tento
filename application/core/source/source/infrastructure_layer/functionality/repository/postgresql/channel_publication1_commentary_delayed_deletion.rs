@@ -4,7 +4,7 @@ use {
         Postgresql,
     },
     crate::{
-        domain_layer::data::entity::channel_publication1_delayed_deletion::ChannelPublication1DelayedDeletion,
+        domain_layer::data::entity::channel_publication1_commentary_delayed_deletion::ChannelPublication1CommentaryDelayedDeletion,
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::repository::Repository,
@@ -14,8 +14,8 @@ use {
     std::future::Future,
     tokio_postgres::types::Type,
 };
-impl Repository<Postgresql<ChannelPublication1DelayedDeletion>> {
-    pub fn create<'a>(database_3_client: &'a Client, insert: Insert) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+impl Repository<Postgresql<ChannelPublication1CommentaryDelayedDeletion>> {
+    pub fn create<'a>(database_4_client: &'a Client, insert: Insert) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -34,19 +34,19 @@ impl Repository<Postgresql<ChannelPublication1DelayedDeletion>> {
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
-                    &insert.channel_publication1__id,
+                    &insert.channel_publication1_commentary__id,
                     Type::INT8,
                 )
                 .add(
-                    &insert.channel_publication1_delayed_deletion__can_be_deleted_from,
+                    &insert.channel_publication1_commentary_delayed_deletion__can_be_deleted_from,
                     Type::INT8,
                 )
                 .add(
-                    &insert.channel_publication1_delayed_deletion__created_at,
+                    &insert.channel_publication1_commentary_delayed_deletion__created_at,
                     Type::INT8,
                 );
             let statement = crate::result_return_logic!(
-                database_3_client
+                database_4_client
                 .prepare_typed_cached(
                     query,
                     parameter_storage.get_parameters_types(),
@@ -54,7 +54,7 @@ impl Repository<Postgresql<ChannelPublication1DelayedDeletion>> {
                 .await
             );
             let rows = crate::result_return_runtime!(
-                database_3_client
+                database_4_client
                 .query(
                     &statement,
                     parameter_storage.get_parameters(),
@@ -69,7 +69,7 @@ impl Repository<Postgresql<ChannelPublication1DelayedDeletion>> {
     }
 }
 pub struct Insert {
-    pub channel_publication1__id: i64,
-    pub channel_publication1_delayed_deletion__can_be_deleted_from: i64,
-    pub channel_publication1_delayed_deletion__created_at: i64,
+    pub channel_publication1_commentary__id: i64,
+    pub channel_publication1_commentary_delayed_deletion__can_be_deleted_from: i64,
+    pub channel_publication1_commentary_delayed_deletion__created_at: i64,
 }

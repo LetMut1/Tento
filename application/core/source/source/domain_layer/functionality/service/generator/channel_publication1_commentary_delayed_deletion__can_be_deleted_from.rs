@@ -1,7 +1,7 @@
 use {
     super::Generator,
     crate::{
-        domain_layer::data::entity::channel_publication1_commentary::ChannelPublication1Commentary_CanBeDeletedFrom,
+        domain_layer::data::entity::channel_publication1_commentary_delayed_deletion::ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom,
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::service::resolver::{
@@ -11,10 +11,10 @@ use {
         },
     },
 };
-impl Generator<ChannelPublication1Commentary_CanBeDeletedFrom> {
+impl Generator<ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom> {
     pub fn generate(now: i64) -> Result<i64, AggregateError> {
         return Resolver::<UnixTime>::add_interval_microseconds(
-            ChannelPublication1Commentary_CanBeDeletedFrom::QUANTITY_OF_MICROSECONDS_BEFORE_DELETION,
+            ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom::QUANTITY_OF_MICROSECONDS_BEFORE_DELETION,
             now,
         );
     }
