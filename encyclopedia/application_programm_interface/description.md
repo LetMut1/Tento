@@ -352,7 +352,7 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     Channel__NotFound,
     Channel__IsClose,
-    User__IsChannelOwner,
+    Channel__UserIsOwner,
     ChannelSubscription__AlreadyExist,
     ChannelSubscriptionToken__AlreadyExpired,
     ParallelExecution,

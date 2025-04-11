@@ -881,7 +881,7 @@ typedef struct ChannelSubscription_Create_Precedent {
   bool user_access_token___already_expired;
   bool channel___not_found;
   bool channel___is_close;
-  bool user___is_channel__owner;
+  bool channel___user_is_owner;
   bool channel_subscription___already_exist;
   bool channel_subscription_token___already_expired;
   bool parallel_execution;

@@ -95,7 +95,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
             };
             if incoming.user_access_token_signed.user__id == channel__owner {
-                return Result::Ok(UnifiedReport::precedent(Precedent::User__IsChannelOwner));
+                return Result::Ok(UnifiedReport::precedent(Precedent::Channel__UserIsOwner));
             }
             if Channel_AccessModifier_::Close as i16 == channel__access_modifier {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));

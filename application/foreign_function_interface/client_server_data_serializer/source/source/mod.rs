@@ -3078,7 +3078,7 @@ pub struct ChannelSubscription_Create_Precedent {
     pub user_access_token___already_expired: bool,
     pub channel___not_found: bool,
     pub channel___is_close: bool,
-    pub user___is_channel__owner: bool,
+    pub channel___user_is_owner: bool,
     pub channel_subscription___already_exist: bool,
     pub channel_subscription_token___already_expired: bool,
     pub parallel_execution: bool,
@@ -3102,8 +3102,8 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
                         channel___is_close: true,
                         ..Default::default()
                     },
-                    ChannelSubscription_Create_Precedent_::User__IsChannelOwner => ChannelSubscription_Create_Precedent {
-                        user___is_channel__owner: true,
+                    ChannelSubscription_Create_Precedent_::Channel__UserIsOwner => ChannelSubscription_Create_Precedent {
+                        channel___user_is_owner: true,
                         ..Default::default()
                     },
                     ChannelSubscription_Create_Precedent_::ChannelSubscription__AlreadyExist => ChannelSubscription_Create_Precedent {
@@ -6155,7 +6155,7 @@ mod test {
                     ChannelSubscription_Create_Precedent_::UserAccessToken__AlreadyExpired => {}
                     ChannelSubscription_Create_Precedent_::Channel__NotFound => {}
                     ChannelSubscription_Create_Precedent_::Channel__IsClose => {}
-                    ChannelSubscription_Create_Precedent_::User__IsChannelOwner => {}
+                    ChannelSubscription_Create_Precedent_::Channel__UserIsOwner => {}
                     ChannelSubscription_Create_Precedent_::ChannelSubscription__AlreadyExist => {}
                     ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken__AlreadyExpired => {}
                     ChannelSubscription_Create_Precedent_::ParallelExecution => {}
@@ -6164,7 +6164,7 @@ mod test {
                     ChannelSubscription_Create_Precedent_::UserAccessToken__AlreadyExpired,
                     ChannelSubscription_Create_Precedent_::Channel__NotFound,
                     ChannelSubscription_Create_Precedent_::Channel__IsClose,
-                    ChannelSubscription_Create_Precedent_::User__IsChannelOwner,
+                    ChannelSubscription_Create_Precedent_::Channel__UserIsOwner,
                     ChannelSubscription_Create_Precedent_::ChannelSubscriptionToken__AlreadyExpired,
                     ChannelSubscription_Create_Precedent_::ParallelExecution,
                 ];

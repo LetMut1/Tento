@@ -14,7 +14,7 @@ pub enum CommonPrecedent {
     ChannelSubscriptionToken__AlreadyExpired,
     ChannelToken__AlreadyExpired,
     User__EmailAlreadyExist,
-    User__IsChannelOwner,
+    Channel__UserIsOwner,
     User__IsNotChannelOwner,
     User__NicknameAlreadyExist,
     User__NotFound,

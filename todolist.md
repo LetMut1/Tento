@@ -147,12 +147,13 @@ ChannelDelayedDeletion_CanBeDeletedFrom - поменять константу п
 продлевать ChnnaelTokenSigned отдельным запросом.
 
 
-добавить в токены  is_channel_owner(channel), is_author(commentary) - и подобные значения, которые позволят уменьшить количество запросов
-
-
 channel__id: i64, НЕ ДОЛЖен Передаваться вне ChnnaelTokenSigned.  в какие ТокенСигнед можно положить, чтобы не брать из Бд для проверки существования канала.
 
 
 
 channel delete route
 взять все каналы овнера.
+
+
+
+добавить в токены  is_channel_owner(channel), is_author(commentary) - и подобные значения, которые позволят уменьшить количество запросов
