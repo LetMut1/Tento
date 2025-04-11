@@ -137,7 +137,9 @@ https://www.reddit.com/r/rust/comments/85qp50/how_to_disable_logging_for_certain
 
 
 !!!!!!!!!!!!!!!!!11
+Нужно, чтобы Удалить можно было только после того, как все токены достигнутсрока экспирации.
 ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom - поменять константу после того, как сделаю Токен.
+ChannelDelayedDeletion_CanBeDeletedFrom - поменять константу после того.
 
 
 обновлять ChnnaelTokenSigned (channel_token__is_channel_subscription_exist) при подписке - отписке

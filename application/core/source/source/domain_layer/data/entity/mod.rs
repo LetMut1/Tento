@@ -18,3 +18,4 @@ pub mod user_registration_token;
 pub mod user_reset_password_token;
 pub mod channel_publication1_delayed_deletion;
 pub mod channel_publication1_commentary_delayed_deletion;
+pub mod channel_delayed_deletion;

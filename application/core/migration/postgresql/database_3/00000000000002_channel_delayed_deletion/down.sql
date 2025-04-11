@@ -1,0 +1,1 @@
+DROP TABLE public.channel_delayed_deletion;

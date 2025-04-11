@@ -11,6 +11,7 @@ mod user_device;
 mod user_registration_token;
 mod user_reset_password_token;
 mod channel_publication1_delayed_deletion;
+mod channel_delayed_deletion;
 mod channel_publication1_commentary_delayed_deletion;
 pub use self::{
     channel::{
