@@ -2660,6 +2660,7 @@ pub struct Channel_GetOneById_Precedent {
     pub channel___not_found: bool,
     pub channel___is_close: bool,
     pub channel_token___already_expired: bool,
+    pub channel_token___user_is_not_the_owner: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetOneById_CResult {
@@ -2723,6 +2724,10 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                     },
                     Channel_GetOneById_Precedent_::ChannelToken__AlreadyExpired => Channel_GetOneById_Precedent {
                         channel_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    Channel_GetOneById_Precedent_::ChannelToken__UserIsNotTheOwner => Channel_GetOneById_Precedent {
+                        channel_token___user_is_not_the_owner: true,
                         ..Default::default()
                     }
                 };
@@ -6000,12 +6005,14 @@ mod test {
                     Channel_GetOneById_Precedent_::Channel__NotFound => {}
                     Channel_GetOneById_Precedent_::Channel__IsClose => {}
                     Channel_GetOneById_Precedent_::ChannelToken__AlreadyExpired => {}
+                    Channel_GetOneById_Precedent_::ChannelToken__UserIsNotTheOwner => {}
                 }
                 let precedents: Vec<Channel_GetOneById_Precedent_> = vec![
                     Channel_GetOneById_Precedent_::UserAccessToken__AlreadyExpired,
                     Channel_GetOneById_Precedent_::Channel__NotFound,
                     Channel_GetOneById_Precedent_::Channel__IsClose,
                     Channel_GetOneById_Precedent_::ChannelToken__AlreadyExpired,
+                    Channel_GetOneById_Precedent_::ChannelToken__UserIsNotTheOwner,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_one_by_id(precedent)?;

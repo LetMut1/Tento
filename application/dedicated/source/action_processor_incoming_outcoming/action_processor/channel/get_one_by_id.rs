@@ -46,5 +46,6 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::Channel__NotFound,
         CommonPrecedent::Channel__IsClose,
         CommonPrecedent::ChannelToken__AlreadyExpired,
+        CommonPrecedent::ChannelToken__UserIsNotTheOwner,
     }
 );

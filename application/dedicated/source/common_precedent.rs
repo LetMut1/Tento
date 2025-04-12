@@ -3,6 +3,7 @@ pub enum CommonPrecedent {
     Channel__LinkedNameAlreadyExist,
     Channel__NameAlreadyExist,
     Channel__NotFound,
+    Channel__UserIsOwner,
     ChannelPublication1__IsAlreadyDeleted,
     ChannelPublication1__NotFound,
     ChannelPublication1Commentary__NotFound,
@@ -13,8 +14,9 @@ pub enum CommonPrecedent {
     ChannelSubscription__NotFound,
     ChannelSubscriptionToken__AlreadyExpired,
     ChannelToken__AlreadyExpired,
+    ChannelToken__UserIsNotTheOwner,
+    ParallelExecution,
     User__EmailAlreadyExist,
-    Channel__UserIsOwner,
     User__IsNotChannelOwner,
     User__NicknameAlreadyExist,
     User__NotFound,
@@ -38,7 +40,6 @@ pub enum CommonPrecedent {
     UserResetPasswordToken__NotFound,
     UserResetPasswordToken__TimeToResendHasNotCome,
     UserResetPasswordToken__WrongValue,
-    ParallelExecution,
 }
 macro_rules! enum_from {
     ($visability:vis enum $enum_name:ident { $($enum:ident :: $enum_variant:ident $({ $($enum_variant_field:ident : $enum_variant_field_type:ty),* $(,)? })?),* $(,)? }) => {

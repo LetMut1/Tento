@@ -215,6 +215,7 @@ enum Precedent {
     Channel__NotFound,
     Channel__IsClose,
     ChannelToken__AlreadyExpired,
+    ChannelToken__UserIsNotTheOwner,
 }
 ```
  - ## Channel_GetManyByNameInSubscriptions POST /channel/get_many_by_name_in_subscriptions

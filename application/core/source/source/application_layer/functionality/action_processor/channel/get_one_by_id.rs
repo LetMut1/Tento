@@ -101,7 +101,11 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 Option::Some(values) => values,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
             };
-            if incoming.user_access_token_signed.user__id != channel__owner
+            if incoming.channel_token_signed.channel_token__is_user_the_owner
+                && incoming.user_access_token_signed.user__id != channel__owner {
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__UserIsNotTheOwner));
+            }
+            if !incoming.channel_token_signed.channel_token__is_user_the_owner
                 && channel__access_modifier == Channel_AccessModifier_::Close as i16
                 && !incoming.channel_token_signed.channel_token__is_user_subscribed {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));
