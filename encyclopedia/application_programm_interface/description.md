@@ -67,15 +67,6 @@ struct ChannelTokenSigned {
     signature: Vec<u8>,
 }
 ```
-- `channel_subscription_token_signed`:
-```
-struct ChannelSubscriptionTokenSigned {
-    channel__id: i64,
-    channel_subscription_token__obfuscation_value: i64,
-    channel_subscription_token__expires_at: i64,
-    signature: Vec<u8>,
-}
-```
 - `channel_publication1_token_signed`:
 ```
 struct ChannelPublication1TokenSigned {
@@ -206,7 +197,6 @@ struct Outcoming {
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
     channel__subscribers_quantity: i64,
-    channel_subscription_token_signed: <Data standards>,
 }
 ```
 ```
@@ -345,19 +335,16 @@ Subscribes user to channel.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>,
-    channel__id: i64,
-    channel_subscription_token_signed: <Data standards>,
+    channel_token_signed: <Data standards>,
 }
 ```
 ```
 enum Precedent {
     UserAccessToken__AlreadyExpired,
-    Channel__NotFound,
-    Channel__IsClose,
+    ChannelToken__AlreadyExpired,
     Channel__UserIsOwner,
     ChannelSubscription__AlreadyExist,
-    ChannelSubscriptionToken__AlreadyExpired,
-    ParallelExecution,
+    Channel__NotFound,
 }
 ```
  - ## ChannelSubscription_Delete POST /channel_subscription/delete
@@ -367,14 +354,14 @@ Unsubscribes user from channel.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>,
-    channel__id: i64,
-    channel_subscription_token_signed: <Data standards>,
+    channel_token_signed: <Data standards>,
 }
 ```
 ```
 enum Precedent {
     UserAccessToken__AlreadyExpired,
-    ChannelSubscriptionToken__AlreadyExpired,
+    ChannelToken__AlreadyExpired,
+    Channel__UserIsOwner,
     ChannelSubscription__NotFound,
     Channel__NotFound,
 }

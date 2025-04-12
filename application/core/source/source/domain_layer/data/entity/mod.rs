@@ -7,7 +7,6 @@ pub mod channel_publication1_mark;
 pub mod channel_publication1_token;
 pub mod channel_publication1_view;
 pub mod channel_subscription;
-pub mod channel_subscription_token;
 pub mod channel_token;
 pub mod user;
 pub mod user_access_refresh_token;

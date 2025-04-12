@@ -1,5 +1,4 @@
 use crate::{
-    channel_subscription_token_signed::ChannelSubscriptionTokenSigned,
     channel_token_signed::ChannelTokenSigned,
     common_precedent::CommonPrecedent,
     user_access_token_signed::UserAccessTokenSigned,
@@ -38,7 +37,6 @@ pub struct Outcoming {
     pub channel__cover_image_path: Option<String>,
     pub channel__background_image_path: Option<String>,
     pub channel__subscribers_quantity: i64,
-    pub channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {

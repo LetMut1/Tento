@@ -11,18 +11,10 @@ use {
                     Channel,
                     Channel_AccessModifier_,
                 },
-                channel_subscription_token::{
-                    ChannelSubscriptionToken,
-                    ChannelSubscriptionToken_ExpiresAt,
-                    ChannelSubscriptionToken_ObfuscationValue,
-                },
                 channel_token::ChannelToken,
                 user_access_token::UserAccessToken,
             },
-            functionality::service::{
-                encoder::Encoder,
-                generator::Generator,
-            },
+            functionality::service::encoder::Encoder,
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
@@ -120,13 +112,6 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 channel__cover_image_path,
                 channel__background_image_path,
                 channel__subscribers_quantity,
-                channel_subscription_token_signed: Encoder::<ChannelSubscriptionToken>::encode(
-                    &inner.environment_configuration.subject.encryption.private_key,
-                    incoming.user_access_token_signed.user__id,
-                    incoming.channel_token_signed.channel__id,
-                    Generator::<ChannelSubscriptionToken_ObfuscationValue>::generate(),
-                    Generator::<ChannelSubscriptionToken_ExpiresAt>::generate(now)?,
-                )?,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

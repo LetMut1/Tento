@@ -7,25 +7,14 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::{
-                    Channel,
-                    Channel_AccessModifier_,
-                    Channel_Id,
-                },
-                channel_subscription::ChannelSubscription,
-                channel_subscription_token::ChannelSubscriptionToken,
-                user_access_token::UserAccessToken,
+                channel::Channel, channel_subscription::ChannelSubscription, channel_token::ChannelToken, user_access_token::UserAccessToken
             },
-            functionality::service::{
-                encoder::Encoder,
-                validator::Validator,
-            },
+            functionality::service::encoder::Encoder,
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
                         ChannelBy1,
                         ChannelSubscriptionInsert,
@@ -33,7 +22,7 @@ use {
                         Postgresql,
                         Resolver as Resolver_,
                         Transaction,
-                    },
+                    }, Repository
                 },
                 service::resolver::{
                     Resolver,
@@ -69,37 +58,23 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
-            if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
-                return Result::Err(crate::new_invalid_argument!());
-            }
-            if !Encoder::<ChannelSubscriptionToken>::is_valid(
+            if !Encoder::<ChannelToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 incoming.user_access_token_signed.user__id,
-                &incoming.channel_subscription_token_signed,
+                &incoming.channel_token_signed,
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if incoming.channel_subscription_token_signed.channel_subscription_token__expires_at < now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscriptionToken__AlreadyExpired));
+            if incoming.channel_token_signed.channel_token__expires_at <= now {
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__AlreadyExpired));
             }
-            let mut postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
-            let (channel__owner, channel__access_modifier) = match Repository::<Postgresql<Channel>>::find_2(
-                &postgresql_client_database_3,
-                ChannelBy1 {
-                    channel__id: incoming.channel__id,
-                },
-            )
-            .await?
-            {
-                Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
-            };
-            if incoming.user_access_token_signed.user__id == channel__owner {
+            if incoming.channel_token_signed.channel_token__is_user_the_owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__UserIsOwner));
             }
-            if Channel_AccessModifier_::Close as i16 == channel__access_modifier {
-                return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));
+            if incoming.channel_token_signed.channel_token__is_user_subscribed {
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscription__AlreadyExist));
             }
+            let mut postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_client_database_3,
                 IsolationLevel::ReadCommitted,
@@ -109,7 +84,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 transaction.get_client(),
                 ChannelSubscriptionInsert {
                     user__id: incoming.user_access_token_signed.user__id,
-                    channel__id: incoming.channel__id,
+                    channel__id: incoming.channel_token_signed.channel__id,
                     channel_subscription__created_at: now,
                 },
             )
@@ -128,7 +103,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             let is_updated = match Repository::<Postgresql<Channel>>::update_1(
                 transaction.get_client(),
                 ChannelBy1 {
-                    channel__id: incoming.channel__id,
+                    channel__id: incoming.channel_token_signed.channel__id,
                 },
             )
             .await
@@ -141,7 +116,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             };
             if !is_updated {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
+                return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound));
             }
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
             return Result::Ok(UnifiedReport::target_empty());

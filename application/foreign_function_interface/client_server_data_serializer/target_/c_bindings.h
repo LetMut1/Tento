@@ -728,13 +728,6 @@ typedef struct CVector_c_short {
   size_t length;
 } CVector_c_short;
 
-typedef struct ChannelSubscriptionTokenSigned {
-  long channel__id;
-  long channel_subscription_token__obfuscation_value;
-  long channel_subscription_token__expires_at;
-  struct CVector_c_uchar signature;
-} ChannelSubscriptionTokenSigned;
-
 typedef struct Channel_GetOneById_Outcoming {
   struct CString channel__name;
   struct CString channel__linked_name;
@@ -745,7 +738,6 @@ typedef struct Channel_GetOneById_Outcoming {
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
   long channel__subscribers_quantity;
-  struct ChannelSubscriptionTokenSigned channel_subscription_token_signed;
 } Channel_GetOneById_Outcoming;
 
 typedef struct CData_Channel_GetOneById_Outcoming {
@@ -875,18 +867,15 @@ typedef struct CResult_CUnifiedReport_Channel_Create_Outcoming__Channel_Create_P
 
 typedef struct ChannelSubscription_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  long channel__id;
-  struct ChannelSubscriptionTokenSigned channel_subscription_token_signed;
+  struct ChannelTokenSigned channel_token_signed;
 } ChannelSubscription_Create_Incoming;
 
 typedef struct ChannelSubscription_Create_Precedent {
   bool user_access_token___already_expired;
+  bool channel_token___already_expired;
   bool channel___not_found;
-  bool channel___is_close;
   bool channel___user_is_owner;
   bool channel_subscription___already_exist;
-  bool channel_subscription_token___already_expired;
-  bool parallel_execution;
 } ChannelSubscription_Create_Precedent;
 
 typedef struct CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent {
@@ -904,13 +893,13 @@ typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Create_Preceden
 
 typedef struct ChannelSubscription_Delete_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  long channel__id;
-  struct ChannelSubscriptionTokenSigned channel_subscription_token_signed;
+  struct ChannelTokenSigned channel_token_signed;
 } ChannelSubscription_Delete_Incoming;
 
 typedef struct ChannelSubscription_Delete_Precedent {
   bool user_access_token___already_expired;
-  bool channel_subscription_token___already_expired;
+  bool channel_token___already_expired;
+  bool channel___user_is_owner;
   bool channel_subscription___not_found;
   bool channel___not_found;
 } ChannelSubscription_Delete_Precedent;

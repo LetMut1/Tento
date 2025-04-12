@@ -10,7 +10,6 @@ use {
                 channel::{
                     Channel,
                     Channel_AccessModifier_,
-                    Channel_Id,
                 }, channel_publication1::ChannelPublication1, channel_publication1_token::{
                     ChannelPublication1Token,
                     ChannelPublication1Token_ExpiresAt,
@@ -20,7 +19,6 @@ use {
             functionality::service::{
                 encoder::Encoder,
                 generator::Generator,
-                validator::Validator,
             },
         },
         infrastructure_layer::{

@@ -1,5 +1,5 @@
 use crate::{
-    channel_subscription_token_signed::ChannelSubscriptionTokenSigned,
+    channel_token_signed::ChannelTokenSigned,
     common_precedent::CommonPrecedent,
     user_access_token_signed::UserAccessTokenSigned,
 };
@@ -17,13 +17,13 @@ pub struct Incoming<'a> {
         serde(borrow)
     )]
     pub user_access_token_signed: UserAccessTokenSigned<'a>,
-    pub channel__id: i64,
-    pub channel_subscription_token_signed: ChannelSubscriptionTokenSigned,
+    pub channel_token_signed: ChannelTokenSigned,
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserAccessToken__AlreadyExpired,
-        CommonPrecedent::ChannelSubscriptionToken__AlreadyExpired,
+        CommonPrecedent::ChannelToken__AlreadyExpired,
+        CommonPrecedent::Channel__UserIsOwner,
         CommonPrecedent::ChannelSubscription__NotFound,
         CommonPrecedent::Channel__NotFound,
     }
