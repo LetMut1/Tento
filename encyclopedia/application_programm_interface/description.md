@@ -56,6 +56,17 @@ struct UserAccessRefreshTokenSigned {
     signature: Vec<u8>,
 }
 ```
+- `channel_token_signed`:
+```
+struct ChannelTokenSigned {
+    channel__id: i64,
+    channel_token__obfuscation_value
+    channel_token__expires_at: i64,
+    channel_token__is_user_subscribed: bool,
+    channel_token__is_user_the_owner: bool,
+    signature: Vec<u8>,
+}
+```
 - `channel_subscription_token_signed`:
 ```
 struct ChannelSubscriptionTokenSigned {
@@ -72,16 +83,6 @@ struct ChannelPublication1TokenSigned {
     channel_publication1__id: i64,
     channel_publication1_token__obfuscation_value: i64,
     channel_publication1_token__expires_at: i64,
-    signature: Vec<u8>,
-}
-```
-- `channel_token_signed`:
-```
-struct ChannelTokenSigned {
-    channel__id: i64,
-    channel_token__obfuscation_value
-    channel_token__expires_at: i64,
-    channel_token__is_user_subscribed: bool,
     signature: Vec<u8>,
 }
 ```

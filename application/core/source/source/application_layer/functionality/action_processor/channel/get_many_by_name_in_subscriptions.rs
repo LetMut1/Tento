@@ -107,6 +107,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
                         Generator::<ChannelToken_ObfuscationValue>::generate(),
                         Generator::<ChannelToken_ExpiresAt>::generate(now)?,
                         true,
+                        false,
                     )?,
                 };
                 data_registry.push(data);

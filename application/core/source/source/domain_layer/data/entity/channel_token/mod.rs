@@ -4,6 +4,7 @@ use {
         ExpiresAt,
         ObfuscationValue,
         IsUserSubscribed,
+        IsUserTheOwner,
     },
     super::{
         channel::Channel_Id,
@@ -18,6 +19,7 @@ pub struct ChannelToken {
     obfuscation_value: ObfuscationValue,
     expires_at: ExpiresAt,
     is_user_subscribed: IsUserSubscribed,
+    is_user_the_owner: IsUserTheOwner,
 }
 pub type ChannelToken_ObfuscationValue = ObfuscationValue;
 pub type ChannelToken_ExpiresAt = ExpiresAt;

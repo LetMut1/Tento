@@ -139,7 +139,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_2<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -177,7 +177,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_3<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_2<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -215,7 +215,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_4<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_3<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -253,7 +253,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_5<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_4<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -291,7 +291,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
             return Result::Ok(true);
         };
     }
-    pub fn update_6<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_5<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\
                 UPDATE ONLY \

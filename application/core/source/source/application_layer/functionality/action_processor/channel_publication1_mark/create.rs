@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Create> {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Mark__AlreadyExist));
             }
-            let is_updated = match Repository::<Postgresql<ChannelPublication1>>::update_2(
+            let is_updated = match Repository::<Postgresql<ChannelPublication1>>::update_1(
                 transaction.get_client(),
                 ChannelPublication1By1 {
                     channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,

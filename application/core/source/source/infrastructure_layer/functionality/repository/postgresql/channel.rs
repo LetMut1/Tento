@@ -356,6 +356,7 @@ impl Repository<Postgresql<Channel>> {
             let mut query = "\
                 SELECT \
                     c.id AS i,\
+                    c.owner AS o, \
                     c.name AS n,\
                     c.linked_name AS ln,\
                     c.access_modifier AS am,\

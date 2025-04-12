@@ -515,6 +515,7 @@ pub struct ChannelTokenSigned {
     pub channel_token__obfuscation_value: c_long,
     pub channel_token__expires_at: c_long,
     pub channel_token__is_user_subscribed: bool,
+    pub channel_token__is_user_the_owner: bool,
     pub signature: CVector<c_uchar>,
 }
 #[repr(C)]
@@ -2242,6 +2243,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                                         channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
                                         channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
                                         channel_token__is_user_subscribed: data__.channel_token_signed.channel_token__is_user_subscribed,
+                                        channel_token__is_user_the_owner: data__.channel_token_signed.channel_token__is_user_the_owner,
                                         signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
                                     },
                                 },
@@ -2394,6 +2396,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                                         channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
                                         channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
                                         channel_token__is_user_subscribed: data__.channel_token_signed.channel_token__is_user_subscribed,
+                                        channel_token__is_user_the_owner: data__.channel_token_signed.channel_token__is_user_the_owner,
                                         signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
                                     },
                                 }
@@ -2544,6 +2547,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                                         channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
                                         channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
                                         channel_token__is_user_subscribed: data__.channel_token_signed.channel_token__is_user_subscribed,
+                                        channel_token__is_user_the_owner: data__.channel_token_signed.channel_token__is_user_the_owner,
                                         signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
                                     },
                                 }
@@ -2618,6 +2622,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__serialize_allocate(incoming: Ch
                     channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
                     channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
                     channel_token__is_user_subscribed: incoming_.channel_token_signed.channel_token__is_user_subscribed,
+                    channel_token__is_user_the_owner: incoming_.channel_token_signed.channel_token__is_user_the_owner,
                     signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
                 },
             },
@@ -2988,6 +2993,7 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
                                 channel_token__obfuscation_value: data_.channel_token_signed.channel_token__obfuscation_value,
                                 channel_token__expires_at: data_.channel_token_signed.channel_token__expires_at,
                                 channel_token__is_user_subscribed: data_.channel_token_signed.channel_token__is_user_subscribed,
+                                channel_token__is_user_the_owner: data_.channel_token_signed.channel_token__is_user_the_owner,
                                 signature: Allocator::<CVector<_>>::allocate(data_.channel_token_signed.signature),
                             },
                         };
@@ -4686,6 +4692,7 @@ mod test {
                         channel_token__obfuscation_value: 0,
                         channel_token__expires_at: 0,
                         channel_token__is_user_subscribed: false,
+                        channel_token__is_user_the_owner: false,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                 };
@@ -5793,6 +5800,7 @@ mod test {
                             channel_token__obfuscation_value: 0,
                             channel_token__expires_at: 0,
                             channel_token__is_user_subscribed: false,
+                            channel_token__is_user_the_owner: false,
                             signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         },
                     };
@@ -5851,6 +5859,7 @@ mod test {
                             channel_token__obfuscation_value: 0,
                             channel_token__expires_at: 0,
                             channel_token__is_user_subscribed: false,
+                            channel_token__is_user_the_owner: false,
                             signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         },
                     };
@@ -5908,6 +5917,7 @@ mod test {
                             channel_token__obfuscation_value: 0,
                             channel_token__expires_at: 0,
                             channel_token__is_user_subscribed: false,
+                            channel_token__is_user_the_owner: false,
                             signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         },
                     };
@@ -6095,6 +6105,7 @@ mod test {
                         channel_token__obfuscation_value: 0,
                         channel_token__expires_at: 0,
                         channel_token__is_user_subscribed: false,
+                        channel_token__is_user_the_owner: false,
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                 };
