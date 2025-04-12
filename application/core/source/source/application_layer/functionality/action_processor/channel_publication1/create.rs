@@ -7,21 +7,15 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::{
-                    Channel,
-                    Channel_Id,
-                },
                 channel_publication1::{
                     ChannelPublication1,
                     ChannelPublication1_ImagesPathes,
                     ChannelPublication1_Text,
-                },
-                channel_publication1_token::{
+                }, channel_publication1_token::{
                     ChannelPublication1Token,
                     ChannelPublication1Token_ExpiresAt,
                     ChannelPublication1Token_ObfuscationValue,
-                },
-                user_access_token::UserAccessToken,
+                }, channel_token::ChannelToken, user_access_token::UserAccessToken
             },
             functionality::service::{
                 encoder::Encoder,
@@ -33,12 +27,10 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
-                        ChannelBy1,
                         ChannelPublication1Insert,
                         Postgresql,
-                    },
+                    }, Repository
                 },
                 service::resolver::{
                     Resolver,
@@ -64,18 +56,25 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
             if !Encoder::<UserAccessToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_signed,
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let now = Resolver::<UnixTime>::get_now_in_microseconds();
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
-            if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
+            if !Encoder::<ChannelToken>::is_valid(
+                &inner.environment_configuration.subject.encryption.private_key,
+                incoming.user_access_token_signed.user__id,
+                &incoming.channel_token_signed,
+            )? {
                 return Result::Err(crate::new_invalid_argument!());
+            }
+            if incoming.channel_token_signed.channel_token__expires_at <= now {
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__AlreadyExpired));
             }
             if !Validator::<ChannelPublication1_Text>::is_valid(incoming.channel_publication1__text) {
                 return Result::Err(crate::new_invalid_argument!());
@@ -83,25 +82,13 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
             if !Validator::<ChannelPublication1_ImagesPathes>::is_valid(incoming.channel_publication1__images_pathes.as_slice()) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
-            let channel__owner = match Repository::<Postgresql<Channel>>::find_7(
-                &postgresql_client_database_3,
-                ChannelBy1 {
-                    channel__id: incoming.channel__id,
-                },
-            )
-            .await?
-            {
-                Option::Some(channel__owner_) => channel__owner_,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
-            };
-            if incoming.user_access_token_signed.user__id != channel__owner {
+            if !incoming.channel_token_signed.channel_token__is_user_the_owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
             let channel_publication1__id = match Repository::<Postgresql<ChannelPublication1>>::create(
-                &postgresql_client_database_3,
+                &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),
                 ChannelPublication1Insert {
-                    channel__id: incoming.channel__id,
+                    channel__id: incoming.channel_token_signed.channel__id,
                     channel_publication1__images_pathes: incoming.channel_publication1__images_pathes.as_slice(),
                     channel_publication1__text: incoming.channel_publication1__text,
                     channel_publication1__commentaries_quantity: 0,
@@ -123,7 +110,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                         channel_publication1_token_signed: Encoder::<ChannelPublication1Token>::encode(
                             &inner.environment_configuration.subject.encryption.private_key,
                             incoming.user_access_token_signed.user__id,
-                            incoming.channel__id,
+                            incoming.channel_token_signed.channel__id,
                             channel_publication1__id,
                             Generator::<ChannelPublication1Token_ObfuscationValue>::generate(),
                             Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?,

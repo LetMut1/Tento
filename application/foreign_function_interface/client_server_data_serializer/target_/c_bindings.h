@@ -758,7 +758,7 @@ typedef struct Channel_GetOneById_Precedent {
   bool channel___not_found;
   bool channel___is_close;
   bool channel_token___already_expired;
-  bool channel_token___user_is_not_the_owner;
+  bool channel_token___user_is_not_owner;
 } Channel_GetOneById_Precedent;
 
 typedef struct CUnifiedReport_Channel_GetOneById_Outcoming__Channel_GetOneById_Precedent {
@@ -930,7 +930,7 @@ typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Delete_Preceden
 
 typedef struct ChannelPublication1_GetMany_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  long channel__id;
+  struct ChannelTokenSigned channel_token_signed;
   long channel_publication1__created_at;
   short limit;
 } ChannelPublication1_GetMany_Incoming;
@@ -975,6 +975,8 @@ typedef struct CData_ChannelPublication1_GetMany_Outcoming {
 
 typedef struct ChannelPublication1_GetMany_Precedent {
   bool user_access_token___already_expired;
+  bool channel_token___already_expired;
+  bool channel_token___user_is_not_owner;
   bool channel___not_found;
   bool channel___is_close;
 } ChannelPublication1_GetMany_Precedent;
@@ -994,7 +996,7 @@ typedef struct CResult_CUnifiedReport_ChannelPublication1_GetMany_Outcoming__Cha
 
 typedef struct ChannelPublication1_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  long channel__id;
+  struct ChannelTokenSigned channel_token_signed;
   struct CVector_CString channel_publication1__images_pathes;
   struct COption_CString channel_publication1__text;
 } ChannelPublication1_Create_Incoming;
@@ -1011,7 +1013,7 @@ typedef struct CData_ChannelPublication1_Create_Outcoming {
 
 typedef struct ChannelPublication1_Create_Precedent {
   bool user_access_token___already_expired;
-  bool channel___not_found;
+  bool channel_token___already_expired;
   bool user___is_not_channel_owner;
   bool parallel_execution;
 } ChannelPublication1_Create_Precedent;
@@ -1031,13 +1033,14 @@ typedef struct CResult_CUnifiedReport_ChannelPublication1_Create_Outcoming__Chan
 
 typedef struct ChannelPublication1_Delete_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
+  struct ChannelTokenSigned channel_token_signed;
   struct ChannelPublication1TokenSigned channel_publication1_token_signed;
 } ChannelPublication1_Delete_Incoming;
 
 typedef struct ChannelPublication1_Delete_Precedent {
   bool user_access_token___already_expired;
+  bool channel_token___already_expired;
   bool channel_publication1_token___already_expired;
-  bool channel___not_found;
   bool user___is_not_channel_owner;
   bool channel_publication1___not_found;
   bool parallel_execution;

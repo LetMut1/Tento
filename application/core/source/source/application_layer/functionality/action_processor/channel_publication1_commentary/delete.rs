@@ -57,13 +57,13 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1Commentary_Delete> 
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
             if !Encoder::<UserAccessToken>::is_valid(
                 &inner.environment_configuration.subject.encryption.private_key,
                 &incoming.user_access_token_signed,
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let now = Resolver::<UnixTime>::get_now_in_microseconds();
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }

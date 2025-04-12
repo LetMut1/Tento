@@ -182,7 +182,7 @@ enum Precedent {
 ```
 ```
 struct Outcoming {
-    channel_token_signed: <Data standards>
+    channel_token_signed: <Data standards>,
 }
 ```
  - ## Channel_GetOneById POST /channel/get_one_by_id
@@ -191,8 +191,8 @@ Returns channel data by id.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
-    channel_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
+    channel_token_signed: <Data standards>,
 }
 ```
 ```
@@ -215,7 +215,7 @@ enum Precedent {
     Channel__NotFound,
     Channel__IsClose,
     ChannelToken__AlreadyExpired,
-    ChannelToken__UserIsNotTheOwner,
+    ChannelToken__UserIsNotOwner,
 }
 ```
  - ## Channel_GetManyByNameInSubscriptions POST /channel/get_many_by_name_in_subscriptions
@@ -224,7 +224,7 @@ Returns channels the user is subscribed to by name.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
     channel__name: String,
     requery___channel__name: Option<String>,
     limit: i16
@@ -251,7 +251,7 @@ struct Data {
     channel__visability_modifier: i16,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
-    channel_token_signed: <Data standards>
+    channel_token_signed: <Data standards>,
 }
 ```
 ```
@@ -265,7 +265,7 @@ Returns channels the user is subscribed to.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
     requery___channel__id: Option<i64>,
     limit: i16
 }
@@ -290,7 +290,7 @@ struct Data {
     channel__access_modifier: i16,
     channel__visability_modifier: i16,
     channel__cover_image_path: Option<String>,
-    channel_token_signed: <Data standards>
+    channel_token_signed: <Data standards>,
 }
 ```
 ```
@@ -304,7 +304,7 @@ Returns public channels by name.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
     channel__name: String,
     requery___channel__name: Option<String>,
     limit: i16
@@ -344,7 +344,7 @@ Subscribes user to channel.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
     channel__id: i64,
     channel_subscription_token_signed: <Data standards>,
 }
@@ -366,7 +366,7 @@ Unsubscribes user from channel.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
     channel__id: i64,
     channel_subscription_token_signed: <Data standards>,
 }
@@ -385,8 +385,8 @@ Creates channel publications of type 1.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
-    channel__id: i64,
+    user_access_token_signed: <Data standards>,
+    channel_token_signed: <Data standards>,
     channel_publication1__images_pathes: Vec<String>,
     channel_publication1__text: Option<String>,
 }
@@ -400,7 +400,7 @@ struct Outcoming {
 ```
 enum Precedent {
     UserAccessToken__AlreadyExpired,
-    Channel__NotFound,
+    ChannelToken__AlreadyExpired,
     User__IsNotChannelOwner,
     ParallelExecution,
 }
@@ -411,7 +411,8 @@ Deletes channel publications of type 1.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
+    channel_token_signed: <Data standards>,
     channel_publication1_token_signed: <Data standards>,
 }
 ```
@@ -430,8 +431,8 @@ Returns channel publications of type 1.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
-    channel__id: i64,
+    user_access_token_signed: <Data standards>,
+    channel_token_signed: <Data standards>,
     channel_publication1__created_at: i64,
     limit: i16,
 }
@@ -462,6 +463,8 @@ struct Data {
 ```
 enum Precedent {
     UserAccessToken__AlreadyExpired,
+    ChannelToken__AlreadyExpired,
+    ChannelToken__UserIsNotOwner,
     Channel__NotFound,
     Channel__IsClose,
 }
@@ -472,7 +475,7 @@ Creates a mark for channel publication1.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
     channel_publication1_token_signed: <Data standards>,
 }
 ```
@@ -490,7 +493,7 @@ Deletes a mark from channel publication1.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
     channel_publication1_token_signed: <Data standards>,
 }
 ```
@@ -508,7 +511,7 @@ Creates a view for channel publication1.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
     channel_publication1_token_signed: <Data standards>,
 }
 ```
@@ -524,7 +527,7 @@ Creates a commentary for channel publication1.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
     channel_publication1_commentary__text: String,
     channel_publication1_token_signed: <Data standards>,
 }
@@ -548,7 +551,7 @@ Deletes a commentary for channel publication1.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
     channel_publication1_commentary__id: i64,
     channel_publication1_token_signed: <Data standards>,
 }
@@ -660,8 +663,8 @@ struct Incoming {
 ```
 ```
 struct Outcoming {
-    user_access_token_signed: <Data standards>
-    user_access_refresh_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
+    user_access_refresh_token_signed: <Data standards>,
 }
 ```
 ```
@@ -744,8 +747,8 @@ struct Incoming {
 ```
 ```
 struct Outcoming {
-    user_access_token_signed: <Data standards>
-    user_access_refresh_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
+    user_access_refresh_token_signed: <Data standards>,
 }
 ```
 ```
@@ -883,14 +886,14 @@ Refreshs user access token.
 ```
 ```
 struct Incoming {
-    user_access_token_signed: <Data standards>
-    user_access_refresh_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
+    user_access_refresh_token_signed: <Data standards>,
 }
 ```
 ```
 struct Outcoming {
-    user_access_token_signed: <Data standards>
-    user_access_refresh_token_signed: <Data standards>
+    user_access_token_signed: <Data standards>,
+    user_access_refresh_token_signed: <Data standards>,
 }
 ```
 ```
