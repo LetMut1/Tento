@@ -29,7 +29,7 @@ impl Encoder<ChannelToken> {
         channel__id: i64,
         channel_token__obfuscation_value: i64,
         channel_token__expires_at: i64,
-        channel_token__is_channel_subscription_exist: bool,
+        channel_token__is_user_subscribed: bool,
     ) -> Result<ChannelTokenSigned, AggregateError> {
         let serialized = Serializer::<BitCode>::serialize(
             &Data {
@@ -37,7 +37,7 @@ impl Encoder<ChannelToken> {
                 channel__id,
                 channel_token__obfuscation_value,
                 channel_token__expires_at,
-                channel_token__is_channel_subscription_exist,
+                channel_token__is_user_subscribed,
             },
         )?;
         let signature = Encoder_::<HmacSha2_256>::encode(
@@ -49,7 +49,7 @@ impl Encoder<ChannelToken> {
                 channel__id,
                 channel_token__obfuscation_value,
                 channel_token__expires_at,
-                channel_token__is_channel_subscription_exist,
+                channel_token__is_user_subscribed,
                 signature,
             },
         );
@@ -67,7 +67,7 @@ impl Encoder<ChannelToken> {
                     channel__id: channel_token_signed.channel__id,
                     channel_token__obfuscation_value: channel_token_signed.channel_token__obfuscation_value,
                     channel_token__expires_at: channel_token_signed.channel_token__expires_at,
-                    channel_token__is_channel_subscription_exist: channel_token_signed.channel_token__is_channel_subscription_exist,
+                    channel_token__is_user_subscribed: channel_token_signed.channel_token__is_user_subscribed,
                 },
             )?
             .as_slice(),
@@ -85,5 +85,5 @@ struct Data {
     channel__id: i64,
     channel_token__obfuscation_value: i64,
     channel_token__expires_at: i64,
-    channel_token__is_channel_subscription_exist: bool,
+    channel_token__is_user_subscribed: bool,
 }

@@ -103,7 +103,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             };
             if incoming.user_access_token_signed.user__id != channel__owner
                 && channel__access_modifier == Channel_AccessModifier_::Close as i16
-                && !incoming.channel_token_signed.channel_token__is_channel_subscription_exist {
+                && !incoming.channel_token_signed.channel_token__is_user_subscribed {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));
             }
             let outcoming = Outcoming {

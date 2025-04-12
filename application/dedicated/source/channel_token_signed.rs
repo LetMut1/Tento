@@ -10,7 +10,7 @@ pub struct ChannelTokenSigned {
     pub channel__id: i64,
     pub channel_token__obfuscation_value: i64,
     pub channel_token__expires_at: i64,
-    pub channel_token__is_channel_subscription_exist: bool,
+    pub channel_token__is_user_subscribed: bool,
     // The bitcode(=0.6.3)::Decode not implemented for &'a [u8].
     pub signature: Vec<u8>,
 }

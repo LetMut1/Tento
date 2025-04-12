@@ -141,8 +141,8 @@ ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom - поменять
 ChannelDelayedDeletion_CanBeDeletedFrom - поменять константу после того.
 
 
-обновлять ChnnaelTokenSigned (channel_token__is_channel_subscription_exist) при подписке - отписке
-что делать с другими устройствами? Нужно триггерить их обновить токен. Или же вообще убрать channel_token__is_channel_subscription_exist из токена.
+обновлять ChnnaelTokenSigned (channel_token__is_user_subscribed) при подписке - отписке
+что делать с другими устройствами? Нужно триггерить их обновить токен. Или же вообще убрать channel_token__is_user_subscribed из токена.
 
 продлевать ChnnaelTokenSigned отдельным запросом.
 

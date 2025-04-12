@@ -573,7 +573,7 @@ typedef struct ChannelTokenSigned {
   long channel__id;
   long channel_token__obfuscation_value;
   long channel_token__expires_at;
-  bool channel_token__is_channel_subscription_exist;
+  bool channel_token__is_user_subscribed;
   struct CVector_c_uchar signature;
 } ChannelTokenSigned;
 

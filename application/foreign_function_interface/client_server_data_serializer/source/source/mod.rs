@@ -514,7 +514,7 @@ pub struct ChannelTokenSigned {
     pub channel__id: c_long,
     pub channel_token__obfuscation_value: c_long,
     pub channel_token__expires_at: c_long,
-    pub channel_token__is_channel_subscription_exist: bool,
+    pub channel_token__is_user_subscribed: bool,
     pub signature: CVector<c_uchar>,
 }
 #[repr(C)]
@@ -2241,7 +2241,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                                         channel__id: data__.channel_token_signed.channel__id,
                                         channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
                                         channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
-                                        channel_token__is_channel_subscription_exist: data__.channel_token_signed.channel_token__is_channel_subscription_exist,
+                                        channel_token__is_user_subscribed: data__.channel_token_signed.channel_token__is_user_subscribed,
                                         signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
                                     },
                                 },
@@ -2393,7 +2393,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                                         channel__id: data__.channel_token_signed.channel__id,
                                         channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
                                         channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
-                                        channel_token__is_channel_subscription_exist: data__.channel_token_signed.channel_token__is_channel_subscription_exist,
+                                        channel_token__is_user_subscribed: data__.channel_token_signed.channel_token__is_user_subscribed,
                                         signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
                                     },
                                 }
@@ -2543,7 +2543,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                                         channel__id: data__.channel_token_signed.channel__id,
                                         channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
                                         channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
-                                        channel_token__is_channel_subscription_exist: data__.channel_token_signed.channel_token__is_channel_subscription_exist,
+                                        channel_token__is_user_subscribed: data__.channel_token_signed.channel_token__is_user_subscribed,
                                         signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
                                     },
                                 }
@@ -2617,7 +2617,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__serialize_allocate(incoming: Ch
                     channel__id: incoming_.channel_token_signed.channel__id,
                     channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
                     channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
-                    channel_token__is_channel_subscription_exist: incoming_.channel_token_signed.channel_token__is_channel_subscription_exist,
+                    channel_token__is_user_subscribed: incoming_.channel_token_signed.channel_token__is_user_subscribed,
                     signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
                 },
             },
@@ -2987,7 +2987,7 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
                                 channel__id: data_.channel_token_signed.channel__id,
                                 channel_token__obfuscation_value: data_.channel_token_signed.channel_token__obfuscation_value,
                                 channel_token__expires_at: data_.channel_token_signed.channel_token__expires_at,
-                                channel_token__is_channel_subscription_exist: data_.channel_token_signed.channel_token__is_channel_subscription_exist,
+                                channel_token__is_user_subscribed: data_.channel_token_signed.channel_token__is_user_subscribed,
                                 signature: Allocator::<CVector<_>>::allocate(data_.channel_token_signed.signature),
                             },
                         };
@@ -4685,7 +4685,7 @@ mod test {
                         channel__id: 0,
                         channel_token__obfuscation_value: 0,
                         channel_token__expires_at: 0,
-                        channel_token__is_channel_subscription_exist: false,
+                        channel_token__is_user_subscribed: false,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                 };
@@ -5792,7 +5792,7 @@ mod test {
                             channel__id: 0,
                             channel_token__obfuscation_value: 0,
                             channel_token__expires_at: 0,
-                            channel_token__is_channel_subscription_exist: false,
+                            channel_token__is_user_subscribed: false,
                             signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         },
                     };
@@ -5850,7 +5850,7 @@ mod test {
                             channel__id: 0,
                             channel_token__obfuscation_value: 0,
                             channel_token__expires_at: 0,
-                            channel_token__is_channel_subscription_exist: false,
+                            channel_token__is_user_subscribed: false,
                             signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         },
                     };
@@ -5907,7 +5907,7 @@ mod test {
                             channel__id: 0,
                             channel_token__obfuscation_value: 0,
                             channel_token__expires_at: 0,
-                            channel_token__is_channel_subscription_exist: false,
+                            channel_token__is_user_subscribed: false,
                             signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         },
                     };
@@ -6094,7 +6094,7 @@ mod test {
                         channel__id: 0,
                         channel_token__obfuscation_value: 0,
                         channel_token__expires_at: 0,
-                        channel_token__is_channel_subscription_exist: false,
+                        channel_token__is_user_subscribed: false,
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                 };
