@@ -37,6 +37,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 ON CONFLICT DO NOTHING \
                 RETURNING \
                     true AS _;";
+            let user_authorization_token__wrong_enter_tries_quantity = insert.user_authorization_token__wrong_enter_tries_quantity as i16;
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -52,7 +53,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     Type::TEXT,
                 )
                 .add(
-                    &insert.user_authorization_token__wrong_enter_tries_quantity,
+                    &user_authorization_token__wrong_enter_tries_quantity,
                     Type::INT2,
                 )
                 .add(
@@ -148,6 +149,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     AND uat.user_device__id = $6 \
                 RETURNING \
                     true AS _;";
+            let user_authorization_token__wrong_enter_tries_quantity = update.user_authorization_token__wrong_enter_tries_quantity as i16;
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -155,7 +157,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     Type::TEXT,
                 )
                 .add(
-                    &update.user_authorization_token__wrong_enter_tries_quantity,
+                    &user_authorization_token__wrong_enter_tries_quantity,
                     Type::INT2,
                 )
                 .add(
@@ -215,6 +217,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     AND uat.user_device__id = $5 \
                 RETURNING \
                     true AS _;";
+            let user_authorization_token__wrong_enter_tries_quantity = update.user_authorization_token__wrong_enter_tries_quantity as i16;
             let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
@@ -222,7 +225,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     Type::TEXT,
                 )
                 .add(
-                    &update.user_authorization_token__wrong_enter_tries_quantity,
+                    &user_authorization_token__wrong_enter_tries_quantity,
                     Type::INT2,
                 )
                 .add(
@@ -320,9 +323,10 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 WHERE \
                     uat.user__id = $1 \
                     AND uat.user_device__id = $2 \
+                    AND uat.wrong_enter_tries_quantity < $3 \
                 RETURNING \
                     true AS _;";
-            let mut parameter_storage = ParameterStorage::new(2);
+            let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
                     &by.user__id,
@@ -331,6 +335,10 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 .add(
                     &by.user_device__id,
                     Type::TEXT,
+                )
+                .add(
+                    &(u8::MAX as i16),
+                    Type::INT2,
                 );
             let statement = crate::result_return_logic!(
                 client_database_2
@@ -355,7 +363,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
         };
     }
     // user_authorization_token__value: String,
-    // user_authorization_token__wrong_enter_tries_quantity: i16,
+    // user_authorization_token__wrong_enter_tries_quantity: u8,
     // user_authorization_token__expires_at: i64,
     // user_authorization_token__can_be_resent_from: i64,
     pub fn find_1<'a>(
@@ -365,7 +373,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
         Output = Result<
             Option<(
                 String,
-                i16,
+                u8,
                 i64,
                 i64,
             )>,
@@ -414,11 +422,15 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
+            let user_authorization_token__wrong_enter_tries_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1));
+            if user_authorization_token__wrong_enter_tries_quantity < (u8::MIN as i16) || user_authorization_token__wrong_enter_tries_quantity > (u8::MAX as i16) {
+                return Result::Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(
                 Option::Some(
                     (
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
+                        user_authorization_token__wrong_enter_tries_quantity as u8,
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
                     ),
@@ -427,7 +439,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
         };
     }
     // user_authorization_token__value: String,
-    // user_authorization_token__wrong_enter_tries_quantity: i16,
+    // user_authorization_token__wrong_enter_tries_quantity: u8,
     // user_authorization_token__expires_at: i64,
     pub fn find_2<'a>(
         client_database_2: &'a Client,
@@ -436,7 +448,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
         Output = Result<
             Option<(
                 String,
-                i16,
+                u8,
                 i64,
             )>,
             AggregateError,
@@ -483,11 +495,15 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
+            let user_authorization_token__wrong_enter_tries_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1));
+            if user_authorization_token__wrong_enter_tries_quantity < (u8::MIN as i16) || user_authorization_token__wrong_enter_tries_quantity > (u8::MAX as i16) {
+                return Result::Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(
                 Option::Some(
                     (
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
+                        user_authorization_token__wrong_enter_tries_quantity as u8,
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(2)),
                     ),
                 ),
@@ -567,19 +583,19 @@ pub struct Insert<'a> {
     pub user__id: i64,
     pub user_device__id: &'a str,
     pub user_authorization_token__value: &'a str,
-    pub user_authorization_token__wrong_enter_tries_quantity: i16,
+    pub user_authorization_token__wrong_enter_tries_quantity: u8,
     pub user_authorization_token__expires_at: i64,
     pub user_authorization_token__can_be_resent_from: i64,
 }
 pub struct Update1<'a> {
     pub user_authorization_token__value: &'a str,
-    pub user_authorization_token__wrong_enter_tries_quantity: i16,
+    pub user_authorization_token__wrong_enter_tries_quantity: u8,
     pub user_authorization_token__expires_at: i64,
     pub user_authorization_token__can_be_resent_from: i64,
 }
 pub struct Update2<'a> {
     pub user_authorization_token__value: &'a str,
-    pub user_authorization_token__wrong_enter_tries_quantity: i16,
+    pub user_authorization_token__wrong_enter_tries_quantity: u8,
     pub user_authorization_token__expires_at: i64,
 }
 pub struct Update3 {

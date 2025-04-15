@@ -596,8 +596,8 @@ struct Incoming {
 struct Outcoming {
     verification_message_sent: bool,
     user_registration_token__can_be_resent_from: i64,
-    user_registration_token__wrong_enter_tries_quantity: i16,
-    user_registration_token__wrong_enter_tries_quantity_limit: i16,
+    user_registration_token__wrong_enter_tries_quantity: u8,
+    user_registration_token__wrong_enter_tries_quantity_limit: u8,
 }
 
 
@@ -629,7 +629,7 @@ enum Precedent {
     UserRegistrationToken__AlreadyExpired,
     UserRegistrationToken__AlreadyApproved,
     UserRegistrationToken__WrongValue {
-        user_registration_token__wrong_enter_tries_quantity: i16,
+        user_registration_token__wrong_enter_tries_quantity: u8,
     },
     ParallelExecution,
 }
@@ -708,8 +708,8 @@ struct Outcoming {
     user__id: i64,
     verification_message_sent: bool,
     user_authorization_token__can_be_resent_from: i64,
-    user_authorization_token__wrong_enter_tries_quantity: i16,
-    user_authorization_token__wrong_enter_tries_quantity_limit: i16,
+    user_authorization_token__wrong_enter_tries_quantity: u8,
+    user_authorization_token__wrong_enter_tries_quantity_limit: u8,
 }
 
 
@@ -743,7 +743,7 @@ enum Precedent {
     UserAuthorizationToken__NotFound,
     UserAuthorizationToken__AlreadyExpired,
     UserAuthorizationToken__WrongValue {
-        user_authorization_token__wrong_enter_tries_quantity: i16,
+        user_authorization_token__wrong_enter_tries_quantity: u8,
     },
     User__NotFound,
     ParallelExecution,
@@ -788,8 +788,8 @@ struct Outcoming {
     user__id: i64,
     verification_message_sent: bool,
     user_reset_password_token__can_be_resent_from: i64,
-    user_reset_password_token__wrong_enter_tries_quantity: i16,
-    user_reset_password_token__wrong_enter_tries_quantity_limit: i16,
+    user_reset_password_token__wrong_enter_tries_quantity: u8,
+    user_reset_password_token__wrong_enter_tries_quantity_limit: u8,
 }
 ```
 ```
@@ -815,7 +815,7 @@ enum Precedent {
     UserResetPasswordToken__AlreadyExpired,
     UserResetPasswordToken__AlreadyApproved,
     UserResetPasswordToken__WrongValue {
-        user_reset_password_token__wrong_enter_tries_quantity: i16,
+        user_reset_password_token__wrong_enter_tries_quantity: u8,
     },
     ParallelExecution,
 }

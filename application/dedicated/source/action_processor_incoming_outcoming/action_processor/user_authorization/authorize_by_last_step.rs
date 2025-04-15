@@ -33,7 +33,7 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::UserAuthorizationToken__NotFound,
         CommonPrecedent::UserAuthorizationToken__AlreadyExpired,
         CommonPrecedent::UserAuthorizationToken__WrongValue {
-            user_authorization_token__wrong_enter_tries_quantity: i16,
+            user_authorization_token__wrong_enter_tries_quantity: u8,
         },
         CommonPrecedent::User__NotFound,
         CommonPrecedent::ParallelExecution,

@@ -23,8 +23,8 @@ pub struct Outcoming {
     pub user__id: i64,
     pub verification_message_sent: bool,
     pub user_reset_password_token__can_be_resent_from: i64,
-    pub user_reset_password_token__wrong_enter_tries_quantity: i16,
-    pub user_reset_password_token__wrong_enter_tries_quantity_limit: i16,
+    pub user_reset_password_token__wrong_enter_tries_quantity: u8,
+    pub user_reset_password_token__wrong_enter_tries_quantity_limit: u8,
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {

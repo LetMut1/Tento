@@ -39,6 +39,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 ON CONFLICT DO NOTHING \
                 RETURNING \
                     true AS _;";
+            let user_registration_token__wrong_enter_tries_quantity = insert.user_registration_token__wrong_enter_tries_quantity as i16;
             let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
@@ -54,7 +55,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                     Type::TEXT,
                 )
                 .add(
-                    &insert.user_registration_token__wrong_enter_tries_quantity,
+                    &user_registration_token__wrong_enter_tries_quantity,
                     Type::INT2,
                 )
                 .add(
@@ -156,6 +157,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                     AND urt.user_device__id = $7 \
                 RETURNING \
                     true AS _;";
+            let user_registration_token__wrong_enter_tries_quantity = update.user_registration_token__wrong_enter_tries_quantity as i16;
             let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
@@ -163,7 +165,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                     Type::TEXT,
                 )
                 .add(
-                    &update.user_registration_token__wrong_enter_tries_quantity,
+                    &user_registration_token__wrong_enter_tries_quantity,
                     Type::INT2,
                 )
                 .add(
@@ -280,6 +282,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                     urt.user_device__id = $6 \
                 RETURNING \
                     true AS _;";
+            let user_registration_token__wrong_enter_tries_quantity = update.user_registration_token__wrong_enter_tries_quantity as i16;
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
@@ -287,7 +290,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                     Type::TEXT,
                 )
                 .add(
-                    &update.user_registration_token__wrong_enter_tries_quantity,
+                    &user_registration_token__wrong_enter_tries_quantity,
                     Type::INT2,
                 )
                 .add(
@@ -338,9 +341,10 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 WHERE \
                     urt.user__email = $1 \
                     AND urt.user_device__id = $2 \
+                    AND urt.wrong_enter_tries_quantity < $3 \
                 RETURNING \
                     true AS _;";
-            let mut parameter_storage = ParameterStorage::new(2);
+            let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
                     &by.user__email,
@@ -349,6 +353,10 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 .add(
                     &by.user_device__id,
                     Type::TEXT,
+                )
+                .add(
+                    &(u8::MAX as i16),
+                    Type::INT2,
                 );
             let statement = crate::result_return_logic!(
                 client_database_2
@@ -424,7 +432,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
         };
     }
     // user_registration_token__value: String,
-    // user_registration_token__wrong_enter_tries_quantity: i16,
+    // user_registration_token__wrong_enter_tries_quantity: u8,
     // user_registration_token__is_approved: bool,
     // user_registration_token__expires_at: i64,
     // user_registration_token__can_be_resent_from: i64,
@@ -435,7 +443,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
         Output = Result<
             Option<(
                 String,
-                i16,
+                u8,
                 bool,
                 i64,
                 i64,
@@ -486,11 +494,15 @@ impl Repository<Postgresql<UserRegistrationToken>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
+            let user_registration_token__wrong_enter_tries_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1));
+            if user_registration_token__wrong_enter_tries_quantity < (u8::MIN as i16) || user_registration_token__wrong_enter_tries_quantity > (u8::MAX as i16) {
+                return Result::Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(
                 Option::Some(
                     (
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
+                        user_registration_token__wrong_enter_tries_quantity as u8,
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(2)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(4)),
@@ -500,7 +512,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
         };
     }
     // user_registration_token__value: String,
-    // user_registration_token__wrong_enter_tries_quantity: i16,
+    // user_registration_token__wrong_enter_tries_quantity: u8,
     // user_registration_token__is_approved: bool,
     // user_registration_token__expires_at: i64,
     pub fn find_2<'a>(
@@ -510,7 +522,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
         Output = Result<
             Option<(
                 String,
-                i16,
+                u8,
                 bool,
                 i64,
             )>,
@@ -559,11 +571,15 @@ impl Repository<Postgresql<UserRegistrationToken>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
+            let user_registration_token__wrong_enter_tries_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1));
+            if user_registration_token__wrong_enter_tries_quantity < (u8::MIN as i16) || user_registration_token__wrong_enter_tries_quantity > (u8::MAX as i16) {
+                return Result::Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(
                 Option::Some(
                     (
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
+                        user_registration_token__wrong_enter_tries_quantity as u8,
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, bool>(2)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(3)),
                     ),
@@ -648,14 +664,14 @@ pub struct Insert<'a> {
     pub user__email: &'a str,
     pub user_device__id: &'a str,
     pub user_registration_token__value: &'a str,
-    pub user_registration_token__wrong_enter_tries_quantity: i16,
+    pub user_registration_token__wrong_enter_tries_quantity: u8,
     pub user_registration_token__is_approved: bool,
     pub user_registration_token__expires_at: i64,
     pub user_registration_token__can_be_resent_from: i64,
 }
 pub struct Update1<'a> {
     pub user_registration_token__value: &'a str,
-    pub user_registration_token__wrong_enter_tries_quantity: i16,
+    pub user_registration_token__wrong_enter_tries_quantity: u8,
     pub user_registration_token__is_approved: bool,
     pub user_registration_token__expires_at: i64,
     pub user_registration_token__can_be_resent_from: i64,
@@ -665,7 +681,7 @@ pub struct Update2 {
 }
 pub struct Update3<'a> {
     pub user_registration_token__value: &'a str,
-    pub user_registration_token__wrong_enter_tries_quantity: i16,
+    pub user_registration_token__wrong_enter_tries_quantity: u8,
     pub user_registration_token__is_approved: bool,
     pub user_registration_token__expires_at: i64,
 }

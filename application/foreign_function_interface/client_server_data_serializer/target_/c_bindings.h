@@ -27,8 +27,8 @@ typedef struct UserAuthorization_AuthorizeByFirstStep_Outcoming {
   long user__id;
   bool verification_message_sent;
   long user_authorization_token__can_be_resent_from;
-  short user_authorization_token__wrong_enter_tries_quantity;
-  short user_authorization_token__wrong_enter_tries_quantity_limit;
+  unsigned char user_authorization_token__wrong_enter_tries_quantity;
+  unsigned char user_authorization_token__wrong_enter_tries_quantity_limit;
 } UserAuthorization_AuthorizeByFirstStep_Outcoming;
 
 typedef struct CData_UserAuthorization_AuthorizeByFirstStep_Outcoming {
@@ -85,7 +85,7 @@ typedef struct CData_UserAuthorization_AuthorizeByLastStep_Outcoming {
 
 typedef struct UserAuthorizationToken__WrongValue {
   bool is_exist;
-  short user_authorization_token__wrong_enter_tries_quantity;
+  unsigned char user_authorization_token__wrong_enter_tries_quantity;
 } UserAuthorizationToken__WrongValue;
 
 typedef struct UserAuthorization_AuthorizeByLastStep_Precedent {
@@ -254,8 +254,8 @@ typedef struct UserAuthorization_RegisterByFirstStep_Incoming {
 typedef struct UserAuthorization_RegisterByFirstStep_Outcoming {
   bool verification_message_sent;
   long user_registration_token__can_be_resent_from;
-  short user_registration_token__wrong_enter_tries_quantity;
-  short user_registration_token__wrong_enter_tries_quantity_limit;
+  unsigned char user_registration_token__wrong_enter_tries_quantity;
+  unsigned char user_registration_token__wrong_enter_tries_quantity_limit;
 } UserAuthorization_RegisterByFirstStep_Outcoming;
 
 typedef struct CData_UserAuthorization_RegisterByFirstStep_Outcoming {
@@ -289,7 +289,7 @@ typedef struct UserAuthorization_RegisterBySecondStep_Incoming {
 
 typedef struct UserRegistrationToken__WrongValue {
   bool is_exist;
-  short user_registration_token__wrong_enter_tries_quantity;
+  unsigned char user_registration_token__wrong_enter_tries_quantity;
 } UserRegistrationToken__WrongValue;
 
 typedef struct UserAuthorization_RegisterBySecondStep_Precedent {
@@ -363,8 +363,8 @@ typedef struct UserAuthorization_ResetPasswordByFirstStep_Outcoming {
   long user__id;
   bool verification_message_sent;
   long user_reset_password_token__can_be_resent_from;
-  short user_reset_password_token__wrong_enter_tries_quantity;
-  short user_reset_password_token__wrong_enter_tries_quantity_limit;
+  unsigned char user_reset_password_token__wrong_enter_tries_quantity;
+  unsigned char user_reset_password_token__wrong_enter_tries_quantity_limit;
 } UserAuthorization_ResetPasswordByFirstStep_Outcoming;
 
 typedef struct CData_UserAuthorization_ResetPasswordByFirstStep_Outcoming {
@@ -398,7 +398,7 @@ typedef struct UserAuthorization_ResetPasswordBySecondStep_Incoming {
 
 typedef struct UserResetPasswordToken__WrongValue {
   bool is_exist;
-  short user_reset_password_token__wrong_enter_tries_quantity;
+  unsigned char user_reset_password_token__wrong_enter_tries_quantity;
 } UserResetPasswordToken__WrongValue;
 
 typedef struct UserAuthorization_ResetPasswordBySecondStep_Precedent {

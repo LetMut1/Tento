@@ -3,9 +3,9 @@ pub struct Value(PhantomData<String>);
 impl Value {
     pub const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 }
-pub struct WrongEnterTriesQuantity(PhantomData<i16>);
+pub struct WrongEnterTriesQuantity(PhantomData<u8>);
 impl WrongEnterTriesQuantity {
-    pub const LIMIT: i16 = 3;
+    pub const LIMIT: u8 = 3;
 }
 pub struct IsApproved(PhantomData<bool>);
 pub struct ExpiresAt(PhantomData<i64>);

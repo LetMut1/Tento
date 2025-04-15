@@ -18,7 +18,7 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::UserRegistrationToken__AlreadyExpired,
         CommonPrecedent::UserRegistrationToken__AlreadyApproved,
         CommonPrecedent::UserRegistrationToken__WrongValue {
-            user_registration_token__wrong_enter_tries_quantity: i16,
+            user_registration_token__wrong_enter_tries_quantity: u8,
         },
         CommonPrecedent::ParallelExecution,
     }

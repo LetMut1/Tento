@@ -553,8 +553,8 @@ pub struct UserAuthorization_AuthorizeByFirstStep_Outcoming {
     pub user__id: c_long,
     pub verification_message_sent: bool,
     pub user_authorization_token__can_be_resent_from: c_long,
-    pub user_authorization_token__wrong_enter_tries_quantity: c_short,
-    pub user_authorization_token__wrong_enter_tries_quantity_limit: c_short,
+    pub user_authorization_token__wrong_enter_tries_quantity: c_uchar,
+    pub user_authorization_token__wrong_enter_tries_quantity_limit: c_uchar,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -668,7 +668,7 @@ pub struct UserAuthorization_AuthorizeByLastStep_Precedent {
 #[derive(Default)]
 pub struct UserAuthorizationToken__WrongValue {
     pub is_exist: bool,
-    pub user_authorization_token__wrong_enter_tries_quantity: c_short,
+    pub user_authorization_token__wrong_enter_tries_quantity: c_uchar,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_AuthorizeByLastStep_CResult {
@@ -1176,8 +1176,8 @@ type UserAuthorization_RegisterByFirstStep_CResult = CResult<CUnifiedReport<User
 pub struct UserAuthorization_RegisterByFirstStep_Outcoming {
     pub verification_message_sent: bool,
     pub user_registration_token__can_be_resent_from: c_long,
-    pub user_registration_token__wrong_enter_tries_quantity: c_short,
-    pub user_registration_token__wrong_enter_tries_quantity_limit: c_short,
+    pub user_registration_token__wrong_enter_tries_quantity: c_uchar,
+    pub user_registration_token__wrong_enter_tries_quantity_limit: c_uchar,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -1284,7 +1284,7 @@ pub struct UserAuthorization_RegisterBySecondStep_Precedent {
 #[derive(Default)]
 pub struct UserRegistrationToken__WrongValue {
     pub is_exist: bool,
-    pub user_registration_token__wrong_enter_tries_quantity: c_short,
+    pub user_registration_token__wrong_enter_tries_quantity: c_uchar,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_second_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterBySecondStep_CResult {
@@ -1520,8 +1520,8 @@ pub struct UserAuthorization_ResetPasswordByFirstStep_Outcoming {
     pub user__id: c_long,
     pub verification_message_sent: bool,
     pub user_reset_password_token__can_be_resent_from: c_long,
-    pub user_reset_password_token__wrong_enter_tries_quantity: c_short,
-    pub user_reset_password_token__wrong_enter_tries_quantity_limit: c_short,
+    pub user_reset_password_token__wrong_enter_tries_quantity: c_uchar,
+    pub user_reset_password_token__wrong_enter_tries_quantity_limit: c_uchar,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -1634,7 +1634,7 @@ pub struct UserAuthorization_ResetPasswordBySecondStep_Precedent {
 #[derive(Default)]
 pub struct UserResetPasswordToken__WrongValue {
     pub is_exist: bool,
-    pub user_reset_password_token__wrong_enter_tries_quantity: c_short,
+    pub user_reset_password_token__wrong_enter_tries_quantity: c_uchar,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__deserialize_allocate(

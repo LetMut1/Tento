@@ -18,7 +18,7 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::UserResetPasswordToken__AlreadyExpired,
         CommonPrecedent::UserResetPasswordToken__AlreadyApproved,
         CommonPrecedent::UserResetPasswordToken__WrongValue {
-            user_reset_password_token__wrong_enter_tries_quantity: i16,
+            user_reset_password_token__wrong_enter_tries_quantity: u8,
         },
         CommonPrecedent::ParallelExecution,
     }
