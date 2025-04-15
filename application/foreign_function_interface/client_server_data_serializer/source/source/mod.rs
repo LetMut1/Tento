@@ -2139,7 +2139,7 @@ pub struct Channel_GetManyByNameInSubscriptions_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__name: CString,
     pub requery___channel__name: COption<CString>,
-    pub limit: c_short,
+    pub limit: c_uchar,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__serialize_allocate(incoming: Channel_GetManyByNameInSubscriptions_Incoming) -> CResult<CVector<c_uchar>> {
@@ -2293,7 +2293,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
 pub struct Channel_GetManyBySubscription_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub requery___channel__id: COption<c_long>,
-    pub limit: c_short,
+    pub limit: c_uchar,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_subscription__serialize_allocate(incoming: Channel_GetManyBySubscription_Incoming) -> CResult<CVector<c_uchar>> {
@@ -2445,7 +2445,7 @@ pub struct Channel_GetManyPublicByName_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__name: CString,
     pub requery___channel__name: COption<CString>,
-    pub limit: c_short,
+    pub limit: c_uchar,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_allocate(incoming: Channel_GetManyPublicByName_Incoming) -> CResult<CVector<c_uchar>> {
@@ -3214,7 +3214,7 @@ pub struct ChannelPublication1_GetMany_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub channel_token_signed: ChannelTokenSigned,
     pub channel_publication1__created_at: c_long,
-    pub limit: c_short,
+    pub limit: c_uchar,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__get_many__serialize_allocate(incoming: ChannelPublication1_GetMany_Incoming) -> CResult<CVector<c_uchar>> {

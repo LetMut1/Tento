@@ -76,8 +76,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
             if incoming.channel_token_signed.channel_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__AlreadyExpired));
             }
-            const LIMIT: i16 = 30;
-            if incoming.limit <= 0 || incoming.limit > LIMIT {
+            const MINIMUM_LIMIT: u8 = 10;
+            const MAXIMUM_LIMIT: u8 = 30;
+            if incoming.limit < MINIMUM_LIMIT || incoming.limit > MAXIMUM_LIMIT {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
@@ -119,7 +120,7 @@ todo!("проверка на Подписку нужна ли. Почему я �
                     channel__id: incoming.channel_token_signed.channel__id,
                     channel_publication1__created_at: incoming.channel_publication1__created_at,
                 },
-                incoming.limit,
+                incoming.limit as i16,
             )
             .await?;
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());

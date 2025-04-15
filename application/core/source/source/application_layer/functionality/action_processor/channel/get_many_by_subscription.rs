@@ -74,8 +74,9 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
                     return Result::Err(crate::new_invalid_argument!());
                 }
             }
-            const LIMIT: i16 = 100;
-            if incoming.limit <= 0 || incoming.limit > LIMIT {
+            const MINIMUM_LIMIT: u8 = 20;
+            const MAXIMUM_LIMIT: u8 = 100;
+            if incoming.limit < MINIMUM_LIMIT || incoming.limit > MAXIMUM_LIMIT {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let rows = Repository::<Postgresql<Channel>>::find_5(
@@ -84,7 +85,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
                     user__id: incoming.user_access_token_signed.user__id,
                     requery___channel__id: incoming.requery___channel__id,
                 },
-                incoming.limit,
+                incoming.limit as i16,
             )
             .await?;
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());

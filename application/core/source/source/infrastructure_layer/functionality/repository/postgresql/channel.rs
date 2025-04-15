@@ -644,43 +644,6 @@ impl Repository<Postgresql<Channel>> {
             );
         };
     }
-    // channel__owner: i64,
-    pub fn find_7<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
-        return async move {
-            let query = "\
-                SELECT \
-                    c.owner AS o \
-                FROM \
-                    public.channel c \
-                WHERE \
-                    c.id = $1;";
-            let mut parameter_storage = ParameterStorage::new(1);
-            parameter_storage.add(
-                &by.channel__id,
-                Type::INT8,
-            );
-            let statement = crate::result_return_logic!(
-                client_database_3
-                .prepare_typed_cached(
-                    query,
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
-            let rows = crate::result_return_runtime!(
-                client_database_3
-                .query(
-                    &statement,
-                    parameter_storage.get_parameters(),
-                )
-                .await
-            );
-            if rows.is_empty() {
-                return Result::Ok(Option::None);
-            }
-            return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
-        };
-    }
     pub fn is_exist_1<'a>(client_database_3: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             let query = "\

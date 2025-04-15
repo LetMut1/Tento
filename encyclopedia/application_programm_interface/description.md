@@ -217,7 +217,7 @@ struct Incoming {
     user_access_token_signed: <Data standards>,
     channel__name: String,
     requery___channel__name: Option<String>,
-    limit: i16
+    limit: u8,
 }
 
 
@@ -227,7 +227,7 @@ Incoming parameters validation rule:
 - requery___channel__name:
     -- same as channel__name.
 - limit:
-    -- [1, 100] values.
+    -- [20, 100] values.
 ```
 ```
 struct Outcoming {
@@ -257,7 +257,7 @@ Returns channels the user is subscribed to.
 struct Incoming {
     user_access_token_signed: <Data standards>,
     requery___channel__id: Option<i64>,
-    limit: i16
+    limit: u8,
 }
 
 
@@ -267,7 +267,7 @@ Incoming parameters validation rule:
 - requery___channel__id:
     -- same as channel__id.
 - limit:
-    -- [1, 100] values.
+    -- [20, 100] values.
 ```
 ```
 struct Outcoming {
@@ -297,7 +297,7 @@ struct Incoming {
     user_access_token_signed: <Data standards>,
     channel__name: String,
     requery___channel__name: Option<String>,
-    limit: i16
+    limit: u8,
 }
 
 
@@ -307,7 +307,7 @@ Incoming parameters validation rule:
 - requery___channel__name:
     -- same as channel__name.
 - limit:
-    -- [1, 15] values.
+    -- [20, 100] values.
 ```
 ```
 struct Outcoming {
@@ -421,7 +421,7 @@ struct Incoming {
     user_access_token_signed: <Data standards>,
     channel_token_signed: <Data standards>,
     channel_publication1__created_at: i64,
-    limit: i16,
+    limit: u8,
 }
 
 
@@ -429,7 +429,7 @@ channel_publication1__created_at - an alternative for offset. The value for next
 
 Incoming parameters validation rule:
 - limit:
-    -- [1, 30] values.
+    -- [10, 30] values.
 ```
 ```
 struct Outcoming {

@@ -16,7 +16,7 @@ pub struct Incoming<'a> {
     pub channel__name: &'a str,
     // The bitcode(=0.6.3)::Decode not implemented for &'_ Option<&'_ str>.
     pub requery___channel__name: Option<&'a str>,
-    pub limit: i16,
+    pub limit: u8,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

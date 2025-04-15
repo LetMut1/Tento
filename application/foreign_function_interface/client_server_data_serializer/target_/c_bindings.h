@@ -566,7 +566,7 @@ typedef struct Channel_GetManyByNameInSubscriptions_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   struct CString channel__name;
   struct COption_CString requery___channel__name;
-  short limit;
+  unsigned char limit;
 } Channel_GetManyByNameInSubscriptions_Incoming;
 
 typedef struct ChannelTokenSigned {
@@ -627,7 +627,7 @@ typedef struct COption_c_long {
 typedef struct Channel_GetManyBySubscription_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   struct COption_c_long requery___channel__id;
-  short limit;
+  unsigned char limit;
 } Channel_GetManyBySubscription_Incoming;
 
 typedef struct Channel_GetManyBySubscription_Data {
@@ -675,7 +675,7 @@ typedef struct Channel_GetManyPublicByName_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   struct CString channel__name;
   struct COption_CString requery___channel__name;
-  short limit;
+  unsigned char limit;
 } Channel_GetManyPublicByName_Incoming;
 
 typedef struct Channel_GetManyPublicByName_Data {
@@ -921,7 +921,7 @@ typedef struct ChannelPublication1_GetMany_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   struct ChannelTokenSigned channel_token_signed;
   long channel_publication1__created_at;
-  short limit;
+  unsigned char limit;
 } ChannelPublication1_GetMany_Incoming;
 
 typedef struct CVector_CString {

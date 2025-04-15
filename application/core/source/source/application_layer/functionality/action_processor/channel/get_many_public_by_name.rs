@@ -70,8 +70,9 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
-            const LIMIT: i16 = 15;
-            if incoming.limit <= 0 || incoming.limit > LIMIT {
+            const MINIMUM_LIMIT: u8 = 20;
+            const MAXIMUM_LIMIT: u8 = 15;
+            if incoming.limit < MINIMUM_LIMIT || incoming.limit > MAXIMUM_LIMIT {
                 return Result::Err(crate::new_invalid_argument!());
             }
             if !Validator::<Channel_Name>::is_valid(incoming.channel__name) {
@@ -90,7 +91,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                     requery___channel__name: incoming.requery___channel__name,
                     channel__visability_modifier: Channel_VisabilityModifier_::Public as i16,
                 },
-                incoming.limit,
+                incoming.limit as i16,
             )
             .await?;
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
