@@ -24,5 +24,5 @@ pub enum VisabilityModifier_ {
 pub struct Orientation(PhantomData<Vec<i16>>);
 pub struct CoverImagePath(PhantomData<Option<String>>);
 pub struct BackgroundImagePath(PhantomData<Option<String>>);
-pub struct SubscribersQuantity(PhantomData<i64>);
+pub struct SubscribersQuantity(PhantomData<u32>);
 pub struct CreatedAt(PhantomData<i64>);

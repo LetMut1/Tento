@@ -59,6 +59,7 @@ impl Repository<Postgresql<Channel>> {
                 ON CONFLICT DO NOTHING \
                 RETURNING \
                     c.id AS i;";
+            let channel__subscribers_quantity = insert.channel__subscribers_quantity;
             let mut parameter_storage = ParameterStorage::new(11);
             parameter_storage
                 .add(
@@ -98,7 +99,7 @@ impl Repository<Postgresql<Channel>> {
                     Type::TEXT,
                 )
                 .add(
-                    &insert.channel__subscribers_quantity,
+                    &channel__subscribers_quantity,
                     Type::INT8,
                 )
                 .add(
@@ -136,13 +137,19 @@ impl Repository<Postgresql<Channel>> {
                     subscribers_quantity = subscribers_quantity + 1 \
                 WHERE \
                     c.id = $1 \
+                    AND c.subscribers_quantity < $2 \
                 RETURNING \
                     true AS _;";
-            let mut parameter_storage = ParameterStorage::new(1);
-            parameter_storage.add(
-                &by.channel__id,
-                Type::INT8,
-            );
+            let mut parameter_storage = ParameterStorage::new(2);
+            parameter_storage
+                .add(
+                    &by.channel__id,
+                    Type::INT8,
+                )
+                .add(
+                    &(u32::MAX as i64),
+                    Type::INT8,
+                );
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
@@ -174,13 +181,19 @@ impl Repository<Postgresql<Channel>> {
                     subscribers_quantity = subscribers_quantity - 1 \
                 WHERE \
                     c.id = $1 \
+                    AND c.subscribers_quantity > $2 \
                 RETURNING \
                     true AS _;";
-            let mut parameter_storage = ParameterStorage::new(1);
-            parameter_storage.add(
-                &by.channel__id,
-                Type::INT8,
-            );
+            let mut parameter_storage = ParameterStorage::new(2);
+            parameter_storage
+                .add(
+                    &by.channel__id,
+                    Type::INT8,
+                )
+                .add(
+                    &(u32::MIN as i64),
+                    Type::INT8,
+                );
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
@@ -212,7 +225,7 @@ impl Repository<Postgresql<Channel>> {
     // channel__orientation: Vec<i16>,
     // channel__cover_image_path: Option<String>,
     // channel__background_image_path: Option<String>,
-    // channel__subscribers_quantity: i64,
+    // channel__subscribers_quantity: u32,
     pub fn find_1<'a>(
         client_database_3: &'a Client,
         by: By1,
@@ -228,7 +241,7 @@ impl Repository<Postgresql<Channel>> {
                 Vec<i16>,
                 Option<String>,
                 Option<String>,
-                i64,
+                u32,
             )>,
             AggregateError,
         >,
@@ -275,6 +288,10 @@ impl Repository<Postgresql<Channel>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
+            let channel__subscribers_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(9));
+            if channel__subscribers_quantity < (u32::MIN as i64) || channel__subscribers_quantity > (u32::MAX as i64) {
+                return Result::Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(
                 Option::Some(
                     (
@@ -287,7 +304,7 @@ impl Repository<Postgresql<Channel>> {
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, Vec<i16>>(6)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(7)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(8)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(9)),
+                        channel__subscribers_quantity as u32,
                     ),
                 ),
             );
@@ -727,7 +744,7 @@ pub struct Insert<'a> {
     pub channel__orientation: &'a [i16],
     pub channel__cover_image_path: Option<&'a str>,
     pub channel__background_image_path: Option<&'a str>,
-    pub channel__subscribers_quantity: i64,
+    pub channel__subscribers_quantity: u32,
     pub channel__created_at: i64,
 }
 pub struct By1 {

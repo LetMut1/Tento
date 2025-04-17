@@ -187,6 +187,7 @@ use {
         c_long,
         c_short,
         c_uchar,
+        c_uint,
         size_t,
     },
     std::{
@@ -2641,7 +2642,7 @@ pub struct Channel_GetOneById_Outcoming {
     pub channel__orientation: CVector<c_short>,
     pub channel__cover_image_path: COption<CString>,
     pub channel__background_image_path: COption<CString>,
-    pub channel__subscribers_quantity: c_long,
+    pub channel__subscribers_quantity: c_uint,
 }
 #[repr(C)]
 #[derive(Default)]

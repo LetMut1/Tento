@@ -196,7 +196,7 @@ struct Outcoming {
     channel__orientation: Vec<i16>,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
-    channel__subscribers_quantity: i64,
+    channel__subscribers_quantity: u32,
 }
 ```
 ```

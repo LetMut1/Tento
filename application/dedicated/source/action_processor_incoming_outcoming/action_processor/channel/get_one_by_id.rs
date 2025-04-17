@@ -36,7 +36,7 @@ pub struct Outcoming {
     pub channel__orientation: Vec<i16>,
     pub channel__cover_image_path: Option<String>,
     pub channel__background_image_path: Option<String>,
-    pub channel__subscribers_quantity: i64,
+    pub channel__subscribers_quantity: u32,
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
