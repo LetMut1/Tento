@@ -439,7 +439,7 @@ struct Data {
     channel_publication1__images_pathes: Vec<String>,
     channel_publication1__text: Option<String>,
     channel_publication1__commentaries_quantity: u32,
-    channel_publication1__marks_quantity: i64,
+    channel_publication1__marks_quantity: u32,
     channel_publication1__view_quantity: i64,
     channel_publication1__created_at: i64,
     channel_publication1_mark__created_at: Option<i64>,

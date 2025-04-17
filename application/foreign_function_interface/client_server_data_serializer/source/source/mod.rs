@@ -3255,7 +3255,7 @@ pub struct ChannelPublication1_GetMany_Data {
     pub channel_publication1__images_pathes: CVector<CString>,
     pub channel_publication1__text: COption<CString>,
     pub channel_publication1__commentaries_quantity: c_uint,
-    pub channel_publication1__marks_quantity: c_long,
+    pub channel_publication1__marks_quantity: c_uint,
     pub channel_publication1__view_quantity: c_long,
     pub channel_publication1__created_at: c_long,
     pub channel_publication1_mark__created_at: COption<c_long>,
