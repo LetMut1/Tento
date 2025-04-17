@@ -17,7 +17,7 @@ use {
 impl Repository<Postgresql<UserDevice>> {
     pub fn create<'a>(client_database_1: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 INSERT INTO \
                     public.user_device (\
                         id,\
@@ -42,7 +42,7 @@ impl Repository<Postgresql<UserDevice>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await

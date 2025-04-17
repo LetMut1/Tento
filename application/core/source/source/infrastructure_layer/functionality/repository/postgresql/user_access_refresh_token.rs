@@ -17,7 +17,7 @@ use {
 impl Repository<Postgresql<UserAccessRefreshToken>> {
     pub fn create<'a>(client_database_2: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 INSERT INTO \
                     public.user_access_refresh_token (\
                         user__id,\
@@ -66,7 +66,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -87,7 +87,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
     }
     pub fn update<'a>(client_database_2: &'a Client, update: Update, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 UPDATE ONLY \
                     public.user_access_refresh_token AS uart \
                 SET (\
@@ -135,7 +135,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -156,13 +156,13 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
     }
     pub fn delete_1<'a>(client_database_2: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
-            DELETE FROM ONLY \
-                public.user_access_refresh_token AS uart \
-            WHERE \
-                uart.user__id = $1 \
-                AND uart.user_device__id = $2 \
-            RETURNING \
+            const QUERY: &'static str = "\
+                DELETE FROM ONLY \
+                    public.user_access_refresh_token AS uart \
+                WHERE \
+                    uart.user__id = $1 \
+                    AND uart.user_device__id = $2 \
+                RETURNING \
                     true AS _;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
@@ -177,7 +177,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -198,7 +198,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
     }
     pub fn delete_2<'a>(client_database_2: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 DELETE FROM ONLY \
                     public.user_access_refresh_token AS uart \
                 WHERE \
@@ -213,7 +213,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -252,7 +252,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
     > + Send
     + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     uart.user_access_token__obfuscation_value AS uatov,\
                     uart.obfuscation_value AS ov,\
@@ -276,7 +276,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -306,7 +306,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
     }
     pub fn is_exist<'a>(client_database_2: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     uart.user__id AS ui \
                 FROM \
@@ -327,7 +327,7 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await

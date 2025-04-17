@@ -18,7 +18,7 @@ impl Repository<Postgresql<User>> {
     // user__id: i64,
     pub fn create_1<'a>(client_database_1: &'a Client, insert: Insert1<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 INSERT INTO \
                     public.user_ AS u (\
                         id,\
@@ -57,7 +57,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -78,7 +78,7 @@ impl Repository<Postgresql<User>> {
     }
     pub fn create_2<'a>(client_database_1: &'a Client, insert: Insert2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 INSERT INTO \
                     public.user_ (\
                         id,\
@@ -120,7 +120,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -141,7 +141,7 @@ impl Repository<Postgresql<User>> {
     }
     pub fn update<'a>(client_database_1: &'a Client, update: Update<'a>, by: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 UPDATE ONLY \
                     public.user_ AS u \
                 SET (\
@@ -166,7 +166,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -187,7 +187,7 @@ impl Repository<Postgresql<User>> {
     }
     pub fn delete<'a>(client_database_1: &'a Client, by: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 DELETE FROM ONLY \
                     public.user_ AS u \
                 WHERE \
@@ -202,7 +202,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -224,7 +224,7 @@ impl Repository<Postgresql<User>> {
     // user__id: i64,
     pub fn find_1<'a>(client_database_1: &'a Client, by: By1<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     u.id AS i \
                 FROM \
@@ -239,7 +239,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -276,7 +276,7 @@ impl Repository<Postgresql<User>> {
     > + Send
     + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     u.id AS i,\
                     u.email AS e,\
@@ -293,7 +293,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -338,7 +338,7 @@ impl Repository<Postgresql<User>> {
     > + Send
     + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     u.id AS i,\
                     u.nickname AS n,\
@@ -355,7 +355,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -385,7 +385,7 @@ impl Repository<Postgresql<User>> {
     // user__id: i64,
     pub fn find_4<'a>(client_database_1: &'a Client, by: By2<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     u.id AS i \
                 FROM \
@@ -400,7 +400,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -437,7 +437,7 @@ impl Repository<Postgresql<User>> {
     > + Send
     + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     u.email AS e,\
                     u.nickname AS n,\
@@ -454,7 +454,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -484,7 +484,7 @@ impl Repository<Postgresql<User>> {
     // user__email: String,
     pub fn find_6<'a>(client_database_1: &'a Client, by: By3) -> impl Future<Output = Result<Option<String>, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     u.email AS e \
                 FROM \
@@ -499,7 +499,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -520,7 +520,7 @@ impl Repository<Postgresql<User>> {
     }
     pub fn is_exist_1<'a>(client_database_1: &'a Client, by: By1<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     u.id AS i \
                 FROM \
@@ -535,7 +535,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -556,7 +556,7 @@ impl Repository<Postgresql<User>> {
     }
     pub fn is_exist_2<'a>(client_database_1: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     u.id AS i \
                 FROM \
@@ -571,7 +571,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -592,7 +592,7 @@ impl Repository<Postgresql<User>> {
     }
     pub fn is_exist_3<'a>(client_database_1: &'a Client, by: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     u.id AS i \
                 FROM \
@@ -607,7 +607,7 @@ impl Repository<Postgresql<User>> {
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -629,12 +629,12 @@ impl Repository<Postgresql<User>> {
     // user__id: i64,
     pub fn get_id<'a>(client_database_1: &'a Client) -> impl Future<Output = Result<i64, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT nextval('public.user__1') AS i;";
             let statement = crate::result_return_logic!(
                 client_database_1
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     [].as_slice(),
                 )
                 .await

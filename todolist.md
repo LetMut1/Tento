@@ -171,3 +171,4 @@ channel_subscription routes. Отдавать новые ChannelToken, так к
 
 
 query -> Const, where it is posssible
+let mut query - сделать через конкатинацию констант через заранее заданное условие

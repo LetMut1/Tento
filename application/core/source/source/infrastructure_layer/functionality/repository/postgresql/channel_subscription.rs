@@ -17,7 +17,7 @@ use {
 impl Repository<Postgresql<ChannelSubscription>> {
     pub fn create<'a>(client_database_3: &'a Client, insert: Insert) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 INSERT INTO \
                     public.channel_subscription (\
                         user__id,\
@@ -48,7 +48,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -69,7 +69,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
     }
     pub fn delete<'a>(client_database_3: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 DELETE FROM ONLY \
                     public.channel_subscription AS cs \
                 WHERE \
@@ -90,7 +90,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await

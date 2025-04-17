@@ -17,7 +17,7 @@ use {
 impl Repository<Postgresql<UserAuthorizationToken>> {
     pub fn create<'a>(client_database_2: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 INSERT INTO \
                     public.user_authorization_token (\
                         user__id,\
@@ -67,7 +67,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -88,7 +88,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
     }
     pub fn delete<'a>(client_database_2: &'a Client, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 DELETE FROM ONLY \
                     public.user_authorization_token AS uat \
                 WHERE \
@@ -109,7 +109,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -130,7 +130,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
     }
     pub fn update_1<'a>(client_database_2: &'a Client, update: Update1<'a>, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 UPDATE ONLY \
                     public.user_authorization_token AS uat \
                 SET (\
@@ -179,7 +179,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -200,7 +200,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
     }
     pub fn update_2<'a>(client_database_2: &'a Client, update: Update2<'a>, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 UPDATE ONLY \
                     public.user_authorization_token AS uat \
                 SET (\
@@ -243,7 +243,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -264,7 +264,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
     }
     pub fn update_3<'a>(client_database_2: &'a Client, update: Update3, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 UPDATE ONLY \
                     public.user_authorization_token AS uat \
                 SET (\
@@ -294,7 +294,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -315,7 +315,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
     }
     pub fn update_4<'a>(client_database_2: &'a Client, by: By<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 UPDATE ONLY \
                     public.user_authorization_token AS uat \
                 SET \
@@ -343,7 +343,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -382,7 +382,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
     > + Send
     + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     uat.value AS v,\
                     uat.wrong_enter_tries_quantity AS wetq,\
@@ -406,7 +406,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -456,7 +456,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
     > + Send
     + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     uat.value AS v,\
                     uat.wrong_enter_tries_quantity AS wetq,\
@@ -479,7 +479,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -528,7 +528,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
     > + Send
     + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     uat.value AS v,\
                     uat.expires_at AS ea,\
@@ -551,7 +551,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             let statement = crate::result_return_logic!(
                 client_database_2
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await

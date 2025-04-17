@@ -27,7 +27,7 @@ use {
 impl Repository<Postgresql<Channel>> {
     pub fn create<'a>(client_database_3: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 INSERT INTO \
                     public.channel AS c (\
                         id,\
@@ -105,7 +105,7 @@ impl Repository<Postgresql<Channel>> {
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -126,7 +126,7 @@ impl Repository<Postgresql<Channel>> {
     }
     pub fn update_1<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 UPDATE ONLY \
                     public.channel AS c \
                 SET \
@@ -149,7 +149,7 @@ impl Repository<Postgresql<Channel>> {
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -170,7 +170,7 @@ impl Repository<Postgresql<Channel>> {
     }
     pub fn update_2<'a>(client_database_3: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 UPDATE ONLY \
                     public.channel AS c \
                 SET \
@@ -193,7 +193,7 @@ impl Repository<Postgresql<Channel>> {
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -242,7 +242,7 @@ impl Repository<Postgresql<Channel>> {
     > + Send
     + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     c.owner AS o1,\
                     c.name AS n,\
@@ -265,7 +265,7 @@ impl Repository<Postgresql<Channel>> {
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -326,7 +326,7 @@ impl Repository<Postgresql<Channel>> {
     > + Send
     + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     c.owner AS ow,\
                     c.access_modifier AS am \
@@ -342,7 +342,7 @@ impl Repository<Postgresql<Channel>> {
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -624,7 +624,7 @@ impl Repository<Postgresql<Channel>> {
     > + Send
     + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     c.owner AS o,\
                     c.access_modifier AS am \
@@ -640,7 +640,7 @@ impl Repository<Postgresql<Channel>> {
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -672,7 +672,7 @@ impl Repository<Postgresql<Channel>> {
     }
     pub fn is_exist_1<'a>(client_database_3: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     c.id AS i \
                 FROM \
@@ -687,7 +687,7 @@ impl Repository<Postgresql<Channel>> {
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -708,7 +708,7 @@ impl Repository<Postgresql<Channel>> {
     }
     pub fn is_exist_2<'a>(client_database_3: &'a Client, by: By3<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 SELECT \
                     c.id AS i \
                 FROM \
@@ -723,7 +723,7 @@ impl Repository<Postgresql<Channel>> {
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await

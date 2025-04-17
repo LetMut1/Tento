@@ -17,7 +17,7 @@ use {
 impl Repository<Postgresql<ChannelPublication1DelayedDeletion>> {
     pub fn create<'a>(client_database_3: &'a Client, insert: Insert) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 INSERT INTO \
                     public.channel_publication1_delayed_deletion (\
                         channel_publication1__id,\
@@ -48,7 +48,7 @@ impl Repository<Postgresql<ChannelPublication1DelayedDeletion>> {
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await

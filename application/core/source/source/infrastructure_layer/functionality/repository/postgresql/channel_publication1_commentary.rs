@@ -18,7 +18,7 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
     // channel_publication1_commentary__id: i64,
     pub fn create<'a>(client_database_4: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 INSERT INTO \
                     public.channel_publication1_commentary AS cp1c (\
                         id,\
@@ -64,7 +64,7 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
             let statement = crate::result_return_logic!(
                 client_database_4
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
@@ -85,7 +85,7 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
     }
     pub fn delete<'a>(client_database_4: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
-            let query = "\
+            const QUERY: &'static str = "\
                 DELETE FROM ONLY \
                     public.channel_publication1_commentary cp1c \
                 WHERE \
@@ -106,7 +106,7 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
             let statement = crate::result_return_logic!(
                 client_database_4
                 .prepare_typed_cached(
-                    query,
+                    QUERY,
                     parameter_storage.get_parameters_types(),
                 )
                 .await
