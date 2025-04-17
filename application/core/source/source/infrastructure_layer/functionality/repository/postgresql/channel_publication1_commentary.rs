@@ -38,6 +38,7 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
                 ON CONFLICT DO NOTHING \
                 RETURNING \
                     cp1c.id AS i;";
+            let channel_publication1_commentary__marks_quantity = insert.channel_publication1_commentary__marks_quantity as i64;
             let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
@@ -53,7 +54,7 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
                     Type::TEXT,
                 )
                 .add(
-                    &insert.channel_publication1_commentary__marks_quantity,
+                    &channel_publication1_commentary__marks_quantity,
                     Type::INT8,
                 )
                 .add(
@@ -129,7 +130,7 @@ pub struct Insert<'a> {
     pub channel_publication1_commentary__author: i64,
     pub channel_publication1__id: i64,
     pub channel_publication1_commentary__text: &'a str,
-    pub channel_publication1_commentary__marks_quantity: i64,
+    pub channel_publication1_commentary__marks_quantity: u32,
     pub channel_publication1_commentary__created_at: i64,
 }
 pub struct By {

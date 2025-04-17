@@ -169,6 +169,8 @@ channel_subscription routes. Отдавать новые ChannelToken, так к
 
 все quantity сделать как unsigned.
 
+почему ChannelPublication1Commentary_Text с Option?
+
 
 
 
