@@ -76,11 +76,18 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
             if incoming.channel_token_signed.channel_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__AlreadyExpired));
             }
-            if !Validator::<ChannelPublication1_Text>::is_valid(incoming.channel_publication1__text) {
+            if incoming.channel_publication1__text.is_none() && incoming.channel_publication1__images_pathes.is_empty() {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<ChannelPublication1_ImagesPathes>::is_valid(incoming.channel_publication1__images_pathes.as_slice()) {
-                return Result::Err(crate::new_invalid_argument!());
+            if let Option::Some(channel_publication1__text) = incoming.channel_publication1__text {
+                if !Validator::<ChannelPublication1_Text>::is_valid(channel_publication1__text) {
+                    return Result::Err(crate::new_invalid_argument!());
+                }
+            }
+            if !incoming.channel_publication1__images_pathes.is_empty() {
+                if !Validator::<ChannelPublication1_ImagesPathes>::is_valid(incoming.channel_publication1__images_pathes.as_slice()) {
+                    return Result::Err(crate::new_invalid_argument!());
+                }
             }
             if !incoming.channel_token_signed.channel_token__is_user_the_owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));

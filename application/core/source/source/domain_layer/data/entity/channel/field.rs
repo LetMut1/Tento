@@ -5,7 +5,7 @@ impl Name {
     pub const MAXIMUM_LENGTH: usize = 75;
 }
 pub struct LinkedName(PhantomData<String>);
-pub struct Description(PhantomData<Option<String>>);
+pub struct Description(PhantomData<String>);
 impl Description {
     pub const MAXIMUM_LENGTH: usize = 500;
 }
@@ -21,7 +21,7 @@ pub enum VisabilityModifier_ {
     Public,
     Private,
 }
-pub struct CoverImagePath(PhantomData<Option<String>>);
-pub struct BackgroundImagePath(PhantomData<Option<String>>);
+pub struct CoverImagePath(PhantomData<String>);
+pub struct BackgroundImagePath(PhantomData<String>);
 pub struct SubscribersQuantity(PhantomData<u32>);
 pub struct CreatedAt(PhantomData<i64>);

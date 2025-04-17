@@ -4,6 +4,6 @@ use {
 };
 impl Validator<ChannelPublication1_ImagesPathes> {
     pub fn is_valid<'a>(channel_publication1__images_pathes: &'a [&'_ str]) -> bool {
-        return true;
+        return true; // TODO TODO TODO
     }
 }

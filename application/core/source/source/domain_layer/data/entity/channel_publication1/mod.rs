@@ -15,7 +15,7 @@ pub struct ChannelPublication1 {
     id: Id,
     channel__id: Channel_Id,
     images_pathes: ImagesPathes,
-    text: Text,
+    text: Option<Text>,
     commentaries_quantity: CommentariesQuantity,
     marks_quantity: MarksQuantity,
     view_quantity: ViewQuantity,
