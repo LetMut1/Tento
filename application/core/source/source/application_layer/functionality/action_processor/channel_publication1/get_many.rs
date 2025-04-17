@@ -133,13 +133,17 @@ todo!("проверка на Подписку нужна ли. Почему я �
                 if channel_publication1__marks_quantity < u32::MIN as i64 || channel_publication1__marks_quantity > u32::MAX as i64 {
                     return Result::Err(crate::new_logic_unreachable_state!());
                 }
+                let channel_publication1__view_quantity = crate::result_return_logic!(row.try_get::<'_, usize, i64>(5));
+                if channel_publication1__view_quantity < u32::MIN as i64 || channel_publication1__view_quantity > u32::MAX as i64 {
+                    return Result::Err(crate::new_logic_unreachable_state!());
+                }
                 data_registry.push(
                     Data {
                         channel_publication1__images_pathes: crate::result_return_logic!(row.try_get::<'_, usize, Vec<String>>(1)),
                         channel_publication1__text: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(2)),
                         channel_publication1__commentaries_quantity: channel_publication1__commentaries_quantity as u32,
                         channel_publication1__marks_quantity: channel_publication1__marks_quantity as u32,
-                        channel_publication1__view_quantity: crate::result_return_logic!(row.try_get::<'_, usize, i64>(5)),
+                        channel_publication1__view_quantity: channel_publication1__view_quantity as u32,
                         channel_publication1__created_at: crate::result_return_logic!(row.try_get::<'_, usize, i64>(6)),
                         channel_publication1_mark__created_at: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7)),
                         channel_publication1_token_signed: Encoder::<ChannelPublication1Token>::encode(

@@ -49,6 +49,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     cp1.id AS i;";
             let channel_publication1__commentaries_quantity = insert.channel_publication1__commentaries_quantity as i64;
             let channel_publication1__marks_quantity = insert.channel_publication1__marks_quantity as i64;
+            let channel_publication1__view_quantity = insert.channel_publication1__view_quantity as i64;
             let mut parameter_storage = ParameterStorage::new(8);
             parameter_storage
                 .add(
@@ -72,7 +73,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     Type::INT8,
                 )
                 .add(
-                    &insert.channel_publication1__view_quantity,
+                    &channel_publication1__view_quantity,
                     Type::INT8,
                 )
                 .add(
@@ -238,13 +239,19 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     view_quantity = view_quantity + 1 \
                 WHERE \
                     cp1.id = $1 \
+                    AND cp1.view_quantity < $2 \
                 RETURNING \
                     true AS _;";
-            let mut parameter_storage = ParameterStorage::new(1);
-            parameter_storage.add(
-                &by.channel_publication1__id,
-                Type::INT8,
-            );
+            let mut parameter_storage = ParameterStorage::new(2);
+            parameter_storage
+                .add(
+                    &by.channel_publication1__id,
+                    Type::INT8,
+                )
+                .add(
+                    &(u32::MAX as i64),
+                    Type::INT8,
+                );
             let statement = crate::result_return_logic!(
                 client_database_3
                 .prepare_typed_cached(
@@ -418,7 +425,7 @@ pub struct Insert<'a, 'b> {
     pub channel_publication1__text: Option<&'a str>,
     pub channel_publication1__commentaries_quantity: u32,
     pub channel_publication1__marks_quantity: u32,
-    pub channel_publication1__view_quantity: i64,
+    pub channel_publication1__view_quantity: u32,
     pub channel_publication1__created_at: i64,
     pub channel_publication1__can_be_deleted_from: i64,
 }
