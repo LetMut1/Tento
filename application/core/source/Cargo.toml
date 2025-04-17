@@ -28,7 +28,7 @@ bitcode = { workspace = true }
 bytes = { package = "bytes", version = "=1.7.1", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "=0.4.38", default-features = true, features = [], optional = false }
 clap = { package = "clap", version = "=4.5.17", default-features = true, features = ["cargo"], optional = false }
-const_format = { package = "const_format", version = "=0.2.33", default-features = true, features = [], optional = true }
+const_format = { package = "const_format", version = "=0.2.33", default-features = true, features = [], optional = false }
 deadpool = { package = "deadpool", version = "=0.12.1", default-features = true, features = ["rt_tokio_1"], optional = false }
 deadpool_postgres = { package = "deadpool-postgres", version = "=0.14.0", default-features = true, features = ["rt_tokio_1"], optional = false }
 dedicated = { workspace = true }
@@ -63,7 +63,7 @@ default = []
 for_development = [
     "logging_to_file",
     "port_for_manual_test",
-    "token_666666",
+    "token_value_666666",
 ]
 logging_to_file = []
 postgresql_connection_with_tls = []
@@ -75,10 +75,9 @@ json_for_manual_test = [
     "serde_for_manual_test",
 ]
 action_for_manual_test = [
-    "dep:const_format",
     "json_for_manual_test",
 ]
 port_for_manual_test = [
     "action_for_manual_test"
 ]
-token_666666 = []
+token_value_666666 = []

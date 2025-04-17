@@ -7,13 +7,7 @@ use {
         domain_layer::data::entity::channel::Channel,
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
-            functionality::{
-                repository::Repository,
-                service::counter::{
-                    Counter,
-                    Counter_,
-                },
-            },
+            functionality::repository::Repository,
         },
     },
     deadpool_postgres::Client,
@@ -374,7 +368,7 @@ impl Repository<Postgresql<Channel>> {
     }
     pub fn find_3<'a>(client_database_3: &'a Client, by: By4<'a>, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
         return async move {
-            let mut query = "\
+            const QUERY_FIRST_PART: &'static str = "\
                 SELECT \
                     c.id AS i,\
                     c.owner AS o, \
@@ -393,14 +387,9 @@ impl Repository<Postgresql<Channel>> {
                     AND c.id = cs.channel__id \
                 WHERE \
                     c.visability_modifier = $2 \
-                    AND c.name LIKE $3"
-                .to_string();
-            let mut counter = Counter::<u8>::new(
-                3,
-                1,
-            );
+                    AND c.name LIKE $3";
             let channel__visability_modifier = by.channel__visability_modifier as i16;
-            let wildcard = format!("{}%", by.channel__name,);
+            let wildcard = format!("{}%", by.channel__name);
             let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
                 .add(
@@ -415,38 +404,56 @@ impl Repository<Postgresql<Channel>> {
                     &wildcard,
                     Type::TEXT,
                 );
-            if let Option::Some(ref requery___channel__name) = by.requery___channel__name {
-                query = format!(
-                    "{} \
-                    AND c.name > ${}",
-                    query.as_str(),
-                    counter.get_next_value_unchecked(),
-                );
-                parameter_storage.add(
-                    requery___channel__name,
-                    Type::TEXT,
-                );
-            }
-            query = format!(
-                "{} \
-                ORDER BY \
-                    c.name ASC \
-                LIMIT ${};",
-                query.as_str(),
-                counter.get_next_value_unchecked(),
-            );
-            parameter_storage.add(
-                &limit,
-                Type::INT2,
-            );
-            let statement = crate::result_return_logic!(
-                client_database_3
-                .prepare_typed_cached(
-                    query.as_str(),
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
+            let statement = match by.requery___channel__name {
+                Option::Some(ref requery___channel__name) => {
+                    const QUERY: &'static str = const_format::concatcp!(
+                        QUERY_FIRST_PART,
+                        " \
+                            AND c.name > $4 \
+                        ORDER BY \
+                            c.name ASC \
+                        LIMIT $5;",
+                    );
+                    parameter_storage
+                        .add(
+                            requery___channel__name,
+                            Type::TEXT,
+                        )
+                        .add(
+                            &limit,
+                            Type::INT2,
+                        );
+                    crate::result_return_logic!(
+                        client_database_3
+                        .prepare_typed_cached(
+                            QUERY,
+                            parameter_storage.get_parameters_types(),
+                        )
+                        .await
+                    )
+                }
+                Option::None => {
+                    const QUERY: &'static str = const_format::concatcp!(
+                        QUERY_FIRST_PART,
+                        " \
+                        ORDER BY \
+                            c.name ASC \
+                        LIMIT $4;",
+                    );
+                    parameter_storage.add(
+                        &limit,
+                        Type::INT2,
+                    );
+                    crate::result_return_logic!(
+                        client_database_3
+                        .prepare_typed_cached(
+                            QUERY,
+                            parameter_storage.get_parameters_types(),
+                        )
+                        .await
+                    )
+                }
+            };
             return crate::result_into_runtime!(
                 client_database_3
                 .query(
@@ -459,7 +466,7 @@ impl Repository<Postgresql<Channel>> {
     }
     pub fn find_4<'a>(client_database_3: &'a Client, by: By5<'a>, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
         return async move {
-            let mut query = "\
+            const QUERY_FIRST_PART: &'static str = "\
                 SELECT \
                     c.id AS i,\
                     c.name AS n,\
@@ -476,12 +483,7 @@ impl Repository<Postgresql<Channel>> {
                     cs.user__id = $1 \
                     AND c.id = cs.channel__id \
                 WHERE \
-                    c.name LIKE $2"
-                .to_string();
-            let mut counter = Counter::<u8>::new(
-                2,
-                1,
-            );
+                    c.name LIKE $2";
             let wildcard = format!("{}%", by.channel__name,);
             let mut parameter_storage = ParameterStorage::new(4);
             parameter_storage
@@ -493,38 +495,56 @@ impl Repository<Postgresql<Channel>> {
                     &wildcard,
                     Type::TEXT,
                 );
-            if let Option::Some(ref requery___channel__name) = by.requery___channel__name {
-                query = format!(
-                    "{} \
-                    AND c.name > ${}",
-                    query.as_str(),
-                    counter.get_next_value_unchecked(),
-                );
-                parameter_storage.add(
-                    requery___channel__name,
-                    Type::TEXT,
-                );
-            }
-            query = format!(
-                "{} \
-                ORDER BY \
-                    c.name ASC \
-                LIMIT ${};",
-                query.as_str(),
-                counter.get_next_value_unchecked(),
-            );
-            parameter_storage.add(
-                &limit,
-                Type::INT2,
-            );
-            let statement = crate::result_return_logic!(
-                client_database_3
-                .prepare_typed_cached(
-                    query.as_str(),
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
+            let statement = match by.requery___channel__name {
+                Option::Some(ref requery___channel__name) => {
+                    const QUERY: &'static str = const_format::concatcp!(
+                        QUERY_FIRST_PART,
+                        " \
+                            AND c.name > $3 \
+                        ORDER BY \
+                            c.name ASC \
+                        LIMIT $4;",
+                    );
+                    parameter_storage
+                        .add(
+                            requery___channel__name,
+                            Type::TEXT,
+                        )
+                        .add(
+                            &limit,
+                            Type::INT2,
+                        );
+                    crate::result_return_logic!(
+                        client_database_3
+                        .prepare_typed_cached(
+                            QUERY,
+                            parameter_storage.get_parameters_types(),
+                        )
+                        .await
+                    )
+                }
+                Option::None => {
+                    const QUERY: &'static str = const_format::concatcp!(
+                        QUERY_FIRST_PART,
+                        " \
+                        ORDER BY \
+                            c.name ASC \
+                        LIMIT $3;",
+                    );
+                    parameter_storage.add(
+                        &limit,
+                        Type::INT2,
+                    );
+                    crate::result_return_logic!(
+                        client_database_3
+                        .prepare_typed_cached(
+                            QUERY,
+                            parameter_storage.get_parameters_types(),
+                        )
+                        .await
+                    )
+                }
+            };
             return crate::result_into_runtime!(
                 client_database_3
                 .query(
@@ -537,7 +557,7 @@ impl Repository<Postgresql<Channel>> {
     }
     pub fn find_5<'a>(client_database_3: &'a Client, by: By6, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
         return async move {
-            let mut query = "\
+            const QUERY_FIRST_PART: &'static str = "\
                 SELECT \
                     c.id AS i,\
                     c.name AS n,\
@@ -552,52 +572,66 @@ impl Repository<Postgresql<Channel>> {
                     public.channel_subscription cs \
                 ON \
                     cs.user__id = $1 \
-                    AND c.id = cs.channel__id"
-                .to_string();
-            let mut counter = Counter::<u8>::new(
-                1,
-                1,
-            );
+                    AND c.id = cs.channel__id";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage.add(
                 &by.user__id,
                 Type::INT8,
             );
             let requery___channel__id: i64;
-            if let Option::Some(requery___channel__id_) = by.requery___channel__id {
-                requery___channel__id = requery___channel__id_;
-                query = format!(
-                    "{} \
-                    WHERE \
-                        cs.channel__id > ${}",
-                    query.as_str(),
-                    counter.get_next_value_unchecked(),
-                );
-                parameter_storage.add(
-                    &requery___channel__id,
-                    Type::INT8,
-                );
-            }
-            query = format!(
-                "{} \
-                ORDER BY \
-                    cs.channel__id ASC \
-                LIMIT ${};",
-                query.as_str(),
-                counter.get_next_value_unchecked(),
-            );
-            parameter_storage.add(
-                &limit,
-                Type::INT2,
-            );
-            let statement = crate::result_return_logic!(
-                client_database_3
-                .prepare_typed_cached(
-                    query.as_str(),
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
+            let statement = match by.requery___channel__id {
+                Option::Some(requery___channel__id_) => {
+                    requery___channel__id = requery___channel__id_;
+                    const QUERY: &'static str = const_format::concatcp!(
+                        QUERY_FIRST_PART,
+                        " \
+                        WHERE \
+                            cs.channel__id > $2 \
+                        ORDER BY \
+                            cs.channel__id ASC \
+                        LIMIT $3;",
+                    );
+                    parameter_storage
+                        .add(
+                            &requery___channel__id,
+                            Type::INT8,
+                        )
+                        .add(
+                            &limit,
+                            Type::INT2,
+                        );
+                    crate::result_return_logic!(
+                        client_database_3
+                        .prepare_typed_cached(
+                            QUERY,
+                            parameter_storage.get_parameters_types(),
+                        )
+                        .await
+                    )
+                }
+                Option::None => {
+                    const QUERY: &'static str = const_format::concatcp!(
+                        QUERY_FIRST_PART,
+                        " \
+                        ORDER BY \
+                            cs.channel__id ASC \
+                        LIMIT $2;",
+                    );
+                    parameter_storage
+                        .add(
+                            &limit,
+                            Type::INT2,
+                        );
+                    crate::result_return_logic!(
+                        client_database_3
+                        .prepare_typed_cached(
+                            QUERY,
+                            parameter_storage.get_parameters_types(),
+                        )
+                        .await
+                    )
+                }
+            };
             return crate::result_into_runtime!(
                 client_database_3
                 .query(

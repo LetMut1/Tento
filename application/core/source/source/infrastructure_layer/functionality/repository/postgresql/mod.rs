@@ -135,52 +135,62 @@ impl<'a> Transaction<'a> {
 impl Resolver<Transaction<'_>> {
     pub fn start<'a>(client: &'a mut Client, transaction_isolation_level: IsolationLevel) -> impl Future<Output = Result<Transaction<'a>, AggregateError>> + Send {
         return async move {
-            let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
-            match transaction_isolation_level {
+            const QUERY_FIRST_PART: &'static str = "START TRANSACTION ISOLATION LEVEL";
+            let query = match transaction_isolation_level {
                 IsolationLevel::ReadCommitted => {
-                    query = format!(
-                        "{} READ COMMITTED,READ WRITE,NOT DEFERRABLE;",
-                        query.as_str(),
+                    const QUERY: &'static str = const_format::concatcp!(
+                        QUERY_FIRST_PART,
+                        " READ COMMITTED,READ WRITE,NOT DEFERRABLE;",
                     );
+                    QUERY
                 }
                 IsolationLevel::RepeatableRead => {
-                    query = format!(
-                        "{} REPEATABLE READ,READ WRITE,NOT DEFERRABLE;",
-                        query.as_str(),
+                    const QUERY: &'static str = const_format::concatcp!(
+                        QUERY_FIRST_PART,
+                        " REPEATABLE READ,READ WRITE,NOT DEFERRABLE;",
                     );
+                    QUERY
                 }
                 IsolationLevel::Serializable {
                     read_only,
                     deferrable,
                 } => {
-                    if read_only && deferrable {
-                        query = format!(
-                            "{} SERIALIZABLE,READ ONLY,DEFERRABLE;",
-                            query.as_str(),
-                        );
+                    let mut query_;
+                    if read_only {
+                        if deferrable {
+                            const QUERY: &'static str = const_format::concatcp!(
+                                QUERY_FIRST_PART,
+                                " SERIALIZABLE,READ ONLY,DEFERRABLE;",
+                            );
+                            query_ = QUERY;
+                        } else {
+                            const QUERY: &'static str = const_format::concatcp!(
+                                QUERY_FIRST_PART,
+                                " SERIALIZABLE,READ ONLY,NOT DEFERRABLE;",
+                            );
+                            query_ = QUERY;
+                        }
+
+                    } else {
+                        if deferrable {
+                            const QUERY: &'static str = const_format::concatcp!(
+                                QUERY_FIRST_PART,
+                                " SERIALIZABLE,READ WRITE,DEFERRABLE;",
+                            );
+                            query_ = QUERY;
+                        } else {
+                            const QUERY: &'static str = const_format::concatcp!(
+                                QUERY_FIRST_PART,
+                                "{} SERIALIZABLE,READ WRITE,NOT DEFERRABLE;",
+                            );
+                            query_ = QUERY;
+                        }
                     }
-                    if read_only && !deferrable {
-                        query = format!(
-                            "{} SERIALIZABLE,READ ONLY,NOT DEFERRABLE;",
-                            query.as_str(),
-                        );
-                    }
-                    if !read_only && deferrable {
-                        query = format!(
-                            "{} SERIALIZABLE,READ WRITE,DEFERRABLE;",
-                            query.as_str(),
-                        );
-                    }
-                    if !read_only && !deferrable {
-                        query = format!(
-                            "{} SERIALIZABLE,READ WRITE,NOT DEFERRABLE;",
-                            query.as_str(),
-                        );
-                    }
+                    query_
                 }
-            }
+            };
             if let Result::Err(aggregate_error) = crate::result_into_runtime!(
-                client.simple_query(query.as_str()).await
+                client.simple_query(query).await
             ) {
                 let _ = client.simple_query("ROLLBACK;").await;
                 return Result::Err(aggregate_error);
