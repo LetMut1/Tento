@@ -495,7 +495,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 return Result::Ok(Option::None);
             }
             let user_registration_token__wrong_enter_tries_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1));
-            if user_registration_token__wrong_enter_tries_quantity < (u8::MIN as i16) || user_registration_token__wrong_enter_tries_quantity > (u8::MAX as i16) {
+            if user_registration_token__wrong_enter_tries_quantity < u8::MIN as i16 || user_registration_token__wrong_enter_tries_quantity > u8::MAX as i16 {
                 return Result::Err(crate::new_logic_unreachable_state!());
             }
             return Result::Ok(
@@ -572,7 +572,7 @@ impl Repository<Postgresql<UserRegistrationToken>> {
                 return Result::Ok(Option::None);
             }
             let user_registration_token__wrong_enter_tries_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1));
-            if user_registration_token__wrong_enter_tries_quantity < (u8::MIN as i16) || user_registration_token__wrong_enter_tries_quantity > (u8::MAX as i16) {
+            if user_registration_token__wrong_enter_tries_quantity < u8::MIN as i16 || user_registration_token__wrong_enter_tries_quantity > u8::MAX as i16 {
                 return Result::Err(crate::new_logic_unreachable_state!());
             }
             return Result::Ok(

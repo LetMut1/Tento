@@ -97,7 +97,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
             '_a: for row in rows.iter() {
                 let channel__access_modifier = crate::result_return_logic!(row.try_get::<'_, usize, i16>(4));
-                if channel__access_modifier < (u8::MIN as i16) || channel__access_modifier > (u8::MAX as i16) {
+                if channel__access_modifier < u8::MIN as i16 || channel__access_modifier > u8::MAX as i16 {
                     return Result::Err(crate::new_logic_unreachable_state!());
                 }
                 let data = Data {

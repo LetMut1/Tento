@@ -282,15 +282,15 @@ impl Repository<Postgresql<Channel>> {
                 return Result::Ok(Option::None);
             }
             let channel__access_modifier = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(4));
-            if channel__access_modifier < (u8::MIN as i16) || channel__access_modifier > (u8::MAX as i16) {
+            if channel__access_modifier < u8::MIN as i16 || channel__access_modifier > u8::MAX as i16 {
                 return Result::Err(crate::new_logic_unreachable_state!());
             }
             let channel__visability_modifier = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(5));
-            if channel__visability_modifier < (u8::MIN as i16) || channel__visability_modifier > (u8::MAX as i16) {
+            if channel__visability_modifier < u8::MIN as i16 || channel__visability_modifier > u8::MAX as i16 {
                 return Result::Err(crate::new_logic_unreachable_state!());
             }
             let channel__subscribers_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(8));
-            if channel__subscribers_quantity < (u32::MIN as i64) || channel__subscribers_quantity > (u32::MAX as i64) {
+            if channel__subscribers_quantity < u32::MIN as i64 || channel__subscribers_quantity > u32::MAX as i64 {
                 return Result::Err(crate::new_logic_unreachable_state!());
             }
             return Result::Ok(
@@ -359,7 +359,7 @@ impl Repository<Postgresql<Channel>> {
                 return Result::Ok(Option::None);
             }
             let channel__access_modifier = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1));
-            if channel__access_modifier < (u8::MIN as i16) || channel__access_modifier > (u8::MAX as i16) {
+            if channel__access_modifier < u8::MIN as i16 || channel__access_modifier > u8::MAX as i16 {
                 return Result::Err(crate::new_logic_unreachable_state!());
             }
             return Result::Ok(
@@ -657,7 +657,7 @@ impl Repository<Postgresql<Channel>> {
                 return Result::Ok(Option::None);
             }
             let channel__access_modifier = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1));
-            if channel__access_modifier < (u8::MIN as i16) || channel__access_modifier > (u8::MAX as i16) {
+            if channel__access_modifier < u8::MIN as i16 || channel__access_modifier > u8::MAX as i16 {
                 return Result::Err(crate::new_logic_unreachable_state!());
             }
             return Result::Ok(
