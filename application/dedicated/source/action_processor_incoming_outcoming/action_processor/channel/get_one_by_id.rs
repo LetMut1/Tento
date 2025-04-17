@@ -33,7 +33,6 @@ pub struct Outcoming {
     pub channel__description: Option<String>,
     pub channel__access_modifier: u8,
     pub channel__visability_modifier: u8,
-    pub channel__orientation: Vec<i16>,
     pub channel__cover_image_path: Option<String>,
     pub channel__background_image_path: Option<String>,
     pub channel__subscribers_quantity: u32,

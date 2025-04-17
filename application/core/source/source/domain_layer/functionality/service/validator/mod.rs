@@ -2,7 +2,6 @@ mod channel__description;
 mod channel__id;
 mod channel__linked_name;
 mod channel__name;
-mod channel__orientation;
 mod channel_publication1__images_pathes;
 mod channel_publication1__text;
 mod channel_publication1_commentary__id;

@@ -37,13 +37,12 @@ impl Repository<Postgresql<Channel>> {
                         description,\
                         access_modifier,\
                         visability_modifier,\
-                        orientation,\
                         cover_image_path,\
                         background_image_path,\
                         subscribers_quantity,\
                         created_at\
                     ) VALUES (\
-                        nextval('public.channel_1'), \
+                        nextval('public.channel_1'),\
                         $1,\
                         $2,\
                         $3,\
@@ -53,8 +52,7 @@ impl Repository<Postgresql<Channel>> {
                         $7,\
                         $8,\
                         $9,\
-                        $10,\
-                        $11\
+                        $10\
                     ) \
                 ON CONFLICT DO NOTHING \
                 RETURNING \
@@ -62,7 +60,7 @@ impl Repository<Postgresql<Channel>> {
             let channel__access_modifier = insert.channel__access_modifier as i16;
             let channel__visability_modifier = insert.channel__visability_modifier as i16;
             let channel__subscribers_quantity = insert.channel__subscribers_quantity as i64;
-            let mut parameter_storage = ParameterStorage::new(11);
+            let mut parameter_storage = ParameterStorage::new(10);
             parameter_storage
                 .add(
                     &insert.channel__owner,
@@ -87,10 +85,6 @@ impl Repository<Postgresql<Channel>> {
                 .add(
                     &channel__visability_modifier,
                     Type::INT2,
-                )
-                .add(
-                    &insert.channel__orientation,
-                    Type::INT2_ARRAY,
                 )
                 .add(
                     &insert.channel__cover_image_path,
@@ -224,7 +218,6 @@ impl Repository<Postgresql<Channel>> {
     // channel__description: Option<String>,
     // channel__access_modifier: u8,
     // channel__visability_modifier: u8,
-    // channel__orientation: Vec<i16>,
     // channel__cover_image_path: Option<String>,
     // channel__background_image_path: Option<String>,
     // channel__subscribers_quantity: u32,
@@ -240,7 +233,6 @@ impl Repository<Postgresql<Channel>> {
                 Option<String>,
                 u8,
                 u8,
-                Vec<i16>,
                 Option<String>,
                 Option<String>,
                 u32,
@@ -258,7 +250,6 @@ impl Repository<Postgresql<Channel>> {
                     c.description AS d,\
                     c.access_modifier AS am,\
                     c.visability_modifier AS vm,\
-                    c.orientation AS o2,\
                     c.cover_image_path AS cip,\
                     c.background_image_path AS bip,\
                     c.subscribers_quantity AS sq \
@@ -298,7 +289,7 @@ impl Repository<Postgresql<Channel>> {
             if channel__visability_modifier < (u8::MIN as i16) || channel__visability_modifier > (u8::MAX as i16) {
                 return Result::Err(crate::new_logic_unreachable_state!());
             }
-            let channel__subscribers_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(9));
+            let channel__subscribers_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(8));
             if channel__subscribers_quantity < (u32::MIN as i64) || channel__subscribers_quantity > (u32::MAX as i64) {
                 return Result::Err(crate::new_logic_unreachable_state!());
             }
@@ -311,9 +302,8 @@ impl Repository<Postgresql<Channel>> {
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(3)),
                         channel__access_modifier as u8,
                         channel__visability_modifier as u8,
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Vec<i16>>(6)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(6)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(7)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(8)),
                         channel__subscribers_quantity as u32,
                     ),
                 ),
@@ -760,7 +750,6 @@ pub struct Insert<'a> {
     pub channel__description: Option<&'a str>,
     pub channel__access_modifier: u8,
     pub channel__visability_modifier: u8,
-    pub channel__orientation: &'a [i16],
     pub channel__cover_image_path: Option<&'a str>,
     pub channel__background_image_path: Option<&'a str>,
     pub channel__subscribers_quantity: u32,

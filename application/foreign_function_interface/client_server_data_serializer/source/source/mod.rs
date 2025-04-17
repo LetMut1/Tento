@@ -185,7 +185,6 @@ use {
     libc::{
         c_char,
         c_long,
-        c_short,
         c_uchar,
         c_uint,
         size_t,
@@ -2639,7 +2638,6 @@ pub struct Channel_GetOneById_Outcoming {
     pub channel__description: COption<CString>,
     pub channel__access_modifier: c_uchar,
     pub channel__visability_modifier: c_uchar,
-    pub channel__orientation: CVector<c_short>,
     pub channel__cover_image_path: COption<CString>,
     pub channel__background_image_path: COption<CString>,
     pub channel__subscribers_quantity: c_uint,
@@ -2683,7 +2681,6 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                             channel__description,
                             channel__access_modifier: data_.channel__access_modifier,
                             channel__visability_modifier: data_.channel__visability_modifier,
-                            channel__orientation: Allocator::<CVector<_>>::allocate(data_.channel__orientation),
                             channel__cover_image_path,
                             channel__background_image_path,
                             channel__subscribers_quantity: data_.channel__subscribers_quantity,
@@ -2740,7 +2737,6 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_deallocate(c_result
         if c_result.data.target.filled.channel__cover_image_path.is_data {
             Allocator::<CString>::deallocate(c_result.data.target.filled.channel__cover_image_path.data);
         }
-        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel__orientation);
     }
     return ();
 }
@@ -6012,7 +6008,6 @@ mod test {
                     channel__description: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                     channel__access_modifier: 0,
                     channel__visability_modifier: 0,
-                    channel__orientation: vec![0, 0, 0],
                     channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                     channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                     channel__subscribers_quantity: 0,

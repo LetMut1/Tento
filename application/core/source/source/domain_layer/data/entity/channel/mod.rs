@@ -10,7 +10,6 @@ use {
         Id,
         LinkedName,
         Name,
-        Orientation,
         SubscribersQuantity,
         VisabilityModifier,
         VisabilityModifier_,
@@ -25,13 +24,11 @@ pub struct Channel {
     description: Description,
     access_modifier: AccessModifier,
     visability_modifier: VisabilityModifier,
-    orientation: Orientation,
     cover_image_path: CoverImagePath,
     background_image_path: BackgroundImagePath,
     subscribers_quantity: SubscribersQuantity,
     created_at: CreatedAt,
 }
-pub type Channel_Orientation = Orientation;
 pub type Channel_AccessModifier_ = AccessModifier_;
 pub type Channel_Description = Description;
 pub type Channel_Id = Id;

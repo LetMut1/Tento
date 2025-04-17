@@ -21,7 +21,6 @@ pub enum VisabilityModifier_ {
     Public,
     Private,
 }
-pub struct Orientation(PhantomData<Vec<i16>>);
 pub struct CoverImagePath(PhantomData<Option<String>>);
 pub struct BackgroundImagePath(PhantomData<Option<String>>);
 pub struct SubscribersQuantity(PhantomData<u32>);

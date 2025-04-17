@@ -10,7 +10,6 @@ use {
                     Channel_Description,
                     Channel_LinkedName,
                     Channel_Name,
-                    Channel_Orientation,
                     Channel_VisabilityModifier_,
                 },
                 user::{
@@ -217,10 +216,6 @@ impl CommandProcessor<CreateFixtures> {
                     } else {
                         Option::None
                     };
-                    let channel__orientation: Vec<i16> = vec![0, 1, 2];
-                    if !Validator::<Channel_Orientation>::is_valid(channel__orientation.as_slice()) {
-                        return Result::Err(crate::new_invalid_argument!());
-                    }
                     if Repository::<Postgresql<Channel>>::is_exist_1(
                         &postgresql_client_database_3,
                         ChannelBy2 {
@@ -240,7 +235,6 @@ impl CommandProcessor<CreateFixtures> {
                                 channel__description: channel__description.as_deref(),
                                 channel__access_modifier: Channel_AccessModifier_::Open as _,
                                 channel__visability_modifier: Channel_VisabilityModifier_::Public as _,
-                                channel__orientation: channel__orientation.as_slice(),
                                 channel__cover_image_path: Option::Some(STUB),
                                 channel__background_image_path: Option::Some(STUB),
                                 channel__subscribers_quantity: 0,

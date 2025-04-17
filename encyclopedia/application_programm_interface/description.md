@@ -193,7 +193,6 @@ struct Outcoming {
     channel__description: Option<String>,
     channel__access_modifier: u8,
     channel__visability_modifier: u8,
-    channel__orientation: Vec<i16>,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
     channel__subscribers_quantity: u32,

@@ -107,7 +107,6 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     channel__description: Option::None,
                     channel__access_modifier: incoming.channel__access_modifier,
                     channel__visability_modifier: incoming.channel__visability_modifier,
-                    channel__orientation: vec![].as_slice(),
                     channel__cover_image_path: Option::None,
                     channel__background_image_path: Option::None,
                     channel__subscribers_quantity: 0,
