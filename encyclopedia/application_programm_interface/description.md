@@ -159,8 +159,8 @@ struct Incoming {
     user_access_token_signed: <Data standards>,
     channel__name: String,
     channel__linked_name: String,
-    channel__access_modifier: i16,
-    channel__visability_modifier: i16,
+    channel__access_modifier: u8,
+    channel__visability_modifier: u8,
 }
 ```
 ```
@@ -191,8 +191,8 @@ struct Outcoming {
     channel__name: String,
     channel__linked_name: String,
     channel__description: Option<String>,
-    channel__access_modifier: i16,
-    channel__visability_modifier: i16,
+    channel__access_modifier: u8,
+    channel__visability_modifier: u8,
     channel__orientation: Vec<i16>,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
@@ -237,8 +237,8 @@ struct Outcoming {
 struct Data {
     channel__name: String,
     channel__linked_name: String,
-    channel__access_modifier: i16,
-    channel__visability_modifier: i16,
+    channel__access_modifier: u8,
+    channel__visability_modifier: u8,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
     channel_token_signed: <Data standards>,
@@ -277,8 +277,8 @@ struct Outcoming {
 struct Data {
     channel__name: String,
     channel__linked_name: String,
-    channel__access_modifier: i16,
-    channel__visability_modifier: i16,
+    channel__access_modifier: u8,
+    channel__visability_modifier: u8,
     channel__cover_image_path: Option<String>,
     channel_token_signed: <Data standards>,
 }
@@ -317,7 +317,7 @@ struct Outcoming {
 struct Data {
     channel__name: String,
     channel__linked_name: String,
-    channel__access_modifier: i16,
+    channel__access_modifier: u8,
     channel__cover_image_path: Option<String>,
     channel__background_image_path: Option<String>,
     channel_token_signed: <Data standards>,

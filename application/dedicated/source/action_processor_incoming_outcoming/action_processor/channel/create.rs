@@ -15,8 +15,8 @@ pub struct Incoming<'a> {
     pub user_access_token_signed: UserAccessTokenSigned<'a>,
     pub channel__name: &'a str,
     pub channel__linked_name: &'a str,
-    pub channel__access_modifier: i16,
-    pub channel__visability_modifier: i16,
+    pub channel__access_modifier: u8,
+    pub channel__visability_modifier: u8,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

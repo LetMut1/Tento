@@ -59,7 +59,9 @@ impl Repository<Postgresql<Channel>> {
                 ON CONFLICT DO NOTHING \
                 RETURNING \
                     c.id AS i;";
-            let channel__subscribers_quantity = insert.channel__subscribers_quantity;
+            let channel__access_modifier = insert.channel__access_modifier as i16;
+            let channel__visability_modifier = insert.channel__visability_modifier as i16;
+            let channel__subscribers_quantity = insert.channel__subscribers_quantity as i64;
             let mut parameter_storage = ParameterStorage::new(11);
             parameter_storage
                 .add(
@@ -79,11 +81,11 @@ impl Repository<Postgresql<Channel>> {
                     Type::TEXT,
                 )
                 .add(
-                    &insert.channel__access_modifier,
+                    &channel__access_modifier,
                     Type::INT2,
                 )
                 .add(
-                    &insert.channel__visability_modifier,
+                    &channel__visability_modifier,
                     Type::INT2,
                 )
                 .add(
@@ -220,8 +222,8 @@ impl Repository<Postgresql<Channel>> {
     // channel__name: String,
     // channel__linked_name: String,
     // channel__description: Option<String>,
-    // channel__access_modifier: i16,
-    // channel__visability_modifier: i16,
+    // channel__access_modifier: u8,
+    // channel__visability_modifier: u8,
     // channel__orientation: Vec<i16>,
     // channel__cover_image_path: Option<String>,
     // channel__background_image_path: Option<String>,
@@ -236,8 +238,8 @@ impl Repository<Postgresql<Channel>> {
                 String,
                 String,
                 Option<String>,
-                i16,
-                i16,
+                u8,
+                u8,
                 Vec<i16>,
                 Option<String>,
                 Option<String>,
@@ -288,6 +290,14 @@ impl Repository<Postgresql<Channel>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
+            let channel__access_modifier = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(4));
+            if channel__access_modifier < (u8::MIN as i16) || channel__access_modifier > (u8::MAX as i16) {
+                return Result::Err(crate::new_logic_unreachable_state!());
+            }
+            let channel__visability_modifier = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(5));
+            if channel__visability_modifier < (u8::MIN as i16) || channel__visability_modifier > (u8::MAX as i16) {
+                return Result::Err(crate::new_logic_unreachable_state!());
+            }
             let channel__subscribers_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(9));
             if channel__subscribers_quantity < (u32::MIN as i64) || channel__subscribers_quantity > (u32::MAX as i64) {
                 return Result::Err(crate::new_logic_unreachable_state!());
@@ -299,8 +309,8 @@ impl Repository<Postgresql<Channel>> {
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(3)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(4)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(5)),
+                        channel__access_modifier as u8,
+                        channel__visability_modifier as u8,
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, Vec<i16>>(6)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(7)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<String>>(8)),
@@ -311,7 +321,7 @@ impl Repository<Postgresql<Channel>> {
         };
     }
     // channel__owner: i64,
-    // channel__access_modifier: i16,
+    // channel__access_modifier: u8,
     pub fn find_2<'a>(
         client_database_3: &'a Client,
         by: By1,
@@ -319,7 +329,7 @@ impl Repository<Postgresql<Channel>> {
         Output = Result<
             Option<(
                 i64,
-                i16,
+                u8,
             )>,
             AggregateError,
         >,
@@ -358,11 +368,15 @@ impl Repository<Postgresql<Channel>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
+            let channel__access_modifier = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1));
+            if channel__access_modifier < (u8::MIN as i16) || channel__access_modifier > (u8::MAX as i16) {
+                return Result::Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(
                 Option::Some(
                     (
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
+                        channel__access_modifier as u8,
                     ),
                 ),
             );
@@ -395,6 +409,7 @@ impl Repository<Postgresql<Channel>> {
                 3,
                 1,
             );
+            let channel__visability_modifier = by.channel__visability_modifier as i16;
             let wildcard = format!("{}%", by.channel__name,);
             let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
@@ -403,7 +418,7 @@ impl Repository<Postgresql<Channel>> {
                     Type::INT8,
                 )
                 .add(
-                    &by.channel__visability_modifier,
+                    &channel__visability_modifier,
                     Type::INT2,
                 )
                 .add(
@@ -604,7 +619,7 @@ impl Repository<Postgresql<Channel>> {
         };
     }
     // channel__owner: i64,
-    // channel__access_modifier: i16,
+    // channel__access_modifier: u8,
     pub fn find_6<'a>(
         client_database_3: &'a Client,
         by: By1,
@@ -612,7 +627,7 @@ impl Repository<Postgresql<Channel>> {
         Output = Result<
             Option<(
                 i64,
-                i16,
+                u8,
             )>,
             AggregateError,
         >,
@@ -651,11 +666,15 @@ impl Repository<Postgresql<Channel>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
+            let channel__access_modifier = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1));
+            if channel__access_modifier < (u8::MIN as i16) || channel__access_modifier > (u8::MAX as i16) {
+                return Result::Err(crate::new_logic_unreachable_state!());
+            }
             return Result::Ok(
                 Option::Some(
                     (
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1)),
+                        channel__access_modifier as u8,
                     ),
                 ),
             );
@@ -739,8 +758,8 @@ pub struct Insert<'a> {
     pub channel__name: &'a str,
     pub channel__linked_name: &'a str,
     pub channel__description: Option<&'a str>,
-    pub channel__access_modifier: i16,
-    pub channel__visability_modifier: i16,
+    pub channel__access_modifier: u8,
+    pub channel__visability_modifier: u8,
     pub channel__orientation: &'a [i16],
     pub channel__cover_image_path: Option<&'a str>,
     pub channel__background_image_path: Option<&'a str>,
@@ -760,7 +779,7 @@ pub struct By4<'a> {
     pub user__id: i64,
     pub channel__name: &'a str,
     pub requery___channel__name: Option<&'a str>,
-    pub channel__visability_modifier: i16,
+    pub channel__visability_modifier: u8,
 }
 pub struct By5<'a> {
     pub user__id: i64,

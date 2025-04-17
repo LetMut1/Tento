@@ -9,14 +9,14 @@ pub struct Description(PhantomData<Option<String>>);
 impl Description {
     pub const MAXIMUM_LENGTH: usize = 500;
 }
-pub struct AccessModifier(PhantomData<i16>);
-#[repr(i16)]
+pub struct AccessModifier(PhantomData<u8>);
+#[repr(u8)]
 pub enum AccessModifier_ {
     Open = 0,
     Close = 1,
 }
-pub struct VisabilityModifier(PhantomData<i16>);
-#[repr(i16)]
+pub struct VisabilityModifier(PhantomData<u8>);
+#[repr(u8)]
 pub enum VisabilityModifier_ {
     Public,
     Private,

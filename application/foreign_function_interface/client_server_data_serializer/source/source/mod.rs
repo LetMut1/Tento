@@ -2181,8 +2181,8 @@ type Channel_GetManyByNameInSubscriptions_CResult = CResult<CUnifiedReport<Chann
 pub struct Channel_GetManyByNameInSubscriptions_Data {
     pub channel__name: CString,
     pub channel__linked_name: CString,
-    pub channel__access_modifier: c_short,
-    pub channel__visability_modifier: c_short,
+    pub channel__access_modifier: c_uchar,
+    pub channel__visability_modifier: c_uchar,
     pub channel__cover_image_path: COption<CString>,
     pub channel__background_image_path: COption<CString>,
     pub channel_token_signed: ChannelTokenSigned,
@@ -2334,8 +2334,8 @@ type Channel_GetManyBySubscription_CResult = CResult<CUnifiedReport<Channel_GetM
 pub struct Channel_GetManyBySubscription_Data {
     pub channel__name: CString,
     pub channel__linked_name: CString,
-    pub channel__access_modifier: c_short,
-    pub channel__visability_modifier: c_short,
+    pub channel__access_modifier: c_uchar,
+    pub channel__visability_modifier: c_uchar,
     pub channel__cover_image_path: COption<CString>,
     pub channel__background_image_path: COption<CString>,
     pub channel_token_signed: ChannelTokenSigned,
@@ -2487,7 +2487,7 @@ type Channel_GetManyPublicByName_CResult = CResult<CUnifiedReport<Channel_GetMan
 pub struct Channel_GetManyPublicByName_Data {
     pub channel__name: CString,
     pub channel__linked_name: CString,
-    pub channel__access_modifier: c_short,
+    pub channel__access_modifier: c_uchar,
     pub channel__cover_image_path: COption<CString>,
     pub channel__background_image_path: COption<CString>,
     pub channel_token_signed: ChannelTokenSigned,
@@ -2637,8 +2637,8 @@ pub struct Channel_GetOneById_Outcoming {
     pub channel__name: CString,
     pub channel__linked_name: CString,
     pub channel__description: COption<CString>,
-    pub channel__access_modifier: c_short,
-    pub channel__visability_modifier: c_short,
+    pub channel__access_modifier: c_uchar,
+    pub channel__visability_modifier: c_uchar,
     pub channel__orientation: CVector<c_short>,
     pub channel__cover_image_path: COption<CString>,
     pub channel__background_image_path: COption<CString>,
@@ -2918,8 +2918,8 @@ pub struct Channel_Create_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__name: CString,
     pub channel__linked_name: CString,
-    pub channel__access_modifier: c_short,
-    pub channel__visability_modifier: c_short,
+    pub channel__access_modifier: c_uchar,
+    pub channel__visability_modifier: c_uchar,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__create__serialize_allocate(incoming: Channel_Create_Incoming) -> CResult<CVector<c_uchar>> {

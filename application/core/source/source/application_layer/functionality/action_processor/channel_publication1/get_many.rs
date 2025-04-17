@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__UserIsNotOwner));
             }
             if !incoming.channel_token_signed.channel_token__is_user_the_owner
-                && Channel_AccessModifier_::Close as i16 == channel__access_modifier {
+                && Channel_AccessModifier_::Close as u8 == channel__access_modifier {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));
             }
 

@@ -581,8 +581,8 @@ typedef struct ChannelTokenSigned {
 typedef struct Channel_GetManyByNameInSubscriptions_Data {
   struct CString channel__name;
   struct CString channel__linked_name;
-  short channel__access_modifier;
-  short channel__visability_modifier;
+  unsigned char channel__access_modifier;
+  unsigned char channel__visability_modifier;
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
   struct ChannelTokenSigned channel_token_signed;
@@ -633,8 +633,8 @@ typedef struct Channel_GetManyBySubscription_Incoming {
 typedef struct Channel_GetManyBySubscription_Data {
   struct CString channel__name;
   struct CString channel__linked_name;
-  short channel__access_modifier;
-  short channel__visability_modifier;
+  unsigned char channel__access_modifier;
+  unsigned char channel__visability_modifier;
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
   struct ChannelTokenSigned channel_token_signed;
@@ -681,7 +681,7 @@ typedef struct Channel_GetManyPublicByName_Incoming {
 typedef struct Channel_GetManyPublicByName_Data {
   struct CString channel__name;
   struct CString channel__linked_name;
-  short channel__access_modifier;
+  unsigned char channel__access_modifier;
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
   struct ChannelTokenSigned channel_token_signed;
@@ -732,12 +732,12 @@ typedef struct Channel_GetOneById_Outcoming {
   struct CString channel__name;
   struct CString channel__linked_name;
   struct COption_CString channel__description;
-  short channel__access_modifier;
-  short channel__visability_modifier;
+  unsigned char channel__access_modifier;
+  unsigned char channel__visability_modifier;
   struct CVector_c_short channel__orientation;
   struct COption_CString channel__cover_image_path;
   struct COption_CString channel__background_image_path;
-  long channel__subscribers_quantity;
+  unsigned int channel__subscribers_quantity;
 } Channel_GetOneById_Outcoming;
 
 typedef struct CData_Channel_GetOneById_Outcoming {
@@ -832,8 +832,8 @@ typedef struct Channel_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   struct CString channel__name;
   struct CString channel__linked_name;
-  short channel__access_modifier;
-  short channel__visability_modifier;
+  unsigned char channel__access_modifier;
+  unsigned char channel__visability_modifier;
 } Channel_Create_Incoming;
 
 typedef struct Channel_Create_Outcoming {

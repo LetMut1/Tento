@@ -29,8 +29,8 @@ pub struct Incoming<'a> {
 pub struct Data {
     pub channel__name: String,
     pub channel__linked_name: String,
-    pub channel__access_modifier: i16,
-    pub channel__visability_modifier: i16,
+    pub channel__access_modifier: u8,
+    pub channel__visability_modifier: u8,
     pub channel__cover_image_path: Option<String>,
     pub channel__background_image_path: Option<String>,
     pub channel_token_signed: ChannelTokenSigned,

@@ -90,11 +90,19 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
             .await?;
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
             '_a: for row in rows.iter() {
+                let channel__access_modifier = crate::result_return_logic!(row.try_get::<'_, usize, i16>(3));
+                if channel__access_modifier < (u8::MIN as i16) || channel__access_modifier > (u8::MAX as i16) {
+                    return Result::Err(crate::new_logic_unreachable_state!());
+                }
+                let channel__visability_modifier = crate::result_return_logic!(row.try_get::<'_, usize, i16>(4));
+                if channel__visability_modifier < (u8::MIN as i16) || channel__visability_modifier > (u8::MAX as i16) {
+                    return Result::Err(crate::new_logic_unreachable_state!());
+                }
                 let data = Data {
                     channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
                     channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
-                    channel__access_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(3)),
-                    channel__visability_modifier: crate::result_return_logic!(row.try_get::<'_, usize, i16>(4)),
+                    channel__access_modifier: channel__access_modifier as u8,
+                    channel__visability_modifier: channel__visability_modifier as u8,
                     channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
                     channel_token_signed: Encoder::<ChannelToken>::encode(
