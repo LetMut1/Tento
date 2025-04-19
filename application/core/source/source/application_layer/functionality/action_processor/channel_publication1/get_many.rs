@@ -93,12 +93,12 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                 Option::Some(values) => values,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
             };
-            if incoming.channel_token_signed.channel_token__is_user_the_owner
+            if incoming.channel_token_signed.channel_token__is_user_the_channel_owner
                 && incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__UserIsNotOwner));
             }
-            if !incoming.channel_token_signed.channel_token__is_user_the_owner
-                && !incoming.channel_token_signed.channel_token__is_user_subscribed
+            if !incoming.channel_token_signed.channel_token__is_user_the_channel_owner
+                && !incoming.channel_token_signed.channel_token__is_user_the_channel_subscriber
                 && Channel_AccessModifier_::Close as u8 == channel__access_modifier {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));
             }

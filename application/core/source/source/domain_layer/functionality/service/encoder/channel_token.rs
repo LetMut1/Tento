@@ -29,8 +29,8 @@ impl Encoder<ChannelToken> {
         channel__id: i64,
         channel_token__obfuscation_value: i64,
         channel_token__expires_at: i64,
-        channel_token__is_user_subscribed: bool,
-        channel_token__is_user_the_owner: bool,
+        channel_token__is_user_the_channel_subscriber: bool,
+        channel_token__is_user_the_channel_owner: bool,
     ) -> Result<ChannelTokenSigned, AggregateError> {
         let serialized = Serializer::<BitCode>::serialize(
             &Data {
@@ -38,8 +38,8 @@ impl Encoder<ChannelToken> {
                 channel__id,
                 channel_token__obfuscation_value,
                 channel_token__expires_at,
-                channel_token__is_user_subscribed,
-                channel_token__is_user_the_owner,
+                channel_token__is_user_the_channel_subscriber,
+                channel_token__is_user_the_channel_owner,
             },
         )?;
         let signature = Encoder_::<HmacSha2_256>::encode(
@@ -51,8 +51,8 @@ impl Encoder<ChannelToken> {
                 channel__id,
                 channel_token__obfuscation_value,
                 channel_token__expires_at,
-                channel_token__is_user_subscribed,
-                channel_token__is_user_the_owner,
+                channel_token__is_user_the_channel_subscriber,
+                channel_token__is_user_the_channel_owner,
                 signature,
             },
         );
@@ -70,8 +70,8 @@ impl Encoder<ChannelToken> {
                     channel__id: channel_token_signed.channel__id,
                     channel_token__obfuscation_value: channel_token_signed.channel_token__obfuscation_value,
                     channel_token__expires_at: channel_token_signed.channel_token__expires_at,
-                    channel_token__is_user_subscribed: channel_token_signed.channel_token__is_user_subscribed,
-                    channel_token__is_user_the_owner: channel_token_signed.channel_token__is_user_the_owner,
+                    channel_token__is_user_the_channel_subscriber: channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                    channel_token__is_user_the_channel_owner: channel_token_signed.channel_token__is_user_the_channel_owner,
                 },
             )?
             .as_slice(),
@@ -89,6 +89,6 @@ struct Data {
     channel__id: i64,
     channel_token__obfuscation_value: i64,
     channel_token__expires_at: i64,
-    channel_token__is_user_subscribed: bool,
-    channel_token__is_user_the_owner: bool,
+    channel_token__is_user_the_channel_subscriber: bool,
+    channel_token__is_user_the_channel_owner: bool,
 }

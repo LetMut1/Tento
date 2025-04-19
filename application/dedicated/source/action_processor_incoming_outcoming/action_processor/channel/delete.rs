@@ -17,27 +17,13 @@ pub struct Incoming<'a> {
         serde(borrow)
     )]
     pub user_access_token_signed: UserAccessTokenSigned<'a>,
-    pub channel__name: &'a str,
-    pub channel__linked_name: &'a str,
-    pub channel__access_modifier: u8,
-    pub channel__visability_modifier: u8,
-}
-#[cfg_attr(
-    feature = "serde_for_manual_test",
-    derive(
-        serde::Serialize,
-        serde::Deserialize,
-    )
-)]
-#[derive(bitcode::Encode, bitcode::Decode)]
-pub struct Outcoming {
     pub channel_token_signed: ChannelTokenSigned,
 }
 crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserAccessToken__AlreadyExpired,
-        CommonPrecedent::Channel__NameAlreadyExist,
-        CommonPrecedent::Channel__LinkedNameAlreadyExist,
-        CommonPrecedent::ParallelExecution,
+        CommonPrecedent::ChannelToken__AlreadyExpired,
+        // CommonPrecedent::ChannelToken_XXXXXx_UserIsNotOwner,
+        CommonPrecedent::Channel__NotFound,
     }
 );

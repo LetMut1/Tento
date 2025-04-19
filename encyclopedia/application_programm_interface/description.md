@@ -62,8 +62,8 @@ struct ChannelTokenSigned {
     channel__id: i64,
     channel_token__obfuscation_value
     channel_token__expires_at: i64,
-    channel_token__is_user_subscribed: bool,
-    channel_token__is_user_the_owner: bool,
+    channel_token__is_user_the_channel_subscriber: bool,
+    channel_token__is_user_the_channel_owner: bool,
     signature: Vec<u8>,
 }
 ```

@@ -79,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
             if incoming.channel_token_signed.channel__id != incoming.channel_publication1_token_signed.channel__id {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !incoming.channel_token_signed.channel_token__is_user_the_owner {
+            if !incoming.channel_token_signed.channel_token__is_user_the_channel_owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
             let mut postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);

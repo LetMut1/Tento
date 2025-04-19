@@ -66,10 +66,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
             if incoming.channel_token_signed.channel_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__AlreadyExpired));
             }
-            if incoming.channel_token_signed.channel_token__is_user_the_owner {
+            if incoming.channel_token_signed.channel_token__is_user_the_channel_owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__UserIsOwner));
             }
-            if !incoming.channel_token_signed.channel_token__is_user_subscribed {
+            if !incoming.channel_token_signed.channel_token__is_user_the_channel_subscriber {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelSubscription__NotFound));
             }
             let mut postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
@@ -126,7 +126,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
                             Generator::<ChannelToken_ObfuscationValue>::generate(),
                             Generator::<ChannelToken_ExpiresAt>::generate(now)?,
                             false,
-                            incoming.channel_token_signed.channel_token__is_user_the_owner,
+                            incoming.channel_token_signed.channel_token__is_user_the_channel_owner,
                         )?,
                     },
                 ),

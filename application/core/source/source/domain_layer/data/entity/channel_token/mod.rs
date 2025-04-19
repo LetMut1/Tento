@@ -3,8 +3,8 @@ use {
     self::field::{
         ExpiresAt,
         ObfuscationValue,
-        IsUserSubscribed,
-        IsUserTheOwner,
+        IsUserTheChannelSubscriber,
+        IsUserTheChannelOwner,
     },
     super::{
         channel::Channel_Id,
@@ -18,8 +18,8 @@ pub struct ChannelToken {
     channel__id: Channel_Id,
     obfuscation_value: ObfuscationValue,
     expires_at: ExpiresAt,
-    is_user_subscribed: IsUserSubscribed,
-    is_user_the_owner: IsUserTheOwner,
+    is_user_the_channel_subscriber: IsUserTheChannelSubscriber,
+    is_user_the_channel_owner: IsUserTheChannelOwner,
 }
 pub type ChannelToken_ObfuscationValue = ObfuscationValue;
 pub type ChannelToken_ExpiresAt = ExpiresAt;

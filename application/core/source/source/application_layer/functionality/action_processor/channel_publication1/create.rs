@@ -89,7 +89,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
                     return Result::Err(crate::new_invalid_argument!());
                 }
             }
-            if !incoming.channel_token_signed.channel_token__is_user_the_owner {
+            if !incoming.channel_token_signed.channel_token__is_user_the_channel_owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User__IsNotChannelOwner));
             }
             let channel_publication1__id = match Repository::<Postgresql<ChannelPublication1>>::create(

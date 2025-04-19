@@ -15,6 +15,8 @@ pub enum CommonPrecedent {
     ChannelSubscriptionToken__AlreadyExpired,
     ChannelToken__AlreadyExpired,
     ChannelToken__UserIsNotOwner,
+
+    // invalid channel owner definition
     ParallelExecution,
     User__EmailAlreadyExist,
     User__IsNotChannelOwner,

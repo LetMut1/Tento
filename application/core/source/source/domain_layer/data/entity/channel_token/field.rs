@@ -4,5 +4,5 @@ pub struct ExpiresAt(PhantomData<i64>);
 impl ExpiresAt {
     pub const QUANTITY_OF_MICROSECONDS_FOR_EXPIRATION: i64 = 1000000 * 60 * 60;
 }
-pub struct IsUserSubscribed(PhantomData<bool>);
-pub struct IsUserTheOwner(PhantomData<bool>);
+pub struct IsUserTheChannelSubscriber(PhantomData<bool>);
+pub struct IsUserTheChannelOwner(PhantomData<bool>);
