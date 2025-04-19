@@ -864,6 +864,15 @@ typedef struct ChannelSubscription_Create_Incoming {
   struct ChannelTokenSigned channel_token_signed;
 } ChannelSubscription_Create_Incoming;
 
+typedef struct ChannelSubscription_Create_Outcoming {
+  struct ChannelTokenSigned channel_token_signed;
+} ChannelSubscription_Create_Outcoming;
+
+typedef struct CData_ChannelSubscription_Create_Outcoming {
+  struct ChannelSubscription_Create_Outcoming filled;
+  bool is_filled;
+} CData_ChannelSubscription_Create_Outcoming;
+
 typedef struct ChannelSubscription_Create_Precedent {
   bool user_access_token___already_expired;
   bool channel_token___already_expired;
@@ -872,23 +881,32 @@ typedef struct ChannelSubscription_Create_Precedent {
   bool channel_subscription___already_exist;
 } ChannelSubscription_Create_Precedent;
 
-typedef struct CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent {
-  struct CData_CVoid target;
+typedef struct CUnifiedReport_ChannelSubscription_Create_Outcoming__ChannelSubscription_Create_Precedent {
+  struct CData_ChannelSubscription_Create_Outcoming target;
   struct ChannelSubscription_Create_Precedent precedent;
   bool is_target;
-} CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent;
+} CUnifiedReport_ChannelSubscription_Create_Outcoming__ChannelSubscription_Create_Precedent;
 
-typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent {
-  struct CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent data;
+typedef struct CResult_CUnifiedReport_ChannelSubscription_Create_Outcoming__ChannelSubscription_Create_Precedent {
+  struct CUnifiedReport_ChannelSubscription_Create_Outcoming__ChannelSubscription_Create_Precedent data;
   bool is_data;
-} CResult_CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent;
+} CResult_CUnifiedReport_ChannelSubscription_Create_Outcoming__ChannelSubscription_Create_Precedent;
 
-typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Create_Precedent ChannelSubscription_Create_CResult;
+typedef struct CResult_CUnifiedReport_ChannelSubscription_Create_Outcoming__ChannelSubscription_Create_Precedent ChannelSubscription_Create_CResult;
 
 typedef struct ChannelSubscription_Delete_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   struct ChannelTokenSigned channel_token_signed;
 } ChannelSubscription_Delete_Incoming;
+
+typedef struct ChannelSubscription_Delete_Outcoming {
+  struct ChannelTokenSigned channel_token_signed;
+} ChannelSubscription_Delete_Outcoming;
+
+typedef struct CData_ChannelSubscription_Delete_Outcoming {
+  struct ChannelSubscription_Delete_Outcoming filled;
+  bool is_filled;
+} CData_ChannelSubscription_Delete_Outcoming;
 
 typedef struct ChannelSubscription_Delete_Precedent {
   bool user_access_token___already_expired;
@@ -898,18 +916,18 @@ typedef struct ChannelSubscription_Delete_Precedent {
   bool channel___not_found;
 } ChannelSubscription_Delete_Precedent;
 
-typedef struct CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent {
-  struct CData_CVoid target;
+typedef struct CUnifiedReport_ChannelSubscription_Delete_Outcoming__ChannelSubscription_Delete_Precedent {
+  struct CData_ChannelSubscription_Delete_Outcoming target;
   struct ChannelSubscription_Delete_Precedent precedent;
   bool is_target;
-} CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent;
+} CUnifiedReport_ChannelSubscription_Delete_Outcoming__ChannelSubscription_Delete_Precedent;
 
-typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent {
-  struct CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent data;
+typedef struct CResult_CUnifiedReport_ChannelSubscription_Delete_Outcoming__ChannelSubscription_Delete_Precedent {
+  struct CUnifiedReport_ChannelSubscription_Delete_Outcoming__ChannelSubscription_Delete_Precedent data;
   bool is_data;
-} CResult_CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent;
+} CResult_CUnifiedReport_ChannelSubscription_Delete_Outcoming__ChannelSubscription_Delete_Precedent;
 
-typedef struct CResult_CUnifiedReport_CVoid__ChannelSubscription_Delete_Precedent ChannelSubscription_Delete_CResult;
+typedef struct CResult_CUnifiedReport_ChannelSubscription_Delete_Outcoming__ChannelSubscription_Delete_Precedent ChannelSubscription_Delete_CResult;
 
 typedef struct ChannelPublication1_GetMany_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
@@ -1365,7 +1383,7 @@ void channel_subscription__create__serialize_deallocate(struct CResult_CVector_c
 
 ChannelSubscription_Create_CResult channel_subscription__create__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
 
-void channel_subscription__create__deserialize_deallocate(ChannelSubscription_Create_CResult _c_result);
+void channel_subscription__create__deserialize_deallocate(ChannelSubscription_Create_CResult c_result);
 
 struct CResult_CVector_c_uchar channel_subscription__delete__serialize_allocate(struct ChannelSubscription_Delete_Incoming incoming);
 
@@ -1373,7 +1391,7 @@ void channel_subscription__delete__serialize_deallocate(struct CResult_CVector_c
 
 ChannelSubscription_Delete_CResult channel_subscription__delete__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
 
-void channel_subscription__delete__deserialize_deallocate(ChannelSubscription_Delete_CResult _c_result);
+void channel_subscription__delete__deserialize_deallocate(ChannelSubscription_Delete_CResult c_result);
 
 struct CResult_CVector_c_uchar channel_publication1__get_many__serialize_allocate(struct ChannelPublication1_GetMany_Incoming incoming);
 

@@ -88,10 +88,12 @@ use {
             channel_subscription::{
                 create::{
                     Incoming as ChannelSubscription_Create_Incoming_,
+                    Outcoming as ChannelSubscription_Create_Outcoming_,
                     Precedent as ChannelSubscription_Create_Precedent_,
                 },
                 delete::{
                     Incoming as ChannelSubscription_Delete_Incoming_,
+                    Outcoming as ChannelSubscription_Delete_Outcoming_,
                     Precedent as ChannelSubscription_Delete_Precedent_,
                 },
             },
@@ -800,9 +802,7 @@ pub extern "C-unwind" fn user_authorization__check_email_for_existing__deseriali
     let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming_, Void>| -> Result<CUnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
         let UnifiedReport::Target { data } = unified_report;
         let c_data = match data {
-            Data::Empty => {
-                CData::empty()
-            }
+            Data::Empty => CData::empty(),
             Data::Filled { data: data_ } => {
                 let outcoming = UserAuthorization_CheckEmailForExisting_Outcoming {
                     result: data_.result,
@@ -861,9 +861,7 @@ pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__deseri
     let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void>| -> Result<CUnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
         let UnifiedReport::Target { data } = unified_report;
         let c_data = match data {
-            Data::Empty => {
-                CData::empty()
-            }
+            Data::Empty => CData::empty(),
             Data::Filled { data: data_ } => {
                 let outcoming = UserAuthorization_CheckNicknameForExisting_Outcoming {
                     result: data_.result,
@@ -2657,9 +2655,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let c_data = match data {
-                    Data::Empty => {
-                        CData::empty()
-                    }
+                    Data::Empty => CData::empty(),
                     Data::Filled {
                         data: data_
                     } => {
@@ -2789,9 +2785,7 @@ pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let c_data = match data {
-                    Data::Empty => {
-                        CData::empty()
-                    }
+                    Data::Empty => CData::empty(),
                     Data::Filled {
                         data: data_
                     } => {
@@ -2873,9 +2867,7 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_al
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let c_data = match data {
-                    Data::Empty => {
-                        CData::empty()
-                    }
+                    Data::Empty => CData::empty(),
                     Data::Filled {
                         data: data_
                     } => {
@@ -2966,9 +2958,7 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let c_data = match data {
-                    Data::Empty => {
-                        CData::empty()
-                    }
+                    Data::Empty => CData::empty(),
                     Data::Filled {
                         data: data_
                     } => {
@@ -3062,7 +3052,12 @@ pub extern "C-unwind" fn channel_subscription__create__serialize_deallocate(c_re
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ChannelSubscription_Create_CResult = CResult<CUnifiedReport<CVoid, ChannelSubscription_Create_Precedent>>;
+type ChannelSubscription_Create_CResult = CResult<CUnifiedReport<ChannelSubscription_Create_Outcoming, ChannelSubscription_Create_Precedent>>;
+#[repr(C)]
+#[derive(Default)]
+pub struct ChannelSubscription_Create_Outcoming {
+    pub channel_token_signed: ChannelTokenSigned
+}
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelSubscription_Create_Precedent {
@@ -3074,9 +3069,29 @@ pub struct ChannelSubscription_Create_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Create_CResult {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelSubscription_Create_Precedent_>| -> Result<CUnifiedReport<CVoid, ChannelSubscription_Create_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ChannelSubscription_Create_Outcoming_, ChannelSubscription_Create_Precedent_>| -> Result<CUnifiedReport<ChannelSubscription_Create_Outcoming, ChannelSubscription_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data } => {
+                let c_data = match data {
+                    Data::Empty => CData::empty(),
+                    Data::Filled {
+                        data: data_
+                    } => {
+                        let outcoming = ChannelSubscription_Create_Outcoming {
+                            channel_token_signed: ChannelTokenSigned {
+                                channel__id: data_.channel_token_signed.channel__id,
+                                channel_token__obfuscation_value: data_.channel_token_signed.channel_token__obfuscation_value,
+                                channel_token__expires_at: data_.channel_token_signed.channel_token__expires_at,
+                                channel_token__is_user_subscribed: data_.channel_token_signed.channel_token__is_user_subscribed,
+                                channel_token__is_user_the_owner: data_.channel_token_signed.channel_token__is_user_the_owner,
+                                signature: Allocator::<CVector<_>>::allocate(data_.channel_token_signed.signature),
+                            },
+                        };
+                        CData::filled(outcoming)
+                    }
+                };
+                CUnifiedReport::target(c_data)
+            }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     ChannelSubscription_Create_Precedent_::UserAccessToken__AlreadyExpired => ChannelSubscription_Create_Precedent {
@@ -3111,7 +3126,10 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
     );
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_subscription__create__deserialize_deallocate(_c_result: ChannelSubscription_Create_CResult) -> () {
+pub extern "C-unwind" fn channel_subscription__create__deserialize_deallocate(c_result: ChannelSubscription_Create_CResult) -> () {
+    if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_token_signed.signature);
+    }
     return ();
 }
 #[repr(C)]
@@ -3153,7 +3171,12 @@ pub extern "C-unwind" fn channel_subscription__delete__serialize_deallocate(c_re
     Allocator::<CResult<CVector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ChannelSubscription_Delete_CResult = CResult<CUnifiedReport<CVoid, ChannelSubscription_Delete_Precedent>>;
+type ChannelSubscription_Delete_CResult = CResult<CUnifiedReport<ChannelSubscription_Delete_Outcoming, ChannelSubscription_Delete_Precedent>>;
+#[repr(C)]
+#[derive(Default)]
+pub struct ChannelSubscription_Delete_Outcoming {
+    pub channel_token_signed: ChannelTokenSigned
+}
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelSubscription_Delete_Precedent {
@@ -3165,9 +3188,29 @@ pub struct ChannelSubscription_Delete_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Delete_CResult {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelSubscription_Delete_Precedent_>| -> Result<CUnifiedReport<CVoid, ChannelSubscription_Delete_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ChannelSubscription_Delete_Outcoming_, ChannelSubscription_Delete_Precedent_>| -> Result<CUnifiedReport<ChannelSubscription_Delete_Outcoming, ChannelSubscription_Delete_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data } => {
+                let c_data = match data {
+                    Data::Empty => CData::empty(),
+                    Data::Filled {
+                        data: data_
+                    } => {
+                        let outcoming = ChannelSubscription_Delete_Outcoming {
+                            channel_token_signed: ChannelTokenSigned {
+                                channel__id: data_.channel_token_signed.channel__id,
+                                channel_token__obfuscation_value: data_.channel_token_signed.channel_token__obfuscation_value,
+                                channel_token__expires_at: data_.channel_token_signed.channel_token__expires_at,
+                                channel_token__is_user_subscribed: data_.channel_token_signed.channel_token__is_user_subscribed,
+                                channel_token__is_user_the_owner: data_.channel_token_signed.channel_token__is_user_the_owner,
+                                signature: Allocator::<CVector<_>>::allocate(data_.channel_token_signed.signature),
+                            },
+                        };
+                        CData::filled(outcoming)
+                    }
+                };
+                CUnifiedReport::target(c_data)
+            }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired => ChannelSubscription_Delete_Precedent {
@@ -3202,7 +3245,10 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_ve
     );
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_subscription__delete__deserialize_deallocate(_c_result: ChannelSubscription_Delete_CResult) -> () {
+pub extern "C-unwind" fn channel_subscription__delete__deserialize_deallocate(c_result: ChannelSubscription_Delete_CResult) -> () {
+    if c_result.is_data && c_result.data.is_target && c_result.data.target.is_filled {
+        Allocator::<CVector<_>>::deallocate(c_result.data.target.filled.channel_token_signed.signature);
+    }
     return ();
 }
 #[repr(C)]
@@ -6178,7 +6224,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelSubscription_Create_Precedent_>::target_empty();
+                let unified_report = UnifiedReport::<ChannelSubscription_Create_Outcoming_, ChannelSubscription_Create_Precedent_>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel_subscription__create__deserialize_allocate,
@@ -6186,10 +6232,25 @@ mod test {
                 );
             }
             pub fn target_filled__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
-                return Result::Ok(());
+                let outcoming = ChannelSubscription_Create_Outcoming_ {
+                    channel_token_signed: ChannelTokenSigned_ {
+                        channel__id: 0,
+                        channel_token__obfuscation_value: 0,
+                        channel_token__expires_at: 0,
+                        channel_token__is_user_subscribed: false,
+                        channel_token__is_user_the_owner: false,
+                        signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                    },
+                };
+                let unified_report = UnifiedReport::<ChannelSubscription_Create_Outcoming_, ChannelSubscription_Create_Precedent_>::target_filled(outcoming);
+                return run_by_template(
+                    &unified_report,
+                    channel_subscription__create__deserialize_allocate,
+                    channel_subscription__create__deserialize_deallocate,
+                );
             }
             fn _precedent__channel_subscription__create(precedent: ChannelSubscription_Create_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelSubscription_Create_Precedent_>::precedent(precedent);
+                let unified_report = UnifiedReport::<ChannelSubscription_Create_Outcoming_, ChannelSubscription_Create_Precedent_>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel_subscription__create__deserialize_allocate,
@@ -6217,7 +6278,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel_subscription__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelSubscription_Delete_Precedent_>::target_empty();
+                let unified_report = UnifiedReport::<ChannelSubscription_Delete_Outcoming_, ChannelSubscription_Delete_Precedent_>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel_subscription__delete__deserialize_allocate,
@@ -6225,10 +6286,25 @@ mod test {
                 );
             }
             pub fn target_filled__channel_subscription__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                return Result::Ok(());
+                let outcoming = ChannelSubscription_Delete_Outcoming_ {
+                    channel_token_signed: ChannelTokenSigned_ {
+                        channel__id: 0,
+                        channel_token__obfuscation_value: 0,
+                        channel_token__expires_at: 0,
+                        channel_token__is_user_subscribed: false,
+                        channel_token__is_user_the_owner: false,
+                        signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                    },
+                };
+                let unified_report = UnifiedReport::<ChannelSubscription_Delete_Outcoming_, ChannelSubscription_Create_Precedent_>::target_filled(outcoming);
+                return run_by_template(
+                    &unified_report,
+                    channel_subscription__delete__deserialize_allocate,
+                    channel_subscription__delete__deserialize_deallocate,
+                );
             }
             fn _precedent__channel_subscription__delete(precedent: ChannelSubscription_Delete_Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelSubscription_Delete_Precedent_>::precedent(precedent);
+                let unified_report = UnifiedReport::<ChannelSubscription_Delete_Outcoming_, ChannelSubscription_Delete_Precedent_>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel_subscription__delete__deserialize_allocate,

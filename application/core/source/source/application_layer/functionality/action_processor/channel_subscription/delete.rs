@@ -7,9 +7,9 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::Channel, channel_subscription::ChannelSubscription, channel_token::ChannelToken, user_access_token::UserAccessToken
+                channel::Channel, channel_subscription::ChannelSubscription, channel_token::{ChannelToken, ChannelToken_ExpiresAt, ChannelToken_ObfuscationValue}, user_access_token::UserAccessToken
             },
-            functionality::service::encoder::Encoder,
+            functionality::service::{encoder::Encoder, generator::Generator},
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
@@ -33,18 +33,16 @@ use {
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel_subscription::delete::{
-            Incoming,
-            Precedent,
+            Incoming, Outcoming, Precedent
         },
         unified_report::UnifiedReport,
-        void::Void,
     },
     std::future::Future,
 };
 pub struct ChannelSubscription_Delete;
 impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
     type Incoming<'a> = Incoming<'a>;
-    type Outcoming = Void;
+    type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
@@ -118,7 +116,21 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound));
             }
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
-            return Result::Ok(UnifiedReport::target_empty());
+            return Result::Ok(
+                UnifiedReport::target_filled(
+                    Outcoming {
+                        channel_token_signed: Encoder::<ChannelToken>::encode(
+                            &inner.environment_configuration.subject.encryption.private_key,
+                            incoming.user_access_token_signed.user__id,
+                            incoming.channel_token_signed.channel__id,
+                            Generator::<ChannelToken_ObfuscationValue>::generate(),
+                            Generator::<ChannelToken_ExpiresAt>::generate(now)?,
+                            false,
+                            incoming.channel_token_signed.channel_token__is_user_the_owner,
+                        )?,
+                    },
+                ),
+            );
         };
     }
 }

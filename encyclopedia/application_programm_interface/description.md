@@ -346,6 +346,11 @@ enum Precedent {
     Channel__NotFound,
 }
 ```
+```
+struct Outcoming {
+    channel_token_signed: <Data standards>,
+}
+```
  - ## ChannelSubscription_Delete POST /channel_subscription/delete
 ```
 Unsubscribes user from channel.
@@ -363,6 +368,11 @@ enum Precedent {
     Channel__UserIsOwner,
     ChannelSubscription__NotFound,
     Channel__NotFound,
+}
+```
+```
+struct Outcoming {
+    channel_token_signed: <Data standards>,
 }
 ```
  - ## ChannelPublication1_Create POST /channel_publication1/create
