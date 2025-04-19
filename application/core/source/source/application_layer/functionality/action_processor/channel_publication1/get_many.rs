@@ -98,22 +98,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__UserIsNotOwner));
             }
             if !incoming.channel_token_signed.channel_token__is_user_the_owner
+                && !incoming.channel_token_signed.channel_token__is_user_subscribed
                 && Channel_AccessModifier_::Close as u8 == channel__access_modifier {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));
             }
-
-
-
-
-
-todo!("проверка на Подписку нужна ли. Почему я проверил только овнера");
-
-
-
-
-
-
-
             let rows = Repository::<Postgresql<ChannelPublication1>>::find_1(
                 &postgresql_client_database_3,
                 ChannelPublication1By2 {
