@@ -2647,7 +2647,7 @@ pub struct Channel_GetOneById_Precedent {
     pub channel___not_found: bool,
     pub channel___is_close: bool,
     pub channel_token___already_expired: bool,
-    pub channel_token___user_is_not_owner: bool,
+    pub channel_token___invalid_channel_owner_definition: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetOneById_CResult {
@@ -2704,8 +2704,8 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                         channel_token___already_expired: true,
                         ..Default::default()
                     },
-                    Channel_GetOneById_Precedent_::ChannelToken__UserIsNotOwner => Channel_GetOneById_Precedent {
-                        channel_token___user_is_not_owner: true,
+                    Channel_GetOneById_Precedent_::ChannelToken__InvalidChannelOwnerDefinition => Channel_GetOneById_Precedent {
+                        channel_token___invalid_channel_owner_definition: true,
                         ..Default::default()
                     }
                 };
@@ -3317,7 +3317,7 @@ pub struct ChannelPublication1_GetMany_Outcoming {
 pub struct ChannelPublication1_GetMany_Precedent {
     pub user_access_token___already_expired: bool,
     pub channel_token___already_expired: bool,
-    pub channel_token___user_is_not_owner: bool,
+    pub channel_token___invalid_channel_owner_definition: bool,
     pub channel___not_found: bool,
     pub channel___is_close: bool,
 }
@@ -3386,8 +3386,8 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                         channel_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_GetMany_Precedent_::ChannelToken__UserIsNotOwner => ChannelPublication1_GetMany_Precedent {
-                        channel_token___user_is_not_owner: true,
+                    ChannelPublication1_GetMany_Precedent_::ChannelToken__InvalidChannelOwnerDefinition => ChannelPublication1_GetMany_Precedent {
+                        channel_token___invalid_channel_owner_definition: true,
                         ..Default::default()
                     },
                     ChannelPublication1_GetMany_Precedent_::Channel__NotFound => ChannelPublication1_GetMany_Precedent {
@@ -6079,14 +6079,14 @@ mod test {
                     Channel_GetOneById_Precedent_::Channel__NotFound => {}
                     Channel_GetOneById_Precedent_::Channel__IsClose => {}
                     Channel_GetOneById_Precedent_::ChannelToken__AlreadyExpired => {}
-                    Channel_GetOneById_Precedent_::ChannelToken__UserIsNotOwner => {}
+                    Channel_GetOneById_Precedent_::ChannelToken__InvalidChannelOwnerDefinition => {}
                 }
                 let precedents: Vec<Channel_GetOneById_Precedent_> = vec![
                     Channel_GetOneById_Precedent_::UserAccessToken__AlreadyExpired,
                     Channel_GetOneById_Precedent_::Channel__NotFound,
                     Channel_GetOneById_Precedent_::Channel__IsClose,
                     Channel_GetOneById_Precedent_::ChannelToken__AlreadyExpired,
-                    Channel_GetOneById_Precedent_::ChannelToken__UserIsNotOwner,
+                    Channel_GetOneById_Precedent_::ChannelToken__InvalidChannelOwnerDefinition,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_one_by_id(precedent)?;
@@ -6386,14 +6386,14 @@ mod test {
                 match ChannelPublication1_GetMany_Precedent_::UserAccessToken__AlreadyExpired {
                     ChannelPublication1_GetMany_Precedent_::UserAccessToken__AlreadyExpired => {}
                     ChannelPublication1_GetMany_Precedent_::ChannelToken__AlreadyExpired => {}
-                    ChannelPublication1_GetMany_Precedent_::ChannelToken__UserIsNotOwner => {}
+                    ChannelPublication1_GetMany_Precedent_::ChannelToken__InvalidChannelOwnerDefinition => {}
                     ChannelPublication1_GetMany_Precedent_::Channel__NotFound => {}
                     ChannelPublication1_GetMany_Precedent_::Channel__IsClose => {}
                 }
                 let precedents: Vec<ChannelPublication1_GetMany_Precedent_> = vec![
                     ChannelPublication1_GetMany_Precedent_::UserAccessToken__AlreadyExpired,
                     ChannelPublication1_GetMany_Precedent_::ChannelToken__AlreadyExpired,
-                    ChannelPublication1_GetMany_Precedent_::ChannelToken__UserIsNotOwner,
+                    ChannelPublication1_GetMany_Precedent_::ChannelToken__InvalidChannelOwnerDefinition,
                     ChannelPublication1_GetMany_Precedent_::Channel__NotFound,
                     ChannelPublication1_GetMany_Precedent_::Channel__IsClose,
                 ];

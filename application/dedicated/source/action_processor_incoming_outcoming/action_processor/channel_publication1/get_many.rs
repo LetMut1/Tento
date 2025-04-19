@@ -55,7 +55,7 @@ crate::common_precedent::enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserAccessToken__AlreadyExpired,
         CommonPrecedent::ChannelToken__AlreadyExpired,
-        CommonPrecedent::ChannelToken__UserIsNotOwner,
+        CommonPrecedent::ChannelToken__InvalidChannelOwnerDefinition,
         CommonPrecedent::Channel__NotFound,
         CommonPrecedent::Channel__IsClose,
     }

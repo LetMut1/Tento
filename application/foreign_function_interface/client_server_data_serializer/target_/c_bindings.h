@@ -744,7 +744,7 @@ typedef struct Channel_GetOneById_Precedent {
   bool channel___not_found;
   bool channel___is_close;
   bool channel_token___already_expired;
-  bool channel_token___user_is_not_owner;
+  bool channel_token___invalid_channel_owner_definition;
 } Channel_GetOneById_Precedent;
 
 typedef struct CUnifiedReport_Channel_GetOneById_Outcoming__Channel_GetOneById_Precedent {
@@ -977,7 +977,7 @@ typedef struct CData_ChannelPublication1_GetMany_Outcoming {
 typedef struct ChannelPublication1_GetMany_Precedent {
   bool user_access_token___already_expired;
   bool channel_token___already_expired;
-  bool channel_token___user_is_not_owner;
+  bool channel_token___invalid_channel_owner_definition;
   bool channel___not_found;
   bool channel___is_close;
 } ChannelPublication1_GetMany_Precedent;

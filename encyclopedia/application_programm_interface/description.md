@@ -204,7 +204,7 @@ enum Precedent {
     Channel__NotFound,
     Channel__IsClose,
     ChannelToken__AlreadyExpired,
-    ChannelToken__UserIsNotOwner,
+    ChannelToken__InvalidChannelOwnerDefinition,
 }
 ```
  - ## Channel_GetManyByNameInSubscriptions POST /channel/get_many_by_name_in_subscriptions
@@ -460,7 +460,7 @@ struct Data {
 enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelToken__AlreadyExpired,
-    ChannelToken__UserIsNotOwner,
+    ChannelToken__InvalidChannelOwnerDefinition,
     Channel__NotFound,
     Channel__IsClose,
 }

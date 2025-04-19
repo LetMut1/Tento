@@ -94,7 +94,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             };
             if incoming.channel_token_signed.channel_token__is_user_the_channel_owner
                 && incoming.user_access_token_signed.user__id != channel__owner {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__UserIsNotOwner));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__InvalidChannelOwnerDefinition));
             }
             if !incoming.channel_token_signed.channel_token__is_user_the_channel_owner
                 && channel__access_modifier == Channel_AccessModifier_::Close as u8
