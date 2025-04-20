@@ -157,7 +157,7 @@ impl Resolver<Transaction<'_>> {
                     read_only,
                     deferrable,
                 } => {
-                    let mut query_;
+                    let query_;
                     if read_only {
                         if deferrable {
                             const QUERY: &'static str = const_format::concatcp!(
