@@ -268,17 +268,17 @@ where
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct CUnifiedReport<D, P> {
-    pub target: CData<D>,
+pub struct UnifiedReport_<D, P> {
+    pub target: Data_<D>,
     pub precedent: P,
     // If false, then it means we have to work with precedent.
     pub is_target: bool,
 }
-impl<D, P> CUnifiedReport<D, P>
+impl<D, P> UnifiedReport_<D, P>
 where
     P: Default,
 {
-    fn target(target: CData<D>) -> Self {
+    fn target(target: Data_<D>) -> Self {
         return Self {
             target,
             precedent: P::default(),
@@ -286,13 +286,13 @@ where
         };
     }
 }
-impl<D, P> CUnifiedReport<D, P>
+impl<D, P> UnifiedReport_<D, P>
 where
     D: Default,
 {
     fn precedent(precedent: P) -> Self {
         return Self {
-            target: CData::<D>::default(),
+            target: Data_::<D>::default(),
             precedent,
             is_target: false,
         };
@@ -300,25 +300,25 @@ where
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct CData<T> {
+pub struct Data_<T> {
     pub filled: T,
     // If false, then it means data is empty.
     pub is_filled: bool,
 }
-impl<T> CData<T> {
+impl<T> Data_<T> {
     fn filled(filled: T) -> Self {
-        return CData {
+        return Data_ {
             filled,
             is_filled: true,
         };
     }
 }
-impl<T> CData<T>
+impl<T> Data_<T>
 where
     T: Default,
 {
     fn empty() -> Self {
-        return CData {
+        return Data_ {
             filled: T::default(),
             is_filled: false,
         };
@@ -458,8 +458,8 @@ impl Transformer {
     }
     fn transform_server_response_data<O1, P1, O2, P2>(
         c_vector_of_bytes: CVector<c_uchar>,
-        converter: impl FnOnce(UnifiedReport<O1, P1>) -> Result<CUnifiedReport<O2, P2>, Box<dyn StdError + 'static>>,
-    ) -> Result_<CUnifiedReport<O2, P2>>
+        converter: impl FnOnce(UnifiedReport<O1, P1>) -> Result<UnifiedReport_<O2, P2>, Box<dyn StdError + 'static>>,
+    ) -> Result_<UnifiedReport_<O2, P2>>
     where
         O1: for<'a> Decode<'a>,
         P1: for<'a> Decode<'a>,
@@ -475,13 +475,13 @@ impl Transformer {
                 return Result_::error();
             }
         };
-        let c_unified_report = match converter(unified_report) {
-            Result::Ok(c_unified_report_) => c_unified_report_,
+        let unified_report = match converter(unified_report) {
+            Result::Ok(unified_report_) => unified_report_,
             Result::Err(_) => {
                 return Result_::error();
             }
         };
-        return Result_::data(c_unified_report);
+        return Result_::data(unified_report);
     }
 }
 #[repr(C)]
@@ -546,7 +546,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__serialize_
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type UserAuthorization_AuthorizeByFirstStep_Result = Result_<CUnifiedReport<UserAuthorization_AuthorizeByFirstStep_Outcoming, UserAuthorization_AuthorizeByFirstStep_Precedent>>;
+type UserAuthorization_AuthorizeByFirstStep_Result = Result_<UnifiedReport_<UserAuthorization_AuthorizeByFirstStep_Outcoming, UserAuthorization_AuthorizeByFirstStep_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_AuthorizeByFirstStep_Outcoming {
@@ -565,7 +565,7 @@ pub struct UserAuthorization_AuthorizeByFirstStep_Precedent {
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_AuthorizeByFirstStep_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_AuthorizeByFirstStep_Outcoming_, UserAuthorization_AuthorizeByFirstStep_Precedent_>| -> Result<
-        CUnifiedReport<UserAuthorization_AuthorizeByFirstStep_Outcoming, UserAuthorization_AuthorizeByFirstStep_Precedent>,
+        UnifiedReport_<UserAuthorization_AuthorizeByFirstStep_Outcoming, UserAuthorization_AuthorizeByFirstStep_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -573,7 +573,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserializ
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
@@ -584,10 +584,10 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserializ
                             user_authorization_token__wrong_enter_tries_quantity: data_.user_authorization_token__wrong_enter_tries_quantity,
                             user_authorization_token__wrong_enter_tries_quantity_limit: data_.user_authorization_token__wrong_enter_tries_quantity_limit,
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -606,7 +606,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserializ
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -648,7 +648,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__serialize_d
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type UserAuthorization_AuthorizeByLastStep_Result = Result_<CUnifiedReport<UserAuthorization_AuthorizeByLastStep_Outcoming, UserAuthorization_AuthorizeByLastStep_Precedent>>;
+type UserAuthorization_AuthorizeByLastStep_Result = Result_<UnifiedReport_<UserAuthorization_AuthorizeByLastStep_Outcoming, UserAuthorization_AuthorizeByLastStep_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_AuthorizeByLastStep_Outcoming {
@@ -673,7 +673,7 @@ pub struct UserAuthorizationToken__WrongValue {
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_AuthorizeByLastStep_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_AuthorizeByLastStep_Outcoming_, UserAuthorization_AuthorizeByLastStep_Precedent_>| -> Result<
-        CUnifiedReport<UserAuthorization_AuthorizeByLastStep_Outcoming, UserAuthorization_AuthorizeByLastStep_Precedent>,
+        UnifiedReport_<UserAuthorization_AuthorizeByLastStep_Outcoming, UserAuthorization_AuthorizeByLastStep_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -681,7 +681,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
@@ -698,10 +698,10 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                                 signature: Allocator::<CVector<_>>::allocate(data_.user_access_refresh_token_signed.signature),
                             },
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -743,7 +743,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -787,7 +787,7 @@ pub extern "C-unwind" fn user_authorization__check_email_for_existing__serialize
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type UserAuthorization_CheckEmailForExisting_Result = Result_<CUnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming, CVoid>>;
+type UserAuthorization_CheckEmailForExisting_Result = Result_<UnifiedReport_<UserAuthorization_CheckEmailForExisting_Outcoming, CVoid>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_CheckEmailForExisting_Outcoming {
@@ -797,18 +797,18 @@ pub struct UserAuthorization_CheckEmailForExisting_Outcoming {
 pub extern "C-unwind" fn user_authorization__check_email_for_existing__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_CheckEmailForExisting_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming_, Void>| -> Result<CUnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming_, Void>| -> Result<UnifiedReport_<UserAuthorization_CheckEmailForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
         let UnifiedReport::Target { data } = unified_report;
         let c_data = match data {
-            Data::Empty => CData::empty(),
+            Data::Empty => Data_::empty(),
             Data::Filled { data: data_ } => {
                 let outcoming = UserAuthorization_CheckEmailForExisting_Outcoming {
                     result: data_.result,
                 };
-                CData::filled(outcoming)
+                Data_::filled(outcoming)
             }
         };
-        return Result::Ok(CUnifiedReport::target(c_data));
+        return Result::Ok(UnifiedReport_::target(c_data));
     };
     return Transformer::transform_server_response_data(
         c_vector_of_bytes,
@@ -846,7 +846,7 @@ pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__serial
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type UserAuthorization_CheckNicknameForExisting_Result = Result_<CUnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming, CVoid>>;
+type UserAuthorization_CheckNicknameForExisting_Result = Result_<UnifiedReport_<UserAuthorization_CheckNicknameForExisting_Outcoming, CVoid>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_CheckNicknameForExisting_Outcoming {
@@ -856,18 +856,18 @@ pub struct UserAuthorization_CheckNicknameForExisting_Outcoming {
 pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_CheckNicknameForExisting_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void>| -> Result<CUnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void>| -> Result<UnifiedReport_<UserAuthorization_CheckNicknameForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
         let UnifiedReport::Target { data } = unified_report;
         let c_data = match data {
-            Data::Empty => CData::empty(),
+            Data::Empty => Data_::empty(),
             Data::Filled { data: data_ } => {
                 let outcoming = UserAuthorization_CheckNicknameForExisting_Outcoming {
                     result: data_.result,
                 };
-                CData::filled(outcoming)
+                Data_::filled(outcoming)
             }
         };
-        return Result::Ok(CUnifiedReport::target(c_data));
+        return Result::Ok(UnifiedReport_::target(c_data));
     };
     return Transformer::transform_server_response_data(
         c_vector_of_bytes,
@@ -911,7 +911,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__seria
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type UserAuthorization_DeauthorizeFromAllDevices_Result = Result_<CUnifiedReport<CVoid, UserAuthorization_DeauthorizeFromAllDevices_Precedent>>;
+type UserAuthorization_DeauthorizeFromAllDevices_Result = Result_<UnifiedReport_<CVoid, UserAuthorization_DeauthorizeFromAllDevices_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_DeauthorizeFromAllDevices_Precedent {
@@ -921,9 +921,9 @@ pub struct UserAuthorization_DeauthorizeFromAllDevices_Precedent {
 pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_DeauthorizeFromAllDevices_Result {
-    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_DeauthorizeFromAllDevices_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_>| -> Result<UnifiedReport_<CVoid, UserAuthorization_DeauthorizeFromAllDevices_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken__AlreadyExpired => {
@@ -933,7 +933,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deser
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -947,7 +947,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deser
 pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deserialize_deallocate(_result: UserAuthorization_DeauthorizeFromAllDevices_Result) -> () {
     return ();
 }
-type UserAuthorization_DeauthorizeFromOneDevice_Result = Result_<CUnifiedReport<CVoid, UserAuthorization_DeauthorizeFromOneDevice_Precedent>>;
+type UserAuthorization_DeauthorizeFromOneDevice_Result = Result_<UnifiedReport_<CVoid, UserAuthorization_DeauthorizeFromOneDevice_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_DeauthorizeFromOneDevice_Precedent {
@@ -990,9 +990,9 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__serial
 pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_DeauthorizeFromOneDevice_Result {
-    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_DeauthorizeFromOneDevice_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_>| -> Result<UnifiedReport_<CVoid, UserAuthorization_DeauthorizeFromOneDevice_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken__AlreadyExpired => {
@@ -1002,7 +1002,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deseri
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -1051,7 +1051,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__serialize_dea
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type UserAuthorization_RefreshAccessToken_Result = Result_<CUnifiedReport<UserAuthorization_RefreshAccessToken_Outcoming, UserAuthorization_RefreshAccessToken_Precedent>>;
+type UserAuthorization_RefreshAccessToken_Result = Result_<UnifiedReport_<UserAuthorization_RefreshAccessToken_Outcoming, UserAuthorization_RefreshAccessToken_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_RefreshAccessToken_Outcoming {
@@ -1068,7 +1068,7 @@ pub struct UserAuthorization_RefreshAccessToken_Precedent {
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RefreshAccessToken_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_RefreshAccessToken_Outcoming_, UserAuthorization_RefreshAccessToken_Precedent_>| -> Result<
-        CUnifiedReport<UserAuthorization_RefreshAccessToken_Outcoming, UserAuthorization_RefreshAccessToken_Precedent>,
+        UnifiedReport_<UserAuthorization_RefreshAccessToken_Outcoming, UserAuthorization_RefreshAccessToken_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -1076,7 +1076,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
@@ -1093,10 +1093,10 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
                                 signature: Allocator::<CVector<_>>::allocate(data_.user_access_refresh_token_signed.signature),
                             },
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -1121,7 +1121,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -1166,7 +1166,7 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__serialize_d
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type UserAuthorization_RegisterByFirstStep_Result = Result_<CUnifiedReport<UserAuthorization_RegisterByFirstStep_Outcoming, UserAuthorization_RegisterByFirstStep_Precedent>>;
+type UserAuthorization_RegisterByFirstStep_Result = Result_<UnifiedReport_<UserAuthorization_RegisterByFirstStep_Outcoming, UserAuthorization_RegisterByFirstStep_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_RegisterByFirstStep_Outcoming {
@@ -1184,7 +1184,7 @@ pub struct UserAuthorization_RegisterByFirstStep_Precedent {
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterByFirstStep_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_RegisterByFirstStep_Outcoming_, UserAuthorization_RegisterByFirstStep_Precedent_>| -> Result<
-        CUnifiedReport<UserAuthorization_RegisterByFirstStep_Outcoming, UserAuthorization_RegisterByFirstStep_Precedent>,
+        UnifiedReport_<UserAuthorization_RegisterByFirstStep_Outcoming, UserAuthorization_RegisterByFirstStep_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -1192,7 +1192,7 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
@@ -1202,10 +1202,10 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize
                             user_registration_token__wrong_enter_tries_quantity: data_.user_registration_token__wrong_enter_tries_quantity,
                             user_registration_token__wrong_enter_tries_quantity_limit: data_.user_registration_token__wrong_enter_tries_quantity_limit,
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -1224,7 +1224,7 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -1266,7 +1266,7 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__serialize_
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type UserAuthorization_RegisterBySecondStep_Result = Result_<CUnifiedReport<CVoid, UserAuthorization_RegisterBySecondStep_Precedent>>;
+type UserAuthorization_RegisterBySecondStep_Result = Result_<UnifiedReport_<CVoid, UserAuthorization_RegisterBySecondStep_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_RegisterBySecondStep_Precedent {
@@ -1284,9 +1284,9 @@ pub struct UserRegistrationToken__WrongValue {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_second_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterBySecondStep_Result {
-    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_RegisterBySecondStep_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_RegisterBySecondStep_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_RegisterBySecondStep_Precedent_>| -> Result<UnifiedReport_<CVoid, UserAuthorization_RegisterBySecondStep_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__NotFound => UserAuthorization_RegisterBySecondStep_Precedent {
@@ -1316,7 +1316,7 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__deserializ
                         ..Default::default()
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -1362,7 +1362,7 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__serialize_de
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type UserAuthorization_RegisterByLastStep_Result = Result_<CUnifiedReport<UserAuthorization_RegisterByLastStep_Outcoming, UserAuthorization_RegisterByLastStep_Precedent>>;
+type UserAuthorization_RegisterByLastStep_Result = Result_<UnifiedReport_<UserAuthorization_RegisterByLastStep_Outcoming, UserAuthorization_RegisterByLastStep_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_RegisterByLastStep_Outcoming {
@@ -1383,7 +1383,7 @@ pub struct UserAuthorization_RegisterByLastStep_Precedent {
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterByLastStep_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_RegisterByLastStep_Outcoming_, UserAuthorization_RegisterByLastStep_Precedent_>| -> Result<
-        CUnifiedReport<UserAuthorization_RegisterByLastStep_Outcoming, UserAuthorization_RegisterByLastStep_Precedent>,
+        UnifiedReport_<UserAuthorization_RegisterByLastStep_Outcoming, UserAuthorization_RegisterByLastStep_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -1391,7 +1391,7 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
@@ -1408,10 +1408,10 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
                                 signature: Allocator::<CVector<_>>::allocate(data_.user_access_refresh_token_signed.signature),
                             },
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -1460,7 +1460,7 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -1509,7 +1509,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__seria
     return ();
 }
 type UserAuthorization_ResetPasswordByFirstStep_Result =
-    Result_<CUnifiedReport<UserAuthorization_ResetPasswordByFirstStep_Outcoming, UserAuthorization_ResetPasswordByFirstStep_Precedent>>;
+    Result_<UnifiedReport_<UserAuthorization_ResetPasswordByFirstStep_Outcoming, UserAuthorization_ResetPasswordByFirstStep_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_ResetPasswordByFirstStep_Outcoming {
@@ -1530,7 +1530,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deser
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_ResetPasswordByFirstStep_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_ResetPasswordByFirstStep_Outcoming_, UserAuthorization_ResetPasswordByFirstStep_Precedent_>| -> Result<
-        CUnifiedReport<UserAuthorization_ResetPasswordByFirstStep_Outcoming, UserAuthorization_ResetPasswordByFirstStep_Precedent>,
+        UnifiedReport_<UserAuthorization_ResetPasswordByFirstStep_Outcoming, UserAuthorization_ResetPasswordByFirstStep_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -1538,7 +1538,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deser
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
@@ -1549,10 +1549,10 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deser
                             user_reset_password_token__wrong_enter_tries_quantity: data_.user_reset_password_token__wrong_enter_tries_quantity,
                             user_reset_password_token__wrong_enter_tries_quantity_limit: data_.user_reset_password_token__wrong_enter_tries_quantity_limit,
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -1571,7 +1571,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deser
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -1616,7 +1616,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__seri
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type UserAuthorization_ResetPasswordBySecondStep_Result = Result_<CUnifiedReport<CVoid, UserAuthorization_ResetPasswordBySecondStep_Precedent>>;
+type UserAuthorization_ResetPasswordBySecondStep_Result = Result_<UnifiedReport_<CVoid, UserAuthorization_ResetPasswordBySecondStep_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_ResetPasswordBySecondStep_Precedent {
@@ -1636,9 +1636,9 @@ pub struct UserResetPasswordToken__WrongValue {
 pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_ResetPasswordBySecondStep_Result {
-    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_ResetPasswordBySecondStep_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_>| -> Result<UnifiedReport_<CVoid, UserAuthorization_ResetPasswordBySecondStep_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__NotFound => UserAuthorization_ResetPasswordBySecondStep_Precedent {
@@ -1667,7 +1667,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__dese
                         ..Default::default()
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -1714,7 +1714,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__serial
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type UserAuthorization_ResetPasswordByLastStep_Result = Result_<CUnifiedReport<CVoid, UserAuthorization_ResetPasswordByLastStep_Precedent>>;
+type UserAuthorization_ResetPasswordByLastStep_Result = Result_<UnifiedReport_<CVoid, UserAuthorization_ResetPasswordByLastStep_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_ResetPasswordByLastStep_Precedent {
@@ -1729,9 +1729,9 @@ pub struct UserAuthorization_ResetPasswordByLastStep_Precedent {
 pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deserialize_allocate(
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_ResetPasswordByLastStep_Result {
-    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_ResetPasswordByLastStep_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_>| -> Result<UnifiedReport_<CVoid, UserAuthorization_ResetPasswordByLastStep_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::User__NotFound => UserAuthorization_ResetPasswordByLastStep_Precedent {
@@ -1759,7 +1759,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deseri
                         ..Default::default()
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -1799,7 +1799,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__serialize_
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type UserAuthorization_SendEmailForRegister_Result = Result_<CUnifiedReport<UserAuthorization_SendEmailForRegister_Outcoming, UserAuthorization_SendEmailForRegister_Precedent>>;
+type UserAuthorization_SendEmailForRegister_Result = Result_<UnifiedReport_<UserAuthorization_SendEmailForRegister_Outcoming, UserAuthorization_SendEmailForRegister_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_SendEmailForRegister_Outcoming {
@@ -1817,7 +1817,7 @@ pub struct UserAuthorization_SendEmailForRegister_Precedent {
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__send_email_for_register__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_SendEmailForRegister_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForRegister_Outcoming_, UserAuthorization_SendEmailForRegister_Precedent_>| -> Result<
-        CUnifiedReport<UserAuthorization_SendEmailForRegister_Outcoming, UserAuthorization_SendEmailForRegister_Precedent>,
+        UnifiedReport_<UserAuthorization_SendEmailForRegister_Outcoming, UserAuthorization_SendEmailForRegister_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -1825,17 +1825,17 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__deserializ
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
                         let outcoming = UserAuthorization_SendEmailForRegister_Outcoming {
                             user_registration_token__can_be_resent_from: data_.user_registration_token__can_be_resent_from,
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -1872,7 +1872,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__deserializ
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -1914,7 +1914,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__serialize
     return ();
 }
 type UserAuthorization_SendEmailForAuthorize_Result =
-    Result_<CUnifiedReport<UserAuthorization_SendEmailForAuthorize_Outcoming, UserAuthorization_SendEmailForAuthorize_Precedent>>;
+    Result_<UnifiedReport_<UserAuthorization_SendEmailForAuthorize_Outcoming, UserAuthorization_SendEmailForAuthorize_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_SendEmailForAuthorize_Outcoming {
@@ -1934,7 +1934,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deseriali
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_SendEmailForAuthorize_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>| -> Result<
-        CUnifiedReport<UserAuthorization_SendEmailForAuthorize_Outcoming, UserAuthorization_SendEmailForAuthorize_Precedent>,
+        UnifiedReport_<UserAuthorization_SendEmailForAuthorize_Outcoming, UserAuthorization_SendEmailForAuthorize_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -1942,17 +1942,17 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deseriali
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
                         let outcoming = UserAuthorization_SendEmailForAuthorize_Outcoming {
                             user_authorization_token__can_be_resent_from: data_.user_authorization_token__can_be_resent_from,
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -1989,7 +1989,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deseriali
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -2033,7 +2033,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__seri
     return ();
 }
 type UserAuthorization_SendEmailForResetPassword_Result =
-    Result_<CUnifiedReport<UserAuthorization_SendEmailForResetPassword_Outcoming, UserAuthorization_SendEmailForResetPassword_Precedent>>;
+    Result_<UnifiedReport_<UserAuthorization_SendEmailForResetPassword_Outcoming, UserAuthorization_SendEmailForResetPassword_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct UserAuthorization_SendEmailForResetPassword_Outcoming {
@@ -2054,7 +2054,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_SendEmailForResetPassword_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForResetPassword_Outcoming_, UserAuthorization_SendEmailForResetPassword_Precedent_>| -> Result<
-        CUnifiedReport<UserAuthorization_SendEmailForResetPassword_Outcoming, UserAuthorization_SendEmailForResetPassword_Precedent>,
+        UnifiedReport_<UserAuthorization_SendEmailForResetPassword_Outcoming, UserAuthorization_SendEmailForResetPassword_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -2062,17 +2062,17 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
                         let outcoming = UserAuthorization_SendEmailForResetPassword_Outcoming {
                             user_resep_password_token_can_be_resent_from: data_.user_reset_password_token__can_be_resent_from,
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -2115,7 +2115,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -2170,7 +2170,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__serialize_d
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type Channel_GetManyByNameInSubscriptions_Result = Result_<CUnifiedReport<Channel_GetManyByNameInSubscriptions_Outcoming, Channel_GetManyByNameInSubscriptions_Precedent>>;
+type Channel_GetManyByNameInSubscriptions_Result = Result_<UnifiedReport_<Channel_GetManyByNameInSubscriptions_Outcoming, Channel_GetManyByNameInSubscriptions_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyByNameInSubscriptions_Data {
@@ -2195,7 +2195,7 @@ pub struct Channel_GetManyByNameInSubscriptions_Precedent {
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyByNameInSubscriptions_Result {
     let converter = move |unified_report: UnifiedReport<Channel_GetManyByNameInSubscriptions_Outcoming_, Channel_GetManyByNameInSubscriptions_Precedent_>| -> Result<
-        CUnifiedReport<Channel_GetManyByNameInSubscriptions_Outcoming, Channel_GetManyByNameInSubscriptions_Precedent>,
+        UnifiedReport_<Channel_GetManyByNameInSubscriptions_Outcoming, Channel_GetManyByNameInSubscriptions_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -2203,7 +2203,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
@@ -2239,10 +2239,10 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                         let outcoming = Channel_GetManyByNameInSubscriptions_Outcoming {
                             data_registry: Allocator::<CVector<_>>::allocate(data_registry),
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -2255,7 +2255,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -2323,7 +2323,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__serialize_deallocate
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type Channel_GetManyBySubscription_Result = Result_<CUnifiedReport<Channel_GetManyBySubscription_Outcoming, Channel_GetManyBySubscription_Precedent>>;
+type Channel_GetManyBySubscription_Result = Result_<UnifiedReport_<Channel_GetManyBySubscription_Outcoming, Channel_GetManyBySubscription_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyBySubscription_Data {
@@ -2348,7 +2348,7 @@ pub struct Channel_GetManyBySubscription_Precedent {
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyBySubscription_Result {
     let converter = move |unified_report: UnifiedReport<Channel_GetManyBySubscription_Outcoming_, Channel_GetManyBySubscription_Precedent_>| -> Result<
-        CUnifiedReport<Channel_GetManyBySubscription_Outcoming, Channel_GetManyBySubscription_Precedent>,
+        UnifiedReport_<Channel_GetManyBySubscription_Outcoming, Channel_GetManyBySubscription_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -2356,7 +2356,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
@@ -2392,10 +2392,10 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                         let outcoming = Channel_GetManyBySubscription_Outcoming {
                             data_registry: Allocator::<CVector<_>>::allocate(data_registry),
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -2406,7 +2406,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                         ..Default::default()
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -2476,7 +2476,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_deallocate(
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type Channel_GetManyPublicByName_Result = Result_<CUnifiedReport<Channel_GetManyPublicByName_Outcoming, Channel_GetManyPublicByName_Precedent>>;
+type Channel_GetManyPublicByName_Result = Result_<UnifiedReport_<Channel_GetManyPublicByName_Outcoming, Channel_GetManyPublicByName_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyPublicByName_Data {
@@ -2500,7 +2500,7 @@ pub struct Channel_GetManyPublicByName_Precedent {
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetManyPublicByName_Result {
     let converter = move |unified_report: UnifiedReport<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>| -> Result<
-        CUnifiedReport<Channel_GetManyPublicByName_Outcoming, Channel_GetManyPublicByName_Precedent>,
+        UnifiedReport_<Channel_GetManyPublicByName_Outcoming, Channel_GetManyPublicByName_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -2508,7 +2508,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
@@ -2543,10 +2543,10 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                         let outcoming = Channel_GetManyPublicByName_Outcoming {
                             data_registry: Allocator::<CVector<_>>::allocate(data_registry),
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -2557,7 +2557,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                         ..Default::default()
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -2625,7 +2625,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__serialize_deallocate(result: Re
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type Channel_GetOneById_Result = Result_<CUnifiedReport<Channel_GetOneById_Outcoming, Channel_GetOneById_Precedent>>;
+type Channel_GetOneById_Result = Result_<UnifiedReport_<Channel_GetOneById_Outcoming, Channel_GetOneById_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetOneById_Outcoming {
@@ -2649,11 +2649,11 @@ pub struct Channel_GetOneById_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetOneById_Result {
-    let converter = move |unified_report: UnifiedReport<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>| -> Result<CUnifiedReport<Channel_GetOneById_Outcoming, Channel_GetOneById_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>| -> Result<UnifiedReport_<Channel_GetOneById_Outcoming, Channel_GetOneById_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_
                     } => {
@@ -2679,10 +2679,10 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                             channel__background_image_path,
                             channel__subscribers_quantity: data_.channel__subscribers_quantity,
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -2707,7 +2707,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                         ..Default::default()
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -2766,7 +2766,7 @@ pub extern "C-unwind" fn channel__check_name_for_existing__serialize_deallocate(
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type Channel_CheckNameForExisting_Result = Result_<CUnifiedReport<Channel_CheckNameForExisting_Outcoming, Channel_CheckNameForExisting_Precedent>>;
+type Channel_CheckNameForExisting_Result = Result_<UnifiedReport_<Channel_CheckNameForExisting_Outcoming, Channel_CheckNameForExisting_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_CheckNameForExisting_Outcoming {
@@ -2779,21 +2779,21 @@ pub struct Channel_CheckNameForExisting_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_CheckNameForExisting_Result {
-    let converter = move |unified_report: UnifiedReport<Channel_CheckNameForExisting_Outcoming_, Channel_CheckNameForExisting_Precedent_>| -> Result<CUnifiedReport<Channel_CheckNameForExisting_Outcoming, Channel_CheckNameForExisting_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Channel_CheckNameForExisting_Outcoming_, Channel_CheckNameForExisting_Precedent_>| -> Result<UnifiedReport_<Channel_CheckNameForExisting_Outcoming, Channel_CheckNameForExisting_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_
                     } => {
                         let outcoming = Channel_CheckNameForExisting_Outcoming {
                             result: data_.result,
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -2802,7 +2802,7 @@ pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(
                         ..Default::default()
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -2848,7 +2848,7 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__serialize_deal
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type Channel_CheckLinkedNameForExisting_Result = Result_<CUnifiedReport<Channel_CheckLinkedNameForExisting_Outcoming, Channel_CheckLinkedNameForExisting_Precedent>>;
+type Channel_CheckLinkedNameForExisting_Result = Result_<UnifiedReport_<Channel_CheckLinkedNameForExisting_Outcoming, Channel_CheckLinkedNameForExisting_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_CheckLinkedNameForExisting_Outcoming {
@@ -2861,21 +2861,21 @@ pub struct Channel_CheckLinkedNameForExisting_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_CheckLinkedNameForExisting_Result {
-    let converter = move |unified_report: UnifiedReport<Channel_CheckLinkedNameForExisting_Outcoming_, Channel_CheckLinkedNameForExisting_Precedent_>| -> Result<CUnifiedReport<Channel_CheckLinkedNameForExisting_Outcoming, Channel_CheckLinkedNameForExisting_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Channel_CheckLinkedNameForExisting_Outcoming_, Channel_CheckLinkedNameForExisting_Precedent_>| -> Result<UnifiedReport_<Channel_CheckLinkedNameForExisting_Outcoming, Channel_CheckLinkedNameForExisting_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_
                     } => {
                         let outcoming = Channel_CheckLinkedNameForExisting_Outcoming {
                             result: data_.result,
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -2884,7 +2884,7 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_al
                         ..Default::default()
                     },
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -2936,7 +2936,7 @@ pub extern "C-unwind" fn channel__create__serialize_deallocate(result: Result_<C
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type Channel_Create_Result = Result_<CUnifiedReport<Channel_Create_Outcoming, Channel_Create_Precedent>>;
+type Channel_Create_Result = Result_<UnifiedReport_<Channel_Create_Outcoming, Channel_Create_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_Create_Outcoming {
@@ -2952,11 +2952,11 @@ pub struct Channel_Create_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_Create_Result {
-    let converter = move |unified_report: UnifiedReport<Channel_Create_Outcoming_, Channel_Create_Precedent_>| -> Result<CUnifiedReport<Channel_Create_Outcoming, Channel_Create_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Channel_Create_Outcoming_, Channel_Create_Precedent_>| -> Result<UnifiedReport_<Channel_Create_Outcoming, Channel_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_
                     } => {
@@ -2970,10 +2970,10 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
                                 signature: Allocator::<CVector<_>>::allocate(data_.channel_token_signed.signature),
                             },
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -2994,7 +2994,7 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
                         ..Default::default()
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -3050,7 +3050,7 @@ pub extern "C-unwind" fn channel__delete__serialize_deallocate(result: Result_<C
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type Channel_Delete_Result = Result_<CUnifiedReport<CVoid, Channel_Delete_Precedent>>;
+type Channel_Delete_Result = Result_<UnifiedReport_<CVoid, Channel_Delete_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_Delete_Precedent {
@@ -3061,9 +3061,9 @@ pub struct Channel_Delete_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_Delete_Result {
-    let converter = move |unified_report: UnifiedReport<Void, Channel_Delete_Precedent_>| -> Result<CUnifiedReport<CVoid, Channel_Delete_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, Channel_Delete_Precedent_>| -> Result<UnifiedReport_<CVoid, Channel_Delete_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     Channel_Delete_Precedent_::UserAccessToken__AlreadyExpired => Channel_Delete_Precedent {
@@ -3083,7 +3083,7 @@ pub extern "C-unwind" fn channel__delete__deserialize_allocate(c_vector_of_bytes
                         ..Default::default()
                     },
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -3136,7 +3136,7 @@ pub extern "C-unwind" fn channel_subscription__create__serialize_deallocate(resu
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type ChannelSubscription_Create_Result = Result_<CUnifiedReport<ChannelSubscription_Create_Outcoming, ChannelSubscription_Create_Precedent>>;
+type ChannelSubscription_Create_Result = Result_<UnifiedReport_<ChannelSubscription_Create_Outcoming, ChannelSubscription_Create_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelSubscription_Create_Outcoming {
@@ -3153,11 +3153,11 @@ pub struct ChannelSubscription_Create_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Create_Result {
-    let converter = move |unified_report: UnifiedReport<ChannelSubscription_Create_Outcoming_, ChannelSubscription_Create_Precedent_>| -> Result<CUnifiedReport<ChannelSubscription_Create_Outcoming, ChannelSubscription_Create_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ChannelSubscription_Create_Outcoming_, ChannelSubscription_Create_Precedent_>| -> Result<UnifiedReport_<ChannelSubscription_Create_Outcoming, ChannelSubscription_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_
                     } => {
@@ -3171,10 +3171,10 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
                                 signature: Allocator::<CVector<_>>::allocate(data_.channel_token_signed.signature),
                             },
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -3199,7 +3199,7 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
                         ..Default::default()
                     },
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -3255,7 +3255,7 @@ pub extern "C-unwind" fn channel_subscription__delete__serialize_deallocate(resu
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type ChannelSubscription_Delete_Result = Result_<CUnifiedReport<ChannelSubscription_Delete_Outcoming, ChannelSubscription_Delete_Precedent>>;
+type ChannelSubscription_Delete_Result = Result_<UnifiedReport_<ChannelSubscription_Delete_Outcoming, ChannelSubscription_Delete_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelSubscription_Delete_Outcoming {
@@ -3272,13 +3272,13 @@ pub struct ChannelSubscription_Delete_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Delete_Result {
-    let converter = move |unified_report: UnifiedReport<ChannelSubscription_Delete_Outcoming_, ChannelSubscription_Delete_Precedent_>| -> Result<CUnifiedReport<ChannelSubscription_Delete_Outcoming, ChannelSubscription_Delete_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ChannelSubscription_Delete_Outcoming_, ChannelSubscription_Delete_Precedent_>| -> Result<UnifiedReport_<ChannelSubscription_Delete_Outcoming, ChannelSubscription_Delete_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_
                     } => {
@@ -3292,10 +3292,10 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_ve
                                 signature: Allocator::<CVector<_>>::allocate(data_.channel_token_signed.signature),
                             },
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -3320,7 +3320,7 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_ve
                         ..Default::default()
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -3380,7 +3380,7 @@ pub extern "C-unwind" fn channel_publication1__get_many__serialize_deallocate(re
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type ChannelPublication1_GetMany_Result = Result_<CUnifiedReport<ChannelPublication1_GetMany_Outcoming, ChannelPublication1_GetMany_Precedent>>;
+type ChannelPublication1_GetMany_Result = Result_<UnifiedReport_<ChannelPublication1_GetMany_Outcoming, ChannelPublication1_GetMany_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1_GetMany_Data {
@@ -3409,13 +3409,13 @@ pub struct ChannelPublication1_GetMany_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1_GetMany_Result {
-    let converter = move |unified_report: UnifiedReport<ChannelPublication1_GetMany_Outcoming_, ChannelPublication1_GetMany_Precedent_>| -> Result<CUnifiedReport<ChannelPublication1_GetMany_Outcoming, ChannelPublication1_GetMany_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ChannelPublication1_GetMany_Outcoming_, ChannelPublication1_GetMany_Precedent_>| -> Result<UnifiedReport_<ChannelPublication1_GetMany_Outcoming, ChannelPublication1_GetMany_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
@@ -3457,10 +3457,10 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                         let outcoming = ChannelPublication1_GetMany_Outcoming {
                             data_registry: Allocator::<CVector<_>>::allocate(data_registry),
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             },
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -3485,7 +3485,7 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                         ..Default::default()
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -3566,7 +3566,7 @@ pub extern "C-unwind" fn channel_publication1__create__serialize_deallocate(resu
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type ChannelPublication1_Create_Result = Result_<CUnifiedReport<ChannelPublication1_Create_Outcoming, ChannelPublication1_Create_Precedent>>;
+type ChannelPublication1_Create_Result = Result_<UnifiedReport_<ChannelPublication1_Create_Outcoming, ChannelPublication1_Create_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1_Create_Outcoming {
@@ -3583,13 +3583,13 @@ pub struct ChannelPublication1_Create_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1_Create_Result {
-    let converter = move |unified_report: UnifiedReport<ChannelPublication1_Create_Outcoming_, ChannelPublication1_Create_Precedent_>| -> Result<CUnifiedReport<ChannelPublication1_Create_Outcoming, ChannelPublication1_Create_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ChannelPublication1_Create_Outcoming_, ChannelPublication1_Create_Precedent_>| -> Result<UnifiedReport_<ChannelPublication1_Create_Outcoming, ChannelPublication1_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
@@ -3603,10 +3603,10 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_ve
                                 signature: Allocator::<CVector<_>>::allocate(data_.channel_publication1_token_signed.signature),
                             },
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             },
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -3627,7 +3627,7 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_ve
                         ..Default::default()
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -3691,7 +3691,7 @@ pub extern "C-unwind" fn channel_publication1__delete__serialize_deallocate(resu
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type ChannelPublication1_Delete_Result = Result_<CUnifiedReport<CVoid, ChannelPublication1_Delete_Precedent>>;
+type ChannelPublication1_Delete_Result = Result_<UnifiedReport_<CVoid, ChannelPublication1_Delete_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1_Delete_Precedent {
@@ -3704,9 +3704,9 @@ pub struct ChannelPublication1_Delete_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1_Delete_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1_Delete_Precedent_>| -> Result<CUnifiedReport<CVoid, ChannelPublication1_Delete_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1_Delete_Precedent_>| -> Result<UnifiedReport_<CVoid, ChannelPublication1_Delete_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1_Delete_Precedent {
@@ -3730,7 +3730,7 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_ve
                         ..Default::default()
                     },
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -3782,7 +3782,7 @@ pub extern "C-unwind" fn channel_publication1_mark__create__serialize_deallocate
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type ChannelPublication1Mark_Create_Result = Result_<CUnifiedReport<CVoid, ChannelPublication1Mark_Create_Precedent>>;
+type ChannelPublication1Mark_Create_Result = Result_<UnifiedReport_<CVoid, ChannelPublication1Mark_Create_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1Mark_Create_Precedent {
@@ -3793,9 +3793,9 @@ pub struct ChannelPublication1Mark_Create_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1Mark_Create_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Create_Precedent_>| -> Result<CUnifiedReport<CVoid, ChannelPublication1Mark_Create_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Create_Precedent_>| -> Result<UnifiedReport_<CVoid, ChannelPublication1Mark_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Create_Precedent {
@@ -3815,7 +3815,7 @@ pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate
                         ..Default::default()
                     },
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -3867,7 +3867,7 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__serialize_deallocate
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type ChannelPublication1Mark_Delete_Result = Result_<CUnifiedReport<CVoid, ChannelPublication1Mark_Delete_Precedent>>;
+type ChannelPublication1Mark_Delete_Result = Result_<UnifiedReport_<CVoid, ChannelPublication1Mark_Delete_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1Mark_Delete_Precedent {
@@ -3878,9 +3878,9 @@ pub struct ChannelPublication1Mark_Delete_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1Mark_Delete_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Delete_Precedent_>| -> Result<CUnifiedReport<CVoid, ChannelPublication1Mark_Delete_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Delete_Precedent_>| -> Result<UnifiedReport_<CVoid, ChannelPublication1Mark_Delete_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     ChannelPublication1Mark_Delete_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Delete_Precedent {
@@ -3900,7 +3900,7 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_allocate
                         ..Default::default()
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -3952,7 +3952,7 @@ pub extern "C-unwind" fn channel_publication1_view__create__serialize_deallocate
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type ChannelPublication1View_Create_Result = Result_<CUnifiedReport<CVoid, ChannelPublication1View_Create_Precedent>>;
+type ChannelPublication1View_Create_Result = Result_<UnifiedReport_<CVoid, ChannelPublication1View_Create_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1View_Create_Precedent {
@@ -3961,9 +3961,9 @@ pub struct ChannelPublication1View_Create_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_view__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1View_Create_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1View_Create_Precedent_>| -> Result<CUnifiedReport<CVoid, ChannelPublication1View_Create_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1View_Create_Precedent_>| -> Result<UnifiedReport_<CVoid, ChannelPublication1View_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     ChannelPublication1View_Create_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1View_Create_Precedent {
@@ -3975,7 +3975,7 @@ pub extern "C-unwind" fn channel_publication1_view__create__deserialize_allocate
                         ..Default::default()
                     },
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -4029,7 +4029,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__serialize_deal
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type ChannelPublication1Commentary_Create_Result = Result_<CUnifiedReport<ChannelPublication1Commentary_Create_Outcoming, ChannelPublication1Commentary_Create_Precedent>>;
+type ChannelPublication1Commentary_Create_Result = Result_<UnifiedReport_<ChannelPublication1Commentary_Create_Outcoming, ChannelPublication1Commentary_Create_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1Commentary_Create_Outcoming {
@@ -4046,7 +4046,7 @@ pub struct ChannelPublication1Commentary_Create_Precedent {
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1Commentary_Create_Result {
     let converter = move |unified_report: UnifiedReport<ChannelPublication1Commentary_Create_Outcoming_, ChannelPublication1Commentary_Create_Precedent_>| -> Result<
-        CUnifiedReport<ChannelPublication1Commentary_Create_Outcoming, ChannelPublication1Commentary_Create_Precedent>,
+        UnifiedReport_<ChannelPublication1Commentary_Create_Outcoming, ChannelPublication1Commentary_Create_Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -4054,7 +4054,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_al
                 data,
             } => {
                 let c_data = match data {
-                    Data::Empty => CData::empty(),
+                    Data::Empty => Data_::empty(),
                     Data::Filled {
                         data: data_,
                     } => {
@@ -4062,10 +4062,10 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_al
                             channel_publication1__id: data_.channel_publication1_commentary__id,
                             channel_publication1_commentary__created_at: data_.channel_publication1_commentary__created_at,
                         };
-                        CData::filled(outcoming)
+                        Data_::filled(outcoming)
                     }
                 };
-                CUnifiedReport::target(c_data)
+                UnifiedReport_::target(c_data)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -4090,7 +4090,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_al
                         }
                     }
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
@@ -4144,7 +4144,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__delete__serialize_deal
     Allocator::<Result_<CVector<c_uchar>>>::deallocate(result);
     return ();
 }
-type ChannelPublication1Commentary_Delete_Result = Result_<CUnifiedReport<CVoid, ChannelPublication1Commentary_Delete_Precedent>>;
+type ChannelPublication1Commentary_Delete_Result = Result_<UnifiedReport_<CVoid, ChannelPublication1Commentary_Delete_Precedent>>;
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1Commentary_Delete_Precedent {
@@ -4154,9 +4154,9 @@ pub struct ChannelPublication1Commentary_Delete_Precedent {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_commentary__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1Commentary_Delete_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Commentary_Delete_Precedent_>| -> Result<CUnifiedReport<CVoid, ChannelPublication1Commentary_Delete_Precedent>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Commentary_Delete_Precedent_>| -> Result<UnifiedReport_<CVoid, ChannelPublication1Commentary_Delete_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => CUnifiedReport::target(CData::empty()),
+            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
                     ChannelPublication1Commentary_Delete_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1Commentary_Delete_Precedent {
@@ -4173,7 +4173,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__delete__deserialize_al
                     },
 
                 };
-                CUnifiedReport::precedent(precedent_)
+                UnifiedReport_::precedent(precedent_)
             }
         };
         return Result::Ok(unified_report_);
