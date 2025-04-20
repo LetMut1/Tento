@@ -234,12 +234,12 @@ where
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct COption<T> {
+pub struct Option_<T> {
     pub data: T,
     // If false, then it means it it Option::None.
     pub is_data: bool,
 }
-impl<T> COption<T> {
+impl<T> Option_<T> {
     fn data(data: T) -> Self {
         return Self {
             data,
@@ -247,7 +247,7 @@ impl<T> COption<T> {
         };
     }
 }
-impl<T> COption<T>
+impl<T> Option_<T>
 where
     T: Default,
 {
@@ -258,7 +258,7 @@ where
         };
     }
 }
-impl<T> Default for COption<T>
+impl<T> Default for Option_<T>
 where
     T: Default,
 {
@@ -2134,7 +2134,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
 pub struct Channel_GetManyByNameInSubscriptions_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__name: CString,
-    pub requery___channel__name: COption<CString>,
+    pub requery___channel__name: Option_<CString>,
     pub limit: c_uchar,
 }
 #[unsafe(no_mangle)]
@@ -2178,8 +2178,8 @@ pub struct Channel_GetManyByNameInSubscriptions_Data {
     pub channel__linked_name: CString,
     pub channel__access_modifier: c_uchar,
     pub channel__visability_modifier: c_uchar,
-    pub channel__cover_image_path: COption<CString>,
-    pub channel__background_image_path: COption<CString>,
+    pub channel__cover_image_path: Option_<CString>,
+    pub channel__background_image_path: Option_<CString>,
     pub channel_token_signed: ChannelTokenSigned,
 }
 #[repr(C)]
@@ -2210,12 +2210,12 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                         let mut data_registry: Vec<Channel_GetManyByNameInSubscriptions_Data> = Vec::with_capacity(data_.data_registry.len());
                         '_a: for data__ in data_.data_registry {
                             let channel__cover_image_path = match data__.channel__cover_image_path {
-                                Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
-                                Option::None => COption::none(),
+                                Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
+                                Option::None => Option_::none(),
                             };
                             let channel__background_image_path = match data__.channel__background_image_path {
-                                Option::Some(channel__background_image_path_) => COption::data(Allocator::<CString>::allocate(channel__background_image_path_)),
-                                Option::None => COption::none(),
+                                Option::Some(channel__background_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__background_image_path_)),
+                                Option::None => Option_::none(),
                             };
                             data_registry.push(
                                 Channel_GetManyByNameInSubscriptions_Data {
@@ -2288,7 +2288,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
 #[derive(Clone, Copy)]
 pub struct Channel_GetManyBySubscription_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
-    pub requery___channel__id: COption<c_long>,
+    pub requery___channel__id: Option_<c_long>,
     pub limit: c_uchar,
 }
 #[unsafe(no_mangle)]
@@ -2331,8 +2331,8 @@ pub struct Channel_GetManyBySubscription_Data {
     pub channel__linked_name: CString,
     pub channel__access_modifier: c_uchar,
     pub channel__visability_modifier: c_uchar,
-    pub channel__cover_image_path: COption<CString>,
-    pub channel__background_image_path: COption<CString>,
+    pub channel__cover_image_path: Option_<CString>,
+    pub channel__background_image_path: Option_<CString>,
     pub channel_token_signed: ChannelTokenSigned,
 }
 #[repr(C)]
@@ -2363,12 +2363,12 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                         let mut data_registry: Vec<Channel_GetManyBySubscription_Data> = Vec::with_capacity(data_.data_registry.len());
                         '_a: for data__ in data_.data_registry {
                             let channel__cover_image_path = match data__.channel__cover_image_path {
-                                Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
-                                Option::None => COption::none(),
+                                Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
+                                Option::None => Option_::none(),
                             };
                             let channel__background_image_path = match data__.channel__background_image_path {
-                                Option::Some(channel__background_image_path_) => COption::data(Allocator::<CString>::allocate(channel__background_image_path_)),
-                                Option::None => COption::none(),
+                                Option::Some(channel__background_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__background_image_path_)),
+                                Option::None => Option_::none(),
                             };
                             data_registry.push(
                                 Channel_GetManyBySubscription_Data {
@@ -2440,7 +2440,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_dealloca
 pub struct Channel_GetManyPublicByName_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub channel__name: CString,
-    pub requery___channel__name: COption<CString>,
+    pub requery___channel__name: Option_<CString>,
     pub limit: c_uchar,
 }
 #[unsafe(no_mangle)]
@@ -2483,8 +2483,8 @@ pub struct Channel_GetManyPublicByName_Data {
     pub channel__name: CString,
     pub channel__linked_name: CString,
     pub channel__access_modifier: c_uchar,
-    pub channel__cover_image_path: COption<CString>,
-    pub channel__background_image_path: COption<CString>,
+    pub channel__cover_image_path: Option_<CString>,
+    pub channel__background_image_path: Option_<CString>,
     pub channel_token_signed: ChannelTokenSigned,
 }
 #[repr(C)]
@@ -2515,12 +2515,12 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                         let mut data_registry: Vec<Channel_GetManyPublicByName_Data> = Vec::with_capacity(data_.data_registry.len());
                         '_a: for data__ in data_.data_registry {
                             let channel__cover_image_path = match data__.channel__cover_image_path {
-                                Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
-                                Option::None => COption::none(),
+                                Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
+                                Option::None => Option_::none(),
                             };
                             let channel__background_image_path = match data__.channel__background_image_path {
-                                Option::Some(channel__background_image_path_) => COption::data(Allocator::<CString>::allocate(channel__background_image_path_)),
-                                Option::None => COption::none(),
+                                Option::Some(channel__background_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__background_image_path_)),
+                                Option::None => Option_::none(),
                             };
                             data_registry.push(
                                 Channel_GetManyPublicByName_Data {
@@ -2631,11 +2631,11 @@ type Channel_GetOneById_Result = Result_<CUnifiedReport<Channel_GetOneById_Outco
 pub struct Channel_GetOneById_Outcoming {
     pub channel__name: CString,
     pub channel__linked_name: CString,
-    pub channel__description: COption<CString>,
+    pub channel__description: Option_<CString>,
     pub channel__access_modifier: c_uchar,
     pub channel__visability_modifier: c_uchar,
-    pub channel__cover_image_path: COption<CString>,
-    pub channel__background_image_path: COption<CString>,
+    pub channel__cover_image_path: Option_<CString>,
+    pub channel__background_image_path: Option_<CString>,
     pub channel__subscribers_quantity: c_uint,
 }
 #[repr(C)]
@@ -2658,16 +2658,16 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                         data: data_
                     } => {
                         let channel__description = match data_.channel__description {
-                            Option::Some(channel__description_) => COption::data(Allocator::<CString>::allocate(channel__description_)),
-                            Option::None => COption::none()
+                            Option::Some(channel__description_) => Option_::data(Allocator::<CString>::allocate(channel__description_)),
+                            Option::None => Option_::none()
                         };
                         let channel__cover_image_path = match data_.channel__cover_image_path {
-                            Option::Some(channel__cover_image_path_) => COption::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
-                            Option::None => COption::none()
+                            Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
+                            Option::None => Option_::none()
                         };
                         let channel__background_image_path = match data_.channel__background_image_path {
-                            Option::Some(channel__background_image_path_) => COption::data(Allocator::<CString>::allocate(channel__background_image_path_)),
-                            Option::None => COption::none()
+                            Option::Some(channel__background_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__background_image_path_)),
+                            Option::None => Option_::none()
                         };
                         let outcoming = Channel_GetOneById_Outcoming {
                             channel__name: Allocator::<CString>::allocate(data_.channel__name),
@@ -3385,12 +3385,12 @@ type ChannelPublication1_GetMany_Result = Result_<CUnifiedReport<ChannelPublicat
 #[derive(Default)]
 pub struct ChannelPublication1_GetMany_Data {
     pub channel_publication1__images_pathes: CVector<CString>,
-    pub channel_publication1__text: COption<CString>,
+    pub channel_publication1__text: Option_<CString>,
     pub channel_publication1__commentaries_quantity: c_uint,
     pub channel_publication1__marks_quantity: c_uint,
     pub channel_publication1__view_quantity: c_uint,
     pub channel_publication1__created_at: c_long,
-    pub channel_publication1_mark__created_at: COption<c_long>,
+    pub channel_publication1_mark__created_at: Option_<c_long>,
     pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 #[repr(C)]
@@ -3422,8 +3422,8 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                         let mut data_registry: Vec<ChannelPublication1_GetMany_Data> = Vec::with_capacity(data_.data_registry.len());
                         '_a: for data__ in data_.data_registry {
                             let channel_publication1__text = match data__.channel_publication1__text {
-                                Option::Some(channel_publication1__text_) => COption::data(Allocator::<CString>::allocate(channel_publication1__text_)),
-                                Option::None => COption::none(),
+                                Option::Some(channel_publication1__text_) => Option_::data(Allocator::<CString>::allocate(channel_publication1__text_)),
+                                Option::None => Option_::none(),
                             };
                             let mut channel_publication1__images_pathes: Vec<CString> = Vec::with_capacity(data__.channel_publication1__images_pathes.len());
                             '_b: for channel_publication1__image_pathe in data__.channel_publication1__images_pathes {
@@ -3432,8 +3432,8 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                                 );
                             }
                             let channel_publication1_mark__created_at = match data__.channel_publication1_mark__created_at {
-                                Option::Some(channel_publication1_mark__created_at_) => COption::data(channel_publication1_mark__created_at_),
-                                Option::None => COption::none(),
+                                Option::Some(channel_publication1_mark__created_at_) => Option_::data(channel_publication1_mark__created_at_),
+                                Option::None => Option_::none(),
                             };
                             data_registry.push(
                                 ChannelPublication1_GetMany_Data {
@@ -3520,7 +3520,7 @@ pub struct ChannelPublication1_Create_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub channel_token_signed: ChannelTokenSigned,
     pub channel_publication1__images_pathes: CVector<CString>,
-    pub channel_publication1__text: COption<CString>,
+    pub channel_publication1__text: Option_<CString>,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__create__serialize_allocate(incoming: ChannelPublication1_Create_Incoming) -> Result_<CVector<c_uchar>> {
@@ -4770,7 +4770,7 @@ mod test {
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    requery___channel__name: COption::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
+                    requery___channel__name: Option_::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
                     limit: 0,
                 };
                 run_by_template(
@@ -4793,7 +4793,7 @@ mod test {
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    requery___channel__id: COption::data(0),
+                    requery___channel__id: Option_::data(0),
                     limit: 0,
                 };
                 run_by_template(
@@ -4815,7 +4815,7 @@ mod test {
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    requery___channel__name: COption::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
+                    requery___channel__name: Option_::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
                     limit: 0,
                 };
                 run_by_template(
@@ -5059,7 +5059,7 @@ mod test {
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel_publication1__images_pathes: Allocator::<CVector<_>>::allocate(vec![c_string_1, c_string_2, c_string_3]),
-                    channel_publication1__text: COption::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
+                    channel_publication1__text: Option_::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
                 };
                 run_by_template(
                     incoming,

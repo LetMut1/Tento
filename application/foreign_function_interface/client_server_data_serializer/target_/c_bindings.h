@@ -557,15 +557,15 @@ typedef struct Result__CUnifiedReport_UserAuthorization_SendEmailForResetPasswor
 
 typedef struct Result__CUnifiedReport_UserAuthorization_SendEmailForResetPassword_Outcoming__UserAuthorization_SendEmailForResetPassword_Precedent UserAuthorization_SendEmailForResetPassword_Result;
 
-typedef struct COption_CString {
+typedef struct Option__CString {
   struct CString data;
   bool is_data;
-} COption_CString;
+} Option__CString;
 
 typedef struct Channel_GetManyByNameInSubscriptions_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   struct CString channel__name;
-  struct COption_CString requery___channel__name;
+  struct Option__CString requery___channel__name;
   unsigned char limit;
 } Channel_GetManyByNameInSubscriptions_Incoming;
 
@@ -583,8 +583,8 @@ typedef struct Channel_GetManyByNameInSubscriptions_Data {
   struct CString channel__linked_name;
   unsigned char channel__access_modifier;
   unsigned char channel__visability_modifier;
-  struct COption_CString channel__cover_image_path;
-  struct COption_CString channel__background_image_path;
+  struct Option__CString channel__cover_image_path;
+  struct Option__CString channel__background_image_path;
   struct ChannelTokenSigned channel_token_signed;
 } Channel_GetManyByNameInSubscriptions_Data;
 
@@ -619,14 +619,14 @@ typedef struct Result__CUnifiedReport_Channel_GetManyByNameInSubscriptions_Outco
 
 typedef struct Result__CUnifiedReport_Channel_GetManyByNameInSubscriptions_Outcoming__Channel_GetManyByNameInSubscriptions_Precedent Channel_GetManyByNameInSubscriptions_Result;
 
-typedef struct COption_c_long {
+typedef struct Option__c_long {
   long data;
   bool is_data;
-} COption_c_long;
+} Option__c_long;
 
 typedef struct Channel_GetManyBySubscription_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  struct COption_c_long requery___channel__id;
+  struct Option__c_long requery___channel__id;
   unsigned char limit;
 } Channel_GetManyBySubscription_Incoming;
 
@@ -635,8 +635,8 @@ typedef struct Channel_GetManyBySubscription_Data {
   struct CString channel__linked_name;
   unsigned char channel__access_modifier;
   unsigned char channel__visability_modifier;
-  struct COption_CString channel__cover_image_path;
-  struct COption_CString channel__background_image_path;
+  struct Option__CString channel__cover_image_path;
+  struct Option__CString channel__background_image_path;
   struct ChannelTokenSigned channel_token_signed;
 } Channel_GetManyBySubscription_Data;
 
@@ -674,7 +674,7 @@ typedef struct Result__CUnifiedReport_Channel_GetManyBySubscription_Outcoming__C
 typedef struct Channel_GetManyPublicByName_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   struct CString channel__name;
-  struct COption_CString requery___channel__name;
+  struct Option__CString requery___channel__name;
   unsigned char limit;
 } Channel_GetManyPublicByName_Incoming;
 
@@ -682,8 +682,8 @@ typedef struct Channel_GetManyPublicByName_Data {
   struct CString channel__name;
   struct CString channel__linked_name;
   unsigned char channel__access_modifier;
-  struct COption_CString channel__cover_image_path;
-  struct COption_CString channel__background_image_path;
+  struct Option__CString channel__cover_image_path;
+  struct Option__CString channel__background_image_path;
   struct ChannelTokenSigned channel_token_signed;
 } Channel_GetManyPublicByName_Data;
 
@@ -726,11 +726,11 @@ typedef struct Channel_GetOneById_Incoming {
 typedef struct Channel_GetOneById_Outcoming {
   struct CString channel__name;
   struct CString channel__linked_name;
-  struct COption_CString channel__description;
+  struct Option__CString channel__description;
   unsigned char channel__access_modifier;
   unsigned char channel__visability_modifier;
-  struct COption_CString channel__cover_image_path;
-  struct COption_CString channel__background_image_path;
+  struct Option__CString channel__cover_image_path;
+  struct Option__CString channel__background_image_path;
   unsigned int channel__subscribers_quantity;
 } Channel_GetOneById_Outcoming;
 
@@ -976,12 +976,12 @@ typedef struct ChannelPublication1TokenSigned {
 
 typedef struct ChannelPublication1_GetMany_Data {
   struct CVector_CString channel_publication1__images_pathes;
-  struct COption_CString channel_publication1__text;
+  struct Option__CString channel_publication1__text;
   unsigned int channel_publication1__commentaries_quantity;
   unsigned int channel_publication1__marks_quantity;
   unsigned int channel_publication1__view_quantity;
   long channel_publication1__created_at;
-  struct COption_c_long channel_publication1_mark__created_at;
+  struct Option__c_long channel_publication1_mark__created_at;
   struct ChannelPublication1TokenSigned channel_publication1_token_signed;
 } ChannelPublication1_GetMany_Data;
 
@@ -1024,7 +1024,7 @@ typedef struct ChannelPublication1_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   struct ChannelTokenSigned channel_token_signed;
   struct CVector_CString channel_publication1__images_pathes;
-  struct COption_CString channel_publication1__text;
+  struct Option__CString channel_publication1__text;
 } ChannelPublication1_Create_Incoming;
 
 typedef struct ChannelPublication1_Create_Outcoming {
