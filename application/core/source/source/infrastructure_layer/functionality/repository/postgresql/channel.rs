@@ -206,6 +206,48 @@ impl Repository<Postgresql<Channel>> {
             return Result::Ok(true);
         };
     }
+    pub fn delete<'a>(client_database_3: &'a Client, by: By7) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+        return async move {
+            const QUERY: &'static str = "\
+                DELETE FROM ONLY \
+                    public.channel AS c \
+                WHERE \
+                    c.id = $1 \
+                    AND c.owner = $2 \
+                RETURNING \
+                    true AS _;";
+            let mut parameter_storage = ParameterStorage::new(2);
+            parameter_storage
+                .add(
+                    &by.channel__id,
+                    Type::INT8,
+                )
+                .add(
+                    &by.channel__owner,
+                    Type::INT8,
+                );
+            let statement = crate::result_return_logic!(
+                client_database_3
+                .prepare_typed_cached(
+                    QUERY,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                client_database_3
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(false);
+            }
+            return Result::Ok(true);
+        };
+    }
     // channel__owner: i64,
     // channel__name: String,
     // channel__linked_name: String,
@@ -812,4 +854,8 @@ pub struct By5<'a> {
 pub struct By6 {
     pub user__id: i64,
     pub requery___channel__id: Option<i64>,
+}
+pub struct By7 {
+    pub channel__id: i64,
+    pub channel__owner: i64,
 }

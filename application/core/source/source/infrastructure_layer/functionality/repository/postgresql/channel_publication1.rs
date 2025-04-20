@@ -43,7 +43,7 @@ impl Repository<Postgresql<ChannelPublication1>> {
                         $6,\
                         $7,\
                         $8\
-                    )\
+                    ) \
                 ON CONFLICT DO NOTHING \
                 RETURNING \
                     cp1.id AS i;";

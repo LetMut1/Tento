@@ -23,6 +23,7 @@ use {
                 ChannelPublication1Mark_Delete,
                 ChannelPublication1View_Create,
                 ChannelSubscription_Create,
+                Channel_Delete,
                 ChannelSubscription_Delete,
                 Inner as ActionProcessorInner,
                 UserAuthorization_AuthorizeByFirstStep,
@@ -494,6 +495,13 @@ impl HttpServer {
         crate::result_return_logic!(
             router
             .insert(
+                Channel::DELETE,
+                ActionRoute::Channel(Channel::Delete),
+            )
+        );
+        crate::result_return_logic!(
+            router
+            .insert(
                 ChannelSubscription::CREATE,
                 ActionRoute::ChannelSubscription(ChannelSubscription::Create),
             )
@@ -721,6 +729,13 @@ impl HttpServer {
                 .insert(
                     Channel::CHECK_LINKED_NAME_FOR_EXISTING_,
                     ActionRoute::Channel(Channel::CheckLinkedNameForExisting_),
+                )
+            );
+            crate::result_return_logic!(
+                router
+                .insert(
+                    Channel::DELETE_,
+                    ActionRoute::Channel(Channel::Delete_),
                 )
             );
             crate::result_return_logic!(
@@ -1111,6 +1126,13 @@ impl HttpServer {
                             )
                             .await;
                         }
+                        (&Channel::Delete, &Method::POST) => {
+                            return Action::<Channel_Delete>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -1162,6 +1184,13 @@ impl HttpServer {
                                     }
                                     (&Channel::GetManyPublicByName_, &Method::POST) => {
                                         return Action::<Channel_GetManyPublicByName>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&Channel::Delete_, &Method::POST) => {
+                                        return Action::<Channel_Delete>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
@@ -1581,6 +1610,7 @@ pub enum Channel {
     Create,
     CheckNameForExisting,
     CheckLinkedNameForExisting,
+    Delete,
     #[cfg(feature = "action_for_manual_test")]
     GetOneById_,
     #[cfg(feature = "action_for_manual_test")]
@@ -1595,6 +1625,8 @@ pub enum Channel {
     CheckNameForExisting_,
     #[cfg(feature = "action_for_manual_test")]
     CheckLinkedNameForExisting_,
+    #[cfg(feature = "action_for_manual_test")]
+    Delete_,
 }
 impl Channel {
     pub const CHECK_LINKED_NAME_FOR_EXISTING: &'static str = "/channel/check_linked_name_for_existing";
@@ -1604,6 +1636,7 @@ impl Channel {
     pub const GET_MANY_BY_SUBSCRIPTION: &'static str = "/channel/get_many_by_subscription";
     pub const GET_MANY_PUBLIC_BY_NAME: &'static str = "/channel/get_many_public_by_name";
     pub const GET_ONE_BY_ID: &'static str = "/channel/get_one_by_id";
+    pub const DELETE: &'static str = "/channel/delete";
 }
 #[cfg(feature = "action_for_manual_test")]
 impl Channel {
@@ -1633,6 +1666,10 @@ impl Channel {
     );
     pub const CHECK_LINKED_NAME_FOR_EXISTING_: &'static str = const_format::concatcp!(
         Channel::CHECK_LINKED_NAME_FOR_EXISTING,
+        ActionRoute::PART,
+    );
+    pub const DELETE_: &'static str = const_format::concatcp!(
+        Channel::DELETE,
         ActionRoute::PART,
     );
 }

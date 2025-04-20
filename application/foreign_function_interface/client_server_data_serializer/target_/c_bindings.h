@@ -859,6 +859,31 @@ typedef struct CResult_CUnifiedReport_Channel_Create_Outcoming__Channel_Create_P
 
 typedef struct CResult_CUnifiedReport_Channel_Create_Outcoming__Channel_Create_Precedent Channel_Create_CResult;
 
+typedef struct Channel_Delete_Incoming {
+  struct UserAccessTokenSigned user_access_token_signed;
+  struct ChannelTokenSigned channel_token_signed;
+} Channel_Delete_Incoming;
+
+typedef struct Channel_Delete_Precedent {
+  bool user_access_token___already_expired;
+  bool channel_token___already_expired;
+  bool user___is_not_channel_owner;
+  bool channel___not_found;
+} Channel_Delete_Precedent;
+
+typedef struct CUnifiedReport_CVoid__Channel_Delete_Precedent {
+  struct CData_CVoid target;
+  struct Channel_Delete_Precedent precedent;
+  bool is_target;
+} CUnifiedReport_CVoid__Channel_Delete_Precedent;
+
+typedef struct CResult_CUnifiedReport_CVoid__Channel_Delete_Precedent {
+  struct CUnifiedReport_CVoid__Channel_Delete_Precedent data;
+  bool is_data;
+} CResult_CUnifiedReport_CVoid__Channel_Delete_Precedent;
+
+typedef struct CResult_CUnifiedReport_CVoid__Channel_Delete_Precedent Channel_Delete_CResult;
+
 typedef struct ChannelSubscription_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   struct ChannelTokenSigned channel_token_signed;
@@ -1376,6 +1401,14 @@ void channel__create__serialize_deallocate(struct CResult_CVector_c_uchar c_resu
 Channel_Create_CResult channel__create__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
 
 void channel__create__deserialize_deallocate(Channel_Create_CResult c_result);
+
+struct CResult_CVector_c_uchar channel__delete__serialize_allocate(struct Channel_Delete_Incoming incoming);
+
+void channel__delete__serialize_deallocate(struct CResult_CVector_c_uchar c_result);
+
+Channel_Delete_CResult channel__delete__deserialize_allocate(struct CVector_c_uchar c_vector_of_bytes);
+
+void channel__delete__deserialize_deallocate(Channel_Delete_CResult c_result);
 
 struct CResult_CVector_c_uchar channel_subscription__create__serialize_allocate(struct ChannelSubscription_Create_Incoming incoming);
 

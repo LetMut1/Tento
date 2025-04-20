@@ -14,6 +14,7 @@ pub use self::{
         get_many_by_subscription::Channel_GetManyBySubscription,
         get_many_public_by_name::Channel_GetManyPublicByName,
         get_one_by_id::Channel_GetOneById,
+        delete::Channel_Delete,
     },
     channel_publication1::{
         create::ChannelPublication1_Create,

@@ -21,6 +21,7 @@ pub use self::{
         By4 as ChannelBy4,
         By5 as ChannelBy5,
         By6 as ChannelBy6,
+        By7 as ChannelBy7,
         Insert as ChannelInsert,
     },
     channel_publication1::{
@@ -28,6 +29,7 @@ pub use self::{
         By2 as ChannelPublication1By2,
         Insert as ChannelPublication1Insert,
     },
+    channel_delayed_deletion::Insert as ChannelDelayedDeletionInsert,
     channel_publication1_delayed_deletion::Insert as ChannelPublication1DelayedDeletionInsert,
     channel_publication1_commentary_delayed_deletion::Insert as ChannelPublication1CommentaryDelayedDeletionInsert,
     channel_publication1_commentary::{
