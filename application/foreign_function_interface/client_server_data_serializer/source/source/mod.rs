@@ -442,13 +442,21 @@ impl Allocator<CResult<CVector<c_uchar>>> {
         return ();
     }
 }
-struct Transformer<S> {
-    _subject: PhantomData<S>,
-}
-struct ServerRequestData;
-struct ServerResponseData;
-impl Transformer<ServerResponseData> {
-    fn transform<O1, P1, O2, P2>(
+struct Transformer;
+impl Transformer {
+    fn transform_server_request_data<I1, I2>(incoming: I1, converter: impl for<'a> FnOnce(&'a I1) -> Result<I2, Box<dyn StdError + 'static>>) -> CResult<CVector<c_uchar>>
+    where
+        I2: Encode,
+    {
+        let incoming_ = match converter(&incoming) {
+            Result::Ok(incoming__) => incoming__,
+            Result::Err(_) => {
+                return CResult::error();
+            }
+        };
+        return CResult::data(Allocator::<CVector<_>>::allocate(Serializer::serialize(&incoming_)));
+    }
+    fn transform_server_response_data<O1, P1, O2, P2>(
         c_vector_of_bytes: CVector<c_uchar>,
         converter: impl FnOnce(UnifiedReport<O1, P1>) -> Result<CUnifiedReport<O2, P2>, Box<dyn StdError + 'static>>,
     ) -> CResult<CUnifiedReport<O2, P2>>
@@ -474,20 +482,6 @@ impl Transformer<ServerResponseData> {
             }
         };
         return CResult::data(c_unified_report);
-    }
-}
-impl Transformer<ServerRequestData> {
-    fn transform<I1, I2>(incoming: I1, converter: impl for<'a> FnOnce(&'a I1) -> Result<I2, Box<dyn StdError + 'static>>) -> CResult<CVector<c_uchar>>
-    where
-        I2: Encode,
-    {
-        let incoming_ = match converter(&incoming) {
-            Result::Ok(incoming__) => incoming__,
-            Result::Err(_) => {
-                return CResult::error();
-            }
-        };
-        return CResult::data(Allocator::<CVector<_>>::allocate(Serializer::serialize(&incoming_)));
     }
 }
 #[repr(C)]
@@ -542,7 +536,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__serialize_
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -617,7 +611,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserializ
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -644,7 +638,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__serialize_a
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -754,7 +748,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -783,7 +777,7 @@ pub extern "C-unwind" fn user_authorization__check_email_for_existing__serialize
                 },
             );
         };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -816,7 +810,7 @@ pub extern "C-unwind" fn user_authorization__check_email_for_existing__deseriali
         };
         return Result::Ok(CUnifiedReport::target(c_data));
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -842,7 +836,7 @@ pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__serial
                 },
             );
         };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -875,7 +869,7 @@ pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__deseri
         };
         return Result::Ok(CUnifiedReport::target(c_data));
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -907,7 +901,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__seria
                 },
             );
         };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -944,7 +938,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deser
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -982,7 +976,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__serial
                 },
             );
         };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -1013,7 +1007,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deseri
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -1047,7 +1041,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__serialize_all
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -1132,7 +1126,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -1162,7 +1156,7 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__serialize_a
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -1235,7 +1229,7 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -1262,7 +1256,7 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__serialize_
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -1327,7 +1321,7 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__deserializ
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -1358,7 +1352,7 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__serialize_al
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -1471,7 +1465,7 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -1504,7 +1498,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__seria
                 },
             );
         };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -1582,7 +1576,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deser
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -1612,7 +1606,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__seri
                 },
             );
         };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -1678,7 +1672,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__dese
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -1710,7 +1704,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__serial
                 },
             );
         };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -1770,7 +1764,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deseri
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -1795,7 +1789,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__serialize_
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -1883,7 +1877,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__deserializ
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -1909,7 +1903,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__serialize
                 },
             );
         };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -2000,7 +1994,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deseriali
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -2028,7 +2022,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__seri
                 },
             );
         };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -2126,7 +2120,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -2166,7 +2160,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__serialize_a
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -2266,7 +2260,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -2319,7 +2313,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__serialize_allocate(i
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -2417,7 +2411,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -2472,7 +2466,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_allocate(in
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -2568,7 +2562,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -2621,7 +2615,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__serialize_allocate(incoming: Ch
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -2718,7 +2712,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -2762,7 +2756,7 @@ pub extern "C-unwind" fn channel__check_name_for_existing__serialize_allocate(in
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -2813,7 +2807,7 @@ pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -2844,7 +2838,7 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__serialize_allo
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -2895,7 +2889,7 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_al
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -2932,7 +2926,7 @@ pub extern "C-unwind" fn channel__create__serialize_allocate(incoming: Channel_C
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -3005,7 +2999,7 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -3046,7 +3040,7 @@ pub extern "C-unwind" fn channel__delete__serialize_allocate(incoming: Channel_D
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -3094,7 +3088,7 @@ pub extern "C-unwind" fn channel__delete__deserialize_allocate(c_vector_of_bytes
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -3132,7 +3126,7 @@ pub extern "C-unwind" fn channel_subscription__create__serialize_allocate(incomi
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -3210,7 +3204,7 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -3251,7 +3245,7 @@ pub extern "C-unwind" fn channel_subscription__delete__serialize_allocate(incomi
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -3331,7 +3325,7 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_ve
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -3376,7 +3370,7 @@ pub extern "C-unwind" fn channel_publication1__get_many__serialize_allocate(inco
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -3496,7 +3490,7 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -3562,7 +3556,7 @@ pub extern "C-unwind" fn channel_publication1__create__serialize_allocate(incomi
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -3638,7 +3632,7 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_ve
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -3687,7 +3681,7 @@ pub extern "C-unwind" fn channel_publication1__delete__serialize_allocate(incomi
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -3741,7 +3735,7 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_ve
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -3778,7 +3772,7 @@ pub extern "C-unwind" fn channel_publication1_mark__create__serialize_allocate(i
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -3826,7 +3820,7 @@ pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -3863,7 +3857,7 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__serialize_allocate(i
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -3911,7 +3905,7 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_allocate
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -3948,7 +3942,7 @@ pub extern "C-unwind" fn channel_publication1_view__create__serialize_allocate(i
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -3986,7 +3980,7 @@ pub extern "C-unwind" fn channel_publication1_view__create__deserialize_allocate
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -4025,7 +4019,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__serialize_allo
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -4101,7 +4095,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_al
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );
@@ -4140,7 +4134,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__delete__serialize_allo
             },
         );
     };
-    return Transformer::<ServerRequestData>::transform(
+    return Transformer::transform_server_request_data(
         incoming,
         converter,
     );
@@ -4184,7 +4178,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__delete__deserialize_al
         };
         return Result::Ok(unified_report_);
     };
-    return Transformer::<ServerResponseData>::transform(
+    return Transformer::transform_server_response_data(
         c_vector_of_bytes,
         converter,
     );

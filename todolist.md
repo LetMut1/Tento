@@ -146,8 +146,6 @@ ChannelDelayedDeletion_CanBeDeletedFrom - поменять константу п
 
 делать Енкод и валидацию токенов на НЕВоркерСРидахТокие (Блокинг)
 
-
-channel delete route
 взять все каналы овнера.
 
 
