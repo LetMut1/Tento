@@ -10,182 +10,182 @@ use {
             channel::{
                 check_linked_name_for_existing::{
                     Incoming as Channel_CheckLinkedNameForExisting_Incoming,
-                    Outcoming as Channel_CheckLinkedNameForExisting_Outcoming_XXX,
-                    Precedent as Channel_CheckLinkedNameForExisting_Precedent_XXX,
+                    Outcoming as Channel_CheckLinkedNameForExisting_Outcoming,
+                    Precedent as Channel_CheckLinkedNameForExisting_Precedent,
                 },
                 check_name_for_existing::{
-                    Incoming as Channel_CheckNameForExisting_Incoming_XXX,
-                    Outcoming as Channel_CheckNameForExisting_Outcoming_XXX,
-                    Precedent as Channel_CheckNameForExisting_Precedent_XXX,
+                    Incoming as Channel_CheckNameForExisting_Incoming,
+                    Outcoming as Channel_CheckNameForExisting_Outcoming,
+                    Precedent as Channel_CheckNameForExisting_Precedent,
                 },
                 create::{
-                    Incoming as Channel_Create_Incoming_XXX,
-                    Outcoming as Channel_Create_Outcoming_XXX,
-                    Precedent as Channel_Create_Precedent_XXX,
+                    Incoming as Channel_Create_Incoming,
+                    Outcoming as Channel_Create_Outcoming,
+                    Precedent as Channel_Create_Precedent,
                 },
                 get_many_by_name_in_subscriptions::{
-                    Incoming as Channel_GetManyByNameInSubscriptions_Incoming_XXX,
-                    Outcoming as Channel_GetManyByNameInSubscriptions_Outcoming_XXX,
-                    Precedent as Channel_GetManyByNameInSubscriptions_Precedent_XXX,
+                    Incoming as Channel_GetManyByNameInSubscriptions_Incoming,
+                    Outcoming as Channel_GetManyByNameInSubscriptions_Outcoming,
+                    Precedent as Channel_GetManyByNameInSubscriptions_Precedent,
                 },
                 get_many_by_subscription::{
-                    Incoming as Channel_GetManyBySubscription_Incoming_XXX,
-                    Outcoming as Channel_GetManyBySubscription_Outcoming_XXX,
-                    Precedent as Channel_GetManyBySubscription_Precedent_XXX,
+                    Incoming as Channel_GetManyBySubscription_Incoming,
+                    Outcoming as Channel_GetManyBySubscription_Outcoming,
+                    Precedent as Channel_GetManyBySubscription_Precedent,
                 },
                 get_many_public_by_name::{
-                    Incoming as Channel_GetManyPublicByName_Incoming_XXX,
-                    Outcoming as Channel_GetManyPublicByName_Outcoming_XXX,
-                    Precedent as Channel_GetManyPublicByName_Precedent_XXX,
+                    Incoming as Channel_GetManyPublicByName_Incoming,
+                    Outcoming as Channel_GetManyPublicByName_Outcoming,
+                    Precedent as Channel_GetManyPublicByName_Precedent,
                 },
                 get_one_by_id::{
-                    Incoming as Channel_GetOneById_Incoming_XXX,
-                    Outcoming as Channel_GetOneById_Outcoming_XXX,
-                    Precedent as Channel_GetOneById_Precedent_XXX,
+                    Incoming as Channel_GetOneById_Incoming,
+                    Outcoming as Channel_GetOneById_Outcoming,
+                    Precedent as Channel_GetOneById_Precedent,
                 },
                 delete:: {
-                    Incoming as Channel_Delete_Incoming_XXX,
-                    Precedent as Channel_Delete_Precedent_XXX,
+                    Incoming as Channel_Delete_Incoming,
+                    Precedent as Channel_Delete_Precedent,
                 },
             },
             channel_publication1::{
                 create::{
-                    Incoming as ChannelPublication1_Create_Incoming_XXX,
-                    Outcoming as ChannelPublication1_Create_Outcoming_XXX,
-                    Precedent as ChannelPublication1_Create_Precedent_XXX,
+                    Incoming as ChannelPublication1_Create_Incoming,
+                    Outcoming as ChannelPublication1_Create_Outcoming,
+                    Precedent as ChannelPublication1_Create_Precedent,
                 },
                 delete::{
-                    Incoming as ChannelPublication1_Delete_Incoming_XXX,
-                    Precedent as ChannelPublication1_Delete_Precedent_XXX,
+                    Incoming as ChannelPublication1_Delete_Incoming,
+                    Precedent as ChannelPublication1_Delete_Precedent,
                 },
                 get_many::{
-                    Incoming as ChannelPublication1_GetMany_Incoming_XXX,
-                    Outcoming as ChannelPublication1_GetMany_Outcoming_XXX,
-                    Precedent as ChannelPublication1_GetMany_Precedent_XXX,
+                    Incoming as ChannelPublication1_GetMany_Incoming,
+                    Outcoming as ChannelPublication1_GetMany_Outcoming,
+                    Precedent as ChannelPublication1_GetMany_Precedent,
                 },
             },
             channel_publication1_commentary::{
                 create::{
-                    Incoming as ChannelPublication1Commentary_Create_Incoming_XXX,
-                    Outcoming as ChannelPublication1Commentary_Create_Outcoming_XXX,
-                    Precedent as ChannelPublication1Commentary_Create_Precedent_XXX,
+                    Incoming as ChannelPublication1Commentary_Create_Incoming,
+                    Outcoming as ChannelPublication1Commentary_Create_Outcoming,
+                    Precedent as ChannelPublication1Commentary_Create_Precedent,
                 },
                 delete::{
-                    Incoming as ChannelPublication1Commentary_Delete_Incoming_XXX,
-                    Precedent as ChannelPublication1Commentary_Delete_Precedent_XXX,
+                    Incoming as ChannelPublication1Commentary_Delete_Incoming,
+                    Precedent as ChannelPublication1Commentary_Delete_Precedent,
                 },
             },
             channel_publication1_mark::{
                 create::{
-                    Incoming as ChannelPublication1Mark_Create_Incoming_XXX,
-                    Precedent as ChannelPublication1Mark_Create_Precedent_XXX,
+                    Incoming as ChannelPublication1Mark_Create_Incoming,
+                    Precedent as ChannelPublication1Mark_Create_Precedent,
                 },
                 delete::{
-                    Incoming as ChannelPublication1Mark_Delete_Incoming_XXX,
-                    Precedent as ChannelPublication1Mark_Delete_Precedent_XXX,
+                    Incoming as ChannelPublication1Mark_Delete_Incoming,
+                    Precedent as ChannelPublication1Mark_Delete_Precedent,
                 },
             },
             channel_publication1_view::create::{
-                Incoming as ChannelPublication1View_Create_Incoming_XXX,
-                Precedent as ChannelPublication1View_Create_Precedent_XXX,
+                Incoming as ChannelPublication1View_Create_Incoming,
+                Precedent as ChannelPublication1View_Create_Precedent,
             },
             channel_subscription::{
                 create::{
-                    Incoming as ChannelSubscription_Create_Incoming_XXX,
-                    Outcoming as ChannelSubscription_Create_Outcoming_XXX,
-                    Precedent as ChannelSubscription_Create_Precedent_XXX,
+                    Incoming as ChannelSubscription_Create_Incoming,
+                    Outcoming as ChannelSubscription_Create_Outcoming,
+                    Precedent as ChannelSubscription_Create_Precedent,
                 },
                 delete::{
-                    Incoming as ChannelSubscription_Delete_Incoming_XXX,
-                    Outcoming as ChannelSubscription_Delete_Outcoming_XXX,
-                    Precedent as ChannelSubscription_Delete_Precedent_XXX,
+                    Incoming as ChannelSubscription_Delete_Incoming,
+                    Outcoming as ChannelSubscription_Delete_Outcoming,
+                    Precedent as ChannelSubscription_Delete_Precedent,
                 },
             },
             user_authorization::{
                 authorize_by_first_step::{
-                    Incoming as UserAuthorization_AuthorizeByFirstStep_Incoming_XXX,
-                    Outcoming as UserAuthorization_AuthorizeByFirstStep_Outcoming_XXX,
-                    Precedent as UserAuthorization_AuthorizeByFirstStep_Precedent_XXX,
+                    Incoming as UserAuthorization_AuthorizeByFirstStep_Incoming,
+                    Outcoming as UserAuthorization_AuthorizeByFirstStep_Outcoming,
+                    Precedent as UserAuthorization_AuthorizeByFirstStep_Precedent,
                 },
                 authorize_by_last_step::{
-                    Incoming as UserAuthorization_AuthorizeByLastStep_Incoming_XXX,
-                    Outcoming as UserAuthorization_AuthorizeByLastStep_Outcoming_XXX,
-                    Precedent as UserAuthorization_AuthorizeByLastStep_Precedent_XXX,
+                    Incoming as UserAuthorization_AuthorizeByLastStep_Incoming,
+                    Outcoming as UserAuthorization_AuthorizeByLastStep_Outcoming,
+                    Precedent as UserAuthorization_AuthorizeByLastStep_Precedent,
                 },
                 check_email_for_existing::{
-                    Incoming as UserAuthorization_CheckEmailForExisting_Incoming_XXX,
-                    Outcoming as UserAuthorization_CheckEmailForExisting_Outcoming_XXX,
+                    Incoming as UserAuthorization_CheckEmailForExisting_Incoming,
+                    Outcoming as UserAuthorization_CheckEmailForExisting_Outcoming,
                 },
                 check_nickname_for_existing::{
-                    Incoming as UserAuthorization_CheckNicknameForExisting_Incoming_XXX,
-                    Outcoming as UserAuthorization_CheckNicknameForExisting_Outcoming_XXX,
+                    Incoming as UserAuthorization_CheckNicknameForExisting_Incoming,
+                    Outcoming as UserAuthorization_CheckNicknameForExisting_Outcoming,
                 },
                 deauthorize_from_all_devices::{
-                    Incoming as UserAuthorization_DeauthorizeFromAllDevices_Incoming_XXX,
-                    Precedent as UserAuthorization_DeauthorizeFromAllDevices_Precedent_XXX,
+                    Incoming as UserAuthorization_DeauthorizeFromAllDevices_Incoming,
+                    Precedent as UserAuthorization_DeauthorizeFromAllDevices_Precedent,
                 },
                 deauthorize_from_one_device::{
-                    Incoming as UserAuthorization_DeauthorizeFromOneDevice_Incoming_XXX,
-                    Precedent as UserAuthorization_DeauthorizeFromOneDevice_Precedent_XXX,
+                    Incoming as UserAuthorization_DeauthorizeFromOneDevice_Incoming,
+                    Precedent as UserAuthorization_DeauthorizeFromOneDevice_Precedent,
                 },
                 refresh_access_token::{
-                    Incoming as UserAuthorization_RefreshAccessToken_Incoming_XXX,
-                    Outcoming as UserAuthorization_RefreshAccessToken_Outcoming_XXX,
-                    Precedent as UserAuthorization_RefreshAccessToken_Precedent_XXX,
+                    Incoming as UserAuthorization_RefreshAccessToken_Incoming,
+                    Outcoming as UserAuthorization_RefreshAccessToken_Outcoming,
+                    Precedent as UserAuthorization_RefreshAccessToken_Precedent,
                 },
                 register_by_first_step::{
-                    Incoming as UserAuthorization_RegisterByFirstStep_Incoming_XXX,
-                    Outcoming as UserAuthorization_RegisterByFirstStep_Outcoming_XXX,
-                    Precedent as UserAuthorization_RegisterByFirstStep_Precedent_XXX,
+                    Incoming as UserAuthorization_RegisterByFirstStep_Incoming,
+                    Outcoming as UserAuthorization_RegisterByFirstStep_Outcoming,
+                    Precedent as UserAuthorization_RegisterByFirstStep_Precedent,
                 },
                 register_by_last_step::{
-                    Incoming as UserAuthorization_RegisterByLastStep_Incoming_XXX,
-                    Outcoming as UserAuthorization_RegisterByLastStep_Outcoming_XXX,
-                    Precedent as UserAuthorization_RegisterByLastStep_Precedent_XXX,
+                    Incoming as UserAuthorization_RegisterByLastStep_Incoming,
+                    Outcoming as UserAuthorization_RegisterByLastStep_Outcoming,
+                    Precedent as UserAuthorization_RegisterByLastStep_Precedent,
                 },
                 register_by_second_step::{
-                    Incoming as UserAuthorization_RegisterBySecondStep_Incoming_XXX,
-                    Precedent as UserAuthorization_RegisterBySecondStep_Precedent_XXX,
+                    Incoming as UserAuthorization_RegisterBySecondStep_Incoming,
+                    Precedent as UserAuthorization_RegisterBySecondStep_Precedent,
                 },
                 reset_password_by_first_step::{
-                    Incoming as UserAuthorization_ResetPasswordByFirstStep_Incoming_XXX,
-                    Outcoming as UserAuthorization_ResetPasswordByFirstStep_Outcoming_XXX,
-                    Precedent as UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX,
+                    Incoming as UserAuthorization_ResetPasswordByFirstStep_Incoming,
+                    Outcoming as UserAuthorization_ResetPasswordByFirstStep_Outcoming,
+                    Precedent as UserAuthorization_ResetPasswordByFirstStep_Precedent,
                 },
                 reset_password_by_last_step::{
-                    Incoming as UserAuthorization_ResetPasswordByLastStep_Incoming_XXX,
-                    Precedent as UserAuthorization_ResetPasswordByLastStep_Precedent_XXX,
+                    Incoming as UserAuthorization_ResetPasswordByLastStep_Incoming,
+                    Precedent as UserAuthorization_ResetPasswordByLastStep_Precedent,
                 },
                 reset_password_by_second_step::{
-                    Incoming as UserAuthorization_ResetPasswordBySecondStep_Incoming_XXX,
-                    Precedent as UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX,
+                    Incoming as UserAuthorization_ResetPasswordBySecondStep_Incoming,
+                    Precedent as UserAuthorization_ResetPasswordBySecondStep_Precedent,
                 },
                 send_email_for_authorize::{
-                    Incoming as UserAuthorization_SendEmailForAuthorize_Incoming_XXX,
-                    Outcoming as UserAuthorization_SendEmailForAuthorize_Outcoming_XXX,
-                    Precedent as UserAuthorization_SendEmailForAuthorize_Precedent_XXX,
+                    Incoming as UserAuthorization_SendEmailForAuthorize_Incoming,
+                    Outcoming as UserAuthorization_SendEmailForAuthorize_Outcoming,
+                    Precedent as UserAuthorization_SendEmailForAuthorize_Precedent,
                 },
                 send_email_for_register::{
-                    Incoming as UserAuthorization_SendEmailForRegister_Incoming_XXX,
-                    Outcoming as UserAuthorization_SendEmailForRegister_Outcoming_XXX,
-                    Precedent as UserAuthorization_SendEmailForRegister_Precedent_XXX,
+                    Incoming as UserAuthorization_SendEmailForRegister_Incoming,
+                    Outcoming as UserAuthorization_SendEmailForRegister_Outcoming,
+                    Precedent as UserAuthorization_SendEmailForRegister_Precedent,
                 },
                 send_email_for_reset_password::{
-                    Incoming as UserAuthorization_SendEmailForResetPassword_Incoming_XXX,
-                    Outcoming as UserAuthorization_SendEmailForResetPassword_Outcoming_XXX,
-                    Precedent as UserAuthorization_SendEmailForResetPassword_Precedent_XXX,
+                    Incoming as UserAuthorization_SendEmailForResetPassword_Incoming,
+                    Outcoming as UserAuthorization_SendEmailForResetPassword_Outcoming,
+                    Precedent as UserAuthorization_SendEmailForResetPassword_Precedent,
                 },
             },
         },
         bit_code_serializer::Serializer,
-        channel_publication1_token_signed::ChannelPublication1TokenSigned as ChannelPublication1TokenSigned_XXX,
-        channel_token_signed::ChannelTokenSigned as ChannelTokenSigned_XXX,
+        channel_publication1_token_signed::ChannelPublication1TokenSigned as ChannelPublication1TokenSigned,
+        channel_token_signed::ChannelTokenSigned as ChannelTokenSigned,
         unified_report::{
             Data,
             UnifiedReport,
         },
-        user_access_refresh_token_signed::UserAccessRefreshTokenSigned as UserAccessRefreshTokenSigned_XXX,
-        user_access_token_signed::UserAccessTokenSigned as UserAccessTokenSigned_XXX,
+        user_access_refresh_token_signed::UserAccessRefreshTokenSigned as UserAccessRefreshTokenSigned,
+        user_access_token_signed::UserAccessTokenSigned as UserAccessTokenSigned,
         void::Void,
     },
     libc::{
@@ -527,9 +527,9 @@ pub struct UserAuthorization_AuthorizeByFirstStep_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_first_step__serialize_allocate(incoming: UserAuthorization_AuthorizeByFirstStep_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ UserAuthorization_AuthorizeByFirstStep_Incoming_| -> Result<UserAuthorization_AuthorizeByFirstStep_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ UserAuthorization_AuthorizeByFirstStep_Incoming_| -> Result<UserAuthorization_AuthorizeByFirstStep_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            UserAuthorization_AuthorizeByFirstStep_Incoming_XXX {
+            UserAuthorization_AuthorizeByFirstStep_Incoming {
                 user_device__id: incoming_.user_device__id.get_as_str()?,
                 user__email___or___user__nickname: incoming_.user__email___or___user__nickname.get_as_str()?,
                 user__password: incoming_.user__password.get_as_str()?,
@@ -564,7 +564,7 @@ pub struct UserAuthorization_AuthorizeByFirstStep_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> UserAuthorization_AuthorizeByFirstStep_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_AuthorizeByFirstStep_Outcoming_XXX, UserAuthorization_AuthorizeByFirstStep_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_AuthorizeByFirstStep_Outcoming, UserAuthorization_AuthorizeByFirstStep_Precedent>| -> Result<
         UnifiedReport_<UserAuthorization_AuthorizeByFirstStep_Outcoming_, UserAuthorization_AuthorizeByFirstStep_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -593,13 +593,13 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserializ
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_AuthorizeByFirstStep_Precedent_XXX::User__WrongEmailOrNicknameOrPassword => {
+                    UserAuthorization_AuthorizeByFirstStep_Precedent::User__WrongEmailOrNicknameOrPassword => {
                         UserAuthorization_AuthorizeByFirstStep_Precedent_ {
                             user___wrong_email_or_nickname_or_password: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_AuthorizeByFirstStep_Precedent_XXX::ParallelExecution => {
+                    UserAuthorization_AuthorizeByFirstStep_Precedent::ParallelExecution => {
                         UserAuthorization_AuthorizeByFirstStep_Precedent_ {
                             parallel_execution: true,
                             ..Default::default()
@@ -629,9 +629,9 @@ pub struct UserAuthorization_AuthorizeByLastStep_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_last_step__serialize_allocate(incoming: UserAuthorization_AuthorizeByLastStep_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ UserAuthorization_AuthorizeByLastStep_Incoming_| -> Result<UserAuthorization_AuthorizeByLastStep_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ UserAuthorization_AuthorizeByLastStep_Incoming_| -> Result<UserAuthorization_AuthorizeByLastStep_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            UserAuthorization_AuthorizeByLastStep_Incoming_XXX {
+            UserAuthorization_AuthorizeByLastStep_Incoming {
                 user__id: incoming_.user__id,
                 user_device__id: incoming_.user_device__id.get_as_str()?,
                 user_authorization_token__value: incoming_.user_authorization_token__value.get_as_str()?,
@@ -672,7 +672,7 @@ pub struct UserAuthorizationToken__WrongValue {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> UserAuthorization_AuthorizeByLastStep_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_AuthorizeByLastStep_Outcoming_XXX, UserAuthorization_AuthorizeByLastStep_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_AuthorizeByLastStep_Outcoming, UserAuthorization_AuthorizeByLastStep_Precedent>| -> Result<
         UnifiedReport_<UserAuthorization_AuthorizeByLastStep_Outcoming_, UserAuthorization_AuthorizeByLastStep_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -707,19 +707,19 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::UserAuthorizationToken__AlreadyExpired => {
+                    UserAuthorization_AuthorizeByLastStep_Precedent::UserAuthorizationToken__AlreadyExpired => {
                         UserAuthorization_AuthorizeByLastStep_Precedent_ {
                             user_authorization_token___already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::UserAuthorizationToken__NotFound => {
+                    UserAuthorization_AuthorizeByLastStep_Precedent::UserAuthorizationToken__NotFound => {
                         UserAuthorization_AuthorizeByLastStep_Precedent_ {
                             user_authorization_token___not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::UserAuthorizationToken__WrongValue {
+                    UserAuthorization_AuthorizeByLastStep_Precedent::UserAuthorizationToken__WrongValue {
                         user_authorization_token__wrong_enter_tries_quantity,
                     } => {
                         UserAuthorization_AuthorizeByLastStep_Precedent_ {
@@ -730,13 +730,13 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::User__NotFound => {
+                    UserAuthorization_AuthorizeByLastStep_Precedent::User__NotFound => {
                         UserAuthorization_AuthorizeByLastStep_Precedent_ {
                             user___not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::ParallelExecution => {
+                    UserAuthorization_AuthorizeByLastStep_Precedent::ParallelExecution => {
                         UserAuthorization_AuthorizeByLastStep_Precedent_ {
                             parallel_execution: true,
                             ..Default::default()
@@ -770,9 +770,9 @@ pub struct UserAuthorization_CheckEmailForExisting_Incoming_ {
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__check_email_for_existing__serialize_allocate(incoming: UserAuthorization_CheckEmailForExisting_Incoming_) -> Result_<Vec_<c_uchar>> {
     let converter =
-        move |incoming_: &'_ UserAuthorization_CheckEmailForExisting_Incoming_| -> Result<UserAuthorization_CheckEmailForExisting_Incoming_XXX, Box<dyn StdError + 'static>> {
+        move |incoming_: &'_ UserAuthorization_CheckEmailForExisting_Incoming_| -> Result<UserAuthorization_CheckEmailForExisting_Incoming, Box<dyn StdError + 'static>> {
             return Result::Ok(
-                UserAuthorization_CheckEmailForExisting_Incoming_XXX {
+                UserAuthorization_CheckEmailForExisting_Incoming {
                     user__email: incoming_.user__email.get_as_str()?,
                 },
             );
@@ -797,7 +797,7 @@ pub struct UserAuthorization_CheckEmailForExisting_Outcoming_ {
 pub extern "C-unwind" fn user_authorization__check_email_for_existing__deserialize_allocate(
     vector_of_bytes: Vec_<c_uchar>,
 ) -> UserAuthorization_CheckEmailForExisting_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming_XXX, Void>| -> Result<UnifiedReport_<UserAuthorization_CheckEmailForExisting_Outcoming_, Void_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming, Void>| -> Result<UnifiedReport_<UserAuthorization_CheckEmailForExisting_Outcoming_, Void_>, Box<dyn StdError + 'static>> {
         let UnifiedReport::Target {
             data,
         } = unified_report;
@@ -833,9 +833,9 @@ pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__serial
     incoming: UserAuthorization_CheckNicknameForExisting_Incoming_,
 ) -> Result_<Vec_<c_uchar>> {
     let converter =
-        move |incoming_: &'_ UserAuthorization_CheckNicknameForExisting_Incoming_| -> Result<UserAuthorization_CheckNicknameForExisting_Incoming_XXX, Box<dyn StdError + 'static>> {
+        move |incoming_: &'_ UserAuthorization_CheckNicknameForExisting_Incoming_| -> Result<UserAuthorization_CheckNicknameForExisting_Incoming, Box<dyn StdError + 'static>> {
             return Result::Ok(
-                UserAuthorization_CheckNicknameForExisting_Incoming_XXX {
+                UserAuthorization_CheckNicknameForExisting_Incoming {
                     user__nickname: incoming_.user__nickname.get_as_str()?,
                 },
             );
@@ -860,7 +860,7 @@ pub struct UserAuthorization_CheckNicknameForExisting_Outcoming_ {
 pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__deserialize_allocate(
     vector_of_bytes: Vec_<c_uchar>,
 ) -> UserAuthorization_CheckNicknameForExisting_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming_XXX, Void>| -> Result<UnifiedReport_<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming, Void>| -> Result<UnifiedReport_<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void_>, Box<dyn StdError + 'static>> {
         let UnifiedReport::Target {
             data,
         } = unified_report;
@@ -896,10 +896,10 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__seria
     incoming: UserAuthorization_DeauthorizeFromAllDevices_Incoming_,
 ) -> Result_<Vec_<c_uchar>> {
     let converter =
-        move |incoming_: &'_ UserAuthorization_DeauthorizeFromAllDevices_Incoming_| -> Result<UserAuthorization_DeauthorizeFromAllDevices_Incoming_XXX, Box<dyn StdError + 'static>> {
+        move |incoming_: &'_ UserAuthorization_DeauthorizeFromAllDevices_Incoming_| -> Result<UserAuthorization_DeauthorizeFromAllDevices_Incoming, Box<dyn StdError + 'static>> {
             return Result::Ok(
-                UserAuthorization_DeauthorizeFromAllDevices_Incoming_XXX {
-                    user_access_token_signed: UserAccessTokenSigned_XXX {
+                UserAuthorization_DeauthorizeFromAllDevices_Incoming {
+                    user_access_token_signed: UserAccessTokenSigned {
                         user__id: incoming_.user_access_token_signed.user__id,
                         user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                         user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
@@ -929,7 +929,7 @@ pub struct UserAuthorization_DeauthorizeFromAllDevices_Precedent_ {
 pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deserialize_allocate(
     vector_of_bytes: Vec_<c_uchar>,
 ) -> UserAuthorization_DeauthorizeFromAllDevices_Result {
-    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_XXX>| -> Result<UnifiedReport_<Void_, UserAuthorization_DeauthorizeFromAllDevices_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent>| -> Result<UnifiedReport_<Void_, UserAuthorization_DeauthorizeFromAllDevices_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -938,7 +938,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deser
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_XXX::UserAccessToken__AlreadyExpired => {
+                    UserAuthorization_DeauthorizeFromAllDevices_Precedent::UserAccessToken__AlreadyExpired => {
                         UserAuthorization_DeauthorizeFromAllDevices_Precedent_ {
                             user_access_token___already_expired: true,
                             ..Default::default()
@@ -975,10 +975,10 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__serial
     incoming: UserAuthorization_DeauthorizeFromOneDevice_Incoming_,
 ) -> Result_<Vec_<c_uchar>> {
     let converter =
-        move |incoming_: &'_ UserAuthorization_DeauthorizeFromOneDevice_Incoming_| -> Result<UserAuthorization_DeauthorizeFromOneDevice_Incoming_XXX, Box<dyn StdError + 'static>> {
+        move |incoming_: &'_ UserAuthorization_DeauthorizeFromOneDevice_Incoming_| -> Result<UserAuthorization_DeauthorizeFromOneDevice_Incoming, Box<dyn StdError + 'static>> {
             return Result::Ok(
-                UserAuthorization_DeauthorizeFromOneDevice_Incoming_XXX {
-                    user_access_token_signed: UserAccessTokenSigned_XXX {
+                UserAuthorization_DeauthorizeFromOneDevice_Incoming {
+                    user_access_token_signed: UserAccessTokenSigned {
                         user__id: incoming_.user_access_token_signed.user__id,
                         user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                         user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
@@ -1002,7 +1002,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__serial
 pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deserialize_allocate(
     vector_of_bytes: Vec_<c_uchar>,
 ) -> UserAuthorization_DeauthorizeFromOneDevice_Result {
-    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_XXX>| -> Result<UnifiedReport_<Void_, UserAuthorization_DeauthorizeFromOneDevice_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent>| -> Result<UnifiedReport_<Void_, UserAuthorization_DeauthorizeFromOneDevice_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -1011,7 +1011,7 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deseri
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_XXX::UserAccessToken__AlreadyExpired => {
+                    UserAuthorization_DeauthorizeFromOneDevice_Precedent::UserAccessToken__AlreadyExpired => {
                         UserAuthorization_DeauthorizeFromOneDevice_Precedent_ {
                             user_access_token___already_expired: true,
                             ..Default::default()
@@ -1040,17 +1040,17 @@ pub struct UserAuthorization_RefreshAccessToken_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__refresh_access_token__serialize_allocate(incoming: UserAuthorization_RefreshAccessToken_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ UserAuthorization_RefreshAccessToken_Incoming_| -> Result<UserAuthorization_RefreshAccessToken_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ UserAuthorization_RefreshAccessToken_Incoming_| -> Result<UserAuthorization_RefreshAccessToken_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            UserAuthorization_RefreshAccessToken_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            UserAuthorization_RefreshAccessToken_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                user_access_refresh_token_signed: UserAccessRefreshTokenSigned_XXX {
+                user_access_refresh_token_signed: UserAccessRefreshTokenSigned {
                     user_access_refresh_token__expires_at: incoming_.user_access_refresh_token_signed.user_access_refresh_token__expires_at,
                     signature: incoming_.user_access_refresh_token_signed.signature.clone_as_vec()?,
                 },
@@ -1083,7 +1083,7 @@ pub struct UserAuthorization_RefreshAccessToken_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> UserAuthorization_RefreshAccessToken_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_RefreshAccessToken_Outcoming_XXX, UserAuthorization_RefreshAccessToken_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_RefreshAccessToken_Outcoming, UserAuthorization_RefreshAccessToken_Precedent>| -> Result<
         UnifiedReport_<UserAuthorization_RefreshAccessToken_Outcoming_, UserAuthorization_RefreshAccessToken_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -1118,19 +1118,19 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_RefreshAccessToken_Precedent_XXX::UserAccessRefreshToken__AlreadyExpired => {
+                    UserAuthorization_RefreshAccessToken_Precedent::UserAccessRefreshToken__AlreadyExpired => {
                         UserAuthorization_RefreshAccessToken_Precedent_ {
                             user_access_refresh_token___already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RefreshAccessToken_Precedent_XXX::UserAccessRefreshToken__NotFound => {
+                    UserAuthorization_RefreshAccessToken_Precedent::UserAccessRefreshToken__NotFound => {
                         UserAuthorization_RefreshAccessToken_Precedent_ {
                             user_access_refresh_token___not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RefreshAccessToken_Precedent_XXX::ParallelExecution => {
+                    UserAuthorization_RefreshAccessToken_Precedent::ParallelExecution => {
                         UserAuthorization_RefreshAccessToken_Precedent_ {
                             parallel_execution: true,
                             ..Default::default()
@@ -1164,9 +1164,9 @@ pub struct UserAuthorization_RegisterByFirstStep_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_first_step__serialize_allocate(incoming: UserAuthorization_RegisterByFirstStep_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ UserAuthorization_RegisterByFirstStep_Incoming_| -> Result<UserAuthorization_RegisterByFirstStep_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ UserAuthorization_RegisterByFirstStep_Incoming_| -> Result<UserAuthorization_RegisterByFirstStep_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            UserAuthorization_RegisterByFirstStep_Incoming_XXX {
+            UserAuthorization_RegisterByFirstStep_Incoming {
                 user__email: incoming_.user__email.get_as_str()?,
                 user_device__id: incoming_.user_device__id.get_as_str()?,
             },
@@ -1199,7 +1199,7 @@ pub struct UserAuthorization_RegisterByFirstStep_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> UserAuthorization_RegisterByFirstStep_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_RegisterByFirstStep_Outcoming_XXX, UserAuthorization_RegisterByFirstStep_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_RegisterByFirstStep_Outcoming, UserAuthorization_RegisterByFirstStep_Precedent>| -> Result<
         UnifiedReport_<UserAuthorization_RegisterByFirstStep_Outcoming_, UserAuthorization_RegisterByFirstStep_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -1227,13 +1227,13 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_RegisterByFirstStep_Precedent_XXX::User__EmailAlreadyExist => {
+                    UserAuthorization_RegisterByFirstStep_Precedent::User__EmailAlreadyExist => {
                         UserAuthorization_RegisterByFirstStep_Precedent_ {
                             user___email_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterByFirstStep_Precedent_XXX::ParallelExecution => {
+                    UserAuthorization_RegisterByFirstStep_Precedent::ParallelExecution => {
                         UserAuthorization_RegisterByFirstStep_Precedent_ {
                             parallel_execution: true,
                             ..Default::default()
@@ -1263,9 +1263,9 @@ pub struct UserAuthorization_RegisterBySecondStep_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_second_step__serialize_allocate(incoming: UserAuthorization_RegisterBySecondStep_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ UserAuthorization_RegisterBySecondStep_Incoming_| -> Result<UserAuthorization_RegisterBySecondStep_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ UserAuthorization_RegisterBySecondStep_Incoming_| -> Result<UserAuthorization_RegisterBySecondStep_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            UserAuthorization_RegisterBySecondStep_Incoming_XXX {
+            UserAuthorization_RegisterBySecondStep_Incoming {
                 user__email: incoming_.user__email.get_as_str()?,
                 user_device__id: incoming_.user_device__id.get_as_str()?,
                 user_registration_token__value: incoming_.user_registration_token__value.get_as_str()?,
@@ -1300,7 +1300,7 @@ pub struct UserRegistrationToken__WrongValue {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_second_step__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> UserAuthorization_RegisterBySecondStep_Result {
-    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_RegisterBySecondStep_Precedent_XXX>| -> Result<UnifiedReport_<Void_, UserAuthorization_RegisterBySecondStep_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_RegisterBySecondStep_Precedent>| -> Result<UnifiedReport_<Void_, UserAuthorization_RegisterBySecondStep_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -1309,20 +1309,20 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__deserializ
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__NotFound => UserAuthorization_RegisterBySecondStep_Precedent_ {
+                    UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__NotFound => UserAuthorization_RegisterBySecondStep_Precedent_ {
                         user_registration_token___not_found: true,
                         ..Default::default()
                     },
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__AlreadyExpired => UserAuthorization_RegisterBySecondStep_Precedent_ {
+                    UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__AlreadyExpired => UserAuthorization_RegisterBySecondStep_Precedent_ {
                         user_registration_token___already_expired: true,
                         ..Default::default()
                     },
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__AlreadyApproved =>
+                    UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__AlreadyApproved =>
                     UserAuthorization_RegisterBySecondStep_Precedent_ {
                         user_registration_token___already_approved: true,
                         ..Default::default()
                     },
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__WrongValue {
+                    UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__WrongValue {
                         user_registration_token__wrong_enter_tries_quantity
                     } => UserAuthorization_RegisterBySecondStep_Precedent_ {
                         user_registration_token___wrong_value: UserRegistrationToken__WrongValue {
@@ -1331,7 +1331,7 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__deserializ
                         },
                         ..Default::default()
                     },
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::ParallelExecution => UserAuthorization_RegisterBySecondStep_Precedent_ {
+                    UserAuthorization_RegisterBySecondStep_Precedent::ParallelExecution => UserAuthorization_RegisterBySecondStep_Precedent_ {
                         parallel_execution: true,
                         ..Default::default()
                     }
@@ -1361,9 +1361,9 @@ pub struct UserAuthorization_RegisterByLastStep_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_last_step__serialize_allocate(incoming: UserAuthorization_RegisterByLastStep_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ UserAuthorization_RegisterByLastStep_Incoming_| -> Result<UserAuthorization_RegisterByLastStep_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ UserAuthorization_RegisterByLastStep_Incoming_| -> Result<UserAuthorization_RegisterByLastStep_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            UserAuthorization_RegisterByLastStep_Incoming_XXX {
+            UserAuthorization_RegisterByLastStep_Incoming {
                 user_device__id: incoming_.user_device__id.get_as_str()?,
                 user__email: incoming_.user__email.get_as_str()?,
                 user__nickname: incoming_.user__nickname.get_as_str()?,
@@ -1402,7 +1402,7 @@ pub struct UserAuthorization_RegisterByLastStep_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> UserAuthorization_RegisterByLastStep_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_RegisterByLastStep_Outcoming_XXX, UserAuthorization_RegisterByLastStep_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_RegisterByLastStep_Outcoming, UserAuthorization_RegisterByLastStep_Precedent>| -> Result<
         UnifiedReport_<UserAuthorization_RegisterByLastStep_Outcoming_, UserAuthorization_RegisterByLastStep_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -1437,43 +1437,43 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::User__NicknameAlreadyExist => {
+                    UserAuthorization_RegisterByLastStep_Precedent::User__NicknameAlreadyExist => {
                         UserAuthorization_RegisterByLastStep_Precedent_ {
                             user___nickname_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::User__EmailAlreadyExist => {
+                    UserAuthorization_RegisterByLastStep_Precedent::User__EmailAlreadyExist => {
                         UserAuthorization_RegisterByLastStep_Precedent_ {
                             user___email_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::UserRegistrationToken__NotFound => {
+                    UserAuthorization_RegisterByLastStep_Precedent::UserRegistrationToken__NotFound => {
                         UserAuthorization_RegisterByLastStep_Precedent_ {
                             user_registration_token___not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::UserRegistrationToken__AlreadyExpired => {
+                    UserAuthorization_RegisterByLastStep_Precedent::UserRegistrationToken__AlreadyExpired => {
                         UserAuthorization_RegisterByLastStep_Precedent_ {
                             user_registration_token___already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::UserRegistrationToken__IsNotApproved => {
+                    UserAuthorization_RegisterByLastStep_Precedent::UserRegistrationToken__IsNotApproved => {
                         UserAuthorization_RegisterByLastStep_Precedent_ {
                             user_registration_token___is_not_approved: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::UserRegistrationToken__WrongValue => {
+                    UserAuthorization_RegisterByLastStep_Precedent::UserRegistrationToken__WrongValue => {
                         UserAuthorization_RegisterByLastStep_Precedent_ {
                             user_registration_token___wrong_value: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::ParallelExecution => {
+                    UserAuthorization_RegisterByLastStep_Precedent::ParallelExecution => {
                         UserAuthorization_RegisterByLastStep_Precedent_ {
                             parallel_execution: true,
                             ..Default::default()
@@ -1510,9 +1510,9 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__seria
     incoming: UserAuthorization_ResetPasswordByFirstStep_Incoming_,
 ) -> Result_<Vec_<c_uchar>> {
     let converter =
-        move |incoming_: &'_ UserAuthorization_ResetPasswordByFirstStep_Incoming_| -> Result<UserAuthorization_ResetPasswordByFirstStep_Incoming_XXX, Box<dyn StdError + 'static>> {
+        move |incoming_: &'_ UserAuthorization_ResetPasswordByFirstStep_Incoming_| -> Result<UserAuthorization_ResetPasswordByFirstStep_Incoming, Box<dyn StdError + 'static>> {
             return Result::Ok(
-                UserAuthorization_ResetPasswordByFirstStep_Incoming_XXX {
+                UserAuthorization_ResetPasswordByFirstStep_Incoming {
                     user__email: incoming_.user__email.get_as_str()?,
                     user_device__id: incoming_.user_device__id.get_as_str()?,
                 },
@@ -1549,7 +1549,7 @@ pub struct UserAuthorization_ResetPasswordByFirstStep_Precedent_ {
 pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deserialize_allocate(
     vector_of_bytes: Vec_<c_uchar>,
 ) -> UserAuthorization_ResetPasswordByFirstStep_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_ResetPasswordByFirstStep_Outcoming_XXX, UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_ResetPasswordByFirstStep_Outcoming, UserAuthorization_ResetPasswordByFirstStep_Precedent>| -> Result<
         UnifiedReport_<UserAuthorization_ResetPasswordByFirstStep_Outcoming_, UserAuthorization_ResetPasswordByFirstStep_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -1578,13 +1578,13 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deser
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX::User__NotFound => {
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent::User__NotFound => {
                         UserAuthorization_ResetPasswordByFirstStep_Precedent_ {
                             user___not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX::ParallelExecution => {
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent::ParallelExecution => {
                         UserAuthorization_ResetPasswordByFirstStep_Precedent_ {
                             parallel_execution: true,
                             ..Default::default()
@@ -1617,9 +1617,9 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__seri
     incoming: UserAuthorization_ResetPasswordBySecondStep_Incoming_,
 ) -> Result_<Vec_<c_uchar>> {
     let converter =
-        move |incoming_: &'_ UserAuthorization_ResetPasswordBySecondStep_Incoming_| -> Result<UserAuthorization_ResetPasswordBySecondStep_Incoming_XXX, Box<dyn StdError + 'static>> {
+        move |incoming_: &'_ UserAuthorization_ResetPasswordBySecondStep_Incoming_| -> Result<UserAuthorization_ResetPasswordBySecondStep_Incoming, Box<dyn StdError + 'static>> {
             return Result::Ok(
-                UserAuthorization_ResetPasswordBySecondStep_Incoming_XXX {
+                UserAuthorization_ResetPasswordBySecondStep_Incoming {
                     user__id: incoming_.user__id,
                     user_device__id: incoming_.user_device__id.get_as_str()?,
                     user_reset_password_token__value: incoming_.user_reset_password_token__value.get_as_str()?,
@@ -1656,7 +1656,7 @@ pub struct UserResetPasswordToken__WrongValue_ {
 pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__deserialize_allocate(
     vector_of_bytes: Vec_<c_uchar>,
 ) -> UserAuthorization_ResetPasswordBySecondStep_Result {
-    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX>| -> Result<UnifiedReport_<Void_, UserAuthorization_ResetPasswordBySecondStep_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent>| -> Result<UnifiedReport_<Void_, UserAuthorization_ResetPasswordBySecondStep_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -1665,19 +1665,19 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__dese
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__NotFound => UserAuthorization_ResetPasswordBySecondStep_Precedent_ {
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__NotFound => UserAuthorization_ResetPasswordBySecondStep_Precedent_ {
                         user_reset_password_token___not_found: true,
                         ..Default::default()
                     },
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__AlreadyExpired => UserAuthorization_ResetPasswordBySecondStep_Precedent_ {
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__AlreadyExpired => UserAuthorization_ResetPasswordBySecondStep_Precedent_ {
                         user_reset_password_token___already_expired: true,
                         ..Default::default()
                     },
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__AlreadyApproved => UserAuthorization_ResetPasswordBySecondStep_Precedent_ {
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__AlreadyApproved => UserAuthorization_ResetPasswordBySecondStep_Precedent_ {
                         user_reset_password_token___already_approved: true,
                         ..Default::default()
                     },
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__WrongValue {
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__WrongValue {
                         user_reset_password_token__wrong_enter_tries_quantity
                     } => UserAuthorization_ResetPasswordBySecondStep_Precedent_ {
                         user_reset_password_token___wrong_value: UserResetPasswordToken__WrongValue_ {
@@ -1686,7 +1686,7 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__dese
                         },
                         ..Default::default()
                     },
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::ParallelExecution => UserAuthorization_ResetPasswordBySecondStep_Precedent_ {
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::ParallelExecution => UserAuthorization_ResetPasswordBySecondStep_Precedent_ {
                         parallel_execution: true,
                         ..Default::default()
                     }
@@ -1718,9 +1718,9 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__serial
     incoming: UserAuthorization_ResetPasswordByLastStep_Incoming_,
 ) -> Result_<Vec_<c_uchar>> {
     let converter =
-        move |incoming_: &'_ UserAuthorization_ResetPasswordByLastStep_Incoming_| -> Result<UserAuthorization_ResetPasswordByLastStep_Incoming_XXX, Box<dyn StdError + 'static>> {
+        move |incoming_: &'_ UserAuthorization_ResetPasswordByLastStep_Incoming_| -> Result<UserAuthorization_ResetPasswordByLastStep_Incoming, Box<dyn StdError + 'static>> {
             return Result::Ok(
-                UserAuthorization_ResetPasswordByLastStep_Incoming_XXX {
+                UserAuthorization_ResetPasswordByLastStep_Incoming {
                     user__id: incoming_.user__id,
                     user_device__id: incoming_.user_device__id.get_as_str()?,
                     user__password: incoming_.user__password.get_as_str()?,
@@ -1753,7 +1753,7 @@ pub struct UserAuthorization_ResetPasswordByLastStep_Precedent_ {
 pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deserialize_allocate(
     vector_of_bytes: Vec_<c_uchar>,
 ) -> UserAuthorization_ResetPasswordByLastStep_Result {
-    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_XXX>| -> Result<UnifiedReport_<Void_, UserAuthorization_ResetPasswordByLastStep_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordByLastStep_Precedent>| -> Result<UnifiedReport_<Void_, UserAuthorization_ResetPasswordByLastStep_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -1762,27 +1762,27 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deseri
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::User__NotFound => UserAuthorization_ResetPasswordByLastStep_Precedent_ {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::User__NotFound => UserAuthorization_ResetPasswordByLastStep_Precedent_ {
                         user___not_found: true,
                         ..Default::default()
                     },
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::UserResetPasswordToken__NotFound => UserAuthorization_ResetPasswordByLastStep_Precedent_ {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::UserResetPasswordToken__NotFound => UserAuthorization_ResetPasswordByLastStep_Precedent_ {
                         user_reset_password_token___not_found: true,
                         ..Default::default()
                     },
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::UserResetPasswordToken__AlreadyExpired => UserAuthorization_ResetPasswordByLastStep_Precedent_ {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::UserResetPasswordToken__AlreadyExpired => UserAuthorization_ResetPasswordByLastStep_Precedent_ {
                         user_reset_password_token___already_expired: true,
                         ..Default::default()
                     },
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::UserResetPasswordToken__IsNotApproved => UserAuthorization_ResetPasswordByLastStep_Precedent_ {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::UserResetPasswordToken__IsNotApproved => UserAuthorization_ResetPasswordByLastStep_Precedent_ {
                         user_reset_password_token___is_not_approved: true,
                         ..Default::default()
                     },
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::UserResetPasswordToken__WrongValue => UserAuthorization_ResetPasswordByLastStep_Precedent_ {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::UserResetPasswordToken__WrongValue => UserAuthorization_ResetPasswordByLastStep_Precedent_ {
                         user_reset_password_token___wrong_value: true,
                         ..Default::default()
                     },
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::ParallelExecution => UserAuthorization_ResetPasswordByLastStep_Precedent_ {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::ParallelExecution => UserAuthorization_ResetPasswordByLastStep_Precedent_ {
                         parallel_execution: true,
                         ..Default::default()
                     }
@@ -1809,9 +1809,9 @@ pub struct UserAuthorization_SendEmailForRegister_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__send_email_for_register__serialize_allocate(incoming: UserAuthorization_SendEmailForRegister_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ UserAuthorization_SendEmailForRegister_Incoming_| -> Result<UserAuthorization_SendEmailForRegister_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ UserAuthorization_SendEmailForRegister_Incoming_| -> Result<UserAuthorization_SendEmailForRegister_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            UserAuthorization_SendEmailForRegister_Incoming_XXX {
+            UserAuthorization_SendEmailForRegister_Incoming {
                 user__email: incoming_.user__email.get_as_str()?,
                 user_device__id: incoming_.user_device__id.get_as_str()?,
             },
@@ -1844,7 +1844,7 @@ pub struct UserAuthorization_SendEmailForRegister_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__send_email_for_register__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> UserAuthorization_SendEmailForRegister_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForRegister_Outcoming_XXX, UserAuthorization_SendEmailForRegister_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForRegister_Outcoming, UserAuthorization_SendEmailForRegister_Precedent>| -> Result<
         UnifiedReport_<UserAuthorization_SendEmailForRegister_Outcoming_, UserAuthorization_SendEmailForRegister_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -1869,31 +1869,31 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__deserializ
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__NotFound => {
+                    UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__NotFound => {
                         UserAuthorization_SendEmailForRegister_Precedent_ {
                             user_registration_token___not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__AlreadyExpired => {
+                    UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__AlreadyExpired => {
                         UserAuthorization_SendEmailForRegister_Precedent_ {
                             user_registration_token___already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__AlreadyApproved => {
+                    UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__AlreadyApproved => {
                         UserAuthorization_SendEmailForRegister_Precedent_ {
                             user_registration_token___already_approved: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__TimeToResendHasNotCome => {
+                    UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__TimeToResendHasNotCome => {
                         UserAuthorization_SendEmailForRegister_Precedent_ {
                             user_registration_token___time_to_resend_has_not_come: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::ParallelExecution => {
+                    UserAuthorization_SendEmailForRegister_Precedent::ParallelExecution => {
                         UserAuthorization_SendEmailForRegister_Precedent_ {
                             parallel_execution: true,
                             ..Default::default()
@@ -1923,9 +1923,9 @@ pub struct UserAuthorization_SendEmailForAuthorize_Incoming_ {
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__send_email_for_authorize__serialize_allocate(incoming: UserAuthorization_SendEmailForAuthorize_Incoming_) -> Result_<Vec_<c_uchar>> {
     let converter =
-        move |incoming_: &'_ UserAuthorization_SendEmailForAuthorize_Incoming_| -> Result<UserAuthorization_SendEmailForAuthorize_Incoming_XXX, Box<dyn StdError + 'static>> {
+        move |incoming_: &'_ UserAuthorization_SendEmailForAuthorize_Incoming_| -> Result<UserAuthorization_SendEmailForAuthorize_Incoming, Box<dyn StdError + 'static>> {
             return Result::Ok(
-                UserAuthorization_SendEmailForAuthorize_Incoming_XXX {
+                UserAuthorization_SendEmailForAuthorize_Incoming {
                     user_device__id: incoming_.user_device__id.get_as_str()?,
                     user__id: incoming_.user__id,
                 },
@@ -1961,7 +1961,7 @@ pub struct UserAuthorization_SendEmailForAuthorize_Precedent_ {
 pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deserialize_allocate(
     vector_of_bytes: Vec_<c_uchar>,
 ) -> UserAuthorization_SendEmailForAuthorize_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForAuthorize_Outcoming_XXX, UserAuthorization_SendEmailForAuthorize_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForAuthorize_Outcoming, UserAuthorization_SendEmailForAuthorize_Precedent>| -> Result<
         UnifiedReport_<UserAuthorization_SendEmailForAuthorize_Outcoming_, UserAuthorization_SendEmailForAuthorize_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -1986,31 +1986,31 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deseriali
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::User__NotFound => {
+                    UserAuthorization_SendEmailForAuthorize_Precedent::User__NotFound => {
                         UserAuthorization_SendEmailForAuthorize_Precedent_ {
                             user___not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::UserAuthorizationToken__NotFound => {
+                    UserAuthorization_SendEmailForAuthorize_Precedent::UserAuthorizationToken__NotFound => {
                         UserAuthorization_SendEmailForAuthorize_Precedent_ {
                             user_authorization_token___not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::UserAuthorizationToken__AlreadyExpired => {
+                    UserAuthorization_SendEmailForAuthorize_Precedent::UserAuthorizationToken__AlreadyExpired => {
                         UserAuthorization_SendEmailForAuthorize_Precedent_ {
                             user_authorization_token___already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::UserAuthorizationToken__TimeToResendHasNotCome => {
+                    UserAuthorization_SendEmailForAuthorize_Precedent::UserAuthorizationToken__TimeToResendHasNotCome => {
                         UserAuthorization_SendEmailForAuthorize_Precedent_ {
                             user_authorization_token___time_to_resend_has_not_come: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::ParallelExecution => {
+                    UserAuthorization_SendEmailForAuthorize_Precedent::ParallelExecution => {
                         UserAuthorization_SendEmailForAuthorize_Precedent_ {
                             parallel_execution: true,
                             ..Default::default()
@@ -2042,9 +2042,9 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__seri
     incoming: UserAuthorization_SendEmailForResetPassword_Incoming_,
 ) -> Result_<Vec_<c_uchar>> {
     let converter =
-        move |incoming_: &'_ UserAuthorization_SendEmailForResetPassword_Incoming_| -> Result<UserAuthorization_SendEmailForResetPassword_Incoming_XXX, Box<dyn StdError + 'static>> {
+        move |incoming_: &'_ UserAuthorization_SendEmailForResetPassword_Incoming_| -> Result<UserAuthorization_SendEmailForResetPassword_Incoming, Box<dyn StdError + 'static>> {
             return Result::Ok(
-                UserAuthorization_SendEmailForResetPassword_Incoming_XXX {
+                UserAuthorization_SendEmailForResetPassword_Incoming {
                     user__id: incoming_.user__id,
                     user_device__id: incoming_.user_device__id.get_as_str()?,
                 },
@@ -2081,7 +2081,7 @@ pub struct UserAuthorization_SendEmailForResetPassword_Precedent_ {
 pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__deserialize_allocate(
     vector_of_bytes: Vec_<c_uchar>,
 ) -> UserAuthorization_SendEmailForResetPassword_Result {
-    let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForResetPassword_Outcoming_XXX, UserAuthorization_SendEmailForResetPassword_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<UserAuthorization_SendEmailForResetPassword_Outcoming, UserAuthorization_SendEmailForResetPassword_Precedent>| -> Result<
         UnifiedReport_<UserAuthorization_SendEmailForResetPassword_Outcoming_, UserAuthorization_SendEmailForResetPassword_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -2106,37 +2106,37 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::User__NotFound => {
+                    UserAuthorization_SendEmailForResetPassword_Precedent::User__NotFound => {
                         UserAuthorization_SendEmailForResetPassword_Precedent_ {
                             user___not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::UserResetPasswordToken__NotFound => {
+                    UserAuthorization_SendEmailForResetPassword_Precedent::UserResetPasswordToken__NotFound => {
                         UserAuthorization_SendEmailForResetPassword_Precedent_ {
                             user_reset_password_token___not_found: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::UserResetPasswordToken__AlreadyExpired => {
+                    UserAuthorization_SendEmailForResetPassword_Precedent::UserResetPasswordToken__AlreadyExpired => {
                         UserAuthorization_SendEmailForResetPassword_Precedent_ {
                             user_reset_password_token___already_expired: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::UserResetPasswordToken__AlreadyApproved => {
+                    UserAuthorization_SendEmailForResetPassword_Precedent::UserResetPasswordToken__AlreadyApproved => {
                         UserAuthorization_SendEmailForResetPassword_Precedent_ {
                             user_reset_password_token___already_approved: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::UserResetPasswordToken__TimeToResendHasNotCome => {
+                    UserAuthorization_SendEmailForResetPassword_Precedent::UserResetPasswordToken__TimeToResendHasNotCome => {
                         UserAuthorization_SendEmailForResetPassword_Precedent_ {
                             user_reset_password_token___time_to_resend_has_not_come: true,
                             ..Default::default()
                         }
                     }
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::ParallelExecution => {
+                    UserAuthorization_SendEmailForResetPassword_Precedent::ParallelExecution => {
                         UserAuthorization_SendEmailForResetPassword_Precedent_ {
                             parallel_execution: true,
                             ..Default::default()
@@ -2167,15 +2167,15 @@ pub struct Channel_GetManyByNameInSubscriptions_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__serialize_allocate(incoming: Channel_GetManyByNameInSubscriptions_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ Channel_GetManyByNameInSubscriptions_Incoming_| -> Result<Channel_GetManyByNameInSubscriptions_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ Channel_GetManyByNameInSubscriptions_Incoming_| -> Result<Channel_GetManyByNameInSubscriptions_Incoming, Box<dyn StdError + 'static>> {
         let requery___channel__name = if incoming_.requery___channel__name.is_data {
             Option::Some(incoming_.requery___channel__name.data.get_as_str()?)
         } else {
             Option::None
         };
         return Result::Ok(
-            Channel_GetManyByNameInSubscriptions_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            Channel_GetManyByNameInSubscriptions_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
@@ -2222,7 +2222,7 @@ pub struct Channel_GetManyByNameInSubscriptions_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> Channel_GetManyByNameInSubscriptions_Result {
-    let converter = move |unified_report: UnifiedReport<Channel_GetManyByNameInSubscriptions_Outcoming_XXX, Channel_GetManyByNameInSubscriptions_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<Channel_GetManyByNameInSubscriptions_Outcoming, Channel_GetManyByNameInSubscriptions_Precedent>| -> Result<
         UnifiedReport_<Channel_GetManyByNameInSubscriptions_Outcoming_, Channel_GetManyByNameInSubscriptions_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -2276,7 +2276,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_GetManyByNameInSubscriptions_Precedent_XXX::UserAccessToken__AlreadyExpired => {
+                    Channel_GetManyByNameInSubscriptions_Precedent::UserAccessToken__AlreadyExpired => {
                         Channel_GetManyByNameInSubscriptions_Precedent_ {
                             user_access_token___already_expired: true,
                             ..Default::default()
@@ -2321,15 +2321,15 @@ pub struct Channel_GetManyBySubscription_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_subscription__serialize_allocate(incoming: Channel_GetManyBySubscription_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ Channel_GetManyBySubscription_Incoming_| -> Result<Channel_GetManyBySubscription_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ Channel_GetManyBySubscription_Incoming_| -> Result<Channel_GetManyBySubscription_Incoming, Box<dyn StdError + 'static>> {
         let requery___channel__id = if incoming_.requery___channel__id.is_data {
             Option::Some(incoming_.requery___channel__id.data)
         } else {
             Option::None
         };
         return Result::Ok(
-            Channel_GetManyBySubscription_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            Channel_GetManyBySubscription_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
@@ -2375,7 +2375,7 @@ pub struct Channel_GetManyBySubscription_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> Channel_GetManyBySubscription_Result {
-    let converter = move |unified_report: UnifiedReport<Channel_GetManyBySubscription_Outcoming_XXX, Channel_GetManyBySubscription_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<Channel_GetManyBySubscription_Outcoming, Channel_GetManyBySubscription_Precedent>| -> Result<
         UnifiedReport_<Channel_GetManyBySubscription_Outcoming_, Channel_GetManyBySubscription_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -2429,7 +2429,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_GetManyBySubscription_Precedent_XXX::UserAccessToken__AlreadyExpired => Channel_GetManyBySubscription_Precedent_ {
+                    Channel_GetManyBySubscription_Precedent::UserAccessToken__AlreadyExpired => Channel_GetManyBySubscription_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     }
@@ -2473,15 +2473,15 @@ pub struct Channel_GetManyPublicByName_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_public_by_name__serialize_allocate(incoming: Channel_GetManyPublicByName_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ Channel_GetManyPublicByName_Incoming_| -> Result<Channel_GetManyPublicByName_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ Channel_GetManyPublicByName_Incoming_| -> Result<Channel_GetManyPublicByName_Incoming, Box<dyn StdError + 'static>> {
         let requery___channel__name = if incoming_.requery___channel__name.is_data {
             Option::Some(incoming_.requery___channel__name.data.get_as_str()?)
         } else {
             Option::None
         };
         return Result::Ok(
-            Channel_GetManyPublicByName_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            Channel_GetManyPublicByName_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
@@ -2527,7 +2527,7 @@ pub struct Channel_GetManyPublicByName_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> Channel_GetManyPublicByName_Result {
-    let converter = move |unified_report: UnifiedReport<Channel_GetManyPublicByName_Outcoming_XXX, Channel_GetManyPublicByName_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<Channel_GetManyPublicByName_Outcoming, Channel_GetManyPublicByName_Precedent>| -> Result<
         UnifiedReport_<Channel_GetManyPublicByName_Outcoming_, Channel_GetManyPublicByName_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -2580,7 +2580,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_GetManyPublicByName_Precedent_XXX::UserAccessToken__AlreadyExpired => Channel_GetManyPublicByName_Precedent_ {
+                    Channel_GetManyPublicByName_Precedent::UserAccessToken__AlreadyExpired => Channel_GetManyPublicByName_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     }
@@ -2622,17 +2622,17 @@ pub struct Channel_GetOneById_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_one_by_id__serialize_allocate(incoming: Channel_GetOneById_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ Channel_GetOneById_Incoming_| -> Result<Channel_GetOneById_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ Channel_GetOneById_Incoming_| -> Result<Channel_GetOneById_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            Channel_GetOneById_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            Channel_GetOneById_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                channel_token_signed: ChannelTokenSigned_XXX {
+                channel_token_signed: ChannelTokenSigned {
                     channel__id: incoming_.channel_token_signed.channel__id,
                     channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
                     channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
@@ -2677,7 +2677,7 @@ pub struct Channel_GetOneById_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> Channel_GetOneById_Result {
-    let converter = move |unified_report: UnifiedReport<Channel_GetOneById_Outcoming_XXX, Channel_GetOneById_Precedent_XXX>| -> Result<UnifiedReport_<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Channel_GetOneById_Outcoming, Channel_GetOneById_Precedent>| -> Result<UnifiedReport_<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data
@@ -2718,23 +2718,23 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(vector_of_
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_GetOneById_Precedent_XXX::UserAccessToken__AlreadyExpired => Channel_GetOneById_Precedent_ {
+                    Channel_GetOneById_Precedent::UserAccessToken__AlreadyExpired => Channel_GetOneById_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    Channel_GetOneById_Precedent_XXX::Channel__NotFound => Channel_GetOneById_Precedent_ {
+                    Channel_GetOneById_Precedent::Channel__NotFound => Channel_GetOneById_Precedent_ {
                         channel___not_found: true,
                         ..Default::default()
                     },
-                    Channel_GetOneById_Precedent_XXX::Channel__IsClose => Channel_GetOneById_Precedent_ {
+                    Channel_GetOneById_Precedent::Channel__IsClose => Channel_GetOneById_Precedent_ {
                         channel___is_close: true,
                         ..Default::default()
                     },
-                    Channel_GetOneById_Precedent_XXX::ChannelToken__AlreadyExpired => Channel_GetOneById_Precedent_ {
+                    Channel_GetOneById_Precedent::ChannelToken__AlreadyExpired => Channel_GetOneById_Precedent_ {
                         channel_token___already_expired: true,
                         ..Default::default()
                     },
-                    Channel_GetOneById_Precedent_XXX::ChannelToken__InvalidChannelOwnerDefinition => Channel_GetOneById_Precedent_ {
+                    Channel_GetOneById_Precedent::ChannelToken__InvalidChannelOwnerDefinition => Channel_GetOneById_Precedent_ {
                         channel_token___invalid_channel_owner_definition: true,
                         ..Default::default()
                     }
@@ -2774,10 +2774,10 @@ pub struct Channel_CheckNameForExisting_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__check_name_for_existing__serialize_allocate(incoming: Channel_CheckNameForExisting_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ Channel_CheckNameForExisting_Incoming_| -> Result<Channel_CheckNameForExisting_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ Channel_CheckNameForExisting_Incoming_| -> Result<Channel_CheckNameForExisting_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            Channel_CheckNameForExisting_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            Channel_CheckNameForExisting_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
@@ -2811,7 +2811,7 @@ pub struct Channel_CheckNameForExisting_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> Channel_CheckNameForExisting_Result {
-    let converter = move |unified_report: UnifiedReport<Channel_CheckNameForExisting_Outcoming_XXX, Channel_CheckNameForExisting_Precedent_XXX>| -> Result<UnifiedReport_<Channel_CheckNameForExisting_Outcoming_, Channel_CheckNameForExisting_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Channel_CheckNameForExisting_Outcoming, Channel_CheckNameForExisting_Precedent>| -> Result<UnifiedReport_<Channel_CheckNameForExisting_Outcoming_, Channel_CheckNameForExisting_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data,
@@ -2833,7 +2833,7 @@ pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_CheckNameForExisting_Precedent_XXX::UserAccessToken__AlreadyExpired => Channel_CheckNameForExisting_Precedent_ {
+                    Channel_CheckNameForExisting_Precedent::UserAccessToken__AlreadyExpired => Channel_CheckNameForExisting_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     }
@@ -2863,7 +2863,7 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__serialize_allo
     let converter = move |incoming_: &'_ Channel_CheckLinkedNameForExisting_Incoming_| -> Result<Channel_CheckLinkedNameForExisting_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
             Channel_CheckLinkedNameForExisting_Incoming {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
@@ -2897,7 +2897,7 @@ pub struct Channel_CheckLinkedNameForExisting_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> Channel_CheckLinkedNameForExisting_Result {
-    let converter = move |unified_report: UnifiedReport<Channel_CheckLinkedNameForExisting_Outcoming_XXX, Channel_CheckLinkedNameForExisting_Precedent_XXX>| -> Result<UnifiedReport_<Channel_CheckLinkedNameForExisting_Outcoming_, Channel_CheckLinkedNameForExisting_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Channel_CheckLinkedNameForExisting_Outcoming, Channel_CheckLinkedNameForExisting_Precedent>| -> Result<UnifiedReport_<Channel_CheckLinkedNameForExisting_Outcoming_, Channel_CheckLinkedNameForExisting_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data,
@@ -2919,7 +2919,7 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_al
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_CheckLinkedNameForExisting_Precedent_XXX::UserAccessToken__AlreadyExpired => Channel_CheckLinkedNameForExisting_Precedent_ {
+                    Channel_CheckLinkedNameForExisting_Precedent::UserAccessToken__AlreadyExpired => Channel_CheckLinkedNameForExisting_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
@@ -2949,10 +2949,10 @@ pub struct Channel_Create_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__create__serialize_allocate(incoming: Channel_Create_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ Channel_Create_Incoming_| -> Result<Channel_Create_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ Channel_Create_Incoming_| -> Result<Channel_Create_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            Channel_Create_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            Channel_Create_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
@@ -2992,7 +2992,7 @@ pub struct Channel_Create_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__create__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> Channel_Create_Result {
-    let converter = move |unified_report: UnifiedReport<Channel_Create_Outcoming_XXX, Channel_Create_Precedent_XXX>| -> Result<UnifiedReport_<Channel_Create_Outcoming_, Channel_Create_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Channel_Create_Outcoming, Channel_Create_Precedent>| -> Result<UnifiedReport_<Channel_Create_Outcoming_, Channel_Create_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data,
@@ -3021,19 +3021,19 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(vector_of_bytes: 
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_Create_Precedent_XXX::UserAccessToken__AlreadyExpired => Channel_Create_Precedent_ {
+                    Channel_Create_Precedent::UserAccessToken__AlreadyExpired => Channel_Create_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    Channel_Create_Precedent_XXX::Channel__NameAlreadyExist => Channel_Create_Precedent_ {
+                    Channel_Create_Precedent::Channel__NameAlreadyExist => Channel_Create_Precedent_ {
                         channel___name_already_exist: true,
                         ..Default::default()
                     },
-                    Channel_Create_Precedent_XXX::Channel__LinkedNameAlreadyExist => Channel_Create_Precedent_ {
+                    Channel_Create_Precedent::Channel__LinkedNameAlreadyExist => Channel_Create_Precedent_ {
                         channel___linked_name_already_exist: true,
                         ..Default::default()
                     },
-                    Channel_Create_Precedent_XXX::ParallelExecution => Channel_Create_Precedent_ {
+                    Channel_Create_Precedent::ParallelExecution => Channel_Create_Precedent_ {
                         parallel_execution: true,
                         ..Default::default()
                     }
@@ -3063,17 +3063,17 @@ pub struct Channel_Delete_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__delete__serialize_allocate(incoming: Channel_Delete_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ Channel_Delete_Incoming_| -> Result<Channel_Delete_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ Channel_Delete_Incoming_| -> Result<Channel_Delete_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            Channel_Delete_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            Channel_Delete_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                channel_token_signed: ChannelTokenSigned_XXX {
+                channel_token_signed: ChannelTokenSigned {
                     channel__id: incoming_.channel_token_signed.channel__id,
                     channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
                     channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
@@ -3105,7 +3105,7 @@ pub struct Channel_Delete_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__delete__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> Channel_Delete_Result {
-    let converter = move |unified_report: UnifiedReport<Void, Channel_Delete_Precedent_XXX>| -> Result<UnifiedReport_<Void_, Channel_Delete_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, Channel_Delete_Precedent>| -> Result<UnifiedReport_<Void_, Channel_Delete_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -3114,19 +3114,19 @@ pub extern "C-unwind" fn channel__delete__deserialize_allocate(vector_of_bytes: 
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired => Channel_Delete_Precedent_ {
+                    Channel_Delete_Precedent::UserAccessToken__AlreadyExpired => Channel_Delete_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    Channel_Delete_Precedent_XXX::ChannelToken__AlreadyExpired => Channel_Delete_Precedent_ {
+                    Channel_Delete_Precedent::ChannelToken__AlreadyExpired => Channel_Delete_Precedent_ {
                         channel_token___already_expired: true,
                         ..Default::default()
                     },
-                    Channel_Delete_Precedent_XXX::User__IsNotChannelOwner => Channel_Delete_Precedent_ {
+                    Channel_Delete_Precedent::User__IsNotChannelOwner => Channel_Delete_Precedent_ {
                         user___is_not_channel_owner: true,
                         ..Default::default()
                     },
-                    Channel_Delete_Precedent_XXX::Channel__NotFound => Channel_Delete_Precedent_ {
+                    Channel_Delete_Precedent::Channel__NotFound => Channel_Delete_Precedent_ {
                         channel___not_found: true,
                         ..Default::default()
                     },
@@ -3153,17 +3153,17 @@ pub struct ChannelSubscription_Create_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__create__serialize_allocate(incoming: ChannelSubscription_Create_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelSubscription_Create_Incoming_| -> Result<ChannelSubscription_Create_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ ChannelSubscription_Create_Incoming_| -> Result<ChannelSubscription_Create_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            ChannelSubscription_Create_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            ChannelSubscription_Create_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                channel_token_signed: ChannelTokenSigned_XXX {
+                channel_token_signed: ChannelTokenSigned {
                     channel__id: incoming_.channel_token_signed.channel__id,
                     channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
                     channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
@@ -3201,7 +3201,7 @@ pub struct ChannelSubscription_Create_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelSubscription_Create_Result {
-    let converter = move |unified_report: UnifiedReport<ChannelSubscription_Create_Outcoming_XXX, ChannelSubscription_Create_Precedent_XXX>| -> Result<UnifiedReport_<ChannelSubscription_Create_Outcoming_, ChannelSubscription_Create_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ChannelSubscription_Create_Outcoming, ChannelSubscription_Create_Precedent>| -> Result<UnifiedReport_<ChannelSubscription_Create_Outcoming_, ChannelSubscription_Create_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data,
@@ -3230,23 +3230,23 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(vect
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelSubscription_Create_Precedent_XXX::UserAccessToken__AlreadyExpired => ChannelSubscription_Create_Precedent_ {
+                    ChannelSubscription_Create_Precedent::UserAccessToken__AlreadyExpired => ChannelSubscription_Create_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelSubscription_Create_Precedent_XXX::ChannelToken__AlreadyExpired => ChannelSubscription_Create_Precedent_ {
+                    ChannelSubscription_Create_Precedent::ChannelToken__AlreadyExpired => ChannelSubscription_Create_Precedent_ {
                         channel_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelSubscription_Create_Precedent_XXX::Channel__NotFound => ChannelSubscription_Create_Precedent_ {
+                    ChannelSubscription_Create_Precedent::Channel__NotFound => ChannelSubscription_Create_Precedent_ {
                         channel___not_found: true,
                         ..Default::default()
                     },
-                    ChannelSubscription_Create_Precedent_XXX::Channel__UserIsOwner => ChannelSubscription_Create_Precedent_ {
+                    ChannelSubscription_Create_Precedent::Channel__UserIsOwner => ChannelSubscription_Create_Precedent_ {
                         channel___user_is_owner: true,
                         ..Default::default()
                     },
-                    ChannelSubscription_Create_Precedent_XXX::ChannelSubscription__AlreadyExist => ChannelSubscription_Create_Precedent_ {
+                    ChannelSubscription_Create_Precedent::ChannelSubscription__AlreadyExist => ChannelSubscription_Create_Precedent_ {
                         channel_subscription___already_exist: true,
                         ..Default::default()
                     },
@@ -3276,17 +3276,17 @@ pub struct ChannelSubscription_Delete_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__delete__serialize_allocate(incoming: ChannelSubscription_Delete_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelSubscription_Delete_Incoming_| -> Result<ChannelSubscription_Delete_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ ChannelSubscription_Delete_Incoming_| -> Result<ChannelSubscription_Delete_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            ChannelSubscription_Delete_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            ChannelSubscription_Delete_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                channel_token_signed: ChannelTokenSigned_XXX {
+                channel_token_signed: ChannelTokenSigned {
                     channel__id: incoming_.channel_token_signed.channel__id,
                     channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
                     channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
@@ -3324,7 +3324,7 @@ pub struct ChannelSubscription_Delete_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelSubscription_Delete_Result {
-    let converter = move |unified_report: UnifiedReport<ChannelSubscription_Delete_Outcoming_XXX, ChannelSubscription_Delete_Precedent_XXX>| -> Result<UnifiedReport_<ChannelSubscription_Delete_Outcoming_, ChannelSubscription_Delete_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ChannelSubscription_Delete_Outcoming, ChannelSubscription_Delete_Precedent>| -> Result<UnifiedReport_<ChannelSubscription_Delete_Outcoming_, ChannelSubscription_Delete_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data
@@ -3353,23 +3353,23 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(vect
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelSubscription_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired => ChannelSubscription_Delete_Precedent_ {
+                    ChannelSubscription_Delete_Precedent::UserAccessToken__AlreadyExpired => ChannelSubscription_Delete_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelSubscription_Delete_Precedent_XXX::ChannelToken__AlreadyExpired => ChannelSubscription_Delete_Precedent_ {
+                    ChannelSubscription_Delete_Precedent::ChannelToken__AlreadyExpired => ChannelSubscription_Delete_Precedent_ {
                         channel_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelSubscription_Delete_Precedent_XXX::Channel__UserIsOwner => ChannelSubscription_Delete_Precedent_ {
+                    ChannelSubscription_Delete_Precedent::Channel__UserIsOwner => ChannelSubscription_Delete_Precedent_ {
                         channel___user_is_owner: true,
                         ..Default::default()
                     },
-                    ChannelSubscription_Delete_Precedent_XXX::ChannelSubscription__NotFound => ChannelSubscription_Delete_Precedent_ {
+                    ChannelSubscription_Delete_Precedent::ChannelSubscription__NotFound => ChannelSubscription_Delete_Precedent_ {
                         channel_subscription___not_found: true,
                         ..Default::default()
                     },
-                    ChannelSubscription_Delete_Precedent_XXX::Channel__NotFound => ChannelSubscription_Delete_Precedent_ {
+                    ChannelSubscription_Delete_Precedent::Channel__NotFound => ChannelSubscription_Delete_Precedent_ {
                         channel___not_found: true,
                         ..Default::default()
                     }
@@ -3401,17 +3401,17 @@ pub struct ChannelPublication1_GetMany_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__get_many__serialize_allocate(incoming: ChannelPublication1_GetMany_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1_GetMany_Incoming_| -> Result<ChannelPublication1_GetMany_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ ChannelPublication1_GetMany_Incoming_| -> Result<ChannelPublication1_GetMany_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            ChannelPublication1_GetMany_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            ChannelPublication1_GetMany_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                channel_token_signed: ChannelTokenSigned_XXX {
+                channel_token_signed: ChannelTokenSigned {
                     channel__id: incoming_.channel_token_signed.channel__id,
                     channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
                     channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
@@ -3463,7 +3463,7 @@ pub struct ChannelPublication1_GetMany_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1_GetMany_Result {
-    let converter = move |unified_report: UnifiedReport<ChannelPublication1_GetMany_Outcoming_XXX, ChannelPublication1_GetMany_Precedent_XXX>| -> Result<UnifiedReport_<ChannelPublication1_GetMany_Outcoming_, ChannelPublication1_GetMany_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ChannelPublication1_GetMany_Outcoming, ChannelPublication1_GetMany_Precedent>| -> Result<UnifiedReport_<ChannelPublication1_GetMany_Outcoming_, ChannelPublication1_GetMany_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data
@@ -3520,23 +3520,23 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(ve
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1_GetMany_Precedent_XXX::UserAccessToken__AlreadyExpired => ChannelPublication1_GetMany_Precedent_ {
+                    ChannelPublication1_GetMany_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1_GetMany_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_GetMany_Precedent_XXX::ChannelToken__AlreadyExpired => ChannelPublication1_GetMany_Precedent_ {
+                    ChannelPublication1_GetMany_Precedent::ChannelToken__AlreadyExpired => ChannelPublication1_GetMany_Precedent_ {
                         channel_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_GetMany_Precedent_XXX::ChannelToken__InvalidChannelOwnerDefinition => ChannelPublication1_GetMany_Precedent_ {
+                    ChannelPublication1_GetMany_Precedent::ChannelToken__InvalidChannelOwnerDefinition => ChannelPublication1_GetMany_Precedent_ {
                         channel_token___invalid_channel_owner_definition: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_GetMany_Precedent_XXX::Channel__NotFound => ChannelPublication1_GetMany_Precedent_ {
+                    ChannelPublication1_GetMany_Precedent::Channel__NotFound => ChannelPublication1_GetMany_Precedent_ {
                         channel___not_found: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_GetMany_Precedent_XXX::Channel__IsClose => ChannelPublication1_GetMany_Precedent_ {
+                    ChannelPublication1_GetMany_Precedent::Channel__IsClose => ChannelPublication1_GetMany_Precedent_ {
                         channel___is_close: true,
                         ..Default::default()
                     }
@@ -3580,7 +3580,7 @@ pub struct ChannelPublication1_Create_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__create__serialize_allocate(incoming: ChannelPublication1_Create_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1_Create_Incoming_| -> Result<ChannelPublication1_Create_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ ChannelPublication1_Create_Incoming_| -> Result<ChannelPublication1_Create_Incoming, Box<dyn StdError + 'static>> {
         let mut channel_publication1__images_pathes: Vec<&'_ str> = Vec::with_capacity(incoming_.channel_publication1__images_pathes.length);
         '_a: for channel_publication1__image_path in incoming_.channel_publication1__images_pathes.as_slice()? {
             channel_publication1__images_pathes.push(channel_publication1__image_path.get_as_str()?);
@@ -3591,15 +3591,15 @@ pub extern "C-unwind" fn channel_publication1__create__serialize_allocate(incomi
             Option::None
         };
         return Result::Ok(
-            ChannelPublication1_Create_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            ChannelPublication1_Create_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                channel_token_signed: ChannelTokenSigned_XXX {
+                channel_token_signed: ChannelTokenSigned {
                     channel__id: incoming_.channel_token_signed.channel__id,
                     channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
                     channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
@@ -3639,7 +3639,7 @@ pub struct ChannelPublication1_Create_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1_Create_Result {
-    let converter = move |unified_report: UnifiedReport<ChannelPublication1_Create_Outcoming_XXX, ChannelPublication1_Create_Precedent_XXX>| -> Result<UnifiedReport_<ChannelPublication1_Create_Outcoming_, ChannelPublication1_Create_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ChannelPublication1_Create_Outcoming, ChannelPublication1_Create_Precedent>| -> Result<UnifiedReport_<ChannelPublication1_Create_Outcoming_, ChannelPublication1_Create_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data
@@ -3668,19 +3668,19 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(vect
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1_Create_Precedent_XXX::UserAccessToken__AlreadyExpired => ChannelPublication1_Create_Precedent_ {
+                    ChannelPublication1_Create_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1_Create_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_Create_Precedent_XXX::ChannelToken__AlreadyExpired => ChannelPublication1_Create_Precedent_ {
+                    ChannelPublication1_Create_Precedent::ChannelToken__AlreadyExpired => ChannelPublication1_Create_Precedent_ {
                         channel_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_Create_Precedent_XXX::User__IsNotChannelOwner => ChannelPublication1_Create_Precedent_ {
+                    ChannelPublication1_Create_Precedent::User__IsNotChannelOwner => ChannelPublication1_Create_Precedent_ {
                         user___is_not_channel_owner: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_Create_Precedent_XXX::ParallelExecution => ChannelPublication1_Create_Precedent_ {
+                    ChannelPublication1_Create_Precedent::ParallelExecution => ChannelPublication1_Create_Precedent_ {
                         parallel_execution: true,
                         ..Default::default()
                     }
@@ -3711,17 +3711,17 @@ pub struct ChannelPublication1_Delete_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__delete__serialize_allocate(incoming: ChannelPublication1_Delete_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1_Delete_Incoming_| -> Result<ChannelPublication1_Delete_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ ChannelPublication1_Delete_Incoming_| -> Result<ChannelPublication1_Delete_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            ChannelPublication1_Delete_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            ChannelPublication1_Delete_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                channel_token_signed: ChannelTokenSigned_XXX {
+                channel_token_signed: ChannelTokenSigned {
                     channel__id: incoming_.channel_token_signed.channel__id,
                     channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
                     channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
@@ -3729,7 +3729,7 @@ pub extern "C-unwind" fn channel_publication1__delete__serialize_allocate(incomi
                     channel_token__is_user_the_channel_owner: incoming_.channel_token_signed.channel_token__is_user_the_channel_owner,
                     signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
                 },
-                channel_publication1_token_signed: ChannelPublication1TokenSigned_XXX {
+                channel_publication1_token_signed: ChannelPublication1TokenSigned {
                     channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
@@ -3762,7 +3762,7 @@ pub struct ChannelPublication1_Delete_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1_Delete_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1_Delete_Precedent_XXX>| -> Result<UnifiedReport_<Void_, ChannelPublication1_Delete_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1_Delete_Precedent>| -> Result<UnifiedReport_<Void_, ChannelPublication1_Delete_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -3771,23 +3771,23 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(vect
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired => ChannelPublication1_Delete_Precedent_ {
+                    ChannelPublication1_Delete_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1_Delete_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_Delete_Precedent_XXX::ChannelToken__AlreadyExpired => ChannelPublication1_Delete_Precedent_ {
+                    ChannelPublication1_Delete_Precedent::ChannelToken__AlreadyExpired => ChannelPublication1_Delete_Precedent_ {
                         channel_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_Delete_Precedent_XXX::ChannelPublication1Token__AlreadyExpired => ChannelPublication1_Delete_Precedent_ {
+                    ChannelPublication1_Delete_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1_Delete_Precedent_ {
                         channel_publication1_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_Delete_Precedent_XXX::User__IsNotChannelOwner => ChannelPublication1_Delete_Precedent_ {
+                    ChannelPublication1_Delete_Precedent::User__IsNotChannelOwner => ChannelPublication1_Delete_Precedent_ {
                         user___is_not_channel_owner: true,
                         ..Default::default()
                     },
-                    ChannelPublication1_Delete_Precedent_XXX::ChannelPublication1__NotFound => ChannelPublication1_Delete_Precedent_ {
+                    ChannelPublication1_Delete_Precedent::ChannelPublication1__NotFound => ChannelPublication1_Delete_Precedent_ {
                         channel_publication1___not_found: true,
                         ..Default::default()
                     },
@@ -3814,17 +3814,17 @@ pub struct ChannelPublication1Mark_Create_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_mark__create__serialize_allocate(incoming: ChannelPublication1Mark_Create_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1Mark_Create_Incoming_| -> Result<ChannelPublication1Mark_Create_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ ChannelPublication1Mark_Create_Incoming_| -> Result<ChannelPublication1Mark_Create_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            ChannelPublication1Mark_Create_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            ChannelPublication1Mark_Create_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                channel_publication1_token_signed: ChannelPublication1TokenSigned_XXX {
+                channel_publication1_token_signed: ChannelPublication1TokenSigned {
                     channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
@@ -3855,7 +3855,7 @@ pub struct ChannelPublication1Mark_Create_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1Mark_Create_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Create_Precedent_XXX>| -> Result<UnifiedReport_<Void_, ChannelPublication1Mark_Create_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Create_Precedent>| -> Result<UnifiedReport_<Void_, ChannelPublication1Mark_Create_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -3864,19 +3864,19 @@ pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1Mark_Create_Precedent_XXX::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Create_Precedent_ {
+                    ChannelPublication1Mark_Create_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Create_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Create_Precedent_XXX::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Mark_Create_Precedent_ {
+                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Mark_Create_Precedent_ {
                         channel_publication1_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Create_Precedent_XXX::ChannelPublication1Mark__AlreadyExist => ChannelPublication1Mark_Create_Precedent_ {
+                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1Mark__AlreadyExist => ChannelPublication1Mark_Create_Precedent_ {
                         channel_publication1_mark___already_exist: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Create_Precedent_XXX::ChannelPublication1__NotFound => ChannelPublication1Mark_Create_Precedent_ {
+                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1__NotFound => ChannelPublication1Mark_Create_Precedent_ {
                         channel_publication1__not_found: true,
                         ..Default::default()
                     },
@@ -3903,17 +3903,17 @@ pub struct ChannelPublication1Mark_Delete_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_mark__delete__serialize_allocate(incoming: ChannelPublication1Mark_Delete_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1Mark_Delete_Incoming_| -> Result<ChannelPublication1Mark_Delete_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ ChannelPublication1Mark_Delete_Incoming_| -> Result<ChannelPublication1Mark_Delete_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            ChannelPublication1Mark_Delete_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            ChannelPublication1Mark_Delete_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                channel_publication1_token_signed: ChannelPublication1TokenSigned_XXX {
+                channel_publication1_token_signed: ChannelPublication1TokenSigned {
                     channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
@@ -3944,7 +3944,7 @@ pub struct ChannelPublication1Mark_Delete_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1Mark_Delete_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Delete_Precedent_XXX>| -> Result<UnifiedReport_<Void_, ChannelPublication1Mark_Delete_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Delete_Precedent>| -> Result<UnifiedReport_<Void_, ChannelPublication1Mark_Delete_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -3953,19 +3953,19 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_allocate
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1Mark_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Delete_Precedent_ {
+                    ChannelPublication1Mark_Delete_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Delete_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Delete_Precedent_XXX::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Mark_Delete_Precedent_ {
+                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Mark_Delete_Precedent_ {
                         channel_publication1_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Delete_Precedent_XXX::ChannelPublication1Mark__NotFound => ChannelPublication1Mark_Delete_Precedent_ {
+                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1Mark__NotFound => ChannelPublication1Mark_Delete_Precedent_ {
                         channel_publication1_mark___not_found: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Delete_Precedent_XXX::ChannelPublication1__NotFound => ChannelPublication1Mark_Delete_Precedent_ {
+                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1__NotFound => ChannelPublication1Mark_Delete_Precedent_ {
                         channel_publication1__not_found: true,
                         ..Default::default()
                     }
@@ -3992,17 +3992,17 @@ pub struct ChannelPublication1View_Create_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_view__create__serialize_allocate(incoming: ChannelPublication1View_Create_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1View_Create_Incoming_| -> Result<ChannelPublication1View_Create_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ ChannelPublication1View_Create_Incoming_| -> Result<ChannelPublication1View_Create_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            ChannelPublication1View_Create_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            ChannelPublication1View_Create_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                channel_publication1_token_signed: ChannelPublication1TokenSigned_XXX {
+                channel_publication1_token_signed: ChannelPublication1TokenSigned {
                     channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
@@ -4031,7 +4031,7 @@ pub struct ChannelPublication1View_Create_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_view__create__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1View_Create_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1View_Create_Precedent_XXX>| -> Result<UnifiedReport_<Void_, ChannelPublication1View_Create_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1View_Create_Precedent>| -> Result<UnifiedReport_<Void_, ChannelPublication1View_Create_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -4040,11 +4040,11 @@ pub extern "C-unwind" fn channel_publication1_view__create__deserialize_allocate
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1View_Create_Precedent_XXX::UserAccessToken__AlreadyExpired => ChannelPublication1View_Create_Precedent_ {
+                    ChannelPublication1View_Create_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1View_Create_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1View_Create_Precedent_XXX::ChannelPublication1Token__AlreadyExpired => ChannelPublication1View_Create_Precedent_ {
+                    ChannelPublication1View_Create_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1View_Create_Precedent_ {
                         channel_publication1_token___already_expired: true,
                         ..Default::default()
                     },
@@ -4072,10 +4072,10 @@ pub struct ChannelPublication1Commentary_Create_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_commentary__create__serialize_allocate(incoming: ChannelPublication1Commentary_Create_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1Commentary_Create_Incoming_| -> Result<ChannelPublication1Commentary_Create_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ ChannelPublication1Commentary_Create_Incoming_| -> Result<ChannelPublication1Commentary_Create_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            ChannelPublication1Commentary_Create_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            ChannelPublication1Commentary_Create_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
@@ -4083,7 +4083,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__serialize_allo
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel_publication1_commentary__text: incoming_.channel_publication1_commentary__text.get_as_str()?,
-                channel_publication1_token_signed: ChannelPublication1TokenSigned_XXX {
+                channel_publication1_token_signed: ChannelPublication1TokenSigned {
                     channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
@@ -4119,7 +4119,7 @@ pub struct ChannelPublication1Commentary_Create_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1Commentary_Create_Result {
-    let converter = move |unified_report: UnifiedReport<ChannelPublication1Commentary_Create_Outcoming_XXX, ChannelPublication1Commentary_Create_Precedent_XXX>| -> Result<
+    let converter = move |unified_report: UnifiedReport<ChannelPublication1Commentary_Create_Outcoming, ChannelPublication1Commentary_Create_Precedent>| -> Result<
         UnifiedReport_<ChannelPublication1Commentary_Create_Outcoming_, ChannelPublication1Commentary_Create_Precedent_>,
         Box<dyn StdError + 'static>,
     > {
@@ -4145,19 +4145,19 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_al
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1Commentary_Create_Precedent_XXX::UserAccessToken__AlreadyExpired => {
+                    ChannelPublication1Commentary_Create_Precedent::UserAccessToken__AlreadyExpired => {
                         ChannelPublication1Commentary_Create_Precedent_ {
                             user_access_token___already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1Commentary_Create_Precedent_XXX::ChannelPublication1Token__AlreadyExpired => {
+                    ChannelPublication1Commentary_Create_Precedent::ChannelPublication1Token__AlreadyExpired => {
                         ChannelPublication1Commentary_Create_Precedent_ {
                             channel_publication1_token___already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ChannelPublication1Commentary_Create_Precedent_XXX::ParallelExecution => {
+                    ChannelPublication1Commentary_Create_Precedent::ParallelExecution => {
                         ChannelPublication1Commentary_Create_Precedent_ {
                             parallel_execution: true,
                             ..Default::default()
@@ -4187,10 +4187,10 @@ pub struct ChannelPublication1Commentary_Delete_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_commentary__delete__serialize_allocate(incoming: ChannelPublication1Commentary_Delete_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1Commentary_Delete_Incoming_| -> Result<ChannelPublication1Commentary_Delete_Incoming_XXX, Box<dyn StdError + 'static>> {
+    let converter = move |incoming_: &'_ ChannelPublication1Commentary_Delete_Incoming_| -> Result<ChannelPublication1Commentary_Delete_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            ChannelPublication1Commentary_Delete_Incoming_XXX {
-                user_access_token_signed: UserAccessTokenSigned_XXX {
+            ChannelPublication1Commentary_Delete_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
@@ -4198,7 +4198,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__delete__serialize_allo
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
                 channel_publication1_commentary__id: incoming_.channel_publication1_commentary__id,
-                channel_publication1_token_signed: ChannelPublication1TokenSigned_XXX {
+                channel_publication1_token_signed: ChannelPublication1TokenSigned {
                     channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
@@ -4228,7 +4228,7 @@ pub struct ChannelPublication1Commentary_Delete_Precedent_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_commentary__delete__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1Commentary_Delete_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Commentary_Delete_Precedent_XXX>| -> Result<UnifiedReport_<Void_, ChannelPublication1Commentary_Delete_Precedent_>, Box<dyn StdError + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Commentary_Delete_Precedent>| -> Result<UnifiedReport_<Void_, ChannelPublication1Commentary_Delete_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -4237,15 +4237,15 @@ pub extern "C-unwind" fn channel_publication1_commentary__delete__deserialize_al
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1Commentary_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired => ChannelPublication1Commentary_Delete_Precedent_ {
+                    ChannelPublication1Commentary_Delete_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1Commentary_Delete_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Commentary_Delete_Precedent_XXX::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Commentary_Delete_Precedent_ {
+                    ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Commentary_Delete_Precedent_ {
                         channel_publication1_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Commentary_Delete_Precedent_XXX::ChannelPublication1Commentary__NotFound => ChannelPublication1Commentary_Delete_Precedent_ {
+                    ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Commentary__NotFound => ChannelPublication1Commentary_Delete_Precedent_ {
                         channel_publication1_commentary___not_found: true,
                         ..Default::default()
                     },
@@ -5335,13 +5335,13 @@ mod test {
                 dedicated::{
                     action_processor_incoming_outcoming::action_processor::{
                         channel::{
-                            get_many_by_name_in_subscriptions::Data as Channel_GetManyByNameInSubscriptions_Data_XXX,
-                            get_many_by_subscription::Data as Channel_GetManyBySubscription_Data_XXX,
-                            get_many_public_by_name::Data as Channel_GetManyPublicByName_Data_XXX,
+                            get_many_by_name_in_subscriptions::Data as Channel_GetManyByNameInSubscriptions_Data,
+                            get_many_by_subscription::Data as Channel_GetManyBySubscription_Data,
+                            get_many_public_by_name::Data as Channel_GetManyPublicByName_Data,
                         },
-                        channel_publication1::get_many::Data as ChannelPublication1_GetMany_Data_XXX,
+                        channel_publication1::get_many::Data as ChannelPublication1_GetMany_Data,
                     },
-                    user_access_token_signed::UserAccessTokenSigned_ as UserAccessTokenSigned___XXX,
+                    user_access_token_signed::UserAccessTokenSigned_ as UserAccessTokenSigned__,
                 },
             };
             fn run_by_template<'a, T, E>(
@@ -5358,7 +5358,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming_XXX, UserAuthorization_AuthorizeByFirstStep_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming, UserAuthorization_AuthorizeByFirstStep_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__authorize_by_first_step__deserialize_allocate,
@@ -5366,7 +5366,7 @@ mod test {
                 );
             }
             pub fn target_filled__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = UserAuthorization_AuthorizeByFirstStep_Outcoming_XXX {
+                let outcoming = UserAuthorization_AuthorizeByFirstStep_Outcoming {
                     user__id: 0,
                     verification_message_sent: false,
                     user_authorization_token__can_be_resent_from: 0,
@@ -5374,15 +5374,15 @@ mod test {
                     user_authorization_token__wrong_enter_tries_quantity_limit: 0,
                 };
                 let unified_report =
-                    UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming_XXX, UserAuthorization_AuthorizeByFirstStep_Precedent_XXX>::target_filled(outcoming);
+                    UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming, UserAuthorization_AuthorizeByFirstStep_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     user_authorization__authorize_by_first_step__deserialize_allocate,
                     user_authorization__authorize_by_first_step__deserialize_deallocate,
                 );
             }
-            fn _precedent__user_authorization__authorize_by_first_step(precedent: UserAuthorization_AuthorizeByFirstStep_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming_XXX, UserAuthorization_AuthorizeByFirstStep_Precedent_XXX>::precedent(precedent);
+            fn _precedent__user_authorization__authorize_by_first_step(precedent: UserAuthorization_AuthorizeByFirstStep_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByFirstStep_Outcoming, UserAuthorization_AuthorizeByFirstStep_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__authorize_by_first_step__deserialize_allocate,
@@ -5390,13 +5390,13 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_AuthorizeByFirstStep_Precedent_XXX::User__WrongEmailOrNicknameOrPassword {
-                    UserAuthorization_AuthorizeByFirstStep_Precedent_XXX::User__WrongEmailOrNicknameOrPassword => {}
-                    UserAuthorization_AuthorizeByFirstStep_Precedent_XXX::ParallelExecution => {}
+                match UserAuthorization_AuthorizeByFirstStep_Precedent::User__WrongEmailOrNicknameOrPassword {
+                    UserAuthorization_AuthorizeByFirstStep_Precedent::User__WrongEmailOrNicknameOrPassword => {}
+                    UserAuthorization_AuthorizeByFirstStep_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<UserAuthorization_AuthorizeByFirstStep_Precedent_XXX> = vec![
-                    UserAuthorization_AuthorizeByFirstStep_Precedent_XXX::User__WrongEmailOrNicknameOrPassword,
-                    UserAuthorization_AuthorizeByFirstStep_Precedent_XXX::ParallelExecution,
+                let precedents: Vec<UserAuthorization_AuthorizeByFirstStep_Precedent> = vec![
+                    UserAuthorization_AuthorizeByFirstStep_Precedent::User__WrongEmailOrNicknameOrPassword,
+                    UserAuthorization_AuthorizeByFirstStep_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__authorize_by_first_step(precedent)?;
@@ -5404,7 +5404,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming_XXX, UserAuthorization_AuthorizeByLastStep_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming, UserAuthorization_AuthorizeByLastStep_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__authorize_by_last_step__deserialize_allocate,
@@ -5412,28 +5412,28 @@ mod test {
                 );
             }
             pub fn target_filled__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = UserAuthorization_AuthorizeByLastStep_Outcoming_XXX {
-                    user_access_token_signed: UserAccessTokenSigned___XXX {
+                let outcoming = UserAuthorization_AuthorizeByLastStep_Outcoming {
+                    user_access_token_signed: UserAccessTokenSigned__ {
                         user__id: 0,
                         user_device__id: NOT_EMPTY_STRING_LITERAL.to_string(),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
-                    user_access_refresh_token_signed: UserAccessRefreshTokenSigned_XXX {
+                    user_access_refresh_token_signed: UserAccessRefreshTokenSigned {
                         user_access_refresh_token__expires_at: 0,
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                 };
-                let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming_XXX, UserAuthorization_AuthorizeByLastStep_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming, UserAuthorization_AuthorizeByLastStep_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     user_authorization__authorize_by_last_step__deserialize_allocate,
                     user_authorization__authorize_by_last_step__deserialize_deallocate,
                 );
             }
-            fn _precedent__user_authorization__authorize_by_last_step(precedent: UserAuthorization_AuthorizeByLastStep_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming_XXX, UserAuthorization_AuthorizeByLastStep_Precedent_XXX>::precedent(precedent);
+            fn _precedent__user_authorization__authorize_by_last_step(precedent: UserAuthorization_AuthorizeByLastStep_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<UserAuthorization_AuthorizeByLastStep_Outcoming, UserAuthorization_AuthorizeByLastStep_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__authorize_by_last_step__deserialize_allocate,
@@ -5441,23 +5441,23 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_AuthorizeByLastStep_Precedent_XXX::UserAuthorizationToken__NotFound {
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::UserAuthorizationToken__NotFound => {}
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::UserAuthorizationToken__AlreadyExpired => {}
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::UserAuthorizationToken__WrongValue {
+                match UserAuthorization_AuthorizeByLastStep_Precedent::UserAuthorizationToken__NotFound {
+                    UserAuthorization_AuthorizeByLastStep_Precedent::UserAuthorizationToken__NotFound => {}
+                    UserAuthorization_AuthorizeByLastStep_Precedent::UserAuthorizationToken__AlreadyExpired => {}
+                    UserAuthorization_AuthorizeByLastStep_Precedent::UserAuthorizationToken__WrongValue {
                         user_authorization_token__wrong_enter_tries_quantity: _,
                     } => {}
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::User__NotFound => {}
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::ParallelExecution => {}
+                    UserAuthorization_AuthorizeByLastStep_Precedent::User__NotFound => {}
+                    UserAuthorization_AuthorizeByLastStep_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<UserAuthorization_AuthorizeByLastStep_Precedent_XXX> = vec![
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::UserAuthorizationToken__NotFound,
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::UserAuthorizationToken__AlreadyExpired,
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::UserAuthorizationToken__WrongValue {
+                let precedents: Vec<UserAuthorization_AuthorizeByLastStep_Precedent> = vec![
+                    UserAuthorization_AuthorizeByLastStep_Precedent::UserAuthorizationToken__NotFound,
+                    UserAuthorization_AuthorizeByLastStep_Precedent::UserAuthorizationToken__AlreadyExpired,
+                    UserAuthorization_AuthorizeByLastStep_Precedent::UserAuthorizationToken__WrongValue {
                         user_authorization_token__wrong_enter_tries_quantity: 0,
                     },
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::User__NotFound,
-                    UserAuthorization_AuthorizeByLastStep_Precedent_XXX::ParallelExecution,
+                    UserAuthorization_AuthorizeByLastStep_Precedent::User__NotFound,
+                    UserAuthorization_AuthorizeByLastStep_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__authorize_by_last_step(precedent)?;
@@ -5465,7 +5465,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_CheckEmailForExisting_Outcoming_XXX, Void>::target_empty();
+                let unified_report = UnifiedReport::<UserAuthorization_CheckEmailForExisting_Outcoming, Void>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__check_email_for_existing__deserialize_allocate,
@@ -5473,10 +5473,10 @@ mod test {
                 );
             }
             pub fn target_filled__user_authorization__check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = UserAuthorization_CheckEmailForExisting_Outcoming_XXX {
+                let outcoming = UserAuthorization_CheckEmailForExisting_Outcoming {
                     result: false,
                 };
-                let unified_report = UnifiedReport::<UserAuthorization_CheckEmailForExisting_Outcoming_XXX, Void>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<UserAuthorization_CheckEmailForExisting_Outcoming, Void>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     user_authorization__check_email_for_existing__deserialize_allocate,
@@ -5487,7 +5487,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_CheckNicknameForExisting_Outcoming_XXX, Void>::target_empty();
+                let unified_report = UnifiedReport::<UserAuthorization_CheckNicknameForExisting_Outcoming, Void>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__check_nickname_for_existing__deserialize_allocate,
@@ -5495,10 +5495,10 @@ mod test {
                 );
             }
             pub fn target_filled__user_authorization__check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = UserAuthorization_CheckNicknameForExisting_Outcoming_XXX {
+                let outcoming = UserAuthorization_CheckNicknameForExisting_Outcoming {
                     result: false,
                 };
-                let unified_report = UnifiedReport::<UserAuthorization_CheckNicknameForExisting_Outcoming_XXX, Void>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<UserAuthorization_CheckNicknameForExisting_Outcoming, Void>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     user_authorization__check_nickname_for_existing__deserialize_allocate,
@@ -5509,7 +5509,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__deauthorize_from_all_devices__deserialize_allocate,
@@ -5520,9 +5520,9 @@ mod test {
                 return Result::Ok(());
             }
             fn _precedent__user_authorization__deauthorize_from_all_devices(
-                precedent: UserAuthorization_DeauthorizeFromAllDevices_Precedent_XXX,
+                precedent: UserAuthorization_DeauthorizeFromAllDevices_Precedent,
             ) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_XXX>::precedent(precedent);
+                let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__deauthorize_from_all_devices__deserialize_allocate,
@@ -5530,11 +5530,11 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_DeauthorizeFromAllDevices_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
+                match UserAuthorization_DeauthorizeFromAllDevices_Precedent::UserAccessToken__AlreadyExpired {
+                    UserAuthorization_DeauthorizeFromAllDevices_Precedent::UserAccessToken__AlreadyExpired => {}
                 }
-                let precedents: Vec<UserAuthorization_DeauthorizeFromAllDevices_Precedent_XXX> = vec![
-                    UserAuthorization_DeauthorizeFromAllDevices_Precedent_XXX::UserAccessToken__AlreadyExpired,
+                let precedents: Vec<UserAuthorization_DeauthorizeFromAllDevices_Precedent> = vec![
+                    UserAuthorization_DeauthorizeFromAllDevices_Precedent::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__deauthorize_from_all_devices(precedent)?;
@@ -5542,7 +5542,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__deauthorize_from_one_device__deserialize_allocate,
@@ -5553,9 +5553,9 @@ mod test {
                 return Result::Ok(());
             }
             fn _precedent__user_authorization__deauthorize_from_one_device(
-                precedent: UserAuthorization_DeauthorizeFromOneDevice_Precedent_XXX,
+                precedent: UserAuthorization_DeauthorizeFromOneDevice_Precedent,
             ) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_XXX>::precedent(precedent);
+                let unified_report = UnifiedReport::<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__deauthorize_from_one_device__deserialize_allocate,
@@ -5563,11 +5563,11 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_DeauthorizeFromOneDevice_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
+                match UserAuthorization_DeauthorizeFromOneDevice_Precedent::UserAccessToken__AlreadyExpired {
+                    UserAuthorization_DeauthorizeFromOneDevice_Precedent::UserAccessToken__AlreadyExpired => {}
                 }
-                let precedents: Vec<UserAuthorization_DeauthorizeFromOneDevice_Precedent_XXX> = vec![
-                    UserAuthorization_DeauthorizeFromOneDevice_Precedent_XXX::UserAccessToken__AlreadyExpired,
+                let precedents: Vec<UserAuthorization_DeauthorizeFromOneDevice_Precedent> = vec![
+                    UserAuthorization_DeauthorizeFromOneDevice_Precedent::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__deauthorize_from_one_device(precedent)?;
@@ -5575,7 +5575,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming_XXX, UserAuthorization_RefreshAccessToken_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming, UserAuthorization_RefreshAccessToken_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__refresh_access_token__deserialize_allocate,
@@ -5583,28 +5583,28 @@ mod test {
                 );
             }
             pub fn target_filled__user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = UserAuthorization_RefreshAccessToken_Outcoming_XXX {
-                    user_access_token_signed: UserAccessTokenSigned___XXX {
+                let outcoming = UserAuthorization_RefreshAccessToken_Outcoming {
+                    user_access_token_signed: UserAccessTokenSigned__ {
                         user__id: 0,
                         user_device__id: NOT_EMPTY_STRING_LITERAL.to_string(),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
-                    user_access_refresh_token_signed: UserAccessRefreshTokenSigned_XXX {
+                    user_access_refresh_token_signed: UserAccessRefreshTokenSigned {
                         user_access_refresh_token__expires_at: 0,
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                 };
-                let unified_report = UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming_XXX, UserAuthorization_RefreshAccessToken_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming, UserAuthorization_RefreshAccessToken_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     user_authorization__refresh_access_token__deserialize_allocate,
                     user_authorization__refresh_access_token__deserialize_deallocate,
                 );
             }
-            fn _precedent__user_authorization__refresh_access_token(precedent: UserAuthorization_RefreshAccessToken_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming_XXX, UserAuthorization_RefreshAccessToken_Precedent_XXX>::precedent(precedent);
+            fn _precedent__user_authorization__refresh_access_token(precedent: UserAuthorization_RefreshAccessToken_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<UserAuthorization_RefreshAccessToken_Outcoming, UserAuthorization_RefreshAccessToken_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__refresh_access_token__deserialize_allocate,
@@ -5612,15 +5612,15 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_RefreshAccessToken_Precedent_XXX::UserAccessRefreshToken__NotFound {
-                    UserAuthorization_RefreshAccessToken_Precedent_XXX::UserAccessRefreshToken__NotFound => {}
-                    UserAuthorization_RefreshAccessToken_Precedent_XXX::UserAccessRefreshToken__AlreadyExpired => {}
-                    UserAuthorization_RefreshAccessToken_Precedent_XXX::ParallelExecution => {}
+                match UserAuthorization_RefreshAccessToken_Precedent::UserAccessRefreshToken__NotFound {
+                    UserAuthorization_RefreshAccessToken_Precedent::UserAccessRefreshToken__NotFound => {}
+                    UserAuthorization_RefreshAccessToken_Precedent::UserAccessRefreshToken__AlreadyExpired => {}
+                    UserAuthorization_RefreshAccessToken_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<UserAuthorization_RefreshAccessToken_Precedent_XXX> = vec![
-                    UserAuthorization_RefreshAccessToken_Precedent_XXX::UserAccessRefreshToken__NotFound,
-                    UserAuthorization_RefreshAccessToken_Precedent_XXX::UserAccessRefreshToken__AlreadyExpired,
-                    UserAuthorization_RefreshAccessToken_Precedent_XXX::ParallelExecution,
+                let precedents: Vec<UserAuthorization_RefreshAccessToken_Precedent> = vec![
+                    UserAuthorization_RefreshAccessToken_Precedent::UserAccessRefreshToken__NotFound,
+                    UserAuthorization_RefreshAccessToken_Precedent::UserAccessRefreshToken__AlreadyExpired,
+                    UserAuthorization_RefreshAccessToken_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__refresh_access_token(precedent)?;
@@ -5628,7 +5628,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_RegisterByFirstStep_Outcoming_XXX, UserAuthorization_RegisterByFirstStep_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<UserAuthorization_RegisterByFirstStep_Outcoming, UserAuthorization_RegisterByFirstStep_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__register_by_first_step__deserialize_allocate,
@@ -5636,21 +5636,21 @@ mod test {
                 );
             }
             pub fn target_filled__user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = UserAuthorization_RegisterByFirstStep_Outcoming_XXX {
+                let outcoming = UserAuthorization_RegisterByFirstStep_Outcoming {
                     verification_message_sent: false,
                     user_registration_token__can_be_resent_from: 0,
                     user_registration_token__wrong_enter_tries_quantity: 0,
                     user_registration_token__wrong_enter_tries_quantity_limit: 0,
                 };
-                let unified_report = UnifiedReport::<UserAuthorization_RegisterByFirstStep_Outcoming_XXX, UserAuthorization_RegisterByFirstStep_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<UserAuthorization_RegisterByFirstStep_Outcoming, UserAuthorization_RegisterByFirstStep_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     user_authorization__register_by_first_step__deserialize_allocate,
                     user_authorization__register_by_first_step__deserialize_deallocate,
                 );
             }
-            fn _precedent__user_authorization__register_by_first_step(precedent: UserAuthorization_RegisterByFirstStep_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, UserAuthorization_RegisterByFirstStep_Precedent_XXX>::precedent(precedent);
+            fn _precedent__user_authorization__register_by_first_step(precedent: UserAuthorization_RegisterByFirstStep_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, UserAuthorization_RegisterByFirstStep_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__register_by_first_step__deserialize_allocate,
@@ -5658,13 +5658,13 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_RegisterByFirstStep_Precedent_XXX::User__EmailAlreadyExist {
-                    UserAuthorization_RegisterByFirstStep_Precedent_XXX::User__EmailAlreadyExist => {}
-                    UserAuthorization_RegisterByFirstStep_Precedent_XXX::ParallelExecution => {}
+                match UserAuthorization_RegisterByFirstStep_Precedent::User__EmailAlreadyExist {
+                    UserAuthorization_RegisterByFirstStep_Precedent::User__EmailAlreadyExist => {}
+                    UserAuthorization_RegisterByFirstStep_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<UserAuthorization_RegisterByFirstStep_Precedent_XXX> = vec![
-                    UserAuthorization_RegisterByFirstStep_Precedent_XXX::User__EmailAlreadyExist,
-                    UserAuthorization_RegisterByFirstStep_Precedent_XXX::ParallelExecution,
+                let precedents: Vec<UserAuthorization_RegisterByFirstStep_Precedent> = vec![
+                    UserAuthorization_RegisterByFirstStep_Precedent::User__EmailAlreadyExist,
+                    UserAuthorization_RegisterByFirstStep_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__register_by_first_step(precedent)?;
@@ -5672,7 +5672,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, UserAuthorization_RegisterBySecondStep_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Void, UserAuthorization_RegisterBySecondStep_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__register_by_second_step__deserialize_allocate,
@@ -5682,8 +5682,8 @@ mod test {
             pub fn target_filled__user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                 return Result::Ok(());
             }
-            fn _precedent__user_authorization__register_by_second_step(precedent: UserAuthorization_RegisterBySecondStep_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, UserAuthorization_RegisterBySecondStep_Precedent_XXX>::precedent(precedent);
+            fn _precedent__user_authorization__register_by_second_step(precedent: UserAuthorization_RegisterBySecondStep_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, UserAuthorization_RegisterBySecondStep_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__register_by_second_step__deserialize_allocate,
@@ -5691,23 +5691,23 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__NotFound {
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__NotFound => {}
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__AlreadyExpired => {}
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__AlreadyApproved => {}
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__WrongValue {
+                match UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__NotFound {
+                    UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__NotFound => {}
+                    UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__AlreadyExpired => {}
+                    UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__AlreadyApproved => {}
+                    UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__WrongValue {
                         user_registration_token__wrong_enter_tries_quantity: _,
                     } => {}
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::ParallelExecution => {}
+                    UserAuthorization_RegisterBySecondStep_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<UserAuthorization_RegisterBySecondStep_Precedent_XXX> = vec![
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__NotFound,
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__AlreadyExpired,
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__AlreadyApproved,
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::UserRegistrationToken__WrongValue {
+                let precedents: Vec<UserAuthorization_RegisterBySecondStep_Precedent> = vec![
+                    UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__NotFound,
+                    UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__AlreadyExpired,
+                    UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__AlreadyApproved,
+                    UserAuthorization_RegisterBySecondStep_Precedent::UserRegistrationToken__WrongValue {
                         user_registration_token__wrong_enter_tries_quantity: 0,
                     },
-                    UserAuthorization_RegisterBySecondStep_Precedent_XXX::ParallelExecution,
+                    UserAuthorization_RegisterBySecondStep_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__register_by_second_step(precedent)?;
@@ -5715,7 +5715,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming_XXX, UserAuthorization_RegisterByLastStep_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming, UserAuthorization_RegisterByLastStep_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__register_by_last_step__deserialize_allocate,
@@ -5723,28 +5723,28 @@ mod test {
                 );
             }
             pub fn target_filled__user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = UserAuthorization_RegisterByLastStep_Outcoming_XXX {
-                    user_access_token_signed: UserAccessTokenSigned___XXX {
+                let outcoming = UserAuthorization_RegisterByLastStep_Outcoming {
+                    user_access_token_signed: UserAccessTokenSigned__ {
                         user__id: 0,
                         user_device__id: NOT_EMPTY_STRING_LITERAL.to_string(),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
-                    user_access_refresh_token_signed: UserAccessRefreshTokenSigned_XXX {
+                    user_access_refresh_token_signed: UserAccessRefreshTokenSigned {
                         user_access_refresh_token__expires_at: 0,
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                 };
-                let unified_report = UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming_XXX, UserAuthorization_RegisterByLastStep_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming, UserAuthorization_RegisterByLastStep_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     user_authorization__register_by_last_step__deserialize_allocate,
                     user_authorization__register_by_last_step__deserialize_deallocate,
                 );
             }
-            fn _precedent__user_authorization__register_by_last_step(precedent: UserAuthorization_RegisterByLastStep_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming_XXX, UserAuthorization_RegisterByLastStep_Precedent_XXX>::precedent(precedent);
+            fn _precedent__user_authorization__register_by_last_step(precedent: UserAuthorization_RegisterByLastStep_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<UserAuthorization_RegisterByLastStep_Outcoming, UserAuthorization_RegisterByLastStep_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__register_by_last_step__deserialize_allocate,
@@ -5752,23 +5752,23 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_RegisterByLastStep_Precedent_XXX::User__NicknameAlreadyExist {
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::User__NicknameAlreadyExist => {}
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::User__EmailAlreadyExist => {}
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::UserRegistrationToken__NotFound => {}
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::UserRegistrationToken__AlreadyExpired => {}
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::UserRegistrationToken__IsNotApproved => {}
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::UserRegistrationToken__WrongValue => {}
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::ParallelExecution => {}
+                match UserAuthorization_RegisterByLastStep_Precedent::User__NicknameAlreadyExist {
+                    UserAuthorization_RegisterByLastStep_Precedent::User__NicknameAlreadyExist => {}
+                    UserAuthorization_RegisterByLastStep_Precedent::User__EmailAlreadyExist => {}
+                    UserAuthorization_RegisterByLastStep_Precedent::UserRegistrationToken__NotFound => {}
+                    UserAuthorization_RegisterByLastStep_Precedent::UserRegistrationToken__AlreadyExpired => {}
+                    UserAuthorization_RegisterByLastStep_Precedent::UserRegistrationToken__IsNotApproved => {}
+                    UserAuthorization_RegisterByLastStep_Precedent::UserRegistrationToken__WrongValue => {}
+                    UserAuthorization_RegisterByLastStep_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<UserAuthorization_RegisterByLastStep_Precedent_XXX> = vec![
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::User__NicknameAlreadyExist,
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::User__EmailAlreadyExist,
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::UserRegistrationToken__NotFound,
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::UserRegistrationToken__AlreadyExpired,
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::UserRegistrationToken__IsNotApproved,
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::UserRegistrationToken__WrongValue,
-                    UserAuthorization_RegisterByLastStep_Precedent_XXX::ParallelExecution,
+                let precedents: Vec<UserAuthorization_RegisterByLastStep_Precedent> = vec![
+                    UserAuthorization_RegisterByLastStep_Precedent::User__NicknameAlreadyExist,
+                    UserAuthorization_RegisterByLastStep_Precedent::User__EmailAlreadyExist,
+                    UserAuthorization_RegisterByLastStep_Precedent::UserRegistrationToken__NotFound,
+                    UserAuthorization_RegisterByLastStep_Precedent::UserRegistrationToken__AlreadyExpired,
+                    UserAuthorization_RegisterByLastStep_Precedent::UserRegistrationToken__IsNotApproved,
+                    UserAuthorization_RegisterByLastStep_Precedent::UserRegistrationToken__WrongValue,
+                    UserAuthorization_RegisterByLastStep_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__register_by_last_step(precedent)?;
@@ -5776,7 +5776,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_ResetPasswordByFirstStep_Outcoming_XXX, UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<UserAuthorization_ResetPasswordByFirstStep_Outcoming, UserAuthorization_ResetPasswordByFirstStep_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__reset_password_by_first_step__deserialize_allocate,
@@ -5784,7 +5784,7 @@ mod test {
                 );
             }
             pub fn target_filled__user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = UserAuthorization_ResetPasswordByFirstStep_Outcoming_XXX {
+                let outcoming = UserAuthorization_ResetPasswordByFirstStep_Outcoming {
                     user__id: 0,
                     verification_message_sent: false,
                     user_reset_password_token__can_be_resent_from: 0,
@@ -5792,7 +5792,7 @@ mod test {
                     user_reset_password_token__wrong_enter_tries_quantity_limit: 0,
                 };
                 let unified_report =
-                    UnifiedReport::<UserAuthorization_ResetPasswordByFirstStep_Outcoming_XXX, UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX>::target_filled(outcoming);
+                    UnifiedReport::<UserAuthorization_ResetPasswordByFirstStep_Outcoming, UserAuthorization_ResetPasswordByFirstStep_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     user_authorization__reset_password_by_first_step__deserialize_allocate,
@@ -5800,9 +5800,9 @@ mod test {
                 );
             }
             fn _precedent__user_authorization__reset_password_by_first_step(
-                precedent: UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX,
+                precedent: UserAuthorization_ResetPasswordByFirstStep_Precedent,
             ) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX>::precedent(precedent);
+                let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordByFirstStep_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__reset_password_by_first_step__deserialize_allocate,
@@ -5810,13 +5810,13 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX::User__NotFound {
-                    UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX::User__NotFound => {}
-                    UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX::ParallelExecution => {}
+                match UserAuthorization_ResetPasswordByFirstStep_Precedent::User__NotFound {
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent::User__NotFound => {}
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX> = vec![
-                    UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX::User__NotFound,
-                    UserAuthorization_ResetPasswordByFirstStep_Precedent_XXX::ParallelExecution,
+                let precedents: Vec<UserAuthorization_ResetPasswordByFirstStep_Precedent> = vec![
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent::User__NotFound,
+                    UserAuthorization_ResetPasswordByFirstStep_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__reset_password_by_first_step(precedent)?;
@@ -5824,7 +5824,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__reset_password_by_second_step__deserialize_allocate,
@@ -5835,9 +5835,9 @@ mod test {
                 return Result::Ok(());
             }
             fn _precedent__user_authorization__reset_password_by_second_step(
-                precedent: UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX,
+                precedent: UserAuthorization_ResetPasswordBySecondStep_Precedent,
             ) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX>::precedent(precedent);
+                let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__reset_password_by_second_step__deserialize_allocate,
@@ -5845,23 +5845,23 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__NotFound {
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__NotFound => {}
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__AlreadyExpired => {}
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__AlreadyApproved => {}
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__WrongValue {
+                match UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__NotFound {
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__NotFound => {}
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__AlreadyExpired => {}
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__AlreadyApproved => {}
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__WrongValue {
                         user_reset_password_token__wrong_enter_tries_quantity: _,
                     } => {}
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::ParallelExecution => {}
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX> = vec![
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__NotFound,
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__AlreadyExpired,
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__AlreadyApproved,
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::UserResetPasswordToken__WrongValue {
+                let precedents: Vec<UserAuthorization_ResetPasswordBySecondStep_Precedent> = vec![
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__NotFound,
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__AlreadyExpired,
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__AlreadyApproved,
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::UserResetPasswordToken__WrongValue {
                         user_reset_password_token__wrong_enter_tries_quantity: 0,
                     },
-                    UserAuthorization_ResetPasswordBySecondStep_Precedent_XXX::ParallelExecution,
+                    UserAuthorization_ResetPasswordBySecondStep_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__reset_password_by_second_step(precedent)?;
@@ -5869,7 +5869,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordByLastStep_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__reset_password_by_last_step__deserialize_allocate,
@@ -5880,9 +5880,9 @@ mod test {
                 return Result::Ok(());
             }
             fn _precedent__user_authorization__reset_password_by_last_step(
-                precedent: UserAuthorization_ResetPasswordByLastStep_Precedent_XXX,
+                precedent: UserAuthorization_ResetPasswordByLastStep_Precedent,
             ) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_XXX>::precedent(precedent);
+                let unified_report = UnifiedReport::<Void, UserAuthorization_ResetPasswordByLastStep_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__reset_password_by_last_step__deserialize_allocate,
@@ -5890,21 +5890,21 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::User__NotFound {
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::User__NotFound => {}
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::UserResetPasswordToken__NotFound => {}
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::UserResetPasswordToken__AlreadyExpired => {}
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::UserResetPasswordToken__IsNotApproved => {}
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::UserResetPasswordToken__WrongValue => {}
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::ParallelExecution => {}
+                match UserAuthorization_ResetPasswordByLastStep_Precedent::User__NotFound {
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::User__NotFound => {}
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::UserResetPasswordToken__NotFound => {}
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::UserResetPasswordToken__AlreadyExpired => {}
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::UserResetPasswordToken__IsNotApproved => {}
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::UserResetPasswordToken__WrongValue => {}
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<UserAuthorization_ResetPasswordByLastStep_Precedent_XXX> = vec![
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::User__NotFound,
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::UserResetPasswordToken__NotFound,
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::UserResetPasswordToken__AlreadyExpired,
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::UserResetPasswordToken__IsNotApproved,
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::UserResetPasswordToken__WrongValue,
-                    UserAuthorization_ResetPasswordByLastStep_Precedent_XXX::ParallelExecution,
+                let precedents: Vec<UserAuthorization_ResetPasswordByLastStep_Precedent> = vec![
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::User__NotFound,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::UserResetPasswordToken__NotFound,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::UserResetPasswordToken__AlreadyExpired,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::UserResetPasswordToken__IsNotApproved,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::UserResetPasswordToken__WrongValue,
+                    UserAuthorization_ResetPasswordByLastStep_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__reset_password_by_last_step(precedent)?;
@@ -5912,7 +5912,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_SendEmailForRegister_Outcoming_XXX, UserAuthorization_SendEmailForRegister_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<UserAuthorization_SendEmailForRegister_Outcoming, UserAuthorization_SendEmailForRegister_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__send_email_for_register__deserialize_allocate,
@@ -5920,19 +5920,19 @@ mod test {
                 );
             }
             pub fn target_filled__user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = UserAuthorization_SendEmailForRegister_Outcoming_XXX {
+                let outcoming = UserAuthorization_SendEmailForRegister_Outcoming {
                     user_registration_token__can_be_resent_from: 0,
                 };
                 let unified_report =
-                    UnifiedReport::<UserAuthorization_SendEmailForRegister_Outcoming_XXX, UserAuthorization_SendEmailForRegister_Precedent_XXX>::target_filled(outcoming);
+                    UnifiedReport::<UserAuthorization_SendEmailForRegister_Outcoming, UserAuthorization_SendEmailForRegister_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     user_authorization__send_email_for_register__deserialize_allocate,
                     user_authorization__send_email_for_register__deserialize_deallocate,
                 );
             }
-            fn _precedent__user_authorization__send_email_for_register(precedent: UserAuthorization_SendEmailForRegister_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_SendEmailForRegister_Outcoming_XXX, UserAuthorization_SendEmailForRegister_Precedent_XXX>::precedent(precedent);
+            fn _precedent__user_authorization__send_email_for_register(precedent: UserAuthorization_SendEmailForRegister_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<UserAuthorization_SendEmailForRegister_Outcoming, UserAuthorization_SendEmailForRegister_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__send_email_for_register__deserialize_allocate,
@@ -5940,19 +5940,19 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__NotFound {
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__NotFound => {}
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__AlreadyExpired => {}
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__AlreadyApproved => {}
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__TimeToResendHasNotCome => {}
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::ParallelExecution => {}
+                match UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__NotFound {
+                    UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__NotFound => {}
+                    UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__AlreadyExpired => {}
+                    UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__AlreadyApproved => {}
+                    UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__TimeToResendHasNotCome => {}
+                    UserAuthorization_SendEmailForRegister_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<UserAuthorization_SendEmailForRegister_Precedent_XXX> = vec![
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__NotFound,
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__AlreadyExpired,
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__AlreadyApproved,
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::UserRegistrationToken__TimeToResendHasNotCome,
-                    UserAuthorization_SendEmailForRegister_Precedent_XXX::ParallelExecution,
+                let precedents: Vec<UserAuthorization_SendEmailForRegister_Precedent> = vec![
+                    UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__NotFound,
+                    UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__AlreadyExpired,
+                    UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__AlreadyApproved,
+                    UserAuthorization_SendEmailForRegister_Precedent::UserRegistrationToken__TimeToResendHasNotCome,
+                    UserAuthorization_SendEmailForRegister_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_register(precedent)?;
@@ -5960,7 +5960,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming_XXX, UserAuthorization_SendEmailForAuthorize_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming, UserAuthorization_SendEmailForAuthorize_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__send_email_for_authorize__deserialize_allocate,
@@ -5968,19 +5968,19 @@ mod test {
                 );
             }
             pub fn target_filled__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = UserAuthorization_SendEmailForAuthorize_Outcoming_XXX {
+                let outcoming = UserAuthorization_SendEmailForAuthorize_Outcoming {
                     user_authorization_token__can_be_resent_from: 0,
                 };
                 let unified_report =
-                    UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming_XXX, UserAuthorization_SendEmailForAuthorize_Precedent_XXX>::target_filled(outcoming);
+                    UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming, UserAuthorization_SendEmailForAuthorize_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     user_authorization__send_email_for_authorize__deserialize_allocate,
                     user_authorization__send_email_for_authorize__deserialize_deallocate,
                 );
             }
-            fn _precedent__user_authorization__send_email_for_authorize(precedent: UserAuthorization_SendEmailForAuthorize_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming_XXX, UserAuthorization_SendEmailForAuthorize_Precedent_XXX>::precedent(precedent);
+            fn _precedent__user_authorization__send_email_for_authorize(precedent: UserAuthorization_SendEmailForAuthorize_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<UserAuthorization_SendEmailForAuthorize_Outcoming, UserAuthorization_SendEmailForAuthorize_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__send_email_for_authorize__deserialize_allocate,
@@ -5988,19 +5988,19 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_SendEmailForAuthorize_Precedent_XXX::User__NotFound {
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::User__NotFound => {}
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::UserAuthorizationToken__NotFound => {}
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::UserAuthorizationToken__AlreadyExpired => {}
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::UserAuthorizationToken__TimeToResendHasNotCome => {}
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::ParallelExecution => {}
+                match UserAuthorization_SendEmailForAuthorize_Precedent::User__NotFound {
+                    UserAuthorization_SendEmailForAuthorize_Precedent::User__NotFound => {}
+                    UserAuthorization_SendEmailForAuthorize_Precedent::UserAuthorizationToken__NotFound => {}
+                    UserAuthorization_SendEmailForAuthorize_Precedent::UserAuthorizationToken__AlreadyExpired => {}
+                    UserAuthorization_SendEmailForAuthorize_Precedent::UserAuthorizationToken__TimeToResendHasNotCome => {}
+                    UserAuthorization_SendEmailForAuthorize_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<UserAuthorization_SendEmailForAuthorize_Precedent_XXX> = vec![
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::User__NotFound,
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::UserAuthorizationToken__NotFound,
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::UserAuthorizationToken__AlreadyExpired,
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::UserAuthorizationToken__TimeToResendHasNotCome,
-                    UserAuthorization_SendEmailForAuthorize_Precedent_XXX::ParallelExecution,
+                let precedents: Vec<UserAuthorization_SendEmailForAuthorize_Precedent> = vec![
+                    UserAuthorization_SendEmailForAuthorize_Precedent::User__NotFound,
+                    UserAuthorization_SendEmailForAuthorize_Precedent::UserAuthorizationToken__NotFound,
+                    UserAuthorization_SendEmailForAuthorize_Precedent::UserAuthorizationToken__AlreadyExpired,
+                    UserAuthorization_SendEmailForAuthorize_Precedent::UserAuthorizationToken__TimeToResendHasNotCome,
+                    UserAuthorization_SendEmailForAuthorize_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_authorize(precedent)?;
@@ -6009,7 +6009,7 @@ mod test {
             }
             pub fn target_empty__user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
                 let unified_report =
-                    UnifiedReport::<UserAuthorization_SendEmailForResetPassword_Outcoming_XXX, UserAuthorization_SendEmailForResetPassword_Precedent_XXX>::target_empty();
+                    UnifiedReport::<UserAuthorization_SendEmailForResetPassword_Outcoming, UserAuthorization_SendEmailForResetPassword_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     user_authorization__send_email_for_reset_password__deserialize_allocate,
@@ -6017,11 +6017,11 @@ mod test {
                 );
             }
             pub fn target_filled__user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = UserAuthorization_SendEmailForResetPassword_Outcoming_XXX {
+                let outcoming = UserAuthorization_SendEmailForResetPassword_Outcoming {
                     user_reset_password_token__can_be_resent_from: 0,
                 };
                 let unified_report =
-                    UnifiedReport::<UserAuthorization_SendEmailForResetPassword_Outcoming_XXX, UserAuthorization_SendEmailForResetPassword_Precedent_XXX>::target_filled(outcoming);
+                    UnifiedReport::<UserAuthorization_SendEmailForResetPassword_Outcoming, UserAuthorization_SendEmailForResetPassword_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     user_authorization__send_email_for_reset_password__deserialize_allocate,
@@ -6029,10 +6029,10 @@ mod test {
                 );
             }
             fn _precedent__user_authorization__send_email_for_reset_password(
-                precedent: UserAuthorization_SendEmailForResetPassword_Precedent_XXX,
+                precedent: UserAuthorization_SendEmailForResetPassword_Precedent,
             ) -> Result<(), Box<dyn StdError + 'static>> {
                 let unified_report =
-                    UnifiedReport::<UserAuthorization_SendEmailForResetPassword_Outcoming_XXX, UserAuthorization_SendEmailForResetPassword_Precedent_XXX>::precedent(precedent);
+                    UnifiedReport::<UserAuthorization_SendEmailForResetPassword_Outcoming, UserAuthorization_SendEmailForResetPassword_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     user_authorization__send_email_for_reset_password__deserialize_allocate,
@@ -6040,21 +6040,21 @@ mod test {
                 );
             }
             pub fn precedent__user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
-                match UserAuthorization_SendEmailForResetPassword_Precedent_XXX::User__NotFound {
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::User__NotFound => {}
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::UserResetPasswordToken__NotFound => {}
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::UserResetPasswordToken__AlreadyExpired => {}
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::UserResetPasswordToken__AlreadyApproved => {}
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::UserResetPasswordToken__TimeToResendHasNotCome => {}
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::ParallelExecution => {}
+                match UserAuthorization_SendEmailForResetPassword_Precedent::User__NotFound {
+                    UserAuthorization_SendEmailForResetPassword_Precedent::User__NotFound => {}
+                    UserAuthorization_SendEmailForResetPassword_Precedent::UserResetPasswordToken__NotFound => {}
+                    UserAuthorization_SendEmailForResetPassword_Precedent::UserResetPasswordToken__AlreadyExpired => {}
+                    UserAuthorization_SendEmailForResetPassword_Precedent::UserResetPasswordToken__AlreadyApproved => {}
+                    UserAuthorization_SendEmailForResetPassword_Precedent::UserResetPasswordToken__TimeToResendHasNotCome => {}
+                    UserAuthorization_SendEmailForResetPassword_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<UserAuthorization_SendEmailForResetPassword_Precedent_XXX> = vec![
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::User__NotFound,
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::UserResetPasswordToken__NotFound,
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::UserResetPasswordToken__AlreadyExpired,
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::UserResetPasswordToken__AlreadyApproved,
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::UserResetPasswordToken__TimeToResendHasNotCome,
-                    UserAuthorization_SendEmailForResetPassword_Precedent_XXX::ParallelExecution,
+                let precedents: Vec<UserAuthorization_SendEmailForResetPassword_Precedent> = vec![
+                    UserAuthorization_SendEmailForResetPassword_Precedent::User__NotFound,
+                    UserAuthorization_SendEmailForResetPassword_Precedent::UserResetPasswordToken__NotFound,
+                    UserAuthorization_SendEmailForResetPassword_Precedent::UserResetPasswordToken__AlreadyExpired,
+                    UserAuthorization_SendEmailForResetPassword_Precedent::UserResetPasswordToken__AlreadyApproved,
+                    UserAuthorization_SendEmailForResetPassword_Precedent::UserResetPasswordToken__TimeToResendHasNotCome,
+                    UserAuthorization_SendEmailForResetPassword_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__user_authorization__send_email_for_reset_password(precedent)?;
@@ -6062,7 +6062,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming_XXX, Channel_GetManyByNameInSubscriptions_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming, Channel_GetManyByNameInSubscriptions_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel__get_many_by_name_in_subscriptions__deserialize_allocate,
@@ -6070,16 +6070,16 @@ mod test {
                 );
             }
             pub fn target_filled__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut data_registry: Vec<Channel_GetManyByNameInSubscriptions_Data_XXX> = vec![];
+                let mut data_registry: Vec<Channel_GetManyByNameInSubscriptions_Data> = vec![];
                 '_a: for _ in 1..=5 {
-                    let data = Channel_GetManyByNameInSubscriptions_Data_XXX {
+                    let data = Channel_GetManyByNameInSubscriptions_Data {
                         channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel__access_modifier: 0,
                         channel__visability_modifier: 0,
                         channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                        channel_token_signed: ChannelTokenSigned_XXX {
+                        channel_token_signed: ChannelTokenSigned {
                             channel__id: 0,
                             channel_token__obfuscation_value: 0,
                             channel_token__expires_at: 0,
@@ -6090,18 +6090,18 @@ mod test {
                     };
                     data_registry.push(data);
                 }
-                let outcoming = Channel_GetManyByNameInSubscriptions_Outcoming_XXX {
+                let outcoming = Channel_GetManyByNameInSubscriptions_Outcoming {
                     data_registry,
                 };
-                let unified_report = UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming_XXX, Channel_GetManyByNameInSubscriptions_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming, Channel_GetManyByNameInSubscriptions_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     channel__get_many_by_name_in_subscriptions__deserialize_allocate,
                     channel__get_many_by_name_in_subscriptions__deserialize_deallocate,
                 );
             }
-            fn _precedent__channel__get_many_by_name_in_subscriptions(precedent: Channel_GetManyByNameInSubscriptions_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming_XXX, Channel_GetManyByNameInSubscriptions_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel__get_many_by_name_in_subscriptions(precedent: Channel_GetManyByNameInSubscriptions_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Channel_GetManyByNameInSubscriptions_Outcoming, Channel_GetManyByNameInSubscriptions_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel__get_many_by_name_in_subscriptions__deserialize_allocate,
@@ -6109,11 +6109,11 @@ mod test {
                 );
             }
             pub fn precedent__channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_GetManyByNameInSubscriptions_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    Channel_GetManyByNameInSubscriptions_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
+                match Channel_GetManyByNameInSubscriptions_Precedent::UserAccessToken__AlreadyExpired {
+                    Channel_GetManyByNameInSubscriptions_Precedent::UserAccessToken__AlreadyExpired => {}
                 }
-                let precedents: Vec<Channel_GetManyByNameInSubscriptions_Precedent_XXX> = vec![
-                    Channel_GetManyByNameInSubscriptions_Precedent_XXX::UserAccessToken__AlreadyExpired,
+                let precedents: Vec<Channel_GetManyByNameInSubscriptions_Precedent> = vec![
+                    Channel_GetManyByNameInSubscriptions_Precedent::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_by_name_in_subscriptions(precedent)?;
@@ -6121,7 +6121,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming_XXX, Channel_GetManyBySubscription_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming, Channel_GetManyBySubscription_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel__get_many_by_subscription__deserialize_allocate,
@@ -6129,16 +6129,16 @@ mod test {
                 );
             }
             pub fn target_filled__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut data_registry: Vec<Channel_GetManyBySubscription_Data_XXX> = vec![];
+                let mut data_registry: Vec<Channel_GetManyBySubscription_Data> = vec![];
                 '_a: for _ in 1..=2 {
-                    let data = Channel_GetManyBySubscription_Data_XXX {
+                    let data = Channel_GetManyBySubscription_Data {
                         channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel__access_modifier: 0,
                         channel__visability_modifier: 0,
                         channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                        channel_token_signed: ChannelTokenSigned_XXX {
+                        channel_token_signed: ChannelTokenSigned {
                             channel__id: 0,
                             channel_token__obfuscation_value: 0,
                             channel_token__expires_at: 0,
@@ -6149,18 +6149,18 @@ mod test {
                     };
                     data_registry.push(data);
                 }
-                let outcoming = Channel_GetManyBySubscription_Outcoming_XXX {
+                let outcoming = Channel_GetManyBySubscription_Outcoming {
                     data_registry,
                 };
-                let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming_XXX, Channel_GetManyBySubscription_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming, Channel_GetManyBySubscription_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     channel__get_many_by_subscription__deserialize_allocate,
                     channel__get_many_by_subscription__deserialize_deallocate,
                 );
             }
-            fn _precedent__channel__get_many_by_subscription(precedent: Channel_GetManyBySubscription_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming_XXX, Channel_GetManyBySubscription_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel__get_many_by_subscription(precedent: Channel_GetManyBySubscription_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Channel_GetManyBySubscription_Outcoming, Channel_GetManyBySubscription_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel__get_many_by_subscription__deserialize_allocate,
@@ -6168,11 +6168,11 @@ mod test {
                 );
             }
             pub fn precedent__channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_GetManyBySubscription_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    Channel_GetManyBySubscription_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
+                match Channel_GetManyBySubscription_Precedent::UserAccessToken__AlreadyExpired {
+                    Channel_GetManyBySubscription_Precedent::UserAccessToken__AlreadyExpired => {}
                 }
-                let precedents: Vec<Channel_GetManyBySubscription_Precedent_XXX> = vec![
-                    Channel_GetManyBySubscription_Precedent_XXX::UserAccessToken__AlreadyExpired,
+                let precedents: Vec<Channel_GetManyBySubscription_Precedent> = vec![
+                    Channel_GetManyBySubscription_Precedent::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_by_subscription(precedent)?;
@@ -6180,7 +6180,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_XXX, Channel_GetManyPublicByName_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming, Channel_GetManyPublicByName_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel__get_many_public_by_name__deserialize_allocate,
@@ -6188,15 +6188,15 @@ mod test {
                 );
             }
             pub fn target_filled__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut data_registry: Vec<Channel_GetManyPublicByName_Data_XXX> = vec![];
+                let mut data_registry: Vec<Channel_GetManyPublicByName_Data> = vec![];
                 '_a: for _ in 1..=5 {
-                    let data = Channel_GetManyPublicByName_Data_XXX {
+                    let data = Channel_GetManyPublicByName_Data {
                         channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel__access_modifier: 0,
                         channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                        channel_token_signed: ChannelTokenSigned_XXX {
+                        channel_token_signed: ChannelTokenSigned {
                             channel__id: 0,
                             channel_token__obfuscation_value: 0,
                             channel_token__expires_at: 0,
@@ -6207,18 +6207,18 @@ mod test {
                     };
                     data_registry.push(data);
                 }
-                let outcoming = Channel_GetManyPublicByName_Outcoming_XXX {
+                let outcoming = Channel_GetManyPublicByName_Outcoming {
                     data_registry,
                 };
-                let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_XXX, Channel_GetManyPublicByName_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming, Channel_GetManyPublicByName_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     channel__get_many_public_by_name__deserialize_allocate,
                     channel__get_many_public_by_name__deserialize_deallocate,
                 );
             }
-            fn _precedent__channel__get_many_public_by_name(precedent: Channel_GetManyPublicByName_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming_XXX, Channel_GetManyPublicByName_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel__get_many_public_by_name(precedent: Channel_GetManyPublicByName_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Channel_GetManyPublicByName_Outcoming, Channel_GetManyPublicByName_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel__get_many_public_by_name__deserialize_allocate,
@@ -6226,11 +6226,11 @@ mod test {
                 );
             }
             pub fn precedent__channel__get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_GetManyPublicByName_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    Channel_GetManyPublicByName_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
+                match Channel_GetManyPublicByName_Precedent::UserAccessToken__AlreadyExpired {
+                    Channel_GetManyPublicByName_Precedent::UserAccessToken__AlreadyExpired => {}
                 }
-                let precedents: Vec<Channel_GetManyPublicByName_Precedent_XXX> = vec![
-                    Channel_GetManyPublicByName_Precedent_XXX::UserAccessToken__AlreadyExpired,
+                let precedents: Vec<Channel_GetManyPublicByName_Precedent> = vec![
+                    Channel_GetManyPublicByName_Precedent::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_public_by_name(precedent)?;
@@ -6238,7 +6238,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_XXX, Channel_GetOneById_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming, Channel_GetOneById_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel__get_one_by_id__deserialize_allocate,
@@ -6246,7 +6246,7 @@ mod test {
                 );
             }
             pub fn target_filled__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = Channel_GetOneById_Outcoming_XXX {
+                let outcoming = Channel_GetOneById_Outcoming {
                     channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
                     channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                     channel__description: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
@@ -6256,15 +6256,15 @@ mod test {
                     channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                     channel__subscribers_quantity: 0,
                 };
-                let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_XXX, Channel_GetOneById_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming, Channel_GetOneById_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     channel__get_one_by_id__deserialize_allocate,
                     channel__get_one_by_id__deserialize_deallocate,
                 );
             }
-            fn _precedent__channel__get_one_by_id(precedent: Channel_GetOneById_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming_XXX, Channel_GetOneById_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel__get_one_by_id(precedent: Channel_GetOneById_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Channel_GetOneById_Outcoming, Channel_GetOneById_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel__get_one_by_id__deserialize_allocate,
@@ -6272,19 +6272,19 @@ mod test {
                 );
             }
             pub fn precedent__channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_GetOneById_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    Channel_GetOneById_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    Channel_GetOneById_Precedent_XXX::Channel__NotFound => {}
-                    Channel_GetOneById_Precedent_XXX::Channel__IsClose => {}
-                    Channel_GetOneById_Precedent_XXX::ChannelToken__AlreadyExpired => {}
-                    Channel_GetOneById_Precedent_XXX::ChannelToken__InvalidChannelOwnerDefinition => {}
+                match Channel_GetOneById_Precedent::UserAccessToken__AlreadyExpired {
+                    Channel_GetOneById_Precedent::UserAccessToken__AlreadyExpired => {}
+                    Channel_GetOneById_Precedent::Channel__NotFound => {}
+                    Channel_GetOneById_Precedent::Channel__IsClose => {}
+                    Channel_GetOneById_Precedent::ChannelToken__AlreadyExpired => {}
+                    Channel_GetOneById_Precedent::ChannelToken__InvalidChannelOwnerDefinition => {}
                 }
-                let precedents: Vec<Channel_GetOneById_Precedent_XXX> = vec![
-                    Channel_GetOneById_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    Channel_GetOneById_Precedent_XXX::Channel__NotFound,
-                    Channel_GetOneById_Precedent_XXX::Channel__IsClose,
-                    Channel_GetOneById_Precedent_XXX::ChannelToken__AlreadyExpired,
-                    Channel_GetOneById_Precedent_XXX::ChannelToken__InvalidChannelOwnerDefinition,
+                let precedents: Vec<Channel_GetOneById_Precedent> = vec![
+                    Channel_GetOneById_Precedent::UserAccessToken__AlreadyExpired,
+                    Channel_GetOneById_Precedent::Channel__NotFound,
+                    Channel_GetOneById_Precedent::Channel__IsClose,
+                    Channel_GetOneById_Precedent::ChannelToken__AlreadyExpired,
+                    Channel_GetOneById_Precedent::ChannelToken__InvalidChannelOwnerDefinition,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_one_by_id(precedent)?;
@@ -6292,7 +6292,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel__check_name_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_CheckNameForExisting_Outcoming_XXX, Channel_CheckNameForExisting_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Channel_CheckNameForExisting_Outcoming, Channel_CheckNameForExisting_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel__check_name_for_existing__deserialize_allocate,
@@ -6300,18 +6300,18 @@ mod test {
                 );
             }
             pub fn target_filled__channel__check_name_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = Channel_CheckNameForExisting_Outcoming_XXX {
+                let outcoming = Channel_CheckNameForExisting_Outcoming {
                     result: false,
                 };
-                let unified_report = UnifiedReport::<Channel_CheckNameForExisting_Outcoming_XXX, Channel_CheckNameForExisting_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<Channel_CheckNameForExisting_Outcoming, Channel_CheckNameForExisting_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     channel__check_name_for_existing__deserialize_allocate,
                     channel__check_name_for_existing__deserialize_deallocate,
                 );
             }
-            fn _precedent__channel__check_name_for_existing(precedent: Channel_CheckNameForExisting_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_CheckNameForExisting_Outcoming_XXX, Channel_CheckNameForExisting_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel__check_name_for_existing(precedent: Channel_CheckNameForExisting_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Channel_CheckNameForExisting_Outcoming, Channel_CheckNameForExisting_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel__check_name_for_existing__deserialize_allocate,
@@ -6319,11 +6319,11 @@ mod test {
                 );
             }
             pub fn precedent__channel__check_name_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_CheckNameForExisting_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    Channel_CheckNameForExisting_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
+                match Channel_CheckNameForExisting_Precedent::UserAccessToken__AlreadyExpired {
+                    Channel_CheckNameForExisting_Precedent::UserAccessToken__AlreadyExpired => {}
                 }
-                let precedents: Vec<Channel_CheckNameForExisting_Precedent_XXX> = vec![
-                    Channel_CheckNameForExisting_Precedent_XXX::UserAccessToken__AlreadyExpired,
+                let precedents: Vec<Channel_CheckNameForExisting_Precedent> = vec![
+                    Channel_CheckNameForExisting_Precedent::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__check_name_for_existing(precedent)?;
@@ -6331,7 +6331,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel__check_linked_name_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_CheckLinkedNameForExisting_Outcoming_XXX, Channel_CheckLinkedNameForExisting_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Channel_CheckLinkedNameForExisting_Outcoming, Channel_CheckLinkedNameForExisting_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel__check_linked_name_for_existing__deserialize_allocate,
@@ -6339,18 +6339,18 @@ mod test {
                 );
             }
             pub fn target_filled__channel__check_linked_name_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = Channel_CheckLinkedNameForExisting_Outcoming_XXX {
+                let outcoming = Channel_CheckLinkedNameForExisting_Outcoming {
                     result: false,
                 };
-                let unified_report = UnifiedReport::<Channel_CheckLinkedNameForExisting_Outcoming_XXX, Channel_CheckLinkedNameForExisting_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<Channel_CheckLinkedNameForExisting_Outcoming, Channel_CheckLinkedNameForExisting_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     channel__check_linked_name_for_existing__deserialize_allocate,
                     channel__check_linked_name_for_existing__deserialize_deallocate,
                 );
             }
-            fn _precedent__channel__check_linked_name_for_existing(precedent: Channel_CheckLinkedNameForExisting_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_CheckLinkedNameForExisting_Outcoming_XXX, Channel_CheckLinkedNameForExisting_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel__check_linked_name_for_existing(precedent: Channel_CheckLinkedNameForExisting_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Channel_CheckLinkedNameForExisting_Outcoming, Channel_CheckLinkedNameForExisting_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel__check_linked_name_for_existing__deserialize_allocate,
@@ -6358,11 +6358,11 @@ mod test {
                 );
             }
             pub fn precedent__channel__check_linked_name_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_CheckLinkedNameForExisting_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    Channel_CheckLinkedNameForExisting_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
+                match Channel_CheckLinkedNameForExisting_Precedent::UserAccessToken__AlreadyExpired {
+                    Channel_CheckLinkedNameForExisting_Precedent::UserAccessToken__AlreadyExpired => {}
                 }
-                let precedents: Vec<Channel_CheckLinkedNameForExisting_Precedent_XXX> = vec![
-                    Channel_CheckLinkedNameForExisting_Precedent_XXX::UserAccessToken__AlreadyExpired,
+                let precedents: Vec<Channel_CheckLinkedNameForExisting_Precedent> = vec![
+                    Channel_CheckLinkedNameForExisting_Precedent::UserAccessToken__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__check_linked_name_for_existing(precedent)?;
@@ -6370,7 +6370,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_Create_Outcoming_XXX, Channel_Create_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Channel_Create_Outcoming, Channel_Create_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel__create__deserialize_allocate,
@@ -6378,8 +6378,8 @@ mod test {
                 );
             }
             pub fn target_filled__channel__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = Channel_Create_Outcoming_XXX {
-                    channel_token_signed: ChannelTokenSigned_XXX {
+                let outcoming = Channel_Create_Outcoming {
+                    channel_token_signed: ChannelTokenSigned {
                         channel__id: 0,
                         channel_token__obfuscation_value: 0,
                         channel_token__expires_at: 0,
@@ -6388,15 +6388,15 @@ mod test {
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                 };
-                let unified_report = UnifiedReport::<Channel_Create_Outcoming_XXX, Channel_Create_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<Channel_Create_Outcoming, Channel_Create_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     channel__create__deserialize_allocate,
                     channel__create__deserialize_deallocate,
                 );
             }
-            fn _precedent__channel__create(precedent: Channel_Create_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Channel_Create_Outcoming_XXX, Channel_Create_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel__create(precedent: Channel_Create_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Channel_Create_Outcoming, Channel_Create_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel__create__deserialize_allocate,
@@ -6404,17 +6404,17 @@ mod test {
                 );
             }
             pub fn precedent__channel__create() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_Create_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    Channel_Create_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    Channel_Create_Precedent_XXX::Channel__NameAlreadyExist => {}
-                    Channel_Create_Precedent_XXX::Channel__LinkedNameAlreadyExist => {}
-                    Channel_Create_Precedent_XXX::ParallelExecution => {}
+                match Channel_Create_Precedent::UserAccessToken__AlreadyExpired {
+                    Channel_Create_Precedent::UserAccessToken__AlreadyExpired => {}
+                    Channel_Create_Precedent::Channel__NameAlreadyExist => {}
+                    Channel_Create_Precedent::Channel__LinkedNameAlreadyExist => {}
+                    Channel_Create_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<Channel_Create_Precedent_XXX> = vec![
-                    Channel_Create_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    Channel_Create_Precedent_XXX::Channel__NameAlreadyExist,
-                    Channel_Create_Precedent_XXX::Channel__LinkedNameAlreadyExist,
-                    Channel_Create_Precedent_XXX::ParallelExecution,
+                let precedents: Vec<Channel_Create_Precedent> = vec![
+                    Channel_Create_Precedent::UserAccessToken__AlreadyExpired,
+                    Channel_Create_Precedent::Channel__NameAlreadyExist,
+                    Channel_Create_Precedent::Channel__LinkedNameAlreadyExist,
+                    Channel_Create_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__create(precedent)?;
@@ -6422,7 +6422,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, Channel_Delete_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Void, Channel_Delete_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel__delete__deserialize_allocate,
@@ -6432,8 +6432,8 @@ mod test {
             pub fn target_filled__channel__delete() -> Result<(), Box<dyn StdError + 'static>> {
                 return Result::Ok(());
             }
-            fn _precedent__channel__delete(precedent: Channel_Delete_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, Channel_Delete_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel__delete(precedent: Channel_Delete_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, Channel_Delete_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel__delete__deserialize_allocate,
@@ -6441,17 +6441,17 @@ mod test {
                 );
             }
             pub fn precedent__channel__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                match Channel_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    Channel_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    Channel_Delete_Precedent_XXX::ChannelToken__AlreadyExpired => {}
-                    Channel_Delete_Precedent_XXX::User__IsNotChannelOwner => {}
-                    Channel_Delete_Precedent_XXX::Channel__NotFound => {}
+                match Channel_Delete_Precedent::UserAccessToken__AlreadyExpired {
+                    Channel_Delete_Precedent::UserAccessToken__AlreadyExpired => {}
+                    Channel_Delete_Precedent::ChannelToken__AlreadyExpired => {}
+                    Channel_Delete_Precedent::User__IsNotChannelOwner => {}
+                    Channel_Delete_Precedent::Channel__NotFound => {}
                 }
-                let precedents: Vec<Channel_Delete_Precedent_XXX> = vec![
-                    Channel_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    Channel_Delete_Precedent_XXX::ChannelToken__AlreadyExpired,
-                    Channel_Delete_Precedent_XXX::User__IsNotChannelOwner,
-                    Channel_Delete_Precedent_XXX::Channel__NotFound,
+                let precedents: Vec<Channel_Delete_Precedent> = vec![
+                    Channel_Delete_Precedent::UserAccessToken__AlreadyExpired,
+                    Channel_Delete_Precedent::ChannelToken__AlreadyExpired,
+                    Channel_Delete_Precedent::User__IsNotChannelOwner,
+                    Channel_Delete_Precedent::Channel__NotFound,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__delete(precedent)?;
@@ -6459,7 +6459,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<ChannelSubscription_Create_Outcoming_XXX, ChannelSubscription_Create_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<ChannelSubscription_Create_Outcoming, ChannelSubscription_Create_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel_subscription__create__deserialize_allocate,
@@ -6467,8 +6467,8 @@ mod test {
                 );
             }
             pub fn target_filled__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = ChannelSubscription_Create_Outcoming_XXX {
-                    channel_token_signed: ChannelTokenSigned_XXX {
+                let outcoming = ChannelSubscription_Create_Outcoming {
+                    channel_token_signed: ChannelTokenSigned {
                         channel__id: 0,
                         channel_token__obfuscation_value: 0,
                         channel_token__expires_at: 0,
@@ -6477,15 +6477,15 @@ mod test {
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                 };
-                let unified_report = UnifiedReport::<ChannelSubscription_Create_Outcoming_XXX, ChannelSubscription_Create_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<ChannelSubscription_Create_Outcoming, ChannelSubscription_Create_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     channel_subscription__create__deserialize_allocate,
                     channel_subscription__create__deserialize_deallocate,
                 );
             }
-            fn _precedent__channel_subscription__create(precedent: ChannelSubscription_Create_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<ChannelSubscription_Create_Outcoming_XXX, ChannelSubscription_Create_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel_subscription__create(precedent: ChannelSubscription_Create_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<ChannelSubscription_Create_Outcoming, ChannelSubscription_Create_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel_subscription__create__deserialize_allocate,
@@ -6493,19 +6493,19 @@ mod test {
                 );
             }
             pub fn precedent__channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelSubscription_Create_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    ChannelSubscription_Create_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    ChannelSubscription_Create_Precedent_XXX::ChannelToken__AlreadyExpired => {}
-                    ChannelSubscription_Create_Precedent_XXX::Channel__NotFound => {}
-                    ChannelSubscription_Create_Precedent_XXX::Channel__UserIsOwner => {}
-                    ChannelSubscription_Create_Precedent_XXX::ChannelSubscription__AlreadyExist => {}
+                match ChannelSubscription_Create_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelSubscription_Create_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelSubscription_Create_Precedent::ChannelToken__AlreadyExpired => {}
+                    ChannelSubscription_Create_Precedent::Channel__NotFound => {}
+                    ChannelSubscription_Create_Precedent::Channel__UserIsOwner => {}
+                    ChannelSubscription_Create_Precedent::ChannelSubscription__AlreadyExist => {}
                 }
-                let precedents: Vec<ChannelSubscription_Create_Precedent_XXX> = vec![
-                    ChannelSubscription_Create_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    ChannelSubscription_Create_Precedent_XXX::ChannelToken__AlreadyExpired,
-                    ChannelSubscription_Create_Precedent_XXX::Channel__NotFound,
-                    ChannelSubscription_Create_Precedent_XXX::Channel__UserIsOwner,
-                    ChannelSubscription_Create_Precedent_XXX::ChannelSubscription__AlreadyExist,
+                let precedents: Vec<ChannelSubscription_Create_Precedent> = vec![
+                    ChannelSubscription_Create_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelSubscription_Create_Precedent::ChannelToken__AlreadyExpired,
+                    ChannelSubscription_Create_Precedent::Channel__NotFound,
+                    ChannelSubscription_Create_Precedent::Channel__UserIsOwner,
+                    ChannelSubscription_Create_Precedent::ChannelSubscription__AlreadyExist,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_subscription__create(precedent)?;
@@ -6513,7 +6513,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel_subscription__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<ChannelSubscription_Delete_Outcoming_XXX, ChannelSubscription_Delete_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<ChannelSubscription_Delete_Outcoming, ChannelSubscription_Delete_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel_subscription__delete__deserialize_allocate,
@@ -6521,8 +6521,8 @@ mod test {
                 );
             }
             pub fn target_filled__channel_subscription__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = ChannelSubscription_Delete_Outcoming_XXX {
-                    channel_token_signed: ChannelTokenSigned_XXX {
+                let outcoming = ChannelSubscription_Delete_Outcoming {
+                    channel_token_signed: ChannelTokenSigned {
                         channel__id: 0,
                         channel_token__obfuscation_value: 0,
                         channel_token__expires_at: 0,
@@ -6531,15 +6531,15 @@ mod test {
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                 };
-                let unified_report = UnifiedReport::<ChannelSubscription_Delete_Outcoming_XXX, ChannelSubscription_Create_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<ChannelSubscription_Delete_Outcoming, ChannelSubscription_Create_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     channel_subscription__delete__deserialize_allocate,
                     channel_subscription__delete__deserialize_deallocate,
                 );
             }
-            fn _precedent__channel_subscription__delete(precedent: ChannelSubscription_Delete_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<ChannelSubscription_Delete_Outcoming_XXX, ChannelSubscription_Delete_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel_subscription__delete(precedent: ChannelSubscription_Delete_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<ChannelSubscription_Delete_Outcoming, ChannelSubscription_Delete_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel_subscription__delete__deserialize_allocate,
@@ -6547,19 +6547,19 @@ mod test {
                 );
             }
             pub fn precedent__channel_subscription__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelSubscription_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    ChannelSubscription_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    ChannelSubscription_Delete_Precedent_XXX::ChannelToken__AlreadyExpired => {}
-                    ChannelSubscription_Delete_Precedent_XXX::Channel__UserIsOwner => {}
-                    ChannelSubscription_Delete_Precedent_XXX::ChannelSubscription__NotFound => {}
-                    ChannelSubscription_Delete_Precedent_XXX::Channel__NotFound => {}
+                match ChannelSubscription_Delete_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelSubscription_Delete_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelSubscription_Delete_Precedent::ChannelToken__AlreadyExpired => {}
+                    ChannelSubscription_Delete_Precedent::Channel__UserIsOwner => {}
+                    ChannelSubscription_Delete_Precedent::ChannelSubscription__NotFound => {}
+                    ChannelSubscription_Delete_Precedent::Channel__NotFound => {}
                 }
-                let precedents: Vec<ChannelSubscription_Delete_Precedent_XXX> = vec![
-                    ChannelSubscription_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    ChannelSubscription_Delete_Precedent_XXX::ChannelToken__AlreadyExpired,
-                    ChannelSubscription_Delete_Precedent_XXX::Channel__UserIsOwner,
-                    ChannelSubscription_Delete_Precedent_XXX::ChannelSubscription__NotFound,
-                    ChannelSubscription_Delete_Precedent_XXX::Channel__NotFound,
+                let precedents: Vec<ChannelSubscription_Delete_Precedent> = vec![
+                    ChannelSubscription_Delete_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelSubscription_Delete_Precedent::ChannelToken__AlreadyExpired,
+                    ChannelSubscription_Delete_Precedent::Channel__UserIsOwner,
+                    ChannelSubscription_Delete_Precedent::ChannelSubscription__NotFound,
+                    ChannelSubscription_Delete_Precedent::Channel__NotFound,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_subscription__delete(precedent)?;
@@ -6567,7 +6567,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel_publication1__get_many() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<ChannelPublication1_GetMany_Outcoming_XXX, ChannelPublication1_GetMany_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<ChannelPublication1_GetMany_Outcoming, ChannelPublication1_GetMany_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel_publication1__get_many__deserialize_allocate,
@@ -6575,9 +6575,9 @@ mod test {
                 );
             }
             pub fn target_filled__channel_publication1__get_many() -> Result<(), Box<dyn StdError + 'static>> {
-                let mut data_registry: Vec<ChannelPublication1_GetMany_Data_XXX> = vec![];
+                let mut data_registry: Vec<ChannelPublication1_GetMany_Data> = vec![];
                 '_a: for _ in 1..=5 {
-                    let data = ChannelPublication1_GetMany_Data_XXX {
+                    let data = ChannelPublication1_GetMany_Data {
                         channel_publication1__text: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         channel_publication1__images_pathes: vec![
                             NOT_EMPTY_STRING_LITERAL.to_string(),
@@ -6589,7 +6589,7 @@ mod test {
                         channel_publication1__view_quantity: 0,
                         channel_publication1__created_at: 0,
                         channel_publication1_mark__created_at: Option::Some(0),
-                        channel_publication1_token_signed: ChannelPublication1TokenSigned_XXX {
+                        channel_publication1_token_signed: ChannelPublication1TokenSigned {
                             channel__id: 0,
                             channel_publication1__id: 0,
                             channel_publication1_token__obfuscation_value: 0,
@@ -6599,18 +6599,18 @@ mod test {
                     };
                     data_registry.push(data);
                 }
-                let outcoming = ChannelPublication1_GetMany_Outcoming_XXX {
+                let outcoming = ChannelPublication1_GetMany_Outcoming {
                     data_registry,
                 };
-                let unified_report = UnifiedReport::<ChannelPublication1_GetMany_Outcoming_XXX, ChannelPublication1_GetMany_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<ChannelPublication1_GetMany_Outcoming, ChannelPublication1_GetMany_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     channel_publication1__get_many__deserialize_allocate,
                     channel_publication1__get_many__deserialize_deallocate,
                 );
             }
-            fn _precedent__channel_publication1__get_many(precedent: ChannelPublication1_GetMany_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<ChannelPublication1_GetMany_Outcoming_XXX, ChannelPublication1_GetMany_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel_publication1__get_many(precedent: ChannelPublication1_GetMany_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<ChannelPublication1_GetMany_Outcoming, ChannelPublication1_GetMany_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel_publication1__get_many__deserialize_allocate,
@@ -6618,19 +6618,19 @@ mod test {
                 );
             }
             pub fn precedent__channel_publication1__get_many() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1_GetMany_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    ChannelPublication1_GetMany_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    ChannelPublication1_GetMany_Precedent_XXX::ChannelToken__AlreadyExpired => {}
-                    ChannelPublication1_GetMany_Precedent_XXX::ChannelToken__InvalidChannelOwnerDefinition => {}
-                    ChannelPublication1_GetMany_Precedent_XXX::Channel__NotFound => {}
-                    ChannelPublication1_GetMany_Precedent_XXX::Channel__IsClose => {}
+                match ChannelPublication1_GetMany_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1_GetMany_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1_GetMany_Precedent::ChannelToken__AlreadyExpired => {}
+                    ChannelPublication1_GetMany_Precedent::ChannelToken__InvalidChannelOwnerDefinition => {}
+                    ChannelPublication1_GetMany_Precedent::Channel__NotFound => {}
+                    ChannelPublication1_GetMany_Precedent::Channel__IsClose => {}
                 }
-                let precedents: Vec<ChannelPublication1_GetMany_Precedent_XXX> = vec![
-                    ChannelPublication1_GetMany_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    ChannelPublication1_GetMany_Precedent_XXX::ChannelToken__AlreadyExpired,
-                    ChannelPublication1_GetMany_Precedent_XXX::ChannelToken__InvalidChannelOwnerDefinition,
-                    ChannelPublication1_GetMany_Precedent_XXX::Channel__NotFound,
-                    ChannelPublication1_GetMany_Precedent_XXX::Channel__IsClose,
+                let precedents: Vec<ChannelPublication1_GetMany_Precedent> = vec![
+                    ChannelPublication1_GetMany_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1_GetMany_Precedent::ChannelToken__AlreadyExpired,
+                    ChannelPublication1_GetMany_Precedent::ChannelToken__InvalidChannelOwnerDefinition,
+                    ChannelPublication1_GetMany_Precedent::Channel__NotFound,
+                    ChannelPublication1_GetMany_Precedent::Channel__IsClose,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__get_many(precedent)?;
@@ -6638,7 +6638,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel_publication1__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<ChannelPublication1_Create_Outcoming_XXX, ChannelPublication1_Create_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<ChannelPublication1_Create_Outcoming, ChannelPublication1_Create_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel_publication1__create__deserialize_allocate,
@@ -6646,9 +6646,9 @@ mod test {
                 );
             }
             pub fn target_filled__channel_publication1__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = ChannelPublication1_Create_Outcoming_XXX {
+                let outcoming = ChannelPublication1_Create_Outcoming {
                     channel_publication1__created_at: 0,
-                    channel_publication1_token_signed: ChannelPublication1TokenSigned_XXX {
+                    channel_publication1_token_signed: ChannelPublication1TokenSigned {
                         channel__id: 0,
                         channel_publication1__id: 0,
                         channel_publication1_token__obfuscation_value: 0,
@@ -6656,15 +6656,15 @@ mod test {
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                 };
-                let unified_report = UnifiedReport::<ChannelPublication1_Create_Outcoming_XXX, ChannelPublication1_Create_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<ChannelPublication1_Create_Outcoming, ChannelPublication1_Create_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     channel_publication1__create__deserialize_allocate,
                     channel_publication1__create__deserialize_deallocate,
                 );
             }
-            fn _precedent__channel_publication1__create(precedent: ChannelPublication1_Create_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<ChannelPublication1_Create_Outcoming_XXX, ChannelPublication1_Create_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel_publication1__create(precedent: ChannelPublication1_Create_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<ChannelPublication1_Create_Outcoming, ChannelPublication1_Create_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel_publication1__create__deserialize_allocate,
@@ -6672,17 +6672,17 @@ mod test {
                 );
             }
             pub fn precedent__channel_publication1__create() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1_Create_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    ChannelPublication1_Create_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    ChannelPublication1_Create_Precedent_XXX::ChannelToken__AlreadyExpired => {}
-                    ChannelPublication1_Create_Precedent_XXX::User__IsNotChannelOwner => {}
-                    ChannelPublication1_Create_Precedent_XXX::ParallelExecution => {}
+                match ChannelPublication1_Create_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1_Create_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1_Create_Precedent::ChannelToken__AlreadyExpired => {}
+                    ChannelPublication1_Create_Precedent::User__IsNotChannelOwner => {}
+                    ChannelPublication1_Create_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<ChannelPublication1_Create_Precedent_XXX> = vec![
-                    ChannelPublication1_Create_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    ChannelPublication1_Create_Precedent_XXX::ChannelToken__AlreadyExpired,
-                    ChannelPublication1_Create_Precedent_XXX::User__IsNotChannelOwner,
-                    ChannelPublication1_Create_Precedent_XXX::ParallelExecution,
+                let precedents: Vec<ChannelPublication1_Create_Precedent> = vec![
+                    ChannelPublication1_Create_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1_Create_Precedent::ChannelToken__AlreadyExpired,
+                    ChannelPublication1_Create_Precedent::User__IsNotChannelOwner,
+                    ChannelPublication1_Create_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__create(precedent)?;
@@ -6690,7 +6690,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel_publication1__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1_Delete_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Void, ChannelPublication1_Delete_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel_publication1__delete__deserialize_allocate,
@@ -6700,8 +6700,8 @@ mod test {
             pub fn target_filled__channel_publication1__delete() -> Result<(), Box<dyn StdError + 'static>> {
                 return Result::Ok(());
             }
-            fn _precedent__channel_publication1__delete(precedent: ChannelPublication1_Delete_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1_Delete_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel_publication1__delete(precedent: ChannelPublication1_Delete_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1_Delete_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel_publication1__delete__deserialize_allocate,
@@ -6709,19 +6709,19 @@ mod test {
                 );
             }
             pub fn precedent__channel_publication1__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    ChannelPublication1_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    ChannelPublication1_Delete_Precedent_XXX::ChannelToken__AlreadyExpired => {}
-                    ChannelPublication1_Delete_Precedent_XXX::ChannelPublication1Token__AlreadyExpired => {}
-                    ChannelPublication1_Delete_Precedent_XXX::User__IsNotChannelOwner => {}
-                    ChannelPublication1_Delete_Precedent_XXX::ChannelPublication1__NotFound => {}
+                match ChannelPublication1_Delete_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1_Delete_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1_Delete_Precedent::ChannelToken__AlreadyExpired => {}
+                    ChannelPublication1_Delete_Precedent::ChannelPublication1Token__AlreadyExpired => {}
+                    ChannelPublication1_Delete_Precedent::User__IsNotChannelOwner => {}
+                    ChannelPublication1_Delete_Precedent::ChannelPublication1__NotFound => {}
                 }
-                let precedents: Vec<ChannelPublication1_Delete_Precedent_XXX> = vec![
-                    ChannelPublication1_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    ChannelPublication1_Delete_Precedent_XXX::ChannelToken__AlreadyExpired,
-                    ChannelPublication1_Delete_Precedent_XXX::ChannelPublication1Token__AlreadyExpired,
-                    ChannelPublication1_Delete_Precedent_XXX::User__IsNotChannelOwner,
-                    ChannelPublication1_Delete_Precedent_XXX::ChannelPublication1__NotFound,
+                let precedents: Vec<ChannelPublication1_Delete_Precedent> = vec![
+                    ChannelPublication1_Delete_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1_Delete_Precedent::ChannelToken__AlreadyExpired,
+                    ChannelPublication1_Delete_Precedent::ChannelPublication1Token__AlreadyExpired,
+                    ChannelPublication1_Delete_Precedent::User__IsNotChannelOwner,
+                    ChannelPublication1_Delete_Precedent::ChannelPublication1__NotFound,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__delete(precedent)?;
@@ -6729,7 +6729,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Create_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Create_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel_publication1_mark__create__deserialize_allocate,
@@ -6739,8 +6739,8 @@ mod test {
             pub fn target_filled__channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
                 return Result::Ok(());
             }
-            fn _precedent__channel_publication1_mark__create(precedent: ChannelPublication1Mark_Create_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Create_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel_publication1_mark__create(precedent: ChannelPublication1Mark_Create_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Create_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel_publication1_mark__create__deserialize_allocate,
@@ -6748,17 +6748,17 @@ mod test {
                 );
             }
             pub fn precedent__channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1Mark_Create_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    ChannelPublication1Mark_Create_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    ChannelPublication1Mark_Create_Precedent_XXX::ChannelPublication1Token__AlreadyExpired => {}
-                    ChannelPublication1Mark_Create_Precedent_XXX::ChannelPublication1Mark__AlreadyExist => {}
-                    ChannelPublication1Mark_Create_Precedent_XXX::ChannelPublication1__NotFound => {}
+                match ChannelPublication1Mark_Create_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1Mark_Create_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1Token__AlreadyExpired => {}
+                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1Mark__AlreadyExist => {}
+                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1__NotFound => {}
                 }
-                let precedents: Vec<ChannelPublication1Mark_Create_Precedent_XXX> = vec![
-                    ChannelPublication1Mark_Create_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    ChannelPublication1Mark_Create_Precedent_XXX::ChannelPublication1Token__AlreadyExpired,
-                    ChannelPublication1Mark_Create_Precedent_XXX::ChannelPublication1Mark__AlreadyExist,
-                    ChannelPublication1Mark_Create_Precedent_XXX::ChannelPublication1__NotFound,
+                let precedents: Vec<ChannelPublication1Mark_Create_Precedent> = vec![
+                    ChannelPublication1Mark_Create_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1Token__AlreadyExpired,
+                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1Mark__AlreadyExist,
+                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1__NotFound,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1_mark__create(precedent)?;
@@ -6766,7 +6766,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel_publication1_mark__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Delete_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Delete_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel_publication1_mark__delete__deserialize_allocate,
@@ -6776,8 +6776,8 @@ mod test {
             pub fn target_filled__channel_publication1_mark__delete() -> Result<(), Box<dyn StdError + 'static>> {
                 return Result::Ok(());
             }
-            fn _precedent__channel_publication1_mark__delete(precedent: ChannelPublication1Mark_Delete_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Delete_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel_publication1_mark__delete(precedent: ChannelPublication1Mark_Delete_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Delete_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel_publication1_mark__delete__deserialize_allocate,
@@ -6785,17 +6785,17 @@ mod test {
                 );
             }
             pub fn precedent__channel_publication1_mark__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1Mark_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    ChannelPublication1Mark_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    ChannelPublication1Mark_Delete_Precedent_XXX::ChannelPublication1Token__AlreadyExpired => {}
-                    ChannelPublication1Mark_Delete_Precedent_XXX::ChannelPublication1Mark__NotFound => {}
-                    ChannelPublication1Mark_Delete_Precedent_XXX::ChannelPublication1__NotFound => {}
+                match ChannelPublication1Mark_Delete_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1Mark_Delete_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1Token__AlreadyExpired => {}
+                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1Mark__NotFound => {}
+                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1__NotFound => {}
                 }
-                let precedents: Vec<ChannelPublication1Mark_Delete_Precedent_XXX> = vec![
-                    ChannelPublication1Mark_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    ChannelPublication1Mark_Delete_Precedent_XXX::ChannelPublication1Token__AlreadyExpired,
-                    ChannelPublication1Mark_Delete_Precedent_XXX::ChannelPublication1Mark__NotFound,
-                    ChannelPublication1Mark_Delete_Precedent_XXX::ChannelPublication1__NotFound,
+                let precedents: Vec<ChannelPublication1Mark_Delete_Precedent> = vec![
+                    ChannelPublication1Mark_Delete_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1Token__AlreadyExpired,
+                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1Mark__NotFound,
+                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1__NotFound,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1_mark__delete(precedent)?;
@@ -6803,7 +6803,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel_publication1_view__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1View_Create_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Void, ChannelPublication1View_Create_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel_publication1_view__create__deserialize_allocate,
@@ -6813,8 +6813,8 @@ mod test {
             pub fn target_filled__channel_publication1_view__create() -> Result<(), Box<dyn StdError + 'static>> {
                 return Result::Ok(());
             }
-            fn _precedent__channel_publication1_view__create(precedent: ChannelPublication1View_Create_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1View_Create_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel_publication1_view__create(precedent: ChannelPublication1View_Create_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1View_Create_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel_publication1_view__create__deserialize_allocate,
@@ -6822,13 +6822,13 @@ mod test {
                 );
             }
             pub fn precedent__channel_publication1_view__create() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1View_Create_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    ChannelPublication1View_Create_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    ChannelPublication1View_Create_Precedent_XXX::ChannelPublication1Token__AlreadyExpired => {}
+                match ChannelPublication1View_Create_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1View_Create_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1View_Create_Precedent::ChannelPublication1Token__AlreadyExpired => {}
                 }
-                let precedents: Vec<ChannelPublication1View_Create_Precedent_XXX> = vec![
-                    ChannelPublication1View_Create_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    ChannelPublication1View_Create_Precedent_XXX::ChannelPublication1Token__AlreadyExpired,
+                let precedents: Vec<ChannelPublication1View_Create_Precedent> = vec![
+                    ChannelPublication1View_Create_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1View_Create_Precedent::ChannelPublication1Token__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1_view__create(precedent)?;
@@ -6836,7 +6836,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel_publication1_commentary__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<ChannelPublication1Commentary_Create_Outcoming_XXX, ChannelPublication1Commentary_Create_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<ChannelPublication1Commentary_Create_Outcoming, ChannelPublication1Commentary_Create_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel_publication1_commentary__create__deserialize_allocate,
@@ -6844,19 +6844,19 @@ mod test {
                 );
             }
             pub fn target_filled__channel_publication1_commentary__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let outcoming = ChannelPublication1Commentary_Create_Outcoming_XXX {
+                let outcoming = ChannelPublication1Commentary_Create_Outcoming {
                     channel_publication1_commentary__id: 0,
                     channel_publication1_commentary__created_at: 0,
                 };
-                let unified_report = UnifiedReport::<ChannelPublication1Commentary_Create_Outcoming_XXX, ChannelPublication1Commentary_Create_Precedent_XXX>::target_filled(outcoming);
+                let unified_report = UnifiedReport::<ChannelPublication1Commentary_Create_Outcoming, ChannelPublication1Commentary_Create_Precedent>::target_filled(outcoming);
                 return run_by_template(
                     &unified_report,
                     channel_publication1_commentary__create__deserialize_allocate,
                     channel_publication1_commentary__create__deserialize_deallocate,
                 );
             }
-            fn _precedent__channel_publication1_commentary__create(precedent: ChannelPublication1Commentary_Create_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<ChannelPublication1Commentary_Create_Outcoming_XXX, ChannelPublication1Commentary_Create_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel_publication1_commentary__create(precedent: ChannelPublication1Commentary_Create_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<ChannelPublication1Commentary_Create_Outcoming, ChannelPublication1Commentary_Create_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel_publication1_commentary__create__deserialize_allocate,
@@ -6864,15 +6864,15 @@ mod test {
                 );
             }
             pub fn precedent__channel_publication1_commentary__create() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1Commentary_Create_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    ChannelPublication1Commentary_Create_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    ChannelPublication1Commentary_Create_Precedent_XXX::ChannelPublication1Token__AlreadyExpired => {}
-                    ChannelPublication1Commentary_Create_Precedent_XXX::ParallelExecution => {}
+                match ChannelPublication1Commentary_Create_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1Commentary_Create_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1Commentary_Create_Precedent::ChannelPublication1Token__AlreadyExpired => {}
+                    ChannelPublication1Commentary_Create_Precedent::ParallelExecution => {}
                 }
-                let precedents: Vec<ChannelPublication1Commentary_Create_Precedent_XXX> = vec![
-                    ChannelPublication1Commentary_Create_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    ChannelPublication1Commentary_Create_Precedent_XXX::ChannelPublication1Token__AlreadyExpired,
-                    ChannelPublication1Commentary_Create_Precedent_XXX::ParallelExecution,
+                let precedents: Vec<ChannelPublication1Commentary_Create_Precedent> = vec![
+                    ChannelPublication1Commentary_Create_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1Commentary_Create_Precedent::ChannelPublication1Token__AlreadyExpired,
+                    ChannelPublication1Commentary_Create_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1_commentary__create(precedent)?;
@@ -6880,7 +6880,7 @@ mod test {
                 return Result::Ok(());
             }
             pub fn target_empty__channel_publication1_commentary__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1Commentary_Delete_Precedent_XXX>::target_empty();
+                let unified_report = UnifiedReport::<Void, ChannelPublication1Commentary_Delete_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
                     channel_publication1_commentary__delete__deserialize_allocate,
@@ -6890,8 +6890,8 @@ mod test {
             pub fn target_filled__channel_publication1_commentary__delete() -> Result<(), Box<dyn StdError + 'static>> {
                 return Result::Ok(());
             }
-            fn _precedent__channel_publication1_commentary__delete(precedent: ChannelPublication1Commentary_Delete_Precedent_XXX) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1Commentary_Delete_Precedent_XXX>::precedent(precedent);
+            fn _precedent__channel_publication1_commentary__delete(precedent: ChannelPublication1Commentary_Delete_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1Commentary_Delete_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
                     channel_publication1_commentary__delete__deserialize_allocate,
@@ -6899,15 +6899,15 @@ mod test {
                 );
             }
             pub fn precedent__channel_publication1_commentary__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1Commentary_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired {
-                    ChannelPublication1Commentary_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired => {}
-                    ChannelPublication1Commentary_Delete_Precedent_XXX::ChannelPublication1Token__AlreadyExpired => {}
-                    ChannelPublication1Commentary_Delete_Precedent_XXX::ChannelPublication1Commentary__NotFound => {}
+                match ChannelPublication1Commentary_Delete_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1Commentary_Delete_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Token__AlreadyExpired => {}
+                    ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Commentary__NotFound => {}
                 }
-                let precedents: Vec<ChannelPublication1Commentary_Delete_Precedent_XXX> = vec![
-                    ChannelPublication1Commentary_Delete_Precedent_XXX::UserAccessToken__AlreadyExpired,
-                    ChannelPublication1Commentary_Delete_Precedent_XXX::ChannelPublication1Token__AlreadyExpired,
-                    ChannelPublication1Commentary_Delete_Precedent_XXX::ChannelPublication1Commentary__NotFound,
+                let precedents: Vec<ChannelPublication1Commentary_Delete_Precedent> = vec![
+                    ChannelPublication1Commentary_Delete_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Token__AlreadyExpired,
+                    ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Commentary__NotFound,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1_commentary__delete(precedent)?;
