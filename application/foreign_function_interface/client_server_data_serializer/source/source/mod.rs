@@ -572,22 +572,22 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserializ
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
                         let outcoming = UserAuthorization_AuthorizeByFirstStep_Outcoming {
-                            user__id: data_.user__id,
-                            verification_message_sent: data_.verification_message_sent,
-                            user_authorization_token__can_be_resent_from: data_.user_authorization_token__can_be_resent_from,
-                            user_authorization_token__wrong_enter_tries_quantity: data_.user_authorization_token__wrong_enter_tries_quantity,
-                            user_authorization_token__wrong_enter_tries_quantity_limit: data_.user_authorization_token__wrong_enter_tries_quantity_limit,
+                            user__id: data__.user__id,
+                            verification_message_sent: data__.verification_message_sent,
+                            user_authorization_token__can_be_resent_from: data__.user_authorization_token__can_be_resent_from,
+                            user_authorization_token__wrong_enter_tries_quantity: data__.user_authorization_token__wrong_enter_tries_quantity,
+                            user_authorization_token__wrong_enter_tries_quantity_limit: data__.user_authorization_token__wrong_enter_tries_quantity_limit,
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -680,28 +680,28 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
                         let outcoming = UserAuthorization_AuthorizeByLastStep_Outcoming {
                             user_access_token_signed: UserAccessTokenSigned {
-                                user__id: data_.user_access_token_signed.user__id,
-                                user_device__id: Allocator::<CString>::allocate(data_.user_access_token_signed.user_device__id),
-                                user_access_token__obfuscation_value: data_.user_access_token_signed.user_access_token__obfuscation_value,
-                                user_access_token__expires_at: data_.user_access_token_signed.user_access_token__expires_at,
-                                signature: Allocator::<CVector<_>>::allocate(data_.user_access_token_signed.signature),
+                                user__id: data__.user_access_token_signed.user__id,
+                                user_device__id: Allocator::<CString>::allocate(data__.user_access_token_signed.user_device__id),
+                                user_access_token__obfuscation_value: data__.user_access_token_signed.user_access_token__obfuscation_value,
+                                user_access_token__expires_at: data__.user_access_token_signed.user_access_token__expires_at,
+                                signature: Allocator::<CVector<_>>::allocate(data__.user_access_token_signed.signature),
                             },
                             user_access_refresh_token_signed: UserAccessRefreshTokenSigned {
-                                user_access_refresh_token__expires_at: data_.user_access_refresh_token_signed.user_access_refresh_token__expires_at,
-                                signature: Allocator::<CVector<_>>::allocate(data_.user_access_refresh_token_signed.signature),
+                                user_access_refresh_token__expires_at: data__.user_access_refresh_token_signed.user_access_refresh_token__expires_at,
+                                signature: Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_signed.signature),
                             },
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -799,16 +799,18 @@ pub extern "C-unwind" fn user_authorization__check_email_for_existing__deseriali
 ) -> UserAuthorization_CheckEmailForExisting_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming_, Void>| -> Result<UnifiedReport_<UserAuthorization_CheckEmailForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
         let UnifiedReport::Target { data } = unified_report;
-        let c_data = match data {
+        let data_ = match data {
             Data::Empty => Data_::empty(),
-            Data::Filled { data: data_ } => {
+            Data::Filled {
+                data: data__
+            } => {
                 let outcoming = UserAuthorization_CheckEmailForExisting_Outcoming {
-                    result: data_.result,
+                    result: data__.result,
                 };
                 Data_::filled(outcoming)
             }
         };
-        return Result::Ok(UnifiedReport_::target(c_data));
+        return Result::Ok(UnifiedReport_::target(data_));
     };
     return Transformer::transform_server_response_data(
         c_vector_of_bytes,
@@ -858,16 +860,18 @@ pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__deseri
 ) -> UserAuthorization_CheckNicknameForExisting_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void>| -> Result<UnifiedReport_<UserAuthorization_CheckNicknameForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
         let UnifiedReport::Target { data } = unified_report;
-        let c_data = match data {
+        let data_ = match data {
             Data::Empty => Data_::empty(),
-            Data::Filled { data: data_ } => {
+            Data::Filled {
+                data: data__
+            } => {
                 let outcoming = UserAuthorization_CheckNicknameForExisting_Outcoming {
-                    result: data_.result,
+                    result: data__.result,
                 };
                 Data_::filled(outcoming)
             }
         };
-        return Result::Ok(UnifiedReport_::target(c_data));
+        return Result::Ok(UnifiedReport_::target(data_));
     };
     return Transformer::transform_server_response_data(
         c_vector_of_bytes,
@@ -1075,28 +1079,28 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
                         let outcoming = UserAuthorization_RefreshAccessToken_Outcoming {
                             user_access_token_signed: UserAccessTokenSigned {
-                                user__id: data_.user_access_token_signed.user__id,
-                                user_device__id: Allocator::<CString>::allocate(data_.user_access_token_signed.user_device__id),
-                                user_access_token__obfuscation_value: data_.user_access_token_signed.user_access_token__obfuscation_value,
-                                user_access_token__expires_at: data_.user_access_token_signed.user_access_token__expires_at,
-                                signature: Allocator::<CVector<_>>::allocate(data_.user_access_token_signed.signature),
+                                user__id: data__.user_access_token_signed.user__id,
+                                user_device__id: Allocator::<CString>::allocate(data__.user_access_token_signed.user_device__id),
+                                user_access_token__obfuscation_value: data__.user_access_token_signed.user_access_token__obfuscation_value,
+                                user_access_token__expires_at: data__.user_access_token_signed.user_access_token__expires_at,
+                                signature: Allocator::<CVector<_>>::allocate(data__.user_access_token_signed.signature),
                             },
                             user_access_refresh_token_signed: UserAccessRefreshTokenSigned {
-                                user_access_refresh_token__expires_at: data_.user_access_refresh_token_signed.user_access_refresh_token__expires_at,
-                                signature: Allocator::<CVector<_>>::allocate(data_.user_access_refresh_token_signed.signature),
+                                user_access_refresh_token__expires_at: data__.user_access_refresh_token_signed.user_access_refresh_token__expires_at,
+                                signature: Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_signed.signature),
                             },
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -1191,21 +1195,21 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
                         let outcoming = UserAuthorization_RegisterByFirstStep_Outcoming {
-                            verification_message_sent: data_.verification_message_sent,
-                            user_registration_token__can_be_resent_from: data_.user_registration_token__can_be_resent_from,
-                            user_registration_token__wrong_enter_tries_quantity: data_.user_registration_token__wrong_enter_tries_quantity,
-                            user_registration_token__wrong_enter_tries_quantity_limit: data_.user_registration_token__wrong_enter_tries_quantity_limit,
+                            verification_message_sent: data__.verification_message_sent,
+                            user_registration_token__can_be_resent_from: data__.user_registration_token__can_be_resent_from,
+                            user_registration_token__wrong_enter_tries_quantity: data__.user_registration_token__wrong_enter_tries_quantity,
+                            user_registration_token__wrong_enter_tries_quantity_limit: data__.user_registration_token__wrong_enter_tries_quantity_limit,
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -1390,28 +1394,28 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
                         let outcoming = UserAuthorization_RegisterByLastStep_Outcoming {
                             user_access_token_signed: UserAccessTokenSigned {
-                                user__id: data_.user_access_token_signed.user__id,
-                                user_device__id: Allocator::<CString>::allocate(data_.user_access_token_signed.user_device__id),
-                                user_access_token__obfuscation_value: data_.user_access_token_signed.user_access_token__obfuscation_value,
-                                user_access_token__expires_at: data_.user_access_token_signed.user_access_token__expires_at,
-                                signature: Allocator::<CVector<_>>::allocate(data_.user_access_token_signed.signature),
+                                user__id: data__.user_access_token_signed.user__id,
+                                user_device__id: Allocator::<CString>::allocate(data__.user_access_token_signed.user_device__id),
+                                user_access_token__obfuscation_value: data__.user_access_token_signed.user_access_token__obfuscation_value,
+                                user_access_token__expires_at: data__.user_access_token_signed.user_access_token__expires_at,
+                                signature: Allocator::<CVector<_>>::allocate(data__.user_access_token_signed.signature),
                             },
                             user_access_refresh_token_signed: UserAccessRefreshTokenSigned {
-                                user_access_refresh_token__expires_at: data_.user_access_refresh_token_signed.user_access_refresh_token__expires_at,
-                                signature: Allocator::<CVector<_>>::allocate(data_.user_access_refresh_token_signed.signature),
+                                user_access_refresh_token__expires_at: data__.user_access_refresh_token_signed.user_access_refresh_token__expires_at,
+                                signature: Allocator::<CVector<_>>::allocate(data__.user_access_refresh_token_signed.signature),
                             },
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -1537,22 +1541,22 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deser
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
                         let outcoming = UserAuthorization_ResetPasswordByFirstStep_Outcoming {
-                            user__id: data_.user__id,
-                            verification_message_sent: data_.verification_message_sent,
-                            user_reset_password_token__can_be_resent_from: data_.user_reset_password_token__can_be_resent_from,
-                            user_reset_password_token__wrong_enter_tries_quantity: data_.user_reset_password_token__wrong_enter_tries_quantity,
-                            user_reset_password_token__wrong_enter_tries_quantity_limit: data_.user_reset_password_token__wrong_enter_tries_quantity_limit,
+                            user__id: data__.user__id,
+                            verification_message_sent: data__.verification_message_sent,
+                            user_reset_password_token__can_be_resent_from: data__.user_reset_password_token__can_be_resent_from,
+                            user_reset_password_token__wrong_enter_tries_quantity: data__.user_reset_password_token__wrong_enter_tries_quantity,
+                            user_reset_password_token__wrong_enter_tries_quantity_limit: data__.user_reset_password_token__wrong_enter_tries_quantity_limit,
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -1824,18 +1828,18 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__deserializ
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
                         let outcoming = UserAuthorization_SendEmailForRegister_Outcoming {
-                            user_registration_token__can_be_resent_from: data_.user_registration_token__can_be_resent_from,
+                            user_registration_token__can_be_resent_from: data__.user_registration_token__can_be_resent_from,
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -1941,18 +1945,18 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deseriali
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
                         let outcoming = UserAuthorization_SendEmailForAuthorize_Outcoming {
-                            user_authorization_token__can_be_resent_from: data_.user_authorization_token__can_be_resent_from,
+                            user_authorization_token__can_be_resent_from: data__.user_authorization_token__can_be_resent_from,
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -2061,18 +2065,18 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
                         let outcoming = UserAuthorization_SendEmailForResetPassword_Outcoming {
-                            user_resep_password_token_can_be_resent_from: data_.user_reset_password_token__can_be_resent_from,
+                            user_resep_password_token_can_be_resent_from: data__.user_reset_password_token__can_be_resent_from,
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -2202,36 +2206,36 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
-                        let mut data_registry: Vec<Channel_GetManyByNameInSubscriptions_Data> = Vec::with_capacity(data_.data_registry.len());
-                        '_a: for data__ in data_.data_registry {
-                            let channel__cover_image_path = match data__.channel__cover_image_path {
+                        let mut data_registry: Vec<Channel_GetManyByNameInSubscriptions_Data> = Vec::with_capacity(data__.data_registry.len());
+                        '_a: for data___ in data__.data_registry {
+                            let channel__cover_image_path = match data___.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
                                 Option::None => Option_::none(),
                             };
-                            let channel__background_image_path = match data__.channel__background_image_path {
+                            let channel__background_image_path = match data___.channel__background_image_path {
                                 Option::Some(channel__background_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__background_image_path_)),
                                 Option::None => Option_::none(),
                             };
                             data_registry.push(
                                 Channel_GetManyByNameInSubscriptions_Data {
-                                    channel__name: Allocator::<CString>::allocate(data__.channel__name),
-                                    channel__linked_name: Allocator::<CString>::allocate(data__.channel__linked_name),
-                                    channel__access_modifier: data__.channel__access_modifier,
-                                    channel__visability_modifier: data__.channel__visability_modifier,
+                                    channel__name: Allocator::<CString>::allocate(data___.channel__name),
+                                    channel__linked_name: Allocator::<CString>::allocate(data___.channel__linked_name),
+                                    channel__access_modifier: data___.channel__access_modifier,
+                                    channel__visability_modifier: data___.channel__visability_modifier,
                                     channel__cover_image_path,
                                     channel__background_image_path,
                                     channel_token_signed: ChannelTokenSigned {
-                                        channel__id: data__.channel_token_signed.channel__id,
-                                        channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
-                                        channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
-                                        channel_token__is_user_the_channel_subscriber: data__.channel_token_signed.channel_token__is_user_the_channel_subscriber,
-                                        channel_token__is_user_the_channel_owner: data__.channel_token_signed.channel_token__is_user_the_channel_owner,
-                                        signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
+                                        channel__id: data___.channel_token_signed.channel__id,
+                                        channel_token__obfuscation_value: data___.channel_token_signed.channel_token__obfuscation_value,
+                                        channel_token__expires_at: data___.channel_token_signed.channel_token__expires_at,
+                                        channel_token__is_user_the_channel_subscriber: data___.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                                        channel_token__is_user_the_channel_owner: data___.channel_token_signed.channel_token__is_user_the_channel_owner,
+                                        signature: Allocator::<CVector<_>>::allocate(data___.channel_token_signed.signature),
                                     },
                                 },
                             );
@@ -2242,7 +2246,7 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -2355,36 +2359,36 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
-                        let mut data_registry: Vec<Channel_GetManyBySubscription_Data> = Vec::with_capacity(data_.data_registry.len());
-                        '_a: for data__ in data_.data_registry {
-                            let channel__cover_image_path = match data__.channel__cover_image_path {
+                        let mut data_registry: Vec<Channel_GetManyBySubscription_Data> = Vec::with_capacity(data__.data_registry.len());
+                        '_a: for data___ in data__.data_registry {
+                            let channel__cover_image_path = match data___.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
                                 Option::None => Option_::none(),
                             };
-                            let channel__background_image_path = match data__.channel__background_image_path {
+                            let channel__background_image_path = match data___.channel__background_image_path {
                                 Option::Some(channel__background_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__background_image_path_)),
                                 Option::None => Option_::none(),
                             };
                             data_registry.push(
                                 Channel_GetManyBySubscription_Data {
-                                    channel__name: Allocator::<CString>::allocate(data__.channel__name),
-                                    channel__linked_name: Allocator::<CString>::allocate(data__.channel__linked_name),
-                                    channel__access_modifier: data__.channel__access_modifier,
-                                    channel__visability_modifier: data__.channel__visability_modifier,
+                                    channel__name: Allocator::<CString>::allocate(data___.channel__name),
+                                    channel__linked_name: Allocator::<CString>::allocate(data___.channel__linked_name),
+                                    channel__access_modifier: data___.channel__access_modifier,
+                                    channel__visability_modifier: data___.channel__visability_modifier,
                                     channel__cover_image_path,
                                     channel__background_image_path,
                                     channel_token_signed: ChannelTokenSigned {
-                                        channel__id: data__.channel_token_signed.channel__id,
-                                        channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
-                                        channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
-                                        channel_token__is_user_the_channel_subscriber: data__.channel_token_signed.channel_token__is_user_the_channel_subscriber,
-                                        channel_token__is_user_the_channel_owner: data__.channel_token_signed.channel_token__is_user_the_channel_owner,
-                                        signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
+                                        channel__id: data___.channel_token_signed.channel__id,
+                                        channel_token__obfuscation_value: data___.channel_token_signed.channel_token__obfuscation_value,
+                                        channel_token__expires_at: data___.channel_token_signed.channel_token__expires_at,
+                                        channel_token__is_user_the_channel_subscriber: data___.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                                        channel_token__is_user_the_channel_owner: data___.channel_token_signed.channel_token__is_user_the_channel_owner,
+                                        signature: Allocator::<CVector<_>>::allocate(data___.channel_token_signed.signature),
                                     },
                                 }
                             );
@@ -2395,7 +2399,7 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -2507,35 +2511,35 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
-                        let mut data_registry: Vec<Channel_GetManyPublicByName_Data> = Vec::with_capacity(data_.data_registry.len());
-                        '_a: for data__ in data_.data_registry {
-                            let channel__cover_image_path = match data__.channel__cover_image_path {
+                        let mut data_registry: Vec<Channel_GetManyPublicByName_Data> = Vec::with_capacity(data__.data_registry.len());
+                        '_a: for data___ in data__.data_registry {
+                            let channel__cover_image_path = match data___.channel__cover_image_path {
                                 Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
                                 Option::None => Option_::none(),
                             };
-                            let channel__background_image_path = match data__.channel__background_image_path {
+                            let channel__background_image_path = match data___.channel__background_image_path {
                                 Option::Some(channel__background_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__background_image_path_)),
                                 Option::None => Option_::none(),
                             };
                             data_registry.push(
                                 Channel_GetManyPublicByName_Data {
-                                    channel__name: Allocator::<CString>::allocate(data__.channel__name),
-                                    channel__linked_name: Allocator::<CString>::allocate(data__.channel__linked_name),
-                                    channel__access_modifier: data__.channel__access_modifier,
+                                    channel__name: Allocator::<CString>::allocate(data___.channel__name),
+                                    channel__linked_name: Allocator::<CString>::allocate(data___.channel__linked_name),
+                                    channel__access_modifier: data___.channel__access_modifier,
                                     channel__cover_image_path,
                                     channel__background_image_path,
                                     channel_token_signed: ChannelTokenSigned {
-                                        channel__id: data__.channel_token_signed.channel__id,
-                                        channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
-                                        channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
-                                        channel_token__is_user_the_channel_subscriber: data__.channel_token_signed.channel_token__is_user_the_channel_subscriber,
-                                        channel_token__is_user_the_channel_owner: data__.channel_token_signed.channel_token__is_user_the_channel_owner,
-                                        signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
+                                        channel__id: data___.channel_token_signed.channel__id,
+                                        channel_token__obfuscation_value: data___.channel_token_signed.channel_token__obfuscation_value,
+                                        channel_token__expires_at: data___.channel_token_signed.channel_token__expires_at,
+                                        channel_token__is_user_the_channel_subscriber: data___.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                                        channel_token__is_user_the_channel_owner: data___.channel_token_signed.channel_token__is_user_the_channel_owner,
+                                        signature: Allocator::<CVector<_>>::allocate(data___.channel_token_signed.signature),
                                     },
                                 }
                             );
@@ -2546,7 +2550,7 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
@@ -2651,38 +2655,40 @@ pub struct Channel_GetOneById_Precedent {
 pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_GetOneById_Result {
     let converter = move |unified_report: UnifiedReport<Channel_GetOneById_Outcoming_, Channel_GetOneById_Precedent_>| -> Result<UnifiedReport_<Channel_GetOneById_Outcoming, Channel_GetOneById_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
-                let c_data = match data {
+            UnifiedReport::Target {
+                data
+            } => {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_
+                        data: data__
                     } => {
-                        let channel__description = match data_.channel__description {
+                        let channel__description = match data__.channel__description {
                             Option::Some(channel__description_) => Option_::data(Allocator::<CString>::allocate(channel__description_)),
                             Option::None => Option_::none()
                         };
-                        let channel__cover_image_path = match data_.channel__cover_image_path {
+                        let channel__cover_image_path = match data__.channel__cover_image_path {
                             Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
                             Option::None => Option_::none()
                         };
-                        let channel__background_image_path = match data_.channel__background_image_path {
+                        let channel__background_image_path = match data__.channel__background_image_path {
                             Option::Some(channel__background_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__background_image_path_)),
                             Option::None => Option_::none()
                         };
                         let outcoming = Channel_GetOneById_Outcoming {
-                            channel__name: Allocator::<CString>::allocate(data_.channel__name),
-                            channel__linked_name: Allocator::<CString>::allocate(data_.channel__linked_name),
+                            channel__name: Allocator::<CString>::allocate(data__.channel__name),
+                            channel__linked_name: Allocator::<CString>::allocate(data__.channel__linked_name),
                             channel__description,
-                            channel__access_modifier: data_.channel__access_modifier,
-                            channel__visability_modifier: data_.channel__visability_modifier,
+                            channel__access_modifier: data__.channel__access_modifier,
+                            channel__visability_modifier: data__.channel__visability_modifier,
                             channel__cover_image_path,
                             channel__background_image_path,
-                            channel__subscribers_quantity: data_.channel__subscribers_quantity,
+                            channel__subscribers_quantity: data__.channel__subscribers_quantity,
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -2782,18 +2788,18 @@ pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(
     let converter = move |unified_report: UnifiedReport<Channel_CheckNameForExisting_Outcoming_, Channel_CheckNameForExisting_Precedent_>| -> Result<UnifiedReport_<Channel_CheckNameForExisting_Outcoming, Channel_CheckNameForExisting_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_
+                        data: data__
                     } => {
                         let outcoming = Channel_CheckNameForExisting_Outcoming {
-                            result: data_.result,
+                            result: data__.result,
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -2864,18 +2870,18 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_al
     let converter = move |unified_report: UnifiedReport<Channel_CheckLinkedNameForExisting_Outcoming_, Channel_CheckLinkedNameForExisting_Precedent_>| -> Result<UnifiedReport_<Channel_CheckLinkedNameForExisting_Outcoming, Channel_CheckLinkedNameForExisting_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_
+                        data: data__
                     } => {
                         let outcoming = Channel_CheckLinkedNameForExisting_Outcoming {
-                            result: data_.result,
+                            result: data__.result,
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -2955,25 +2961,25 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
     let converter = move |unified_report: UnifiedReport<Channel_Create_Outcoming_, Channel_Create_Precedent_>| -> Result<UnifiedReport_<Channel_Create_Outcoming, Channel_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_
+                        data: data__
                     } => {
                         let outcoming = Channel_Create_Outcoming {
                             channel_token_signed: ChannelTokenSigned {
-                                channel__id: data_.channel_token_signed.channel__id,
-                                channel_token__obfuscation_value: data_.channel_token_signed.channel_token__obfuscation_value,
-                                channel_token__expires_at: data_.channel_token_signed.channel_token__expires_at,
-                                channel_token__is_user_the_channel_subscriber: data_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
-                                channel_token__is_user_the_channel_owner: data_.channel_token_signed.channel_token__is_user_the_channel_owner,
-                                signature: Allocator::<CVector<_>>::allocate(data_.channel_token_signed.signature),
+                                channel__id: data__.channel_token_signed.channel__id,
+                                channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
+                                channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
+                                channel_token__is_user_the_channel_subscriber: data__.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                                channel_token__is_user_the_channel_owner: data__.channel_token_signed.channel_token__is_user_the_channel_owner,
+                                signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
                             },
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -3156,25 +3162,25 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
     let converter = move |unified_report: UnifiedReport<ChannelSubscription_Create_Outcoming_, ChannelSubscription_Create_Precedent_>| -> Result<UnifiedReport_<ChannelSubscription_Create_Outcoming, ChannelSubscription_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_
+                        data: data__
                     } => {
                         let outcoming = ChannelSubscription_Create_Outcoming {
                             channel_token_signed: ChannelTokenSigned {
-                                channel__id: data_.channel_token_signed.channel__id,
-                                channel_token__obfuscation_value: data_.channel_token_signed.channel_token__obfuscation_value,
-                                channel_token__expires_at: data_.channel_token_signed.channel_token__expires_at,
-                                channel_token__is_user_the_channel_subscriber: data_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
-                                channel_token__is_user_the_channel_owner: data_.channel_token_signed.channel_token__is_user_the_channel_owner,
-                                signature: Allocator::<CVector<_>>::allocate(data_.channel_token_signed.signature),
+                                channel__id: data__.channel_token_signed.channel__id,
+                                channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
+                                channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
+                                channel_token__is_user_the_channel_subscriber: data__.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                                channel_token__is_user_the_channel_owner: data__.channel_token_signed.channel_token__is_user_the_channel_owner,
+                                signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
                             },
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -3277,25 +3283,25 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_ve
             UnifiedReport::Target {
                 data
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_
+                        data: data__
                     } => {
                         let outcoming = ChannelSubscription_Delete_Outcoming {
                             channel_token_signed: ChannelTokenSigned {
-                                channel__id: data_.channel_token_signed.channel__id,
-                                channel_token__obfuscation_value: data_.channel_token_signed.channel_token__obfuscation_value,
-                                channel_token__expires_at: data_.channel_token_signed.channel_token__expires_at,
-                                channel_token__is_user_the_channel_subscriber: data_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
-                                channel_token__is_user_the_channel_owner: data_.channel_token_signed.channel_token__is_user_the_channel_owner,
-                                signature: Allocator::<CVector<_>>::allocate(data_.channel_token_signed.signature),
+                                channel__id: data__.channel_token_signed.channel__id,
+                                channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
+                                channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
+                                channel_token__is_user_the_channel_subscriber: data__.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                                channel_token__is_user_the_channel_owner: data__.channel_token_signed.channel_token__is_user_the_channel_owner,
+                                signature: Allocator::<CVector<_>>::allocate(data__.channel_token_signed.signature),
                             },
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -3414,24 +3420,24 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
             UnifiedReport::Target {
                 data
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
-                        let mut data_registry: Vec<ChannelPublication1_GetMany_Data> = Vec::with_capacity(data_.data_registry.len());
-                        '_a: for data__ in data_.data_registry {
-                            let channel_publication1__text = match data__.channel_publication1__text {
+                        let mut data_registry: Vec<ChannelPublication1_GetMany_Data> = Vec::with_capacity(data__.data_registry.len());
+                        '_a: for data___ in data__.data_registry {
+                            let channel_publication1__text = match data___.channel_publication1__text {
                                 Option::Some(channel_publication1__text_) => Option_::data(Allocator::<CString>::allocate(channel_publication1__text_)),
                                 Option::None => Option_::none(),
                             };
-                            let mut channel_publication1__images_pathes: Vec<CString> = Vec::with_capacity(data__.channel_publication1__images_pathes.len());
-                            '_b: for channel_publication1__image_pathe in data__.channel_publication1__images_pathes {
+                            let mut channel_publication1__images_pathes: Vec<CString> = Vec::with_capacity(data___.channel_publication1__images_pathes.len());
+                            '_b: for channel_publication1__image_pathe in data___.channel_publication1__images_pathes {
                                 channel_publication1__images_pathes.push(
                                     Allocator::<CString>::allocate(channel_publication1__image_pathe),
                                 );
                             }
-                            let channel_publication1_mark__created_at = match data__.channel_publication1_mark__created_at {
+                            let channel_publication1_mark__created_at = match data___.channel_publication1_mark__created_at {
                                 Option::Some(channel_publication1_mark__created_at_) => Option_::data(channel_publication1_mark__created_at_),
                                 Option::None => Option_::none(),
                             };
@@ -3439,17 +3445,17 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                                 ChannelPublication1_GetMany_Data {
                                     channel_publication1__images_pathes: Allocator::<CVector<_>>::allocate(channel_publication1__images_pathes),
                                     channel_publication1__text,
-                                    channel_publication1__commentaries_quantity: data__.channel_publication1__commentaries_quantity,
-                                    channel_publication1__marks_quantity: data__.channel_publication1__marks_quantity,
-                                    channel_publication1__view_quantity: data__.channel_publication1__view_quantity,
-                                    channel_publication1__created_at: data__.channel_publication1__created_at,
+                                    channel_publication1__commentaries_quantity: data___.channel_publication1__commentaries_quantity,
+                                    channel_publication1__marks_quantity: data___.channel_publication1__marks_quantity,
+                                    channel_publication1__view_quantity: data___.channel_publication1__view_quantity,
+                                    channel_publication1__created_at: data___.channel_publication1__created_at,
                                     channel_publication1_mark__created_at,
                                     channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                                        channel__id: data__.channel_publication1_token_signed.channel__id,
-                                        channel_publication1__id: data__.channel_publication1_token_signed.channel_publication1__id,
-                                        channel_publication1_token__obfuscation_value: data__.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
-                                        channel_publication1_token__expires_at: data__.channel_publication1_token_signed.channel_publication1_token__expires_at,
-                                        signature: Allocator::<CVector<_>>::allocate(data__.channel_publication1_token_signed.signature),
+                                        channel__id: data___.channel_publication1_token_signed.channel__id,
+                                        channel_publication1__id: data___.channel_publication1_token_signed.channel_publication1__id,
+                                        channel_publication1_token__obfuscation_value: data___.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
+                                        channel_publication1_token__expires_at: data___.channel_publication1_token_signed.channel_publication1_token__expires_at,
+                                        signature: Allocator::<CVector<_>>::allocate(data___.channel_publication1_token_signed.signature),
                                     },
                                 }
                             );
@@ -3460,7 +3466,7 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             },
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -3588,25 +3594,25 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_ve
             UnifiedReport::Target {
                 data
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
                         let outcoming = ChannelPublication1_Create_Outcoming {
-                            channel_publication1__created_at: data_.channel_publication1__created_at,
+                            channel_publication1__created_at: data__.channel_publication1__created_at,
                             channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                                channel__id: data_.channel_publication1_token_signed.channel__id,
-                                channel_publication1__id: data_.channel_publication1_token_signed.channel_publication1__id,
-                                channel_publication1_token__obfuscation_value: data_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
-                                channel_publication1_token__expires_at: data_.channel_publication1_token_signed.channel_publication1_token__expires_at,
-                                signature: Allocator::<CVector<_>>::allocate(data_.channel_publication1_token_signed.signature),
+                                channel__id: data__.channel_publication1_token_signed.channel__id,
+                                channel_publication1__id: data__.channel_publication1_token_signed.channel_publication1__id,
+                                channel_publication1_token__obfuscation_value: data__.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
+                                channel_publication1_token__expires_at: data__.channel_publication1_token_signed.channel_publication1_token__expires_at,
+                                signature: Allocator::<CVector<_>>::allocate(data__.channel_publication1_token_signed.signature),
                             },
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             },
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -4053,19 +4059,19 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_al
             UnifiedReport::Target {
                 data,
             } => {
-                let c_data = match data {
+                let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
-                        data: data_,
+                        data: data__,
                     } => {
                         let outcoming = ChannelPublication1Commentary_Create_Outcoming {
-                            channel_publication1__id: data_.channel_publication1_commentary__id,
-                            channel_publication1_commentary__created_at: data_.channel_publication1_commentary__created_at,
+                            channel_publication1__id: data__.channel_publication1_commentary__id,
+                            channel_publication1_commentary__created_at: data__.channel_publication1_commentary__created_at,
                         };
                         Data_::filled(outcoming)
                     }
                 };
-                UnifiedReport_::target(c_data)
+                UnifiedReport_::target(data_)
             }
             UnifiedReport::Precedent {
                 precedent,
