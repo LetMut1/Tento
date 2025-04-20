@@ -798,7 +798,9 @@ pub extern "C-unwind" fn user_authorization__check_email_for_existing__deseriali
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_CheckEmailForExisting_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckEmailForExisting_Outcoming_, Void>| -> Result<UnifiedReport_<UserAuthorization_CheckEmailForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
-        let UnifiedReport::Target { data } = unified_report;
+        let UnifiedReport::Target {
+            data,
+        } = unified_report;
         let data_ = match data {
             Data::Empty => Data_::empty(),
             Data::Filled {
@@ -859,7 +861,9 @@ pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__deseri
     c_vector_of_bytes: CVector<c_uchar>,
 ) -> UserAuthorization_CheckNicknameForExisting_Result {
     let converter = move |unified_report: UnifiedReport<UserAuthorization_CheckNicknameForExisting_Outcoming_, Void>| -> Result<UnifiedReport_<UserAuthorization_CheckNicknameForExisting_Outcoming, CVoid>, Box<dyn StdError + 'static>> {
-        let UnifiedReport::Target { data } = unified_report;
+        let UnifiedReport::Target {
+            data,
+        } = unified_report;
         let data_ = match data {
             Data::Empty => Data_::empty(),
             Data::Filled {
@@ -927,8 +931,12 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_all_devices__deser
 ) -> UserAuthorization_DeauthorizeFromAllDevices_Result {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_>| -> Result<UnifiedReport_<CVoid, UserAuthorization_DeauthorizeFromAllDevices_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Target {
+                data: _,
+            } => UnifiedReport_::target(Data_::empty()),
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     UserAuthorization_DeauthorizeFromAllDevices_Precedent_::UserAccessToken__AlreadyExpired => {
                         UserAuthorization_DeauthorizeFromAllDevices_Precedent {
@@ -996,8 +1004,12 @@ pub extern "C-unwind" fn user_authorization__deauthorize_from_one_device__deseri
 ) -> UserAuthorization_DeauthorizeFromOneDevice_Result {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_>| -> Result<UnifiedReport_<CVoid, UserAuthorization_DeauthorizeFromOneDevice_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Target {
+                data: _,
+            } => UnifiedReport_::target(Data_::empty()),
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     UserAuthorization_DeauthorizeFromOneDevice_Precedent_::UserAccessToken__AlreadyExpired => {
                         UserAuthorization_DeauthorizeFromOneDevice_Precedent {
@@ -1290,8 +1302,12 @@ pub struct UserRegistrationToken__WrongValue {
 pub extern "C-unwind" fn user_authorization__register_by_second_step__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> UserAuthorization_RegisterBySecondStep_Result {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_RegisterBySecondStep_Precedent_>| -> Result<UnifiedReport_<CVoid, UserAuthorization_RegisterBySecondStep_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Target {
+                data: _,
+            } => UnifiedReport_::target(Data_::empty()),
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     UserAuthorization_RegisterBySecondStep_Precedent_::UserRegistrationToken__NotFound => UserAuthorization_RegisterBySecondStep_Precedent {
                         user_registration_token___not_found: true,
@@ -1642,8 +1658,12 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__dese
 ) -> UserAuthorization_ResetPasswordBySecondStep_Result {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_>| -> Result<UnifiedReport_<CVoid, UserAuthorization_ResetPasswordBySecondStep_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Target {
+                data: _,
+            } => UnifiedReport_::target(Data_::empty()),
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     UserAuthorization_ResetPasswordBySecondStep_Precedent_::UserResetPasswordToken__NotFound => UserAuthorization_ResetPasswordBySecondStep_Precedent {
                         user_reset_password_token___not_found: true,
@@ -1735,8 +1755,12 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deseri
 ) -> UserAuthorization_ResetPasswordByLastStep_Result {
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_>| -> Result<UnifiedReport_<CVoid, UserAuthorization_ResetPasswordByLastStep_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Target {
+                data: _,
+            } => UnifiedReport_::target(Data_::empty()),
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     UserAuthorization_ResetPasswordByLastStep_Precedent_::User__NotFound => UserAuthorization_ResetPasswordByLastStep_Precedent {
                         user___not_found: true,
@@ -2690,7 +2714,9 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                 };
                 UnifiedReport_::target(data_)
             }
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     Channel_GetOneById_Precedent_::UserAccessToken__AlreadyExpired => Channel_GetOneById_Precedent {
                         user_access_token___already_expired: true,
@@ -2787,7 +2813,9 @@ pub struct Channel_CheckNameForExisting_Precedent {
 pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_CheckNameForExisting_Result {
     let converter = move |unified_report: UnifiedReport<Channel_CheckNameForExisting_Outcoming_, Channel_CheckNameForExisting_Precedent_>| -> Result<UnifiedReport_<Channel_CheckNameForExisting_Outcoming, Channel_CheckNameForExisting_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
+            UnifiedReport::Target {
+                data,
+            } => {
                 let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
@@ -2801,7 +2829,9 @@ pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_allocate(
                 };
                 UnifiedReport_::target(data_)
             }
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     Channel_CheckNameForExisting_Precedent_::UserAccessToken__AlreadyExpired => Channel_CheckNameForExisting_Precedent {
                         user_access_token___already_expired: true,
@@ -2869,7 +2899,9 @@ pub struct Channel_CheckLinkedNameForExisting_Precedent {
 pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_CheckLinkedNameForExisting_Result {
     let converter = move |unified_report: UnifiedReport<Channel_CheckLinkedNameForExisting_Outcoming_, Channel_CheckLinkedNameForExisting_Precedent_>| -> Result<UnifiedReport_<Channel_CheckLinkedNameForExisting_Outcoming, Channel_CheckLinkedNameForExisting_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
+            UnifiedReport::Target {
+                data,
+            } => {
                 let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
@@ -2883,7 +2915,9 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_al
                 };
                 UnifiedReport_::target(data_)
             }
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     Channel_CheckLinkedNameForExisting_Precedent_::UserAccessToken__AlreadyExpired => Channel_CheckLinkedNameForExisting_Precedent {
                         user_access_token___already_expired: true,
@@ -2960,7 +2994,9 @@ pub struct Channel_Create_Precedent {
 pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_Create_Result {
     let converter = move |unified_report: UnifiedReport<Channel_Create_Outcoming_, Channel_Create_Precedent_>| -> Result<UnifiedReport_<Channel_Create_Outcoming, Channel_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
+            UnifiedReport::Target {
+                data,
+            } => {
                 let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
@@ -2981,7 +3017,9 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(c_vector_of_bytes
                 };
                 UnifiedReport_::target(data_)
             }
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     Channel_Create_Precedent_::UserAccessToken__AlreadyExpired => Channel_Create_Precedent {
                         user_access_token___already_expired: true,
@@ -3069,8 +3107,12 @@ pub struct Channel_Delete_Precedent {
 pub extern "C-unwind" fn channel__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> Channel_Delete_Result {
     let converter = move |unified_report: UnifiedReport<Void, Channel_Delete_Precedent_>| -> Result<UnifiedReport_<CVoid, Channel_Delete_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Target {
+                data: _,
+            } => UnifiedReport_::target(Data_::empty()),
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     Channel_Delete_Precedent_::UserAccessToken__AlreadyExpired => Channel_Delete_Precedent {
                         user_access_token___already_expired: true,
@@ -3161,7 +3203,9 @@ pub struct ChannelSubscription_Create_Precedent {
 pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelSubscription_Create_Result {
     let converter = move |unified_report: UnifiedReport<ChannelSubscription_Create_Outcoming_, ChannelSubscription_Create_Precedent_>| -> Result<UnifiedReport_<ChannelSubscription_Create_Outcoming, ChannelSubscription_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data } => {
+            UnifiedReport::Target {
+                data,
+            } => {
                 let data_ = match data {
                     Data::Empty => Data_::empty(),
                     Data::Filled {
@@ -3182,7 +3226,9 @@ pub extern "C-unwind" fn channel_subscription__create__deserialize_allocate(c_ve
                 };
                 UnifiedReport_::target(data_)
             }
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     ChannelSubscription_Create_Precedent_::UserAccessToken__AlreadyExpired => ChannelSubscription_Create_Precedent {
                         user_access_token___already_expired: true,
@@ -3303,7 +3349,9 @@ pub extern "C-unwind" fn channel_subscription__delete__deserialize_allocate(c_ve
                 };
                 UnifiedReport_::target(data_)
             }
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     ChannelSubscription_Delete_Precedent_::UserAccessToken__AlreadyExpired => ChannelSubscription_Delete_Precedent {
                         user_access_token___already_expired: true,
@@ -3468,7 +3516,9 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                 };
                 UnifiedReport_::target(data_)
             },
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     ChannelPublication1_GetMany_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1_GetMany_Precedent {
                         user_access_token___already_expired: true,
@@ -3614,7 +3664,9 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(c_ve
                 };
                 UnifiedReport_::target(data_)
             },
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     ChannelPublication1_Create_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1_Create_Precedent {
                         user_access_token___already_expired: true,
@@ -3712,8 +3764,12 @@ pub struct ChannelPublication1_Delete_Precedent {
 pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1_Delete_Result {
     let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1_Delete_Precedent_>| -> Result<UnifiedReport_<CVoid, ChannelPublication1_Delete_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Target {
+                data: _,
+            } => UnifiedReport_::target(Data_::empty()),
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     ChannelPublication1_Delete_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1_Delete_Precedent {
                         user_access_token___already_expired: true,
@@ -3801,8 +3857,12 @@ pub struct ChannelPublication1Mark_Create_Precedent {
 pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1Mark_Create_Result {
     let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Create_Precedent_>| -> Result<UnifiedReport_<CVoid, ChannelPublication1Mark_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Target {
+                data: _,
+            } => UnifiedReport_::target(Data_::empty()),
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     ChannelPublication1Mark_Create_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Create_Precedent {
                         user_access_token___already_expired: true,
@@ -3886,8 +3946,12 @@ pub struct ChannelPublication1Mark_Delete_Precedent {
 pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1Mark_Delete_Result {
     let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Delete_Precedent_>| -> Result<UnifiedReport_<CVoid, ChannelPublication1Mark_Delete_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Target {
+                data: _,
+            } => UnifiedReport_::target(Data_::empty()),
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     ChannelPublication1Mark_Delete_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Delete_Precedent {
                         user_access_token___already_expired: true,
@@ -3969,8 +4033,12 @@ pub struct ChannelPublication1View_Create_Precedent {
 pub extern "C-unwind" fn channel_publication1_view__create__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1View_Create_Result {
     let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1View_Create_Precedent_>| -> Result<UnifiedReport_<CVoid, ChannelPublication1View_Create_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Target {
+                data: _,
+            } => UnifiedReport_::target(Data_::empty()),
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     ChannelPublication1View_Create_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1View_Create_Precedent {
                         user_access_token___already_expired: true,
@@ -4162,8 +4230,12 @@ pub struct ChannelPublication1Commentary_Delete_Precedent {
 pub extern "C-unwind" fn channel_publication1_commentary__delete__deserialize_allocate(c_vector_of_bytes: CVector<c_uchar>) -> ChannelPublication1Commentary_Delete_Result {
     let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Commentary_Delete_Precedent_>| -> Result<UnifiedReport_<CVoid, ChannelPublication1Commentary_Delete_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
-            UnifiedReport::Target { data: _ } => UnifiedReport_::target(Data_::empty()),
-            UnifiedReport::Precedent { precedent } => {
+            UnifiedReport::Target {
+                data: _,
+            } => UnifiedReport_::target(Data_::empty()),
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
                 let precedent_ = match precedent {
                     ChannelPublication1Commentary_Delete_Precedent_::UserAccessToken__AlreadyExpired => ChannelPublication1Commentary_Delete_Precedent {
                         user_access_token___already_expired: true,
