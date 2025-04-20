@@ -791,10 +791,10 @@ typedef struct Result__UnifiedReport__Channel_CheckNameForExisting_Outcoming__Ch
 
 typedef struct Result__UnifiedReport__Channel_CheckNameForExisting_Outcoming__Channel_CheckNameForExisting_Precedent Channel_CheckNameForExisting_Result;
 
-typedef struct Channel_CheckLinkedNameForExisting_Incoming {
+typedef struct Channel_CheckLinkedNameForExisting_Incoming_ {
   struct UserAccessTokenSigned user_access_token_signed;
   struct String_ channel__linked_name;
-} Channel_CheckLinkedNameForExisting_Incoming;
+} Channel_CheckLinkedNameForExisting_Incoming_;
 
 typedef struct Channel_CheckLinkedNameForExisting_Outcoming {
   bool result;
@@ -1386,7 +1386,7 @@ Channel_CheckNameForExisting_Result channel__check_name_for_existing__deserializ
 
 void channel__check_name_for_existing__deserialize_deallocate(Channel_CheckNameForExisting_Result _result);
 
-struct Result__Vec__c_uchar channel__check_linked_name_for_existing__serialize_allocate(struct Channel_CheckLinkedNameForExisting_Incoming incoming);
+struct Result__Vec__c_uchar channel__check_linked_name_for_existing__serialize_allocate(struct Channel_CheckLinkedNameForExisting_Incoming_ incoming);
 
 void channel__check_linked_name_for_existing__serialize_deallocate(struct Result__Vec__c_uchar result);
 
