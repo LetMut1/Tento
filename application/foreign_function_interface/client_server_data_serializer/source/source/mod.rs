@@ -199,7 +199,7 @@ use {
         error::Error as StdError,
         ffi::{
             CStr,
-            CString as CString_,
+            CString,
         },
         marker::PhantomData,
     },
@@ -326,10 +326,10 @@ where
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct CString {
+pub struct String_ {
     pub pointer: *mut c_char,
 }
-impl CString {
+impl String_ {
     fn get_as_str<'a, 'b>(&'a self) -> Result<&'b str, Box<dyn StdError + 'static>> {
         if self.pointer.is_null() {
             return Result::Err(NULL_POINTER_ERROR_MESAGE.into());
@@ -338,7 +338,7 @@ impl CString {
         return Result::Ok(c_str.to_str()?);
     }
 }
-impl Default for CString {
+impl Default for String_ {
     fn default() -> Self {
         return Self {
             pointer: std::ptr::null_mut(),
@@ -393,18 +393,18 @@ pub struct CVoid {
 struct Allocator<S> {
     _subject: PhantomData<S>,
 }
-impl Allocator<CString> {
-    fn allocate(string: String) -> CString {
-        return CString {
-            pointer: unsafe { CString_::from_vec_unchecked(string.into_bytes()) }.into_raw(),
+impl Allocator<String_> {
+    fn allocate(string: String) -> String_ {
+        return String_ {
+            pointer: unsafe { CString::from_vec_unchecked(string.into_bytes()) }.into_raw(),
         };
     }
-    fn deallocate(c_string: CString) -> () {
-        if c_string.pointer.is_null() {
+    fn deallocate(string: String_) -> () {
+        if string.pointer.is_null() {
             return ();
         }
         {
-            let _ = unsafe { CString_::from_raw(c_string.pointer) };
+            let _ = unsafe { CString::from_raw(string.pointer) };
         }
         return ();
     }
@@ -488,7 +488,7 @@ impl Transformer {
 #[derive(Default, Clone, Copy)]
 pub struct UserAccessTokenSigned {
     pub user__id: c_long,
-    pub user_device__id: CString,
+    pub user_device__id: String_,
     pub user_access_token__obfuscation_value: c_long,
     pub user_access_token__expires_at: c_long,
     pub signature: CVector<c_uchar>,
@@ -521,9 +521,9 @@ pub struct ChannelPublication1TokenSigned {
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_AuthorizeByFirstStep_Incoming {
-    pub user_device__id: CString,
-    pub user__email___or___user__nickname: CString,
-    pub user__password: CString,
+    pub user_device__id: String_,
+    pub user__email___or___user__nickname: String_,
+    pub user__password: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_first_step__serialize_allocate(incoming: UserAuthorization_AuthorizeByFirstStep_Incoming) -> Result_<CVector<c_uchar>> {
@@ -624,8 +624,8 @@ pub extern "C-unwind" fn user_authorization__authorize_by_first_step__deserializ
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_AuthorizeByLastStep_Incoming {
     pub user__id: c_long,
-    pub user_device__id: CString,
-    pub user_authorization_token__value: CString,
+    pub user_device__id: String_,
+    pub user_authorization_token__value: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_last_step__serialize_allocate(incoming: UserAuthorization_AuthorizeByLastStep_Incoming) -> Result_<CVector<c_uchar>> {
@@ -688,7 +688,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
                         let outcoming = UserAuthorization_AuthorizeByLastStep_Outcoming {
                             user_access_token_signed: UserAccessTokenSigned {
                                 user__id: data__.user_access_token_signed.user__id,
-                                user_device__id: Allocator::<CString>::allocate(data__.user_access_token_signed.user_device__id),
+                                user_device__id: Allocator::<String_>::allocate(data__.user_access_token_signed.user_device__id),
                                 user_access_token__obfuscation_value: data__.user_access_token_signed.user_access_token__obfuscation_value,
                                 user_access_token__expires_at: data__.user_access_token_signed.user_access_token__expires_at,
                                 signature: Allocator::<CVector<_>>::allocate(data__.user_access_token_signed.signature),
@@ -756,7 +756,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize_deallocate(result: UserAuthorization_AuthorizeByLastStep_Result) -> () {
     if result.is_data && result.data.is_target && result.data.target.is_filled {
-        Allocator::<CString>::deallocate(result.data.target.filled.user_access_token_signed.user_device__id);
+        Allocator::<String_>::deallocate(result.data.target.filled.user_access_token_signed.user_device__id);
         Allocator::<CVector<_>>::deallocate(result.data.target.filled.user_access_token_signed.signature);
         Allocator::<CVector<_>>::deallocate(result.data.target.filled.user_access_refresh_token_signed.signature);
     }
@@ -765,7 +765,7 @@ pub extern "C-unwind" fn user_authorization__authorize_by_last_step__deserialize
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_CheckEmailForExisting_Incoming {
-    pub user__email: CString,
+    pub user__email: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__check_email_for_existing__serialize_allocate(incoming: UserAuthorization_CheckEmailForExisting_Incoming) -> Result_<CVector<c_uchar>> {
@@ -826,7 +826,7 @@ pub extern "C-unwind" fn user_authorization__check_email_for_existing__deseriali
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_CheckNicknameForExisting_Incoming {
-    pub user__nickname: CString,
+    pub user__nickname: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__check_nickname_for_existing__serialize_allocate(
@@ -1099,7 +1099,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
                         let outcoming = UserAuthorization_RefreshAccessToken_Outcoming {
                             user_access_token_signed: UserAccessTokenSigned {
                                 user__id: data__.user_access_token_signed.user__id,
-                                user_device__id: Allocator::<CString>::allocate(data__.user_access_token_signed.user_device__id),
+                                user_device__id: Allocator::<String_>::allocate(data__.user_access_token_signed.user_device__id),
                                 user_access_token__obfuscation_value: data__.user_access_token_signed.user_access_token__obfuscation_value,
                                 user_access_token__expires_at: data__.user_access_token_signed.user_access_token__expires_at,
                                 signature: Allocator::<CVector<_>>::allocate(data__.user_access_token_signed.signature),
@@ -1150,7 +1150,7 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_a
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_deallocate(result: UserAuthorization_RefreshAccessToken_Result) -> () {
     if result.is_data && result.data.is_target && result.data.target.is_filled {
-        Allocator::<CString>::deallocate(result.data.target.filled.user_access_token_signed.user_device__id);
+        Allocator::<String_>::deallocate(result.data.target.filled.user_access_token_signed.user_device__id);
         Allocator::<CVector<_>>::deallocate(result.data.target.filled.user_access_token_signed.signature);
         Allocator::<CVector<_>>::deallocate(result.data.target.filled.user_access_refresh_token_signed.signature);
     }
@@ -1159,8 +1159,8 @@ pub extern "C-unwind" fn user_authorization__refresh_access_token__deserialize_d
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_RegisterByFirstStep_Incoming {
-    pub user__email: CString,
-    pub user_device__id: CString,
+    pub user__email: String_,
+    pub user_device__id: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_first_step__serialize_allocate(incoming: UserAuthorization_RegisterByFirstStep_Incoming) -> Result_<CVector<c_uchar>> {
@@ -1257,9 +1257,9 @@ pub extern "C-unwind" fn user_authorization__register_by_first_step__deserialize
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_RegisterBySecondStep_Incoming {
-    pub user__email: CString,
-    pub user_device__id: CString,
-    pub user_registration_token__value: CString,
+    pub user__email: String_,
+    pub user_device__id: String_,
+    pub user_registration_token__value: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_second_step__serialize_allocate(incoming: UserAuthorization_RegisterBySecondStep_Incoming) -> Result_<CVector<c_uchar>> {
@@ -1353,11 +1353,11 @@ pub extern "C-unwind" fn user_authorization__register_by_second_step__deserializ
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_RegisterByLastStep_Incoming {
-    pub user_device__id: CString,
-    pub user__nickname: CString,
-    pub user__password: CString,
-    pub user__email: CString,
-    pub user_registration_token__value: CString,
+    pub user_device__id: String_,
+    pub user__nickname: String_,
+    pub user__password: String_,
+    pub user__email: String_,
+    pub user_registration_token__value: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_last_step__serialize_allocate(incoming: UserAuthorization_RegisterByLastStep_Incoming) -> Result_<CVector<c_uchar>> {
@@ -1418,7 +1418,7 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
                         let outcoming = UserAuthorization_RegisterByLastStep_Outcoming {
                             user_access_token_signed: UserAccessTokenSigned {
                                 user__id: data__.user_access_token_signed.user__id,
-                                user_device__id: Allocator::<CString>::allocate(data__.user_access_token_signed.user_device__id),
+                                user_device__id: Allocator::<String_>::allocate(data__.user_access_token_signed.user_device__id),
                                 user_access_token__obfuscation_value: data__.user_access_token_signed.user_access_token__obfuscation_value,
                                 user_access_token__expires_at: data__.user_access_token_signed.user_access_token__expires_at,
                                 signature: Allocator::<CVector<_>>::allocate(data__.user_access_token_signed.signature),
@@ -1493,7 +1493,7 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_deallocate(result: UserAuthorization_RegisterByLastStep_Result) -> () {
     if result.is_data && result.data.is_target && result.data.target.is_filled {
-        Allocator::<CString>::deallocate(result.data.target.filled.user_access_token_signed.user_device__id);
+        Allocator::<String_>::deallocate(result.data.target.filled.user_access_token_signed.user_device__id);
         Allocator::<CVector<_>>::deallocate(result.data.target.filled.user_access_token_signed.signature);
         Allocator::<CVector<_>>::deallocate(result.data.target.filled.user_access_refresh_token_signed.signature);
     }
@@ -1502,8 +1502,8 @@ pub extern "C-unwind" fn user_authorization__register_by_last_step__deserialize_
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_ResetPasswordByFirstStep_Incoming {
-    pub user__email: CString,
-    pub user_device__id: CString,
+    pub user__email: String_,
+    pub user_device__id: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__serialize_allocate(
@@ -1609,8 +1609,8 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_first_step__deser
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_ResetPasswordBySecondStep_Incoming {
     pub user__id: c_long,
-    pub user_device__id: CString,
-    pub user_reset_password_token__value: CString,
+    pub user_device__id: String_,
+    pub user_reset_password_token__value: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__serialize_allocate(
@@ -1709,9 +1709,9 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_second_step__dese
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_ResetPasswordByLastStep_Incoming {
     pub user__id: c_long,
-    pub user_device__id: CString,
-    pub user__password: CString,
-    pub user_reset_password_token__value: CString,
+    pub user_device__id: String_,
+    pub user__password: String_,
+    pub user_reset_password_token__value: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__serialize_allocate(
@@ -1804,8 +1804,8 @@ pub extern "C-unwind" fn user_authorization__reset_password_by_last_step__deseri
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_SendEmailForRegister_Incoming {
-    pub user__email: CString,
-    pub user_device__id: CString,
+    pub user__email: String_,
+    pub user_device__id: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__send_email_for_register__serialize_allocate(incoming: UserAuthorization_SendEmailForRegister_Incoming) -> Result_<CVector<c_uchar>> {
@@ -1917,7 +1917,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_register__deserializ
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_SendEmailForAuthorize_Incoming {
-    pub user_device__id: CString,
+    pub user_device__id: String_,
     pub user__id: c_long,
 }
 #[unsafe(no_mangle)]
@@ -2035,7 +2035,7 @@ pub extern "C-unwind" fn user_authorization__send_email_for_authorize__deseriali
 #[derive(Clone, Copy)]
 pub struct UserAuthorization_SendEmailForResetPassword_Incoming {
     pub user__id: c_long,
-    pub user_device__id: CString,
+    pub user_device__id: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__serialize_allocate(
@@ -2161,8 +2161,8 @@ pub extern "C-unwind" fn user_authorization__send_email_for_reset_password__dese
 #[derive(Clone, Copy)]
 pub struct Channel_GetManyByNameInSubscriptions_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
-    pub channel__name: CString,
-    pub requery___channel__name: Option_<CString>,
+    pub channel__name: String_,
+    pub requery___channel__name: Option_<String_>,
     pub limit: c_uchar,
 }
 #[unsafe(no_mangle)]
@@ -2202,12 +2202,12 @@ type Channel_GetManyByNameInSubscriptions_Result = Result_<UnifiedReport_<Channe
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyByNameInSubscriptions_Data {
-    pub channel__name: CString,
-    pub channel__linked_name: CString,
+    pub channel__name: String_,
+    pub channel__linked_name: String_,
     pub channel__access_modifier: c_uchar,
     pub channel__visability_modifier: c_uchar,
-    pub channel__cover_image_path: Option_<CString>,
-    pub channel__background_image_path: Option_<CString>,
+    pub channel__cover_image_path: Option_<String_>,
+    pub channel__background_image_path: Option_<String_>,
     pub channel_token_signed: ChannelTokenSigned,
 }
 #[repr(C)]
@@ -2238,17 +2238,17 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                         let mut data_registry: Vec<Channel_GetManyByNameInSubscriptions_Data> = Vec::with_capacity(data__.data_registry.len());
                         '_a: for data___ in data__.data_registry {
                             let channel__cover_image_path = match data___.channel__cover_image_path {
-                                Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
+                                Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<String_>::allocate(channel__cover_image_path_)),
                                 Option::None => Option_::none(),
                             };
                             let channel__background_image_path = match data___.channel__background_image_path {
-                                Option::Some(channel__background_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__background_image_path_)),
+                                Option::Some(channel__background_image_path_) => Option_::data(Allocator::<String_>::allocate(channel__background_image_path_)),
                                 Option::None => Option_::none(),
                             };
                             data_registry.push(
                                 Channel_GetManyByNameInSubscriptions_Data {
-                                    channel__name: Allocator::<CString>::allocate(data___.channel__name),
-                                    channel__linked_name: Allocator::<CString>::allocate(data___.channel__linked_name),
+                                    channel__name: Allocator::<String_>::allocate(data___.channel__name),
+                                    channel__linked_name: Allocator::<String_>::allocate(data___.channel__linked_name),
                                     channel__access_modifier: data___.channel__access_modifier,
                                     channel__visability_modifier: data___.channel__visability_modifier,
                                     channel__cover_image_path,
@@ -2298,13 +2298,13 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
     if result.is_data && result.data.is_target && result.data.target.is_filled {
         let data_registry = result.data.target.filled.data_registry.as_slice_unchecked();
         '_a: for data in data_registry {
-            Allocator::<CString>::deallocate(data.channel__name);
-            Allocator::<CString>::deallocate(data.channel__linked_name);
+            Allocator::<String_>::deallocate(data.channel__name);
+            Allocator::<String_>::deallocate(data.channel__linked_name);
             if data.channel__background_image_path.is_data {
-                Allocator::<CString>::deallocate(data.channel__background_image_path.data);
+                Allocator::<String_>::deallocate(data.channel__background_image_path.data);
             }
             if data.channel__cover_image_path.is_data {
-                Allocator::<CString>::deallocate(data.channel__cover_image_path.data);
+                Allocator::<String_>::deallocate(data.channel__cover_image_path.data);
             }
             Allocator::<CVector<_>>::deallocate(data.channel_token_signed.signature);
         }
@@ -2355,12 +2355,12 @@ type Channel_GetManyBySubscription_Result = Result_<UnifiedReport_<Channel_GetMa
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyBySubscription_Data {
-    pub channel__name: CString,
-    pub channel__linked_name: CString,
+    pub channel__name: String_,
+    pub channel__linked_name: String_,
     pub channel__access_modifier: c_uchar,
     pub channel__visability_modifier: c_uchar,
-    pub channel__cover_image_path: Option_<CString>,
-    pub channel__background_image_path: Option_<CString>,
+    pub channel__cover_image_path: Option_<String_>,
+    pub channel__background_image_path: Option_<String_>,
     pub channel_token_signed: ChannelTokenSigned,
 }
 #[repr(C)]
@@ -2391,17 +2391,17 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_allocate
                         let mut data_registry: Vec<Channel_GetManyBySubscription_Data> = Vec::with_capacity(data__.data_registry.len());
                         '_a: for data___ in data__.data_registry {
                             let channel__cover_image_path = match data___.channel__cover_image_path {
-                                Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
+                                Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<String_>::allocate(channel__cover_image_path_)),
                                 Option::None => Option_::none(),
                             };
                             let channel__background_image_path = match data___.channel__background_image_path {
-                                Option::Some(channel__background_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__background_image_path_)),
+                                Option::Some(channel__background_image_path_) => Option_::data(Allocator::<String_>::allocate(channel__background_image_path_)),
                                 Option::None => Option_::none(),
                             };
                             data_registry.push(
                                 Channel_GetManyBySubscription_Data {
-                                    channel__name: Allocator::<CString>::allocate(data___.channel__name),
-                                    channel__linked_name: Allocator::<CString>::allocate(data___.channel__linked_name),
+                                    channel__name: Allocator::<String_>::allocate(data___.channel__name),
+                                    channel__linked_name: Allocator::<String_>::allocate(data___.channel__linked_name),
                                     channel__access_modifier: data___.channel__access_modifier,
                                     channel__visability_modifier: data___.channel__visability_modifier,
                                     channel__cover_image_path,
@@ -2449,13 +2449,13 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_dealloca
     if result.is_data && result.data.is_target && result.data.target.is_filled {
         let data_registry = result.data.target.filled.data_registry.as_slice_unchecked();
         '_a: for data in data_registry {
-            Allocator::<CString>::deallocate(data.channel__name);
-            Allocator::<CString>::deallocate(data.channel__linked_name);
+            Allocator::<String_>::deallocate(data.channel__name);
+            Allocator::<String_>::deallocate(data.channel__linked_name);
             if data.channel__background_image_path.is_data {
-                Allocator::<CString>::deallocate(data.channel__background_image_path.data);
+                Allocator::<String_>::deallocate(data.channel__background_image_path.data);
             }
             if data.channel__cover_image_path.is_data {
-                Allocator::<CString>::deallocate(data.channel__cover_image_path.data);
+                Allocator::<String_>::deallocate(data.channel__cover_image_path.data);
             }
             Allocator::<CVector<_>>::deallocate(data.channel_token_signed.signature);
         }
@@ -2467,8 +2467,8 @@ pub extern "C-unwind" fn channel__get_many_by_subscription__deserialize_dealloca
 #[derive(Clone, Copy)]
 pub struct Channel_GetManyPublicByName_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
-    pub channel__name: CString,
-    pub requery___channel__name: Option_<CString>,
+    pub channel__name: String_,
+    pub requery___channel__name: Option_<String_>,
     pub limit: c_uchar,
 }
 #[unsafe(no_mangle)]
@@ -2508,11 +2508,11 @@ type Channel_GetManyPublicByName_Result = Result_<UnifiedReport_<Channel_GetMany
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetManyPublicByName_Data {
-    pub channel__name: CString,
-    pub channel__linked_name: CString,
+    pub channel__name: String_,
+    pub channel__linked_name: String_,
     pub channel__access_modifier: c_uchar,
-    pub channel__cover_image_path: Option_<CString>,
-    pub channel__background_image_path: Option_<CString>,
+    pub channel__cover_image_path: Option_<String_>,
+    pub channel__background_image_path: Option_<String_>,
     pub channel_token_signed: ChannelTokenSigned,
 }
 #[repr(C)]
@@ -2543,17 +2543,17 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_allocate(
                         let mut data_registry: Vec<Channel_GetManyPublicByName_Data> = Vec::with_capacity(data__.data_registry.len());
                         '_a: for data___ in data__.data_registry {
                             let channel__cover_image_path = match data___.channel__cover_image_path {
-                                Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
+                                Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<String_>::allocate(channel__cover_image_path_)),
                                 Option::None => Option_::none(),
                             };
                             let channel__background_image_path = match data___.channel__background_image_path {
-                                Option::Some(channel__background_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__background_image_path_)),
+                                Option::Some(channel__background_image_path_) => Option_::data(Allocator::<String_>::allocate(channel__background_image_path_)),
                                 Option::None => Option_::none(),
                             };
                             data_registry.push(
                                 Channel_GetManyPublicByName_Data {
-                                    channel__name: Allocator::<CString>::allocate(data___.channel__name),
-                                    channel__linked_name: Allocator::<CString>::allocate(data___.channel__linked_name),
+                                    channel__name: Allocator::<String_>::allocate(data___.channel__name),
+                                    channel__linked_name: Allocator::<String_>::allocate(data___.channel__linked_name),
                                     channel__access_modifier: data___.channel__access_modifier,
                                     channel__cover_image_path,
                                     channel__background_image_path,
@@ -2600,13 +2600,13 @@ pub extern "C-unwind" fn channel__get_many_public_by_name__deserialize_deallocat
     if result.is_data && result.data.is_target && result.data.target.is_filled {
         let data_registry = result.data.target.filled.data_registry.as_slice_unchecked();
         '_a: for data in data_registry {
-            Allocator::<CString>::deallocate(data.channel__name);
-            Allocator::<CString>::deallocate(data.channel__linked_name);
+            Allocator::<String_>::deallocate(data.channel__name);
+            Allocator::<String_>::deallocate(data.channel__linked_name);
             if data.channel__background_image_path.is_data {
-                Allocator::<CString>::deallocate(data.channel__background_image_path.data);
+                Allocator::<String_>::deallocate(data.channel__background_image_path.data);
             }
             if data.channel__cover_image_path.is_data {
-                Allocator::<CString>::deallocate(data.channel__cover_image_path.data);
+                Allocator::<String_>::deallocate(data.channel__cover_image_path.data);
             }
             Allocator::<CVector<_>>::deallocate(data.channel_token_signed.signature);
         }
@@ -2657,13 +2657,13 @@ type Channel_GetOneById_Result = Result_<UnifiedReport_<Channel_GetOneById_Outco
 #[repr(C)]
 #[derive(Default)]
 pub struct Channel_GetOneById_Outcoming {
-    pub channel__name: CString,
-    pub channel__linked_name: CString,
-    pub channel__description: Option_<CString>,
+    pub channel__name: String_,
+    pub channel__linked_name: String_,
+    pub channel__description: Option_<String_>,
     pub channel__access_modifier: c_uchar,
     pub channel__visability_modifier: c_uchar,
-    pub channel__cover_image_path: Option_<CString>,
-    pub channel__background_image_path: Option_<CString>,
+    pub channel__cover_image_path: Option_<String_>,
+    pub channel__background_image_path: Option_<String_>,
     pub channel__subscribers_quantity: c_uint,
 }
 #[repr(C)]
@@ -2688,20 +2688,20 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
                         data: data__
                     } => {
                         let channel__description = match data__.channel__description {
-                            Option::Some(channel__description_) => Option_::data(Allocator::<CString>::allocate(channel__description_)),
+                            Option::Some(channel__description_) => Option_::data(Allocator::<String_>::allocate(channel__description_)),
                             Option::None => Option_::none()
                         };
                         let channel__cover_image_path = match data__.channel__cover_image_path {
-                            Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__cover_image_path_)),
+                            Option::Some(channel__cover_image_path_) => Option_::data(Allocator::<String_>::allocate(channel__cover_image_path_)),
                             Option::None => Option_::none()
                         };
                         let channel__background_image_path = match data__.channel__background_image_path {
-                            Option::Some(channel__background_image_path_) => Option_::data(Allocator::<CString>::allocate(channel__background_image_path_)),
+                            Option::Some(channel__background_image_path_) => Option_::data(Allocator::<String_>::allocate(channel__background_image_path_)),
                             Option::None => Option_::none()
                         };
                         let outcoming = Channel_GetOneById_Outcoming {
-                            channel__name: Allocator::<CString>::allocate(data__.channel__name),
-                            channel__linked_name: Allocator::<CString>::allocate(data__.channel__linked_name),
+                            channel__name: Allocator::<String_>::allocate(data__.channel__name),
+                            channel__linked_name: Allocator::<String_>::allocate(data__.channel__linked_name),
                             channel__description,
                             channel__access_modifier: data__.channel__access_modifier,
                             channel__visability_modifier: data__.channel__visability_modifier,
@@ -2752,16 +2752,16 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_allocate(c_vector_o
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__get_one_by_id__deserialize_deallocate(result: Channel_GetOneById_Result) -> () {
     if result.is_data && result.data.is_target && result.data.target.is_filled {
-        Allocator::<CString>::deallocate(result.data.target.filled.channel__name);
-        Allocator::<CString>::deallocate(result.data.target.filled.channel__linked_name);
+        Allocator::<String_>::deallocate(result.data.target.filled.channel__name);
+        Allocator::<String_>::deallocate(result.data.target.filled.channel__linked_name);
         if result.data.target.filled.channel__description.is_data {
-            Allocator::<CString>::deallocate(result.data.target.filled.channel__description.data);
+            Allocator::<String_>::deallocate(result.data.target.filled.channel__description.data);
         }
         if result.data.target.filled.channel__background_image_path.is_data {
-            Allocator::<CString>::deallocate(result.data.target.filled.channel__background_image_path.data);
+            Allocator::<String_>::deallocate(result.data.target.filled.channel__background_image_path.data);
         }
         if result.data.target.filled.channel__cover_image_path.is_data {
-            Allocator::<CString>::deallocate(result.data.target.filled.channel__cover_image_path.data);
+            Allocator::<String_>::deallocate(result.data.target.filled.channel__cover_image_path.data);
         }
     }
     return ();
@@ -2770,7 +2770,7 @@ pub extern "C-unwind" fn channel__get_one_by_id__deserialize_deallocate(result: 
 #[derive(Clone, Copy)]
 pub struct Channel_CheckNameForExisting_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
-    pub channel__name: CString,
+    pub channel__name: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__check_name_for_existing__serialize_allocate(incoming: Channel_CheckNameForExisting_Incoming) -> Result_<CVector<c_uchar>> {
@@ -2856,7 +2856,7 @@ pub extern "C-unwind" fn channel__check_name_for_existing__deserialize_deallocat
 #[derive(Clone, Copy)]
 pub struct Channel_CheckLinkedNameForExisting_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
-    pub channel__linked_name: CString,
+    pub channel__linked_name: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__check_linked_name_for_existing__serialize_allocate(incoming: Channel_CheckLinkedNameForExisting_Incoming) -> Result_<CVector<c_uchar>> {
@@ -2942,8 +2942,8 @@ pub extern "C-unwind" fn channel__check_linked_name_for_existing__deserialize_de
 #[derive(Clone, Copy)]
 pub struct Channel_Create_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
-    pub channel__name: CString,
-    pub channel__linked_name: CString,
+    pub channel__name: String_,
+    pub channel__linked_name: String_,
     pub channel__access_modifier: c_uchar,
     pub channel__visability_modifier: c_uchar,
 }
@@ -3438,8 +3438,8 @@ type ChannelPublication1_GetMany_Result = Result_<UnifiedReport_<ChannelPublicat
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1_GetMany_Data {
-    pub channel_publication1__images_pathes: CVector<CString>,
-    pub channel_publication1__text: Option_<CString>,
+    pub channel_publication1__images_pathes: CVector<String_>,
+    pub channel_publication1__text: Option_<String_>,
     pub channel_publication1__commentaries_quantity: c_uint,
     pub channel_publication1__marks_quantity: c_uint,
     pub channel_publication1__view_quantity: c_uint,
@@ -3476,13 +3476,13 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(c_
                         let mut data_registry: Vec<ChannelPublication1_GetMany_Data> = Vec::with_capacity(data__.data_registry.len());
                         '_a: for data___ in data__.data_registry {
                             let channel_publication1__text = match data___.channel_publication1__text {
-                                Option::Some(channel_publication1__text_) => Option_::data(Allocator::<CString>::allocate(channel_publication1__text_)),
+                                Option::Some(channel_publication1__text_) => Option_::data(Allocator::<String_>::allocate(channel_publication1__text_)),
                                 Option::None => Option_::none(),
                             };
-                            let mut channel_publication1__images_pathes: Vec<CString> = Vec::with_capacity(data___.channel_publication1__images_pathes.len());
+                            let mut channel_publication1__images_pathes: Vec<String_> = Vec::with_capacity(data___.channel_publication1__images_pathes.len());
                             '_b: for channel_publication1__image_pathe in data___.channel_publication1__images_pathes {
                                 channel_publication1__images_pathes.push(
-                                    Allocator::<CString>::allocate(channel_publication1__image_pathe),
+                                    Allocator::<String_>::allocate(channel_publication1__image_pathe),
                                 );
                             }
                             let channel_publication1_mark__created_at = match data___.channel_publication1_mark__created_at {
@@ -3557,11 +3557,11 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_deallocate(
         let data_registry = result.data.target.filled.data_registry.as_slice_unchecked();
         '_a: for data in data_registry {
             if data.channel_publication1__text.is_data {
-                Allocator::<CString>::deallocate(data.channel_publication1__text.data);
+                Allocator::<String_>::deallocate(data.channel_publication1__text.data);
             }
             let channel_publication1__images_pathes = data.channel_publication1__images_pathes.as_slice_unchecked();
             '_b: for channel_publication1__image_pathe in channel_publication1__images_pathes {
-                Allocator::<CString>::deallocate(*channel_publication1__image_pathe);
+                Allocator::<String_>::deallocate(*channel_publication1__image_pathe);
             }
             Allocator::<CVector<_>>::deallocate(data.channel_publication1__images_pathes);
             Allocator::<CVector<_>>::deallocate(data.channel_publication1_token_signed.signature);
@@ -3575,8 +3575,8 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_deallocate(
 pub struct ChannelPublication1_Create_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
     pub channel_token_signed: ChannelTokenSigned,
-    pub channel_publication1__images_pathes: CVector<CString>,
-    pub channel_publication1__text: Option_<CString>,
+    pub channel_publication1__images_pathes: CVector<String_>,
+    pub channel_publication1__text: Option_<String_>,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__create__serialize_allocate(incoming: ChannelPublication1_Create_Incoming) -> Result_<CVector<c_uchar>> {
@@ -4067,7 +4067,7 @@ pub extern "C-unwind" fn channel_publication1_view__create__deserialize_dealloca
 #[derive(Clone, Copy)]
 pub struct ChannelPublication1Commentary_Create_Incoming {
     pub user_access_token_signed: UserAccessTokenSigned,
-    pub channel_publication1_commentary__text: CString,
+    pub channel_publication1_commentary__text: String_,
     pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 #[unsafe(no_mangle)]
@@ -4312,7 +4312,7 @@ mod test {
         > = vec![
             vec![
                 with_name!(self::deallocation::c_vector_clone),
-                with_name!(self::deallocation::c_string_get_as_str),
+                with_name!(self::deallocation::string_get_as_str),
             ],
             vec![
                 with_name!(self::deallocation::server_request_data_serialization::user_authorization__authorize_by_first_step),
@@ -4564,15 +4564,15 @@ mod test {
             Allocator::<CVector<_>>::deallocate(c_vector);
             return Result::Ok(());
         }
-        pub fn c_string_get_as_str() -> Result<(), Box<dyn StdError + 'static>> {
-            let c_string = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
+        pub fn string_get_as_str() -> Result<(), Box<dyn StdError + 'static>> {
+            let string = Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
             {
-                let _ = c_string.get_as_str()?;
+                let _ = string.get_as_str()?;
             }
-            if c_string.pointer.is_null() {
+            if string.pointer.is_null() {
                 return Result::Err(ALLOCATION_ERROR.into());
             }
-            Allocator::<CString>::deallocate(c_string);
+            Allocator::<String_>::deallocate(string);
             return Result::Ok(());
         }
         pub mod server_request_data_serialization {
@@ -4587,64 +4587,64 @@ mod test {
             }
             pub fn user_authorization__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_AuthorizeByFirstStep_Incoming {
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__email___or___user__nickname: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__password: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email___or___user__nickname: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__password: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     user_authorization__authorize_by_first_step__serialize_allocate,
                     user_authorization__authorize_by_first_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_device__id);
-                Allocator::<CString>::deallocate(incoming.user__email___or___user__nickname);
-                Allocator::<CString>::deallocate(incoming.user__password);
+                Allocator::<String_>::deallocate(incoming.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user__email___or___user__nickname);
+                Allocator::<String_>::deallocate(incoming.user__password);
                 return Result::Ok(());
             }
             pub fn user_authorization__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_AuthorizeByLastStep_Incoming {
                     user__id: 0,
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_authorization_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_authorization_token__value: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     user_authorization__authorize_by_last_step__serialize_allocate,
                     user_authorization__authorize_by_last_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_device__id);
-                Allocator::<CString>::deallocate(incoming.user_authorization_token__value);
+                Allocator::<String_>::deallocate(incoming.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_authorization_token__value);
                 return Result::Ok(());
             }
             pub fn user_authorization__check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_CheckEmailForExisting_Incoming {
-                    user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     user_authorization__check_email_for_existing__serialize_allocate,
                     user_authorization__check_email_for_existing__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user__email);
+                Allocator::<String_>::deallocate(incoming.user__email);
                 return Result::Ok(());
             }
             pub fn user_authorization__check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_CheckNicknameForExisting_Incoming {
-                    user__nickname: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__nickname: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     user_authorization__check_nickname_for_existing__serialize_allocate,
                     user_authorization__check_nickname_for_existing__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user__nickname);
+                Allocator::<String_>::deallocate(incoming.user__nickname);
                 return Result::Ok(());
             }
             pub fn user_authorization__deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_DeauthorizeFromAllDevices_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -4655,7 +4655,7 @@ mod test {
                     user_authorization__deauthorize_from_all_devices__serialize_allocate,
                     user_authorization__deauthorize_from_all_devices__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 return Result::Ok(());
             }
@@ -4663,7 +4663,7 @@ mod test {
                 let incoming = UserAuthorization_DeauthorizeFromOneDevice_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -4674,7 +4674,7 @@ mod test {
                     user_authorization__deauthorize_from_one_device__serialize_allocate,
                     user_authorization__deauthorize_from_one_device__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 return Result::Ok(());
             }
@@ -4682,7 +4682,7 @@ mod test {
                 let incoming = UserAuthorization_RefreshAccessToken_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -4697,124 +4697,124 @@ mod test {
                     user_authorization__refresh_access_token__serialize_allocate,
                     user_authorization__refresh_access_token__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_refresh_token_signed.signature);
                 return Result::Ok(());
             }
             pub fn user_authorization__register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_RegisterByFirstStep_Incoming {
-                    user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     user_authorization__register_by_first_step__serialize_allocate,
                     user_authorization__register_by_first_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user__email);
-                Allocator::<CString>::deallocate(incoming.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user__email);
+                Allocator::<String_>::deallocate(incoming.user_device__id);
                 return Result::Ok(());
             }
             pub fn user_authorization__register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_RegisterBySecondStep_Incoming {
-                    user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_registration_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_registration_token__value: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     user_authorization__register_by_second_step__serialize_allocate,
                     user_authorization__register_by_second_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user__email);
-                Allocator::<CString>::deallocate(incoming.user_device__id);
-                Allocator::<CString>::deallocate(incoming.user_registration_token__value);
+                Allocator::<String_>::deallocate(incoming.user__email);
+                Allocator::<String_>::deallocate(incoming.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_registration_token__value);
                 return Result::Ok(());
             }
             pub fn user_authorization__register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_RegisterByLastStep_Incoming {
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__nickname: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__password: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_registration_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__nickname: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__password: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_registration_token__value: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     user_authorization__register_by_last_step__serialize_allocate,
                     user_authorization__register_by_last_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_device__id);
-                Allocator::<CString>::deallocate(incoming.user__nickname);
-                Allocator::<CString>::deallocate(incoming.user__password);
-                Allocator::<CString>::deallocate(incoming.user__email);
-                Allocator::<CString>::deallocate(incoming.user_registration_token__value);
+                Allocator::<String_>::deallocate(incoming.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user__nickname);
+                Allocator::<String_>::deallocate(incoming.user__password);
+                Allocator::<String_>::deallocate(incoming.user__email);
+                Allocator::<String_>::deallocate(incoming.user_registration_token__value);
                 return Result::Ok(());
             }
             pub fn user_authorization__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_ResetPasswordByFirstStep_Incoming {
-                    user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     user_authorization__reset_password_by_first_step__serialize_allocate,
                     user_authorization__reset_password_by_first_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user__email);
-                Allocator::<CString>::deallocate(incoming.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user__email);
+                Allocator::<String_>::deallocate(incoming.user_device__id);
                 return Result::Ok(());
             }
             pub fn user_authorization__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_ResetPasswordBySecondStep_Incoming {
                     user__id: 0,
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_reset_password_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_reset_password_token__value: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     user_authorization__reset_password_by_second_step__serialize_allocate,
                     user_authorization__reset_password_by_second_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_device__id);
-                Allocator::<CString>::deallocate(incoming.user_reset_password_token__value);
+                Allocator::<String_>::deallocate(incoming.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_reset_password_token__value);
                 return Result::Ok(());
             }
             pub fn user_authorization__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_ResetPasswordByLastStep_Incoming {
                     user__id: 0,
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__password: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_reset_password_token__value: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__password: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_reset_password_token__value: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     user_authorization__reset_password_by_last_step__serialize_allocate,
                     user_authorization__reset_password_by_last_step__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_device__id);
-                Allocator::<CString>::deallocate(incoming.user__password);
-                Allocator::<CString>::deallocate(incoming.user_reset_password_token__value);
+                Allocator::<String_>::deallocate(incoming.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user__password);
+                Allocator::<String_>::deallocate(incoming.user_reset_password_token__value);
                 return Result::Ok(());
             }
             pub fn user_authorization__send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_SendEmailForRegister_Incoming {
-                    user__email: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     user_authorization__send_email_for_register__serialize_allocate,
                     user_authorization__send_email_for_register__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user__email);
-                Allocator::<CString>::deallocate(incoming.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user__email);
+                Allocator::<String_>::deallocate(incoming.user_device__id);
                 return Result::Ok(());
             }
             pub fn user_authorization__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_SendEmailForAuthorize_Incoming {
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     user__id: 0,
                 };
                 run_by_template(
@@ -4822,33 +4822,33 @@ mod test {
                     user_authorization__send_email_for_authorize__serialize_allocate,
                     user_authorization__send_email_for_authorize__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_device__id);
                 return Result::Ok(());
             }
             pub fn user_authorization__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = UserAuthorization_SendEmailForResetPassword_Incoming {
                     user__id: 0,
-                    user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     user_authorization__send_email_for_reset_password__serialize_allocate,
                     user_authorization__send_email_for_reset_password__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_device__id);
                 return Result::Ok(());
             }
             pub fn channel__get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel_GetManyByNameInSubscriptions_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    requery___channel__name: Option_::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
+                    channel__name: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    requery___channel__name: Option_::data(Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
                     limit: 0,
                 };
                 run_by_template(
@@ -4856,17 +4856,17 @@ mod test {
                     channel__get_many_by_name_in_subscriptions__serialize_allocate,
                     channel__get_many_by_name_in_subscriptions__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
-                Allocator::<CString>::deallocate(incoming.channel__name);
-                Allocator::<CString>::deallocate(incoming.requery___channel__name.data);
+                Allocator::<String_>::deallocate(incoming.channel__name);
+                Allocator::<String_>::deallocate(incoming.requery___channel__name.data);
                 return Result::Ok(());
             }
             pub fn channel__get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel_GetManyBySubscription_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -4879,7 +4879,7 @@ mod test {
                     channel__get_many_by_subscription__serialize_allocate,
                     channel__get_many_by_subscription__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 return Result::Ok(());
             }
@@ -4887,13 +4887,13 @@ mod test {
                 let incoming = Channel_GetManyPublicByName_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    requery___channel__name: Option_::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
+                    channel__name: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    requery___channel__name: Option_::data(Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
                     limit: 0,
                 };
                 run_by_template(
@@ -4901,17 +4901,17 @@ mod test {
                     channel__get_many_public_by_name__serialize_allocate,
                     channel__get_many_public_by_name__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
-                Allocator::<CString>::deallocate(incoming.channel__name);
-                Allocator::<CString>::deallocate(incoming.requery___channel__name.data);
+                Allocator::<String_>::deallocate(incoming.channel__name);
+                Allocator::<String_>::deallocate(incoming.requery___channel__name.data);
                 return Result::Ok(());
             }
             pub fn channel__get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel_GetOneById_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -4930,7 +4930,7 @@ mod test {
                     channel__get_one_by_id__serialize_allocate,
                     channel__get_one_by_id__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_token_signed.signature);
                 return Result::Ok(());
@@ -4939,55 +4939,55 @@ mod test {
                 let incoming = Channel_CheckNameForExisting_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    channel__name: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     channel__check_name_for_existing__serialize_allocate,
                     channel__check_name_for_existing__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
-                Allocator::<CString>::deallocate(incoming.channel__name);
+                Allocator::<String_>::deallocate(incoming.channel__name);
                 return Result::Ok(());
             }
             pub fn channel__check_linked_name_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel_CheckLinkedNameForExisting_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    channel__linked_name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    channel__linked_name: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
                     channel__check_linked_name_for_existing__serialize_allocate,
                     channel__check_linked_name_for_existing__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
-                Allocator::<CString>::deallocate(incoming.channel__linked_name);
+                Allocator::<String_>::deallocate(incoming.channel__linked_name);
                 return Result::Ok(());
             }
             pub fn channel__create() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel_Create_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    channel__name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    channel__linked_name: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    channel__name: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    channel__linked_name: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     channel__access_modifier: 0,
                     channel__visability_modifier: 0,
                 };
@@ -4996,17 +4996,17 @@ mod test {
                     channel__create__serialize_allocate,
                     channel__create__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
-                Allocator::<CString>::deallocate(incoming.channel__name);
-                Allocator::<CString>::deallocate(incoming.channel__linked_name);
+                Allocator::<String_>::deallocate(incoming.channel__name);
+                Allocator::<String_>::deallocate(incoming.channel__linked_name);
                 return Result::Ok(());
             }
             pub fn channel__delete() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel_Delete_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -5025,7 +5025,7 @@ mod test {
                     channel__delete__serialize_allocate,
                     channel__delete__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_token_signed.signature);
                 return Result::Ok(());
@@ -5034,7 +5034,7 @@ mod test {
                 let incoming = ChannelSubscription_Create_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -5053,7 +5053,7 @@ mod test {
                     channel_subscription__create__serialize_allocate,
                     channel_subscription__create__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_token_signed.signature);
                 return Result::Ok(());
@@ -5062,7 +5062,7 @@ mod test {
                 let incoming = ChannelSubscription_Delete_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -5081,7 +5081,7 @@ mod test {
                     channel_subscription__delete__serialize_allocate,
                     channel_subscription__delete__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_token_signed.signature);
                 return Result::Ok(());
@@ -5090,7 +5090,7 @@ mod test {
                 let incoming = ChannelPublication1_GetMany_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -5111,19 +5111,19 @@ mod test {
                     channel_publication1__get_many__serialize_allocate,
                     channel_publication1__get_many__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_token_signed.signature);
                 return Result::Ok(());
             }
             pub fn channel_publication1__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let c_string_1 = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
-                let c_string_2 = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
-                let c_string_3 = Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
+                let string_1 = Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
+                let string_2 = Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
+                let string_3 = Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
                 let incoming = ChannelPublication1_Create_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -5136,29 +5136,29 @@ mod test {
                         channel_token__is_user_the_channel_owner: false,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    channel_publication1__images_pathes: Allocator::<CVector<_>>::allocate(vec![c_string_1, c_string_2, c_string_3]),
-                    channel_publication1__text: Option_::data(Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
+                    channel_publication1__images_pathes: Allocator::<CVector<_>>::allocate(vec![string_1, string_2, string_3]),
+                    channel_publication1__text: Option_::data(Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
                 };
                 run_by_template(
                     incoming,
                     channel_publication1__create__serialize_allocate,
                     channel_publication1__create__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(c_string_1);
-                Allocator::<CString>::deallocate(c_string_2);
-                Allocator::<CString>::deallocate(c_string_3);
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(string_1);
+                Allocator::<String_>::deallocate(string_2);
+                Allocator::<String_>::deallocate(string_3);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_publication1__images_pathes);
-                Allocator::<CString>::deallocate(incoming.channel_publication1__text.data);
+                Allocator::<String_>::deallocate(incoming.channel_publication1__text.data);
                 return Result::Ok(());
             }
             pub fn channel_publication1__delete() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ChannelPublication1_Delete_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -5184,7 +5184,7 @@ mod test {
                     channel_publication1__delete__serialize_allocate,
                     channel_publication1__delete__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
@@ -5194,7 +5194,7 @@ mod test {
                 let incoming = ChannelPublication1Mark_Create_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -5212,7 +5212,7 @@ mod test {
                     channel_publication1_mark__create__serialize_allocate,
                     channel_publication1_mark__create__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
                 return Result::Ok(());
@@ -5221,7 +5221,7 @@ mod test {
                 let incoming = ChannelPublication1Mark_Delete_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -5239,7 +5239,7 @@ mod test {
                     channel_publication1_mark__delete__serialize_allocate,
                     channel_publication1_mark__delete__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
                 return Result::Ok(());
@@ -5248,7 +5248,7 @@ mod test {
                 let incoming = ChannelPublication1View_Create_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -5266,7 +5266,7 @@ mod test {
                     channel_publication1_view__create__serialize_allocate,
                     channel_publication1_view__create__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
                 return Result::Ok(());
@@ -5275,12 +5275,12 @@ mod test {
                 let incoming = ChannelPublication1Commentary_Create_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    channel_publication1_commentary__text: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    channel_publication1_commentary__text: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     channel_publication1_token_signed: ChannelPublication1TokenSigned {
                         channel__id: 0,
                         channel_publication1__id: 0,
@@ -5294,9 +5294,9 @@ mod test {
                     channel_publication1_commentary__create__serialize_allocate,
                     channel_publication1_commentary__create__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
-                Allocator::<CString>::deallocate(incoming.channel_publication1_commentary__text);
+                Allocator::<String_>::deallocate(incoming.channel_publication1_commentary__text);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
                 return Result::Ok(());
             }
@@ -5304,7 +5304,7 @@ mod test {
                 let incoming = ChannelPublication1Commentary_Delete_Incoming {
                     user_access_token_signed: UserAccessTokenSigned {
                         user__id: 0,
-                        user_device__id: Allocator::<CString>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                         user_access_token__obfuscation_value: 0,
                         user_access_token__expires_at: 0,
                         signature: Allocator::<CVector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
@@ -5323,7 +5323,7 @@ mod test {
                     channel_publication1_commentary__delete__serialize_allocate,
                     channel_publication1_commentary__delete__serialize_deallocate,
                 )?;
-                Allocator::<CString>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<CVector<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<CVector<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
                 return Result::Ok(());

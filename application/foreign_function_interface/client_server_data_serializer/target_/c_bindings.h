@@ -13,14 +13,14 @@ typedef struct Result__CVector_c_uchar {
   bool is_data;
 } Result__CVector_c_uchar;
 
-typedef struct CString {
+typedef struct String_ {
   char *pointer;
-} CString;
+} String_;
 
 typedef struct UserAuthorization_AuthorizeByFirstStep_Incoming {
-  struct CString user_device__id;
-  struct CString user__email___or___user__nickname;
-  struct CString user__password;
+  struct String_ user_device__id;
+  struct String_ user__email___or___user__nickname;
+  struct String_ user__password;
 } UserAuthorization_AuthorizeByFirstStep_Incoming;
 
 typedef struct UserAuthorization_AuthorizeByFirstStep_Outcoming {
@@ -56,13 +56,13 @@ typedef struct Result__UnifiedReport__UserAuthorization_AuthorizeByFirstStep_Out
 
 typedef struct UserAuthorization_AuthorizeByLastStep_Incoming {
   long user__id;
-  struct CString user_device__id;
-  struct CString user_authorization_token__value;
+  struct String_ user_device__id;
+  struct String_ user_authorization_token__value;
 } UserAuthorization_AuthorizeByLastStep_Incoming;
 
 typedef struct UserAccessTokenSigned {
   long user__id;
-  struct CString user_device__id;
+  struct String_ user_device__id;
   long user_access_token__obfuscation_value;
   long user_access_token__expires_at;
   struct CVector_c_uchar signature;
@@ -110,7 +110,7 @@ typedef struct Result__UnifiedReport__UserAuthorization_AuthorizeByLastStep_Outc
 typedef struct Result__UnifiedReport__UserAuthorization_AuthorizeByLastStep_Outcoming__UserAuthorization_AuthorizeByLastStep_Precedent UserAuthorization_AuthorizeByLastStep_Result;
 
 typedef struct UserAuthorization_CheckEmailForExisting_Incoming {
-  struct CString user__email;
+  struct String_ user__email;
 } UserAuthorization_CheckEmailForExisting_Incoming;
 
 typedef struct UserAuthorization_CheckEmailForExisting_Outcoming {
@@ -140,7 +140,7 @@ typedef struct Result__UnifiedReport__UserAuthorization_CheckEmailForExisting_Ou
 typedef struct Result__UnifiedReport__UserAuthorization_CheckEmailForExisting_Outcoming__CVoid UserAuthorization_CheckEmailForExisting_Result;
 
 typedef struct UserAuthorization_CheckNicknameForExisting_Incoming {
-  struct CString user__nickname;
+  struct String_ user__nickname;
 } UserAuthorization_CheckNicknameForExisting_Incoming;
 
 typedef struct UserAuthorization_CheckNicknameForExisting_Outcoming {
@@ -247,8 +247,8 @@ typedef struct Result__UnifiedReport__UserAuthorization_RefreshAccessToken_Outco
 typedef struct Result__UnifiedReport__UserAuthorization_RefreshAccessToken_Outcoming__UserAuthorization_RefreshAccessToken_Precedent UserAuthorization_RefreshAccessToken_Result;
 
 typedef struct UserAuthorization_RegisterByFirstStep_Incoming {
-  struct CString user__email;
-  struct CString user_device__id;
+  struct String_ user__email;
+  struct String_ user_device__id;
 } UserAuthorization_RegisterByFirstStep_Incoming;
 
 typedef struct UserAuthorization_RegisterByFirstStep_Outcoming {
@@ -282,9 +282,9 @@ typedef struct Result__UnifiedReport__UserAuthorization_RegisterByFirstStep_Outc
 typedef struct Result__UnifiedReport__UserAuthorization_RegisterByFirstStep_Outcoming__UserAuthorization_RegisterByFirstStep_Precedent UserAuthorization_RegisterByFirstStep_Result;
 
 typedef struct UserAuthorization_RegisterBySecondStep_Incoming {
-  struct CString user__email;
-  struct CString user_device__id;
-  struct CString user_registration_token__value;
+  struct String_ user__email;
+  struct String_ user_device__id;
+  struct String_ user_registration_token__value;
 } UserAuthorization_RegisterBySecondStep_Incoming;
 
 typedef struct UserRegistrationToken__WrongValue {
@@ -314,11 +314,11 @@ typedef struct Result__UnifiedReport__CVoid__UserAuthorization_RegisterBySecondS
 typedef struct Result__UnifiedReport__CVoid__UserAuthorization_RegisterBySecondStep_Precedent UserAuthorization_RegisterBySecondStep_Result;
 
 typedef struct UserAuthorization_RegisterByLastStep_Incoming {
-  struct CString user_device__id;
-  struct CString user__nickname;
-  struct CString user__password;
-  struct CString user__email;
-  struct CString user_registration_token__value;
+  struct String_ user_device__id;
+  struct String_ user__nickname;
+  struct String_ user__password;
+  struct String_ user__email;
+  struct String_ user_registration_token__value;
 } UserAuthorization_RegisterByLastStep_Incoming;
 
 typedef struct UserAuthorization_RegisterByLastStep_Outcoming {
@@ -355,8 +355,8 @@ typedef struct Result__UnifiedReport__UserAuthorization_RegisterByLastStep_Outco
 typedef struct Result__UnifiedReport__UserAuthorization_RegisterByLastStep_Outcoming__UserAuthorization_RegisterByLastStep_Precedent UserAuthorization_RegisterByLastStep_Result;
 
 typedef struct UserAuthorization_ResetPasswordByFirstStep_Incoming {
-  struct CString user__email;
-  struct CString user_device__id;
+  struct String_ user__email;
+  struct String_ user_device__id;
 } UserAuthorization_ResetPasswordByFirstStep_Incoming;
 
 typedef struct UserAuthorization_ResetPasswordByFirstStep_Outcoming {
@@ -392,8 +392,8 @@ typedef struct Result__UnifiedReport__UserAuthorization_ResetPasswordByFirstStep
 
 typedef struct UserAuthorization_ResetPasswordBySecondStep_Incoming {
   long user__id;
-  struct CString user_device__id;
-  struct CString user_reset_password_token__value;
+  struct String_ user_device__id;
+  struct String_ user_reset_password_token__value;
 } UserAuthorization_ResetPasswordBySecondStep_Incoming;
 
 typedef struct UserResetPasswordToken__WrongValue {
@@ -424,9 +424,9 @@ typedef struct Result__UnifiedReport__CVoid__UserAuthorization_ResetPasswordBySe
 
 typedef struct UserAuthorization_ResetPasswordByLastStep_Incoming {
   long user__id;
-  struct CString user_device__id;
-  struct CString user__password;
-  struct CString user_reset_password_token__value;
+  struct String_ user_device__id;
+  struct String_ user__password;
+  struct String_ user_reset_password_token__value;
 } UserAuthorization_ResetPasswordByLastStep_Incoming;
 
 typedef struct UserAuthorization_ResetPasswordByLastStep_Precedent {
@@ -452,8 +452,8 @@ typedef struct Result__UnifiedReport__CVoid__UserAuthorization_ResetPasswordByLa
 typedef struct Result__UnifiedReport__CVoid__UserAuthorization_ResetPasswordByLastStep_Precedent UserAuthorization_ResetPasswordByLastStep_Result;
 
 typedef struct UserAuthorization_SendEmailForRegister_Incoming {
-  struct CString user__email;
-  struct CString user_device__id;
+  struct String_ user__email;
+  struct String_ user_device__id;
 } UserAuthorization_SendEmailForRegister_Incoming;
 
 typedef struct UserAuthorization_SendEmailForRegister_Outcoming {
@@ -487,7 +487,7 @@ typedef struct Result__UnifiedReport__UserAuthorization_SendEmailForRegister_Out
 typedef struct Result__UnifiedReport__UserAuthorization_SendEmailForRegister_Outcoming__UserAuthorization_SendEmailForRegister_Precedent UserAuthorization_SendEmailForRegister_Result;
 
 typedef struct UserAuthorization_SendEmailForAuthorize_Incoming {
-  struct CString user_device__id;
+  struct String_ user_device__id;
   long user__id;
 } UserAuthorization_SendEmailForAuthorize_Incoming;
 
@@ -523,7 +523,7 @@ typedef struct Result__UnifiedReport__UserAuthorization_SendEmailForAuthorize_Ou
 
 typedef struct UserAuthorization_SendEmailForResetPassword_Incoming {
   long user__id;
-  struct CString user_device__id;
+  struct String_ user_device__id;
 } UserAuthorization_SendEmailForResetPassword_Incoming;
 
 typedef struct UserAuthorization_SendEmailForResetPassword_Outcoming {
@@ -557,15 +557,15 @@ typedef struct Result__UnifiedReport__UserAuthorization_SendEmailForResetPasswor
 
 typedef struct Result__UnifiedReport__UserAuthorization_SendEmailForResetPassword_Outcoming__UserAuthorization_SendEmailForResetPassword_Precedent UserAuthorization_SendEmailForResetPassword_Result;
 
-typedef struct Option__CString {
-  struct CString data;
+typedef struct Option__String_ {
+  struct String_ data;
   bool is_data;
-} Option__CString;
+} Option__String_;
 
 typedef struct Channel_GetManyByNameInSubscriptions_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  struct CString channel__name;
-  struct Option__CString requery___channel__name;
+  struct String_ channel__name;
+  struct Option__String_ requery___channel__name;
   unsigned char limit;
 } Channel_GetManyByNameInSubscriptions_Incoming;
 
@@ -579,12 +579,12 @@ typedef struct ChannelTokenSigned {
 } ChannelTokenSigned;
 
 typedef struct Channel_GetManyByNameInSubscriptions_Data {
-  struct CString channel__name;
-  struct CString channel__linked_name;
+  struct String_ channel__name;
+  struct String_ channel__linked_name;
   unsigned char channel__access_modifier;
   unsigned char channel__visability_modifier;
-  struct Option__CString channel__cover_image_path;
-  struct Option__CString channel__background_image_path;
+  struct Option__String_ channel__cover_image_path;
+  struct Option__String_ channel__background_image_path;
   struct ChannelTokenSigned channel_token_signed;
 } Channel_GetManyByNameInSubscriptions_Data;
 
@@ -631,12 +631,12 @@ typedef struct Channel_GetManyBySubscription_Incoming {
 } Channel_GetManyBySubscription_Incoming;
 
 typedef struct Channel_GetManyBySubscription_Data {
-  struct CString channel__name;
-  struct CString channel__linked_name;
+  struct String_ channel__name;
+  struct String_ channel__linked_name;
   unsigned char channel__access_modifier;
   unsigned char channel__visability_modifier;
-  struct Option__CString channel__cover_image_path;
-  struct Option__CString channel__background_image_path;
+  struct Option__String_ channel__cover_image_path;
+  struct Option__String_ channel__background_image_path;
   struct ChannelTokenSigned channel_token_signed;
 } Channel_GetManyBySubscription_Data;
 
@@ -673,17 +673,17 @@ typedef struct Result__UnifiedReport__Channel_GetManyBySubscription_Outcoming__C
 
 typedef struct Channel_GetManyPublicByName_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  struct CString channel__name;
-  struct Option__CString requery___channel__name;
+  struct String_ channel__name;
+  struct Option__String_ requery___channel__name;
   unsigned char limit;
 } Channel_GetManyPublicByName_Incoming;
 
 typedef struct Channel_GetManyPublicByName_Data {
-  struct CString channel__name;
-  struct CString channel__linked_name;
+  struct String_ channel__name;
+  struct String_ channel__linked_name;
   unsigned char channel__access_modifier;
-  struct Option__CString channel__cover_image_path;
-  struct Option__CString channel__background_image_path;
+  struct Option__String_ channel__cover_image_path;
+  struct Option__String_ channel__background_image_path;
   struct ChannelTokenSigned channel_token_signed;
 } Channel_GetManyPublicByName_Data;
 
@@ -724,13 +724,13 @@ typedef struct Channel_GetOneById_Incoming {
 } Channel_GetOneById_Incoming;
 
 typedef struct Channel_GetOneById_Outcoming {
-  struct CString channel__name;
-  struct CString channel__linked_name;
-  struct Option__CString channel__description;
+  struct String_ channel__name;
+  struct String_ channel__linked_name;
+  struct Option__String_ channel__description;
   unsigned char channel__access_modifier;
   unsigned char channel__visability_modifier;
-  struct Option__CString channel__cover_image_path;
-  struct Option__CString channel__background_image_path;
+  struct Option__String_ channel__cover_image_path;
+  struct Option__String_ channel__background_image_path;
   unsigned int channel__subscribers_quantity;
 } Channel_GetOneById_Outcoming;
 
@@ -762,7 +762,7 @@ typedef struct Result__UnifiedReport__Channel_GetOneById_Outcoming__Channel_GetO
 
 typedef struct Channel_CheckNameForExisting_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  struct CString channel__name;
+  struct String_ channel__name;
 } Channel_CheckNameForExisting_Incoming;
 
 typedef struct Channel_CheckNameForExisting_Outcoming {
@@ -793,7 +793,7 @@ typedef struct Result__UnifiedReport__Channel_CheckNameForExisting_Outcoming__Ch
 
 typedef struct Channel_CheckLinkedNameForExisting_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  struct CString channel__linked_name;
+  struct String_ channel__linked_name;
 } Channel_CheckLinkedNameForExisting_Incoming;
 
 typedef struct Channel_CheckLinkedNameForExisting_Outcoming {
@@ -824,8 +824,8 @@ typedef struct Result__UnifiedReport__Channel_CheckLinkedNameForExisting_Outcomi
 
 typedef struct Channel_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  struct CString channel__name;
-  struct CString channel__linked_name;
+  struct String_ channel__name;
+  struct String_ channel__linked_name;
   unsigned char channel__access_modifier;
   unsigned char channel__visability_modifier;
 } Channel_Create_Incoming;
@@ -961,10 +961,10 @@ typedef struct ChannelPublication1_GetMany_Incoming {
   unsigned char limit;
 } ChannelPublication1_GetMany_Incoming;
 
-typedef struct CVector_CString {
-  struct CString *pointer;
+typedef struct CVector_String_ {
+  struct String_ *pointer;
   size_t length;
-} CVector_CString;
+} CVector_String_;
 
 typedef struct ChannelPublication1TokenSigned {
   long channel__id;
@@ -975,8 +975,8 @@ typedef struct ChannelPublication1TokenSigned {
 } ChannelPublication1TokenSigned;
 
 typedef struct ChannelPublication1_GetMany_Data {
-  struct CVector_CString channel_publication1__images_pathes;
-  struct Option__CString channel_publication1__text;
+  struct CVector_String_ channel_publication1__images_pathes;
+  struct Option__String_ channel_publication1__text;
   unsigned int channel_publication1__commentaries_quantity;
   unsigned int channel_publication1__marks_quantity;
   unsigned int channel_publication1__view_quantity;
@@ -1023,8 +1023,8 @@ typedef struct Result__UnifiedReport__ChannelPublication1_GetMany_Outcoming__Cha
 typedef struct ChannelPublication1_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
   struct ChannelTokenSigned channel_token_signed;
-  struct CVector_CString channel_publication1__images_pathes;
-  struct Option__CString channel_publication1__text;
+  struct CVector_String_ channel_publication1__images_pathes;
+  struct Option__String_ channel_publication1__text;
 } ChannelPublication1_Create_Incoming;
 
 typedef struct ChannelPublication1_Create_Outcoming {
@@ -1160,7 +1160,7 @@ typedef struct Result__UnifiedReport__CVoid__ChannelPublication1View_Create_Prec
 
 typedef struct ChannelPublication1Commentary_Create_Incoming {
   struct UserAccessTokenSigned user_access_token_signed;
-  struct CString channel_publication1_commentary__text;
+  struct String_ channel_publication1_commentary__text;
   struct ChannelPublication1TokenSigned channel_publication1_token_signed;
 } ChannelPublication1Commentary_Create_Incoming;
 
