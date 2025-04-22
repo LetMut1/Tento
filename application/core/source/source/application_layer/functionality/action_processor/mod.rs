@@ -15,6 +15,7 @@ pub use self::{
         get_many_public_by_name::Channel_GetManyPublicByName,
         get_one_by_id::Channel_GetOneById,
         delete::Channel_Delete,
+        get_many_owned::Channel_GetManyOwned,
     },
     channel_publication1::{
         create::ChannelPublication1_Create,

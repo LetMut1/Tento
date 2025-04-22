@@ -566,7 +566,6 @@ typedef struct Channel_GetManyByNameInSubscriptions_Incoming_ {
   struct UserAccessTokenSigned_ user_access_token_signed;
   struct String_ channel__name;
   struct Option__String_ requery___channel__name;
-  unsigned char limit;
 } Channel_GetManyByNameInSubscriptions_Incoming_;
 
 typedef struct ChannelTokenSigned_ {
@@ -627,7 +626,6 @@ typedef struct Option__c_long {
 typedef struct Channel_GetManyBySubscription_Incoming_ {
   struct UserAccessTokenSigned_ user_access_token_signed;
   struct Option__c_long requery___channel__id;
-  unsigned char limit;
 } Channel_GetManyBySubscription_Incoming_;
 
 typedef struct Channel_GetManyBySubscription_Data_ {
@@ -675,7 +673,6 @@ typedef struct Channel_GetManyPublicByName_Incoming_ {
   struct UserAccessTokenSigned_ user_access_token_signed;
   struct String_ channel__name;
   struct Option__String_ requery___channel__name;
-  unsigned char limit;
 } Channel_GetManyPublicByName_Incoming_;
 
 typedef struct Channel_GetManyPublicByName_Data_ {
@@ -884,6 +881,51 @@ typedef struct Result__UnifiedReport__Void___Channel_Delete_Precedent_ {
 
 typedef struct Result__UnifiedReport__Void___Channel_Delete_Precedent_ Channel_Delete_Result;
 
+typedef struct Channel_GetManyOwned_Incoming_ {
+  struct UserAccessTokenSigned_ user_access_token_signed;
+} Channel_GetManyOwned_Incoming_;
+
+typedef struct Channel_GetManyOwned_Data_ {
+  struct String_ channel__name;
+  struct String_ channel__linked_name;
+  unsigned char channel__access_modifier;
+  unsigned char channel__visability_modifier;
+  struct Option__String_ channel__cover_image_path;
+  struct Option__String_ channel__background_image_path;
+  struct ChannelTokenSigned_ channel_token_signed;
+} Channel_GetManyOwned_Data_;
+
+typedef struct Vec__Channel_GetManyOwned_Data_ {
+  struct Channel_GetManyOwned_Data_ *pointer;
+  size_t length;
+} Vec__Channel_GetManyOwned_Data_;
+
+typedef struct Channel_GetManyOwned_Outcoming_ {
+  struct Vec__Channel_GetManyOwned_Data_ data_registry;
+} Channel_GetManyOwned_Outcoming_;
+
+typedef struct Data__Channel_GetManyOwned_Outcoming_ {
+  struct Channel_GetManyOwned_Outcoming_ filled;
+  bool is_filled;
+} Data__Channel_GetManyOwned_Outcoming_;
+
+typedef struct Channel_GetManyOwned_Precedent_ {
+  bool user_access_token___already_expired;
+} Channel_GetManyOwned_Precedent_;
+
+typedef struct UnifiedReport__Channel_GetManyOwned_Outcoming___Channel_GetManyOwned_Precedent_ {
+  struct Data__Channel_GetManyOwned_Outcoming_ target;
+  struct Channel_GetManyOwned_Precedent_ precedent;
+  bool is_target;
+} UnifiedReport__Channel_GetManyOwned_Outcoming___Channel_GetManyOwned_Precedent_;
+
+typedef struct Result__UnifiedReport__Channel_GetManyOwned_Outcoming___Channel_GetManyOwned_Precedent_ {
+  struct UnifiedReport__Channel_GetManyOwned_Outcoming___Channel_GetManyOwned_Precedent_ data;
+  bool is_data;
+} Result__UnifiedReport__Channel_GetManyOwned_Outcoming___Channel_GetManyOwned_Precedent_;
+
+typedef struct Result__UnifiedReport__Channel_GetManyOwned_Outcoming___Channel_GetManyOwned_Precedent_ Channel_GetManyOwned_Result;
+
 typedef struct ChannelSubscription_Create_Incoming_ {
   struct UserAccessTokenSigned_ user_access_token_signed;
   struct ChannelTokenSigned_ channel_token_signed;
@@ -958,7 +1000,6 @@ typedef struct ChannelPublication1_GetMany_Incoming_ {
   struct UserAccessTokenSigned_ user_access_token_signed;
   struct ChannelTokenSigned_ channel_token_signed;
   long channel_publication1__created_at;
-  unsigned char limit;
 } ChannelPublication1_GetMany_Incoming_;
 
 typedef struct Vec__String_ {
@@ -1409,6 +1450,14 @@ void channel__delete__serialize_deallocate(struct Result__Vec__c_uchar result);
 Channel_Delete_Result channel__delete__deserialize_allocate(struct Vec__c_uchar vector_of_bytes);
 
 void channel__delete__deserialize_deallocate(Channel_Delete_Result _result);
+
+struct Result__Vec__c_uchar channel__get_many_owned__serialize_allocate(struct Channel_GetManyOwned_Incoming_ incoming);
+
+void channel__get_many_owned__serialize_deallocate(struct Result__Vec__c_uchar result);
+
+Channel_GetManyOwned_Result channel__get_many_owned__deserialize_allocate(struct Vec__c_uchar vector_of_bytes);
+
+void channel__get_many_owned__deserialize_deallocate(Channel_GetManyOwned_Result result);
 
 struct Result__Vec__c_uchar channel_subscription__create__serialize_allocate(struct ChannelSubscription_Create_Incoming_ incoming);
 

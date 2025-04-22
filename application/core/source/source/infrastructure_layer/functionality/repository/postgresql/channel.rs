@@ -659,11 +659,10 @@ impl Repository<Postgresql<Channel>> {
                             cs.channel__id ASC \
                         LIMIT $2;",
                     );
-                    parameter_storage
-                        .add(
-                            &limit,
-                            Type::INT2,
-                        );
+                    parameter_storage.add(
+                        &limit,
+                        Type::INT2,
+                    );
                     crate::result_return_logic!(
                         client_database_3
                         .prepare_typed_cached(
@@ -743,6 +742,50 @@ impl Repository<Postgresql<Channel>> {
                         channel__access_modifier as u8,
                     ),
                 ),
+            );
+        };
+    }
+    pub fn find_7<'a>(client_database_3: &'a Client, by: By8, limit: i16) -> impl Future<Output = Result<Vec<Row>, AggregateError>> + Send + use<'a> {
+        return async move {
+            const QUERY: &'static str = "\
+                SELECT \
+                    c.id AS i,\
+                    c.name AS n,\
+                    c.linked_name AS ln,\
+                    c.access_modifier AS am,\
+                    c.visability_modifier AS vm,\
+                    c.cover_image_path AS cip,\
+                    c.background_image_path AS bip \
+                FROM \
+                    public.channel c \
+                WHERE \
+                    c.owner = $1 \
+                LIMIT $2;";
+            let mut parameter_storage = ParameterStorage::new(2);
+            parameter_storage
+                .add(
+                    &by.channel__owner,
+                    Type::INT8,
+                )
+                .add(
+                    &limit,
+                    Type::INT2,
+                );
+            let statement = crate::result_return_logic!(
+                client_database_3
+                .prepare_typed_cached(
+                    QUERY,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            return crate::result_into_runtime!(
+                client_database_3
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
             );
         };
     }
@@ -857,5 +900,8 @@ pub struct By6 {
 }
 pub struct By7 {
     pub channel__id: i64,
+    pub channel__owner: i64,
+}
+pub struct By8 {
     pub channel__owner: i64,
 }

@@ -18,7 +18,6 @@ pub struct Incoming<'a> {
     )]
     pub user_access_token_signed: UserAccessTokenSigned<'a>,
     pub requery___channel__id: Option<i64>,
-    pub limit: u8,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

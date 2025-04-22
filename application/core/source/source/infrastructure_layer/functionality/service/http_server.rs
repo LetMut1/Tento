@@ -24,6 +24,7 @@ use {
                 ChannelPublication1View_Create,
                 ChannelSubscription_Create,
                 Channel_Delete,
+                Channel_GetManyOwned,
                 ChannelSubscription_Delete,
                 Inner as ActionProcessorInner,
                 UserAuthorization_AuthorizeByFirstStep,
@@ -502,6 +503,13 @@ impl HttpServer {
         crate::result_return_logic!(
             router
             .insert(
+                Channel::GET_MANY_OWNED,
+                ActionRoute::Channel(Channel::GetManyOwned),
+            )
+        );
+        crate::result_return_logic!(
+            router
+            .insert(
                 ChannelSubscription::CREATE,
                 ActionRoute::ChannelSubscription(ChannelSubscription::Create),
             )
@@ -736,6 +744,13 @@ impl HttpServer {
                 .insert(
                     Channel::DELETE_,
                     ActionRoute::Channel(Channel::Delete_),
+                )
+            );
+            crate::result_return_logic!(
+                router
+                .insert(
+                    Channel::GET_MANY_OWNED_,
+                    ActionRoute::Channel(Channel::GetManyOwned_),
                 )
             );
             crate::result_return_logic!(
@@ -1133,6 +1148,13 @@ impl HttpServer {
                             )
                             .await;
                         }
+                        (&Channel::GetManyOwned, &Method::POST) => {
+                            return Action::<Channel_GetManyOwned>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -1191,6 +1213,13 @@ impl HttpServer {
                                     }
                                     (&Channel::Delete_, &Method::POST) => {
                                         return Action::<Channel_Delete>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&Channel::GetManyOwned_, &Method::POST) => {
+                                        return Action::<Channel_GetManyOwned>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
@@ -1611,6 +1640,7 @@ pub enum Channel {
     CheckNameForExisting,
     CheckLinkedNameForExisting,
     Delete,
+    GetManyOwned,
     #[cfg(feature = "action_for_manual_test")]
     GetOneById_,
     #[cfg(feature = "action_for_manual_test")]
@@ -1627,6 +1657,8 @@ pub enum Channel {
     CheckLinkedNameForExisting_,
     #[cfg(feature = "action_for_manual_test")]
     Delete_,
+    #[cfg(feature = "action_for_manual_test")]
+    GetManyOwned_,
 }
 impl Channel {
     pub const CHECK_LINKED_NAME_FOR_EXISTING: &'static str = "/channel/check_linked_name_for_existing";
@@ -1637,6 +1669,7 @@ impl Channel {
     pub const GET_MANY_PUBLIC_BY_NAME: &'static str = "/channel/get_many_public_by_name";
     pub const GET_ONE_BY_ID: &'static str = "/channel/get_one_by_id";
     pub const DELETE: &'static str = "/channel/delete";
+    pub const GET_MANY_OWNED: &'static str = "/channel/get_many_owned";
 }
 #[cfg(feature = "action_for_manual_test")]
 impl Channel {
@@ -1670,6 +1703,10 @@ impl Channel {
     );
     pub const DELETE_: &'static str = const_format::concatcp!(
         Channel::DELETE,
+        ActionRoute::PART,
+    );
+    pub const GET_MANY_OWNED_: &'static str = const_format::concatcp!(
+        Channel::GET_MANY_OWNED,
         ActionRoute::PART,
     );
 }

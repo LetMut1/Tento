@@ -210,13 +210,13 @@ enum Precedent {
  - ## Channel_GetManyByNameInSubscriptions POST /channel/get_many_by_name_in_subscriptions
 ```
 Returns channels the user is subscribed to by name.
+Limit: 30.
 ```
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>,
     channel__name: String,
     requery___channel__name: Option<String>,
-    limit: u8,
 }
 
 
@@ -225,8 +225,6 @@ requery___channel__name - an alternative for offset. Used only for requering wit
 Incoming parameters validation rule:
 - requery___channel__name:
     -- same as channel__name.
-- limit:
-    -- [20, 100] values.
 ```
 ```
 struct Outcoming {
@@ -251,12 +249,12 @@ enum Precedent {
  - ## Channel_GetManyBySubscription POST /channel/get_many_by_subscription
 ```
 Returns channels the user is subscribed to.
+Limit: 30.
 ```
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>,
     requery___channel__id: Option<i64>,
-    limit: u8,
 }
 
 
@@ -265,8 +263,6 @@ requery___channel__id - an alternative for offset. The value must be equal to th
 Incoming parameters validation rule:
 - requery___channel__id:
     -- same as channel__id.
-- limit:
-    -- [20, 100] values.
 ```
 ```
 struct Outcoming {
@@ -290,13 +286,13 @@ enum Precedent {
  - ## Channel_GetManyPublicByName POST /channel/get_many_public_by_name
 ```
 Returns public channels by name.
+Limit: 30.
 ```
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>,
     channel__name: String,
     requery___channel__name: Option<String>,
-    limit: u8,
 }
 
 
@@ -305,8 +301,6 @@ requery___channel__name - an alternative for offset. Used only for requering wit
 Incoming parameters validation rule:
 - requery___channel__name:
     -- same as channel__name.
-- limit:
-    -- [20, 100] values.
 ```
 ```
 struct Outcoming {
@@ -343,6 +337,35 @@ enum Precedent {
     ChannelToken__AlreadyExpired,
     User__IsNotChannelOwner,
     Channel__NotFound,
+}
+```
+ - ## Channel_GetManyOwned POST /channel/get_many_owned
+```
+Returns channels owned by user.
+Limit: 30.
+```
+```
+struct Incoming {
+    user_access_token_signed: <Data standards>,
+}
+```
+```
+struct Outcoming {
+    data_registry: Vec<Data>,
+}
+
+struct Data {
+    channel__name: String,
+    channel__linked_name: String,
+    channel__access_modifier: u8,
+    channel__visability_modifier: u8,
+    channel__cover_image_path: Option<String>,
+    channel_token_signed: <Data standards>,
+}
+```
+```
+enum Precedent {
+    UserAccessToken__AlreadyExpired,
 }
 ```
  - ## ChannelSubscription_Create POST /channel_subscription/create
@@ -442,21 +465,17 @@ enum Precedent {
  - ## ChannelPublication1_GetMany POST /channel_publication1/get_many
 ```
 Returns channel publications of type 1.
+Limit: 30.
 ```
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>,
     channel_token_signed: <Data standards>,
     channel_publication1__created_at: i64,
-    limit: u8,
 }
 
 
 channel_publication1__created_at - an alternative for offset. The value for next requests must be equal to the last channel_publication1__created_at of data_regitry registry in received early response.
-
-Incoming parameters validation rule:
-- limit:
-    -- [10, 30] values.
 ```
 ```
 struct Outcoming {

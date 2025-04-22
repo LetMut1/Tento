@@ -29,6 +29,9 @@ pub struct Channel {
     subscribers_quantity: SubscribersQuantity,
     created_at: CreatedAt,
 }
+impl Channel {
+    pub const OWNED_QUANTITY_PER_USER: u8 = 30;
+}
 pub type Channel_AccessModifier_ = AccessModifier_;
 pub type Channel_Description = Description;
 pub type Channel_Id = Id;

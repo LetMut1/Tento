@@ -7,11 +7,7 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::{
-                    Channel,
-                    Channel_Name,
-                    Channel_VisabilityModifier_,
-                },
+                channel::Channel,
                 channel_token::{
                     ChannelToken,
                     ChannelToken_ExpiresAt,
@@ -20,20 +16,16 @@ use {
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder,
-                generator::Generator,
-                validator::Validator,
+                encoder::Encoder, generator::Generator,
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
-                        ChannelBy4,
-                        Postgresql,
-                    },
+                       ChannelBy8, Postgresql
+                    }, Repository
                 },
                 service::resolver::{
                     Resolver,
@@ -43,7 +35,7 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::channel::get_many_public_by_name::{
+        action_processor_incoming_outcoming::action_processor::channel::get_many_owned::{
             Data,
             Incoming,
             Outcoming,
@@ -53,8 +45,8 @@ use {
     },
     std::future::Future,
 };
-pub struct Channel_GetManyPublicByName;
-impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
+pub struct Channel_GetManyOwned;
+impl ActionProcessor_ for ActionProcessor<Channel_GetManyOwned> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
@@ -70,36 +62,33 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
-            if !Validator::<Channel_Name>::is_valid(incoming.channel__name) {
-                return Result::Err(crate::new_invalid_argument!());
-            }
-            if let Option::Some(requery___channel__name_) = incoming.requery___channel__name {
-                if !Validator::<Channel_Name>::is_valid(requery___channel__name_) {
-                    return Result::Err(crate::new_invalid_argument!());
-                }
-            }
-            const LIMIT: i16 = 30;
-            let rows = Repository::<Postgresql<Channel>>::find_3(
+            const LIMIT: i16 = Channel::OWNED_QUANTITY_PER_USER as i16;
+            static_assertions::const_assert!(
+                LIMIT <= 30
+            );
+            let rows = Repository::<Postgresql<Channel>>::find_7(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),
-                ChannelBy4 {
-                    user__id: incoming.user_access_token_signed.user__id,
-                    channel__name: incoming.channel__name,
-                    requery___channel__name: incoming.requery___channel__name,
-                    channel__visability_modifier: Channel_VisabilityModifier_::Public as u8,
+                ChannelBy8 {
+                    channel__owner: incoming.user_access_token_signed.user__id,
                 },
                 LIMIT,
             )
             .await?;
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
             '_a: for row in rows.iter() {
-                let channel__access_modifier = crate::result_return_logic!(row.try_get::<'_, usize, i16>(4));
+                let channel__access_modifier = crate::result_return_logic!(row.try_get::<'_, usize, i16>(3));
                 if channel__access_modifier < u8::MIN as i16 || channel__access_modifier > u8::MAX as i16 {
                     return Result::Err(crate::new_logic_unreachable_state!());
                 }
+                let channel__visability_modifier = crate::result_return_logic!(row.try_get::<'_, usize, i16>(4));
+                if channel__visability_modifier < u8::MIN as i16 || channel__visability_modifier > u8::MAX as i16 {
+                    return Result::Err(crate::new_logic_unreachable_state!());
+                }
                 let data = Data {
-                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
-                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(3)),
+                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
+                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
                     channel__access_modifier: channel__access_modifier as u8,
+                    channel__visability_modifier: channel__visability_modifier as u8,
                     channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
                     channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
                     channel_token_signed: Encoder::<ChannelToken>::encode(
@@ -108,8 +97,8 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                         crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
                         Generator::<ChannelToken_ObfuscationValue>::generate(),
                         Generator::<ChannelToken_ExpiresAt>::generate(now)?,
-                        crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7)).is_some(),
-                        crate::result_return_logic!(row.try_get::<'_, usize, i64>(1)) == incoming.user_access_token_signed.user__id,
+                        false,
+                        true,
                     )?,
                 };
                 data_registry.push(data);

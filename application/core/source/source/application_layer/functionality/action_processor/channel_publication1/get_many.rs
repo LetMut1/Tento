@@ -76,11 +76,6 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
             if incoming.channel_token_signed.channel_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__AlreadyExpired));
             }
-            const MINIMUM_LIMIT: u8 = 10;
-            const MAXIMUM_LIMIT: u8 = 30;
-            if incoming.limit < MINIMUM_LIMIT || incoming.limit > MAXIMUM_LIMIT {
-                return Result::Err(crate::new_invalid_argument!());
-            }
             let postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let (channel__owner, channel__access_modifier) = match Repository::<Postgresql<Channel>>::find_6(
                 &postgresql_client_database_3,
@@ -102,13 +97,14 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_GetMany> {
                 && Channel_AccessModifier_::Close as u8 == channel__access_modifier {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));
             }
+            const LIMIT: i16 = 30;
             let rows = Repository::<Postgresql<ChannelPublication1>>::find_1(
                 &postgresql_client_database_3,
                 ChannelPublication1By2 {
                     channel__id: incoming.channel_token_signed.channel__id,
                     channel_publication1__created_at: incoming.channel_publication1__created_at,
                 },
-                incoming.limit as i16,
+                LIMIT,
             )
             .await?;
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());

@@ -6,3 +6,4 @@ pub mod get_many_by_subscription;
 pub mod get_many_public_by_name;
 pub mod get_one_by_id;
 pub mod delete;
+pub mod get_many_owned;

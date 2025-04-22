@@ -20,7 +20,6 @@ pub struct Incoming<'a> {
     pub user_access_token_signed: UserAccessTokenSigned<'a>,
     pub channel_token_signed: ChannelTokenSigned,
     pub channel_publication1__created_at: i64,
-    pub limit: u8,
 }
 #[cfg_attr(
     feature = "serde_for_manual_test",

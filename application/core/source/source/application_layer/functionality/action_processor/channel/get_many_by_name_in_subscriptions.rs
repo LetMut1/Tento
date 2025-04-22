@@ -69,11 +69,6 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
-            const MINIMUM_LIMIT: u8 = 20;
-            const MAXIMUM_LIMIT: u8 = 100;
-            if incoming.limit < MINIMUM_LIMIT || incoming.limit > MAXIMUM_LIMIT {
-                return Result::Err(crate::new_invalid_argument!());
-            }
             if !Validator::<Channel_Name>::is_valid(incoming.channel__name) {
                 return Result::Err(crate::new_invalid_argument!());
             }
@@ -82,6 +77,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
                     return Result::Err(crate::new_invalid_argument!());
                 }
             }
+            const LIMIT: i16 = 30;
             let rows = Repository::<Postgresql<Channel>>::find_4(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),
                 ChannelBy5 {
@@ -89,7 +85,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
                     channel__name: incoming.channel__name,
                     requery___channel__name: incoming.requery___channel__name,
                 },
-                incoming.limit as i16,
+                LIMIT,
             )
             .await?;
             let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
