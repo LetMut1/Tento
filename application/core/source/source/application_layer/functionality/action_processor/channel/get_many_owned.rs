@@ -7,13 +7,11 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::Channel,
-                channel_token::{
+                channel::Channel, channel_token::{
                     ChannelToken,
                     ChannelToken_ExpiresAt,
                     ChannelToken_ObfuscationValue,
-                },
-                user_access_token::UserAccessToken,
+                }, quantity_limiter::QuantityLimiter_OwnedChannelsQuantity, user_access_token::UserAccessToken
             },
             functionality::service::{
                 encoder::Encoder, generator::Generator,
@@ -62,7 +60,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyOwned> {
             if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
-            const LIMIT: i16 = Channel::OWNED_QUANTITY_PER_USER as i16;
+            const LIMIT: i16 = QuantityLimiter_OwnedChannelsQuantity::MAXIMUM_VALUE as i16;
             static_assertions::const_assert!(
                 LIMIT <= 30
             );

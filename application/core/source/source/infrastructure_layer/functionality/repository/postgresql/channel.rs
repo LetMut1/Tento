@@ -17,8 +17,8 @@ use {
         types::Type,
     },
 };
-// channel__id: i64,
 impl Repository<Postgresql<Channel>> {
+    // channel__id: i64,
     pub fn create<'a>(client_database_3: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
             const QUERY: &'static str = "\

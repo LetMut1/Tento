@@ -260,6 +260,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 }
             };
             if !is_deleted {
+                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             Resolver_::<Transaction<'_>>::commit(transaction).await?;

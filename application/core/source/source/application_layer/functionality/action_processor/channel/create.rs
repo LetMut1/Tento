@@ -77,6 +77,17 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             if !Validator::<Channel_LinkedName>::is_valid(incoming.channel__linked_name) {
                 return Result::Err(crate::new_invalid_argument!());
             }
+
+
+
+
+
+            todo!("check quantity of channels, Update Limiter first in transaction.");
+
+
+
+
+
             let postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             if Repository::<Postgresql<Channel>>::is_exist_1(
                 &postgresql_client_database_3,

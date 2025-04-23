@@ -13,6 +13,7 @@ mod user_reset_password_token;
 mod channel_publication1_delayed_deletion;
 mod channel_delayed_deletion;
 mod channel_publication1_commentary_delayed_deletion;
+mod quantity_limiter;
 pub use self::{
     channel::{
         By1 as ChannelBy1,
@@ -29,6 +30,11 @@ pub use self::{
         By1 as ChannelPublication1By1,
         By2 as ChannelPublication1By2,
         Insert as ChannelPublication1Insert,
+    },
+    quantity_limiter::{
+        By as QuantityLimiterBy,
+        Insert as QuantityLimiterInsert,
+        Update as QuantityLimiterUpdate,
     },
     channel_delayed_deletion::Insert as ChannelDelayedDeletionInsert,
     channel_publication1_delayed_deletion::Insert as ChannelPublication1DelayedDeletionInsert,

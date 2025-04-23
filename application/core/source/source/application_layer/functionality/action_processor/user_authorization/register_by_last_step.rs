@@ -1,64 +1,45 @@
 use {
     crate::{
-        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
-        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        },
-        domain_layer::{
+        }, domain_layer::{
             data::entity::{
                 user::{
                     User,
                     User_Email,
                     User_Nickname,
                     User_Password,
-                },
-                user_access_refresh_token::{
+                }, user_access_refresh_token::{
                     UserAccessRefreshToken,
                     UserAccessRefreshToken_ExpiresAt,
                     UserAccessRefreshToken_ObfuscationValue,
-                },
-                user_access_token::{
+                }, user_access_token::{
                     UserAccessToken,
                     UserAccessToken_ExpiresAt,
                     UserAccessToken_ObfuscationValue,
-                },
-                user_device::{
+                }, user_device::{
                     UserDevice,
                     UserDevice_Id,
-                },
-                user_registration_token::{
+                }, user_registration_token::{
                     UserRegistrationToken,
                     UserRegistrationToken_Value,
                     UserRegistrationToken_WrongEnterTriesQuantity,
-                },
+                }
             },
             functionality::service::{
                 encoder::Encoder,
                 generator::Generator,
                 validator::Validator,
             },
-        },
-        infrastructure_layer::{
+        }, infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
-                        IsolationLevel,
-                        Postgresql,
-                        Resolver as Resolver_,
-                        Transaction,
-                        UserAccessRefreshTokenInsert,
-                        UserBy1,
-                        UserBy2,
-                        UserBy3,
-                        UserDeviceInsert,
-                        UserInsert2,
-                        UserRegistrationTokenBy,
-                    },
+                        IsolationLevel, Postgresql, Resolver as Resolver_, Transaction, UserAccessRefreshTokenInsert, UserBy1, UserBy2, UserBy3, UserDeviceInsert, UserInsert2, UserRegistrationTokenBy
+                    }, Repository
                 },
                 service::{
                     resolver::{
@@ -72,7 +53,7 @@ use {
                     },
                 },
             },
-        },
+        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user_authorization::register_by_last_step::{
@@ -220,6 +201,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             let user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
+            let postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let mut postgresql_client_database_2 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_client_database_2,
@@ -246,6 +228,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 }
             };
             if !is_created {
+                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             let is_deleted = match Repository::<Postgresql<UserRegistrationToken>>::delete(
