@@ -80,7 +80,7 @@ impl Repository<Postgresql<QuantityLimiter>> {
                     AND ql.owned_channels_quantity < $2 \
                 RETURNING \
                     true AS _;";
-            let quantity_limiter_maximum_owned_channels_quantity = update.quantity_limiter_maximum_owned_channels_quantity as i16;
+            let quantity_limiter_maximum_owned_channels_quantity = update.quantity_limiter__owned_channels_quantity___maximum_value as i16;
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
@@ -157,44 +157,8 @@ impl Repository<Postgresql<QuantityLimiter>> {
             return Result::Ok(true);
         };
     }
-    pub fn delete<'a>(client_database_3: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
-        return async move {
-            const QUERY: &'static str = "\
-                DELETE FROM ONLY \
-                    public.quantity_limiter AS ql \
-                WHERE \
-                    ql.user__id = $1 \
-                RETURNING \
-                    true AS _;";
-            let mut parameter_storage = ParameterStorage::new(1);
-            parameter_storage.add(
-                &by.user__id,
-                Type::INT8,
-            );
-            let statement = crate::result_return_logic!(
-                client_database_3
-                .prepare_typed_cached(
-                    QUERY,
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
-            let rows = crate::result_return_runtime!(
-                client_database_3
-                .query(
-                    &statement,
-                    parameter_storage.get_parameters(),
-                )
-                .await
-            );
-            if rows.is_empty() {
-                return Result::Ok(false);
-            }
-            return Result::Ok(true);
-        };
-    }
-    // quantity_limiter_owned_channels_quantity: u8,
-    pub fn find_1<'a>(
+    // quantity_limiter__owned_channels_quantity: u8,
+    pub fn find<'a>(
         client_database_3: &'a Client,
         by: By,
     ) -> impl Future<Output = Result<Option<u8>, AggregateError>> + Send + use<'a> {
@@ -230,11 +194,11 @@ impl Repository<Postgresql<QuantityLimiter>> {
             if rows.is_empty() {
                 return Result::Ok(Option::None);
             }
-            let quantity_limiter_owned_channels_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1));
-            if quantity_limiter_owned_channels_quantity < u8::MIN as i16 || quantity_limiter_owned_channels_quantity > u8::MAX as i16 {
+            let quantity_limiter__owned_channels_quantity = crate::result_return_logic!(rows[0].try_get::<'_, usize, i16>(1));
+            if quantity_limiter__owned_channels_quantity < u8::MIN as i16 || quantity_limiter__owned_channels_quantity > u8::MAX as i16 {
                 return Result::Err(crate::new_logic_unreachable_state!());
             }
-            return Result::Ok(Option::Some(quantity_limiter_owned_channels_quantity as u8));
+            return Result::Ok(Option::Some(quantity_limiter__owned_channels_quantity as u8));
         };
     }
 }
@@ -244,8 +208,8 @@ pub struct Insert {
     pub quantity_limiter__created_at: i64,
 }
 pub struct Update {
-    pub quantity_limiter_maximum_owned_channels_quantity: u8,
+    pub quantity_limiter__owned_channels_quantity___maximum_value: u8,
 }
 pub struct By {
-    user__id: i64,
+    pub user__id: i64,
 }
