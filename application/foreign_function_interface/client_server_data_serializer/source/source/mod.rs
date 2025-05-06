@@ -3774,7 +3774,6 @@ pub struct ChannelPublication1_Create_Precedent_ {
     pub user_access_token___already_expired: bool,
     pub channel_token___already_expired: bool,
     pub user___is_not_channel_owner: bool,
-    pub quantity_limiter___exceeded_owned_channels_quantity: bool,
     pub parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
@@ -3818,10 +3817,6 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(vect
                     },
                     ChannelPublication1_Create_Precedent::User__IsNotChannelOwner => ChannelPublication1_Create_Precedent_ {
                         user___is_not_channel_owner: true,
-                        ..Default::default()
-                    },
-                    ChannelPublication1_Create_Precedent::QuantityLimiter__ExceededOwnedChannelsQuantity => ChannelPublication1_Create_Precedent_ {
-                        quantity_limiter___exceeded_owned_channels_quantity: true,
                         ..Default::default()
                     },
                     ChannelPublication1_Create_Precedent::ParallelExecution => ChannelPublication1_Create_Precedent_ {
@@ -3902,7 +3897,6 @@ pub struct ChannelPublication1_Delete_Precedent_ {
     pub channel_publication1_token___already_expired: bool,
     pub user___is_not_channel_owner: bool,
     pub channel_publication1___not_found: bool,
-    pub parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1_Delete_Result {
@@ -3933,10 +3927,6 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_allocate(vect
                     },
                     ChannelPublication1_Delete_Precedent::ChannelPublication1__NotFound => ChannelPublication1_Delete_Precedent_ {
                         channel_publication1___not_found: true,
-                        ..Default::default()
-                    },
-                    ChannelPublication1_Delete_Precedent::ParallelExecution => ChannelPublication1_Delete_Precedent_ {
-                        parallel_execution: true,
                         ..Default::default()
                     },
                 };
@@ -6905,14 +6895,12 @@ mod test {
                     ChannelPublication1_Create_Precedent::UserAccessToken__AlreadyExpired => {}
                     ChannelPublication1_Create_Precedent::ChannelToken__AlreadyExpired => {}
                     ChannelPublication1_Create_Precedent::User__IsNotChannelOwner => {}
-                    ChannelPublication1_Create_Precedent::QuantityLimiter__ExceededOwnedChannelsQuantity => {}
                     ChannelPublication1_Create_Precedent::ParallelExecution => {}
                 }
                 let precedents: Vec<ChannelPublication1_Create_Precedent> = vec![
                     ChannelPublication1_Create_Precedent::UserAccessToken__AlreadyExpired,
                     ChannelPublication1_Create_Precedent::ChannelToken__AlreadyExpired,
                     ChannelPublication1_Create_Precedent::User__IsNotChannelOwner,
-                    ChannelPublication1_Create_Precedent::QuantityLimiter__ExceededOwnedChannelsQuantity,
                     ChannelPublication1_Create_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
@@ -6946,7 +6934,6 @@ mod test {
                     ChannelPublication1_Delete_Precedent::ChannelPublication1Token__AlreadyExpired => {}
                     ChannelPublication1_Delete_Precedent::User__IsNotChannelOwner => {}
                     ChannelPublication1_Delete_Precedent::ChannelPublication1__NotFound => {}
-                    ChannelPublication1_Delete_Precedent::ParallelExecution => {}
                 }
                 let precedents: Vec<ChannelPublication1_Delete_Precedent> = vec![
                     ChannelPublication1_Delete_Precedent::UserAccessToken__AlreadyExpired,
@@ -6954,7 +6941,6 @@ mod test {
                     ChannelPublication1_Delete_Precedent::ChannelPublication1Token__AlreadyExpired,
                     ChannelPublication1_Delete_Precedent::User__IsNotChannelOwner,
                     ChannelPublication1_Delete_Precedent::ChannelPublication1__NotFound,
-                    ChannelPublication1_Delete_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel_publication1__delete(precedent)?;

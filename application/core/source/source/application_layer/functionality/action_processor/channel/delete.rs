@@ -76,6 +76,42 @@ impl ActionProcessor_ for ActionProcessor<Channel_Delete> {
                 IsolationLevel::ReadCommitted,
             )
             .await?;
+
+
+
+
+
+
+            // let is_updated = match Repository::<Postgresql<QuantityLimiter>>::update_2(
+            //     transaction.get_client(),
+            //     QuantityLimiterBy {
+            //         user__id: incoming.user_access_token_signed.user__id,
+            //     }
+            // )
+            // .await
+            // {
+            //     Result::Ok(is_updated_) => is_updated_,
+            //     Result::Err(aggregate_error) => {
+            //         Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+            //         return Result::Err(aggregate_error);
+            //     }
+            // };
+            // if !is_updated {
+            //     Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+            //     return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
+            // }
+
+
+
+
+
+
+
+
+
+
+
+
             let is_deleted = match Repository::<Postgresql<Channel>>::delete(
                 transaction.get_client(),
                 ChannelBy7 {

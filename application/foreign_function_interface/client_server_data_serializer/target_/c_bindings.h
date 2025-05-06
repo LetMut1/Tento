@@ -1082,7 +1082,6 @@ typedef struct ChannelPublication1_Create_Precedent_ {
   bool user_access_token___already_expired;
   bool channel_token___already_expired;
   bool user___is_not_channel_owner;
-  bool quantity_limiter___exceeded_owned_channels_quantity;
   bool parallel_execution;
 } ChannelPublication1_Create_Precedent_;
 
@@ -1111,7 +1110,6 @@ typedef struct ChannelPublication1_Delete_Precedent_ {
   bool channel_publication1_token___already_expired;
   bool user___is_not_channel_owner;
   bool channel_publication1___not_found;
-  bool parallel_execution;
 } ChannelPublication1_Delete_Precedent_;
 
 typedef struct UnifiedReport__Void___ChannelPublication1_Delete_Precedent_ {

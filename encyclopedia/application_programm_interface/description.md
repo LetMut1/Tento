@@ -439,7 +439,6 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelToken__AlreadyExpired,
     User__IsNotChannelOwner,
-    QuantityLimiter__ExceededOwnedChannelsQuantity,
     ParallelExecution,
 }
 ```
@@ -461,7 +460,6 @@ enum Precedent {
     Channel__NotFound,
     User__IsNotChannelOwner,
     ChannelPublication1__NotFound,
-    ParallelExecution,
 }
 ```
  - ## ChannelPublication1_GetMany POST /channel_publication1/get_many

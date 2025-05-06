@@ -7,7 +7,7 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel_publication1::ChannelPublication1, channel_publication1_delayed_deletion::{ChannelPublication1DelayedDeletion, ChannelPublication1DelayedDeletion_CanBeDeletedFrom}, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, quantity_limiter::QuantityLimiter, user_access_token::UserAccessToken
+                channel_publication1::ChannelPublication1, channel_publication1_delayed_deletion::{ChannelPublication1DelayedDeletion, ChannelPublication1DelayedDeletion_CanBeDeletedFrom}, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
             },
             functionality::service::{
                 encoder::Encoder,
@@ -19,7 +19,7 @@ use {
             functionality::{
                 repository::{
                     postgresql::{
-                        ChannelPublication1By1, ChannelPublication1DelayedDeletionInsert, IsolationLevel, Postgresql, QuantityLimiterBy, Resolver as Resolver_, Transaction
+                        ChannelPublication1By1, ChannelPublication1DelayedDeletionInsert, IsolationLevel, Postgresql, Resolver as Resolver_, Transaction
                     }, Repository,
                 },
                 service::resolver::{
@@ -88,24 +88,6 @@ impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Delete> {
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            let is_updated = match Repository::<Postgresql<QuantityLimiter>>::update_2(
-                transaction.get_client(),
-                QuantityLimiterBy {
-                    user__id: incoming.user_access_token_signed.user__id,
-                }
-            )
-            .await
-            {
-                Result::Ok(is_updated_) => is_updated_,
-                Result::Err(aggregate_error) => {
-                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                    return Result::Err(aggregate_error);
-                }
-            };
-            if !is_updated {
-                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
-            }
             let is_deleted = match Repository::<Postgresql<ChannelPublication1>>::delete(
                 transaction.get_client(),
                 ChannelPublication1By1 {
