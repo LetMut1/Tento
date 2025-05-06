@@ -2987,6 +2987,7 @@ pub struct Channel_Create_Precedent_ {
     pub user_access_token___already_expired: bool,
     pub channel___name_already_exist: bool,
     pub channel___linked_name_already_exist: bool,
+    pub quantity_limiter___exceeded_owned_channels_quantity: bool,
     pub parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
@@ -3030,6 +3031,10 @@ pub extern "C-unwind" fn channel__create__deserialize_allocate(vector_of_bytes: 
                     },
                     Channel_Create_Precedent::Channel__LinkedNameAlreadyExist => Channel_Create_Precedent_ {
                         channel___linked_name_already_exist: true,
+                        ..Default::default()
+                    },
+                    Channel_Create_Precedent::QuantityLimiter__ExceededOwnedChannelsQuantity => Channel_Create_Precedent_ {
+                        quantity_limiter___exceeded_owned_channels_quantity: true,
                         ..Default::default()
                     },
                     Channel_Create_Precedent::ParallelExecution => Channel_Create_Precedent_ {
@@ -3101,6 +3106,7 @@ pub struct Channel_Delete_Precedent_ {
     pub channel_token___already_expired: bool,
     pub user___is_not_channel_owner: bool,
     pub channel___not_found: bool,
+    pub parallel_execution: bool,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel__delete__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> Channel_Delete_Result {
@@ -3127,6 +3133,10 @@ pub extern "C-unwind" fn channel__delete__deserialize_allocate(vector_of_bytes: 
                     },
                     Channel_Delete_Precedent::Channel__NotFound => Channel_Delete_Precedent_ {
                         channel___not_found: true,
+                        ..Default::default()
+                    },
+                    Channel_Delete_Precedent::ParallelExecution => Channel_Delete_Precedent_ {
+                        parallel_execution: true,
                         ..Default::default()
                     },
                 };
@@ -6568,12 +6578,14 @@ mod test {
                     Channel_Create_Precedent::UserAccessToken__AlreadyExpired => {}
                     Channel_Create_Precedent::Channel__NameAlreadyExist => {}
                     Channel_Create_Precedent::Channel__LinkedNameAlreadyExist => {}
+                    Channel_Create_Precedent::QuantityLimiter__ExceededOwnedChannelsQuantity => {}
                     Channel_Create_Precedent::ParallelExecution => {}
                 }
                 let precedents: Vec<Channel_Create_Precedent> = vec![
                     Channel_Create_Precedent::UserAccessToken__AlreadyExpired,
                     Channel_Create_Precedent::Channel__NameAlreadyExist,
                     Channel_Create_Precedent::Channel__LinkedNameAlreadyExist,
+                    Channel_Create_Precedent::QuantityLimiter__ExceededOwnedChannelsQuantity,
                     Channel_Create_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
@@ -6606,12 +6618,14 @@ mod test {
                     Channel_Delete_Precedent::ChannelToken__AlreadyExpired => {}
                     Channel_Delete_Precedent::User__IsNotChannelOwner => {}
                     Channel_Delete_Precedent::Channel__NotFound => {}
+                    Channel_Delete_Precedent::ParallelExecution => {}
                 }
                 let precedents: Vec<Channel_Delete_Precedent> = vec![
                     Channel_Delete_Precedent::UserAccessToken__AlreadyExpired,
                     Channel_Delete_Precedent::ChannelToken__AlreadyExpired,
                     Channel_Delete_Precedent::User__IsNotChannelOwner,
                     Channel_Delete_Precedent::Channel__NotFound,
+                    Channel_Delete_Precedent::ParallelExecution,
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__delete(precedent)?;

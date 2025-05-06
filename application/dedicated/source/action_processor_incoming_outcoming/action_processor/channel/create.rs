@@ -38,6 +38,7 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::UserAccessToken__AlreadyExpired,
         CommonPrecedent::Channel__NameAlreadyExist,
         CommonPrecedent::Channel__LinkedNameAlreadyExist,
+        CommonPrecedent::QuantityLimiter__ExceededOwnedChannelsQuantity,
         CommonPrecedent::ParallelExecution,
     }
 );

@@ -11,31 +11,23 @@ use {
                     Channel,
                     Channel_LinkedName,
                     Channel_Name,
-                },
-                channel_token::{
+                }, channel_token::{
                     ChannelToken,
                     ChannelToken_ExpiresAt,
                     ChannelToken_ObfuscationValue,
-                },
-                user_access_token::UserAccessToken,
+                }, quantity_limiter::{QuantityLimiter, QuantityLimiter_OwnedChannelsQuantity}, user_access_token::UserAccessToken
             },
             functionality::service::{
-                encoder::Encoder,
-                validator::Validator,
-                generator::Generator,
+                encoder::Encoder, generator::Generator, validator::Validator
             },
         },
         infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
-                        ChannelBy2,
-                        ChannelBy3,
-                        ChannelInsert,
-                        Postgresql,
-                    },
+                        ChannelBy2, ChannelBy3, ChannelInsert, IsolationLevel, Postgresql, QuantityLimiterBy, QuantityLimiterInsert, QuantityLimiterUpdate, Resolver as Resolver_, Transaction
+                    }, Repository
                 },
                 service::resolver::{
                     Resolver,
@@ -98,93 +90,77 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__LinkedNameAlreadyExist));
             }
-
-
-
-
-
-
-            // let transaction = match Repository::<Postgresql<QuantityLimiter>>::find(
-            //     &postgresql_client_database_3,
-            //     QuantityLimiterBy {
-            //         user__id: incoming.user_access_token_signed.user__id,
-            //     }
-            // )
-            // .await?
-            // {
-            //     Option::Some(quantity_limiter__owned_channels_quantity) => {
-            //         if quantity_limiter__owned_channels_quantity >= QuantityLimiter_OwnedChannelsQuantity::MAXIMUM_VALUE {
-            //             return Result::Ok(UnifiedReport::precedent(Precedent::QuantityLimiter__ExceededOwnedChannelsQuantity));
-            //         }
-            //         let transaction_ = Resolver_::<Transaction<'_>>::start(
-            //             &mut postgresql_client_database_3,
-            //             IsolationLevel::ReadCommitted,
-            //         )
-            //         .await?;
-            //         let is_updated = match Repository::<Postgresql<QuantityLimiter>>::update_1(
-            //             transaction_.get_client(),
-            //             QuantityLimiterUpdate {
-            //                 quantity_limiter__owned_channels_quantity___maximum_value: QuantityLimiter_OwnedChannelsQuantity::MAXIMUM_VALUE,
-            //             },
-            //             QuantityLimiterBy {
-            //                 user__id: incoming.user_access_token_signed.user__id,
-            //             }
-            //         )
-            //         .await
-            //         {
-            //             Result::Ok(is_updated_) => is_updated_,
-            //             Result::Err(aggregate_error) => {
-            //                 Resolver_::<Transaction<'_>>::rollback(transaction_).await?;
-            //                 return Result::Err(aggregate_error);
-            //             }
-            //         };
-            //         if !is_updated {
-            //             Resolver_::<Transaction<'_>>::rollback(transaction_).await?;
-            //             return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
-            //         }
-            //         transaction_
-            //     },
-            //     Option::None => {
-            //         let transaction_ = Resolver_::<Transaction<'_>>::start(
-            //             &mut postgresql_client_database_3,
-            //             IsolationLevel::ReadCommitted,
-            //         )
-            //         .await?;
-            //         let is_created = match Repository::<Postgresql<QuantityLimiter>>::create(
-            //             transaction_.get_client(),
-            //             QuantityLimiterInsert {
-            //                 user__id: incoming.user_access_token_signed.user__id,
-            //                 quantity_limiter__owned_channels_quantity: 1,
-            //                 quantity_limiter__created_at: now,
-            //             }
-            //         )
-            //         .await
-            //         {
-            //             Result::Ok(is_created_) => is_created_,
-            //             Result::Err(aggregate_error) => {
-            //                 Resolver_::<Transaction<'_>>::rollback(transaction_).await?;
-            //                 return Result::Err(aggregate_error);
-            //             }
-            //         };
-            //         if !is_created {
-            //             Resolver_::<Transaction<'_>>::rollback(transaction_).await?;
-            //             return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
-            //         }
-            //         transaction_
-            //     }
-            // };
-
-
-
-
-
-
-
-
-
-
-            let channel__id = match Repository::<Postgresql<Channel>>::create(
+            let transaction = match Repository::<Postgresql<QuantityLimiter>>::find(
                 &postgresql_client_database_3,
+                QuantityLimiterBy {
+                    user__id: incoming.user_access_token_signed.user__id,
+                }
+            )
+            .await?
+            {
+                Option::Some(quantity_limiter__owned_channels_quantity) => {
+                    if quantity_limiter__owned_channels_quantity >= QuantityLimiter_OwnedChannelsQuantity::MAXIMUM_VALUE {
+                        return Result::Ok(UnifiedReport::precedent(Precedent::QuantityLimiter__ExceededOwnedChannelsQuantity));
+                    }
+                    let transaction_ = Resolver_::<Transaction<'_>>::start(
+                        &mut postgresql_client_database_3,
+                        IsolationLevel::ReadCommitted,
+                    )
+                    .await?;
+                    let is_updated = match Repository::<Postgresql<QuantityLimiter>>::update_1(
+                        transaction_.get_client(),
+                        QuantityLimiterUpdate {
+                            quantity_limiter__owned_channels_quantity___maximum_value: QuantityLimiter_OwnedChannelsQuantity::MAXIMUM_VALUE,
+                        },
+                        QuantityLimiterBy {
+                            user__id: incoming.user_access_token_signed.user__id,
+                        }
+                    )
+                    .await
+                    {
+                        Result::Ok(is_updated_) => is_updated_,
+                        Result::Err(aggregate_error) => {
+                            Resolver_::<Transaction<'_>>::rollback(transaction_).await?;
+                            return Result::Err(aggregate_error);
+                        }
+                    };
+                    if !is_updated {
+                        Resolver_::<Transaction<'_>>::rollback(transaction_).await?;
+                        return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
+                    }
+                    transaction_
+                },
+                Option::None => {
+                    let transaction_ = Resolver_::<Transaction<'_>>::start(
+                        &mut postgresql_client_database_3,
+                        IsolationLevel::ReadCommitted,
+                    )
+                    .await?;
+                    let is_created = match Repository::<Postgresql<QuantityLimiter>>::create(
+                        transaction_.get_client(),
+                        QuantityLimiterInsert {
+                            user__id: incoming.user_access_token_signed.user__id,
+                            quantity_limiter__owned_channels_quantity: 1,
+                            quantity_limiter__created_at: now,
+                        }
+                    )
+                    .await
+                    {
+                        Result::Ok(is_created_) => is_created_,
+                        Result::Err(aggregate_error) => {
+                            Resolver_::<Transaction<'_>>::rollback(transaction_).await?;
+                            return Result::Err(aggregate_error);
+                        }
+                    };
+                    if !is_created {
+                        Resolver_::<Transaction<'_>>::rollback(transaction_).await?;
+                        return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
+                    }
+                    transaction_
+                }
+            };
+            let channel__id = match Repository::<Postgresql<Channel>>::create(
+                transaction.get_client(),
                 ChannelInsert {
                     channel__owner: incoming.user_access_token_signed.user__id,
                     channel__name: incoming.channel__name,
@@ -198,18 +174,26 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     channel__created_at: now,
                 },
             )
-            .await?
+            .await
             {
-                Option::Some(channel__id_) => channel__id_,
+                Result::Ok(channel__id_) => channel__id_,
+                Result::Err(aggregate_error) => {
+                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                    return Result::Err(aggregate_error);
+                }
+            };
+            let channel__id_ = match channel__id {
+                Option::Some(channel__id__) => channel__id__,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution)),
             };
+            Resolver_::<Transaction<'_>>::commit(transaction).await?;
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {
                         channel_token_signed: Encoder::<ChannelToken>::encode(
                             &inner.environment_configuration.subject.encryption.private_key,
                             incoming.user_access_token_signed.user__id,
-                            channel__id,
+                            channel__id_,
                             Generator::<ChannelToken_ObfuscationValue>::generate(),
                             Generator::<ChannelToken_ExpiresAt>::generate(now)?,
                             false,

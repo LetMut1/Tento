@@ -168,6 +168,7 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     Channel__NameAlreadyExist,
     Channel__LinkedNameAlreadyExist,
+    QuantityLimiter__ExceededOwnedChannelsQuantity
     ParallelExecution,
 }
 ```

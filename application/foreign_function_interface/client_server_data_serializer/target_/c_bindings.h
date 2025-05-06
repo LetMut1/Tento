@@ -840,6 +840,7 @@ typedef struct Channel_Create_Precedent_ {
   bool user_access_token___already_expired;
   bool channel___name_already_exist;
   bool channel___linked_name_already_exist;
+  bool quantity_limiter___exceeded_owned_channels_quantity;
   bool parallel_execution;
 } Channel_Create_Precedent_;
 
@@ -866,6 +867,7 @@ typedef struct Channel_Delete_Precedent_ {
   bool channel_token___already_expired;
   bool user___is_not_channel_owner;
   bool channel___not_found;
+  bool parallel_execution;
 } Channel_Delete_Precedent_;
 
 typedef struct UnifiedReport__Void___Channel_Delete_Precedent_ {
