@@ -928,6 +928,39 @@ typedef struct Result__UnifiedReport__Channel_GetManyOwned_Outcoming___Channel_G
 
 typedef struct Result__UnifiedReport__Channel_GetManyOwned_Outcoming___Channel_GetManyOwned_Precedent_ Channel_GetManyOwned_Result;
 
+typedef struct Channel_RefreshChannelToken_Incoming_ {
+  struct UserAccessTokenSigned_ user_access_token_signed;
+  struct ChannelTokenSigned_ channel_token_signed;
+} Channel_RefreshChannelToken_Incoming_;
+
+typedef struct Channel_RefreshChannelToken_Outcoming_ {
+  struct ChannelTokenSigned_ channel_token_signed;
+} Channel_RefreshChannelToken_Outcoming_;
+
+typedef struct Data__Channel_RefreshChannelToken_Outcoming_ {
+  struct Channel_RefreshChannelToken_Outcoming_ filled;
+  bool is_filled;
+} Data__Channel_RefreshChannelToken_Outcoming_;
+
+typedef struct Channel_RefreshChannelToken_Precedent_ {
+  bool user_access_token___already_expired;
+  bool channel___name_already_exist;
+  bool channel___not_found;
+} Channel_RefreshChannelToken_Precedent_;
+
+typedef struct UnifiedReport__Channel_RefreshChannelToken_Outcoming___Channel_RefreshChannelToken_Precedent_ {
+  struct Data__Channel_RefreshChannelToken_Outcoming_ target;
+  struct Channel_RefreshChannelToken_Precedent_ precedent;
+  bool is_target;
+} UnifiedReport__Channel_RefreshChannelToken_Outcoming___Channel_RefreshChannelToken_Precedent_;
+
+typedef struct Result__UnifiedReport__Channel_RefreshChannelToken_Outcoming___Channel_RefreshChannelToken_Precedent_ {
+  struct UnifiedReport__Channel_RefreshChannelToken_Outcoming___Channel_RefreshChannelToken_Precedent_ data;
+  bool is_data;
+} Result__UnifiedReport__Channel_RefreshChannelToken_Outcoming___Channel_RefreshChannelToken_Precedent_;
+
+typedef struct Result__UnifiedReport__Channel_RefreshChannelToken_Outcoming___Channel_RefreshChannelToken_Precedent_ Channel_RefreshChannelToken_Result;
+
 typedef struct ChannelSubscription_Create_Incoming_ {
   struct UserAccessTokenSigned_ user_access_token_signed;
   struct ChannelTokenSigned_ channel_token_signed;
@@ -1459,6 +1492,14 @@ void channel__get_many_owned__serialize_deallocate(struct Result__Vec__c_uchar r
 Channel_GetManyOwned_Result channel__get_many_owned__deserialize_allocate(struct Vec__c_uchar vector_of_bytes);
 
 void channel__get_many_owned__deserialize_deallocate(Channel_GetManyOwned_Result result);
+
+struct Result__Vec__c_uchar channel__refresh_channel_token__serialize_allocate(struct Channel_RefreshChannelToken_Incoming_ incoming);
+
+void channel__refresh_channel_token__serialize_deallocate(struct Result__Vec__c_uchar result);
+
+Channel_RefreshChannelToken_Result channel__refresh_channel_token__deserialize_allocate(struct Vec__c_uchar vector_of_bytes);
+
+void channel__refresh_channel_token__deserialize_deallocate(Channel_RefreshChannelToken_Result result);
 
 struct Result__Vec__c_uchar channel_subscription__create__serialize_allocate(struct ChannelSubscription_Create_Incoming_ incoming);
 

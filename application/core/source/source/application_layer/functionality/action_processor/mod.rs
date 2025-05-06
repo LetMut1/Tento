@@ -16,6 +16,7 @@ pub use self::{
         get_one_by_id::Channel_GetOneById,
         delete::Channel_Delete,
         get_many_owned::Channel_GetManyOwned,
+        refresh_channel_token::Channel_RefreshChannelToken,
     },
     channel_publication1::{
         create::ChannelPublication1_Create,

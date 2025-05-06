@@ -369,6 +369,28 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
 }
 ```
+ - ## Channel_RefreshChannelToken POST /channel/refresh_channel_token
+```
+Refreshes channel token.
+```
+```
+struct Incoming {
+    user_access_token_signed: <Data standards>,
+    channel_token_signed: <Data standards>,
+}
+```
+```
+struct Outcoming {
+    channel_token_signed: <Data standards>,
+}
+```
+```
+enum Precedent {
+    UserAccessToken__AlreadyExpired,
+    ChannelToken__AlreadyExpired,
+    Channel__NotFound,
+}
+```
  - ## ChannelSubscription_Create POST /channel_subscription/create
 ```
 Subscribes user to channel.

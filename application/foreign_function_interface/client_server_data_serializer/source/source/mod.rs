@@ -51,7 +51,12 @@ use {
                     Incoming as Channel_GetManyOwned_Incoming,
                     Outcoming as Channel_GetManyOwned_Outcoming,
                     Precedent as Channel_GetManyOwned_Precedent,
-                }
+                },
+                refresh_channel_token::{
+                    Incoming as Channel_RefreshChannelToken_Incoming,
+                    Outcoming as Channel_RefreshChannelToken_Outcoming,
+                    Precedent as Channel_RefreshChannelToken_Precedent,
+                },
             },
             channel_publication1::{
                 create::{
@@ -3298,6 +3303,119 @@ pub extern "C-unwind" fn channel__get_many_owned__deserialize_deallocate(result:
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
+pub struct Channel_RefreshChannelToken_Incoming_ {
+    pub user_access_token_signed: UserAccessTokenSigned_,
+    pub channel_token_signed: ChannelTokenSigned_,
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel__refresh_channel_token__serialize_allocate(incoming: Channel_RefreshChannelToken_Incoming_) -> Result_<Vec_<c_uchar>> {
+    let converter = move |incoming_: &'_ Channel_RefreshChannelToken_Incoming_| -> Result<Channel_RefreshChannelToken_Incoming, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            Channel_RefreshChannelToken_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
+                    user__id: incoming_.user_access_token_signed.user__id,
+                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
+                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                },
+                channel_token_signed: ChannelTokenSigned {
+                    channel__id: incoming_.channel_token_signed.channel__id,
+                    channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
+                    channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
+                    channel_token__is_user_the_channel_subscriber: incoming_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                    channel_token__is_user_the_channel_owner: incoming_.channel_token_signed.channel_token__is_user_the_channel_owner,
+                    signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
+                },
+            },
+        );
+    };
+    return Transformer::transform_server_request_data(
+        incoming,
+        converter,
+    );
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel__refresh_channel_token__serialize_deallocate(result: Result_<Vec_<c_uchar>>) -> () {
+    Allocator::<Result_<Vec_<c_uchar>>>::deallocate(result);
+    return ();
+}
+type Channel_RefreshChannelToken_Result = Result_<UnifiedReport_<Channel_RefreshChannelToken_Outcoming_, Channel_RefreshChannelToken_Precedent_>>;
+#[repr(C)]
+#[derive(Default)]
+pub struct Channel_RefreshChannelToken_Outcoming_ {
+    pub channel_token_signed: ChannelTokenSigned_
+}
+#[repr(C)]
+#[derive(Default)]
+pub struct Channel_RefreshChannelToken_Precedent_ {
+    pub user_access_token___already_expired: bool,
+    pub channel___name_already_exist: bool,
+    pub channel___not_found: bool,
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel__refresh_channel_token__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> Channel_RefreshChannelToken_Result {
+    let converter = move |unified_report: UnifiedReport<Channel_RefreshChannelToken_Outcoming, Channel_RefreshChannelToken_Precedent>| -> Result<UnifiedReport_<Channel_RefreshChannelToken_Outcoming_, Channel_RefreshChannelToken_Precedent_>, Box<dyn StdError + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport::Target {
+                data,
+            } => {
+                let data_ = match data {
+                    Data::Empty => Data_::empty(),
+                    Data::Filled {
+                        data: data__
+                    } => {
+                        let outcoming = Channel_RefreshChannelToken_Outcoming_ {
+                            channel_token_signed: ChannelTokenSigned_ {
+                                channel__id: data__.channel_token_signed.channel__id,
+                                channel_token__obfuscation_value: data__.channel_token_signed.channel_token__obfuscation_value,
+                                channel_token__expires_at: data__.channel_token_signed.channel_token__expires_at,
+                                channel_token__is_user_the_channel_subscriber: data__.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                                channel_token__is_user_the_channel_owner: data__.channel_token_signed.channel_token__is_user_the_channel_owner,
+                                signature: Allocator::<Vec_<_>>::allocate(data__.channel_token_signed.signature),
+                            },
+                        };
+                        Data_::filled(outcoming)
+                    }
+                };
+                UnifiedReport_::target(data_)
+            }
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
+                let precedent_ = match precedent {
+                    Channel_RefreshChannelToken_Precedent::UserAccessToken__AlreadyExpired => Channel_RefreshChannelToken_Precedent_ {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    Channel_RefreshChannelToken_Precedent::ChannelToken__AlreadyExpired => Channel_RefreshChannelToken_Precedent_ {
+                        channel___name_already_exist: true,
+                        ..Default::default()
+                    },
+                    Channel_RefreshChannelToken_Precedent::Channel__NotFound => Channel_RefreshChannelToken_Precedent_ {
+                        channel___not_found: true,
+                        ..Default::default()
+                    },
+                };
+                UnifiedReport_::precedent(precedent_)
+            }
+        };
+        return Result::Ok(unified_report_);
+    };
+    return Transformer::transform_server_response_data(
+        vector_of_bytes,
+        converter,
+    );
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel__refresh_channel_token__deserialize_deallocate(result: Channel_RefreshChannelToken_Result) -> () {
+    if result.is_data && result.data.is_target && result.data.target.is_filled {
+        Allocator::<Vec_<_>>::deallocate(result.data.target.filled.channel_token_signed.signature);
+    }
+    return ();
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
 pub struct ChannelSubscription_Create_Incoming_ {
     pub user_access_token_signed: UserAccessTokenSigned_,
     pub channel_token_signed: ChannelTokenSigned_,
@@ -4613,6 +4731,12 @@ mod test {
                 with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__get_many_owned),
             ],
             vec![
+                with_name!(self::deallocation::server_request_data_serialization::channel__refresh_channel_token),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel__refresh_channel_token),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel__refresh_channel_token),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel__refresh_channel_token),
+            ],
+            vec![
                 with_name!(self::deallocation::server_request_data_serialization::channel_subscription__create),
                 with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_subscription__create),
                 with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_subscription__create),
@@ -5198,6 +5322,34 @@ mod test {
                 )?;
                 Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<Vec_<_>>::deallocate(incoming.user_access_token_signed.signature);
+                return Result::Ok(());
+            }
+            pub fn channel__refresh_channel_token() -> Result<(), Box<dyn StdError + 'static>> {
+                let incoming = Channel_RefreshChannelToken_Incoming_ {
+                    user_access_token_signed: UserAccessTokenSigned_ {
+                        user__id: 0,
+                        user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        user_access_token__obfuscation_value: 0,
+                        user_access_token__expires_at: 0,
+                        signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
+                    channel_token_signed: ChannelTokenSigned_ {
+                        channel__id: 0,
+                        channel_token__obfuscation_value: 0,
+                        channel_token__expires_at: 0,
+                        channel_token__is_user_the_channel_subscriber: false,
+                        channel_token__is_user_the_channel_owner: false,
+                        signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
+                };
+                run_by_template(
+                    incoming,
+                    channel__refresh_channel_token__serialize_allocate,
+                    channel__refresh_channel_token__serialize_deallocate,
+                )?;
+                Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
+                Allocator::<Vec_<_>>::deallocate(incoming.user_access_token_signed.signature);
+                Allocator::<Vec_<_>>::deallocate(incoming.channel_token_signed.signature);
                 return Result::Ok(());
             }
             pub fn channel_subscription__create() -> Result<(), Box<dyn StdError + 'static>> {
@@ -6688,6 +6840,56 @@ mod test {
                 ];
                 '_a: for precedent in precedents {
                     _precedent__channel__get_many_owned(precedent)?;
+                }
+                return Result::Ok(());
+            }
+            pub fn target_empty__channel__refresh_channel_token() -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Channel_RefreshChannelToken_Outcoming, Channel_RefreshChannelToken_Precedent>::target_empty();
+                return run_by_template(
+                    &unified_report,
+                    channel__refresh_channel_token__deserialize_allocate,
+                    channel__refresh_channel_token__deserialize_deallocate,
+                );
+            }
+            pub fn target_filled__channel__refresh_channel_token() -> Result<(), Box<dyn StdError + 'static>> {
+                let outcoming = Channel_RefreshChannelToken_Outcoming {
+                    channel_token_signed: ChannelTokenSigned {
+                        channel__id: 0,
+                        channel_token__obfuscation_value: 0,
+                        channel_token__expires_at: 0,
+                        channel_token__is_user_the_channel_subscriber: false,
+                        channel_token__is_user_the_channel_owner: false,
+                        signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                    },
+                };
+                let unified_report = UnifiedReport::<Channel_RefreshChannelToken_Outcoming, Channel_RefreshChannelToken_Precedent>::target_filled(outcoming);
+                return run_by_template(
+                    &unified_report,
+                    channel__refresh_channel_token__deserialize_allocate,
+                    channel__refresh_channel_token__deserialize_deallocate,
+                );
+            }
+            fn _precedent__channel__refresh_channel_token(precedent: Channel_RefreshChannelToken_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Channel_RefreshChannelToken_Outcoming, Channel_RefreshChannelToken_Precedent>::precedent(precedent);
+                return run_by_template(
+                    &unified_report,
+                    channel__refresh_channel_token__deserialize_allocate,
+                    channel__refresh_channel_token__deserialize_deallocate,
+                );
+            }
+            pub fn precedent__channel__refresh_channel_token() -> Result<(), Box<dyn StdError + 'static>> {
+                match Channel_RefreshChannelToken_Precedent::UserAccessToken__AlreadyExpired {
+                    Channel_RefreshChannelToken_Precedent::UserAccessToken__AlreadyExpired => {}
+                    Channel_RefreshChannelToken_Precedent::ChannelToken__AlreadyExpired => {}
+                    Channel_RefreshChannelToken_Precedent::Channel__NotFound => {}
+                }
+                let precedents: Vec<Channel_RefreshChannelToken_Precedent> = vec![
+                    Channel_RefreshChannelToken_Precedent::UserAccessToken__AlreadyExpired,
+                    Channel_RefreshChannelToken_Precedent::ChannelToken__AlreadyExpired,
+                    Channel_RefreshChannelToken_Precedent::Channel__NotFound,
+                ];
+                '_a: for precedent in precedents {
+                    _precedent__channel__refresh_channel_token(precedent)?;
                 }
                 return Result::Ok(());
             }

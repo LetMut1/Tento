@@ -24,6 +24,7 @@ pub use self::{
         By6 as ChannelBy6,
         By7 as ChannelBy7,
         By8 as ChannelBy8,
+        By9 as ChannelBy9,
         Insert as ChannelInsert,
     },
     channel_publication1::{

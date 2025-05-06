@@ -14,6 +14,7 @@ use {
                 Channel_GetManyBySubscription,
                 Channel_GetManyPublicByName,
                 Channel_GetOneById,
+                Channel_RefreshChannelToken,
                 ChannelPublication1_Create,
                 ChannelPublication1_Delete,
                 ChannelPublication1_GetMany,
@@ -510,6 +511,13 @@ impl HttpServer {
         crate::result_return_logic!(
             router
             .insert(
+                Channel::REFRESH_CHANNEL_TOKEN,
+                ActionRoute::Channel(Channel::RefreshChannelToken),
+            )
+        );
+        crate::result_return_logic!(
+            router
+            .insert(
                 ChannelSubscription::CREATE,
                 ActionRoute::ChannelSubscription(ChannelSubscription::Create),
             )
@@ -751,6 +759,13 @@ impl HttpServer {
                 .insert(
                     Channel::GET_MANY_OWNED_,
                     ActionRoute::Channel(Channel::GetManyOwned_),
+                )
+            );
+            crate::result_return_logic!(
+                router
+                .insert(
+                    Channel::REFRESH_CHANNEL_TOKEN_,
+                    ActionRoute::Channel(Channel::RefreshChannelToken_),
                 )
             );
             crate::result_return_logic!(
@@ -1155,6 +1170,13 @@ impl HttpServer {
                             )
                             .await;
                         }
+                        (&Channel::RefreshChannelToken, &Method::POST) => {
+                            return Action::<Channel_RefreshChannelToken>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
                         _ => {
                             #[cfg(feature = "action_for_manual_test")]
                             {
@@ -1220,6 +1242,13 @@ impl HttpServer {
                                     }
                                     (&Channel::GetManyOwned_, &Method::POST) => {
                                         return Action::<Channel_GetManyOwned>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&Channel::RefreshChannelToken_, &Method::POST) => {
+                                        return Action::<Channel_RefreshChannelToken>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
@@ -1641,6 +1670,7 @@ pub enum Channel {
     CheckLinkedNameForExisting,
     Delete,
     GetManyOwned,
+    RefreshChannelToken,
     #[cfg(feature = "action_for_manual_test")]
     GetOneById_,
     #[cfg(feature = "action_for_manual_test")]
@@ -1659,6 +1689,8 @@ pub enum Channel {
     Delete_,
     #[cfg(feature = "action_for_manual_test")]
     GetManyOwned_,
+    #[cfg(feature = "action_for_manual_test")]
+    RefreshChannelToken_,
 }
 impl Channel {
     pub const CHECK_LINKED_NAME_FOR_EXISTING: &'static str = "/channel/check_linked_name_for_existing";
@@ -1670,6 +1702,7 @@ impl Channel {
     pub const GET_ONE_BY_ID: &'static str = "/channel/get_one_by_id";
     pub const DELETE: &'static str = "/channel/delete";
     pub const GET_MANY_OWNED: &'static str = "/channel/get_many_owned";
+    pub const REFRESH_CHANNEL_TOKEN: &'static str = "/channel/refresh_channel_token";
 }
 #[cfg(feature = "action_for_manual_test")]
 impl Channel {
@@ -1707,6 +1740,10 @@ impl Channel {
     );
     pub const GET_MANY_OWNED_: &'static str = const_format::concatcp!(
         Channel::GET_MANY_OWNED,
+        ActionRoute::PART,
+    );
+    pub const REFRESH_CHANNEL_TOKEN_: &'static str = const_format::concatcp!(
+        Channel::REFRESH_CHANNEL_TOKEN,
         ActionRoute::PART,
     );
 }

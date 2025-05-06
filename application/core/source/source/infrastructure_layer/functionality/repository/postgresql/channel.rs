@@ -413,7 +413,7 @@ impl Repository<Postgresql<Channel>> {
             const QUERY_FIRST_PART: &'static str = "\
                 SELECT \
                     c.id AS i,\
-                    c.owner AS o, \
+                    c.owner AS o,\
                     c.name AS n,\
                     c.linked_name AS ln,\
                     c.access_modifier AS am,\
@@ -789,6 +789,62 @@ impl Repository<Postgresql<Channel>> {
             );
         };
     }
+    // channel__owner: i64,
+    // is_user_the_channel_subscriber: bool,
+    pub fn find_8<'a>(client_database_3: &'a Client, by: By9) -> impl Future<Output = Result<Option<(i64, bool)>, AggregateError>> + Send + use<'a> {
+        return async move {
+            const QUERY: &'static str = "\
+                SELECT \
+                    c.owner AS o,\
+                    cs.channel__id AS ca \
+                FROM \
+                    public.channel c \
+                LEFT OUTER JOIN \
+                    public.channel_subscription cs \
+                ON \
+                    cs.user__id = $1 \
+                    AND c.id = cs.channel__id \
+                WHERE \
+                    c.id = $2;";
+            let mut parameter_storage = ParameterStorage::new(2);
+            parameter_storage
+                .add(
+                    &by.user__id,
+                    Type::INT8,
+                )
+                .add(
+                    &by.channel__id,
+                    Type::INT8,
+                );
+            let statement = crate::result_return_logic!(
+                client_database_3
+                .prepare_typed_cached(
+                    QUERY,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                client_database_3
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(Option::None);
+            }
+            return Result::Ok(
+                Option::Some(
+                    (
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<i64>>(1)).is_some(),
+                    )
+                )
+            );
+        };
+    }
     pub fn is_exist_1<'a>(client_database_3: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             const QUERY: &'static str = "\
@@ -904,4 +960,8 @@ pub struct By7 {
 }
 pub struct By8 {
     pub channel__owner: i64,
+}
+pub struct By9 {
+    pub user__id: i64,
+    pub channel__id: i64,
 }

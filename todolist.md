@@ -154,4 +154,8 @@ ChannelDelayedDeletion_CanBeDeletedFrom - поменять константу п
 
 route space "user_authorization" change to "user"?
 
-route channel__refresh_cannel_token
+
+Постгрес Опимизация запросов с ДЖОИНАМИ. ON/Where on indexed column
+
+
+Channel_RefreshChannelToken - а не просроченный ли должен быть токен? Сейчас можно рефрешить, если не просроченный
