@@ -83,8 +83,8 @@ use {
         time::Duration,
     },
 };
-pub struct User_AuthorizeByLastStep;
-impl ActionProcessor_ for ActionProcessor<User_AuthorizeByLastStep> {
+pub struct AuthorizeByLastStep;
+impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

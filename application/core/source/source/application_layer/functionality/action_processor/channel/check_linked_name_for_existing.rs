@@ -45,8 +45,8 @@ use {
     },
     std::future::Future,
 };
-pub struct Channel_CheckLinkedNameForExisting;
-impl ActionProcessor_ for ActionProcessor<Channel_CheckLinkedNameForExisting> {
+pub struct CheckLinkedNameForExisting;
+impl ActionProcessor_ for ActionProcessor<CheckLinkedNameForExisting> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

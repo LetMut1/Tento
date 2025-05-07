@@ -75,8 +75,8 @@ use {
         time::Duration,
     },
 };
-pub struct User_AuthorizeByFirstStep;
-impl ActionProcessor_ for ActionProcessor<User_AuthorizeByFirstStep> {
+pub struct AuthorizeByFirstStep;
+impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

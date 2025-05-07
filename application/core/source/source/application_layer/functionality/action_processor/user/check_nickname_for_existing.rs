@@ -33,8 +33,8 @@ use {
     },
     std::future::Future,
 };
-pub struct User_CheckNicknameForExisting;
-impl ActionProcessor_ for ActionProcessor<User_CheckNicknameForExisting> {
+pub struct CheckNicknameForExisting;
+impl ActionProcessor_ for ActionProcessor<CheckNicknameForExisting> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Void;

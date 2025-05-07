@@ -63,8 +63,8 @@ use {
         time::Duration,
     },
 };
-pub struct User_SendEmailForResetPassword;
-impl ActionProcessor_ for ActionProcessor<User_SendEmailForResetPassword> {
+pub struct SendEmailForResetPassword;
+impl ActionProcessor_ for ActionProcessor<SendEmailForResetPassword> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

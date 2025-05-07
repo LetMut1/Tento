@@ -43,8 +43,8 @@ use {
     },
     std::future::Future,
 };
-pub struct Channel_GetManyOwned;
-impl ActionProcessor_ for ActionProcessor<Channel_GetManyOwned> {
+pub struct GetManyOwned;
+impl ActionProcessor_ for ActionProcessor<GetManyOwned> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

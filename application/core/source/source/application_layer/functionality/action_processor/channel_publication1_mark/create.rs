@@ -45,8 +45,8 @@ use {
     },
     std::future::Future,
 };
-pub struct ChannelPublication1Mark_Create;
-impl ActionProcessor_ for ActionProcessor<ChannelPublication1Mark_Create> {
+pub struct Create;
+impl ActionProcessor_ for ActionProcessor<Create> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;

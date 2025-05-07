@@ -63,8 +63,8 @@ use {
         time::Duration,
     },
 };
-pub struct User_SendEmailForAuthorize;
-impl ActionProcessor_ for ActionProcessor<User_SendEmailForAuthorize> {
+pub struct SendEmailForAuthorize;
+impl ActionProcessor_ for ActionProcessor<SendEmailForAuthorize> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

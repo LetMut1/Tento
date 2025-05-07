@@ -53,8 +53,8 @@ use {
     },
     std::future::Future,
 };
-pub struct Channel_GetManyPublicByName;
-impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
+pub struct GetManyPublicByName;
+impl ActionProcessor_ for ActionProcessor<GetManyPublicByName> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

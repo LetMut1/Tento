@@ -51,8 +51,8 @@ use {
     },
     std::future::Future,
 };
-pub struct User_RefreshAccessToken;
-impl ActionProcessor_ for ActionProcessor<User_RefreshAccessToken> {
+pub struct RefreshAccessToken;
+impl ActionProcessor_ for ActionProcessor<RefreshAccessToken> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

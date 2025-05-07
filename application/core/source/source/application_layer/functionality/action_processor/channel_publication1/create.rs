@@ -48,8 +48,8 @@ use {
     },
     std::future::Future,
 };
-pub struct ChannelPublication1_Create;
-impl ActionProcessor_ for ActionProcessor<ChannelPublication1_Create> {
+pub struct Create;
+impl ActionProcessor_ for ActionProcessor<Create> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

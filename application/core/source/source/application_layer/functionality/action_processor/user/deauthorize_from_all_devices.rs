@@ -40,8 +40,8 @@ use {
     },
     std::future::Future,
 };
-pub struct User_DeauthorizeFromAllDevices;
-impl ActionProcessor_ for ActionProcessor<User_DeauthorizeFromAllDevices> {
+pub struct DeauthorizeFromAllDevices;
+impl ActionProcessor_ for ActionProcessor<DeauthorizeFromAllDevices> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;

@@ -39,8 +39,8 @@ use {
     },
     std::future::Future,
 };
-pub struct ChannelSubscription_Delete;
-impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Delete> {
+pub struct Delete;
+impl ActionProcessor_ for ActionProcessor<Delete> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

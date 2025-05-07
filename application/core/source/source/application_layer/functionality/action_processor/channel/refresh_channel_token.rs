@@ -42,8 +42,8 @@ use {
     },
     std::future::Future,
 };
-pub struct Channel_RefreshChannelToken;
-impl ActionProcessor_ for ActionProcessor<Channel_RefreshChannelToken> {
+pub struct RefreshChannelToken;
+impl ActionProcessor_ for ActionProcessor<RefreshChannelToken> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

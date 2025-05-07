@@ -45,8 +45,8 @@ use {
     },
     std::future::Future,
 };
-pub struct User_RegisterBySecondStep;
-impl ActionProcessor_ for ActionProcessor<User_RegisterBySecondStep> {
+pub struct RegisterBySecondStep;
+impl ActionProcessor_ for ActionProcessor<RegisterBySecondStep> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;

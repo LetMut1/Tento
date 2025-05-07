@@ -53,8 +53,8 @@ use {
         time::Duration,
     },
 };
-pub struct ChannelPublication1View_Create;
-impl ActionProcessor_ for ActionProcessor<ChannelPublication1View_Create> {
+pub struct Create;
+impl ActionProcessor_ for ActionProcessor<Create> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;

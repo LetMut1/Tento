@@ -52,8 +52,8 @@ use {
     },
     std::future::Future,
 };
-pub struct Channel_GetManyByNameInSubscriptions;
-impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> {
+pub struct GetManyByNameInSubscriptions;
+impl ActionProcessor_ for ActionProcessor<GetManyByNameInSubscriptions> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

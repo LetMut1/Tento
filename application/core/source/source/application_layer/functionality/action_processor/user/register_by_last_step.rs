@@ -68,8 +68,8 @@ use {
         time::Duration,
     },
 };
-pub struct User_RegisterByLastStep;
-impl ActionProcessor_ for ActionProcessor<User_RegisterByLastStep> {
+pub struct RegisterByLastStep;
+impl ActionProcessor_ for ActionProcessor<RegisterByLastStep> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

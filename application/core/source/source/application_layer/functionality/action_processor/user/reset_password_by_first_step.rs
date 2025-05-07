@@ -69,8 +69,8 @@ use {
         time::Duration,
     },
 };
-pub struct User_ResetPasswordByFirstStep;
-impl ActionProcessor_ for ActionProcessor<User_ResetPasswordByFirstStep> {
+pub struct ResetPasswordByFirstStep;
+impl ActionProcessor_ for ActionProcessor<ResetPasswordByFirstStep> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

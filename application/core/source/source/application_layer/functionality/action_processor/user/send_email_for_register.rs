@@ -59,8 +59,8 @@ use {
         time::Duration,
     },
 };
-pub struct User_SendEmailForRegister;
-impl ActionProcessor_ for ActionProcessor<User_SendEmailForRegister> {
+pub struct SendEmailForRegister;
+impl ActionProcessor_ for ActionProcessor<SendEmailForRegister> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

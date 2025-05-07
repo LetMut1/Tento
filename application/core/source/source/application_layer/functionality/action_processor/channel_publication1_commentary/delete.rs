@@ -50,8 +50,8 @@ use {
         time::Duration,
     },
 };
-pub struct ChannelPublication1Commentary_Delete;
-impl ActionProcessor_ for ActionProcessor<ChannelPublication1Commentary_Delete> {
+pub struct Delete;
+impl ActionProcessor_ for ActionProcessor<Delete> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;

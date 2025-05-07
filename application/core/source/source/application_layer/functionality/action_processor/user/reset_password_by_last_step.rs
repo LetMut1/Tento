@@ -66,8 +66,8 @@ use {
     },
     std::future::Future,
 };
-pub struct User_ResetPasswordByLastStep;
-impl ActionProcessor_ for ActionProcessor<User_ResetPasswordByLastStep> {
+pub struct ResetPasswordByLastStep;
+impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;
