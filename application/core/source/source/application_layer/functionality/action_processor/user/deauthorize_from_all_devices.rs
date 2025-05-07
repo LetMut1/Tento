@@ -19,10 +19,11 @@ use {
                     Repository,
                     postgresql::{
                         Postgresql,
-                        UserAccessRefreshTokenBy2,
+                        UserAccessRefreshTokenBy1,
                     },
                 },
                 service::resolver::{
+                    CloudMessage,
                     Resolver,
                     UnixTime,
                 },
@@ -30,7 +31,7 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_one_device::{
+        action_processor_incoming_outcoming::action_processor::user::deauthorize_from_all_devices::{
             Incoming,
             Precedent,
         },
@@ -39,8 +40,8 @@ use {
     },
     std::future::Future,
 };
-pub struct UserAuthorization_DeauthorizeFromOneDevice;
-impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDevice> {
+pub struct User_DeauthorizeFromAllDevices;
+impl ActionProcessor_ for ActionProcessor<User_DeauthorizeFromAllDevices> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;
@@ -55,14 +56,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDe
             if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_microseconds() {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
-            let _ = Repository::<Postgresql<UserAccessRefreshToken>>::delete_1(
+            let _ = Repository::<Postgresql<UserAccessRefreshToken>>::delete_2(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await),
-                UserAccessRefreshTokenBy2 {
+                UserAccessRefreshTokenBy1 {
                     user__id: incoming.user_access_token_signed.user__id,
-                    user_device__id: incoming.user_access_token_signed.user_device__id,
                 },
             )
             .await?;
+            Resolver::<CloudMessage>::deauthorize_user_from_all_devices();
             return Result::Ok(UnifiedReport::target_empty());
         };
     }

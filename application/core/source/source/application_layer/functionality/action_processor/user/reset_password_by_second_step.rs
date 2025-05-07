@@ -36,7 +36,7 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_second_step::{
+        action_processor_incoming_outcoming::action_processor::user::reset_password_by_second_step::{
             Incoming,
             Precedent,
         },
@@ -45,8 +45,8 @@ use {
     },
     std::future::Future,
 };
-pub struct UserAuthorization_ResetPasswordBySecondStep;
-impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecondStep> {
+pub struct User_ResetPasswordBySecondStep;
+impl ActionProcessor_ for ActionProcessor<User_ResetPasswordBySecondStep> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;

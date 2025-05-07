@@ -82,7 +82,7 @@ struct ChannelPublication1TokenSigned {
 
 # API for authorized user.
  Every endpoint at this area requires an existing of `user_access_token_signed`.
- - ## UserAuthorization_DeauthorizeFromOneDevice POST /user_authorization/deauthorize_from_one_device
+ - ## User_DeauthorizeFromOneDevice POST /user/deauthorize_from_one_device
 ```
 Deauthorizes user from one device.
 ```
@@ -96,7 +96,7 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
 }
 ```
- - ## UserAuthorization_DeauthorizeFromAllDevices POST /user_authorization/deauthorize_from_all_devices
+ - ## User_DeauthorizeFromAllDevices POST /user/deauthorize_from_all_devices
 ```
 Deauthorizes user from all devices.
 ```
@@ -623,7 +623,7 @@ enum Precedent {
 <br/><br/>
 
 # API for not authorized user.
- - ## UserAuthorization_CheckEmailForExisting POST /user_authorization/check_email_for_existing
+ - ## User_CheckEmailForExisting POST /user/check_email_for_existing
 ```
 Checks user email for existing.
 ```
@@ -637,7 +637,7 @@ struct Outcoming {
     result: bool
 }
 ```
- - ## UserAuthorization_CheckNicknameForExisting POST /user_authorization/check_nickname_for_existing
+ - ## User_CheckNicknameForExisting POST /user/check_nickname_for_existing
 ```
 Checks user nickname for existing.
 ```
@@ -651,7 +651,7 @@ struct Outcoming {
     result: bool
 }
 ```
- - ## UserAuthorization_RegisterByFirstStep POST /user_authorization/register_by_first_step
+ - ## User_RegisterByFirstStep POST /user/register_by_first_step
 ```
 Registers user for the first step and sends email to user.
 ```
@@ -681,7 +681,7 @@ Precedent {
     ParallelExecution,
 }
 ```
-- ## UserAuthorization_RegisterBySecondStep POST /user_authorization/register_by_second_step
+- ## User_RegisterBySecondStep POST /user/register_by_second_step
 ```
 Registers user for the second step through token value approving.
 ```
@@ -704,7 +704,7 @@ enum Precedent {
 }
 ```
 
- - ## UserAuthorization_RegisterByLastStep POST /user_authorization/register_by_last_step
+ - ## User_RegisterByLastStep POST /user/register_by_last_step
 ```
 Registers user for the last step.
 ```
@@ -734,7 +734,7 @@ enum Precedent {
     ParallelExecution,
 }
 ```
- - ## UserAuthorization_SendEmailForRegister POST /user_authorization/send_email_for_register
+ - ## User_SendEmailForRegister POST /user/send_email_for_register
 ```
 Sends email for register. (Should be used only if the user does not receive an email.)
 ```
@@ -761,7 +761,7 @@ enum Precedent {
     ParallelExecution,
 }
 ```
- - ## UserAuthorization_AuthorizeByFirstStep POST /user_authorization/authorize_by_first_step
+ - ## User_AuthorizeByFirstStep POST /user/authorize_by_first_step
 ```
 Authorizes user for the first step and send email to user.
 ```
@@ -790,7 +790,7 @@ enum Precedent {
     ParallelExecution,
 }
 ```
- - ## UserAuthorization_AuthorizeByLastStep POST /user_authorization/authorize_by_last_step
+ - ## User_AuthorizeByLastStep POST /user/authorize_by_last_step
 ```
 Authorizes user for the last step.
 ```
@@ -818,7 +818,7 @@ enum Precedent {
     ParallelExecution,
 }
 ```
- - ## UserAuthorization_SendEmailForAuthorize POST /user_authorization/send_email_for_authorize
+ - ## User_SendEmailForAuthorize POST /user/send_email_for_authorize
 ```
 Sends email for authorization. (Should be used only if the user does not receive an email.)
 ```
@@ -842,7 +842,7 @@ enum Precedent {
     ParallelExecution,
 }
 ```
- - ## UserAuthorization_ResetPasswordByFirstStep POST /user_authorization/reset_password_by_first_step
+ - ## User_ResetPasswordByFirstStep POST /user/reset_password_by_first_step
 ```
 Resets user password for the first step and send email to user.
 ```
@@ -867,7 +867,7 @@ enum Precedent {
     ParallelExecution,
 }
 ```
- - ## UserAuthorization_ResetPasswordBySecondStep POST /user_authorization/reset_password_by_second_step
+ - ## User_ResetPasswordBySecondStep POST /user/reset_password_by_second_step
 ```
 Resets user password for the second step through token value approving.
 ```
@@ -889,7 +889,7 @@ enum Precedent {
     ParallelExecution,
 }
 ```
- - ## UserAuthorization_ResetPasswordByLastStep POST /user_authorization/reset_password_by_last_step
+ - ## User_ResetPasswordByLastStep POST /user/reset_password_by_last_step
 ```
 Resets user password for the last step.
 ```
@@ -911,7 +911,7 @@ enum Precedent {
     ParallelExecution,
 }
 ```
- - ## UserAuthorization_SendEmailForResetPassword POST /user_authorization/send_email_for_reset_password
+ - ## User_SendEmailForResetPassword POST /user/send_email_for_reset_password
 ```
 Sends email for reset password.  (Should be used only if the user does not receive an email.)
 ```
@@ -936,7 +936,7 @@ enum Precedent {
     ParallelExecution,
 }
 ```
- - ## UserAuthorization_RefreshAccessToken POST /user_authorization/refresh_access_token
+ - ## User_RefreshAccessToken POST /user/refresh_access_token
 ```
 Refreshs user access token. The incoming access token should can be expired or not expired.
 ```

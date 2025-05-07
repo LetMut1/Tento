@@ -28,22 +28,22 @@ use {
                 Channel_GetManyOwned,
                 ChannelSubscription_Delete,
                 Inner as ActionProcessorInner,
-                UserAuthorization_AuthorizeByFirstStep,
-                UserAuthorization_AuthorizeByLastStep,
-                UserAuthorization_CheckEmailForExisting,
-                UserAuthorization_CheckNicknameForExisting,
-                UserAuthorization_DeauthorizeFromAllDevices,
-                UserAuthorization_DeauthorizeFromOneDevice,
-                UserAuthorization_RefreshAccessToken,
-                UserAuthorization_RegisterByFirstStep,
-                UserAuthorization_RegisterByLastStep,
-                UserAuthorization_RegisterBySecondStep,
-                UserAuthorization_ResetPasswordByFirstStep,
-                UserAuthorization_ResetPasswordByLastStep,
-                UserAuthorization_ResetPasswordBySecondStep,
-                UserAuthorization_SendEmailForAuthorize,
-                UserAuthorization_SendEmailForRegister,
-                UserAuthorization_SendEmailForResetPassword,
+                User_AuthorizeByFirstStep,
+                User_AuthorizeByLastStep,
+                User_CheckEmailForExisting,
+                User_CheckNicknameForExisting,
+                User_DeauthorizeFromAllDevices,
+                User_DeauthorizeFromOneDevice,
+                User_RefreshAccessToken,
+                User_RegisterByFirstStep,
+                User_RegisterByLastStep,
+                User_RegisterBySecondStep,
+                User_ResetPasswordByFirstStep,
+                User_ResetPasswordByLastStep,
+                User_ResetPasswordBySecondStep,
+                User_SendEmailForAuthorize,
+                User_SendEmailForRegister,
+                User_SendEmailForResetPassword,
             },
             command_processor::RunServer,
         },
@@ -336,113 +336,113 @@ impl HttpServer {
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::CHECK_NICKNAME_FOR_EXISTING,
-                ActionRoute::UserAuthorization(UserAuthorization::CheckNicknameForExisting)
+                User::CHECK_NICKNAME_FOR_EXISTING,
+                ActionRoute::User(User::CheckNicknameForExisting)
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::CHECK_EMAIL_FOR_EXISTING,
-                ActionRoute::UserAuthorization(UserAuthorization::CheckEmailForExisting)
+                User::CHECK_EMAIL_FOR_EXISTING,
+                ActionRoute::User(User::CheckEmailForExisting)
             )
         );
         crate::result_return_logic!(router
 
             .insert(
-                UserAuthorization::REGISTER_BY_FIRST_STEP,
-                ActionRoute::UserAuthorization(UserAuthorization::RegisterByFirstStep),
+                User::REGISTER_BY_FIRST_STEP,
+                ActionRoute::User(User::RegisterByFirstStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::REGISTER_BY_SECOND_STEP,
-                ActionRoute::UserAuthorization(UserAuthorization::RegisterBySecondStep),
+                User::REGISTER_BY_SECOND_STEP,
+                ActionRoute::User(User::RegisterBySecondStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::REGISTER_BY_LAST_STEP,
-                ActionRoute::UserAuthorization(UserAuthorization::RegisterByLastStep),
+                User::REGISTER_BY_LAST_STEP,
+                ActionRoute::User(User::RegisterByLastStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::SEND_EMAIL_FOR_REGISTER,
-                ActionRoute::UserAuthorization(UserAuthorization::SendEmailForRegister),
+                User::SEND_EMAIL_FOR_REGISTER,
+                ActionRoute::User(User::SendEmailForRegister),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::AUTHORIZE_BY_FIRST_STEP,
-                ActionRoute::UserAuthorization(UserAuthorization::AuthorizeByFirstStep),
+                User::AUTHORIZE_BY_FIRST_STEP,
+                ActionRoute::User(User::AuthorizeByFirstStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::AUTHORIZE_BY_LAST_STEP,
-                ActionRoute::UserAuthorization(UserAuthorization::AuthorizeByLastStep),
+                User::AUTHORIZE_BY_LAST_STEP,
+                ActionRoute::User(User::AuthorizeByLastStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE,
-                ActionRoute::UserAuthorization(UserAuthorization::SendEmailForAuthorize),
+                User::SEND_EMAIL_FOR_AUTHORIZE,
+                ActionRoute::User(User::SendEmailForAuthorize),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP,
-                ActionRoute::UserAuthorization(UserAuthorization::ResetPasswordByFirstStep),
+                User::RESET_PASSWORD_BY_FIRST_STEP,
+                ActionRoute::User(User::ResetPasswordByFirstStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP,
-                ActionRoute::UserAuthorization(UserAuthorization::ResetPasswordBySecondStep),
+                User::RESET_PASSWORD_BY_SECOND_STEP,
+                ActionRoute::User(User::ResetPasswordBySecondStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::RESET_PASSWORD_BY_LAST_STEP,
-                ActionRoute::UserAuthorization(UserAuthorization::ResetPasswordByLastStep),
+                User::RESET_PASSWORD_BY_LAST_STEP,
+                ActionRoute::User(User::ResetPasswordByLastStep),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD,
-                ActionRoute::UserAuthorization(UserAuthorization::SendEmailForResetPassword),
+                User::SEND_EMAIL_FOR_RESET_PASSWORD,
+                ActionRoute::User(User::SendEmailForResetPassword),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::REFRESH_ACCESS_TOKEN,
-                ActionRoute::UserAuthorization(UserAuthorization::RefreshAccessToken),
+                User::REFRESH_ACCESS_TOKEN,
+                ActionRoute::User(User::RefreshAccessToken),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE,
-                ActionRoute::UserAuthorization(UserAuthorization::DeauthorizeFromOneDevice),
+                User::DEAUTHORIZE_FROM_ONE_DEVICE,
+                ActionRoute::User(User::DeauthorizeFromOneDevice),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES,
-                ActionRoute::UserAuthorization(UserAuthorization::DeauthorizeFromAllDevices),
+                User::DEAUTHORIZE_FROM_ALL_DEVICES,
+                ActionRoute::User(User::DeauthorizeFromAllDevices),
             )
         );
         crate::result_return_logic!(
@@ -590,113 +590,113 @@ impl HttpServer {
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::CHECK_NICKNAME_FOR_EXISTING_,
-                    ActionRoute::UserAuthorization(UserAuthorization::CheckNicknameForExisting_),
+                    User::CHECK_NICKNAME_FOR_EXISTING_,
+                    ActionRoute::User(User::CheckNicknameForExisting_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::CHECK_EMAIL_FOR_EXISTING_,
-                    ActionRoute::UserAuthorization(UserAuthorization::CheckEmailForExisting_),
+                    User::CHECK_EMAIL_FOR_EXISTING_,
+                    ActionRoute::User(User::CheckEmailForExisting_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::REGISTER_BY_FIRST_STEP_,
-                    ActionRoute::UserAuthorization(UserAuthorization::RegisterByFirstStep_),
+                    User::REGISTER_BY_FIRST_STEP_,
+                    ActionRoute::User(User::RegisterByFirstStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::REGISTER_BY_SECOND_STEP_,
-                    ActionRoute::UserAuthorization(UserAuthorization::RegisterBySecondStep_),
+                    User::REGISTER_BY_SECOND_STEP_,
+                    ActionRoute::User(User::RegisterBySecondStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::REGISTER_BY_LAST_STEP_,
-                    ActionRoute::UserAuthorization(UserAuthorization::RegisterByLastStep_),
+                    User::REGISTER_BY_LAST_STEP_,
+                    ActionRoute::User(User::RegisterByLastStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::SEND_EMAIL_FOR_REGISTER_,
-                    ActionRoute::UserAuthorization(UserAuthorization::SendEmailForRegister_),
+                    User::SEND_EMAIL_FOR_REGISTER_,
+                    ActionRoute::User(User::SendEmailForRegister_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::AUTHORIZE_BY_FIRST_STEP_,
-                    ActionRoute::UserAuthorization(UserAuthorization::AuthorizeByFirstStep_),
+                    User::AUTHORIZE_BY_FIRST_STEP_,
+                    ActionRoute::User(User::AuthorizeByFirstStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::AUTHORIZE_BY_LAST_STEP_,
-                    ActionRoute::UserAuthorization(UserAuthorization::AuthorizeByLastStep_),
+                    User::AUTHORIZE_BY_LAST_STEP_,
+                    ActionRoute::User(User::AuthorizeByLastStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE_,
-                    ActionRoute::UserAuthorization(UserAuthorization::SendEmailForAuthorize_),
+                    User::SEND_EMAIL_FOR_AUTHORIZE_,
+                    ActionRoute::User(User::SendEmailForAuthorize_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP_,
-                    ActionRoute::UserAuthorization(UserAuthorization::ResetPasswordByFirstStep_),
+                    User::RESET_PASSWORD_BY_FIRST_STEP_,
+                    ActionRoute::User(User::ResetPasswordByFirstStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP_,
-                    ActionRoute::UserAuthorization(UserAuthorization::ResetPasswordBySecondStep_),
+                    User::RESET_PASSWORD_BY_SECOND_STEP_,
+                    ActionRoute::User(User::ResetPasswordBySecondStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::RESET_PASSWORD_BY_LAST_STEP_,
-                    ActionRoute::UserAuthorization(UserAuthorization::ResetPasswordByLastStep_),
+                    User::RESET_PASSWORD_BY_LAST_STEP_,
+                    ActionRoute::User(User::ResetPasswordByLastStep_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD_,
-                    ActionRoute::UserAuthorization(UserAuthorization::SendEmailForResetPassword_),
+                    User::SEND_EMAIL_FOR_RESET_PASSWORD_,
+                    ActionRoute::User(User::SendEmailForResetPassword_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::REFRESH_ACCESS_TOKEN_,
-                    ActionRoute::UserAuthorization(UserAuthorization::RefreshAccessToken_),
+                    User::REFRESH_ACCESS_TOKEN_,
+                    ActionRoute::User(User::RefreshAccessToken_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE_,
-                    ActionRoute::UserAuthorization(UserAuthorization::DeauthorizeFromOneDevice_),
+                    User::DEAUTHORIZE_FROM_ONE_DEVICE_,
+                    ActionRoute::User(User::DeauthorizeFromOneDevice_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES_,
-                    ActionRoute::UserAuthorization(UserAuthorization::DeauthorizeFromAllDevices_),
+                    User::DEAUTHORIZE_FROM_ALL_DEVICES_,
+                    ActionRoute::User(User::DeauthorizeFromAllDevices_),
                 )
             );
             crate::result_return_logic!(
@@ -860,118 +860,118 @@ impl HttpServer {
                 postgresql_connection_pool_database_4: &cloned.postgresql_connection_pool_database_4,
             };
             match *r#match.value {
-                ActionRoute::UserAuthorization(ref user_authorization) => {
+                ActionRoute::User(ref user) => {
                     match (
-                        user_authorization,
+                        user,
                         &parts.method,
                     ) {
-                        (&UserAuthorization::CheckNicknameForExisting, &Method::POST) => {
-                            return Action::<UserAuthorization_CheckNicknameForExisting>::run(
+                        (&User::CheckNicknameForExisting, &Method::POST) => {
+                            return Action::<User_CheckNicknameForExisting>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::CheckEmailForExisting, &Method::POST) => {
-                            return Action::<UserAuthorization_CheckEmailForExisting>::run(
+                        (&User::CheckEmailForExisting, &Method::POST) => {
+                            return Action::<User_CheckEmailForExisting>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::RegisterByFirstStep, &Method::POST) => {
-                            return Action::<UserAuthorization_RegisterByFirstStep>::run(
+                        (&User::RegisterByFirstStep, &Method::POST) => {
+                            return Action::<User_RegisterByFirstStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::RegisterBySecondStep, &Method::POST) => {
-                            return Action::<UserAuthorization_RegisterBySecondStep>::run(
+                        (&User::RegisterBySecondStep, &Method::POST) => {
+                            return Action::<User_RegisterBySecondStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::RegisterByLastStep, &Method::POST) => {
-                            return Action::<UserAuthorization_RegisterByLastStep>::run(
+                        (&User::RegisterByLastStep, &Method::POST) => {
+                            return Action::<User_RegisterByLastStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::SendEmailForRegister, &Method::POST) => {
-                            return Action::<UserAuthorization_SendEmailForRegister>::run(
+                        (&User::SendEmailForRegister, &Method::POST) => {
+                            return Action::<User_SendEmailForRegister>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::AuthorizeByFirstStep, &Method::POST) => {
-                            return Action::<UserAuthorization_AuthorizeByFirstStep>::run(
+                        (&User::AuthorizeByFirstStep, &Method::POST) => {
+                            return Action::<User_AuthorizeByFirstStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::AuthorizeByLastStep, &Method::POST) => {
-                            return Action::<UserAuthorization_AuthorizeByLastStep>::run(
+                        (&User::AuthorizeByLastStep, &Method::POST) => {
+                            return Action::<User_AuthorizeByLastStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::SendEmailForAuthorize, &Method::POST) => {
-                            return Action::<UserAuthorization_SendEmailForAuthorize>::run(
+                        (&User::SendEmailForAuthorize, &Method::POST) => {
+                            return Action::<User_SendEmailForAuthorize>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::ResetPasswordByFirstStep, &Method::POST) => {
-                            return Action::<UserAuthorization_ResetPasswordByFirstStep>::run(
+                        (&User::ResetPasswordByFirstStep, &Method::POST) => {
+                            return Action::<User_ResetPasswordByFirstStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::ResetPasswordBySecondStep, &Method::POST) => {
-                            return Action::<UserAuthorization_ResetPasswordBySecondStep>::run(
+                        (&User::ResetPasswordBySecondStep, &Method::POST) => {
+                            return Action::<User_ResetPasswordBySecondStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::ResetPasswordByLastStep, &Method::POST) => {
-                            return Action::<UserAuthorization_ResetPasswordByLastStep>::run(
+                        (&User::ResetPasswordByLastStep, &Method::POST) => {
+                            return Action::<User_ResetPasswordByLastStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::SendEmailForResetPassword, &Method::POST) => {
-                            return Action::<UserAuthorization_SendEmailForResetPassword>::run(
+                        (&User::SendEmailForResetPassword, &Method::POST) => {
+                            return Action::<User_SendEmailForResetPassword>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::RefreshAccessToken, &Method::POST) => {
-                            return Action::<UserAuthorization_RefreshAccessToken>::run(
+                        (&User::RefreshAccessToken, &Method::POST) => {
+                            return Action::<User_RefreshAccessToken>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::DeauthorizeFromOneDevice, &Method::POST) => {
-                            return Action::<UserAuthorization_DeauthorizeFromOneDevice>::run(
+                        (&User::DeauthorizeFromOneDevice, &Method::POST) => {
+                            return Action::<User_DeauthorizeFromOneDevice>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization::DeauthorizeFromAllDevices, &Method::POST) => {
-                            return Action::<UserAuthorization_DeauthorizeFromAllDevices>::run(
+                        (&User::DeauthorizeFromAllDevices, &Method::POST) => {
+                            return Action::<User_DeauthorizeFromAllDevices>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
@@ -981,116 +981,116 @@ impl HttpServer {
                             #[cfg(feature = "action_for_manual_test")]
                             {
                                 match (
-                                    user_authorization,
+                                    user,
                                     &parts.method,
                                 ) {
-                                    (&UserAuthorization::CheckNicknameForExisting_, &Method::POST) => {
-                                        return Action::<UserAuthorization_CheckNicknameForExisting>::run_(
+                                    (&User::CheckNicknameForExisting_, &Method::POST) => {
+                                        return Action::<User_CheckNicknameForExisting>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::CheckEmailForExisting_, &Method::POST) => {
-                                        return Action::<UserAuthorization_CheckEmailForExisting>::run_(
+                                    (&User::CheckEmailForExisting_, &Method::POST) => {
+                                        return Action::<User_CheckEmailForExisting>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::RegisterByFirstStep_, &Method::POST) => {
-                                        return Action::<UserAuthorization_RegisterByFirstStep>::run_(
+                                    (&User::RegisterByFirstStep_, &Method::POST) => {
+                                        return Action::<User_RegisterByFirstStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::RegisterBySecondStep_, &Method::POST) => {
-                                        return Action::<UserAuthorization_RegisterBySecondStep>::run_(
+                                    (&User::RegisterBySecondStep_, &Method::POST) => {
+                                        return Action::<User_RegisterBySecondStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::RegisterByLastStep_, &Method::POST) => {
-                                        return Action::<UserAuthorization_RegisterByLastStep>::run_(
+                                    (&User::RegisterByLastStep_, &Method::POST) => {
+                                        return Action::<User_RegisterByLastStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::SendEmailForRegister_, &Method::POST) => {
-                                        return Action::<UserAuthorization_SendEmailForRegister>::run_(
+                                    (&User::SendEmailForRegister_, &Method::POST) => {
+                                        return Action::<User_SendEmailForRegister>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::AuthorizeByFirstStep_, &Method::POST) => {
-                                        return Action::<UserAuthorization_AuthorizeByFirstStep>::run_(
+                                    (&User::AuthorizeByFirstStep_, &Method::POST) => {
+                                        return Action::<User_AuthorizeByFirstStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::AuthorizeByLastStep_, &Method::POST) => {
-                                        return Action::<UserAuthorization_AuthorizeByLastStep>::run_(
+                                    (&User::AuthorizeByLastStep_, &Method::POST) => {
+                                        return Action::<User_AuthorizeByLastStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::SendEmailForAuthorize_, &Method::POST) => {
-                                        return Action::<UserAuthorization_SendEmailForAuthorize>::run_(
+                                    (&User::SendEmailForAuthorize_, &Method::POST) => {
+                                        return Action::<User_SendEmailForAuthorize>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::ResetPasswordByFirstStep_, &Method::POST) => {
-                                        return Action::<UserAuthorization_ResetPasswordByFirstStep>::run_(
+                                    (&User::ResetPasswordByFirstStep_, &Method::POST) => {
+                                        return Action::<User_ResetPasswordByFirstStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::ResetPasswordBySecondStep_, &Method::POST) => {
-                                        return Action::<UserAuthorization_ResetPasswordBySecondStep>::run_(
+                                    (&User::ResetPasswordBySecondStep_, &Method::POST) => {
+                                        return Action::<User_ResetPasswordBySecondStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::ResetPasswordByLastStep_, &Method::POST) => {
-                                        return Action::<UserAuthorization_ResetPasswordByLastStep>::run_(
+                                    (&User::ResetPasswordByLastStep_, &Method::POST) => {
+                                        return Action::<User_ResetPasswordByLastStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::SendEmailForResetPassword_, &Method::POST) => {
-                                        return Action::<UserAuthorization_SendEmailForResetPassword>::run_(
+                                    (&User::SendEmailForResetPassword_, &Method::POST) => {
+                                        return Action::<User_SendEmailForResetPassword>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::RefreshAccessToken_, &Method::POST) => {
-                                        return Action::<UserAuthorization_RefreshAccessToken>::run_(
+                                    (&User::RefreshAccessToken_, &Method::POST) => {
+                                        return Action::<User_RefreshAccessToken>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::DeauthorizeFromOneDevice_, &Method::POST) => {
-                                        return Action::<UserAuthorization_DeauthorizeFromOneDevice>::run_(
+                                    (&User::DeauthorizeFromOneDevice_, &Method::POST) => {
+                                        return Action::<User_DeauthorizeFromOneDevice>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization::DeauthorizeFromAllDevices_, &Method::POST) => {
-                                        return Action::<UserAuthorization_DeauthorizeFromAllDevices>::run_(
+                                    (&User::DeauthorizeFromAllDevices_, &Method::POST) => {
+                                        return Action::<User_DeauthorizeFromAllDevices>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
@@ -1513,7 +1513,7 @@ struct Cloned {
     postgresql_connection_pool_database_4: PostgresqlConnectionPool,
 }
 pub enum ActionRoute {
-    UserAuthorization(UserAuthorization),
+    User(User),
     Channel(Channel),
     ChannelSubscription(ChannelSubscription),
     ChannelPublication1(ChannelPublication1),
@@ -1525,7 +1525,7 @@ pub enum ActionRoute {
 impl ActionRoute {
     const PART: &'static str = "_";
 }
-pub enum UserAuthorization {
+pub enum User {
     CheckNicknameForExisting,
     CheckEmailForExisting,
     RegisterByFirstStep,
@@ -1575,88 +1575,88 @@ pub enum UserAuthorization {
     #[cfg(feature = "action_for_manual_test")]
     DeauthorizeFromAllDevices_,
 }
-impl UserAuthorization {
-    pub const AUTHORIZE_BY_FIRST_STEP: &'static str = "/user_authorization/authorize_by_first_step";
-    pub const AUTHORIZE_BY_LAST_STEP: &'static str = "/user_authorization/authorize_by_last_step";
-    pub const CHECK_EMAIL_FOR_EXISTING: &'static str = "/user_authorization/check_email_for_existing";
-    pub const CHECK_NICKNAME_FOR_EXISTING: &'static str = "/user_authorization/check_nickname_for_existing";
-    pub const DEAUTHORIZE_FROM_ALL_DEVICES: &'static str = "/user_authorization/deauthorize_from_all_devices";
-    pub const DEAUTHORIZE_FROM_ONE_DEVICE: &'static str = "/user_authorization/deauthorize_from_one_device";
-    pub const REFRESH_ACCESS_TOKEN: &'static str = "/user_authorization/refresh_access_token";
-    pub const REGISTER_BY_FIRST_STEP: &'static str = "/user_authorization/register_by_first_step";
-    pub const REGISTER_BY_LAST_STEP: &'static str = "/user_authorization/register_by_last_step";
-    pub const REGISTER_BY_SECOND_STEP: &'static str = "/user_authorization/register_by_second_step";
-    pub const RESET_PASSWORD_BY_FIRST_STEP: &'static str = "/user_authorization/reset_password_by_first_step";
-    pub const RESET_PASSWORD_BY_LAST_STEP: &'static str = "/user_authorization/reset_password_by_last_step";
-    pub const RESET_PASSWORD_BY_SECOND_STEP: &'static str = "/user_authorization/reset_password_by_second_step";
-    pub const SEND_EMAIL_FOR_AUTHORIZE: &'static str = "/user_authorization/send_email_for_authorize";
-    pub const SEND_EMAIL_FOR_REGISTER: &'static str = "/user_authorization/send_email_for_register";
-    pub const SEND_EMAIL_FOR_RESET_PASSWORD: &'static str = "/user_authorization/send_email_for_reset_password";
+impl User {
+    pub const AUTHORIZE_BY_FIRST_STEP: &'static str = "/user/authorize_by_first_step";
+    pub const AUTHORIZE_BY_LAST_STEP: &'static str = "/user/authorize_by_last_step";
+    pub const CHECK_EMAIL_FOR_EXISTING: &'static str = "/user/check_email_for_existing";
+    pub const CHECK_NICKNAME_FOR_EXISTING: &'static str = "/user/check_nickname_for_existing";
+    pub const DEAUTHORIZE_FROM_ALL_DEVICES: &'static str = "/user/deauthorize_from_all_devices";
+    pub const DEAUTHORIZE_FROM_ONE_DEVICE: &'static str = "/user/deauthorize_from_one_device";
+    pub const REFRESH_ACCESS_TOKEN: &'static str = "/user/refresh_access_token";
+    pub const REGISTER_BY_FIRST_STEP: &'static str = "/user/register_by_first_step";
+    pub const REGISTER_BY_LAST_STEP: &'static str = "/user/register_by_last_step";
+    pub const REGISTER_BY_SECOND_STEP: &'static str = "/user/register_by_second_step";
+    pub const RESET_PASSWORD_BY_FIRST_STEP: &'static str = "/user/reset_password_by_first_step";
+    pub const RESET_PASSWORD_BY_LAST_STEP: &'static str = "/user/reset_password_by_last_step";
+    pub const RESET_PASSWORD_BY_SECOND_STEP: &'static str = "/user/reset_password_by_second_step";
+    pub const SEND_EMAIL_FOR_AUTHORIZE: &'static str = "/user/send_email_for_authorize";
+    pub const SEND_EMAIL_FOR_REGISTER: &'static str = "/user/send_email_for_register";
+    pub const SEND_EMAIL_FOR_RESET_PASSWORD: &'static str = "/user/send_email_for_reset_password";
 }
 #[cfg(feature = "action_for_manual_test")]
-impl UserAuthorization {
+impl User {
     pub const AUTHORIZE_BY_FIRST_STEP_: &'static str = const_format::concatcp!(
-        UserAuthorization::AUTHORIZE_BY_FIRST_STEP,
+        User::AUTHORIZE_BY_FIRST_STEP,
         ActionRoute::PART,
     );
     pub const AUTHORIZE_BY_LAST_STEP_: &'static str = const_format::concatcp!(
-        UserAuthorization::AUTHORIZE_BY_LAST_STEP,
+        User::AUTHORIZE_BY_LAST_STEP,
         ActionRoute::PART,
     );
     pub const CHECK_EMAIL_FOR_EXISTING_: &'static str = const_format::concatcp!(
-        UserAuthorization::CHECK_EMAIL_FOR_EXISTING,
+        User::CHECK_EMAIL_FOR_EXISTING,
         ActionRoute::PART,
     );
     pub const CHECK_NICKNAME_FOR_EXISTING_: &'static str = const_format::concatcp!(
-        UserAuthorization::CHECK_NICKNAME_FOR_EXISTING,
+        User::CHECK_NICKNAME_FOR_EXISTING,
         ActionRoute::PART,
     );
     pub const DEAUTHORIZE_FROM_ALL_DEVICES_: &'static str = const_format::concatcp!(
-        UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES,
+        User::DEAUTHORIZE_FROM_ALL_DEVICES,
         ActionRoute::PART,
     );
     pub const DEAUTHORIZE_FROM_ONE_DEVICE_: &'static str = const_format::concatcp!(
-        UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE,
+        User::DEAUTHORIZE_FROM_ONE_DEVICE,
         ActionRoute::PART,
     );
     pub const REFRESH_ACCESS_TOKEN_: &'static str = const_format::concatcp!(
-        UserAuthorization::REFRESH_ACCESS_TOKEN,
+        User::REFRESH_ACCESS_TOKEN,
         ActionRoute::PART,
     );
     pub const REGISTER_BY_FIRST_STEP_: &'static str = const_format::concatcp!(
-        UserAuthorization::REGISTER_BY_FIRST_STEP,
+        User::REGISTER_BY_FIRST_STEP,
         ActionRoute::PART,
     );
     pub const REGISTER_BY_LAST_STEP_: &'static str = const_format::concatcp!(
-        UserAuthorization::REGISTER_BY_LAST_STEP,
+        User::REGISTER_BY_LAST_STEP,
         ActionRoute::PART,
     );
     pub const REGISTER_BY_SECOND_STEP_: &'static str = const_format::concatcp!(
-        UserAuthorization::REGISTER_BY_SECOND_STEP,
+        User::REGISTER_BY_SECOND_STEP,
         ActionRoute::PART,
     );
     pub const RESET_PASSWORD_BY_FIRST_STEP_: &'static str = const_format::concatcp!(
-        UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP,
+        User::RESET_PASSWORD_BY_FIRST_STEP,
         ActionRoute::PART,
     );
     pub const RESET_PASSWORD_BY_LAST_STEP_: &'static str = const_format::concatcp!(
-        UserAuthorization::RESET_PASSWORD_BY_LAST_STEP,
+        User::RESET_PASSWORD_BY_LAST_STEP,
         ActionRoute::PART,
     );
     pub const RESET_PASSWORD_BY_SECOND_STEP_: &'static str = const_format::concatcp!(
-        UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP,
+        User::RESET_PASSWORD_BY_SECOND_STEP,
         ActionRoute::PART,
     );
     pub const SEND_EMAIL_FOR_AUTHORIZE_: &'static str = const_format::concatcp!(
-        UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE,
+        User::SEND_EMAIL_FOR_AUTHORIZE,
         ActionRoute::PART,
     );
     pub const SEND_EMAIL_FOR_REGISTER_: &'static str = const_format::concatcp!(
-        UserAuthorization::SEND_EMAIL_FOR_REGISTER,
+        User::SEND_EMAIL_FOR_REGISTER,
         ActionRoute::PART,
     );
     pub const SEND_EMAIL_FOR_RESET_PASSWORD_: &'static str = const_format::concatcp!(
-        UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD,
+        User::SEND_EMAIL_FOR_RESET_PASSWORD,
         ActionRoute::PART,
     );
 }

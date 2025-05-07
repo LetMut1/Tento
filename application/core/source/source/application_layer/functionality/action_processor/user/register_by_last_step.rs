@@ -56,7 +56,7 @@ use {
         }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::user_authorization::register_by_last_step::{
+        action_processor_incoming_outcoming::action_processor::user::register_by_last_step::{
             Incoming,
             Outcoming,
             Precedent,
@@ -68,8 +68,8 @@ use {
         time::Duration,
     },
 };
-pub struct UserAuthorization_RegisterByLastStep;
-impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> {
+pub struct User_RegisterByLastStep;
+impl ActionProcessor_ for ActionProcessor<User_RegisterByLastStep> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

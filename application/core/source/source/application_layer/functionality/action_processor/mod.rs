@@ -4,7 +4,7 @@ mod channel_publication1_commentary;
 mod channel_publication1_mark;
 mod channel_publication1_view;
 mod channel_subscription;
-mod user_authorization;
+mod user;
 pub use self::{
     channel::{
         check_linked_name_for_existing::Channel_CheckLinkedNameForExisting,
@@ -36,23 +36,23 @@ pub use self::{
         create::ChannelSubscription_Create,
         delete::ChannelSubscription_Delete,
     },
-    user_authorization::{
-        authorize_by_first_step::UserAuthorization_AuthorizeByFirstStep,
-        authorize_by_last_step::UserAuthorization_AuthorizeByLastStep,
-        check_email_for_existing::UserAuthorization_CheckEmailForExisting,
-        check_nickname_for_existing::UserAuthorization_CheckNicknameForExisting,
-        deauthorize_from_all_devices::UserAuthorization_DeauthorizeFromAllDevices,
-        deauthorize_from_one_device::UserAuthorization_DeauthorizeFromOneDevice,
-        refresh_access_token::UserAuthorization_RefreshAccessToken,
-        register_by_first_step::UserAuthorization_RegisterByFirstStep,
-        register_by_last_step::UserAuthorization_RegisterByLastStep,
-        register_by_second_step::UserAuthorization_RegisterBySecondStep,
-        reset_password_by_first_step::UserAuthorization_ResetPasswordByFirstStep,
-        reset_password_by_last_step::UserAuthorization_ResetPasswordByLastStep,
-        reset_password_by_second_step::UserAuthorization_ResetPasswordBySecondStep,
-        send_email_for_authorize::UserAuthorization_SendEmailForAuthorize,
-        send_email_for_register::UserAuthorization_SendEmailForRegister,
-        send_email_for_reset_password::UserAuthorization_SendEmailForResetPassword,
+    user::{
+        authorize_by_first_step::User_AuthorizeByFirstStep,
+        authorize_by_last_step::User_AuthorizeByLastStep,
+        check_email_for_existing::User_CheckEmailForExisting,
+        check_nickname_for_existing::User_CheckNicknameForExisting,
+        deauthorize_from_all_devices::User_DeauthorizeFromAllDevices,
+        deauthorize_from_one_device::User_DeauthorizeFromOneDevice,
+        refresh_access_token::User_RefreshAccessToken,
+        register_by_first_step::User_RegisterByFirstStep,
+        register_by_last_step::User_RegisterByLastStep,
+        register_by_second_step::User_RegisterBySecondStep,
+        reset_password_by_first_step::User_ResetPasswordByFirstStep,
+        reset_password_by_last_step::User_ResetPasswordByLastStep,
+        reset_password_by_second_step::User_ResetPasswordBySecondStep,
+        send_email_for_authorize::User_SendEmailForAuthorize,
+        send_email_for_register::User_SendEmailForRegister,
+        send_email_for_reset_password::User_SendEmailForResetPassword,
     },
 };
 use {

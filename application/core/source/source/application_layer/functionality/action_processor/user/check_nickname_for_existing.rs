@@ -24,7 +24,7 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::user_authorization::check_nickname_for_existing::{
+        action_processor_incoming_outcoming::action_processor::user::check_nickname_for_existing::{
             Incoming,
             Outcoming,
         },
@@ -33,8 +33,8 @@ use {
     },
     std::future::Future,
 };
-pub struct UserAuthorization_CheckNicknameForExisting;
-impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExisting> {
+pub struct User_CheckNicknameForExisting;
+impl ActionProcessor_ for ActionProcessor<User_CheckNicknameForExisting> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Void;

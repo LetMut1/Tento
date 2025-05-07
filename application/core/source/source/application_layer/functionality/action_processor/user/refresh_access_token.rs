@@ -42,7 +42,7 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::user_authorization::refresh_access_token::{
+        action_processor_incoming_outcoming::action_processor::user::refresh_access_token::{
             Incoming,
             Outcoming,
             Precedent,
@@ -51,8 +51,8 @@ use {
     },
     std::future::Future,
 };
-pub struct UserAuthorization_RefreshAccessToken;
-impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> {
+pub struct User_RefreshAccessToken;
+impl ActionProcessor_ for ActionProcessor<User_RefreshAccessToken> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

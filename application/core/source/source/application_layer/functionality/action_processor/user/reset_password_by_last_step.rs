@@ -57,7 +57,7 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_last_step::{
+        action_processor_incoming_outcoming::action_processor::user::reset_password_by_last_step::{
             Incoming,
             Precedent,
         },
@@ -66,8 +66,8 @@ use {
     },
     std::future::Future,
 };
-pub struct UserAuthorization_ResetPasswordByLastStep;
-impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastStep> {
+pub struct User_ResetPasswordByLastStep;
+impl ActionProcessor_ for ActionProcessor<User_ResetPasswordByLastStep> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;

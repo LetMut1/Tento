@@ -150,9 +150,6 @@ ChannelDelayedDeletion_CanBeDeletedFrom - поменять константу п
 возможно, добавить channel__access_modifier в channel, так как он проверяется на заборе публикаций
 
 
-route space "user_authorization" change to "user"?
-
-
 Постгрес Опимизация запросов с ДЖОИНАМИ. ON/Where on indexed column
 
 

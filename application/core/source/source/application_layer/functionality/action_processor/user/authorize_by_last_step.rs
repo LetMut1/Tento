@@ -71,7 +71,7 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::user_authorization::authorize_by_last_step::{
+        action_processor_incoming_outcoming::action_processor::user::authorize_by_last_step::{
             Incoming,
             Outcoming,
             Precedent,
@@ -83,8 +83,8 @@ use {
         time::Duration,
     },
 };
-pub struct UserAuthorization_AuthorizeByLastStep;
-impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep> {
+pub struct User_AuthorizeByLastStep;
+impl ActionProcessor_ for ActionProcessor<User_AuthorizeByLastStep> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
