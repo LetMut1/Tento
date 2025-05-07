@@ -7,7 +7,7 @@ use {
         },
         domain_layer::{
             data::entity::{
-                user::User_Id,
+                user::User_ObfuscatedId,
                 user_device::UserDevice_Id,
                 user_reset_password_token::{
                     UserResetPasswordToken,
@@ -21,12 +21,11 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
                         Postgresql,
                         UserResetPasswordTokenBy,
                         UserResetPasswordTokenUpdate5,
-                    },
+                    }, Repository
                 },
                 service::resolver::{
                     Resolver,
@@ -55,7 +54,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordBySecondStep> {
             if !Validator::<UserResetPasswordToken_Value>::is_valid(incoming.user_reset_password_token__value)? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<User_Id>::is_valid(incoming.user__id) {
+            if !Validator::<User_ObfuscatedId>::is_valid(incoming.user__obfuscated_id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
@@ -70,7 +69,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordBySecondStep> {
             ) = match Repository::<Postgresql<UserResetPasswordToken>>::find_2(
                 &postgresql_client_database_2,
                 UserResetPasswordTokenBy {
-                    user__id: incoming.user__id,
+                    user__obfuscated_id: incoming.user__obfuscated_id,
                     user_device__id: incoming.user_device__id,
                 },
             )
@@ -83,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordBySecondStep> {
                 if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
                     &postgresql_client_database_2,
                     UserResetPasswordTokenBy {
-                        user__id: incoming.user__id,
+                        user__obfuscated_id: incoming.user__obfuscated_id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
@@ -104,7 +103,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordBySecondStep> {
                     if !Repository::<Postgresql<UserResetPasswordToken>>::update_4(
                         &postgresql_client_database_2,
                         UserResetPasswordTokenBy {
-                            user__id: incoming.user__id,
+                            user__obfuscated_id: incoming.user__obfuscated_id,
                             user_device__id: incoming.user_device__id,
                         },
                     )
@@ -116,7 +115,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordBySecondStep> {
                     if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
                         &postgresql_client_database_2,
                         UserResetPasswordTokenBy {
-                            user__id: incoming.user__id,
+                            user__obfuscated_id: incoming.user__obfuscated_id,
                             user_device__id: incoming.user_device__id,
                         },
                     )
@@ -139,7 +138,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordBySecondStep> {
                     user_reset_password_token__is_approved: true,
                 },
                 UserResetPasswordTokenBy {
-                    user__id: incoming.user__id,
+                    user__obfuscated_id: incoming.user__obfuscated_id,
                     user_device__id: incoming.user_device__id,
                 },
             )

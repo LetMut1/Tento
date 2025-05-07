@@ -8,8 +8,8 @@ use crate::common_precedent::CommonPrecedent;
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Incoming<'a> {
+    pub user__obfuscated_id: i64,
     pub user_device__id: &'a str,
-    pub user__id: i64,
     pub user__password: &'a str,
     pub user_reset_password_token__value: &'a str,
 }

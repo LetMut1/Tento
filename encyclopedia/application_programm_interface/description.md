@@ -854,7 +854,7 @@ struct Incoming {
 ```
 ```
 struct Outcoming {
-    user__id: i64,
+    user__obfuscated_id: i64,
     verification_message_sent: bool,
     user_reset_password_token__can_be_resent_from: i64,
     user_reset_password_token__wrong_enter_tries_quantity: u8,
@@ -873,7 +873,7 @@ Resets user password for the second step through token value approving.
 ```
 ```
 struct Incoming {
-    user__id: i64,
+    user__obfuscated_id: i64,
     user_device__id: String,
     user_reset_password_token__value: String
 }
@@ -896,7 +896,7 @@ Resets user password for the last step.
 ```
 struct Incoming {
     user_device__id: String,
-    user__id: i64,
+    user__obfuscated_id: i64,
     user__password: String,
     user_reset_password_token__value: String
 }
@@ -917,7 +917,7 @@ Sends email for reset password.  (Should be used only if the user does not recei
 ```
 ```
 struct Incoming {
-    user__id: i64,
+    user__obfuscated_id: i64,
     user_device__id: String,
 }
 ```

@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByFirstStep> {
             if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let user__id = match Repository::<Postgresql<User>>::find_4(
+            let user__obfuscated_id = match Repository::<Postgresql<User>>::find_4(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
                 UserBy2 {
                     user__email: incoming.user__email,
@@ -99,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByFirstStep> {
                 match Repository::<Postgresql<UserResetPasswordToken>>::find_1(
                     &postgresql_client_database_2,
                     UserResetPasswordTokenBy {
-                        user__id,
+                        user__obfuscated_id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
@@ -144,7 +144,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByFirstStep> {
                                     user_reset_password_token__can_be_resent_from: user_reset_password_token__can_be_resent_from_,
                                 },
                                 UserResetPasswordTokenBy {
-                                    user__id,
+                                    user__obfuscated_id,
                                     user_device__id: incoming.user_device__id,
                                 },
                             )
@@ -160,7 +160,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByFirstStep> {
                                         user_reset_password_token__can_be_resent_from: user_reset_password_token__can_be_resent_from_,
                                     },
                                     UserResetPasswordTokenBy {
-                                        user__id,
+                                        user__obfuscated_id,
                                         user_device__id: incoming.user_device__id,
                                     },
                                 )
@@ -179,7 +179,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByFirstStep> {
                                         user_reset_password_token__expires_at,
                                     },
                                     UserResetPasswordTokenBy {
-                                        user__id,
+                                        user__obfuscated_id,
                                         user_device__id: incoming.user_device__id,
                                     },
                                 )
@@ -203,7 +203,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByFirstStep> {
                         if !Repository::<Postgresql<UserResetPasswordToken>>::create(
                             &postgresql_client_database_2,
                             UserResetPasswordTokenInsert {
-                                user__id,
+                                user__obfuscated_id,
                                 user_device__id: incoming.user_device__id,
                                 user_reset_password_token__value: user_reset_password_token__value_.as_str(),
                                 user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token__wrong_enter_tries_quantity_,
@@ -254,7 +254,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByFirstStep> {
                 );
             }
             let outcoming = Outcoming {
-                user__id,
+                user__obfuscated_id,
                 verification_message_sent: can_send,
                 user_reset_password_token__can_be_resent_from,
                 user_reset_password_token__wrong_enter_tries_quantity,

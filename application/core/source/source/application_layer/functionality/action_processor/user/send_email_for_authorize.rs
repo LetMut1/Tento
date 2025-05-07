@@ -29,7 +29,7 @@ use {
                         Postgresql,
                         UserAuthorizationTokenBy,
                         UserAuthorizationTokenUpdate3,
-                        UserBy3, UserBy4,
+                        UserBy4,
                     }, Repository
                 },
                 service::{

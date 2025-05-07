@@ -1543,7 +1543,7 @@ type User_ResetPasswordByFirstStep_Result =
 #[repr(C)]
 #[derive(Default)]
 pub struct User_ResetPasswordByFirstStep_Outcoming_ {
-    pub user__id: c_long,
+    pub user__obfuscated_id: c_long,
     pub verification_message_sent: bool,
     pub user_reset_password_token__can_be_resent_from: c_long,
     pub user_reset_password_token__wrong_enter_tries_quantity: c_uchar,
@@ -1573,7 +1573,7 @@ pub extern "C-unwind" fn user__reset_password_by_first_step__deserialize_allocat
                         data: data__,
                     } => {
                         let outcoming = User_ResetPasswordByFirstStep_Outcoming_ {
-                            user__id: data__.user__id,
+                            user__obfuscated_id: data__.user__obfuscated_id,
                             verification_message_sent: data__.verification_message_sent,
                             user_reset_password_token__can_be_resent_from: data__.user_reset_password_token__can_be_resent_from,
                             user_reset_password_token__wrong_enter_tries_quantity: data__.user_reset_password_token__wrong_enter_tries_quantity,
@@ -1618,7 +1618,7 @@ pub extern "C-unwind" fn user__reset_password_by_first_step__deserialize_dealloc
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct User_ResetPasswordBySecondStep_Incoming_ {
-    pub user__id: c_long,
+    pub user__obfuscated_id: c_long,
     pub user_device__id: String_,
     pub user_reset_password_token__value: String_,
 }
@@ -1630,7 +1630,7 @@ pub extern "C-unwind" fn user__reset_password_by_second_step__serialize_allocate
         move |incoming_: &'_ User_ResetPasswordBySecondStep_Incoming_| -> Result<User_ResetPasswordBySecondStep_Incoming, Box<dyn StdError + 'static>> {
             return Result::Ok(
                 User_ResetPasswordBySecondStep_Incoming {
-                    user__id: incoming_.user__id,
+                    user__obfuscated_id: incoming_.user__obfuscated_id,
                     user_device__id: incoming_.user_device__id.get_as_str()?,
                     user_reset_password_token__value: incoming_.user_reset_password_token__value.get_as_str()?,
                 },
@@ -1718,7 +1718,7 @@ pub extern "C-unwind" fn user__reset_password_by_second_step__deserialize_deallo
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct User_ResetPasswordByLastStep_Incoming_ {
-    pub user__id: c_long,
+    pub user__obfuscated_id: c_long,
     pub user_device__id: String_,
     pub user__password: String_,
     pub user_reset_password_token__value: String_,
@@ -1731,7 +1731,7 @@ pub extern "C-unwind" fn user__reset_password_by_last_step__serialize_allocate(
         move |incoming_: &'_ User_ResetPasswordByLastStep_Incoming_| -> Result<User_ResetPasswordByLastStep_Incoming, Box<dyn StdError + 'static>> {
             return Result::Ok(
                 User_ResetPasswordByLastStep_Incoming {
-                    user__id: incoming_.user__id,
+                    user__obfuscated_id: incoming_.user__obfuscated_id,
                     user_device__id: incoming_.user_device__id.get_as_str()?,
                     user__password: incoming_.user__password.get_as_str()?,
                     user_reset_password_token__value: incoming_.user_reset_password_token__value.get_as_str()?,
@@ -2044,7 +2044,7 @@ pub extern "C-unwind" fn user__send_email_for_authorize__deserialize_deallocate(
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct User_SendEmailForResetPassword_Incoming_ {
-    pub user__id: c_long,
+    pub user__obfuscated_id: c_long,
     pub user_device__id: String_,
 }
 #[unsafe(no_mangle)]
@@ -2055,7 +2055,7 @@ pub extern "C-unwind" fn user__send_email_for_reset_password__serialize_allocate
         move |incoming_: &'_ User_SendEmailForResetPassword_Incoming_| -> Result<User_SendEmailForResetPassword_Incoming, Box<dyn StdError + 'static>> {
             return Result::Ok(
                 User_SendEmailForResetPassword_Incoming {
-                    user__id: incoming_.user__id,
+                    user__obfuscated_id: incoming_.user__obfuscated_id,
                     user_device__id: incoming_.user_device__id.get_as_str()?,
                 },
             );
@@ -5046,7 +5046,7 @@ mod test {
             }
             pub fn user__reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User_ResetPasswordBySecondStep_Incoming_ {
-                    user__id: 0,
+                    user__obfuscated_id: 0,
                     user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     user_reset_password_token__value: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
@@ -5061,7 +5061,7 @@ mod test {
             }
             pub fn user__reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User_ResetPasswordByLastStep_Incoming_ {
-                    user__id: 0,
+                    user__obfuscated_id: 0,
                     user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     user__password: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     user_reset_password_token__value: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
@@ -5105,7 +5105,7 @@ mod test {
             }
             pub fn user__send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User_SendEmailForResetPassword_Incoming_ {
-                    user__id: 0,
+                    user__obfuscated_id: 0,
                     user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
@@ -6107,7 +6107,7 @@ mod test {
             }
             pub fn target_filled__user__reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let outcoming = User_ResetPasswordByFirstStep_Outcoming {
-                    user__id: 0,
+                    user__obfuscated_id: 0,
                     verification_message_sent: false,
                     user_reset_password_token__can_be_resent_from: 0,
                     user_reset_password_token__wrong_enter_tries_quantity: 0,

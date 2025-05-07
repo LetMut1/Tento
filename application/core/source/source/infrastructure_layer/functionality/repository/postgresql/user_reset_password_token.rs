@@ -20,7 +20,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
             const QUERY: &'static str = "\
                 INSERT INTO \
                     public.user_reset_password_token (\
-                        user__id,\
+                        user__obfuscated_id,\
                         user_device__id,\
                         value,\
                         wrong_enter_tries_quantity,\
@@ -43,7 +43,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
             let mut parameter_storage = ParameterStorage::new(7);
             parameter_storage
                 .add(
-                    &insert.user__id,
+                    &insert.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -98,14 +98,14 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 DELETE FROM ONLY \
                     public.user_reset_password_token AS urpt \
                 WHERE \
-                    urpt.user__id = $1 \
+                    urpt.user__obfuscated_id = $1 \
                     AND urpt.user_device__id = $2 \
                 RETURNING \
                     true AS _;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -153,7 +153,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     $5\
                 ) \
                 WHERE \
-                    urpt.user__id = $6 \
+                    urpt.user__obfuscated_id = $6 \
                     AND urpt.user_device__id = $7 \
                 RETURNING \
                     true AS _;";
@@ -181,7 +181,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::INT8,
                 )
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -221,7 +221,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     $1\
                 ) \
                 WHERE \
-                    urpt.user__id = $2 \
+                    urpt.user__obfuscated_id = $2 \
                     AND urpt.user_device__id = $3 \
                 RETURNING \
                     true AS _;";
@@ -232,7 +232,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::INT8,
                 )
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -278,7 +278,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     $4 \
                 ) \
                 WHERE \
-                    urpt.user__id = $5 \
+                    urpt.user__obfuscated_id = $5 \
                     AND urpt.user_device__id = $6 \
                 RETURNING \
                     true AS _;";
@@ -302,7 +302,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::INT8,
                 )
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -339,7 +339,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 SET \
                     wrong_enter_tries_quantity = wrong_enter_tries_quantity + 1 \
                 WHERE \
-                    urpt.user__id = $1 \
+                    urpt.user__obfuscated_id = $1 \
                     AND urpt.user_device__id = $2 \
                     AND urpt.wrong_enter_tries_quantity < $3 \
                 RETURNING \
@@ -347,7 +347,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -391,7 +391,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     $1\
                 ) \
                 WHERE \
-                    urpt.user__id = $2 \
+                    urpt.user__obfuscated_id = $2 \
                     AND urpt.user_device__id = $3 \
                 RETURNING \
                     true AS _;";
@@ -402,7 +402,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                     Type::BOOL,
                 )
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -463,12 +463,12 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 FROM \
                     public.user_reset_password_token urpt \
                 WHERE \
-                    urpt.user__id = $1 \
+                    urpt.user__obfuscated_id = $1 \
                     AND urpt.user_device__id = $2;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -540,12 +540,12 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 FROM \
                     public.user_reset_password_token urpt \
                 WHERE \
-                    urpt.user__id = $1 \
+                    urpt.user__obfuscated_id = $1 \
                     AND urpt.user_device__id = $2;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -616,12 +616,12 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
                 FROM \
                     public.user_reset_password_token urpt \
                 WHERE \
-                    urpt.user__id = $1 \
+                    urpt.user__obfuscated_id = $1 \
                     AND urpt.user_device__id = $2;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -661,7 +661,7 @@ impl Repository<Postgresql<UserResetPasswordToken>> {
     }
 }
 pub struct Insert<'a> {
-    pub user__id: i64,
+    pub user__obfuscated_id: i64,
     pub user_device__id: &'a str,
     pub user_reset_password_token__value: &'a str,
     pub user_reset_password_token__wrong_enter_tries_quantity: u8,
@@ -689,6 +689,6 @@ pub struct Update5 {
     pub user_reset_password_token__is_approved: bool,
 }
 pub struct By<'a> {
-    pub user__id: i64,
+    pub user__obfuscated_id: i64,
     pub user_device__id: &'a str,
 }

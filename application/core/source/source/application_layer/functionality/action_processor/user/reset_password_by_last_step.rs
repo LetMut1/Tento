@@ -8,9 +8,7 @@ use {
         domain_layer::{
             data::entity::{
                 user::{
-                    User,
-                    User_Id,
-                    User_Password,
+                    User, User_ObfuscatedId, User_Password
                 },
                 user_access_refresh_token::UserAccessRefreshToken,
                 user_device::UserDevice_Id,
@@ -29,17 +27,9 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
-                        IsolationLevel,
-                        Postgresql,
-                        Resolver as Resolver_,
-                        Transaction,
-                        UserAccessRefreshTokenBy1,
-                        UserBy3,
-                        UserResetPasswordTokenBy,
-                        UserUpdate,
-                    },
+                        IsolationLevel, Postgresql, Resolver as Resolver_, Transaction, UserAccessRefreshTokenBy1, UserBy3, UserBy4, UserResetPasswordTokenBy, UserUpdate
+                    }, Repository
                 },
                 service::{
                     resolver::{
@@ -76,7 +66,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
             if !Validator::<UserResetPasswordToken_Value>::is_valid(incoming.user_reset_password_token__value)? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<User_Id>::is_valid(incoming.user__id) {
+            if !Validator::<User_ObfuscatedId>::is_valid(incoming.user__obfuscated_id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             if !Validator::<User_Password>::is_valid_part_1(incoming.user__password) {
@@ -95,7 +85,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
                 ) = match Repository::<Postgresql<UserResetPasswordToken>>::find_2(
                     &postgresql_client_database_2,
                     UserResetPasswordTokenBy {
-                        user__id: incoming.user__id,
+                        user__obfuscated_id: incoming.user__obfuscated_id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
@@ -108,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
                     if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
                         &postgresql_client_database_2,
                         UserResetPasswordTokenBy {
-                            user__id: incoming.user__id,
+                            user__obfuscated_id: incoming.user__obfuscated_id,
                             user_device__id: incoming.user_device__id,
                         },
                     )
@@ -129,7 +119,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
                         if !Repository::<Postgresql<UserResetPasswordToken>>::update_4(
                             &postgresql_client_database_2,
                             UserResetPasswordTokenBy {
-                                user__id: incoming.user__id,
+                                user__obfuscated_id: incoming.user__obfuscated_id,
                                 user_device__id: incoming.user_device__id,
                             },
                         )
@@ -141,7 +131,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
                         if !Repository::<Postgresql<UserResetPasswordToken>>::delete(
                             &postgresql_client_database_2,
                             UserResetPasswordTokenBy {
-                                user__id: incoming.user__id,
+                                user__obfuscated_id: incoming.user__obfuscated_id,
                                 user_device__id: incoming.user_device__id,
                             },
                         )
@@ -153,10 +143,10 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken__WrongValue));
                 }
             }
-            let (user__email, user__nickname, mut user__password_hash) = match Repository::<Postgresql<User>>::find_5(
+            let (user__id, user__email, user__nickname, mut user__password_hash) = match Repository::<Postgresql<User>>::find_5(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
-                UserBy3 {
-                    user__id: incoming.user__id,
+                UserBy4 {
+                    user__obfuscated_id: incoming.user__obfuscated_id,
                 },
             )
             .await?
@@ -171,7 +161,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
             ) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            let user__password_hash___old = user__password_hash;
+            let old___user__password_hash = user__password_hash;
             let user__password = incoming.user__password.to_string();
             user__password_hash = crate::result_return_runtime!(
                 Spawner::<TokioBlockingTask>::spawn_processed(
@@ -191,7 +181,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
             let mut is_deleted = match Repository::<Postgresql<UserAccessRefreshToken>>::delete_2(
                 transaction.get_client(),
                 UserAccessRefreshTokenBy1 {
-                    user__id: incoming.user__id,
+                    user__id,
                 },
             )
             .await
@@ -209,7 +199,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
             is_deleted = match Repository::<Postgresql<UserResetPasswordToken>>::delete(
                 transaction.get_client(),
                 UserResetPasswordTokenBy {
-                    user__id: incoming.user__id,
+                    user__obfuscated_id: incoming.user__obfuscated_id,
                     user_device__id: incoming.user_device__id,
                 },
             )
@@ -231,7 +221,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
                     user__password_hash: user__password_hash.as_str(),
                 },
                 UserBy3 {
-                    user__id: incoming.user__id,
+                    user__id,
                 },
             )
             .await
@@ -250,10 +240,10 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
                 if !Repository::<Postgresql<User>>::update(
                     &postgresql_client_database_1,
                     UserUpdate {
-                        user__password_hash: user__password_hash___old.as_str(),
+                        user__password_hash: old___user__password_hash.as_str(),
                     },
                     UserBy3 {
-                        user__id: incoming.user__id,
+                        user__id,
                     },
                 )
                 .await?

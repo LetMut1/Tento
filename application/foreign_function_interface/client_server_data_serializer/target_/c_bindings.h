@@ -360,7 +360,7 @@ typedef struct User_ResetPasswordByFirstStep_Incoming_ {
 } User_ResetPasswordByFirstStep_Incoming_;
 
 typedef struct User_ResetPasswordByFirstStep_Outcoming_ {
-  long user__id;
+  long user__obfuscated_id;
   bool verification_message_sent;
   long user_reset_password_token__can_be_resent_from;
   unsigned char user_reset_password_token__wrong_enter_tries_quantity;
@@ -391,7 +391,7 @@ typedef struct Result__UnifiedReport__User_ResetPasswordByFirstStep_Outcoming___
 typedef struct Result__UnifiedReport__User_ResetPasswordByFirstStep_Outcoming___User_ResetPasswordByFirstStep_Precedent_ User_ResetPasswordByFirstStep_Result;
 
 typedef struct User_ResetPasswordBySecondStep_Incoming_ {
-  long user__id;
+  long user__obfuscated_id;
   struct String_ user_device__id;
   struct String_ user_reset_password_token__value;
 } User_ResetPasswordBySecondStep_Incoming_;
@@ -423,7 +423,7 @@ typedef struct Result__UnifiedReport__Void___User_ResetPasswordBySecondStep_Prec
 typedef struct Result__UnifiedReport__Void___User_ResetPasswordBySecondStep_Precedent_ User_ResetPasswordBySecondStep_Result;
 
 typedef struct User_ResetPasswordByLastStep_Incoming_ {
-  long user__id;
+  long user__obfuscated_id;
   struct String_ user_device__id;
   struct String_ user__password;
   struct String_ user_reset_password_token__value;
@@ -522,7 +522,7 @@ typedef struct Result__UnifiedReport__User_SendEmailForAuthorize_Outcoming___Use
 typedef struct Result__UnifiedReport__User_SendEmailForAuthorize_Outcoming___User_SendEmailForAuthorize_Precedent_ User_SendEmailForAuthorize_Result;
 
 typedef struct User_SendEmailForResetPassword_Incoming_ {
-  long user__id;
+  long user__obfuscated_id;
   struct String_ user_device__id;
 } User_SendEmailForResetPassword_Incoming_;
 

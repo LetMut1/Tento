@@ -394,12 +394,12 @@ impl Repository<Postgresql<User>> {
             );
         };
     }
-    // user__id: i64,
+    // user__obfuscated_id: i64,
     pub fn find_4<'a>(client_database_1: &'a Client, by: By2<'a>) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
         return async move {
             const QUERY: &'static str = "\
                 SELECT \
-                    u.id AS i \
+                    u.obfuscated_id AS oi \
                 FROM \
                     public.user_ u \
                 WHERE \
@@ -431,15 +431,17 @@ impl Repository<Postgresql<User>> {
             return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
         };
     }
+    // user__id: i64,
     // user__email: String,
     // user__nickname: String,
     // user__password_hash: String,
     pub fn find_5<'a>(
         client_database_1: &'a Client,
-        by: By3,
+        by: By4,
     ) -> impl Future<
         Output = Result<
             Option<(
+                i64,
                 String,
                 String,
                 String,
@@ -451,16 +453,17 @@ impl Repository<Postgresql<User>> {
         return async move {
             const QUERY: &'static str = "\
                 SELECT \
+                    u.id AS i,\
                     u.email AS e,\
                     u.nickname AS n,\
                     u.password_hash AS ph \
                 FROM \
                     public.user_ u \
                 WHERE \
-                    u.id = $1;";
+                    u.obfuscated_id = $1;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
-                &by.user__id,
+                &by.user__obfuscated_id,
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
@@ -485,9 +488,10 @@ impl Repository<Postgresql<User>> {
             return Result::Ok(
                 Option::Some(
                     (
-                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(1)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(2)),
+                        crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(3)),
                     ),
                 ),
             );
