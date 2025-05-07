@@ -371,7 +371,7 @@ enum Precedent {
 ```
  - ## Channel_RefreshChannelToken POST /channel/refresh_channel_token
 ```
-Refreshes channel token.
+Refreshes channel token. The incoming token should not be expired.
 ```
 ```
 struct Incoming {
@@ -938,7 +938,7 @@ enum Precedent {
 ```
  - ## UserAuthorization_RefreshAccessToken POST /user_authorization/refresh_access_token
 ```
-Refreshs user access token.
+Refreshs user access token. The incoming access token should can be expired or not expired.
 ```
 ```
 struct Incoming {
