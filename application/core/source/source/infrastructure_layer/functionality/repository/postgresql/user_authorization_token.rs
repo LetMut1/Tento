@@ -20,7 +20,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             const QUERY: &'static str = "\
                 INSERT INTO \
                     public.user_authorization_token (\
-                        user__id,\
+                        user__obfuscated_id,\
                         user_device__id,\
                         value,\
                         wrong_enter_tries_quantity,\
@@ -41,7 +41,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
-                    &insert.user__id,
+                    &insert.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -92,14 +92,14 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 DELETE FROM ONLY \
                     public.user_authorization_token AS uat \
                 WHERE \
-                    uat.user__id = $1 \
+                    uat.user__obfuscated_id = $1 \
                     AND uat.user_device__id = $2 \
                 RETURNING \
                     true AS _;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -145,7 +145,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     $4\
                 ) \
                 WHERE \
-                    uat.user__id = $5 \
+                    uat.user__obfuscated_id = $5 \
                     AND uat.user_device__id = $6 \
                 RETURNING \
                     true AS _;";
@@ -169,7 +169,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     Type::INT8,
                 )
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -213,7 +213,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     $3\
                 ) \
                 WHERE \
-                    uat.user__id = $4 \
+                    uat.user__obfuscated_id = $4 \
                     AND uat.user_device__id = $5 \
                 RETURNING \
                     true AS _;";
@@ -233,7 +233,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     Type::INT8,
                 )
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -273,7 +273,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     $1\
                 ) \
                 WHERE \
-                    uat.user__id = $2 \
+                    uat.user__obfuscated_id = $2 \
                     AND uat.user_device__id = $3 \
                 RETURNING \
                     true AS _;";
@@ -284,7 +284,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                     Type::INT8,
                 )
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -321,7 +321,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 SET \
                     wrong_enter_tries_quantity = wrong_enter_tries_quantity + 1 \
                 WHERE \
-                    uat.user__id = $1 \
+                    uat.user__obfuscated_id = $1 \
                     AND uat.user_device__id = $2 \
                     AND uat.wrong_enter_tries_quantity < $3 \
                 RETURNING \
@@ -329,7 +329,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -391,12 +391,12 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 FROM \
                     public.user_authorization_token uat \
                 WHERE \
-                    uat.user__id = $1 \
+                    uat.user__obfuscated_id = $1 \
                     AND uat.user_device__id = $2;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -464,12 +464,12 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 FROM \
                     public.user_authorization_token uat \
                 WHERE \
-                    uat.user__id = $1 \
+                    uat.user__obfuscated_id = $1 \
                     AND uat.user_device__id = $2;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -536,12 +536,12 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
                 FROM \
                     public.user_authorization_token uat \
                 WHERE \
-                    uat.user__id = $1 \
+                    uat.user__obfuscated_id = $1 \
                     AND uat.user_device__id = $2;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
-                    &by.user__id,
+                    &by.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -580,7 +580,7 @@ impl Repository<Postgresql<UserAuthorizationToken>> {
     }
 }
 pub struct Insert<'a> {
-    pub user__id: i64,
+    pub user__obfuscated_id: i64,
     pub user_device__id: &'a str,
     pub user_authorization_token__value: &'a str,
     pub user_authorization_token__wrong_enter_tries_quantity: u8,
@@ -602,6 +602,6 @@ pub struct Update3 {
     pub user_authorization_token__can_be_resent_from: i64,
 }
 pub struct By<'a> {
-    pub user__id: i64,
+    pub user__obfuscated_id: i64,
     pub user_device__id: &'a str,
 }

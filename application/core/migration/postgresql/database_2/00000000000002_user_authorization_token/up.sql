@@ -1,5 +1,5 @@
 CREATE TABLE public.user_authorization_token (
-    user__id BIGINT,
+    user__obfuscated_id BIGINT,
     user_device__id TEXT,
     value TEXT,
     wrong_enter_tries_quantity SMALLINT,
@@ -8,10 +8,10 @@ CREATE TABLE public.user_authorization_token (
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE UNIQUE INDEX user_authorization_token_1 ON public.user_authorization_token
-USING btree (user__id, user_device__id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
+USING btree (user__obfuscated_id, user_device__id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 ALTER TABLE ONLY public.user_authorization_token
-ALTER COLUMN user__id SET NOT NULL,
+ALTER COLUMN user__obfuscated_id SET NOT NULL,
 ALTER COLUMN user_device__id SET NOT NULL,
 ALTER COLUMN value SET NOT NULL,
 ALTER COLUMN wrong_enter_tries_quantity SET NOT NULL,

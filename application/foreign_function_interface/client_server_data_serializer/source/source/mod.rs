@@ -560,7 +560,7 @@ type User_AuthorizeByFirstStep_Result = Result_<UnifiedReport_<User_AuthorizeByF
 #[repr(C)]
 #[derive(Default)]
 pub struct User_AuthorizeByFirstStep_Outcoming_ {
-    pub user__id: c_long,
+    pub user__obfuscated_id: c_long,
     pub verification_message_sent: bool,
     pub user_authorization_token__can_be_resent_from: c_long,
     pub user_authorization_token__wrong_enter_tries_quantity: c_uchar,
@@ -588,7 +588,7 @@ pub extern "C-unwind" fn user__authorize_by_first_step__deserialize_allocate(vec
                         data: data__,
                     } => {
                         let outcoming = User_AuthorizeByFirstStep_Outcoming_ {
-                            user__id: data__.user__id,
+                            user__obfuscated_id: data__.user__obfuscated_id,
                             verification_message_sent: data__.verification_message_sent,
                             user_authorization_token__can_be_resent_from: data__.user_authorization_token__can_be_resent_from,
                             user_authorization_token__wrong_enter_tries_quantity: data__.user_authorization_token__wrong_enter_tries_quantity,
@@ -633,7 +633,7 @@ pub extern "C-unwind" fn user__authorize_by_first_step__deserialize_deallocate(_
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct User_AuthorizeByLastStep_Incoming_ {
-    pub user__id: c_long,
+    pub user__obfuscated_id: c_long,
     pub user_device__id: String_,
     pub user_authorization_token__value: String_,
 }
@@ -642,7 +642,7 @@ pub extern "C-unwind" fn user__authorize_by_last_step__serialize_allocate(incomi
     let converter = move |incoming_: &'_ User_AuthorizeByLastStep_Incoming_| -> Result<User_AuthorizeByLastStep_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
             User_AuthorizeByLastStep_Incoming {
-                user__id: incoming_.user__id,
+                user__obfuscated_id: incoming_.user__obfuscated_id,
                 user_device__id: incoming_.user_device__id.get_as_str()?,
                 user_authorization_token__value: incoming_.user_authorization_token__value.get_as_str()?,
             },
@@ -1928,7 +1928,7 @@ pub extern "C-unwind" fn user__send_email_for_register__deserialize_deallocate(_
 #[derive(Clone, Copy)]
 pub struct User_SendEmailForAuthorize_Incoming_ {
     pub user_device__id: String_,
-    pub user__id: c_long,
+    pub user__obfuscated_id: c_long,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn user__send_email_for_authorize__serialize_allocate(incoming: User_SendEmailForAuthorize_Incoming_) -> Result_<Vec_<c_uchar>> {
@@ -1937,7 +1937,7 @@ pub extern "C-unwind" fn user__send_email_for_authorize__serialize_allocate(inco
             return Result::Ok(
                 User_SendEmailForAuthorize_Incoming {
                     user_device__id: incoming_.user_device__id.get_as_str()?,
-                    user__id: incoming_.user__id,
+                    user__obfuscated_id: incoming_.user__obfuscated_id,
                 },
             );
         };
@@ -4881,7 +4881,7 @@ mod test {
             }
             pub fn user__authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User_AuthorizeByLastStep_Incoming_ {
-                    user__id: 0,
+                    user__obfuscated_id: 0,
                     user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     user_authorization_token__value: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
@@ -5093,7 +5093,7 @@ mod test {
             pub fn user__send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User_SendEmailForAuthorize_Incoming_ {
                     user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    user__id: 0,
+                    user__obfuscated_id: 0,
                 };
                 run_by_template(
                     incoming,
@@ -5689,7 +5689,7 @@ mod test {
             }
             pub fn target_filled__user__authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let outcoming = User_AuthorizeByFirstStep_Outcoming {
-                    user__id: 0,
+                    user__obfuscated_id: 0,
                     verification_message_sent: false,
                     user_authorization_token__can_be_resent_from: 0,
                     user_authorization_token__wrong_enter_tries_quantity: 0,

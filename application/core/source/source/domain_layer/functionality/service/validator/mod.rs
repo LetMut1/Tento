@@ -14,6 +14,7 @@ mod user_authorization_token__value;
 mod user_device__id;
 mod user_registration_token__value;
 mod user_reset_password_token__value;
+mod user__obfuscated_id;
 use std::marker::PhantomData;
 pub struct Validator<S> {
     _subject: PhantomData<S>,

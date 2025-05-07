@@ -21,7 +21,7 @@ pub struct Incoming<'a> {
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Outcoming {
-    pub user__id: i64,
+    pub user__obfuscated_id: i64,
     pub verification_message_sent: bool,
     pub user_authorization_token__can_be_resent_from: i64,
     pub user_authorization_token__wrong_enter_tries_quantity: u8,

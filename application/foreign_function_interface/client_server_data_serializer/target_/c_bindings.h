@@ -24,7 +24,7 @@ typedef struct User_AuthorizeByFirstStep_Incoming_ {
 } User_AuthorizeByFirstStep_Incoming_;
 
 typedef struct User_AuthorizeByFirstStep_Outcoming_ {
-  long user__id;
+  long user__obfuscated_id;
   bool verification_message_sent;
   long user_authorization_token__can_be_resent_from;
   unsigned char user_authorization_token__wrong_enter_tries_quantity;
@@ -55,7 +55,7 @@ typedef struct Result__UnifiedReport__User_AuthorizeByFirstStep_Outcoming___User
 typedef struct Result__UnifiedReport__User_AuthorizeByFirstStep_Outcoming___User_AuthorizeByFirstStep_Precedent_ User_AuthorizeByFirstStep_Result;
 
 typedef struct User_AuthorizeByLastStep_Incoming_ {
-  long user__id;
+  long user__obfuscated_id;
   struct String_ user_device__id;
   struct String_ user_authorization_token__value;
 } User_AuthorizeByLastStep_Incoming_;
@@ -488,7 +488,7 @@ typedef struct Result__UnifiedReport__User_SendEmailForRegister_Outcoming___User
 
 typedef struct User_SendEmailForAuthorize_Incoming_ {
   struct String_ user_device__id;
-  long user__id;
+  long user__obfuscated_id;
 } User_SendEmailForAuthorize_Incoming_;
 
 typedef struct User_SendEmailForAuthorize_Outcoming_ {

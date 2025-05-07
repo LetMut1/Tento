@@ -1,17 +1,14 @@
 use {
     crate::{
-        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
-        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        },
-        domain_layer::{
+        }, domain_layer::{
             data::entity::{
                 user::{
                     User,
-                    User_Id,
+                    User_ObfuscatedId,
                 },
                 user_access_refresh_token::{
                     UserAccessRefreshToken,
@@ -38,24 +35,13 @@ use {
                 generator::Generator,
                 validator::Validator,
             },
-        },
-        infrastructure_layer::{
+        }, infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
-                        IsolationLevel,
-                        Postgresql,
-                        Resolver as Resolver_,
-                        Transaction,
-                        UserAccessRefreshTokenBy2,
-                        UserAccessRefreshTokenInsert,
-                        UserAccessRefreshTokenUpdate,
-                        UserAuthorizationTokenBy,
-                        UserBy3,
-                        UserDeviceInsert,
-                    },
+                        IsolationLevel, Postgresql, Resolver as Resolver_, Transaction, UserAccessRefreshTokenBy2, UserAccessRefreshTokenInsert, UserAccessRefreshTokenUpdate, UserAuthorizationTokenBy, UserBy4, UserDeviceInsert
+                    }, Repository
                 },
                 service::{
                     resolver::{
@@ -68,7 +54,7 @@ use {
                     },
                 },
             },
-        },
+        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user::authorize_by_last_step::{
@@ -90,7 +76,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Validator::<User_Id>::is_valid(incoming.user__id) {
+            if !Validator::<User_ObfuscatedId>::is_valid(incoming.user__obfuscated_id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             if !Validator::<UserAuthorizationToken_Value>::is_valid(incoming.user_authorization_token__value)? {
@@ -104,7 +90,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
                 match Repository::<Postgresql<UserAuthorizationToken>>::find_2(
                     &postgresql_client_database_2,
                     UserAuthorizationTokenBy {
-                        user__id: incoming.user__id,
+                        user__obfuscated_id: incoming.user__obfuscated_id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
@@ -118,7 +104,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
                 if !Repository::<Postgresql<UserAuthorizationToken>>::delete(
                     &postgresql_client_database_2,
                     UserAuthorizationTokenBy {
-                        user__id: incoming.user__id,
+                        user__obfuscated_id: incoming.user__obfuscated_id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
@@ -136,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
                     if !Repository::<Postgresql<UserAuthorizationToken>>::update_4(
                         &postgresql_client_database_2,
                         UserAuthorizationTokenBy {
-                            user__id: incoming.user__id,
+                            user__obfuscated_id: incoming.user__obfuscated_id,
                             user_device__id: incoming.user_device__id,
                         },
                     )
@@ -148,7 +134,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
                     if !Repository::<Postgresql<UserAuthorizationToken>>::delete(
                         &postgresql_client_database_2,
                         UserAuthorizationTokenBy {
-                            user__id: incoming.user__id,
+                            user__obfuscated_id: incoming.user__obfuscated_id,
                             user_device__id: incoming.user_device__id,
                         },
                     )
@@ -166,16 +152,17 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
                 );
             }
             let postgresql_client_database_1 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
-            if !Repository::<Postgresql<User>>::is_exist_3(
+            let user__id = match Repository::<Postgresql<User>>::find_7(
                 &postgresql_client_database_1,
-                UserBy3 {
-                    user__id: incoming.user__id,
+                UserBy4 {
+                    user__obfuscated_id: incoming.user__obfuscated_id,
                 },
             )
             .await?
             {
-                return Result::Ok(UnifiedReport::precedent(Precedent::User__NotFound));
-            }
+                Option::Some(user__id_) => user__id_,
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User__NotFound))
+            };
             let user_access_token__obfuscation_value = Generator::<UserAccessToken_ObfuscationValue>::generate();
             let user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
@@ -183,7 +170,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
             let is_exist = Repository::<Postgresql<UserAccessRefreshToken>>::is_exist(
                 &postgresql_client_database_2,
                 UserAccessRefreshTokenBy2 {
-                    user__id: incoming.user__id,
+                    user__id,
                     user_device__id: incoming.user_device__id,
                 },
             )
@@ -193,6 +180,17 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
                 IsolationLevel::ReadCommitted,
             )
             .await?;
+
+
+
+
+
+
+
+
+
+    todo!("Здесь не апсерт?");
+
             if is_exist {
                 let is_updated = match Repository::<Postgresql<UserAccessRefreshToken>>::update(
                     transaction.get_client(),
@@ -203,7 +201,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
                         user_access_refresh_token__updated_at: now,
                     },
                     UserAccessRefreshTokenBy2 {
-                        user__id: incoming.user__id,
+                        user__id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
@@ -223,7 +221,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
                 let is_created = match Repository::<Postgresql<UserAccessRefreshToken>>::create(
                     transaction.get_client(),
                     UserAccessRefreshTokenInsert {
-                        user__id: incoming.user__id,
+                        user__id,
                         user_device__id: incoming.user_device__id,
                         user_access_token__obfuscation_value,
                         user_access_refresh_token__obfuscation_value,
@@ -244,10 +242,18 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                 }
             };
+
+
+
+
+
+
+
+
             let is_deleted = match Repository::<Postgresql<UserAuthorizationToken>>::delete(
                 transaction.get_client(),
                 UserAuthorizationTokenBy {
-                    user__id: incoming.user__id,
+                    user__obfuscated_id: incoming.user__obfuscated_id,
                     user_device__id: incoming.user_device__id,
                 },
             )
@@ -266,14 +272,14 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
             let user_access_token_signed = Encoder::<UserAccessToken>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
-                incoming.user__id,
+                user__id,
                 incoming.user_device__id,
                 user_access_token__obfuscation_value,
                 user_access_token__expires_at,
             )?;
             let user_access_refresh_token_signed = Encoder::<UserAccessRefreshToken>::encode(
                 &inner.environment_configuration.subject.encryption.private_key,
-                incoming.user__id,
+                user__id,
                 incoming.user_device__id,
                 user_access_token__obfuscation_value,
                 user_access_refresh_token__obfuscation_value,
@@ -291,7 +297,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
                             &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
                             UserDeviceInsert {
                                 user_device__id: user_device__id.as_str(),
-                                user__id: incoming.user__id,
+                                user__id,
                             },
                         )
                         .await

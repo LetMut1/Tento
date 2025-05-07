@@ -57,6 +57,7 @@ pub use self::{
         By1 as UserBy1,
         By2 as UserBy2,
         By3 as UserBy3,
+        By4 as UserBy4,
         Insert1 as UserInsert1,
         Insert2 as UserInsert2,
         Update as UserUpdate,

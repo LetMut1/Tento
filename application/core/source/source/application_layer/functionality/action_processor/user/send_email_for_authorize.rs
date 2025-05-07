@@ -1,17 +1,14 @@
 use {
     crate::{
-        BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
-        BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        },
-        domain_layer::{
+        }, domain_layer::{
             data::entity::{
                 user::{
                     User,
-                    User_Id,
+                    User_ObfuscatedId,
                 },
                 user_authorization_token::{
                     UserAuthorizationToken,
@@ -24,18 +21,16 @@ use {
                 generator::Generator,
                 validator::Validator,
             },
-        },
-        infrastructure_layer::{
+        }, infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
                         Postgresql,
                         UserAuthorizationTokenBy,
                         UserAuthorizationTokenUpdate3,
-                        UserBy3,
-                    },
+                        UserBy3, UserBy4,
+                    }, Repository
                 },
                 service::{
                     resolver::{
@@ -48,7 +43,7 @@ use {
                     },
                 },
             },
-        },
+        }, BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user::send_email_for_authorize::{
@@ -70,16 +65,16 @@ impl ActionProcessor_ for ActionProcessor<SendEmailForAuthorize> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
+            if !Validator::<User_ObfuscatedId>::is_valid(incoming.user__obfuscated_id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if !Validator::<User_Id>::is_valid(incoming.user__id) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id) {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let user__email = match Repository::<Postgresql<User>>::find_6(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await),
-                UserBy3 {
-                    user__id: incoming.user__id,
+                UserBy4 {
+                    user__obfuscated_id: incoming.user__obfuscated_id,
                 },
             )
             .await?
@@ -92,7 +87,7 @@ impl ActionProcessor_ for ActionProcessor<SendEmailForAuthorize> {
                 match Repository::<Postgresql<UserAuthorizationToken>>::find_3(
                     &postgresql_client_database_2,
                     UserAuthorizationTokenBy {
-                        user__id: incoming.user__id,
+                        user__obfuscated_id: incoming.user__obfuscated_id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
@@ -106,7 +101,7 @@ impl ActionProcessor_ for ActionProcessor<SendEmailForAuthorize> {
                 if !Repository::<Postgresql<UserAuthorizationToken>>::delete(
                     &postgresql_client_database_2,
                     UserAuthorizationTokenBy {
-                        user__id: incoming.user__id,
+                        user__obfuscated_id: incoming.user__obfuscated_id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
@@ -126,7 +121,7 @@ impl ActionProcessor_ for ActionProcessor<SendEmailForAuthorize> {
                     user_authorization_token__can_be_resent_from,
                 },
                 UserAuthorizationTokenBy {
-                    user__id: incoming.user__id,
+                    user__obfuscated_id: incoming.user__obfuscated_id,
                     user_device__id: incoming.user_device__id,
                 },
             )

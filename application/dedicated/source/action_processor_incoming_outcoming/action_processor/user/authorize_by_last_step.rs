@@ -12,7 +12,7 @@ use crate::{
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Incoming<'a> {
-    pub user__id: i64,
+    pub user__obfuscated_id: i64,
     pub user_device__id: &'a str,
     pub user_authorization_token__value: &'a str,
 }

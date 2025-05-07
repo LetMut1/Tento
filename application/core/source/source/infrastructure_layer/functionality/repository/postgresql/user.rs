@@ -270,7 +270,7 @@ impl Repository<Postgresql<User>> {
             return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
         };
     }
-    // user__id: i64,
+    // user__obfuscated_id: i64,
     // user__email: String,
     // user__password_hash: String,
     pub fn find_2<'a>(
@@ -290,7 +290,7 @@ impl Repository<Postgresql<User>> {
         return async move {
             const QUERY: &'static str = "\
                 SELECT \
-                    u.id AS i,\
+                    u.obfuscated_id AS oi,\
                     u.email AS e,\
                     u.password_hash AS ph \
                 FROM \
@@ -332,7 +332,7 @@ impl Repository<Postgresql<User>> {
             );
         };
     }
-    // user__id: i64,
+    // user__obfuscated_id: i64,
     // user__nickname: String,
     // user__password_hash: String,
     pub fn find_3<'a>(
@@ -352,7 +352,7 @@ impl Repository<Postgresql<User>> {
         return async move {
             const QUERY: &'static str = "\
                 SELECT \
-                    u.id AS i,\
+                    u.obfuscated_id AS oi,\
                     u.nickname AS n,\
                     u.password_hash AS ph \
                 FROM \
@@ -494,7 +494,7 @@ impl Repository<Postgresql<User>> {
         };
     }
     // user__email: String,
-    pub fn find_6<'a>(client_database_1: &'a Client, by: By3) -> impl Future<Output = Result<Option<String>, AggregateError>> + Send + use<'a> {
+    pub fn find_6<'a>(client_database_1: &'a Client, by: By4) -> impl Future<Output = Result<Option<String>, AggregateError>> + Send + use<'a> {
         return async move {
             const QUERY: &'static str = "\
                 SELECT \
@@ -502,10 +502,10 @@ impl Repository<Postgresql<User>> {
                 FROM \
                     public.user_ u \
                 WHERE \
-                    u.id = $1;";
+                    u.obfuscated_id = $1;";
             let mut parameter_storage = ParameterStorage::new(1);
             parameter_storage.add(
-                &by.user__id,
+                &by.user__obfuscated_id,
                 Type::INT8,
             );
             let statement = crate::result_return_logic!(
@@ -528,6 +528,43 @@ impl Repository<Postgresql<User>> {
                 return Result::Ok(Option::None);
             }
             return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, String>(0))));
+        };
+    }
+    // user__id: i64,
+    pub fn find_7<'a>(client_database_1: &'a Client, by: By4) -> impl Future<Output = Result<Option<i64>, AggregateError>> + Send + use<'a> {
+        return async move {
+            const QUERY: &'static str = "\
+                SELECT \
+                    u.id AS i \
+                FROM \
+                    public.user_ u \
+                WHERE \
+                    u.obfuscated_id = $1;";
+            let mut parameter_storage = ParameterStorage::new(1);
+            parameter_storage.add(
+                &by.user__obfuscated_id,
+                Type::INT8,
+            );
+            let statement = crate::result_return_logic!(
+                client_database_1
+                .prepare_typed_cached(
+                    QUERY,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                client_database_1
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(Option::None);
+            }
+            return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
         };
     }
     pub fn is_exist_1<'a>(client_database_1: &'a Client, by: By1<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
@@ -579,42 +616,6 @@ impl Repository<Postgresql<User>> {
             parameter_storage.add(
                 &by.user__email,
                 Type::TEXT,
-            );
-            let statement = crate::result_return_logic!(
-                client_database_1
-                .prepare_typed_cached(
-                    QUERY,
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
-            let rows = crate::result_return_runtime!(
-                client_database_1
-                .query(
-                    &statement,
-                    parameter_storage.get_parameters(),
-                )
-                .await
-            );
-            if rows.is_empty() {
-                return Result::Ok(false);
-            }
-            return Result::Ok(true);
-        };
-    }
-    pub fn is_exist_3<'a>(client_database_1: &'a Client, by: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
-        return async move {
-            const QUERY: &'static str = "\
-                SELECT \
-                    u.id AS i \
-                FROM \
-                    public.user_ u \
-                WHERE \
-                    u.id = $1;";
-            let mut parameter_storage = ParameterStorage::new(1);
-            parameter_storage.add(
-                &by.user__id,
-                Type::INT8,
             );
             let statement = crate::result_return_logic!(
                 client_database_1
@@ -692,4 +693,7 @@ pub struct By2<'a> {
 }
 pub struct By3 {
     pub user__id: i64,
+}
+pub struct By4 {
+    pub user__obfuscated_id: i64,
 }

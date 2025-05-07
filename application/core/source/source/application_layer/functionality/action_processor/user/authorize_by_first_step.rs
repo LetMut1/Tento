@@ -89,8 +89,8 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let postgresql_client_database_1 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_1.get().await);
-            let (user__id, user__email, user__nickname, user__password_hash) = if Validator::<User_Email>::is_valid(incoming.user__email___or___user__nickname)? {
-                let (user__id, user__nickname, user__password_hash) = match Repository::<Postgresql<User>>::find_3(
+            let (user__obfuscated_id, user__email, user__nickname, user__password_hash) = if Validator::<User_Email>::is_valid(incoming.user__email___or___user__nickname)? {
+                let (user__obfuscated_id, user__nickname, user__password_hash) = match Repository::<Postgresql<User>>::find_3(
                     &postgresql_client_database_1,
                     UserBy2 {
                         user__email: incoming.user__email___or___user__nickname,
@@ -102,14 +102,14 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
                     Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User__WrongEmailOrNicknameOrPassword)),
                 };
                 (
-                    user__id,
+                    user__obfuscated_id,
                     Cow::Borrowed(incoming.user__email___or___user__nickname),
                     Cow::Owned(user__nickname),
                     user__password_hash,
                 )
             } else {
                 if Validator::<User_Nickname>::is_valid(incoming.user__email___or___user__nickname) {
-                    let (user__id, user__email, user__password_hash) = match Repository::<Postgresql<User>>::find_2(
+                    let (user__obfuscated_id, user__email, user__password_hash) = match Repository::<Postgresql<User>>::find_2(
                         &postgresql_client_database_1,
                         UserBy1 {
                             user__nickname: incoming.user__email___or___user__nickname,
@@ -121,7 +121,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
                         Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User__WrongEmailOrNicknameOrPassword)),
                     };
                     (
-                        user__id,
+                        user__obfuscated_id,
                         Cow::Owned(user__email),
                         Cow::Borrowed(incoming.user__email___or___user__nickname),
                         user__password_hash,
@@ -155,7 +155,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
                 match Repository::<Postgresql<UserAuthorizationToken>>::find_1(
                     &postgresql_client_database_2,
                     UserAuthorizationTokenBy {
-                        user__id,
+                        user__obfuscated_id,
                         user_device__id: incoming.user_device__id,
                     },
                 )
@@ -197,7 +197,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
                                     user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from_,
                                 },
                                 UserAuthorizationTokenBy {
-                                    user__id,
+                                    user__obfuscated_id,
                                     user_device__id: incoming.user_device__id,
                                 },
                             )
@@ -213,7 +213,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
                                         user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from_,
                                     },
                                     UserAuthorizationTokenBy {
-                                        user__id,
+                                        user__obfuscated_id,
                                         user_device__id: incoming.user_device__id,
                                     },
                                 )
@@ -231,7 +231,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
                                         user_authorization_token__expires_at,
                                     },
                                     UserAuthorizationTokenBy {
-                                        user__id,
+                                        user__obfuscated_id,
                                         user_device__id: incoming.user_device__id,
                                     },
                                 )
@@ -255,7 +255,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
                         if !Repository::<Postgresql<UserAuthorizationToken>>::create(
                             &postgresql_client_database_2,
                             UserAuthorizationTokenInsert {
-                                user__id,
+                                user__obfuscated_id,
                                 user_device__id: incoming.user_device__id,
                                 user_authorization_token__value: user_authorization_token__value_.as_str(),
                                 user_authorization_token__wrong_enter_tries_quantity: user_authorization_token__wrong_enter_tries_quantity_,
@@ -305,7 +305,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
                 );
             }
             let outcoming = Outcoming {
-                user__id,
+                user__obfuscated_id,
                 verification_message_sent: can_send,
                 user_authorization_token__can_be_resent_from,
                 user_authorization_token__wrong_enter_tries_quantity,

@@ -774,7 +774,7 @@ struct Incoming {
 ```
 ```
 struct Outcoming {
-    user__id: i64,
+    user__obfuscated_id: i64,
     verification_message_sent: bool,
     user_authorization_token__can_be_resent_from: i64,
     user_authorization_token__wrong_enter_tries_quantity: u8,
@@ -796,7 +796,7 @@ Authorizes user for the last step.
 ```
 ```
 struct Incoming {
-    user__id: i64,
+    user__obfuscated_id: i64,
     user_device__id: String,
     user_authorization_token__value: String
 }
@@ -825,7 +825,7 @@ Sends email for authorization. (Should be used only if the user does not receive
 ```
 struct Incoming {
     user_device__id: String,
-    user__id: i64
+    user__obfuscated_id: i64
 }
 ```
 ```
@@ -971,10 +971,6 @@ enum Precedent {
  - ## user_authorization_token__value
 ```
 ^[0-9]{6}$ - regular expression.
-```
- - ## user__id
-```
->= 0
 ```
  - ## user__email
 ```
