@@ -40,7 +40,7 @@ use {
             functionality::{
                 repository::{
                     postgresql::{
-                        IsolationLevel, Postgresql, Resolver as Resolver_, Transaction, UserAccessRefreshTokenBy2, UserAccessRefreshTokenInsert, UserAccessRefreshTokenUpdate, UserAuthorizationTokenBy, UserBy4, UserDeviceInsert
+                        IsolationLevel, Postgresql, Resolver as Resolver_, Transaction, UserAccessRefreshTokenInsert, UserAuthorizationTokenBy, UserBy4, UserDeviceInsert
                     }, Repository
                 },
                 service::{
@@ -167,89 +167,34 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
             let user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
-            let is_exist = Repository::<Postgresql<UserAccessRefreshToken>>::is_exist(
-                &postgresql_client_database_2,
-                UserAccessRefreshTokenBy2 {
-                    user__id,
-                    user_device__id: incoming.user_device__id,
-                },
-            )
-            .await?;
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_client_database_2,
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-
-
-
-
-
-
-
-
-
-    todo!("Здесь не апсерт?");
-
-            if is_exist {
-                let is_updated = match Repository::<Postgresql<UserAccessRefreshToken>>::update(
-                    transaction.get_client(),
-                    UserAccessRefreshTokenUpdate {
-                        user_access_token__obfuscation_value,
-                        user_access_refresh_token__obfuscation_value,
-                        user_access_refresh_token__expires_at,
-                        user_access_refresh_token__updated_at: now,
-                    },
-                    UserAccessRefreshTokenBy2 {
-                        user__id,
-                        user_device__id: incoming.user_device__id,
-                    },
-                )
-                .await
-                {
-                    Result::Ok(is_updated_) => is_updated_,
-                    Result::Err(aggregate_error) => {
-                        Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                        return Result::Err(aggregate_error);
-                    }
-                };
-                if !is_updated {
+            let is_upserted = match Repository::<Postgresql<UserAccessRefreshToken>>::upsert(
+                transaction.get_client(),
+                UserAccessRefreshTokenInsert {
+                    user__id,
+                    user_device__id: incoming.user_device__id,
+                    user_access_token__obfuscation_value,
+                    user_access_refresh_token__obfuscation_value,
+                    user_access_refresh_token__expires_at,
+                    user_access_refresh_token__updated_at: now,
+                },
+            )
+            .await
+            {
+                Result::Ok(is_created_) => is_created_,
+                Result::Err(aggregate_error) => {
                     Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
-                }
-            } else {
-                let is_created = match Repository::<Postgresql<UserAccessRefreshToken>>::create(
-                    transaction.get_client(),
-                    UserAccessRefreshTokenInsert {
-                        user__id,
-                        user_device__id: incoming.user_device__id,
-                        user_access_token__obfuscation_value,
-                        user_access_refresh_token__obfuscation_value,
-                        user_access_refresh_token__expires_at,
-                        user_access_refresh_token__updated_at: now,
-                    },
-                )
-                .await
-                {
-                    Result::Ok(is_created_) => is_created_,
-                    Result::Err(aggregate_error) => {
-                        Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                        return Result::Err(aggregate_error);
-                    }
-                };
-                if !is_created {
-                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
+                    return Result::Err(aggregate_error);
                 }
             };
-
-
-
-
-
-
-
-
+            if !is_upserted {
+                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
+            }
             let is_deleted = match Repository::<Postgresql<UserAuthorizationToken>>::delete(
                 transaction.get_client(),
                 UserAuthorizationTokenBy {

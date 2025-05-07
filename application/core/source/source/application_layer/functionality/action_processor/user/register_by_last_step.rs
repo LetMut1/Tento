@@ -205,7 +205,7 @@ impl ActionProcessor_ for ActionProcessor<RegisterByLastStep> {
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            let is_created = match Repository::<Postgresql<UserAccessRefreshToken>>::create(
+            let is_upserted = match Repository::<Postgresql<UserAccessRefreshToken>>::upsert(
                 transaction.get_client(),
                 UserAccessRefreshTokenInsert {
                     user__id,
@@ -224,7 +224,7 @@ impl ActionProcessor_ for ActionProcessor<RegisterByLastStep> {
                     return Result::Err(aggregate_error);
                 }
             };
-            if !is_created {
+            if !is_upserted {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }

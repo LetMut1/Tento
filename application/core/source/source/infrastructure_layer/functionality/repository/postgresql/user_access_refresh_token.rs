@@ -15,7 +15,7 @@ use {
     tokio_postgres::types::Type,
 };
 impl Repository<Postgresql<UserAccessRefreshToken>> {
-    pub fn create<'a>(client_database_2: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn upsert<'a>(client_database_2: &'a Client, insert: Insert<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             const QUERY: &'static str = "\
                 INSERT INTO \
@@ -34,7 +34,12 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                         $5,\
                         $6\
                     ) \
-                ON CONFLICT DO NOTHING \
+                ON CONFLICT ON CONSTRAINT user_access_refresh_token_2 DO UPDATE \
+                SET \
+                    user_access_token__obfuscation_value = EXCLUDED.user_access_token__obfuscation_value,\
+                    obfuscation_value = EXCLUDED.obfuscation_value,\
+                    expires_at = EXCLUDED.expires_at,\
+                    updated_at = EXCLUDED.updated_at \
                 RETURNING \
                     true AS _;";
             let mut parameter_storage = ParameterStorage::new(6);
@@ -302,48 +307,6 @@ impl Repository<Postgresql<UserAccessRefreshToken>> {
                     ),
                 ),
             );
-        };
-    }
-    pub fn is_exist<'a>(client_database_2: &'a Client, by: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
-        return async move {
-            const QUERY: &'static str = "\
-                SELECT \
-                    uart.user__id AS ui \
-                FROM \
-                    public.user_access_refresh_token uart \
-                WHERE \
-                    uart.user__id = $1 \
-                    AND uart.user_device__id = $2;";
-            let mut parameter_storage = ParameterStorage::new(2);
-            parameter_storage
-                .add(
-                    &by.user__id,
-                    Type::INT8,
-                )
-                .add(
-                    &by.user_device__id,
-                    Type::TEXT,
-                );
-            let statement = crate::result_return_logic!(
-                client_database_2
-                .prepare_typed_cached(
-                    QUERY,
-                    parameter_storage.get_parameters_types(),
-                )
-                .await
-            );
-            let rows = crate::result_return_runtime!(
-                client_database_2
-                .query(
-                    &statement,
-                    parameter_storage.get_parameters(),
-                )
-                .await
-            );
-            if rows.is_empty() {
-                return Result::Ok(false);
-            }
-            return Result::Ok(true);
         };
     }
 }
