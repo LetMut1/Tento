@@ -938,7 +938,7 @@ enum Precedent {
 ```
  - ## User_RefreshAccessToken POST /user/refresh_access_token
 ```
-Refreshs user access token. The incoming access token should can be expired or not expired.
+Refreshes user access token. The incoming access token can be expired or not expired. The incoming access refresh token should not be expired.
 ```
 ```
 struct Incoming {
