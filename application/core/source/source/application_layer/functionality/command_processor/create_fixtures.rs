@@ -1,3 +1,4 @@
+use crate::domain_layer::{data::entity::user::User_ObfuscatedId, functionality::service::generator::Generator};
 pub use crate::infrastructure_layer::data::environment_configuration::create_fixtures::CreateFixtures;
 use {
     super::CommandProcessor,
@@ -160,6 +161,7 @@ impl CommandProcessor<CreateFixtures> {
                         let user__id_ = match Repository::<Postgresql<User>>::create_1(
                             &postgresql_client_database_1,
                             UserInsert1 {
+                                user__obfuscated_id: Generator::<User_ObfuscatedId>::generate()?,
                                 user__email: user__email.as_str(),
                                 user__nickname: user__nickname.as_str(),
                                 user__password_hash: user__password_hash.as_str(),

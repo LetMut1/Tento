@@ -1,5 +1,6 @@
 use std::marker::PhantomData;
 pub struct Id(PhantomData<i64>);
+pub struct ObfuscatedId(PhantomData<i64>);
 pub struct Email(PhantomData<String>);
 impl Email {
     pub const MAXIMUM_LENGTH: usize = 320;

@@ -22,6 +22,7 @@ impl Repository<Postgresql<User>> {
                 INSERT INTO \
                     public.user_ AS u (\
                         id,\
+                        obfuscated_id,\
                         email,\
                         nickname,\
                         password_hash,\
@@ -31,13 +32,18 @@ impl Repository<Postgresql<User>> {
                         $1,\
                         $2,\
                         $3,\
-                        $4\
+                        $4,\
+                        $5\
                     ) \
                 ON CONFLICT DO NOTHING \
                 RETURNING \
                     u.id AS i;";
-            let mut parameter_storage = ParameterStorage::new(4);
+            let mut parameter_storage = ParameterStorage::new(5);
             parameter_storage
+                .add(
+                    &insert.user__obfuscated_id,
+                    Type::INT8,
+                )
                 .add(
                     &insert.user__email,
                     Type::TEXT,
@@ -82,6 +88,7 @@ impl Repository<Postgresql<User>> {
                 INSERT INTO \
                     public.user_ (\
                         id,\
+                        obfuscated_id,\
                         email,\
                         nickname,\
                         password_hash,\
@@ -91,14 +98,19 @@ impl Repository<Postgresql<User>> {
                         $2,\
                         $3,\
                         $4,\
-                        $5\
+                        $5,\
+                        $6\
                     ) \
                 RETURNING \
                     true AS _;";
-            let mut parameter_storage = ParameterStorage::new(5);
+            let mut parameter_storage = ParameterStorage::new(6);
             parameter_storage
                 .add(
                     &insert.user__id,
+                    Type::INT8,
+                )
+                .add(
+                    &insert.user__obfuscated_id,
                     Type::INT8,
                 )
                 .add(
@@ -655,6 +667,7 @@ impl Repository<Postgresql<User>> {
     }
 }
 pub struct Insert1<'a> {
+    pub user__obfuscated_id: i64,
     pub user__email: &'a str,
     pub user__nickname: &'a str,
     pub user__password_hash: &'a str,
@@ -662,6 +675,7 @@ pub struct Insert1<'a> {
 }
 pub struct Insert2<'a> {
     pub user__id: i64,
+    pub user__obfuscated_id: i64,
     pub user__email: &'a str,
     pub user__nickname: &'a str,
     pub user__password_hash: &'a str,

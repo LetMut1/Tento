@@ -7,10 +7,7 @@ use {
         }, domain_layer::{
             data::entity::{
                 user::{
-                    User,
-                    User_Email,
-                    User_Nickname,
-                    User_Password,
+                    User, User_Email, User_Nickname, User_ObfuscatedId, User_Password
                 }, user_access_refresh_token::{
                     UserAccessRefreshToken,
                     UserAccessRefreshToken_ExpiresAt,
@@ -254,6 +251,7 @@ impl ActionProcessor_ for ActionProcessor<RegisterByLastStep> {
                 &postgresql_client_database_1,
                 UserInsert2 {
                     user__id,
+                    user__obfuscated_id: Generator::<User_ObfuscatedId>::generate()?,
                     user__email: incoming.user__email,
                     user__nickname: incoming.user__nickname,
                     user__password_hash: user__password_hash.as_str(),
