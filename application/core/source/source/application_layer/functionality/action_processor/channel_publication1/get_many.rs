@@ -34,7 +34,7 @@ use {
                 service::{resolver::{
                     Resolver,
                     UnixTime,
-                }, spawner::{Spawner, TokioBlockingTask}},
+                }, tokio_spawner::TokioSpawner,},
             },
         },
     },
@@ -133,7 +133,7 @@ impl ActionProcessor_ for ActionProcessor<GetMany> {
                         channel_publication1__created_at: crate::result_return_logic!(row.try_get::<'_, usize, i64>(6)),
                         channel_publication1_mark__created_at: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7)),
                         channel_publication1_token_signed: crate::result_return_runtime!(
-                            Spawner::<TokioBlockingTask>::spawn_processed(
+                            TokioSpawner::spawn_blocking_task_processed(
                                 move || -> _ {
                                     return Encoder::<ChannelPublication1Token>::encode(
                                         private_key,

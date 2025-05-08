@@ -14,10 +14,7 @@ use {
                     Formatter,
                     RowData,
                 },
-                spawner::{
-                    Spawner,
-                    TokioNonBlockingTask,
-                },
+                tokio_spawner::TokioSpawner,
             },
         },
         presentation_layer::functionality::service::processor::action_round::ActionRound,
@@ -25,7 +22,7 @@ use {
 };
 impl Logger<ActionRound> {
     pub fn log(row_data: RowData) -> () {
-        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+        TokioSpawner::spawn_non_blocking_task_into_background(
             async move {
                 tracing::info!(
                     "{}",
@@ -37,7 +34,7 @@ impl Logger<ActionRound> {
         return ();
     }
     pub fn log_unresponsive_auditor(row_data: RowData, unresponsive_auditor: Auditor<Unresponsive>) -> () {
-        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+        TokioSpawner::spawn_non_blocking_task_into_background(
             async move {
                 tracing::error!(
                     "{}",
@@ -53,7 +50,7 @@ impl Logger<ActionRound> {
         return ();
     }
     pub fn log_responsive_auditor(row_data: RowData, responsive_auditor: Auditor<Responsive>) -> () {
-        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+        TokioSpawner::spawn_non_blocking_task_into_background(
             async move {
                 tracing::info!(
                     "{}",

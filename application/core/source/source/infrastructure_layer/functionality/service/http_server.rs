@@ -59,10 +59,7 @@ use {
             functionality::service::{
                 creator::PostgresqlConnectionPool,
                 logger::Logger,
-                spawner::{
-                    Spawner,
-                    TokioNonBlockingTask,
-                },
+                tokio_spawner::TokioSpawner,
             },
         },
         presentation_layer::functionality::action::{
@@ -115,7 +112,7 @@ impl HttpServer {
             };
             let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?;
             let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
-            let graceful_shutdown_signal_future_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(
+            let graceful_shutdown_signal_future_join_handle = TokioSpawner::spawn_non_blocking_task_processed(
                 async move {
                     tokio::select! {
                         _ = signal_interrupt_future => (),
@@ -246,7 +243,7 @@ impl HttpServer {
                                 let tcp_stream_ = match tcp_stream {
                                     Result::Ok((tcp_stream__, _)) => tcp_stream__,
                                     Result::Err(error) => {
-                                        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                                        TokioSpawner::spawn_non_blocking_task_into_background(
                                             async move {
                                                 Logger::<AggregateError>::log(
                                                     &crate::new_runtime!(error),
@@ -280,7 +277,7 @@ impl HttpServer {
                                             TokioIo::new(tcp_stream_),
                                             service_fn,
                                         );
-                                        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                                        TokioSpawner::spawn_non_blocking_task_into_background(
                                             async move {
                                                 return crate::result_into_runtime!(serving_connection_future.await);
                                             },
@@ -290,7 +287,7 @@ impl HttpServer {
                                             TokioIo::new(tcp_stream_),
                                             service_fn,
                                         );
-                                        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                                        TokioSpawner::spawn_non_blocking_task_into_background(
                                             async move {
                                                 return crate::result_into_runtime!(serving_connection_future.await);
                                             },
@@ -303,7 +300,7 @@ impl HttpServer {
                                         TokioIo::new(tcp_stream_),
                                         service_fn,
                                     );
-                                    Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                                    TokioSpawner::spawn_into_background(
                                         async move {
                                             return crate::result_into_runtime!(serving_connection_future.await);
                                         },

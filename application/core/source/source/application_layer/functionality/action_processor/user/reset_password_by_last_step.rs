@@ -37,11 +37,7 @@ use {
                         Resolver,
                         UnixTime,
                     },
-                    spawner::{
-                        Spawner,
-                        TokioBlockingTask,
-                        TokioNonBlockingTask,
-                    },
+                    tokio_spawner::TokioSpawner,
                 },
             },
         },
@@ -164,7 +160,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
             let old___user__password_hash = user__password_hash;
             let user__password = incoming.user__password.to_string();
             user__password_hash = crate::result_return_runtime!(
-                Spawner::<TokioBlockingTask>::spawn_processed(
+                TokioSpawner::spawn_blocking_task_processed(
                     move || -> _ {
                         return Encoder::<User_Password>::encode(user__password.as_str());
                     },
@@ -252,7 +248,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByLastStep> {
                 }
                 return Result::Err(aggregate_error);
             }
-            Spawner::<TokioNonBlockingTask>::spawn_into_background(
+            TokioSpawner::spawn_non_blocking_task_into_background(
                 async move {
                     Resolver::<CloudMessage>::deauthorize_user_from_all_devices();
                     return Result::Ok(());

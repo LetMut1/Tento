@@ -32,10 +32,7 @@ use {
                         Resolver,
                         UnixTime,
                     },
-                    spawner::{
-                        Spawner,
-                        TokioNonBlockingTask,
-                    },
+                    tokio_spawner::TokioSpawner,
                 },
             },
         },
@@ -81,7 +78,7 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Token__AlreadyExpired));
             }
             let mut postgresql_connection_pool_database_3 = inner.postgresql_connection_pool_database_3.clone();
-            Spawner::<TokioNonBlockingTask>::spawn_into_background(
+            TokioSpawner::spawn_non_blocking_task_into_background(
                 async move {
                     let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
                     '_a: for quantity in 1..=BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
@@ -108,7 +105,7 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                 },
             );
             postgresql_connection_pool_database_3 = inner.postgresql_connection_pool_database_3.clone();
-            Spawner::<TokioNonBlockingTask>::spawn_into_background(
+            TokioSpawner::spawn_non_blocking_task_into_background(
                 async move {
                     let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
                     '_a: for quantity in 1..=BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
