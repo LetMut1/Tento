@@ -1,5 +1,4 @@
 use std::mem::ManuallyDrop;
-#[derive(Clone)]
 pub struct Sended<T>(*mut T);
 impl<T> Sended<T> {
     pub fn new(pointer: *mut T) -> Self {
@@ -16,13 +15,17 @@ impl<T> Sended<T> {
         return unsafe { &*self.0 };
     }
 }
-unsafe impl<T> Send for Sended<T> {}
-unsafe impl<T> Sync for Sended<T> {}
+impl<T> Clone for Sended<T> {
+    fn clone<'a>(&'a self) -> Self {
+        return Self(self.0.clone());
+    }
+}
 impl<T> Copy for Sended<T>
 where
     Self: Clone
 {}
-#[derive(Clone)]
+unsafe impl<T> Send for Sended<T> {}
+unsafe impl<T> Sync for Sended<T> {}
 pub struct Sended_<T>(*const T);
 impl<T> Sended_<T> {
     pub fn new(pointer: *const T) -> Self {
@@ -35,9 +38,14 @@ impl<T> Sended_<T> {
         return unsafe { &*self.0 };
     }
 }
-unsafe impl<T> Send for Sended_<T> {}
-unsafe impl<T> Sync for Sended_<T> {}
+impl<T> Clone for Sended_<T> {
+    fn clone<'a>(&'a self) -> Self {
+        return Self(self.0.clone());
+    }
+}
 impl<T> Copy for Sended_<T>
 where
     Self: Clone
 {}
+unsafe impl<T> Send for Sended_<T> {}
+unsafe impl<T> Sync for Sended_<T> {}

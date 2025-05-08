@@ -19,19 +19,18 @@ use {
             },
         },
         infrastructure_layer::{
-            data::aggregate_error::AggregateError,
+            data::{aggregate_error::AggregateError, sended::Sended_},
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
                         ChannelBy2,
                         Postgresql,
-                    },
+                    }, Repository
                 },
-                service::resolver::{
+                service::{resolver::{
                     Resolver,
                     UnixTime,
-                },
+                }, tokio_spawner::TokioSpawner},
             },
         },
     },
@@ -52,9 +51,17 @@ impl ActionProcessor_ for ActionProcessor<CheckLinkedNameForExisting> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Encoder::<UserAccessToken>::is_valid(
-                &inner.environment_configuration.subject.encryption.private_key,
-                &incoming.user_access_token_signed,
+            let private_key = &inner.environment_configuration.subject.encryption.private_key;
+            let sended = Sended_::new(&raw const incoming as *const Self::Incoming<'static>);
+            if !crate::result_return_runtime!(
+                TokioSpawner::spawn_blocking_task_processed(
+                    move || -> _ {
+                        return Encoder::<UserAccessToken>::is_valid(
+                            private_key,
+                            &(unsafe { sended.read_() }).user_access_token_signed,
+                        );
+                    },
+                ).await
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
