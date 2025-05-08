@@ -300,7 +300,7 @@ impl HttpServer {
                                         TokioIo::new(tcp_stream_),
                                         service_fn,
                                     );
-                                    TokioSpawner::spawn_into_background(
+                                    TokioSpawner::spawn_non_blocking_task_into_background(
                                         async move {
                                             return crate::result_into_runtime!(serving_connection_future.await);
                                         },
