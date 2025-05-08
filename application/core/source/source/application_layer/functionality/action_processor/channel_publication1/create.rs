@@ -31,10 +31,10 @@ use {
                         ChannelPublication1Insert, Postgresql,
                     }, Repository,
                 },
-                service::resolver::{
+                service::{resolver::{
                     Resolver,
                     UnixTime,
-                },
+                }, spawner::{Spawner, TokioBlockingTask}},
             },
         },
     },
@@ -109,17 +109,24 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                 Option::Some(channel_publication1__id_) => channel_publication1__id_,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution)),
             };
+            let private_key = &inner.environment_configuration.subject.encryption.private_key;
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {
                         channel_publication1__created_at: now,
-                        channel_publication1_token_signed: Encoder::<ChannelPublication1Token>::encode(
-                            &inner.environment_configuration.subject.encryption.private_key,
-                            incoming.user_access_token_signed.user__id,
-                            incoming.channel_token_signed.channel__id,
-                            channel_publication1__id,
-                            Generator::<ChannelPublication1Token_ObfuscationValue>::generate(),
-                            Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?,
+                        channel_publication1_token_signed: crate::result_return_runtime!(
+                            Spawner::<TokioBlockingTask>::spawn_processed(
+                                move || -> _ {
+                                    return Encoder::<ChannelPublication1Token>::encode(
+                                        private_key,
+                                        incoming.user_access_token_signed.user__id,
+                                        incoming.channel_token_signed.channel__id,
+                                        channel_publication1__id,
+                                        Generator::<ChannelPublication1Token_ObfuscationValue>::generate(),
+                                        Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?,
+                                    );
+                                },
+                            ).await
                         )?,
                     },
                 ),
