@@ -13,7 +13,6 @@ pub struct RunServer {
     pub encryption: Encryption,
 }
 pub struct TokioRuntime {
-    pub maximum_blocking_threads_quantity: usize,
     pub worker_threads_quantity: usize,
     pub worker_thread_stack_size: usize,
 }

@@ -56,7 +56,6 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
             EnvironmentConfiguration {
                 subject: RunServer {
                     tokio_runtime: RunServerTokioRuntime {
-                        maximum_blocking_threads_quantity: environment_configuration_file.tokio_runtime.maximum_blocking_threads_quantity.value,
                         worker_threads_quantity: environment_configuration_file.tokio_runtime.worker_threads_quantity.value,
                         worker_thread_stack_size: environment_configuration_file.tokio_runtime.worker_thread_stack_size.value,
                     },
@@ -221,7 +220,6 @@ impl Loader<EnvironmentConfiguration<ResolveIncompliteState>> {
             EnvironmentConfiguration {
                 subject: ResolveIncompliteState {
                     tokio_runtime: ResolveIncompliteStateTokioRuntime {
-                        maximum_blocking_threads_quantity: environment_configuration_file.tokio_runtime.maximum_blocking_threads_quantity.value,
                         worker_threads_quantity: environment_configuration_file.tokio_runtime.worker_threads_quantity.value,
                         worker_thread_stack_size: environment_configuration_file.tokio_runtime.worker_thread_stack_size.value,
                     },

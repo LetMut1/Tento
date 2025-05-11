@@ -14,7 +14,6 @@ pub struct EnvironmentConfigurationFile {
 }
 #[derive(serde::Deserialize)]
 pub struct TokioRuntime {
-    pub maximum_blocking_threads_quantity: Value<usize>,
     pub worker_threads_quantity: Value<usize>,
     pub worker_thread_stack_size: Value<usize>,
 }

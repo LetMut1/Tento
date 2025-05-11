@@ -1,10 +1,5 @@
 [tokio_runtime]
 
-# It is better that the number be greater or equal to 512. It all depends on the workload
-# of blocking tasks - these are tasks that take more than 1ms of CPU time.
-[tokio_runtime.maximum_blocking_threads_quantity]
-value = 128
-
 # It is better that the number be equal to the number of threads that the hardware
 # can handle simultaneously.
 [tokio_runtime.worker_threads_quantity]

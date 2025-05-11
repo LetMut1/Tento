@@ -41,6 +41,7 @@ lettre = { package = "lettre", version = "=0.11.9", default-features = false, fe
 matchit = { package = "matchit", version = "=0.8.4", default-features = true, features = [], optional = false }
 num_integer = { package = "num-integer", version = "=0.1.46", default-features = true, features = [], optional = false }
 rand = { package = "rand", version = "=0.8.5", default-features = true, features = [], optional = false }
+rayon = { package = "rayon", version = "=1.10.0", default-features = true, features = [], optional = false }
 regex = { package = "regex", version = "=1.10.6", default-features = true, features = [], optional = false }
 serde = { workspace = true }
 serde_json = { package = "serde_json", version = "=1.0.128", default-features = true, features = [], optional = true }

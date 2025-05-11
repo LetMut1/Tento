@@ -99,13 +99,13 @@ impl CommandProcessor<RunServer> {
         return Result::Ok(());
     }
     fn initialize_runtime<'a>(tokio_runtime: &'a TokioRuntime) -> Result<Runtime, AggregateError> {
-        if tokio_runtime.maximum_blocking_threads_quantity == 0 || tokio_runtime.worker_threads_quantity == 0 || tokio_runtime.worker_thread_stack_size < (1024 * 1024) {
+        if tokio_runtime.worker_threads_quantity == 0 || tokio_runtime.worker_thread_stack_size < (1024 * 1024) {
             return Result::Err(crate::new_logic!(TOKIO_RUNTIME_CONFUGURATION_ERROR_MESSAGE));
         }
         return crate::result_into_runtime!(
             RuntimeBuilder::new_multi_thread()
-            .max_blocking_threads(tokio_runtime.maximum_blocking_threads_quantity)
             .worker_threads(tokio_runtime.worker_threads_quantity)
+            .max_blocking_threads(0)
             .thread_stack_size(tokio_runtime.worker_thread_stack_size)
             .enable_all()
             .build()
