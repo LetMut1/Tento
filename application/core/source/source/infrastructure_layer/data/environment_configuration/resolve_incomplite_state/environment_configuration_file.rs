@@ -4,14 +4,14 @@ use crate::infrastructure_layer::data::environment_configuration::{
 };
 #[derive(serde::Deserialize)]
 pub struct EnvironmentConfigurationFile {
-    pub tokio_runtime: TokioRuntime,
+    pub tokio_crate: TokioCrate,
     #[cfg(feature = "logging_to_file")]
     pub logging: Logging,
     pub resource: Resource,
 }
 #[derive(serde::Deserialize)]
-pub struct TokioRuntime {
-    pub worker_threads_quantity: Value<usize>,
+pub struct TokioCrate {
+    pub worker_threads_quantity: Value<u16>,
     pub worker_thread_stack_size: Value<usize>,
 }
 #[cfg(feature = "logging_to_file")]

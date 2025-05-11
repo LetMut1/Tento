@@ -401,6 +401,7 @@ dependencies = [
  "lettre",
  "matchit",
  "num-integer",
+ "num_cpus",
  "rand",
  "rayon",
  "regex",

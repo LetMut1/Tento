@@ -1,12 +1,12 @@
-[tokio_runtime]
+[tokio_crate]
 
 # It is better that the number be equal to the number of threads that the hardware
 # can handle simultaneously.
-[tokio_runtime.worker_threads_quantity]
+[tokio_crate.worker_threads_quantity]
 value = 3
 
 # It is better that the number be greater or equal to 2MiB
-[tokio_runtime.worker_thread_stack_size]
+[tokio_crate.worker_thread_stack_size]
 value = 2097152
 
 [logging]

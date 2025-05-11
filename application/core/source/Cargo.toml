@@ -39,6 +39,7 @@ hyper = { package = "hyper", version = "=1.4.1", default-features = true, featur
 hyper_util = { package = "hyper-util", version = "=0.1.8", default-features = true, features = ["full"], optional = false }
 lettre = { package = "lettre", version = "=0.11.9", default-features = false, features = ["smtp-transport", "hostname", "builder", "tokio1"], optional = false }
 matchit = { package = "matchit", version = "=0.8.4", default-features = true, features = [], optional = false }
+num_cpus = { package = "num_cpus", version = "=1.16.0", default-features = true, features = [], optional = false }
 num_integer = { package = "num-integer", version = "=0.1.46", default-features = true, features = [], optional = false }
 rand = { package = "rand", version = "=0.8.5", default-features = true, features = [], optional = false }
 rayon = { package = "rayon", version = "=1.10.0", default-features = true, features = [], optional = false }

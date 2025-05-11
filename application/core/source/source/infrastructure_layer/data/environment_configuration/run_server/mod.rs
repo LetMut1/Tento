@@ -5,16 +5,20 @@ use {
     std::net::SocketAddr,
 };
 pub struct RunServer {
-    pub tokio_runtime: TokioRuntime,
+    pub tokio_crate: TokioCrate,
+    pub rayon_crate: RayonCrate,
     pub application_server: ApplicationServer,
     #[cfg(feature = "logging_to_file")]
     pub logging: Logging,
     pub resource: Resource,
     pub encryption: Encryption,
 }
-pub struct TokioRuntime {
-    pub worker_threads_quantity: usize,
+pub struct TokioCrate {
+    pub worker_threads_quantity: u16,
     pub worker_thread_stack_size: usize,
+}
+pub struct RayonCrate {
+    pub threads_quantity: u16,
 }
 pub struct ApplicationServer {
     pub tcp: Tcp,

@@ -21,7 +21,7 @@ use {
                 Postgresql as ResolveIncompliteStatePostgresql,
                 ResolveIncompliteState,
                 Resource as ResolveIncompliteStateResource,
-                TokioRuntime as ResolveIncompliteStateTokioRuntime,
+                TokioCrate as ResolveIncompliteStateTokioCrate,
             },
             run_server::{
                 ApplicationServer,
@@ -37,7 +37,8 @@ use {
                 Tcp,
                 TcpKeepalive,
                 Tls,
-                TokioRuntime as RunServerTokioRuntime,
+                TokioCrate as RunServerTokioCrate,
+                RayonCrate,
             },
         },
     },
@@ -55,9 +56,12 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
         return Result::Ok(
             EnvironmentConfiguration {
                 subject: RunServer {
-                    tokio_runtime: RunServerTokioRuntime {
-                        worker_threads_quantity: environment_configuration_file.tokio_runtime.worker_threads_quantity.value,
-                        worker_thread_stack_size: environment_configuration_file.tokio_runtime.worker_thread_stack_size.value,
+                    tokio_crate: RunServerTokioCrate {
+                        worker_threads_quantity: environment_configuration_file.tokio_crate.worker_threads_quantity.value,
+                        worker_thread_stack_size: environment_configuration_file.tokio_crate.worker_thread_stack_size.value,
+                    },
+                    rayon_crate: RayonCrate {
+                        threads_quantity: environment_configuration_file.rayon_crate.threads_quantity.value,
                     },
                     application_server: ApplicationServer {
                         tcp: Tcp {
@@ -219,9 +223,9 @@ impl Loader<EnvironmentConfiguration<ResolveIncompliteState>> {
         return Result::Ok(
             EnvironmentConfiguration {
                 subject: ResolveIncompliteState {
-                    tokio_runtime: ResolveIncompliteStateTokioRuntime {
-                        worker_threads_quantity: environment_configuration_file.tokio_runtime.worker_threads_quantity.value,
-                        worker_thread_stack_size: environment_configuration_file.tokio_runtime.worker_thread_stack_size.value,
+                    tokio_crate: ResolveIncompliteStateTokioCrate {
+                        worker_threads_quantity: environment_configuration_file.tokio_crate.worker_threads_quantity.value,
+                        worker_thread_stack_size: environment_configuration_file.tokio_crate.worker_thread_stack_size.value,
                     },
                     #[cfg(feature = "logging_to_file")]
                     logging: ResolveIncompliteStateLogging {

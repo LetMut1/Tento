@@ -2,13 +2,13 @@ mod environment_configuration_file;
 pub use self::environment_configuration_file::EnvironmentConfigurationFile;
 use super::PostgresqlInner;
 pub struct ResolveIncompliteState {
-    pub tokio_runtime: TokioRuntime,
+    pub tokio_crate: TokioCrate,
     #[cfg(feature = "logging_to_file")]
     pub logging: Logging,
     pub resource: Resource,
 }
-pub struct TokioRuntime {
-    pub worker_threads_quantity: usize,
+pub struct TokioCrate {
+    pub worker_threads_quantity: u16,
     pub worker_thread_stack_size: usize,
 }
 #[cfg(feature = "logging_to_file")]
