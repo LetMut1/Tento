@@ -2,7 +2,7 @@ pub use crate::infrastructure_layer::data::environment_configuration::resolve_in
 use {
     super::{
         CommandProcessor,
-        TOKIO_RUNTIME_CONFUGURATION_ERROR_MESSAGE,
+        TOKIO_CONFUGURATION_ERROR_MESSAGE,
     },
     crate::infrastructure_layer::{
         data::{
@@ -48,8 +48,8 @@ impl CommandProcessor<ResolveIncompliteState> {
                 Self::initialize_stdout_logger()
             }
         };
-        let runtime = Self::initialize_runtime(&environment_configuration.subject.tokio_crate)?;
-        runtime.block_on(Self::resolve_incomplite_state(&environment_configuration))?;
+        Self::initialize_tokio_runtime(&environment_configuration.subject.tokio_crate)?
+            .block_on(Self::resolve_incomplite_state(&environment_configuration))?;
         return Result::Ok(());
     }
     #[cfg(feature = "logging_to_file")]
@@ -82,9 +82,9 @@ impl CommandProcessor<ResolveIncompliteState> {
         crate::result_return_logic!(tracing::subscriber::set_global_default(fmt_subscriber));
         return Result::Ok(());
     }
-    fn initialize_runtime<'a>(tokio_crate: &'a TokioCrate) -> Result<Runtime, AggregateError> {
+    fn initialize_tokio_runtime<'a>(tokio_crate: &'a TokioCrate) -> Result<Runtime, AggregateError> {
         if tokio_crate.worker_threads_quantity == 0 || tokio_crate.worker_thread_stack_size < (1024 * 1024) {
-            return Result::Err(crate::new_logic!(TOKIO_RUNTIME_CONFUGURATION_ERROR_MESSAGE));
+            return Result::Err(crate::new_logic!(TOKIO_CONFUGURATION_ERROR_MESSAGE));
         }
         return crate::result_into_runtime!(
             RuntimeBuilder::new_multi_thread()

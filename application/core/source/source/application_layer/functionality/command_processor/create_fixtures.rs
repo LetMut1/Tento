@@ -71,13 +71,15 @@ use {
 impl CommandProcessor<CreateFixtures> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
         let environment_configuration = Loader::<EnvironmentConfiguration<CreateFixtures>>::load_from_file(environment_configuration_file_path)?;
-        let runtime = Self::initialize_runtime()?;
-        runtime.block_on(Self::create_fixtures(&environment_configuration))?;
+        Self::initialize_tokio_runtime()?
+            .block_on(Self::create_fixtures(&environment_configuration))?;
         return Result::Ok(());
     }
-    fn initialize_runtime() -> Result<Runtime, AggregateError> {
+    fn initialize_tokio_runtime() -> Result<Runtime, AggregateError> {
         return crate::result_into_runtime!(
-            Builder::new_current_thread().enable_all().build()
+            Builder::new_current_thread()
+                .enable_all()
+                .build()
         );
     }
     fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration<CreateFixtures>) -> impl Future<Output = Result<(), AggregateError>> + Send + use<'a> {

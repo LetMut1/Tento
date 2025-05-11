@@ -7,7 +7,7 @@ pub use self::{
     run_server::RunServer,
 };
 use std::marker::PhantomData;
-pub const TOKIO_RUNTIME_CONFUGURATION_ERROR_MESSAGE: &'static str = "Invalid Tokio runtime configuration.";
+pub const TOKIO_CONFUGURATION_ERROR_MESSAGE: &'static str = "Invalid Tokio configuration.";
 pub struct CommandProcessor<S> {
     _subject: PhantomData<S>,
 }

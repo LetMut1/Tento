@@ -2,14 +2,17 @@ pub use crate::infrastructure_layer::data::environment_configuration::run_server
 use {
     super::{
         CommandProcessor,
-        TOKIO_RUNTIME_CONFUGURATION_ERROR_MESSAGE,
+        TOKIO_CONFUGURATION_ERROR_MESSAGE,
     },
     crate::infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
             environment_configuration::{
                 EnvironmentConfiguration,
-                run_server::TokioCrate,
+                run_server::{
+                    TokioCrate,
+                    RayonCrate,
+                },
             },
         },
         functionality::service::{
@@ -29,6 +32,7 @@ use {
         WorkerGuard,
     },
     tracing_subscriber::FmtSubscriber,
+    rayon::ThreadPoolBuilder,
 };
 #[cfg(feature = "logging_to_file")]
 use {
@@ -48,14 +52,6 @@ impl CommandProcessor<RunServer> {
                 crate::new_logic!("Invalid distribution of core threads."),
             );
         }
-
-
-
-        // rayon::ThreadPoolBuilder::thr
-
-
-
-
         let _worker_guard = {
             #[cfg(feature = "logging_to_file")]
             {
@@ -66,8 +62,9 @@ impl CommandProcessor<RunServer> {
                 Self::initialize_stdout_logger()
             }
         };
-        let runtime = Self::initialize_runtime(&environment_configuration.subject.tokio_crate)?;
-        runtime.block_on(HttpServer::run(environment_configuration))?;
+        Self::initialize_rayon_state(&environment_configuration.subject.rayon_crate)?;
+        Self::initialize_tokio_runtime(&environment_configuration.subject.tokio_crate)?
+            .block_on(HttpServer::run(environment_configuration))?;
         return Result::Ok(());
     }
     fn initialize_environment<'a>(environment_configuration_file_path: &'a str) -> Result<&'static EnvironmentConfiguration<RunServer>, AggregateError> {
@@ -112,17 +109,27 @@ impl CommandProcessor<RunServer> {
         crate::result_return_logic!(tracing::subscriber::set_global_default(fmt_subscriber));
         return Result::Ok(());
     }
-    fn initialize_runtime<'a>(tokio_crate: &'a TokioCrate) -> Result<Runtime, AggregateError> {
+    fn initialize_rayon_state<'a>(rayon_crate: &'a RayonCrate) -> Result<(), AggregateError> {
+        if rayon_crate.threads_quantity == 0 {
+            return Result::Err(crate::new_logic!("Invalid Rayon configuration."));
+        }
+        return crate::result_into_runtime!(
+            ThreadPoolBuilder::new()
+                .num_threads(rayon_crate.threads_quantity as usize)
+                .build_global()
+        );
+    }
+    fn initialize_tokio_runtime<'a>(tokio_crate: &'a TokioCrate) -> Result<Runtime, AggregateError> {
         if tokio_crate.worker_threads_quantity == 0 || tokio_crate.worker_thread_stack_size < (1024 * 1024) {
-            return Result::Err(crate::new_logic!(TOKIO_RUNTIME_CONFUGURATION_ERROR_MESSAGE));
+            return Result::Err(crate::new_logic!(TOKIO_CONFUGURATION_ERROR_MESSAGE));
         }
         return crate::result_into_runtime!(
             RuntimeBuilder::new_multi_thread()
-            .worker_threads(tokio_crate.worker_threads_quantity as usize)
-            .max_blocking_threads(0)
-            .thread_stack_size(tokio_crate.worker_thread_stack_size)
-            .enable_all()
-            .build()
+                .worker_threads(tokio_crate.worker_threads_quantity as usize)
+                .max_blocking_threads(0)
+                .thread_stack_size(tokio_crate.worker_thread_stack_size)
+                .enable_all()
+                .build()
         );
     }
 }
