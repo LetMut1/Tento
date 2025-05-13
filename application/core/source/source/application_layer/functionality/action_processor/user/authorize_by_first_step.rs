@@ -52,7 +52,7 @@ use {
                         Resolver,
                         UnixTime,
                     },
-                    tokio_spawner::TokioSpawner,
+                    task_spawner::TaskSpawner,
                 },
             },
         },
@@ -134,7 +134,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let user__password = incoming.user__password.to_string();
-            let is_valid_join_handle = TokioSpawner::spawn_blocking_task_processed(
+            let is_valid_join_handle = TaskSpawner::spawn_blocking_task_processed(
                 move || -> _ {
                     return Encoder::<User_Password>::is_valid(
                         user__password.as_str(),
@@ -275,7 +275,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
                 let email_server = &inner.environment_configuration.subject.resource.email_server;
                 let user__email_ = user__email.into_owned();
                 let user_device__id = incoming.user_device__id.to_string();
-                TokioSpawner::spawn_non_blocking_task_into_background(
+                TaskSpawner::spawn_tokio_non_blocking_task_into_background(
                     async move {
                         let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
                         '_a: for quantity in 1..=BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY {

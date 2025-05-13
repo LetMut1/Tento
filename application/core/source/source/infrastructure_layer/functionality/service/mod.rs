@@ -9,5 +9,5 @@ pub mod logger;
 pub mod resolver;
 pub mod sender;
 pub mod serializer;
-pub mod tokio_spawner;
+pub mod task_spawner;
 pub mod validator;

@@ -38,7 +38,7 @@ use {
                         Resolver,
                         UnixTime,
                     },
-                    tokio_spawner::TokioSpawner,
+                    task_spawner::TaskSpawner,
                 },
             },
         },
@@ -122,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<SendEmailForRegister> {
             let email_server = &inner.environment_configuration.subject.resource.email_server;
             let user__email = incoming.user__email.to_string();
             let user_device__id = incoming.user_device__id.to_string();
-            TokioSpawner::spawn_non_blocking_task_into_background(
+            TaskSpawner::spawn_tokio_non_blocking_task_into_background(
                 async move {
                     let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
                     '_a: for quantity in 1..=BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY {
