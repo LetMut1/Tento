@@ -54,7 +54,7 @@ impl ActionProcessor_ for ActionProcessor<CheckLinkedNameForExisting> {
             let private_key = &inner.environment_configuration.subject.encryption.private_key;
             let sended = Sended_::new(&raw const incoming as *const Self::Incoming<'static>);
             if !crate::result_return_runtime!(
-                TaskSpawner::spawn_blocking_task_processed(
+                TaskSpawner::spawn_rayon_task_processed(
                     move || -> _ {
                         return Encoder::<UserAccessToken>::is_valid(
                             private_key,

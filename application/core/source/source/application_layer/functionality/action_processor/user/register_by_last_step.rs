@@ -181,7 +181,7 @@ impl ActionProcessor_ for ActionProcessor<RegisterByLastStep> {
             }
             let user__password = incoming.user__password.to_string();
             let user__password_hash = crate::result_return_runtime!(
-                TaskSpawner::spawn_blocking_task_processed(
+                TaskSpawner::spawn_rayon_task_processed(
                     move || -> _ {
                         return Encoder::<User_Password>::encode(user__password.as_str());
                     },

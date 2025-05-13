@@ -115,7 +115,7 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                     Outcoming {
                         channel_publication1__created_at: now,
                         channel_publication1_token_signed: crate::result_return_runtime!(
-                            TaskSpawner::spawn_blocking_task_processed(
+                            TaskSpawner::spawn_rayon_task_processed(
                                 move || -> _ {
                                     return Encoder::<ChannelPublication1Token>::encode(
                                         private_key,

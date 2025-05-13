@@ -134,7 +134,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByFirstStep> {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let user__password = incoming.user__password.to_string();
-            let is_valid_join_handle = TaskSpawner::spawn_blocking_task_processed(
+            let is_valid_join_handle = TaskSpawner::spawn_rayon_task_processed(
                 move || -> _ {
                     return Encoder::<User_Password>::is_valid(
                         user__password.as_str(),

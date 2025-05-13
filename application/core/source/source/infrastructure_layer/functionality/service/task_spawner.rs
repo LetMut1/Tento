@@ -43,16 +43,4 @@ impl TaskSpawner {
         );
         return receiver;
     }
-
-
-
-
-
-
-    pub fn spawn_blocking_task_processed<R>(closure: impl FnOnce() -> R + Send + 'static) -> JoinHandle<R>
-    where
-        R: Send + 'static,
-    {
-        return tokio::task::spawn_blocking(closure);
-    }
 }

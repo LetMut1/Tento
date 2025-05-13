@@ -158,7 +158,4 @@ ChannelDelayedDeletion_CanBeDeletedFrom - поменять константу п
 
 
 
-делать Енкод и валидацию токенов на Районе
-
-
-Убрать Tokio::Spwan_blocking, заменив на Rayon::spawn_fifo (in global scope).
+делать Енкод и валидацию всех токенов на Районе. Начать с проссмотра каждого метода.
