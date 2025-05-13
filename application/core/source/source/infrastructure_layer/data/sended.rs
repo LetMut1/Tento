@@ -11,7 +11,7 @@ impl<T> Sended<T> {
     pub unsafe fn read(self) -> ManuallyDrop<T> {
         return unsafe { ManuallyDrop::new(self.0.read()) };
     }
-    pub unsafe fn read_<'a>(self) -> &'a T {
+    pub unsafe fn read_<'a>(&'a self) -> &'a T {
         return unsafe { &*self.0 };
     }
 }
@@ -34,7 +34,7 @@ impl<T> Sended_<T> {
     pub unsafe fn read(self) -> ManuallyDrop<T> {
         return unsafe { ManuallyDrop::new(self.0.read()) };
     }
-    pub unsafe fn read_<'a>(self) -> &'a T {
+    pub unsafe fn read_<'a>(&'a self) -> &'a T {
         return unsafe { &*self.0 };
     }
 }

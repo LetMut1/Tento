@@ -1,3 +1,4 @@
+use std::time::Duration;
 pub use crate::infrastructure_layer::data::environment_configuration::run_server::RunServer;
 use {
     super::{
@@ -126,7 +127,8 @@ impl CommandProcessor<RunServer> {
         return crate::result_into_runtime!(
             RuntimeBuilder::new_multi_thread()
                 .worker_threads(tokio_crate.worker_threads_quantity as usize)
-                .max_blocking_threads(0)
+                .max_blocking_threads(1)
+                .thread_keep_alive(Duration::from_secs(1))
                 .thread_stack_size(tokio_crate.worker_thread_stack_size)
                 .enable_all()
                 .build()

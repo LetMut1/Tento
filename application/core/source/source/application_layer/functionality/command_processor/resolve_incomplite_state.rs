@@ -1,3 +1,4 @@
+use std::time::Duration;
 pub use crate::infrastructure_layer::data::environment_configuration::resolve_incomplite_state::ResolveIncompliteState;
 use {
     super::{
@@ -88,11 +89,12 @@ impl CommandProcessor<ResolveIncompliteState> {
         }
         return crate::result_into_runtime!(
             RuntimeBuilder::new_multi_thread()
-            .worker_threads(tokio_crate.worker_threads_quantity as usize)
-            .max_blocking_threads(0)
-            .thread_stack_size(tokio_crate.worker_thread_stack_size)
-            .enable_all()
-            .build()
+                .worker_threads(tokio_crate.worker_threads_quantity as usize)
+                .max_blocking_threads(1)
+                .thread_keep_alive(Duration::from_secs(1))
+                .thread_stack_size(tokio_crate.worker_thread_stack_size)
+                .enable_all()
+                .build()
         );
     }
     fn resolve_incomplite_state<'a>(
