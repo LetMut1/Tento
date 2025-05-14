@@ -84,39 +84,54 @@ impl ActionProcessor_ for ActionProcessor<GetManyOwned> {
                 LIMIT,
             )
             .await?;
-            let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
-            '_a: for row in rows.iter() {
-                let channel__access_modifier = crate::result_return_logic!(row.try_get::<'_, usize, i16>(3));
-                if channel__access_modifier < u8::MIN as i16 || channel__access_modifier > u8::MAX as i16 {
-                    return Result::Err(crate::new_logic_unreachable_state!());
-                }
-                let channel__visability_modifier = crate::result_return_logic!(row.try_get::<'_, usize, i16>(4));
-                if channel__visability_modifier < u8::MIN as i16 || channel__visability_modifier > u8::MAX as i16 {
-                    return Result::Err(crate::new_logic_unreachable_state!());
-                }
-                let data = Data {
-                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
-                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
-                    channel__access_modifier: channel__access_modifier as u8,
-                    channel__visability_modifier: channel__visability_modifier as u8,
-                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
-                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
-                    channel_token_signed: Encoder::<ChannelToken>::encode(
-                        &inner.environment_configuration.subject.encryption.private_key,
-                        incoming.user_access_token_signed.user__id,
-                        crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
-                        Generator::<ChannelToken_ObfuscationValue>::generate(),
-                        Generator::<ChannelToken_ExpiresAt>::generate(now)?,
-                        false,
-                        true,
-                    )?,
-                };
-                data_registry.push(data);
-            }
-            let outcoming = Outcoming {
-                data_registry,
+            let data_registry = if rows.is_empty() {
+                vec![]
+            } else {
+                let private_key = &inner.environment_configuration.subject.encryption.private_key;
+                crate::result_return_runtime!(
+                    TaskSpawner::spawn_rayon_task_processed(
+                        move || -> _ {
+                            let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
+                            '_a: for row in rows.iter() {
+                                let channel__access_modifier = crate::result_return_logic!(row.try_get::<'_, usize, i16>(3));
+                                if channel__access_modifier < u8::MIN as i16 || channel__access_modifier > u8::MAX as i16 {
+                                    return Result::Err(crate::new_logic_unreachable_state!());
+                                }
+                                let channel__visability_modifier = crate::result_return_logic!(row.try_get::<'_, usize, i16>(4));
+                                if channel__visability_modifier < u8::MIN as i16 || channel__visability_modifier > u8::MAX as i16 {
+                                    return Result::Err(crate::new_logic_unreachable_state!());
+                                }
+                                let data = Data {
+                                    channel__name: crate::result_return_logic!(row.try_get::<'_, usize, String>(1)),
+                                    channel__linked_name: crate::result_return_logic!(row.try_get::<'_, usize, String>(2)),
+                                    channel__access_modifier: channel__access_modifier as u8,
+                                    channel__visability_modifier: channel__visability_modifier as u8,
+                                    channel__cover_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(5)),
+                                    channel__background_image_path: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(6)),
+                                    channel_token_signed: Encoder::<ChannelToken>::encode(
+                                        private_key,
+                                        incoming.user_access_token_signed.user__id,
+                                        crate::result_return_logic!(row.try_get::<'_, usize, i64>(0)),
+                                        Generator::<ChannelToken_ObfuscationValue>::generate(),
+                                        Generator::<ChannelToken_ExpiresAt>::generate(now)?,
+                                        false,
+                                        true,
+                                    )?,
+                                };
+                                data_registry.push(data);
+                            }
+                            return Ok(data_registry);
+                        },
+                    ).await
+                )?
             };
-            return Result::Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(
+                UnifiedReport::target_filled(
+                    Outcoming {
+                        data_registry,
+                    },
+                ),
+            );
         };
     }
 }

@@ -171,10 +171,3 @@ interval.tick().await; -> sleep.
 
 
 рефреш юзер аксеес токена за 5 минут до экспирации
-
-
-
-
-channel_publication_1___get_many
-channel__get_many_... all
-rows класть в Район

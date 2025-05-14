@@ -119,48 +119,53 @@ impl ActionProcessor_ for ActionProcessor<GetMany> {
                 LIMIT,
             )
             .await?;
-            let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
-            let private_key = &inner.environment_configuration.subject.encryption.private_key;
-            '_a: for row in rows.iter() {
-                let channel_publication1__commentaries_quantity = crate::result_return_logic!(row.try_get::<'_, usize, i64>(3));
-                if channel_publication1__commentaries_quantity < u32::MIN as i64 || channel_publication1__commentaries_quantity > u32::MAX as i64 {
-                    return Result::Err(crate::new_logic_unreachable_state!());
-                }
-                let channel_publication1__marks_quantity = crate::result_return_logic!(row.try_get::<'_, usize, i64>(4));
-                if channel_publication1__marks_quantity < u32::MIN as i64 || channel_publication1__marks_quantity > u32::MAX as i64 {
-                    return Result::Err(crate::new_logic_unreachable_state!());
-                }
-                let channel_publication1__view_quantity = crate::result_return_logic!(row.try_get::<'_, usize, i64>(5));
-                if channel_publication1__view_quantity < u32::MIN as i64 || channel_publication1__view_quantity > u32::MAX as i64 {
-                    return Result::Err(crate::new_logic_unreachable_state!());
-                }
-                let channel_publication1__id = crate::result_return_logic!(row.try_get::<'_, usize, i64>(0));
-                data_registry.push(
-                    Data {
-                        channel_publication1__images_pathes: crate::result_return_logic!(row.try_get::<'_, usize, Vec<String>>(1)),
-                        channel_publication1__text: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(2)),
-                        channel_publication1__commentaries_quantity: channel_publication1__commentaries_quantity as u32,
-                        channel_publication1__marks_quantity: channel_publication1__marks_quantity as u32,
-                        channel_publication1__view_quantity: channel_publication1__view_quantity as u32,
-                        channel_publication1__created_at: crate::result_return_logic!(row.try_get::<'_, usize, i64>(6)),
-                        channel_publication1_mark__created_at: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7)),
-                        channel_publication1_token_signed: crate::result_return_runtime!(
-                            TaskSpawner::spawn_rayon_task_processed(
-                                move || -> _ {
-                                    return Encoder::<ChannelPublication1Token>::encode(
-                                        private_key,
-                                        incoming.user_access_token_signed.user__id,
-                                        incoming.channel_token_signed.channel__id,
-                                        channel_publication1__id,
-                                        Generator::<ChannelPublication1Token_ObfuscationValue>::generate(),
-                                        Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?,
-                                    );
-                                },
-                            ).await
-                        )?,
-                    },
-                );
-            }
+            let data_registry = if rows.is_empty() {
+                vec![]
+            } else {
+                let private_key = &inner.environment_configuration.subject.encryption.private_key;
+                crate::result_return_runtime!(
+                    TaskSpawner::spawn_rayon_task_processed(
+                        move || -> _ {
+                            let mut data_registry: Vec<Data> = Vec::with_capacity(rows.len());
+                            '_a: for row in rows.iter() {
+                                let channel_publication1__commentaries_quantity = crate::result_return_logic!(row.try_get::<'_, usize, i64>(3));
+                                if channel_publication1__commentaries_quantity < u32::MIN as i64 || channel_publication1__commentaries_quantity > u32::MAX as i64 {
+                                    return Result::Err(crate::new_logic_unreachable_state!());
+                                }
+                                let channel_publication1__marks_quantity = crate::result_return_logic!(row.try_get::<'_, usize, i64>(4));
+                                if channel_publication1__marks_quantity < u32::MIN as i64 || channel_publication1__marks_quantity > u32::MAX as i64 {
+                                    return Result::Err(crate::new_logic_unreachable_state!());
+                                }
+                                let channel_publication1__view_quantity = crate::result_return_logic!(row.try_get::<'_, usize, i64>(5));
+                                if channel_publication1__view_quantity < u32::MIN as i64 || channel_publication1__view_quantity > u32::MAX as i64 {
+                                    return Result::Err(crate::new_logic_unreachable_state!());
+                                }
+                                let channel_publication1__id = crate::result_return_logic!(row.try_get::<'_, usize, i64>(0));
+                                data_registry.push(
+                                    Data {
+                                        channel_publication1__images_pathes: crate::result_return_logic!(row.try_get::<'_, usize, Vec<String>>(1)),
+                                        channel_publication1__text: crate::result_return_logic!(row.try_get::<'_, usize, Option<String>>(2)),
+                                        channel_publication1__commentaries_quantity: channel_publication1__commentaries_quantity as u32,
+                                        channel_publication1__marks_quantity: channel_publication1__marks_quantity as u32,
+                                        channel_publication1__view_quantity: channel_publication1__view_quantity as u32,
+                                        channel_publication1__created_at: crate::result_return_logic!(row.try_get::<'_, usize, i64>(6)),
+                                        channel_publication1_mark__created_at: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7)),
+                                        channel_publication1_token_signed: Encoder::<ChannelPublication1Token>::encode(
+                                            private_key,
+                                            incoming.user_access_token_signed.user__id,
+                                            incoming.channel_token_signed.channel__id,
+                                            channel_publication1__id,
+                                            Generator::<ChannelPublication1Token_ObfuscationValue>::generate(),
+                                            Generator::<ChannelPublication1Token_ExpiresAt>::generate(now)?,
+                                        )?,
+                                    },
+                                );
+                            }
+                            return Ok(data_registry);
+                        },
+                    ).await
+                )?
+            };
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {
