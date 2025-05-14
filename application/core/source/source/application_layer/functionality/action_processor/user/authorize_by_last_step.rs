@@ -36,7 +36,7 @@ use {
                 validator::Validator,
             },
         }, infrastructure_layer::{
-            data::aggregate_error::AggregateError,
+            data::{aggregate_error::AggregateError, sended::Sended_},
             functionality::{
                 repository::{
                     postgresql::{
@@ -212,21 +212,37 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
-            let user_access_token_signed = Encoder::<UserAccessToken>::encode(
-                &inner.environment_configuration.subject.encryption.private_key,
-                user__id,
-                incoming.user_device__id,
-                user_access_token__obfuscation_value,
-                user_access_token__expires_at,
-            )?;
-            let user_access_refresh_token_signed = Encoder::<UserAccessRefreshToken>::encode(
-                &inner.environment_configuration.subject.encryption.private_key,
-                user__id,
-                incoming.user_device__id,
-                user_access_token__obfuscation_value,
-                user_access_refresh_token__obfuscation_value,
-                user_access_refresh_token__expires_at,
-                now,
+            let private_key = &inner.environment_configuration.subject.encryption.private_key;
+            let sended = Sended_::new(&raw const incoming as *const Self::Incoming<'static>);
+            let (
+                user_access_token_signed,
+                user_access_refresh_token_signed,
+            ) = crate::result_return_runtime!(
+                TaskSpawner::spawn_rayon_task_processed(
+                    move || -> _ {
+                        let incoming_ = unsafe { sended.read_() };
+                        return Ok(
+                            (
+                                Encoder::<UserAccessToken>::encode(
+                                    private_key,
+                                    user__id,
+                                    incoming_.user_device__id,
+                                    user_access_token__obfuscation_value,
+                                    user_access_token__expires_at,
+                                )?,
+                                Encoder::<UserAccessRefreshToken>::encode(
+                                    private_key,
+                                    user__id,
+                                    incoming_.user_device__id,
+                                    user_access_token__obfuscation_value,
+                                    user_access_refresh_token__obfuscation_value,
+                                    user_access_refresh_token__expires_at,
+                                    now,
+                                )?,
+                            ),
+                        );
+                    },
+                ).await
             )?;
             let postgresql_connection_pool_database_1 = inner.postgresql_connection_pool_database_1.clone();
             let user_device__id = incoming.user_device__id.to_string();

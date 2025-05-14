@@ -19,19 +19,18 @@ use {
             },
         },
         infrastructure_layer::{
-            data::aggregate_error::AggregateError,
+            data::{aggregate_error::AggregateError, sended::Sended_},
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
                         ChannelBy2,
                         Postgresql,
-                    },
+                    }, Repository
                 },
-                service::resolver::{
+                service::{resolver::{
                     Resolver,
                     UnixTime,
-                },
+                }, task_spawner::TaskSpawner},
             },
         },
     },
@@ -52,17 +51,30 @@ impl ActionProcessor_ for ActionProcessor<CheckNameForExisting> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Encoder::<UserAccessToken>::is_valid(
-                &inner.environment_configuration.subject.encryption.private_key,
-                &incoming.user_access_token_signed,
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
+            let private_key = &inner.environment_configuration.subject.encryption.private_key;
+            let sended = Sended_::new(&raw const incoming as *const Self::Incoming<'static>);
+            if let Option::Some(precedent) = crate::result_return_runtime!(
+                TaskSpawner::spawn_rayon_task_processed(
+                    move || -> Result<Option<Precedent>, AggregateError> {
+                        let incoming_ = unsafe { sended.read_() };
+                        if !Encoder::<UserAccessToken>::is_valid(
+                            private_key,
+                            &incoming_.user_access_token_signed,
+                        )? {
+                            return Result::Err(crate::new_invalid_argument!());
+                        }
+                        if incoming_.user_access_token_signed.user_access_token__expires_at <= now {
+                            return Result::Ok(Option::Some(Precedent::UserAccessToken__AlreadyExpired));
+                        }
+                        if !Validator::<Channel_Name>::is_valid(incoming_.channel__name) {
+                            return Result::Err(crate::new_invalid_argument!());
+                        }
+                        return Result::Ok(Option::None);
+                    },
+                ).await
             )? {
-                return Result::Err(crate::new_invalid_argument!());
-            }
-            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_microseconds() {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
-            }
-            if !Validator::<Channel_Name>::is_valid(incoming.channel__name) {
-                return Result::Err(crate::new_invalid_argument!());
+                return Result::Ok(UnifiedReport::precedent(precedent));
             }
             let is_exist = Repository::<Postgresql<Channel>>::is_exist_1(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),

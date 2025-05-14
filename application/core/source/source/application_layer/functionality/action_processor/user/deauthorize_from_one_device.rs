@@ -13,19 +13,18 @@ use {
             functionality::service::encoder::Encoder,
         },
         infrastructure_layer::{
-            data::aggregate_error::AggregateError,
+            data::{aggregate_error::AggregateError, sended::Sended_},
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
                         Postgresql,
                         UserAccessRefreshTokenBy2,
-                    },
+                    }, Repository
                 },
-                service::resolver::{
+                service::{resolver::{
                     Resolver,
                     UnixTime,
-                },
+                }, task_spawner::TaskSpawner},
             },
         },
     },
@@ -46,13 +45,22 @@ impl ActionProcessor_ for ActionProcessor<DeauthorizeFromOneDevice> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Encoder::<UserAccessToken>::is_valid(
-                &inner.environment_configuration.subject.encryption.private_key,
-                &incoming.user_access_token_signed,
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
+            let private_key = &inner.environment_configuration.subject.encryption.private_key;
+            let sended = Sended_::new(&raw const incoming as *const Self::Incoming<'static>);
+            if !crate::result_return_runtime!(
+                TaskSpawner::spawn_rayon_task_processed(
+                    move || -> _ {
+                        return Encoder::<UserAccessToken>::is_valid(
+                            private_key,
+                            &(unsafe { sended.read_() }).user_access_token_signed,
+                        );
+                    },
+                ).await
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
-            if incoming.user_access_token_signed.user_access_token__expires_at <= Resolver::<UnixTime>::get_now_in_microseconds() {
+            if incoming.user_access_token_signed.user_access_token__expires_at <= now {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
             }
             let _ = Repository::<Postgresql<UserAccessRefreshToken>>::delete_1(

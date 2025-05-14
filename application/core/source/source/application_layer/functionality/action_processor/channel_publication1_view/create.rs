@@ -1,13 +1,10 @@
 use {
     crate::{
-        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
-        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        },
-        domain_layer::{
+        }, domain_layer::{
             data::entity::{
                 channel_publication1::ChannelPublication1,
                 channel_publication1_token::ChannelPublication1Token,
@@ -15,17 +12,15 @@ use {
                 user_access_token::UserAccessToken,
             },
             functionality::service::encoder::Encoder,
-        },
-        infrastructure_layer::{
-            data::aggregate_error::AggregateError,
+        }, infrastructure_layer::{
+            data::{aggregate_error::AggregateError, sended::Sended_},
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
                         ChannelPublication1By1,
                         ChannelPublication1ViewInsert,
                         Postgresql,
-                    },
+                    }, Repository
                 },
                 service::{
                     resolver::{
@@ -35,7 +30,7 @@ use {
                     task_spawner::TaskSpawner,
                 },
             },
-        },
+        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel_publication1_view::create::{
@@ -58,24 +53,36 @@ impl ActionProcessor_ for ActionProcessor<Create> {
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
             let now = Resolver::<UnixTime>::get_now_in_microseconds();
-            if !Encoder::<UserAccessToken>::is_valid(
-                &inner.environment_configuration.subject.encryption.private_key,
-                &incoming.user_access_token_signed,
+            let private_key = &inner.environment_configuration.subject.encryption.private_key;
+            let sended = Sended_::new(&raw const incoming as *const Self::Incoming<'static>);
+            if let Option::Some(precedent) = crate::result_return_runtime!(
+                TaskSpawner::spawn_rayon_task_processed(
+                    move || -> Result<Option<Precedent>, AggregateError> {
+                        let incoming_ = unsafe { sended.read_() };
+                        if !Encoder::<UserAccessToken>::is_valid(
+                            private_key,
+                            &incoming_.user_access_token_signed,
+                        )? {
+                            return Result::Err(crate::new_invalid_argument!());
+                        }
+                        if incoming_.user_access_token_signed.user_access_token__expires_at <= now {
+                            return Result::Ok(Option::Some(Precedent::UserAccessToken__AlreadyExpired));
+                        }
+                        if !Encoder::<ChannelPublication1Token>::is_valid(
+                            private_key,
+                            incoming_.user_access_token_signed.user__id,
+                            &incoming_.channel_publication1_token_signed,
+                        )? {
+                            return Result::Err(crate::new_invalid_argument!());
+                        }
+                        if incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at < now {
+                            return Result::Ok(Option::Some(Precedent::ChannelPublication1Token__AlreadyExpired));
+                        }
+                        return Result::Ok(Option::None);
+                    },
+                ).await
             )? {
-                return Result::Err(crate::new_invalid_argument!());
-            }
-            if incoming.user_access_token_signed.user_access_token__expires_at <= now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken__AlreadyExpired));
-            }
-            if !Encoder::<ChannelPublication1Token>::is_valid(
-                &inner.environment_configuration.subject.encryption.private_key,
-                incoming.user_access_token_signed.user__id,
-                &incoming.channel_publication1_token_signed,
-            )? {
-                return Result::Err(crate::new_invalid_argument!());
-            }
-            if incoming.channel_publication1_token_signed.channel_publication1_token__expires_at < now {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Token__AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(precedent));
             }
             let mut postgresql_connection_pool_database_3 = inner.postgresql_connection_pool_database_3.clone();
             TaskSpawner::spawn_tokio_non_blocking_task_into_background(

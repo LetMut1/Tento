@@ -158,4 +158,23 @@ ChannelDelayedDeletion_CanBeDeletedFrom - поменять константу п
 
 
 
-делать Енкод и валидацию всех токенов на Районе. Начать с проссмотра каждого метода.
+
+
+incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b>
+
+interval.tick().await; -> sleep.
+
+
+
+проверить, что при дропе вансшота чаннала после отправик в канале сохраняются данные.
+
+
+
+рефреш юзер аксеес токена за 5 минут до экспирации
+
+
+
+
+channel_publication_1___get_many
+channel__get_many_... all
+rows класть в Район

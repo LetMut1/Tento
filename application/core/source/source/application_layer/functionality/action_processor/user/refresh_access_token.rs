@@ -24,20 +24,19 @@ use {
             },
         },
         infrastructure_layer::{
-            data::aggregate_error::AggregateError,
+            data::{aggregate_error::AggregateError, sended::Sended_},
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
                         Postgresql,
                         UserAccessRefreshTokenBy2,
                         UserAccessRefreshTokenUpdate,
-                    },
+                    }, Repository
                 },
-                service::resolver::{
+                service::{resolver::{
                     Resolver,
                     UnixTime,
-                },
+                }, task_spawner::TaskSpawner},
             },
         },
     },
@@ -58,9 +57,18 @@ impl ActionProcessor_ for ActionProcessor<RefreshAccessToken> {
     type Precedent = Precedent;
     fn process<'a>(inner: &'a Inner<'_>, incoming: Self::Incoming<'a>) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send {
         return async move {
-            if !Encoder::<UserAccessToken>::is_valid(
-                &inner.environment_configuration.subject.encryption.private_key,
-                &incoming.user_access_token_signed,
+            let now = Resolver::<UnixTime>::get_now_in_microseconds();
+            let private_key = &inner.environment_configuration.subject.encryption.private_key;
+            let sended = Sended_::new(&raw const incoming as *const Self::Incoming<'static>);
+            if !crate::result_return_runtime!(
+                TaskSpawner::spawn_rayon_task_processed(
+                    move || -> _ {
+                        return Encoder::<UserAccessToken>::is_valid(
+                            private_key,
+                            &(unsafe { sended.read_() }).user_access_token_signed,
+                        );
+                    },
+                ).await
             )? {
                 return Result::Err(crate::new_invalid_argument!());
             }
@@ -78,20 +86,6 @@ impl ActionProcessor_ for ActionProcessor<RefreshAccessToken> {
                     Option::Some(values) => values,
                     Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken__NotFound)),
                 };
-            let is_valid = Encoder::<UserAccessRefreshToken>::is_valid(
-                &inner.environment_configuration.subject.encryption.private_key,
-                incoming.user_access_token_signed.user__id,
-                incoming.user_access_token_signed.user_device__id,
-                incoming.user_access_token_signed.user_access_token__obfuscation_value,
-                user_access_refresh_token__obfuscation_value,
-                user_access_refresh_token__expires_at,
-                user_access_refresh_token__updated_at,
-                &incoming.user_access_refresh_token_signed,
-            )?;
-            if !is_valid || incoming.user_access_token_signed.user_access_token__obfuscation_value != user_access_token__obfuscation_value_ {
-                return Result::Err(crate::new_invalid_argument!());
-            }
-            let now = Resolver::<UnixTime>::get_now_in_microseconds();
             if user_access_refresh_token__expires_at <= now {
                 if !Repository::<Postgresql<UserAccessRefreshToken>>::delete_1(
                     &postgresql_client_database_2,
@@ -105,6 +99,25 @@ impl ActionProcessor_ for ActionProcessor<RefreshAccessToken> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                 }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken__AlreadyExpired));
+            }
+            if !crate::result_return_runtime!(
+                TaskSpawner::spawn_rayon_task_processed(
+                    move || -> _ {
+                        let incoming_ = unsafe { sended.read_() };
+                        return Encoder::<UserAccessRefreshToken>::is_valid(
+                            private_key,
+                            incoming_.user_access_token_signed.user__id,
+                            incoming_.user_access_token_signed.user_device__id,
+                            incoming_.user_access_token_signed.user_access_token__obfuscation_value,
+                            user_access_refresh_token__obfuscation_value,
+                            user_access_refresh_token__expires_at,
+                            user_access_refresh_token__updated_at,
+                            &incoming_.user_access_refresh_token_signed,
+                        )
+                    },
+                ).await
+            )? || incoming.user_access_token_signed.user_access_token__obfuscation_value != user_access_token__obfuscation_value_ {
+                return Result::Err(crate::new_invalid_argument!());
             }
             let new___user_access_token__obfuscation_value = Generator::<UserAccessToken_ObfuscationValue>::generate();
             let new___user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
@@ -127,23 +140,39 @@ impl ActionProcessor_ for ActionProcessor<RefreshAccessToken> {
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
+            let (
+                user_access_token_signed,
+                user_access_refresh_token_signed,
+            ) = crate::result_return_runtime!(
+                TaskSpawner::spawn_rayon_task_processed(
+                    move || -> _ {
+                        let incoming_ = unsafe { sended.read_() };
+                        return Ok(
+                            (
+                                Encoder::<UserAccessToken>::encode(
+                                    private_key,
+                                    incoming_.user_access_token_signed.user__id,
+                                    incoming_.user_access_token_signed.user_device__id,
+                                    new___user_access_token__obfuscation_value,
+                                    new___user_access_token__expires_at,
+                                )?,
+                                Encoder::<UserAccessRefreshToken>::encode(
+                                    private_key,
+                                    incoming_.user_access_token_signed.user__id,
+                                    incoming_.user_access_token_signed.user_device__id,
+                                    new___user_access_token__obfuscation_value,
+                                    new___user_access_refresh_token__obfuscation_value,
+                                    new___user_access_refresh_token__expires_at,
+                                    now,
+                                )?,
+                            ),
+                        );
+                    },
+                ).await
+            )?;
             let outcoming = Outcoming {
-                user_access_token_signed: Encoder::<UserAccessToken>::encode(
-                    &inner.environment_configuration.subject.encryption.private_key,
-                    incoming.user_access_token_signed.user__id,
-                    incoming.user_access_token_signed.user_device__id,
-                    new___user_access_token__obfuscation_value,
-                    new___user_access_token__expires_at,
-                )?,
-                user_access_refresh_token_signed: Encoder::<UserAccessRefreshToken>::encode(
-                    &inner.environment_configuration.subject.encryption.private_key,
-                    incoming.user_access_token_signed.user__id,
-                    incoming.user_access_token_signed.user_device__id,
-                    new___user_access_token__obfuscation_value,
-                    new___user_access_refresh_token__obfuscation_value,
-                    new___user_access_refresh_token__expires_at,
-                    now,
-                )?,
+                user_access_token_signed,
+                user_access_refresh_token_signed,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
