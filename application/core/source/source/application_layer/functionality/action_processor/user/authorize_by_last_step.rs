@@ -248,9 +248,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
             let user_device__id = incoming.user_device__id.to_string();
             TaskSpawner::spawn_tokio_non_blocking_task_into_background(
                 async move {
-                    let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
                     '_a: for quantity in 1..=BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
-                        interval.tick().await;
                         match Repository::<Postgresql<UserDevice>>::create(
                             &crate::result_return_runtime!(postgresql_connection_pool_database_1.get().await),
                             UserDeviceInsert {
@@ -267,6 +265,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
                                 }
                             }
                         }
+                        tokio::time::sleep(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY)).await;
                     }
                     return Result::Ok(());
                 },

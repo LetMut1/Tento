@@ -138,9 +138,7 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
             let postgresql_connection_pool_database_3 = inner.postgresql_connection_pool_database_3.clone();
             TaskSpawner::spawn_tokio_non_blocking_task_into_background(
                 async move {
-                    let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
                     '_a: for quantity in 1..=BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
-                        interval.tick().await;
                         match Repository::<Postgresql<ChannelPublication1>>::update_5(
                             &crate::result_return_runtime!(postgresql_connection_pool_database_3.get().await),
                             ChannelPublication1By1 {
@@ -156,6 +154,7 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                                 }
                             }
                         }
+                        tokio::time::sleep(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY)).await;
                     }
                     return Result::Ok(());
                 },

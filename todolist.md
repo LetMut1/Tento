@@ -160,9 +160,7 @@ ChannelDelayedDeletion_CanBeDeletedFrom - поменять константу п
 
 
 
-incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b>
-
-interval.tick().await; -> sleep.
+incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b> -> sleep.
 
 
 
@@ -171,3 +169,5 @@ interval.tick().await; -> sleep.
 
 
 рефреш юзер аксеес токена за 5 минут до экспирации
+
+желтые стикеры

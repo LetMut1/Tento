@@ -227,9 +227,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByFirstStep> {
                 let user_device__id = incoming.user_device__id.to_string();
                 TaskSpawner::spawn_tokio_non_blocking_task_into_background(
                     async move {
-                        let mut interval = tokio::time::interval(Duration::from_secs(BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY));
                         '_a: for quantity in 1..=BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY {
-                            interval.tick().await;
                             match EmailSender::<UserResetPasswordToken>::send(
                                 email_server,
                                 user_reset_password_token__value.as_str(),
@@ -245,6 +243,7 @@ impl ActionProcessor_ for ActionProcessor<ResetPasswordByFirstStep> {
                                     }
                                 }
                             }
+                            tokio::time::sleep(Duration::from_secs(BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY)).await;
                         }
                         return Result::Ok(());
                     },
