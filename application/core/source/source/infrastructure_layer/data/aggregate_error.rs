@@ -139,9 +139,9 @@ impl Display for Common {
 impl StdError for Common {}
 macro_rules! new_indefinite_argument {
     ($error:expr) => {
-        crate::infrastructure_layer::data::aggregate_error::AggregateError::new_indefinite_argument(
+        $crate::infrastructure_layer::data::aggregate_error::AggregateError::new_indefinite_argument(
             $error.into(),
-            crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+            $crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
                 std::line!(),
                 std::file!(),
             ),
@@ -150,8 +150,8 @@ macro_rules! new_indefinite_argument {
 }
 macro_rules! new_invalid_argument {
     () => {
-        crate::infrastructure_layer::data::aggregate_error::AggregateError::new_invalid_argument(
-            crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+        $crate::infrastructure_layer::data::aggregate_error::AggregateError::new_invalid_argument(
+            $crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
                 std::line!(),
                 std::file!(),
             ),
@@ -160,9 +160,9 @@ macro_rules! new_invalid_argument {
 }
 macro_rules! new_logic {
     ($error:expr) => {
-        crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic(
+        $crate::infrastructure_layer::data::aggregate_error::AggregateError::new_logic(
             $error.into(),
-            crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+            $crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
                 std::line!(),
                 std::file!(),
             ),
@@ -171,44 +171,44 @@ macro_rules! new_logic {
 }
 macro_rules! new_logic_invalid_socket_address {
     () => {
-        crate::infrastructure_layer::data::aggregate_error::new_logic!(
-            crate::infrastructure_layer::data::aggregate_error::Common::InvalidSocketAddress
+        $crate::infrastructure_layer::data::aggregate_error::new_logic!(
+            $crate::infrastructure_layer::data::aggregate_error::Common::InvalidSocketAddress
         )
     };
 }
 macro_rules! new_logic_out_of_range {
     () => {
-        crate::infrastructure_layer::data::aggregate_error::new_logic!(
-            crate::infrastructure_layer::data::aggregate_error::Common::OutOfRange
+        $crate::infrastructure_layer::data::aggregate_error::new_logic!(
+            $crate::infrastructure_layer::data::aggregate_error::Common::OutOfRange
         )
     };
 }
 macro_rules! new_logic_unreachable_state {
     () => {
-        crate::infrastructure_layer::data::aggregate_error::new_logic!(
-            crate::infrastructure_layer::data::aggregate_error::Common::UnreachableState
+        $crate::infrastructure_layer::data::aggregate_error::new_logic!(
+            $crate::infrastructure_layer::data::aggregate_error::Common::UnreachableState
         )
     };
 }
 macro_rules! new_logic_value_already_exist {
     () => {
-        crate::infrastructure_layer::data::aggregate_error::new_logic!(
-            crate::infrastructure_layer::data::aggregate_error::Common::ValueAlreadyExist
+        $crate::infrastructure_layer::data::aggregate_error::new_logic!(
+            $crate::infrastructure_layer::data::aggregate_error::Common::ValueAlreadyExist
         )
     };
 }
 macro_rules! new_logic_value_does_not_exist {
     () => {
-        crate::infrastructure_layer::data::aggregate_error::new_logic!(
-            crate::infrastructure_layer::data::aggregate_error::Common::ValueDoesNotExist
+        $crate::infrastructure_layer::data::aggregate_error::new_logic!(
+            $crate::infrastructure_layer::data::aggregate_error::Common::ValueDoesNotExist
         )
     };
 }
 macro_rules! new_runtime {
     ($error:expr) => {
-        crate::infrastructure_layer::data::aggregate_error::AggregateError::new_runtime(
+        $crate::infrastructure_layer::data::aggregate_error::AggregateError::new_runtime(
             $error.into(),
-            crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
+            $crate::infrastructure_layer::data::aggregate_error::Backtrace::new(
                 std::line!(),
                 std::file!(),
             ),
@@ -221,7 +221,7 @@ macro_rules! result_return_indefinite_argument {
             std::result::Result::Ok(value) => value,
             std::result::Result::Err(error) => {
                 return std::result::Result::Err(
-                    crate::infrastructure_layer::data::aggregate_error::new_indefinite_argument!(error),
+                    $crate::infrastructure_layer::data::aggregate_error::new_indefinite_argument!(error),
                 );
             }
         }
@@ -231,7 +231,7 @@ macro_rules! result_into_indefinite_argument {
     ($std_result:expr) => {
         $std_result.map_err(
             move |error: _| -> _ {
-                return crate::infrastructure_layer::data::aggregate_error::new_indefinite_argument!(error);
+                return $crate::infrastructure_layer::data::aggregate_error::new_indefinite_argument!(error);
             },
         )
     };
@@ -242,7 +242,7 @@ macro_rules! result_return_logic {
             std::result::Result::Ok(value) => value,
             std::result::Result::Err(error) => {
                 return std::result::Result::Err(
-                    crate::infrastructure_layer::data::aggregate_error::new_logic!(error),
+                    $crate::infrastructure_layer::data::aggregate_error::new_logic!(error),
                 );
             }
         }
@@ -252,7 +252,7 @@ macro_rules! result_into_logic {
     ($std_result:expr) => {
         $std_result.map_err(
             move |error: _| -> _ {
-                return crate::infrastructure_layer::data::aggregate_error::new_logic!(error);
+                return $crate::infrastructure_layer::data::aggregate_error::new_logic!(error);
             },
         )
     };
@@ -263,7 +263,7 @@ macro_rules! result_return_runtime {
             std::result::Result::Ok(value) => value,
             std::result::Result::Err(error) => {
                 return std::result::Result::Err(
-                    crate::infrastructure_layer::data::aggregate_error::new_runtime!(error),
+                    $crate::infrastructure_layer::data::aggregate_error::new_runtime!(error),
                 );
             }
         }
@@ -273,7 +273,7 @@ macro_rules! result_into_runtime {
     ($std_result:expr) => {
         $std_result.map_err(
             move |error: _| -> _ {
-                return crate::infrastructure_layer::data::aggregate_error::new_runtime!(error);
+                return $crate::infrastructure_layer::data::aggregate_error::new_runtime!(error);
             },
         )
     };
@@ -284,7 +284,7 @@ macro_rules! option_return_logic_unreachable_state {
             std::option::Option::Some(value) => value,
             std::option::Option::None => {
                 return std::result::Result::Err(
-                    crate::infrastructure_layer::data::aggregate_error::new_logic_unreachable_state!(),
+                    $crate::infrastructure_layer::data::aggregate_error::new_logic_unreachable_state!(),
                 );
             }
         }
@@ -296,7 +296,7 @@ macro_rules! option_return_logic_out_of_range {
             std::option::Option::Some(value) => value,
             std::option::Option::None => {
                 return std::result::Result::Err(
-                    crate::infrastructure_layer::data::aggregate_error::new_logic_out_of_range!(),
+                    $crate::infrastructure_layer::data::aggregate_error::new_logic_out_of_range!(),
                 );
             }
         }
@@ -305,7 +305,7 @@ macro_rules! option_return_logic_out_of_range {
 macro_rules! option_into_logic_out_of_range {
     ($std_option:expr) => {
         $std_option.ok_or(
-            crate::infrastructure_layer::data::aggregate_error::new_logic_out_of_range!(),
+            $crate::infrastructure_layer::data::aggregate_error::new_logic_out_of_range!(),
         )
     };
 }
@@ -315,7 +315,7 @@ macro_rules! option_return_logic_value_does_not_exist {
             std::option::Option::Some(value) => value,
             std::option::Option::None => {
                 return std::result::Result::Err(
-                    crate::infrastructure_layer::data::aggregate_error::new_logic_value_does_not_exist!(),
+                    $crate::infrastructure_layer::data::aggregate_error::new_logic_value_does_not_exist!(),
                 );
             }
         }
@@ -324,7 +324,7 @@ macro_rules! option_return_logic_value_does_not_exist {
 macro_rules! option_into_logic_value_does_not_exist {
     ($std_option:expr) => {
         $std_option.ok_or(
-            crate::infrastructure_layer::data::aggregate_error::new_logic_value_does_not_exist!(),
+            $crate::infrastructure_layer::data::aggregate_error::new_logic_value_does_not_exist!(),
         )
     };
 }
@@ -334,7 +334,7 @@ macro_rules! option_return_logic_invalid_socket_address {
             std::option::Option::Some(value) => value,
             std::option::Option::None => {
                 return std::result::Result::Err(
-                    crate::infrastructure_layer::data::aggregate_error::new_logic_invalid_socket_address!(),
+                    $crate::infrastructure_layer::data::aggregate_error::new_logic_invalid_socket_address!(),
                 );
             }
         }
