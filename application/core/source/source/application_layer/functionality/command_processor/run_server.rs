@@ -11,8 +11,8 @@ use {
             environment_configuration::{
                 EnvironmentConfiguration,
                 run_server::{
-                    TokioCrate,
-                    RayonCrate,
+                    Tokio,
+                    Rayon,
                 },
             },
         },
@@ -47,8 +47,8 @@ static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration<RunServer>> 
 impl CommandProcessor<RunServer> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
         let environment_configuration = Self::initialize_environment(environment_configuration_file_path)?;
-        if num_cpus::get() < (environment_configuration.subject.tokio_crate.worker_threads_quantity as usize + environment_configuration.subject.rayon_crate.threads_quantity as usize)
-            || environment_configuration.subject.tokio_crate.worker_threads_quantity >= environment_configuration.subject.rayon_crate.threads_quantity {
+        if num_cpus::get() < (environment_configuration.subject.rust_crate.tokio.worker_threads_quantity as usize + environment_configuration.subject.rust_crate.rayon.threads_quantity as usize)
+            || environment_configuration.subject.rust_crate.tokio.worker_threads_quantity >= environment_configuration.subject.rust_crate.rayon.threads_quantity {
             return Result::Err(
                 crate::new_logic!("Invalid distribution of core threads."),
             );
@@ -63,8 +63,8 @@ impl CommandProcessor<RunServer> {
                 Self::initialize_stdout_logger()
             }
         };
-        Self::initialize_rayon_state(&environment_configuration.subject.rayon_crate)?;
-        Self::initialize_tokio_runtime(&environment_configuration.subject.tokio_crate)?
+        Self::initialize_rayon_state(&environment_configuration.subject.rust_crate.rayon)?;
+        Self::initialize_tokio_runtime(&environment_configuration.subject.rust_crate.tokio)?
             .block_on(HttpServer::run(environment_configuration))?;
         return Result::Ok(());
     }
@@ -110,26 +110,26 @@ impl CommandProcessor<RunServer> {
         crate::result_return_logic!(tracing::subscriber::set_global_default(fmt_subscriber));
         return Result::Ok(());
     }
-    fn initialize_rayon_state<'a>(rayon_crate: &'a RayonCrate) -> Result<(), AggregateError> {
-        if rayon_crate.threads_quantity == 0 {
+    fn initialize_rayon_state<'a>(rayon: &'a Rayon) -> Result<(), AggregateError> {
+        if rayon.threads_quantity == 0 {
             return Result::Err(crate::new_logic!("Invalid Rayon configuration."));
         }
         return crate::result_into_runtime!(
             ThreadPoolBuilder::new()
-                .num_threads(rayon_crate.threads_quantity as usize)
+                .num_threads(rayon.threads_quantity as usize)
                 .build_global()
         );
     }
-    fn initialize_tokio_runtime<'a>(tokio_crate: &'a TokioCrate) -> Result<Runtime, AggregateError> {
-        if tokio_crate.worker_threads_quantity == 0 || tokio_crate.worker_thread_stack_size < (1024 * 1024) {
+    fn initialize_tokio_runtime<'a>(tokio: &'a Tokio) -> Result<Runtime, AggregateError> {
+        if tokio.worker_threads_quantity == 0 || tokio.worker_thread_stack_size < (1024 * 1024) {
             return Result::Err(crate::new_logic!(TOKIO_CONFUGURATION_ERROR_MESSAGE));
         }
         return crate::result_into_runtime!(
             RuntimeBuilder::new_multi_thread()
-                .worker_threads(tokio_crate.worker_threads_quantity as usize)
+                .worker_threads(tokio.worker_threads_quantity as usize)
                 .max_blocking_threads(1)
                 .thread_keep_alive(Duration::from_secs(1))
-                .thread_stack_size(tokio_crate.worker_thread_stack_size)
+                .thread_stack_size(tokio.worker_thread_stack_size)
                 .enable_all()
                 .build()
         );

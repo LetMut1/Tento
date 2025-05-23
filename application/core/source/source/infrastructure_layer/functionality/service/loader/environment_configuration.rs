@@ -21,7 +21,8 @@ use {
                 Postgresql as ResolveIncompliteStatePostgresql,
                 ResolveIncompliteState,
                 Resource as ResolveIncompliteStateResource,
-                TokioCrate as ResolveIncompliteStateTokioCrate,
+                Tokio as ResolveIncompliteStateTokio,
+                RustCrate as ResolveIncompliteStateRustCrate,
             },
             run_server::{
                 ApplicationServer,
@@ -37,8 +38,9 @@ use {
                 Tcp,
                 TcpKeepalive,
                 Tls,
-                TokioCrate as RunServerTokioCrate,
-                RayonCrate,
+                Tokio as RunServerTokio,
+                Rayon,
+                RustCrate as RunServerRustCrate,
             },
         },
     },
@@ -56,12 +58,14 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
         return Result::Ok(
             EnvironmentConfiguration {
                 subject: RunServer {
-                    tokio_crate: RunServerTokioCrate {
-                        worker_threads_quantity: environment_configuration_file.tokio_crate.worker_threads_quantity.value,
-                        worker_thread_stack_size: environment_configuration_file.tokio_crate.worker_thread_stack_size.value,
-                    },
-                    rayon_crate: RayonCrate {
-                        threads_quantity: environment_configuration_file.rayon_crate.threads_quantity.value,
+                    rust_crate: RunServerRustCrate {
+                        tokio: RunServerTokio {
+                            worker_threads_quantity: environment_configuration_file.rust_crate.tokio.worker_threads_quantity.value,
+                            worker_thread_stack_size: environment_configuration_file.rust_crate.tokio.worker_thread_stack_size.value,
+                        },
+                        rayon: Rayon {
+                            threads_quantity: environment_configuration_file.rust_crate.rayon.threads_quantity.value,
+                        },
                     },
                     application_server: ApplicationServer {
                         tcp: Tcp {
@@ -223,9 +227,11 @@ impl Loader<EnvironmentConfiguration<ResolveIncompliteState>> {
         return Result::Ok(
             EnvironmentConfiguration {
                 subject: ResolveIncompliteState {
-                    tokio_crate: ResolveIncompliteStateTokioCrate {
-                        worker_threads_quantity: environment_configuration_file.tokio_crate.worker_threads_quantity.value,
-                        worker_thread_stack_size: environment_configuration_file.tokio_crate.worker_thread_stack_size.value,
+                    rust_crate: ResolveIncompliteStateRustCrate {
+                        tokio: ResolveIncompliteStateTokio {
+                            worker_threads_quantity: environment_configuration_file.rust_crate.tokio.worker_threads_quantity.value,
+                            worker_thread_stack_size: environment_configuration_file.rust_crate.tokio.worker_thread_stack_size.value,
+                        },
                     },
                     #[cfg(feature = "logging_to_file")]
                     logging: ResolveIncompliteStateLogging {

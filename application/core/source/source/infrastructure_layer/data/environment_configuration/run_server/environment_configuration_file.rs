@@ -5,8 +5,7 @@ use crate::infrastructure_layer::data::environment_configuration::{
 };
 #[derive(serde::Deserialize)]
 pub struct EnvironmentConfigurationFile {
-    pub tokio_crate: TokioCrate,
-    pub rayon_crate: RayonCrate,
+    pub rust_crate: RustCrate,
     pub application_server: ApplicationServer,
     #[cfg(feature = "logging_to_file")]
     pub logging: Logging,
@@ -14,12 +13,17 @@ pub struct EnvironmentConfigurationFile {
     pub encryption: Encryption,
 }
 #[derive(serde::Deserialize)]
-pub struct TokioCrate {
+pub struct RustCrate {
+    pub tokio: Tokio,
+    pub rayon: Rayon,
+}
+#[derive(serde::Deserialize)]
+pub struct Tokio {
     pub worker_threads_quantity: Value<u16>,
     pub worker_thread_stack_size: Value<usize>,
 }
 #[derive(serde::Deserialize)]
-pub struct RayonCrate {
+pub struct Rayon {
     pub threads_quantity: Value<u16>,
 }
 #[derive(serde::Deserialize)]

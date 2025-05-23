@@ -2,12 +2,15 @@ mod environment_configuration_file;
 pub use self::environment_configuration_file::EnvironmentConfigurationFile;
 use super::PostgresqlInner;
 pub struct ResolveIncompliteState {
-    pub tokio_crate: TokioCrate,
+    pub rust_crate: RustCrate,
     #[cfg(feature = "logging_to_file")]
     pub logging: Logging,
     pub resource: Resource,
 }
-pub struct TokioCrate {
+pub struct RustCrate {
+    pub tokio: Tokio,
+}
+pub struct Tokio {
     pub worker_threads_quantity: u16,
     pub worker_thread_stack_size: usize,
 }
