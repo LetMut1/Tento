@@ -82,6 +82,31 @@ struct ChannelPublication1TokenSigned {
 
 # API for authorized user.
  Every endpoint at this area requires an existing of `user_access_token_signed`.
+ - ## User_RefreshAccessToken POST /user/refresh_access_token
+```
+Refreshes user access token. The current time in MICROseconds must be greater than or equal to the time calculated
+using the formula "user_access_token__expires_at - 5 minutes". The incoming access refresh token should not be expired.
+```
+```
+struct Incoming {
+    user_access_token_signed: <Data standards>,
+    user_access_refresh_token_signed: <Data standards>,
+}
+```
+```
+struct Outcoming {
+    user_access_token_signed: <Data standards>,
+    user_access_refresh_token_signed: <Data standards>,
+}
+```
+```
+enum Precedent {
+    UserAccessToken__NotReadyToRefresh,
+    UserAccessRefreshToken__NotFound,
+    UserAccessRefreshToken__AlreadyExpired,
+    ParallelExecution,
+}
+```
  - ## User_DeauthorizeFromOneDevice POST /user/deauthorize_from_one_device
 ```
 Deauthorizes user from one device.
@@ -933,29 +958,6 @@ enum Precedent {
     UserResetPasswordToken__AlreadyExpired,
     UserResetPasswordToken__AlreadyApproved,
     UserResetPasswordToken__TimeToResendHasNotCome,
-    ParallelExecution,
-}
-```
- - ## User_RefreshAccessToken POST /user/refresh_access_token
-```
-Refreshes user access token. The incoming access token can be expired or not expired. The incoming access refresh token should not be expired.
-```
-```
-struct Incoming {
-    user_access_token_signed: <Data standards>,
-    user_access_refresh_token_signed: <Data standards>,
-}
-```
-```
-struct Outcoming {
-    user_access_token_signed: <Data standards>,
-    user_access_refresh_token_signed: <Data standards>,
-}
-```
-```
-enum Precedent {
-    UserAccessRefreshToken__NotFound,
-    UserAccessRefreshToken__AlreadyExpired,
     ParallelExecution,
 }
 ```

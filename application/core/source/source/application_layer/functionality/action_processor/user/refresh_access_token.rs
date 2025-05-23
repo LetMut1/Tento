@@ -60,17 +60,30 @@ impl ActionProcessor_ for ActionProcessor<RefreshAccessToken> {
             let now = Resolver::<UnixTime>::get_now_in_microseconds();
             let private_key = &inner.environment_configuration.subject.encryption.private_key;
             let sended = Sended_::new(&raw const incoming as *const Self::Incoming<'static>);
-            if !crate::result_return_runtime!(
+            if let Option::Some(precedent) = crate::result_return_runtime!(
                 TaskSpawner::spawn_rayon_task_processed(
-                    move || -> _ {
-                        return Encoder::<UserAccessToken>::is_valid(
+                    move || -> Result<Option<Precedent>, AggregateError> {
+                        let incoming_ = unsafe { sended.read_() };
+                        if !Encoder::<UserAccessToken>::is_valid(
                             private_key,
-                            &(unsafe { sended.read_() }).user_access_token_signed,
+                            &incoming_.user_access_token_signed,
+                        )? {
+                            return Result::Err(crate::new_invalid_argument!());
+                        }
+                        const QUANTITY_OF_MICROSECONDS_UNTIL_TIME: i64 = 1000000 * 60 * 5;
+                        const QUANTITY_OF_MICROSECONDS_FOR_CLIENT_TIME_DESYNCHRONIZATION_CASE: i64 = 1000000 * 10;
+                        const QUANTITY_OF_MICROSECONDS: i64 = QUANTITY_OF_MICROSECONDS_UNTIL_TIME + QUANTITY_OF_MICROSECONDS_FOR_CLIENT_TIME_DESYNCHRONIZATION_CASE;
+                        static_assertions::const_assert!(
+                            (UserAccessToken_ExpiresAt::QUANTITY_OF_MICROSECONDS_FOR_EXPIRATION / QUANTITY_OF_MICROSECONDS) >= 30
                         );
+                        if (incoming_.user_access_token_signed.user_access_token__expires_at - QUANTITY_OF_MICROSECONDS) > now {
+                            return Result::Ok(Option::Some(Precedent::UserAccessToken__NotReadyToRefresh));
+                        }
+                        return Result::Ok(Option::None);
                     },
                 ).await
             )? {
-                return Result::Err(crate::new_invalid_argument!());
+                return Result::Ok(UnifiedReport::precedent(precedent));
             }
             let postgresql_client_database_2 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let (user_access_token__obfuscation_value_, user_access_refresh_token__obfuscation_value, user_access_refresh_token__expires_at, user_access_refresh_token__updated_at) =

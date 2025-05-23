@@ -25,6 +25,7 @@ pub enum CommonPrecedent {
     UserAccessRefreshToken__AlreadyExpired,
     UserAccessRefreshToken__NotFound,
     UserAccessToken__AlreadyExpired,
+    UserAccessToken__NotReadyToRefresh,
     UserAuthorizationToken__AlreadyExpired,
     UserAuthorizationToken__NotFound,
     UserAuthorizationToken__TimeToResendHasNotCome,

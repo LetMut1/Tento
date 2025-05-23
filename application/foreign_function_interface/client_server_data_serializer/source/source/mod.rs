@@ -1087,6 +1087,7 @@ pub struct User_RefreshAccessToken_Outcoming_ {
 #[repr(C)]
 #[derive(Default)]
 pub struct User_RefreshAccessToken_Precedent_ {
+    pub user_access_token___not_ready_to_refresh: bool,
     pub user_access_refresh_token___not_found: bool,
     pub user_access_refresh_token___already_expired: bool,
     pub parallel_execution: bool,
@@ -1128,6 +1129,12 @@ pub extern "C-unwind" fn user__refresh_access_token__deserialize_allocate(vector
                 precedent,
             } => {
                 let precedent_ = match precedent {
+                    User_RefreshAccessToken_Precedent::UserAccessToken__NotReadyToRefresh => {
+                        User_RefreshAccessToken_Precedent_ {
+                            user_access_token___not_ready_to_refresh: true,
+                            ..Default::default()
+                        }
+                    }
                     User_RefreshAccessToken_Precedent::UserAccessRefreshToken__AlreadyExpired => {
                         User_RefreshAccessToken_Precedent_ {
                             user_access_refresh_token___already_expired: true,
@@ -5935,11 +5942,13 @@ mod test {
             }
             pub fn precedent__user__refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
                 match User_RefreshAccessToken_Precedent::UserAccessRefreshToken__NotFound {
+                    User_RefreshAccessToken_Precedent::UserAccessToken__NotReadyToRefresh => {}
                     User_RefreshAccessToken_Precedent::UserAccessRefreshToken__NotFound => {}
                     User_RefreshAccessToken_Precedent::UserAccessRefreshToken__AlreadyExpired => {}
                     User_RefreshAccessToken_Precedent::ParallelExecution => {}
                 }
                 let precedents: Vec<User_RefreshAccessToken_Precedent> = vec![
+                    User_RefreshAccessToken_Precedent::UserAccessToken__NotReadyToRefresh,
                     User_RefreshAccessToken_Precedent::UserAccessRefreshToken__NotFound,
                     User_RefreshAccessToken_Precedent::UserAccessRefreshToken__AlreadyExpired,
                     User_RefreshAccessToken_Precedent::ParallelExecution,

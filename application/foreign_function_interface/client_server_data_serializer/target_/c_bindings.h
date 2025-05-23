@@ -228,6 +228,7 @@ typedef struct Data__User_RefreshAccessToken_Outcoming_ {
 } Data__User_RefreshAccessToken_Outcoming_;
 
 typedef struct User_RefreshAccessToken_Precedent_ {
+  bool user_access_token___not_ready_to_refresh;
   bool user_access_refresh_token___not_found;
   bool user_access_refresh_token___already_expired;
   bool parallel_execution;

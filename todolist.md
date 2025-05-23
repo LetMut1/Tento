@@ -160,14 +160,5 @@ ChannelDelayedDeletion_CanBeDeletedFrom - поменять константу п
 
 
 
-incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b> -> sleep.
-
-
-
-проверить, что при дропе вансшота чаннала после отправик в канале сохраняются данные.
-
-
-
-рефреш юзер аксеес токена за 5 минут до экспирации
-
-желтые стикеры
+incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b>
+Проблема с определение Лайфтайма компилятором. Попробовать сделать это в edition = 2024.
