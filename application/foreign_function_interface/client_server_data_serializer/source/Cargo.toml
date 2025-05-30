@@ -1,3 +1,11 @@
+[package]
+name = "client_server_data_serializer"
+version = "1.0.0"
+authors.workspace = true
+edition = "2021"
+rust-version.workspace = true
+build = "./source/build.rs"
+
 [lib]
 name = "client_server_data_serializer"
 path = "./source/mod.rs"
@@ -7,17 +15,8 @@ bench = true
 doc = true
 proc-macro = false
 harness = true
-edition = "2021"
 crate-type = ["staticlib"]
 required-features = []
-
-[package]
-name = "client_server_data_serializer"
-version = "1.0.0"
-authors.workspace = true
-edition = "2021"
-rust-version.workspace = true
-build = "./source/build.rs"
 
 [dependencies]
 bitcode = { workspace = true }
@@ -25,7 +24,7 @@ dedicated = { workspace = true }
 libc = { package = "libc", version = "=0.2.158", default-features = true, features = [], optional = false }
 
 [build-dependencies]
-cargo-emit = { workspace = true }
+cargo_emit = { workspace = true }
 cbindgen = { package = "cbindgen", version = "=0.28.0", default-features = true, features = [], optional = false }
 uuid = { workspace = true }
 
