@@ -12,6 +12,9 @@ CREATE TABLE public.channel (
     created_at BIGINT
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
+COMMENT ON COLUMN public.channel.access_modifier IS '0 - Open, 1 - Close';
+COMMENT ON COLUMN public.channel.visability_modifier IS '0 - Public, 1 - Private';
+
 CREATE SEQUENCE public.channel_1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.channel.id;
 
@@ -22,7 +25,7 @@ CREATE UNIQUE INDEX channel_3 ON public.channel
 USING btree (name COLLATE "C" ASC NULLS LAST) WITH (fillfactor = 80, deduplicate_items = on);
 
 CREATE INDEX channel_4 ON public.channel
-USING btree (visability_modifier ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
+USING btree (visability_modifier, name COLLATE "C" ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on) WHERE visability_modifier = 0;
 
 CREATE INDEX channel_5 ON public.channel
 USING btree (owner ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);

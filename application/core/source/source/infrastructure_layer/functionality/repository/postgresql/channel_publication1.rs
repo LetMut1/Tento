@@ -383,9 +383,10 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 WHERE \
                     cp1.channel__id = $1 \
                     AND cp1.created_at < $2 \
+                    AND cp1m.user__id = $3 \
                 ORDER BY \
                     cp1.created_at DESC \
-                LIMIT $3;";
+                LIMIT $4;";
             let mut parameter_storage = ParameterStorage::new(3);
             parameter_storage
                 .add(
@@ -394,6 +395,10 @@ impl Repository<Postgresql<ChannelPublication1>> {
                 )
                 .add(
                     &by.channel_publication1__created_at,
+                    Type::INT8,
+                )
+                .add(
+                    &by.user__id,
                     Type::INT8,
                 )
                 .add(
@@ -433,6 +438,7 @@ pub struct By1 {
     pub channel_publication1__id: i64,
 }
 pub struct By2 {
+    pub user__id: i64,
     pub channel__id: i64,
     pub channel_publication1__created_at: i64,
 }

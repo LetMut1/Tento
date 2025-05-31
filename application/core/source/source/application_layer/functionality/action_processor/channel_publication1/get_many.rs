@@ -113,6 +113,7 @@ impl ActionProcessor_ for ActionProcessor<GetMany> {
             let rows = Repository::<Postgresql<ChannelPublication1>>::find_1(
                 &postgresql_client_database_3,
                 ChannelPublication1By2 {
+                    user__id: incoming.user_access_token_signed.user__id,
                     channel__id: incoming.channel_token_signed.channel__id,
                     channel_publication1__created_at: incoming.channel_publication1__created_at,
                 },

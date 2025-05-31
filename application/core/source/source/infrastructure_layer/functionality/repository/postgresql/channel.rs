@@ -425,10 +425,10 @@ impl Repository<Postgresql<Channel>> {
                 LEFT OUTER JOIN \
                     public.channel_subscription cs \
                 ON \
-                    cs.user__id = $1 \
-                    AND c.id = cs.channel__id \
+                    c.id = cs.channel__id \
                 WHERE \
-                    c.visability_modifier = $2 \
+                    cs.user__id = $1 \
+                    AND c.visability_modifier = $2 \
                     AND c.name LIKE $3";
             let channel__visability_modifier = by.channel__visability_modifier as i16;
             let wildcard = format!("{}%", by.channel__name);
@@ -802,14 +802,19 @@ impl Repository<Postgresql<Channel>> {
                 LEFT OUTER JOIN \
                     public.channel_subscription cs \
                 ON \
-                    cs.user__id = $1 \
-                    AND c.id = cs.channel__id \
+                    c.id = cs.channel__id \
                 WHERE \
-                    c.id = $2;";
+                    cs.user__id = $1 \
+                    AND cs.channel__id = $2 \
+                    AND c.id = $3;";
             let mut parameter_storage = ParameterStorage::new(2);
             parameter_storage
                 .add(
                     &by.user__id,
+                    Type::INT8,
+                )
+                .add(
+                    &by.channel__id,
                     Type::INT8,
                 )
                 .add(

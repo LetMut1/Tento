@@ -18,8 +18,8 @@ pub enum AccessModifier_ {
 pub struct VisabilityModifier(PhantomData<u8>);
 #[repr(u8)]
 pub enum VisabilityModifier_ {
-    Public,
-    Private,
+    Public = 0,
+    Private = 1,
 }
 pub struct CoverImagePath(PhantomData<String>);
 pub struct BackgroundImagePath(PhantomData<String>);

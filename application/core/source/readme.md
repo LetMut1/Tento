@@ -19,6 +19,8 @@ diesel database reset --database-url=postgres://root:password@postgresql_databas
 diesel database reset --database-url=postgres://root:password@postgresql_database_2/tento --migration-dir=/_tento/application/core/migration/postgresql/database_2/
 
 diesel database reset --database-url=postgres://root:password@postgresql_database_3/tento --migration-dir=/_tento/application/core/migration/postgresql/database_3/
+
+diesel database reset --database-url=postgres://root:password@postgresql_database_4/tento --migration-dir=/_tento/application/core/migration/postgresql/database_4/
 ```
 
 
