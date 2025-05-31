@@ -83,7 +83,95 @@ impl Repository<Postgresql<ChannelPublication1Commentary>> {
             return Result::Ok(Option::Some(crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0))));
         };
     }
-    pub fn delete<'a>(client_database_4: &'a Client, by: By) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+    pub fn update_1<'a>(client_database_3: &'a Client, by: By2) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+        return async move {
+            const QUERY: &'static str = "\
+                UPDATE ONLY \
+                    public.channel_publication1_commentary AS cp1c \
+                SET \
+                    marks_quantity = marks_quantity + 1 \
+                WHERE \
+                    cp1c.id = $1 \
+                    AND cp1c.marks_quantity < $2 \
+                RETURNING \
+                    true AS _;";
+            let mut parameter_storage = ParameterStorage::new(2);
+            parameter_storage
+                .add(
+                    &by.channel_publication1_commentary__id,
+                    Type::INT8,
+                )
+                .add(
+                    &(u32::MAX as i64),
+                    Type::INT8,
+                );
+            let statement = crate::result_return_logic!(
+                client_database_3
+                .prepare_typed_cached(
+                    QUERY,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                client_database_3
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(false);
+            }
+            return Result::Ok(true);
+        };
+    }
+    pub fn update_2<'a>(client_database_3: &'a Client, by: By2) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
+        return async move {
+            const QUERY: &'static str = "\
+                UPDATE ONLY \
+                    public.channel_publication1_commentary AS cp1c \
+                SET \
+                    marks_quantity = marks_quantity - 1 \
+                WHERE \
+                    cp1c.id = $1 \
+                    AND cp1c.marks_quantity > $2 \
+                RETURNING \
+                    true AS _;";
+            let mut parameter_storage = ParameterStorage::new(2);
+            parameter_storage
+                .add(
+                    &by.channel_publication1_commentary__id,
+                    Type::INT8,
+                )
+                .add(
+                    &(u32::MIN as i64),
+                    Type::INT8,
+                );
+            let statement = crate::result_return_logic!(
+                client_database_3
+                .prepare_typed_cached(
+                    QUERY,
+                    parameter_storage.get_parameters_types(),
+                )
+                .await
+            );
+            let rows = crate::result_return_runtime!(
+                client_database_3
+                .query(
+                    &statement,
+                    parameter_storage.get_parameters(),
+                )
+                .await
+            );
+            if rows.is_empty() {
+                return Result::Ok(false);
+            }
+            return Result::Ok(true);
+        };
+    }
+    pub fn delete<'a>(client_database_4: &'a Client, by: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + use<'a> {
         return async move {
             const QUERY: &'static str = "\
                 DELETE FROM ONLY \
@@ -133,7 +221,10 @@ pub struct Insert<'a> {
     pub channel_publication1_commentary__marks_quantity: u32,
     pub channel_publication1_commentary__created_at: i64,
 }
-pub struct By {
+pub struct By1 {
     pub channel_publication1_commentary__id: i64,
     pub channel_publication1_commentary__author: i64,
+}
+pub struct By2 {
+    pub channel_publication1_commentary__id: i64,
 }

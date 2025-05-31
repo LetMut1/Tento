@@ -21,7 +21,7 @@ use {
             functionality::{
                 repository::{
                     postgresql::{
-                        ChannelPublication1By1, ChannelPublication1CommentaryBy, ChannelPublication1CommentaryDelayedDeletionInsert, IsolationLevel, Postgresql, Resolver as Resolver_, Transaction,
+                        ChannelPublication1By1, ChannelPublication1CommentaryBy1, ChannelPublication1CommentaryDelayedDeletionInsert, IsolationLevel, Postgresql, Resolver as Resolver_, Transaction,
                     }, Repository
                 },
                 service::{
@@ -97,7 +97,7 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
             .await?;
             let is_deleted = match Repository::<Postgresql<ChannelPublication1Commentary>>::delete(
                 transaction.get_client(),
-                ChannelPublication1CommentaryBy {
+                ChannelPublication1CommentaryBy1 {
                     channel_publication1_commentary__id: incoming.channel_publication1_commentary__id,
                     channel_publication1_commentary__author: incoming.user_access_token_signed.user__id,
                 },
