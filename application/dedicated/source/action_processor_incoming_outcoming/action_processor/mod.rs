@@ -5,3 +5,4 @@ pub mod channel_publication1_mark;
 pub mod channel_publication1_view;
 pub mod channel_subscription;
 pub mod user;
+pub mod channel_publication1_commentary_mark;
