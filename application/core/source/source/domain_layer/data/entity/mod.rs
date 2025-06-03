@@ -20,3 +20,4 @@ pub mod channel_publication1_commentary_delayed_deletion;
 pub mod channel_delayed_deletion;
 pub mod quantity_limiter;
 pub mod channel_publication1_commentary_mark;
+pub mod channel_publication1_commentary_token;

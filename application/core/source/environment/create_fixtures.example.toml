@@ -1,18 +1,27 @@
 [resource]
+
 [resource.postgresql]
+
 [resource.postgresql.database_1]
+
 [resource.postgresql.database_1.url]
 value = "postgres://root:password@postgresql_database_1/tento"
+
 [resource.postgresql.database_1.maximum_connection_pool_size]
 value = 1
+
 # In milliseconds.
 [resource.postgresql.database_1.connection_pool_waiting_timeout_duration]
 value = 300
+
 [resource.postgresql.database_2]
+
 [resource.postgresql.database_2.url]
 value = "postgres://root:password@postgresql_database_2/tento"
+
 [resource.postgresql.database_2.maximum_connection_pool_size]
 value = 1
+
 # In milliseconds.
 [resource.postgresql.database_2.connection_pool_waiting_timeout_duration]
 value = 300
