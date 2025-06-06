@@ -20,11 +20,13 @@ pub struct System {
 #[derive(serde::Deserialize)]
 pub struct Tokio {
     pub worker_threads_quantity: Value<u16>,
+    pub affinited_cores: Value<Vec<u8>>,
     pub worker_thread_stack_size: Value<usize>,
 }
 #[derive(serde::Deserialize)]
 pub struct Rayon {
     pub threads_quantity: Value<u16>,
+    pub affinited_cores: Value<Vec<u8>>,
 }
 #[derive(serde::Deserialize)]
 pub struct HttpServer {

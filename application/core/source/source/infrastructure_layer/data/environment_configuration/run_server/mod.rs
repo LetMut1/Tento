@@ -18,10 +18,12 @@ pub struct System {
 }
 pub struct Tokio {
     pub worker_threads_quantity: u16,
+    pub affinited_cores: Vec<u8>,
     pub worker_thread_stack_size: usize,
 }
 pub struct Rayon {
     pub threads_quantity: u16,
+    pub affinited_cores: Vec<u8>,
 }
 pub struct HttpServer {
     pub tcp: Tcp,

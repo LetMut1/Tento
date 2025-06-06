@@ -5,9 +5,10 @@
 [system.tokio.worker_threads_quantity]
 value = 2
 
-# It is better that the number be greater or equal to 2MiB
+# It is better that the number be greater or equal to 2MiB.
+# 5MiB
 [system.tokio.worker_thread_stack_size]
-value = 2097152
+value = 5242880
 
 [logging]
 

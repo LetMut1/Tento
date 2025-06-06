@@ -2,22 +2,32 @@
 
 [system.tokio]
 
-# The number in summ with 'system.rayon.threads_quantity.value' SHOULD be less or equal
-# to the number of all processor logical cores.
+# The quantity in summ with 'system.rayon.threads_quantity.value' SHOULD be less or equal
+# to the quantity of all processor logical cores.
 [system.tokio.worker_threads_quantity]
 value = 2
 
-# It is better that the number be greater or equal to 2MiB.
+# The IDs of processor logical cores for binding with. Value SHOULD not be equal to 'system.rayon.affinited_cores.value'.
+# The quantity of IDs SHOULD be equal to 'system.tokio.worker_threads_quantity.value'
+[system.tokio.affinited_cores]
+value = [0, 1]
+
+# It is better that the value be greater or equal to 2MiB.
 # 5MiB
 [system.tokio.worker_thread_stack_size]
 value = 5242880
 
 [system.rayon]
 
-# The number in summ with 'system.tokio.worker_threads_quantity].value' SHOULD be less or equal
-# to the number of all processor logical cores.
+# The quantity in summ with 'system.tokio.worker_threads_quantity.value' SHOULD be less or equal
+# to the quantity of all processor logical cores.
 [system.rayon.threads_quantity]
 value = 3
+
+# The IDs of processor logical cores for binding with. Value SHOULD not be equal to 'system.tokio.affinited_cores.value'.
+# The quantity of IDs SHOULD be equal to 'system.rayon.threads_quantity.value'
+[system.rayon.affinited_cores]
+value = [2, 3, 4]
 
 [http_server]
 
