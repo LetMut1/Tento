@@ -7,9 +7,10 @@
 [rust_crate.tokio.worker_threads_quantity]
 value = 2
 
-# It is better that the number be greater or equal to 2MiB
+# It is better that the number be greater or equal to 2MiB.
+# 5MiB
 [rust_crate.tokio.worker_thread_stack_size]
-value = 2097152
+value = 5242880
 
 [rust_crate.rayon]
 
@@ -18,81 +19,81 @@ value = 2097152
 [rust_crate.rayon.threads_quantity]
 value = 3
 
-[application_server]
+[http_server]
 
-[application_server.tcp]
+[http_server.tcp]
 
-[application_server.tcp.socket_address]
+[http_server.tcp.socket_address]
 value = "0.0.0.0:80"
 
-[application_server.tcp.nodelay]
+[http_server.tcp.nodelay]
 value = false
 
-[application_server.tcp.sleep_on_accept_errors]
+[http_server.tcp.sleep_on_accept_errors]
 value = false
 
-[application_server.tcp.keepalive]
+[http_server.tcp.keepalive]
 
-[application_server.tcp.keepalive.duration]
+[http_server.tcp.keepalive.duration]
 value = 3
 is_exist = false
 
-[application_server.tcp.keepalive.interval_duration]
+[http_server.tcp.keepalive.interval_duration]
 value = 1
 is_exist = false
 
-[application_server.tcp.keepalive.retries_quantity]
+[http_server.tcp.keepalive.retries_quantity]
 value = 3
 is_exist = false
 
-[application_server.http]
+[http_server.http]
 
-[application_server.http.adaptive_window]
+[http_server.http.adaptive_window]
 value = false
 
 #1MiB
-[application_server.http.connection_window_size]
+[http_server.http.connection_window_size]
 value = 1048576
 
 #1MiB
-[application_server.http.stream_window_size]
+[http_server.http.stream_window_size]
 value = 1048576
 
 #16KiB
-[application_server.http.maximum_frame_size]
+[http_server.http.maximum_frame_size]
 value = 16384
 
 #400KiB
-[application_server.http.maximum_sending_buffer_size]
+[http_server.http.maximum_sending_buffer_size]
 value = 409600
 
-[application_server.http.enable_connect_protocol]
+[http_server.http.enable_connect_protocol]
 value = false
 
 #1MiB
-[application_server.http.maximum_header_list_size]
+[http_server.http.maximum_header_list_size]
 value = 1048576
 
-[application_server.http.maximum_pending_accept_reset_streams]
+[http_server.http.maximum_pending_accept_reset_streams]
 value = 20
 is_exist = false
 
-[application_server.http.keepalive]
+[http_server.http.keepalive]
 is_exist = false
 
-[application_server.http.keepalive.interval_duration]
+[http_server.http.keepalive.interval_duration]
 value = 5
 
-[application_server.http.keepalive.timeout_duration]
+[http_server.http.keepalive.timeout_duration]
 value = 20
 
-[application_server.http.tls]
+[http_server.http.tls]
 is_exist = false
 
-[application_server.http.tls.certificate_crt_file_path]
+[http_server.http.tls.certificate_crt_file_path]
 value = ""
 
-[application_server.http.tls.certificate_key_file_path]
+[http_server.http.tls.certificate_key_file_path]
 value = ""
 
 [logging]

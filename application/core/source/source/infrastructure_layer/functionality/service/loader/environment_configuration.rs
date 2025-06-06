@@ -25,7 +25,7 @@ use {
                 RustCrate as ResolveIncompliteStateRustCrate,
             },
             run_server::{
-                ApplicationServer,
+                HttpServer,
                 EmailServer,
                 Encryption,
                 EnvironmentConfigurationFile as RunServerEnvironmentConfigurationFile,
@@ -67,34 +67,33 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
                             threads_quantity: environment_configuration_file.rust_crate.rayon.threads_quantity.value,
                         },
                     },
-                    application_server: ApplicationServer {
+                    http_server: HttpServer {
                         tcp: Tcp {
-                            socket_address: {
-                                let mut application_server_tcp_socket_addresses = crate::result_return_runtime!(
-                                    environment_configuration_file.application_server.tcp.socket_address.value.to_socket_addrs()
-                                );
-                                crate::option_return_logic_invalid_socket_address!(application_server_tcp_socket_addresses.next())
-                            },
-                            nodelay: environment_configuration_file.application_server.tcp.nodelay.value,
-                            sleep_on_accept_errors: environment_configuration_file.application_server.tcp.sleep_on_accept_errors.value,
+                            socket_address: crate::option_return_logic_invalid_socket_address!(
+                                crate::result_return_runtime!(
+                                    environment_configuration_file.http_server.tcp.socket_address.value.to_socket_addrs()
+                                ).next()
+                            ),
+                            nodelay: environment_configuration_file.http_server.tcp.nodelay.value,
+                            sleep_on_accept_errors: environment_configuration_file.http_server.tcp.sleep_on_accept_errors.value,
                             keepalive: TcpKeepalive {
                                 duration: {
-                                    if environment_configuration_file.application_server.tcp.keepalive.duration.is_exist {
-                                        Option::Some(environment_configuration_file.application_server.tcp.keepalive.duration.value)
+                                    if environment_configuration_file.http_server.tcp.keepalive.duration.is_exist {
+                                        Option::Some(environment_configuration_file.http_server.tcp.keepalive.duration.value)
                                     } else {
                                         Option::None
                                     }
                                 },
                                 interval_duration: {
-                                    if environment_configuration_file.application_server.tcp.keepalive.interval_duration.is_exist {
-                                        Option::Some(environment_configuration_file.application_server.tcp.keepalive.interval_duration.value)
+                                    if environment_configuration_file.http_server.tcp.keepalive.interval_duration.is_exist {
+                                        Option::Some(environment_configuration_file.http_server.tcp.keepalive.interval_duration.value)
                                     } else {
                                         Option::None
                                     }
                                 },
                                 retries_quantity: {
-                                    if environment_configuration_file.application_server.tcp.keepalive.retries_quantity.is_exist {
-                                        Option::Some(environment_configuration_file.application_server.tcp.keepalive.retries_quantity.value)
+                                    if environment_configuration_file.http_server.tcp.keepalive.retries_quantity.is_exist {
+                                        Option::Some(environment_configuration_file.http_server.tcp.keepalive.retries_quantity.value)
                                     } else {
                                         Option::None
                                     }
@@ -102,26 +101,26 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
                             },
                         },
                         http: Http {
-                            adaptive_window: environment_configuration_file.application_server.http.adaptive_window.value,
-                            connection_window_size: environment_configuration_file.application_server.http.connection_window_size.value,
-                            stream_window_size: environment_configuration_file.application_server.http.stream_window_size.value,
-                            maximum_frame_size: environment_configuration_file.application_server.http.maximum_frame_size.value,
-                            maximum_sending_buffer_size: environment_configuration_file.application_server.http.maximum_sending_buffer_size.value,
-                            enable_connect_protocol: environment_configuration_file.application_server.http.enable_connect_protocol.value,
-                            maximum_header_list_size: environment_configuration_file.application_server.http.maximum_header_list_size.value,
+                            adaptive_window: environment_configuration_file.http_server.http.adaptive_window.value,
+                            connection_window_size: environment_configuration_file.http_server.http.connection_window_size.value,
+                            stream_window_size: environment_configuration_file.http_server.http.stream_window_size.value,
+                            maximum_frame_size: environment_configuration_file.http_server.http.maximum_frame_size.value,
+                            maximum_sending_buffer_size: environment_configuration_file.http_server.http.maximum_sending_buffer_size.value,
+                            enable_connect_protocol: environment_configuration_file.http_server.http.enable_connect_protocol.value,
+                            maximum_header_list_size: environment_configuration_file.http_server.http.maximum_header_list_size.value,
                             maximum_pending_accept_reset_streams: {
-                                if environment_configuration_file.application_server.http.maximum_pending_accept_reset_streams.is_exist {
-                                    Option::Some(environment_configuration_file.application_server.http.maximum_pending_accept_reset_streams.value)
+                                if environment_configuration_file.http_server.http.maximum_pending_accept_reset_streams.is_exist {
+                                    Option::Some(environment_configuration_file.http_server.http.maximum_pending_accept_reset_streams.value)
                                 } else {
                                     Option::None
                                 }
                             },
                             keepalive: {
-                                if environment_configuration_file.application_server.http.keepalive.is_exist {
+                                if environment_configuration_file.http_server.http.keepalive.is_exist {
                                     Option::Some(
                                         HttpKeepalive {
-                                            interval_duration: environment_configuration_file.application_server.http.keepalive.interval_duration.value,
-                                            timeout_duration: environment_configuration_file.application_server.http.keepalive.timeout_duration.value,
+                                            interval_duration: environment_configuration_file.http_server.http.keepalive.interval_duration.value,
+                                            timeout_duration: environment_configuration_file.http_server.http.keepalive.timeout_duration.value,
                                         },
                                     )
                                 } else {
@@ -129,11 +128,11 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
                                 }
                             },
                             tls: {
-                                if environment_configuration_file.application_server.http.tls.is_exist {
+                                if environment_configuration_file.http_server.http.tls.is_exist {
                                     Option::Some(
                                         Tls {
-                                            certificate_crt_file_path: environment_configuration_file.application_server.http.tls.certificate_crt_file_path.value,
-                                            certificate_key_file_path: environment_configuration_file.application_server.http.tls.certificate_key_file_path.value,
+                                            certificate_crt_file_path: environment_configuration_file.http_server.http.tls.certificate_crt_file_path.value,
+                                            certificate_key_file_path: environment_configuration_file.http_server.http.tls.certificate_key_file_path.value,
                                         },
                                     )
                                 } else {

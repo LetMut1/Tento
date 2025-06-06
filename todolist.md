@@ -75,14 +75,14 @@
 // !!!!!!!!!!!!!!! Проверять валидность байт в типе Стринг с клиента. Возможно, встроить в модуль.
 // Настроить TCP:
      http2_builder = http2_builder
-         .tcp_nodelay(environment_configuration.application_server.tcp.nodelay)
-         .tcp_sleep_on_accept_errors(environment_configuration.application_server.tcp.sleep_on_accept_errors)
-         .tcp_keepalive_retries(environment_configuration.application_server.tcp.keepalive.retries_quantity);
-     http2_builder = match environment_configuration.application_server.tcp.keepalive.duration {
+         .tcp_nodelay(environment_configuration.http_server.tcp.nodelay)
+         .tcp_sleep_on_accept_errors(environment_configuration.http_server.tcp.sleep_on_accept_errors)
+         .tcp_keepalive_retries(environment_configuration.http_server.tcp.keepalive.retries_quantity);
+     http2_builder = match environment_configuration.http_server.tcp.keepalive.duration {
          Option::Some(duration) => http2_builder.tcp_keepalive(Option::Some(Duration::from_secs(duration))),
          Option::None => http2_builder.tcp_keepalive(Option::None),
      };
-     http2_builder = match environment_configuration.application_server.tcp.keepalive.interval_duration {
+     http2_builder = match environment_configuration.http_server.tcp.keepalive.interval_duration {
          Option::Some(interval_duration) => http2_builder.tcp_keepalive_interval(Option::Some(Duration::from_secs(interval_duration))),
          Option::None => http2_builder.tcp_keepalive_interval(Option::None),
      };

@@ -6,7 +6,7 @@ use {
 };
 pub struct RunServer {
     pub rust_crate: RustCrate,
-    pub application_server: ApplicationServer,
+    pub http_server: HttpServer,
     #[cfg(feature = "logging_to_file")]
     pub logging: Logging,
     pub resource: Resource,
@@ -23,7 +23,7 @@ pub struct Tokio {
 pub struct Rayon {
     pub threads_quantity: u16,
 }
-pub struct ApplicationServer {
+pub struct HttpServer {
     pub tcp: Tcp,
     pub http: Http,
 }

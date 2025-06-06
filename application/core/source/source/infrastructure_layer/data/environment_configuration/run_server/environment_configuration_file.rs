@@ -6,7 +6,7 @@ use crate::infrastructure_layer::data::environment_configuration::{
 #[derive(serde::Deserialize)]
 pub struct EnvironmentConfigurationFile {
     pub rust_crate: RustCrate,
-    pub application_server: ApplicationServer,
+    pub http_server: HttpServer,
     #[cfg(feature = "logging_to_file")]
     pub logging: Logging,
     pub resource: Resource,
@@ -27,7 +27,7 @@ pub struct Rayon {
     pub threads_quantity: Value<u16>,
 }
 #[derive(serde::Deserialize)]
-pub struct ApplicationServer {
+pub struct HttpServer {
     pub tcp: Tcp,
     pub http: Http,
 }
