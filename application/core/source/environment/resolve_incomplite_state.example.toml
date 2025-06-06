@@ -5,6 +5,14 @@
 [system.tokio.worker_threads_quantity]
 value = 2
 
+# The IDs of processor logical cores for binding with. Value SHOULD not be equal to 'system.rayon.affinited_cores.value'.
+# The quantity of IDs SHOULD be equal to 'system.tokio.worker_threads_quantity.value'.
+#
+# It is important that in whole operating system other services do not bind to these same IDs.
+# That is, they should be affinited only with the current application's threads.
+[system.tokio.affinited_cores]
+value = [0, 1]
+
 # It is better that the number be greater or equal to 2MiB.
 # 5MiB
 [system.tokio.worker_thread_stack_size]

@@ -232,6 +232,7 @@ impl Loader<EnvironmentConfiguration<ResolveIncompliteState>> {
                     system: ResolveIncompliteStateSystem {
                         tokio: ResolveIncompliteStateTokio {
                             worker_threads_quantity: environment_configuration_file.system.tokio.worker_threads_quantity.value,
+                            affinited_cores: environment_configuration_file.system.tokio.affinited_cores.value,
                             worker_thread_stack_size: environment_configuration_file.system.tokio.worker_thread_stack_size.value,
                         },
                     },

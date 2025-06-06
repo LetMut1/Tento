@@ -12,6 +12,7 @@ pub struct System {
 }
 pub struct Tokio {
     pub worker_threads_quantity: u16,
+    pub affinited_cores: Vec<u8>,
     pub worker_thread_stack_size: usize,
 }
 #[cfg(feature = "logging_to_file")]
