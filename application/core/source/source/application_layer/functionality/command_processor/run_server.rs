@@ -47,8 +47,7 @@ static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration<RunServer>> 
 impl CommandProcessor<RunServer> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
         let environment_configuration = Self::initialize_environment(environment_configuration_file_path)?;
-        if num_cpus::get() < (environment_configuration.subject.rust_crate.tokio.worker_threads_quantity as usize + environment_configuration.subject.rust_crate.rayon.threads_quantity as usize)
-            || environment_configuration.subject.rust_crate.tokio.worker_threads_quantity >= environment_configuration.subject.rust_crate.rayon.threads_quantity {
+        if num_cpus::get() < (environment_configuration.subject.rust_crate.tokio.worker_threads_quantity as usize + environment_configuration.subject.rust_crate.rayon.threads_quantity as usize) {
             return Result::Err(
                 crate::new_logic!("Invalid distribution of core threads."),
             );

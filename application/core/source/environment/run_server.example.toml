@@ -2,9 +2,8 @@
 
 [rust_crate.tokio]
 
-# The number SHOULD be less than the 'rust_crate.rayon.threads_quantity.value' and
-# in summ with 'rust_crate.rayon.threads_quantity.value' it SHOULD be less or equal
-# to the number of threads that the hardware can handle simultaneously.
+# The number in summ with 'rust_crate.rayon.threads_quantity.value' SHOULD be less or equal
+# to the number of all processor logical cores.
 [rust_crate.tokio.worker_threads_quantity]
 value = 2
 
@@ -14,9 +13,8 @@ value = 2097152
 
 [rust_crate.rayon]
 
-# The number SHOULD be greater than the 'rust_crate.tokio.worker_threads_quantity].value' and
-# in summ with 'rust_crate.tokio.worker_threads_quantity].value' it SHOULD be less or equal
-# to the number of threads that the hardware can handle simultaneously.
+# The number in summ with 'rust_crate.tokio.worker_threads_quantity].value' SHOULD be less or equal
+# to the number of all processor logical cores.
 [rust_crate.rayon.threads_quantity]
 value = 3
 
