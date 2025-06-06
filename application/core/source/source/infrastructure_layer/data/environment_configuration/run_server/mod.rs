@@ -5,14 +5,14 @@ use {
     std::net::SocketAddr,
 };
 pub struct RunServer {
-    pub rust_crate: RustCrate,
+    pub system: System,
     pub http_server: HttpServer,
     #[cfg(feature = "logging_to_file")]
     pub logging: Logging,
     pub resource: Resource,
     pub encryption: Encryption,
 }
-pub struct RustCrate {
+pub struct System {
     pub tokio: Tokio,
     pub rayon: Rayon,
 }

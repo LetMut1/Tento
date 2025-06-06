@@ -47,7 +47,7 @@ static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration<RunServer>> 
 impl CommandProcessor<RunServer> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
         let environment_configuration = Self::initialize_environment(environment_configuration_file_path)?;
-        if num_cpus::get() < (environment_configuration.subject.rust_crate.tokio.worker_threads_quantity as usize + environment_configuration.subject.rust_crate.rayon.threads_quantity as usize) {
+        if num_cpus::get() < (environment_configuration.subject.system.tokio.worker_threads_quantity as usize + environment_configuration.subject.system.rayon.threads_quantity as usize) {
             return Result::Err(
                 crate::new_logic!("Invalid distribution of core threads."),
             );
@@ -62,8 +62,8 @@ impl CommandProcessor<RunServer> {
                 Self::initialize_stdout_logger()
             }
         };
-        Self::initialize_rayon_state(&environment_configuration.subject.rust_crate.rayon)?;
-        Self::initialize_tokio_runtime(&environment_configuration.subject.rust_crate.tokio)?
+        Self::initialize_rayon_state(&environment_configuration.subject.system.rayon)?;
+        Self::initialize_tokio_runtime(&environment_configuration.subject.system.tokio)?
             .block_on(HttpServer::run(environment_configuration))?;
         return Result::Ok(());
     }

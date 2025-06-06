@@ -22,7 +22,7 @@ use {
                 ResolveIncompliteState,
                 Resource as ResolveIncompliteStateResource,
                 Tokio as ResolveIncompliteStateTokio,
-                RustCrate as ResolveIncompliteStateRustCrate,
+                System as ResolveIncompliteStateSystem,
             },
             run_server::{
                 HttpServer,
@@ -40,7 +40,7 @@ use {
                 Tls,
                 Tokio as RunServerTokio,
                 Rayon,
-                RustCrate as RunServerRustCrate,
+                System as RunServerSystem,
             },
         },
     },
@@ -58,13 +58,13 @@ impl Loader<EnvironmentConfiguration<RunServer>> {
         return Result::Ok(
             EnvironmentConfiguration {
                 subject: RunServer {
-                    rust_crate: RunServerRustCrate {
+                    system: RunServerSystem {
                         tokio: RunServerTokio {
-                            worker_threads_quantity: environment_configuration_file.rust_crate.tokio.worker_threads_quantity.value,
-                            worker_thread_stack_size: environment_configuration_file.rust_crate.tokio.worker_thread_stack_size.value,
+                            worker_threads_quantity: environment_configuration_file.system.tokio.worker_threads_quantity.value,
+                            worker_thread_stack_size: environment_configuration_file.system.tokio.worker_thread_stack_size.value,
                         },
                         rayon: Rayon {
-                            threads_quantity: environment_configuration_file.rust_crate.rayon.threads_quantity.value,
+                            threads_quantity: environment_configuration_file.system.rayon.threads_quantity.value,
                         },
                     },
                     http_server: HttpServer {
@@ -227,10 +227,10 @@ impl Loader<EnvironmentConfiguration<ResolveIncompliteState>> {
         return Result::Ok(
             EnvironmentConfiguration {
                 subject: ResolveIncompliteState {
-                    rust_crate: ResolveIncompliteStateRustCrate {
+                    system: ResolveIncompliteStateSystem {
                         tokio: ResolveIncompliteStateTokio {
-                            worker_threads_quantity: environment_configuration_file.rust_crate.tokio.worker_threads_quantity.value,
-                            worker_thread_stack_size: environment_configuration_file.rust_crate.tokio.worker_thread_stack_size.value,
+                            worker_threads_quantity: environment_configuration_file.system.tokio.worker_threads_quantity.value,
+                            worker_thread_stack_size: environment_configuration_file.system.tokio.worker_thread_stack_size.value,
                         },
                     },
                     #[cfg(feature = "logging_to_file")]

@@ -4,13 +4,13 @@ use crate::infrastructure_layer::data::environment_configuration::{
 };
 #[derive(serde::Deserialize)]
 pub struct EnvironmentConfigurationFile {
-    pub rust_crate: RustCrate,
+    pub system: System,
     #[cfg(feature = "logging_to_file")]
     pub logging: Logging,
     pub resource: Resource,
 }
 #[derive(serde::Deserialize)]
-pub struct RustCrate {
+pub struct System {
     pub tokio: Tokio,
 }
 #[derive(serde::Deserialize)]

@@ -5,7 +5,7 @@ use crate::infrastructure_layer::data::environment_configuration::{
 };
 #[derive(serde::Deserialize)]
 pub struct EnvironmentConfigurationFile {
-    pub rust_crate: RustCrate,
+    pub system: System,
     pub http_server: HttpServer,
     #[cfg(feature = "logging_to_file")]
     pub logging: Logging,
@@ -13,7 +13,7 @@ pub struct EnvironmentConfigurationFile {
     pub encryption: Encryption,
 }
 #[derive(serde::Deserialize)]
-pub struct RustCrate {
+pub struct System {
     pub tokio: Tokio,
     pub rayon: Rayon,
 }

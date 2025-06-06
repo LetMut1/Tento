@@ -1,22 +1,22 @@
-[rust_crate]
+[system]
 
-[rust_crate.tokio]
+[system.tokio]
 
-# The number in summ with 'rust_crate.rayon.threads_quantity.value' SHOULD be less or equal
+# The number in summ with 'system.rayon.threads_quantity.value' SHOULD be less or equal
 # to the number of all processor logical cores.
-[rust_crate.tokio.worker_threads_quantity]
+[system.tokio.worker_threads_quantity]
 value = 2
 
 # It is better that the number be greater or equal to 2MiB.
 # 5MiB
-[rust_crate.tokio.worker_thread_stack_size]
+[system.tokio.worker_thread_stack_size]
 value = 5242880
 
-[rust_crate.rayon]
+[system.rayon]
 
-# The number in summ with 'rust_crate.tokio.worker_threads_quantity].value' SHOULD be less or equal
+# The number in summ with 'system.tokio.worker_threads_quantity].value' SHOULD be less or equal
 # to the number of all processor logical cores.
-[rust_crate.rayon.threads_quantity]
+[system.rayon.threads_quantity]
 value = 3
 
 [http_server]

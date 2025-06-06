@@ -1,12 +1,12 @@
-[rust_crate]
+[system]
 
-[rust_crate.tokio]
+[system.tokio]
 
-[rust_crate.tokio.worker_threads_quantity]
+[system.tokio.worker_threads_quantity]
 value = 2
 
 # It is better that the number be greater or equal to 2MiB
-[rust_crate.tokio.worker_thread_stack_size]
+[system.tokio.worker_thread_stack_size]
 value = 2097152
 
 [logging]

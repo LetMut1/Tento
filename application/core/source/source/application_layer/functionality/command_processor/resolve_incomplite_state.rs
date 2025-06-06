@@ -49,7 +49,7 @@ impl CommandProcessor<ResolveIncompliteState> {
                 Self::initialize_stdout_logger()
             }
         };
-        Self::initialize_tokio_runtime(&environment_configuration.subject.rust_crate.tokio)?
+        Self::initialize_tokio_runtime(&environment_configuration.subject.system.tokio)?
             .block_on(Self::resolve_incomplite_state(&environment_configuration))?;
         return Result::Ok(());
     }
