@@ -2,6 +2,7 @@ use std::{sync::atomic::Ordering, time::Duration};
 use core_affinity::CoreId;
 use super::{TOKIO_CONFIGURATION_ERROR_MESSAGE_1, TOKIO_CONFIGURATION_ERROR_MESSAGE_2, TOKIO_CONFIGURATION_ERROR_MESSAGE_3, TWO_MIB};
 pub use crate::infrastructure_layer::data::environment_configuration::run_server::RunServer;
+use crate::infrastructure_layer::functionality::service::resolver::{Resolver, UnixTime};
 use std::sync::atomic::{
     AtomicBool,
     AtomicUsize,
@@ -216,6 +217,7 @@ impl CommandProcessor<RunServer> {
         let quantity_of_started_tokio_worker_threads = Arc::new(AtomicUsize::new(0));
         let is_all_threads_can_be_affinited_ = Arc::clone(&is_all_threads_can_be_affinited);
         let quantity_of_started_tokio_worker_threads_ = Arc::clone(&quantity_of_started_tokio_worker_threads);
+        let expires_at = Resolver::<UnixTime>::get_now_in_seconds() + 10;
         let runtime = crate::result_return_runtime!(
             RuntimeBuilder::new_multi_thread()
                 .worker_threads(tokio.worker_threads_quantity as usize)
@@ -241,6 +243,11 @@ impl CommandProcessor<RunServer> {
                 .build()
         );
         'a: loop {
+            if Resolver::<UnixTime>::get_now_in_seconds() > expires_at {
+                return Result::Err(
+                    crate::new_logic_unreachable_state!(),
+                );
+            }
             if quantity_of_started_tokio_worker_threads.load(Ordering::Acquire) == tokio.worker_threads_quantity as usize {
                 break 'a;
             } else {

@@ -5,6 +5,9 @@ use {
 };
 pub struct UnixTime;
 impl Resolver<UnixTime> {
+    pub fn get_now_in_seconds() -> i64 {
+        return Utc::now().timestamp();
+    }
     pub fn get_now_in_microseconds() -> i64 {
         return Utc::now().timestamp_micros();
     }
