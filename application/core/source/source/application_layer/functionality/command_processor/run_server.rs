@@ -1,7 +1,12 @@
-use std::time::Duration;
+use std::{sync::atomic::Ordering, time::Duration};
 use core_affinity::CoreId;
 use super::{TOKIO_CONFIGURATION_ERROR_MESSAGE_1, TOKIO_CONFIGURATION_ERROR_MESSAGE_2, TOKIO_CONFIGURATION_ERROR_MESSAGE_3, TWO_MIB};
 pub use crate::infrastructure_layer::data::environment_configuration::run_server::RunServer;
+use std::sync::atomic::{
+    AtomicBool,
+    AtomicUsize,
+};
+use std::sync::Arc;
 use {
     super::CommandProcessor,
     crate::infrastructure_layer::{
@@ -100,7 +105,7 @@ impl CommandProcessor<RunServer> {
                 crate::new_logic!("The summ of values of 'system.tokio.worker_threads_quantity' and 'system.rayon.threads_quantity'is greater than quantity of available processor logical cores."),
             );
         }
-        'a: for core_id in environment_configuration.subject.system.tokio.affinited_cores.iter() {
+        '_a: for core_id in environment_configuration.subject.system.tokio.affinited_cores.iter() {
             '_b: for core_id_ in environment_configuration.subject.system.rayon.affinited_cores.iter() {
                 if *core_id == *core_id_ {
                     return Result::Err(
@@ -207,26 +212,46 @@ impl CommandProcessor<RunServer> {
         );
     }
     fn initialize_tokio_runtime(tokio: &'static Tokio) -> Result<Runtime, AggregateError> {
-        return crate::result_into_runtime!(
+        let is_all_threads_can_be_affinited = Arc::new(AtomicBool::new(true));
+        let quantity_of_started_tokio_worker_threads = Arc::new(AtomicUsize::new(0));
+        let is_all_threads_can_be_affinited_ = Arc::clone(&is_all_threads_can_be_affinited);
+        let quantity_of_started_tokio_worker_threads_ = Arc::clone(&quantity_of_started_tokio_worker_threads);
+        let runtime = crate::result_return_runtime!(
             RuntimeBuilder::new_multi_thread()
                 .worker_threads(tokio.worker_threads_quantity as usize)
                 .max_blocking_threads(1)
                 .thread_keep_alive(Duration::from_secs(1))
                 .thread_stack_size(tokio.worker_thread_stack_size)
                 .on_thread_start(
-                    || -> _ {
+                    move || -> _ {
                         '_a: for core_id in tokio.affinited_cores.iter() {
-                            core_affinity::set_for_current(
+                            if !core_affinity::set_for_current(
                                 CoreId {
                                     id: *core_id as usize,
                                 },
-                            );
+                            ) {
+                                is_all_threads_can_be_affinited_.swap(false, Ordering::Release);
+                            }
                         }
+                        quantity_of_started_tokio_worker_threads_.fetch_add(1, Ordering::Release);
                         return ();
                     },
                 )
                 .enable_all()
                 .build()
         );
+        'a: loop {
+            if quantity_of_started_tokio_worker_threads.load(Ordering::Acquire) == tokio.worker_threads_quantity as usize {
+                break 'a;
+            } else {
+                std::thread::sleep(Duration::from_millis(100));
+            }
+        }
+        if !is_all_threads_can_be_affinited.load(Ordering::Acquire) {
+            return Result::Err(
+                crate::new_runtime!("The some values of 'system.tokio.affinited_cores' can not be affinited."),
+            );
+        }
+        return Ok(runtime);
     }
 }

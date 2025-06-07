@@ -184,7 +184,7 @@ impl HttpServer {
                 },
             );
             'a: loop {
-                let cloned_ = cloned.clone();
+                let cloned_ = Arc::clone(&cloned);
                 let mut graceful_shutdown_signal_future_join_handle__ = graceful_shutdown_signal_future_join_handle_.as_mut();
                 #[cfg(feature = "port_for_manual_test")]
                 let http1_tcp_listener = crate::result_return_logic!(
