@@ -100,6 +100,15 @@ impl CommandProcessor<RunServer> {
                 crate::new_logic!("The summ of values of 'system.tokio.worker_threads_quantity' and 'system.rayon.threads_quantity'is greater than quantity of available processor logical cores."),
             );
         }
+        'a: for core_id in environment_configuration.subject.system.tokio.affinited_cores.iter() {
+            '_b: for core_id_ in environment_configuration.subject.system.rayon.affinited_cores.iter() {
+                if *core_id == *core_id_ {
+                    return Result::Err(
+                        crate::new_logic!("The some values of 'system.tokio.affinited_cores' and 'system.rayon.affinited_cores' are the same."),
+                    );
+                }
+            }
+        }
         let mut is_exist = true;
         'a: for core_id in environment_configuration.subject.system.tokio.affinited_cores.iter() {
             '_b: for core_id_ in core_id_registry.iter() {
