@@ -68,19 +68,29 @@ impl CommandProcessor<RunServer> {
     fn initialize_environment<'a>(environment_configuration_file_path: &'a str) -> Result<&'static EnvironmentConfiguration<RunServer>, AggregateError> {
         let environment_configuration = Loader::<EnvironmentConfiguration<RunServer>>::load_from_file(environment_configuration_file_path)?;
         if environment_configuration.subject.system.tokio.worker_threads_quantity == 0 {
-            crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_1);
+            return Result::Err(
+                crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_1)
+            );
         }
         if environment_configuration.subject.system.tokio.worker_threads_quantity as usize != environment_configuration.subject.system.tokio.affinited_cores.len() {
-            crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_2);
+            return Result::Err(
+                crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_2)
+            );
         }
         if environment_configuration.subject.system.tokio.worker_thread_stack_size < (TWO_MIB) {
-            crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_3);
+            return Result::Err(
+                crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_3)
+            );
         }
         if environment_configuration.subject.system.rayon.threads_quantity == 0 {
-            crate::new_logic!("The vaule of 'system.rayon.threads_quantity' is equal to zero.");
+            return Result::Err(
+                crate::new_logic!("The vaule of 'system.rayon.threads_quantity' is equal to zero.")
+            );
         }
         if environment_configuration.subject.system.rayon.threads_quantity as usize != environment_configuration.subject.system.rayon.affinited_cores.len() {
-            crate::new_logic!("The vaule of 'system.rayon.threads_quantity' is not equal to the quantity of elements in the value of 'system.rayon.affinited_cores'.");
+            return Result::Err(
+                crate::new_logic!("The vaule of 'system.rayon.threads_quantity' is not equal to the quantity of elements in the value of 'system.rayon.affinited_cores'.")
+            );
         }
         let core_id_registry = crate::option_return_logic_value_does_not_exist!(
             core_affinity::get_core_ids()
