@@ -1,10 +1,8 @@
 use std::time::Duration;
 pub use crate::infrastructure_layer::data::environment_configuration::resolve_incomplite_state::ResolveIncompliteState;
+use super::{TOKIO_CONFIGURATION_ERROR_MESSAGE_1, TOKIO_CONFIGURATION_ERROR_MESSAGE_2, TOKIO_CONFIGURATION_ERROR_MESSAGE_3, TWO_MIB};
 use {
-    super::{
-        CommandProcessor,
-        TOKIO_CONFUGURATION_ERROR_MESSAGE,
-    },
+    super::CommandProcessor,
     crate::infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
@@ -38,7 +36,14 @@ use {
 };
 impl CommandProcessor<ResolveIncompliteState> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
-        let environment_configuration = Loader::<EnvironmentConfiguration<ResolveIncompliteState>>::load_from_file(environment_configuration_file_path)?;
+        let environment_configuration = Self::initialize_environment(environment_configuration_file_path)?;
+        if environment_configuration.subject.system.tokio.worker_threads_quantity == 0
+            || environment_configuration.subject.system.tokio.worker_threads_quantity as usize != environment_configuration.subject.system.tokio.affinited_cores.len() {
+            crate::new_logic!("The vaule of 'system.tokio.worker_threads_quantity' is zero or is not equal to the quantity of elements in the value of 'system.tokio.affinited_cores'.");
+        }
+        if environment_configuration.subject.system.tokio.worker_thread_stack_size < (1024 * 1024 * 2) {
+            crate::new_logic!("The vaule of 'system.tokio.worker_thread_stack_size' is less than 2MiB.");
+        }
         let _worker_guard = {
             #[cfg(feature = "logging_to_file")]
             {
@@ -52,6 +57,19 @@ impl CommandProcessor<ResolveIncompliteState> {
         Self::initialize_tokio_runtime(&environment_configuration.subject.system.tokio)?
             .block_on(Self::resolve_incomplite_state(&environment_configuration))?;
         return Result::Ok(());
+    }
+    fn initialize_environment<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<ResolveIncompliteState>, AggregateError> {
+        let environment_configuration = Loader::<EnvironmentConfiguration<ResolveIncompliteState>>::load_from_file(environment_configuration_file_path)?;
+        if environment_configuration.subject.system.tokio.worker_threads_quantity == 0 {
+            crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_1);
+        }
+        if environment_configuration.subject.system.tokio.worker_threads_quantity as usize != environment_configuration.subject.system.tokio.affinited_cores.len() {
+            crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_2);
+        }
+        if environment_configuration.subject.system.tokio.worker_thread_stack_size < (TWO_MIB) {
+            crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_3);
+        }
+        return Ok(environment_configuration);
     }
     #[cfg(feature = "logging_to_file")]
     fn initialize_logging_to_fileger<'a>(logging: &'a Logging) -> Result<WorkerGuard, AggregateError> {
@@ -84,9 +102,6 @@ impl CommandProcessor<ResolveIncompliteState> {
         return Result::Ok(());
     }
     fn initialize_tokio_runtime<'a>(tokio: &'a Tokio) -> Result<Runtime, AggregateError> {
-        if tokio.worker_threads_quantity == 0 || tokio.worker_thread_stack_size < (1024 * 1024) {
-            return Result::Err(crate::new_logic!(TOKIO_CONFUGURATION_ERROR_MESSAGE));
-        }
         return crate::result_into_runtime!(
             RuntimeBuilder::new_multi_thread()
                 .worker_threads(tokio.worker_threads_quantity as usize)
