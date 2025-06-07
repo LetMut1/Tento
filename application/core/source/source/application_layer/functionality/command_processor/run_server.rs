@@ -199,18 +199,50 @@ impl CommandProcessor<RunServer> {
         crate::result_return_logic!(tracing::subscriber::set_global_default(fmt_subscriber));
         return Result::Ok(());
     }
-    fn initialize_rayon_state<'a>(rayon: &'a Rayon) -> Result<(), AggregateError> {
-
-
-        todo!();
-
-
-
-        return crate::result_into_runtime!(
+    fn initialize_rayon_state(rayon: &'static Rayon) -> Result<(), AggregateError> {
+        let is_all_threads_can_be_affinited = Arc::new(AtomicBool::new(true));
+        let quantity_of_started_rayon_threads = Arc::new(AtomicUsize::new(0));
+        let is_all_threads_can_be_affinited_ = Arc::clone(&is_all_threads_can_be_affinited);
+        let quantity_of_started_rayon_threads_ = Arc::clone(&quantity_of_started_rayon_threads);
+        let expires_at = Resolver::<UnixTime>::get_now_in_seconds() + 10;
+        crate::result_return_runtime!(
             ThreadPoolBuilder::new()
                 .num_threads(rayon.threads_quantity as usize)
+                .start_handler(
+                    move |_: _| -> _ {
+                        '_a: for core_id in rayon.affinited_cores.iter() {
+                            if !core_affinity::set_for_current(
+                                CoreId {
+                                    id: *core_id as usize,
+                                },
+                            ) {
+                                is_all_threads_can_be_affinited_.swap(false, Ordering::Release);
+                            }
+                        }
+                        quantity_of_started_rayon_threads_.fetch_add(1, Ordering::Release);
+                        return ();
+                    }
+                )
                 .build_global()
         );
+        'a: loop {
+            if Resolver::<UnixTime>::get_now_in_seconds() > expires_at {
+                return Result::Err(
+                    crate::new_logic_unreachable_state!(),
+                );
+            }
+            if quantity_of_started_rayon_threads.load(Ordering::Acquire) == rayon.threads_quantity as usize {
+                break 'a;
+            } else {
+                std::thread::sleep(Duration::from_millis(100));
+            }
+        }
+        if !is_all_threads_can_be_affinited.load(Ordering::Acquire) {
+            return Result::Err(
+                crate::new_runtime!("The some values of 'system.rayon.affinited_cores' can not be affinited."),
+            );
+        }
+        return Ok(());
     }
     fn initialize_tokio_runtime(tokio: &'static Tokio) -> Result<Runtime, AggregateError> {
         let is_all_threads_can_be_affinited = Arc::new(AtomicBool::new(true));

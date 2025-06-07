@@ -1,5 +1,7 @@
-use std::time::Duration;
+use std::{sync::{atomic::{AtomicBool, AtomicUsize, Ordering}, Arc}, time::Duration};
+use core_affinity::CoreId;
 pub use crate::infrastructure_layer::data::environment_configuration::resolve_incomplite_state::ResolveIncompliteState;
+use crate::infrastructure_layer::functionality::service::resolver::{Resolver, UnixTime};
 use super::{TOKIO_CONFIGURATION_ERROR_MESSAGE_1, TOKIO_CONFIGURATION_ERROR_MESSAGE_2, TOKIO_CONFIGURATION_ERROR_MESSAGE_3, TWO_MIB};
 use {
     super::CommandProcessor,
@@ -108,20 +110,54 @@ impl CommandProcessor<ResolveIncompliteState> {
         return Result::Ok(());
     }
     fn initialize_tokio_runtime<'a>(tokio: &'a Tokio) -> Result<Runtime, AggregateError> {
-
-
-todo!();
-
-
-        return crate::result_into_runtime!(
+        let is_all_threads_can_be_affinited = Arc::new(AtomicBool::new(true));
+        let quantity_of_started_tokio_worker_threads = Arc::new(AtomicUsize::new(0));
+        let is_all_threads_can_be_affinited_ = Arc::clone(&is_all_threads_can_be_affinited);
+        let quantity_of_started_tokio_worker_threads_ = Arc::clone(&quantity_of_started_tokio_worker_threads);
+        let affinited_cores = tokio.affinited_cores.clone();
+        let expires_at = Resolver::<UnixTime>::get_now_in_seconds() + 10;
+        let runtime = crate::result_return_runtime!(
             RuntimeBuilder::new_multi_thread()
                 .worker_threads(tokio.worker_threads_quantity as usize)
                 .max_blocking_threads(1)
                 .thread_keep_alive(Duration::from_secs(1))
                 .thread_stack_size(tokio.worker_thread_stack_size)
+                .on_thread_start(
+                    move || -> _ {
+                        '_a: for core_id in affinited_cores.iter() {
+                            if !core_affinity::set_for_current(
+                                CoreId {
+                                    id: *core_id as usize,
+                                },
+                            ) {
+                                is_all_threads_can_be_affinited_.swap(false, Ordering::Release);
+                            }
+                        }
+                        quantity_of_started_tokio_worker_threads_.fetch_add(1, Ordering::Release);
+                        return ();
+                    },
+                )
                 .enable_all()
                 .build()
         );
+        'a: loop {
+            if Resolver::<UnixTime>::get_now_in_seconds() > expires_at {
+                return Result::Err(
+                    crate::new_logic_unreachable_state!(),
+                );
+            }
+            if quantity_of_started_tokio_worker_threads.load(Ordering::Acquire) == tokio.worker_threads_quantity as usize {
+                break 'a;
+            } else {
+                std::thread::sleep(Duration::from_millis(100));
+            }
+        }
+        if !is_all_threads_can_be_affinited.load(Ordering::Acquire) {
+            return Result::Err(
+                crate::new_runtime!("The some values of 'system.tokio.affinited_cores' can not be affinited."),
+            );
+        }
+        return Ok(runtime);
     }
     fn resolve_incomplite_state<'a>(
         environment_configuration: &'a EnvironmentConfiguration<ResolveIncompliteState>,

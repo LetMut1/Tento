@@ -254,10 +254,10 @@ impl HttpServer {
                                         continue 'b;
                                     }
                                 };
-                                let cloned__ = cloned_.clone();
+                                let cloned__ = Arc::clone(&cloned);
                                 let service_fn = hyper::service::service_fn(
                                     move |request: Request| -> _ {
-                                        let cloned___ = cloned__.clone();
+                                        let cloned___ = Arc::clone(&cloned__);
                                         return async move {
                                             let response = Self::process_request(
                                                 request,
