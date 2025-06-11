@@ -143,6 +143,3 @@ incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b
 
 Инкоминге все токены должны передаваться от высшего к текущему. Каждый токен отвечает за свои права.
 Айдишники сущности предыдущего токена в видимой части Сигнда иметь не нужно
-
-thread affinity. core_affinity crate.
-https://www.reddit.com/r/rust/comments/171btot/threadpercore_workstealing_vs_sharenothing/

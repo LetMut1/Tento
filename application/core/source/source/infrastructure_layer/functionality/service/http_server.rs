@@ -254,7 +254,7 @@ impl HttpServer {
                                         continue 'b;
                                     }
                                 };
-                                let cloned__ = Arc::clone(&cloned);
+                                let cloned__ = Arc::clone(&cloned_);
                                 let service_fn = hyper::service::service_fn(
                                     move |request: Request| -> _ {
                                         let cloned___ = Arc::clone(&cloned__);
