@@ -188,14 +188,15 @@ use {
             },
         },
         bit_code_serializer::Serializer,
-        channel_publication1_token_signed::ChannelPublication1TokenSigned as ChannelPublication1TokenSigned,
-        channel_token_signed::ChannelTokenSigned as ChannelTokenSigned,
+        channel_publication1_token_signed::ChannelPublication1TokenSigned,
+        channel_token_signed::ChannelTokenSigned,
+        channel_publication1_commentary_token_signed::ChannelPublication1CommentaryTokenSigned,
         unified_report::{
             Data,
             UnifiedReport,
         },
-        user_access_refresh_token_signed::UserAccessRefreshTokenSigned as UserAccessRefreshTokenSigned,
-        user_access_token_signed::UserAccessTokenSigned as UserAccessTokenSigned,
+        user_access_refresh_token_signed::UserAccessRefreshTokenSigned,
+        user_access_token_signed::UserAccessTokenSigned,
         void::Void,
     },
     libc::{
@@ -4431,7 +4432,7 @@ type ChannelPublication1Commentary_Create_Result = Result_<UnifiedReport_<Channe
 #[repr(C)]
 #[derive(Default)]
 pub struct ChannelPublication1Commentary_Create_Outcoming_ {
-    pub channel_publication1__id: c_long,
+    pub channel_publication1_commentary_token_signed: ChannelPublication1CommentaryTokenSigned_,
     pub channel_publication1_commentary__created_at: c_long,
 }
 #[repr(C)]
@@ -4458,7 +4459,12 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_al
                         data: data__,
                     } => {
                         let outcoming = ChannelPublication1Commentary_Create_Outcoming_ {
-                            channel_publication1__id: data__.channel_publication1_commentary__id,
+                            channel_publication1_commentary_token_signed: ChannelPublication1CommentaryTokenSigned_ {
+                                channel_publication1_commentary__id: data__.channel_publication1_commentary_token_signed.channel_publication1_commentary__id,
+                                channel_publication1_commentary_token__obfuscation_value: data__.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__obfuscation_value,
+                                channel_publication1_commentary_token__expires_at: data__.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__expires_at,
+                                signature: Allocator::<Vec_<_>>::allocate(data__.channel_publication1_commentary_token_signed.signature),
+                            },
                             channel_publication1_commentary__created_at: data__.channel_publication1_commentary__created_at,
                         };
                         Data_::filled(outcoming)
@@ -4498,7 +4504,10 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_al
     );
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_deallocate(_result: ChannelPublication1Commentary_Create_Result) -> () {
+pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_deallocate(result: ChannelPublication1Commentary_Create_Result) -> () {
+    if result.is_data && result.data.is_target && result.data.target.is_filled {
+        Allocator::<Vec_<_>>::deallocate(result.data.target.filled.channel_publication1_commentary_token_signed.signature);
+    }
     return ();
 }
 #[repr(C)]
@@ -7395,7 +7404,12 @@ mod test {
             }
             pub fn target_filled__channel_publication1_commentary__create() -> Result<(), Box<dyn StdError + 'static>> {
                 let outcoming = ChannelPublication1Commentary_Create_Outcoming {
-                    channel_publication1_commentary__id: 0,
+                    channel_publication1_commentary_token_signed: ChannelPublication1CommentaryTokenSigned {
+                        channel_publication1_commentary__id: 0,
+                        channel_publication1_commentary_token__obfuscation_value: 0,
+                        channel_publication1_commentary_token__expires_at: 0,
+                        signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                    },
                     channel_publication1_commentary__created_at: 0,
                 };
                 let unified_report = UnifiedReport::<ChannelPublication1Commentary_Create_Outcoming, ChannelPublication1Commentary_Create_Precedent>::target_filled(outcoming);

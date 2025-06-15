@@ -19,6 +19,8 @@ mod user_reset_password_token__value;
 mod channel_token__obfuscation_value;
 mod channel_delayed_deletion__can_be_deleted_from;
 mod user__obfuscated_id;
+mod channel_publication1_commentary_token__obfuscation_value;
+mod channel_publication1_commentary_token__expires_at;
 use std::marker::PhantomData;
 pub struct Generator<S> {
     _subject: PhantomData<S>,

@@ -1246,8 +1246,15 @@ typedef struct ChannelPublication1Commentary_Create_Incoming_ {
   struct String_ channel_publication1_commentary__text;
 } ChannelPublication1Commentary_Create_Incoming_;
 
+typedef struct ChannelPublication1CommentaryTokenSigned_ {
+  long channel_publication1_commentary__id;
+  long channel_publication1_commentary_token__obfuscation_value;
+  long channel_publication1_commentary_token__expires_at;
+  struct Vec__c_uchar signature;
+} ChannelPublication1CommentaryTokenSigned_;
+
 typedef struct ChannelPublication1Commentary_Create_Outcoming_ {
-  long channel_publication1__id;
+  struct ChannelPublication1CommentaryTokenSigned_ channel_publication1_commentary_token_signed;
   long channel_publication1_commentary__created_at;
 } ChannelPublication1Commentary_Create_Outcoming_;
 
@@ -1581,7 +1588,7 @@ void channel_publication1_commentary__create__serialize_deallocate(struct Result
 
 ChannelPublication1Commentary_Create_Result channel_publication1_commentary__create__deserialize_allocate(struct Vec__c_uchar vector_of_bytes);
 
-void channel_publication1_commentary__create__deserialize_deallocate(ChannelPublication1Commentary_Create_Result _result);
+void channel_publication1_commentary__create__deserialize_deallocate(ChannelPublication1Commentary_Create_Result result);
 
 struct Result__Vec__c_uchar channel_publication1_commentary__delete__serialize_allocate(struct ChannelPublication1Commentary_Delete_Incoming_ incoming);
 

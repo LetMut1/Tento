@@ -630,7 +630,7 @@ struct Incoming {
 ```
 ```
 struct Outcoming {
-    channel_publication1_commentary__id: i64,
+    channel_publication1_commentary_token_signed: <Data standards>,
     channel_publication1_commentary__created_at: i64,
 }
 ```

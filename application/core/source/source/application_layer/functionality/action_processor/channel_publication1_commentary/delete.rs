@@ -70,9 +70,6 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                         if incoming_.user_access_token_signed.user_access_token__expires_at <= now {
                             return Result::Ok(Option::Some(Precedent::UserAccessToken__AlreadyExpired));
                         }
-                        if !Validator::<ChannelPublication1Commentary_Id>::is_valid(incoming_.channel_publication1_commentary__id) {
-                            return Result::Err(crate::new_invalid_argument!());
-                        }
                         if !Encoder::<ChannelToken>::is_valid(
                             private_key,
                             incoming_.user_access_token_signed.user__id,
@@ -93,6 +90,28 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                         }
                         if incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at < now {
                             return Result::Ok(Option::Some(Precedent::ChannelPublication1Token__AlreadyExpired));
+                        }
+
+
+
+
+
+
+
+
+                        todo!("commentary token");
+
+
+
+
+
+
+
+
+
+
+                        if !Validator::<ChannelPublication1Commentary_Id>::is_valid(incoming_.channel_publication1_commentary__id) {
+                            return Result::Err(crate::new_invalid_argument!());
                         }
                         return Result::Ok(Option::None);
                     },

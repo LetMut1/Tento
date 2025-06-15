@@ -9,11 +9,10 @@ use {
                 channel_publication1::ChannelPublication1, channel_publication1_commentary::{
                     ChannelPublication1Commentary,
                     ChannelPublication1Commentary_Text,
-                }, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
+                }, channel_publication1_commentary_token::{ChannelPublication1CommentaryToken, ChannelPublication1CommentaryToken_ExpiresAt, ChannelPublication1CommentaryToken_ObfuscationValue}, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
             },
             functionality::service::{
-                encoder::Encoder,
-                validator::Validator,
+                encoder::Encoder, generator::Generator, validator::Validator
             },
         }, infrastructure_layer::{
             data::{aggregate_error::AggregateError, sended::Sended_},
@@ -116,6 +115,23 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                 Option::Some(channel_publication1_commentary__id_) => channel_publication1_commentary__id_,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution)),
             };
+            let channel_publication1_commentary_token_signed = crate::result_return_runtime!(
+                TaskSpawner::spawn_rayon_task_processed(
+                    move || -> _ {
+                        return Ok(
+                            Encoder::<ChannelPublication1CommentaryToken>::encode(
+                                private_key,
+                                incoming.user_access_token_signed.user__id,
+                                incoming.channel_token_signed.channel__id,
+                                incoming.channel_publication1_token_signed.channel_publication1__id,
+                                channel_publication1_commentary__id,
+                                Generator::<ChannelPublication1CommentaryToken_ObfuscationValue>::generate(),
+                                Generator::<ChannelPublication1CommentaryToken_ExpiresAt>::generate(now)?,
+                            )?
+                        )
+                    }
+                ).await
+            )?;
             let postgresql_connection_pool_database_3 = inner.postgresql_connection_pool_database_3.clone();
             TaskSpawner::spawn_tokio_non_blocking_task_into_background(
                 async move {
@@ -143,7 +159,7 @@ impl ActionProcessor_ for ActionProcessor<Create> {
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {
-                        channel_publication1_commentary__id,
+                        channel_publication1_commentary_token_signed,
                         channel_publication1_commentary__created_at: now,
                     },
                 ),
