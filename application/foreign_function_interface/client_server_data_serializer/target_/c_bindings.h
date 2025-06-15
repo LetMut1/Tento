@@ -1242,8 +1242,9 @@ typedef struct Result__UnifiedReport__Void___ChannelPublication1View_Create_Prec
 
 typedef struct ChannelPublication1Commentary_Create_Incoming_ {
   struct UserAccessTokenSigned_ user_access_token_signed;
-  struct String_ channel_publication1_commentary__text;
+  struct ChannelTokenSigned_ channel_token_signed;
   struct ChannelPublication1TokenSigned_ channel_publication1_token_signed;
+  struct String_ channel_publication1_commentary__text;
 } ChannelPublication1Commentary_Create_Incoming_;
 
 typedef struct ChannelPublication1Commentary_Create_Outcoming_ {
@@ -1258,6 +1259,7 @@ typedef struct Data__ChannelPublication1Commentary_Create_Outcoming_ {
 
 typedef struct ChannelPublication1Commentary_Create_Precedent_ {
   bool user_access_token___already_expired;
+  bool channel_token___already_expired;
   bool channel_publication1_token___already_expired;
   bool parallel_execution;
 } ChannelPublication1Commentary_Create_Precedent_;

@@ -4382,8 +4382,9 @@ pub extern "C-unwind" fn channel_publication1_view__create__deserialize_dealloca
 #[derive(Clone, Copy)]
 pub struct ChannelPublication1Commentary_Create_Incoming_ {
     pub user_access_token_signed: UserAccessTokenSigned_,
-    pub channel_publication1_commentary__text: String_,
+    pub channel_token_signed: ChannelTokenSigned_,
     pub channel_publication1_token_signed: ChannelPublication1TokenSigned_,
+    pub channel_publication1_commentary__text: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_commentary__create__serialize_allocate(incoming: ChannelPublication1Commentary_Create_Incoming_) -> Result_<Vec_<c_uchar>> {
@@ -4397,7 +4398,14 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__serialize_allo
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
                 },
-                channel_publication1_commentary__text: incoming_.channel_publication1_commentary__text.get_as_str()?,
+                channel_token_signed: ChannelTokenSigned {
+                    channel__id: incoming_.channel_token_signed.channel__id,
+                    channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
+                    channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
+                    channel_token__is_user_the_channel_subscriber: incoming_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                    channel_token__is_user_the_channel_owner: incoming_.channel_token_signed.channel_token__is_user_the_channel_owner,
+                    signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
+                },
                 channel_publication1_token_signed: ChannelPublication1TokenSigned {
                     channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
@@ -4405,6 +4413,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__serialize_allo
                     channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
                     signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
                 },
+                channel_publication1_commentary__text: incoming_.channel_publication1_commentary__text.get_as_str()?,
             },
         );
     };
@@ -4429,6 +4438,7 @@ pub struct ChannelPublication1Commentary_Create_Outcoming_ {
 #[derive(Default)]
 pub struct ChannelPublication1Commentary_Create_Precedent_ {
     pub user_access_token___already_expired: bool,
+    pub channel_token___already_expired: bool,
     pub channel_publication1_token___already_expired: bool,
     pub parallel_execution: bool,
 }
@@ -4460,23 +4470,21 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_al
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1Commentary_Create_Precedent::UserAccessToken__AlreadyExpired => {
-                        ChannelPublication1Commentary_Create_Precedent_ {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1Commentary_Create_Precedent::ChannelPublication1Token__AlreadyExpired => {
-                        ChannelPublication1Commentary_Create_Precedent_ {
-                            channel_publication1_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1Commentary_Create_Precedent::ParallelExecution => {
-                        ChannelPublication1Commentary_Create_Precedent_ {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
+                    ChannelPublication1Commentary_Create_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1Commentary_Create_Precedent_ {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Commentary_Create_Precedent::ChannelToken__AlreadyExpired => ChannelPublication1Commentary_Create_Precedent_ {
+                        channel_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Commentary_Create_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Commentary_Create_Precedent_ {
+                        channel_publication1_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Commentary_Create_Precedent::ParallelExecution => ChannelPublication1Commentary_Create_Precedent_ {
+                        parallel_execution: true,
+                        ..Default::default()
                     }
                 };
                 UnifiedReport_::precedent(precedent_)
@@ -5677,7 +5685,14 @@ mod test {
                         user_access_token__expires_at: 0,
                         signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    channel_publication1_commentary__text: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    channel_token_signed: ChannelTokenSigned_ {
+                        channel__id: 0,
+                        channel_token__obfuscation_value: 0,
+                        channel_token__expires_at: 0,
+                        channel_token__is_user_the_channel_subscriber: false,
+                        channel_token__is_user_the_channel_owner: false,
+                        signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
                     channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
                         channel__id: 0,
                         channel_publication1__id: 0,
@@ -5685,6 +5700,7 @@ mod test {
                         channel_publication1_token__expires_at: 0,
                         signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
+                    channel_publication1_commentary__text: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 run_by_template(
                     incoming,
@@ -5693,8 +5709,9 @@ mod test {
                 )?;
                 Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<Vec_<_>>::deallocate(incoming.user_access_token_signed.signature);
-                Allocator::<String_>::deallocate(incoming.channel_publication1_commentary__text);
+                Allocator::<Vec_<_>>::deallocate(incoming.channel_token_signed.signature);
                 Allocator::<Vec_<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
+                Allocator::<String_>::deallocate(incoming.channel_publication1_commentary__text);
                 return Result::Ok(());
             }
             pub fn channel_publication1_commentary__delete() -> Result<(), Box<dyn StdError + 'static>> {
@@ -7385,11 +7402,13 @@ mod test {
             pub fn precedent__channel_publication1_commentary__create() -> Result<(), Box<dyn StdError + 'static>> {
                 match ChannelPublication1Commentary_Create_Precedent::UserAccessToken__AlreadyExpired {
                     ChannelPublication1Commentary_Create_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1Commentary_Create_Precedent::ChannelToken__AlreadyExpired => {}
                     ChannelPublication1Commentary_Create_Precedent::ChannelPublication1Token__AlreadyExpired => {}
                     ChannelPublication1Commentary_Create_Precedent::ParallelExecution => {}
                 }
                 let precedents: Vec<ChannelPublication1Commentary_Create_Precedent> = vec![
                     ChannelPublication1Commentary_Create_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1Commentary_Create_Precedent::ChannelToken__AlreadyExpired,
                     ChannelPublication1Commentary_Create_Precedent::ChannelPublication1Token__AlreadyExpired,
                     ChannelPublication1Commentary_Create_Precedent::ParallelExecution,
                 ];

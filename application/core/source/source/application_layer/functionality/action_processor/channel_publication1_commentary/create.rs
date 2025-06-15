@@ -6,13 +6,10 @@ use {
             Inner,
         }, domain_layer::{
             data::entity::{
-                channel_publication1::ChannelPublication1,
-                channel_publication1_commentary::{
+                channel_publication1::ChannelPublication1, channel_publication1_commentary::{
                     ChannelPublication1Commentary,
                     ChannelPublication1Commentary_Text,
-                },
-                channel_publication1_token::ChannelPublication1Token,
-                user_access_token::UserAccessToken,
+                }, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
             },
             functionality::service::{
                 encoder::Encoder,
@@ -74,8 +71,15 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                         if incoming_.user_access_token_signed.user_access_token__expires_at <= now {
                             return Result::Ok(Option::Some(Precedent::UserAccessToken__AlreadyExpired));
                         }
-                        if !Validator::<ChannelPublication1Commentary_Text>::is_valid(incoming_.channel_publication1_commentary__text) {
+                        if !Encoder::<ChannelToken>::is_valid(
+                            private_key,
+                            incoming_.user_access_token_signed.user__id,
+                            &incoming_.channel_token_signed,
+                        )? {
                             return Result::Err(crate::new_invalid_argument!());
+                        }
+                        if incoming_.channel_token_signed.channel_token__expires_at <= now {
+                            return Result::Ok(Option::Some(Precedent::ChannelToken__AlreadyExpired));
                         }
                         if !Encoder::<ChannelPublication1Token>::is_valid(
                             private_key,
@@ -86,6 +90,9 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                         }
                         if incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at < now {
                             return Result::Ok(Option::Some(Precedent::ChannelPublication1Token__AlreadyExpired));
+                        }
+                        if !Validator::<ChannelPublication1Commentary_Text>::is_valid(incoming_.channel_publication1_commentary__text) {
+                            return Result::Err(crate::new_invalid_argument!());
                         }
                         return Result::Ok(Option::None);
                     },
