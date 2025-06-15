@@ -4083,6 +4083,7 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_deallocate(_r
 #[derive(Clone, Copy)]
 pub struct ChannelPublication1Mark_Create_Incoming_ {
     pub user_access_token_signed: UserAccessTokenSigned_,
+    pub channel_token_signed: ChannelTokenSigned_,
     pub channel_publication1_token_signed: ChannelPublication1TokenSigned_,
 }
 #[unsafe(no_mangle)]
@@ -4096,6 +4097,14 @@ pub extern "C-unwind" fn channel_publication1_mark__create__serialize_allocate(i
                     user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
                     user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
                     signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                },
+                channel_token_signed: ChannelTokenSigned {
+                    channel__id: incoming_.channel_token_signed.channel__id,
+                    channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
+                    channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
+                    channel_token__is_user_the_channel_subscriber: incoming_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                    channel_token__is_user_the_channel_owner: incoming_.channel_token_signed.channel_token__is_user_the_channel_owner,
+                    signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
                 },
                 channel_publication1_token_signed: ChannelPublication1TokenSigned {
                     channel__id: incoming_.channel_publication1_token_signed.channel__id,
@@ -4122,6 +4131,7 @@ type ChannelPublication1Mark_Create_Result = Result_<UnifiedReport_<Void_, Chann
 #[derive(Default)]
 pub struct ChannelPublication1Mark_Create_Precedent_ {
     pub user_access_token___already_expired: bool,
+    pub channel_token___already_expired: bool,
     pub channel_publication1_token___already_expired: bool,
     pub channel_publication1_mark___already_exist: bool,
     pub channel_publication1__not_found: bool,
@@ -4139,6 +4149,10 @@ pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate
                 let precedent_ = match precedent {
                     ChannelPublication1Mark_Create_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Create_Precedent_ {
                         user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Mark_Create_Precedent::ChannelToken__AlreadyExpired => ChannelPublication1Mark_Create_Precedent_ {
+                        channel_token___already_expired: true,
                         ..Default::default()
                     },
                     ChannelPublication1Mark_Create_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Mark_Create_Precedent_ {
@@ -5527,6 +5541,14 @@ mod test {
                         user_access_token__expires_at: 0,
                         signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
+                    channel_token_signed: ChannelTokenSigned_ {
+                        channel__id: 0,
+                        channel_token__obfuscation_value: 0,
+                        channel_token__expires_at: 0,
+                        channel_token__is_user_the_channel_subscriber: false,
+                        channel_token__is_user_the_channel_owner: false,
+                        signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
                     channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
                         channel__id: 0,
                         channel_publication1__id: 0,
@@ -5542,6 +5564,7 @@ mod test {
                 )?;
                 Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<Vec_<_>>::deallocate(incoming.user_access_token_signed.signature);
+                Allocator::<Vec_<_>>::deallocate(incoming.channel_token_signed.signature);
                 Allocator::<Vec_<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
                 return Result::Ok(());
             }
@@ -7194,12 +7217,14 @@ mod test {
             pub fn precedent__channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
                 match ChannelPublication1Mark_Create_Precedent::UserAccessToken__AlreadyExpired {
                     ChannelPublication1Mark_Create_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1Mark_Create_Precedent::ChannelToken__AlreadyExpired => {}
                     ChannelPublication1Mark_Create_Precedent::ChannelPublication1Token__AlreadyExpired => {}
                     ChannelPublication1Mark_Create_Precedent::ChannelPublication1Mark__AlreadyExist => {}
                     ChannelPublication1Mark_Create_Precedent::ChannelPublication1__NotFound => {}
                 }
                 let precedents: Vec<ChannelPublication1Mark_Create_Precedent> = vec![
                     ChannelPublication1Mark_Create_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1Mark_Create_Precedent::ChannelToken__AlreadyExpired,
                     ChannelPublication1Mark_Create_Precedent::ChannelPublication1Token__AlreadyExpired,
                     ChannelPublication1Mark_Create_Precedent::ChannelPublication1Mark__AlreadyExist,
                     ChannelPublication1Mark_Create_Precedent::ChannelPublication1__NotFound,
