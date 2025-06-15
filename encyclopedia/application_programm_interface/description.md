@@ -616,8 +616,8 @@ Creates a commentary for channel publication1.
 struct Incoming {
     user_access_token_signed: <Data standards>,
     channel_token_signed: <Data standards>,
-    channel_publication1_commentary__text: String,
     channel_publication1_token_signed: <Data standards>,
+    channel_publication1_commentary__text: String,
 }
 ```
 ```
@@ -641,13 +641,15 @@ Deletes a commentary for channel publication1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>,
-    channel_publication1_commentary__id: i64,
+    channel_token_signed: <Data standards>,
     channel_publication1_token_signed: <Data standards>,
+    channel_publication1_commentary__id: i64,
 }
 ```
 ```
 enum Precedent {
     UserAccessToken__AlreadyExpired,
+    ChannelToken__AlreadyExpired,
     ChannelPublication1Token__AlreadyExpired,
     ChannelPublication1Commentary__NotFound,
 }

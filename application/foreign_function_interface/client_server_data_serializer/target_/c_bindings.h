@@ -1279,12 +1279,14 @@ typedef struct Result__UnifiedReport__ChannelPublication1Commentary_Create_Outco
 
 typedef struct ChannelPublication1Commentary_Delete_Incoming_ {
   struct UserAccessTokenSigned_ user_access_token_signed;
-  int64_t channel_publication1_commentary__id;
+  struct ChannelTokenSigned_ channel_token_signed;
   struct ChannelPublication1TokenSigned_ channel_publication1_token_signed;
+  int64_t channel_publication1_commentary__id;
 } ChannelPublication1Commentary_Delete_Incoming_;
 
 typedef struct ChannelPublication1Commentary_Delete_Precedent_ {
   bool user_access_token___already_expired;
+  bool channel_token___already_expired;
   bool channel_publication1_token___already_expired;
   bool channel_publication1_commentary___not_found;
 } ChannelPublication1Commentary_Delete_Precedent_;
