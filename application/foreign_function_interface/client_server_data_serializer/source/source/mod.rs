@@ -522,10 +522,17 @@ pub struct ChannelTokenSigned_ {
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
 pub struct ChannelPublication1TokenSigned_ {
-    pub channel__id: c_long,
     pub channel_publication1__id: c_long,
     pub channel_publication1_token__obfuscation_value: c_long,
     pub channel_publication1_token__expires_at: c_long,
+    pub signature: Vec_<c_uchar>,
+}
+#[repr(C)]
+#[derive(Default, Clone, Copy)]
+pub struct ChannelPublication1CommentaryTokenSigned_ {
+    pub channel_publication1_commentary__id: c_long,
+    pub channel_publication1_commentary_token__obfuscation_value: c_long,
+    pub channel_publication1_commentary_token__expires_at: c_long,
     pub signature: Vec_<c_uchar>,
 }
 #[repr(C)]
@@ -3773,7 +3780,6 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(ve
                                     channel_publication1__created_at: data___.channel_publication1__created_at,
                                     channel_publication1_mark__created_at,
                                     channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
-                                        channel__id: data___.channel_publication1_token_signed.channel__id,
                                         channel_publication1__id: data___.channel_publication1_token_signed.channel_publication1__id,
                                         channel_publication1_token__obfuscation_value: data___.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
                                         channel_publication1_token__expires_at: data___.channel_publication1_token_signed.channel_publication1_token__expires_at,
@@ -3926,7 +3932,6 @@ pub extern "C-unwind" fn channel_publication1__create__deserialize_allocate(vect
                         let outcoming = ChannelPublication1_Create_Outcoming_ {
                             channel_publication1__created_at: data__.channel_publication1__created_at,
                             channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
-                                channel__id: data__.channel_publication1_token_signed.channel__id,
                                 channel_publication1__id: data__.channel_publication1_token_signed.channel_publication1__id,
                                 channel_publication1_token__obfuscation_value: data__.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
                                 channel_publication1_token__expires_at: data__.channel_publication1_token_signed.channel_publication1_token__expires_at,
@@ -4004,7 +4009,6 @@ pub extern "C-unwind" fn channel_publication1__delete__serialize_allocate(incomi
                     signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
                 },
                 channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                    channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
                     channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
@@ -4107,7 +4111,6 @@ pub extern "C-unwind" fn channel_publication1_mark__create__serialize_allocate(i
                     signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
                 },
                 channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                    channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
                     channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
@@ -4210,7 +4213,6 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__serialize_allocate(i
                     signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
                 },
                 channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                    channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
                     channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
@@ -4313,7 +4315,6 @@ pub extern "C-unwind" fn channel_publication1_view__create__serialize_allocate(i
                     signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
                 },
                 channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                    channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
                     channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
@@ -4407,7 +4408,6 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__serialize_allo
                     signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
                 },
                 channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                    channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
                     channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
@@ -4530,7 +4530,6 @@ pub extern "C-unwind" fn channel_publication1_commentary__delete__serialize_allo
                     signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
                 },
                 channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                    channel__id: incoming_.channel_publication1_token_signed.channel__id,
                     channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
                     channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
@@ -5564,7 +5563,6 @@ mod test {
                         signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
-                        channel__id: 0,
                         channel_publication1__id: 0,
                         channel_publication1_token__obfuscation_value: 0,
                         channel_publication1_token__expires_at: 0,
@@ -5600,7 +5598,6 @@ mod test {
                         signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
-                        channel__id: 0,
                         channel_publication1__id: 0,
                         channel_publication1_token__obfuscation_value: 0,
                         channel_publication1_token__expires_at: 0,
@@ -5636,7 +5633,6 @@ mod test {
                         signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
-                        channel__id: 0,
                         channel_publication1__id: 0,
                         channel_publication1_token__obfuscation_value: 0,
                         channel_publication1_token__expires_at: 0,
@@ -5672,7 +5668,6 @@ mod test {
                         signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
-                        channel__id: 0,
                         channel_publication1__id: 0,
                         channel_publication1_token__obfuscation_value: 0,
                         channel_publication1_token__expires_at: 0,
@@ -5708,7 +5703,6 @@ mod test {
                         signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
-                        channel__id: 0,
                         channel_publication1__id: 0,
                         channel_publication1_token__obfuscation_value: 0,
                         channel_publication1_token__expires_at: 0,
@@ -5746,7 +5740,6 @@ mod test {
                         signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                     channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
-                        channel__id: 0,
                         channel_publication1__id: 0,
                         channel_publication1_token__obfuscation_value: 0,
                         channel_publication1_token__expires_at: 0,
@@ -7143,7 +7136,6 @@ mod test {
                         channel_publication1__created_at: 0,
                         channel_publication1_mark__created_at: Option::Some(0),
                         channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                            channel__id: 0,
                             channel_publication1__id: 0,
                             channel_publication1_token__obfuscation_value: 0,
                             channel_publication1_token__expires_at: 0,
@@ -7202,7 +7194,6 @@ mod test {
                 let outcoming = ChannelPublication1_Create_Outcoming {
                     channel_publication1__created_at: 0,
                     channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                        channel__id: 0,
                         channel_publication1__id: 0,
                         channel_publication1_token__obfuscation_value: 0,
                         channel_publication1_token__expires_at: 0,

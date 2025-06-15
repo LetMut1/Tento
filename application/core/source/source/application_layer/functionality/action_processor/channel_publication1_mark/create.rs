@@ -77,6 +77,7 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                         if !Encoder::<ChannelPublication1Token>::is_valid(
                             private_key,
                             incoming_.user_access_token_signed.user__id,
+                            incoming_.channel_token_signed.channel__id,
                             &incoming_.channel_publication1_token_signed,
                         )? {
                             return Result::Err(crate::new_invalid_argument!());

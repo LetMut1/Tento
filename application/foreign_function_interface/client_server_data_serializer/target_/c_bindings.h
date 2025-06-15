@@ -1044,7 +1044,6 @@ typedef struct Vec__String_ {
 } Vec__String_;
 
 typedef struct ChannelPublication1TokenSigned_ {
-  long channel__id;
   long channel_publication1__id;
   long channel_publication1_token__obfuscation_value;
   long channel_publication1_token__expires_at;

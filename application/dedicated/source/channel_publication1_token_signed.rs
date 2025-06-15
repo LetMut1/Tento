@@ -7,7 +7,6 @@
 )]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct ChannelPublication1TokenSigned {
-    pub channel__id: i64,
     pub channel_publication1__id: i64,
     pub channel_publication1_token__obfuscation_value: i64,
     pub channel_publication1_token__expires_at: i64,
