@@ -577,12 +577,14 @@ Deletes a mark from channel publication1.
 ```
 struct Incoming {
     user_access_token_signed: <Data standards>,
+    channel_token_signed: <Data standards>,
     channel_publication1_token_signed: <Data standards>,
 }
 ```
 ```
 enum Precedent {
     UserAccessToken__AlreadyExpired,
+    ChannelToken__AlreadyExpired,
     ChannelPublication1Token__AlreadyExpired,
     ChannelPublication1Mark__NotFound,
     ChannelPublication1__NotFound,

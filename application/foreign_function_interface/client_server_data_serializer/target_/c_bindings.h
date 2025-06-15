@@ -1190,11 +1190,13 @@ typedef struct Result__UnifiedReport__Void___ChannelPublication1Mark_Create_Prec
 
 typedef struct ChannelPublication1Mark_Delete_Incoming_ {
   struct UserAccessTokenSigned_ user_access_token_signed;
+  struct ChannelTokenSigned_ channel_token_signed;
   struct ChannelPublication1TokenSigned_ channel_publication1_token_signed;
 } ChannelPublication1Mark_Delete_Incoming_;
 
 typedef struct ChannelPublication1Mark_Delete_Precedent_ {
   bool user_access_token___already_expired;
+  bool channel_token___already_expired;
   bool channel_publication1_token___already_expired;
   bool channel_publication1_mark___not_found;
   bool channel_publication1__not_found;
