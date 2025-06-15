@@ -20,6 +20,7 @@ pub struct ChannelPublication1CommentaryToken {
     channel_publication1_commentary__id: ChannelPublication1Commentary_Id,
     obfuscation_value: ObfuscationValue,
     expires_at: ExpiresAt,
+    commentary_author: User_Id,
 }
 pub type ChannelPublication1CommentaryToken_ExpiresAt = ExpiresAt;
 pub type ChannelPublication1CommentaryToken_ObfuscationValue = ObfuscationValue;

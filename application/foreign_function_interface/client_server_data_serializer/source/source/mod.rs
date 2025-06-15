@@ -534,6 +534,7 @@ pub struct ChannelPublication1CommentaryTokenSigned_ {
     pub channel_publication1_commentary__id: c_long,
     pub channel_publication1_commentary_token__obfuscation_value: c_long,
     pub channel_publication1_commentary_token__expires_at: c_long,
+    pub channel_publication1_commentary_token__commentary_author: c_long,
     pub signature: Vec_<c_uchar>,
 }
 #[repr(C)]
@@ -4463,6 +4464,7 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_al
                                 channel_publication1_commentary__id: data__.channel_publication1_commentary_token_signed.channel_publication1_commentary__id,
                                 channel_publication1_commentary_token__obfuscation_value: data__.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__obfuscation_value,
                                 channel_publication1_commentary_token__expires_at: data__.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__expires_at,
+                                channel_publication1_commentary_token__commentary_author: data__.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__commentary_author,
                                 signature: Allocator::<Vec_<_>>::allocate(data__.channel_publication1_commentary_token_signed.signature),
                             },
                             channel_publication1_commentary__created_at: data__.channel_publication1_commentary__created_at,
@@ -7408,6 +7410,7 @@ mod test {
                         channel_publication1_commentary__id: 0,
                         channel_publication1_commentary_token__obfuscation_value: 0,
                         channel_publication1_commentary_token__expires_at: 0,
+                        channel_publication1_commentary_token__commentary_author: 0,
                         signature: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     },
                     channel_publication1_commentary__created_at: 0,

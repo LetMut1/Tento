@@ -1250,6 +1250,7 @@ typedef struct ChannelPublication1CommentaryTokenSigned_ {
   long channel_publication1_commentary__id;
   long channel_publication1_commentary_token__obfuscation_value;
   long channel_publication1_commentary_token__expires_at;
+  long channel_publication1_commentary_token__commentary_author;
   struct Vec__c_uchar signature;
 } ChannelPublication1CommentaryTokenSigned_;
 

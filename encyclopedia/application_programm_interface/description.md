@@ -82,6 +82,7 @@ struct ChannelPublication1TokenSigned {
     channel_publication1_commentary__id: i64,
     channel_publication1_commentary_token__obfuscation_value: i64,
     channel_publication1_commentary_token__expires_at: i64,
+    channel_publication1_commentary_token__commentary_author: i64,
     signature: Vec<u8>,
 }
 ```

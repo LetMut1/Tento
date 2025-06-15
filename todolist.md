@@ -127,11 +127,6 @@ https://www.reddit.com/r/rust/comments/85qp50/how_to_disable_logging_for_certain
 ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom - поменять константу после того, как сделаю Токен.
 ChannelDelayedDeletion_CanBeDeletedFrom - поменять константу после того.
 
-
-добавить, is_author(commentary) - и подобные значения, которые позволят уменьшить количество запросов
-возможно, добавить channel__access_modifier в channel, так как он проверяется на заборе публикаций
-
-
 incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b>
 Проблема с определение Лайфтайма компилятором. Попробовать сделать это в edition = 2024.
 
@@ -144,6 +139,8 @@ incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b
 Убрать Сендед_ и сделать через Арк?
 
 сделать то, что на стикерах.
+
+Роут ...commentary_get_many
 
 
 после TaskSpawner::spawn_tokio_non_blocking_task_into_background( не должно быть того, что выкинет ошибку.

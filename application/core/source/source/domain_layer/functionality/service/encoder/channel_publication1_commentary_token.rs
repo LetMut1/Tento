@@ -31,6 +31,7 @@ impl Encoder<ChannelPublication1CommentaryToken> {
         channel_publication1_commentary__id: i64,
         channel_publication1_commentary_token__obfuscation_value: i64,
         channel_publication1_commentary_token__expires_at: i64,
+        channel_publication1_commentary_token__commentary_author: i64,
     ) -> Result<ChannelPublication1CommentaryTokenSigned, AggregateError> {
         let serialized = Serializer::<BitCode>::serialize(
             &Data {
@@ -40,6 +41,7 @@ impl Encoder<ChannelPublication1CommentaryToken> {
                 channel_publication1_commentary__id,
                 channel_publication1_commentary_token__obfuscation_value,
                 channel_publication1_commentary_token__expires_at,
+                channel_publication1_commentary_token__commentary_author,
             },
         )?;
         let signature = Encoder_::<HmacSha2_256>::encode(
@@ -51,6 +53,7 @@ impl Encoder<ChannelPublication1CommentaryToken> {
                 channel_publication1_commentary__id,
                 channel_publication1_commentary_token__obfuscation_value,
                 channel_publication1_commentary_token__expires_at,
+                channel_publication1_commentary_token__commentary_author,
                 signature,
             },
         );
@@ -72,6 +75,7 @@ impl Encoder<ChannelPublication1CommentaryToken> {
                     channel_publication1_commentary__id: channel_publication1_commentary_token_signed.channel_publication1_commentary__id,
                     channel_publication1_commentary_token__obfuscation_value: channel_publication1_commentary_token_signed.channel_publication1_commentary_token__obfuscation_value,
                     channel_publication1_commentary_token__expires_at: channel_publication1_commentary_token_signed.channel_publication1_commentary_token__expires_at,
+                    channel_publication1_commentary_token__commentary_author: channel_publication1_commentary_token_signed.channel_publication1_commentary_token__commentary_author,
                 },
             )?
             .as_slice(),
@@ -91,4 +95,5 @@ struct Data {
     channel_publication1_commentary__id: i64,
     channel_publication1_commentary_token__obfuscation_value: i64,
     channel_publication1_commentary_token__expires_at: i64,
+    channel_publication1_commentary_token__commentary_author: i64,
 }

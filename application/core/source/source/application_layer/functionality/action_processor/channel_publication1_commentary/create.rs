@@ -127,6 +127,7 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                                 channel_publication1_commentary__id,
                                 Generator::<ChannelPublication1CommentaryToken_ObfuscationValue>::generate(),
                                 Generator::<ChannelPublication1CommentaryToken_ExpiresAt>::generate(now)?,
+                                incoming.user_access_token_signed.user__id,
                             )?
                         )
                     }
