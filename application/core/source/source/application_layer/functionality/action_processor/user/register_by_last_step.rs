@@ -1,42 +1,68 @@
 use {
     crate::{
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        }, domain_layer::{
+        },
+        domain_layer::{
             data::entity::{
                 user::{
-                    User, User_Email, User_Nickname, User_ObfuscatedId, User_Password
-                }, user_access_refresh_token::{
+                    User,
+                    User_Email,
+                    User_Nickname,
+                    User_ObfuscatedId,
+                    User_Password,
+                },
+                user_access_refresh_token::{
                     UserAccessRefreshToken,
                     UserAccessRefreshToken_ExpiresAt,
                     UserAccessRefreshToken_ObfuscationValue,
-                }, user_access_token::{
+                },
+                user_access_token::{
                     UserAccessToken,
                     UserAccessToken_ExpiresAt,
                     UserAccessToken_ObfuscationValue,
-                }, user_device::{
+                },
+                user_device::{
                     UserDevice,
                     UserDevice_Id,
-                }, user_registration_token::{
+                },
+                user_registration_token::{
                     UserRegistrationToken,
                     UserRegistrationToken_Value,
                     UserRegistrationToken_WrongEnterTriesQuantity,
-                }
+                },
             },
             functionality::service::{
                 encoder::Encoder,
                 generator::Generator,
                 validator::Validator,
             },
-        }, infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+        },
+        infrastructure_layer::{
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
-                        IsolationLevel, Postgresql, Resolver as Resolver_, Transaction, UserAccessRefreshTokenInsert, UserBy1, UserBy2, UserBy3, UserDeviceInsert, UserInsert2, UserRegistrationTokenBy
-                    }, Repository
+                        IsolationLevel,
+                        Postgresql,
+                        Resolver as Resolver_,
+                        Transaction,
+                        UserAccessRefreshTokenInsert,
+                        UserBy1,
+                        UserBy2,
+                        UserBy3,
+                        UserDeviceInsert,
+                        UserInsert2,
+                        UserRegistrationTokenBy,
+                    },
                 },
                 service::{
                     resolver::{
@@ -46,7 +72,7 @@ use {
                     task_spawner::TaskSpawner,
                 },
             },
-        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY
+        },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user::register_by_last_step::{
@@ -281,10 +307,7 @@ impl ActionProcessor_ for ActionProcessor<RegisterByLastStep> {
             }
             let private_key = &inner.environment_configuration.subject.encryption.private_key;
             let sended = Sended_::new(&raw const incoming as *const Self::Incoming<'static>);
-            let (
-                user_access_token_signed,
-                user_access_refresh_token_signed,
-            ) = crate::result_return_runtime!(
+            let (user_access_token_signed, user_access_refresh_token_signed) = crate::result_return_runtime!(
                 TaskSpawner::spawn_rayon_task_processed(
                     move || -> _ {
                         let incoming_ = unsafe { sended.read_() };

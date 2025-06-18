@@ -24,19 +24,26 @@ use {
             },
         },
         infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         Postgresql,
                         UserAccessRefreshTokenBy2,
                         UserAccessRefreshTokenUpdate,
-                    }, Repository
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, task_spawner::TaskSpawner},
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    task_spawner::TaskSpawner,
+                },
             },
         },
     },
@@ -129,7 +136,8 @@ impl ActionProcessor_ for ActionProcessor<RefreshAccessToken> {
                         )
                     },
                 ).await
-            )? || incoming.user_access_token_signed.user_access_token__obfuscation_value != user_access_token__obfuscation_value_ {
+            )? || incoming.user_access_token_signed.user_access_token__obfuscation_value != user_access_token__obfuscation_value_
+            {
                 return Result::Err(crate::new_invalid_argument!());
             }
             let new___user_access_token__obfuscation_value = Generator::<UserAccessToken_ObfuscationValue>::generate();
@@ -153,10 +161,7 @@ impl ActionProcessor_ for ActionProcessor<RefreshAccessToken> {
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
             }
-            let (
-                user_access_token_signed,
-                user_access_refresh_token_signed,
-            ) = crate::result_return_runtime!(
+            let (user_access_token_signed, user_access_refresh_token_signed) = crate::result_return_runtime!(
                 TaskSpawner::spawn_rayon_task_processed(
                     move || -> _ {
                         let incoming_ = unsafe { sended.read_() };

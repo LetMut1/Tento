@@ -2,6 +2,7 @@
 #![cfg(target_endian = "little")]
 pub mod action_processor_incoming_outcoming;
 pub mod bit_code_serializer;
+pub mod channel_publication1_commentary_token_signed;
 pub mod channel_publication1_token_signed;
 pub mod channel_token_signed;
 pub mod common_precedent;
@@ -9,4 +10,3 @@ pub mod unified_report;
 pub mod user_access_refresh_token_signed;
 pub mod user_access_token_signed;
 pub mod void;
-pub mod channel_publication1_commentary_token_signed;

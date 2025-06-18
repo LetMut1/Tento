@@ -1,35 +1,47 @@
-use std::{sync::atomic::Ordering, time::Duration};
-use core_affinity::CoreId;
-use super::{TOKIO_CONFIGURATION_ERROR_MESSAGE_1, TOKIO_CONFIGURATION_ERROR_MESSAGE_2, TOKIO_CONFIGURATION_ERROR_MESSAGE_3, TWO_MIB};
 pub use crate::infrastructure_layer::data::environment_configuration::run_server::RunServer;
-use crate::infrastructure_layer::functionality::service::resolver::{Resolver, UnixTime};
-use std::sync::atomic::{
-    AtomicBool,
-    AtomicUsize,
-};
-use std::sync::Arc;
 use {
-    super::CommandProcessor,
+    super::{
+        CommandProcessor,
+        TOKIO_CONFIGURATION_ERROR_MESSAGE_1,
+        TOKIO_CONFIGURATION_ERROR_MESSAGE_2,
+        TOKIO_CONFIGURATION_ERROR_MESSAGE_3,
+        TWO_MIB,
+    },
     crate::infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
             environment_configuration::{
                 EnvironmentConfiguration,
                 run_server::{
-                    Tokio,
                     Rayon,
+                    Tokio,
                 },
             },
         },
         functionality::service::{
             http_server::HttpServer,
             loader::Loader,
+            resolver::{
+                Resolver,
+                UnixTime,
+            },
         },
     },
+    core_affinity::CoreId,
+    rayon::ThreadPoolBuilder,
     std::{
-        sync::OnceLock,
         collections::HashSet,
         hash::RandomState,
+        sync::{
+            Arc,
+            OnceLock,
+            atomic::{
+                AtomicBool,
+                AtomicUsize,
+                Ordering,
+            },
+        },
+        time::Duration,
     },
     tokio::runtime::{
         Builder as RuntimeBuilder,
@@ -42,7 +54,6 @@ use {
         WorkerGuard,
     },
     tracing_subscriber::FmtSubscriber,
-    rayon::ThreadPoolBuilder,
 };
 #[cfg(feature = "logging_to_file")]
 use {
@@ -67,41 +78,34 @@ impl CommandProcessor<RunServer> {
             }
         };
         Self::initialize_rayon_state(&environment_configuration.subject.system.rayon)?;
-        Self::initialize_tokio_runtime(&environment_configuration.subject.system.tokio)?
-            .block_on(HttpServer::run(environment_configuration))?;
+        Self::initialize_tokio_runtime(&environment_configuration.subject.system.tokio)?.block_on(HttpServer::run(environment_configuration))?;
         return Result::Ok(());
     }
     fn initialize_environment<'a>(environment_configuration_file_path: &'a str) -> Result<&'static EnvironmentConfiguration<RunServer>, AggregateError> {
         let environment_configuration = Loader::<EnvironmentConfiguration<RunServer>>::load_from_file(environment_configuration_file_path)?;
         if environment_configuration.subject.system.tokio.worker_threads_quantity == 0 {
-            return Result::Err(
-                crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_1)
-            );
+            return Result::Err(crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_1));
         }
         if environment_configuration.subject.system.tokio.worker_threads_quantity as usize != environment_configuration.subject.system.tokio.affinited_cores.len() {
-            return Result::Err(
-                crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_2)
-            );
+            return Result::Err(crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_2));
         }
         if environment_configuration.subject.system.tokio.worker_thread_stack_size < (TWO_MIB) {
-            return Result::Err(
-                crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_3)
-            );
+            return Result::Err(crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_3));
         }
         if environment_configuration.subject.system.rayon.threads_quantity == 0 {
-            return Result::Err(
-                crate::new_logic!("The vaule of 'system.rayon.threads_quantity' is equal to zero.")
-            );
+            return Result::Err(crate::new_logic!("The vaule of 'system.rayon.threads_quantity' is equal to zero."));
         }
         if environment_configuration.subject.system.rayon.threads_quantity as usize != environment_configuration.subject.system.rayon.affinited_cores.len() {
             return Result::Err(
-                crate::new_logic!("The vaule of 'system.rayon.threads_quantity' is not equal to the quantity of elements in the value of 'system.rayon.affinited_cores'.")
+                crate::new_logic!("The vaule of 'system.rayon.threads_quantity' is not equal to the quantity of elements in the value of 'system.rayon.affinited_cores'."),
             );
         }
         let core_id_registry = crate::option_return_logic_value_does_not_exist!(
             core_affinity::get_core_ids()
         );
-        if core_id_registry.len() < (environment_configuration.subject.system.tokio.worker_threads_quantity as usize + environment_configuration.subject.system.rayon.threads_quantity as usize) {
+        if core_id_registry.len()
+            < (environment_configuration.subject.system.tokio.worker_threads_quantity as usize + environment_configuration.subject.system.rayon.threads_quantity as usize)
+        {
             return Result::Err(
                 crate::new_logic!("The summ of values of 'system.tokio.worker_threads_quantity' and 'system.rayon.threads_quantity'is greater than quantity of available processor logical cores."),
             );
@@ -109,9 +113,7 @@ impl CommandProcessor<RunServer> {
         '_a: for core_id in environment_configuration.subject.system.tokio.affinited_cores.iter() {
             '_b: for core_id_ in environment_configuration.subject.system.rayon.affinited_cores.iter() {
                 if *core_id == *core_id_ {
-                    return Result::Err(
-                        crate::new_logic!("The some values of 'system.tokio.affinited_cores' and 'system.rayon.affinited_cores' are the same."),
-                    );
+                    return Result::Err(crate::new_logic!("The some values of 'system.tokio.affinited_cores' and 'system.rayon.affinited_cores' are the same."));
                 }
             }
         }
@@ -126,9 +128,7 @@ impl CommandProcessor<RunServer> {
             break 'a;
         }
         if !is_exist {
-            return Result::Err(
-                crate::new_logic!("The value of 'system.tokio.affinited_cores' is invalid."),
-            );
+            return Result::Err(crate::new_logic!("The value of 'system.tokio.affinited_cores' is invalid."));
         }
         is_exist = true;
         'a: for core_id in environment_configuration.subject.system.rayon.affinited_cores.iter() {
@@ -141,9 +141,7 @@ impl CommandProcessor<RunServer> {
             break 'a;
         }
         if !is_exist {
-            return Result::Err(
-                crate::new_logic!("The value of 'system.rayon.affinited_cores' is invalid."),
-            );
+            return Result::Err(crate::new_logic!("The value of 'system.rayon.affinited_cores' is invalid."));
         }
         let encryption_private_keys = vec![
             environment_configuration.subject.encryption.private_key.user_access_token.as_str(),
@@ -155,9 +153,7 @@ impl CommandProcessor<RunServer> {
         ];
         let encryption_private_key_hash_set = HashSet::<_, RandomState>::from_iter(encryption_private_keys.iter());
         if encryption_private_key_hash_set.len() != encryption_private_keys.len() {
-            return Result::Err(
-                crate::new_logic!("The some values of 'encryption.private_key' are the same."),
-            );
+            return Result::Err(crate::new_logic!("The some values of 'encryption.private_key' are the same."));
         }
         return match ENVIRONMENT_CONFIGURATION.get() {
             Option::Some(environment_configuration__) => Result::Ok(environment_configuration__),
@@ -227,9 +223,7 @@ impl CommandProcessor<RunServer> {
         );
         'a: loop {
             if Resolver::<UnixTime>::get_now_in_seconds() > expires_at {
-                return Result::Err(
-                    crate::new_logic_unreachable_state!(),
-                );
+                return Result::Err(crate::new_logic_unreachable_state!());
             }
             if quantity_of_started_rayon_threads.load(Ordering::Acquire) == rayon.threads_quantity as usize {
                 break 'a;
@@ -238,9 +232,7 @@ impl CommandProcessor<RunServer> {
             }
         }
         if !is_all_threads_can_be_affinited.load(Ordering::Acquire) {
-            return Result::Err(
-                crate::new_runtime!("The some values of 'system.rayon.affinited_cores' can not be affinited."),
-            );
+            return Result::Err(crate::new_runtime!("The some values of 'system.rayon.affinited_cores' can not be affinited."));
         }
         return Ok(());
     }
@@ -276,9 +268,7 @@ impl CommandProcessor<RunServer> {
         );
         'a: loop {
             if Resolver::<UnixTime>::get_now_in_seconds() > expires_at {
-                return Result::Err(
-                    crate::new_logic_unreachable_state!(),
-                );
+                return Result::Err(crate::new_logic_unreachable_state!());
             }
             if quantity_of_started_tokio_worker_threads.load(Ordering::Acquire) == tokio.worker_threads_quantity as usize {
                 break 'a;
@@ -287,9 +277,7 @@ impl CommandProcessor<RunServer> {
             }
         }
         if !is_all_threads_can_be_affinited.load(Ordering::Acquire) {
-            return Result::Err(
-                crate::new_runtime!("The some values of 'system.tokio.affinited_cores' can not be affinited."),
-            );
+            return Result::Err(crate::new_runtime!("The some values of 'system.tokio.affinited_cores' can not be affinited."));
         }
         return Ok(runtime);
     }

@@ -5,9 +5,9 @@ use {
         ObfuscationValue,
     },
     super::{
+        channel::Channel_Id,
         channel_publication1::ChannelPublication1_Id,
         user::User_Id,
-        channel::Channel_Id,
     },
 };
 // It is necessary to prevent User from creation of ChannelPublication1Mark on ChannelPublication1 using

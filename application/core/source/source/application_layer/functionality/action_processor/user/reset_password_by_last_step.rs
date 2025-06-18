@@ -8,7 +8,9 @@ use {
         domain_layer::{
             data::entity::{
                 user::{
-                    User, User_ObfuscatedId, User_Password
+                    User,
+                    User_ObfuscatedId,
+                    User_Password,
                 },
                 user_access_refresh_token::UserAccessRefreshToken,
                 user_device::UserDevice_Id,
@@ -27,9 +29,18 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
-                        IsolationLevel, Postgresql, Resolver as Resolver_, Transaction, UserAccessRefreshTokenBy1, UserBy3, UserBy4, UserResetPasswordTokenBy, UserUpdate
-                    }, Repository
+                        IsolationLevel,
+                        Postgresql,
+                        Resolver as Resolver_,
+                        Transaction,
+                        UserAccessRefreshTokenBy1,
+                        UserBy3,
+                        UserBy4,
+                        UserResetPasswordTokenBy,
+                        UserUpdate,
+                    },
                 },
                 service::{
                     resolver::{

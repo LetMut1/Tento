@@ -5,7 +5,9 @@ impl<T> Sended<T> {
         return Self(pointer);
     }
     pub unsafe fn write(self, value: T) -> () {
-        unsafe { self.0.write(value); }
+        unsafe {
+            self.0.write(value);
+        }
         return ();
     }
     pub unsafe fn read(self) -> ManuallyDrop<T> {
@@ -20,10 +22,7 @@ impl<T> Clone for Sended<T> {
         return Self(self.0.clone());
     }
 }
-impl<T> Copy for Sended<T>
-where
-    Self: Clone
-{}
+impl<T> Copy for Sended<T> where Self: Clone {}
 unsafe impl<T> Send for Sended<T> {}
 unsafe impl<T> Sync for Sended<T> {}
 pub struct Sended_<T>(*const T);
@@ -43,9 +42,6 @@ impl<T> Clone for Sended_<T> {
         return Self(self.0.clone());
     }
 }
-impl<T> Copy for Sended_<T>
-where
-    Self: Clone
-{}
+impl<T> Copy for Sended_<T> where Self: Clone {}
 unsafe impl<T> Send for Sended_<T> {}
 unsafe impl<T> Sync for Sended_<T> {}

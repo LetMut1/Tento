@@ -7,14 +7,22 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel_publication1::ChannelPublication1, channel_publication1_mark::ChannelPublication1Mark, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
+                channel_publication1::ChannelPublication1,
+                channel_publication1_mark::ChannelPublication1Mark,
+                channel_publication1_token::ChannelPublication1Token,
+                channel_token::ChannelToken,
+                user_access_token::UserAccessToken,
             },
             functionality::service::encoder::Encoder,
         },
         infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelPublication1By1,
                         ChannelPublication1MarkBy,
@@ -22,12 +30,15 @@ use {
                         Postgresql,
                         Resolver as Resolver_,
                         Transaction,
-                    }, Repository
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, task_spawner::TaskSpawner},
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    task_spawner::TaskSpawner,
+                },
             },
         },
     },

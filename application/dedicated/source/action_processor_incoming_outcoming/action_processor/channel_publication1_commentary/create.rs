@@ -1,5 +1,9 @@
 use crate::{
-    channel_publication1_commentary_token_signed::ChannelPublication1CommentaryTokenSigned, channel_publication1_token_signed::ChannelPublication1TokenSigned, channel_token_signed::ChannelTokenSigned, common_precedent::CommonPrecedent, user_access_token_signed::UserAccessTokenSigned
+    channel_publication1_commentary_token_signed::ChannelPublication1CommentaryTokenSigned,
+    channel_publication1_token_signed::ChannelPublication1TokenSigned,
+    channel_token_signed::ChannelTokenSigned,
+    common_precedent::CommonPrecedent,
+    user_access_token_signed::UserAccessTokenSigned,
 };
 #[cfg_attr(
     feature = "serde_for_manual_test",

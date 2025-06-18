@@ -1,10 +1,13 @@
 use {
     crate::{
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        }, domain_layer::{
+        },
+        domain_layer::{
             data::entity::{
                 user::{
                     User,
@@ -35,13 +38,25 @@ use {
                 generator::Generator,
                 validator::Validator,
             },
-        }, infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+        },
+        infrastructure_layer::{
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
-                        IsolationLevel, Postgresql, Resolver as Resolver_, Transaction, UserAccessRefreshTokenInsert, UserAuthorizationTokenBy, UserBy4, UserDeviceInsert
-                    }, Repository
+                        IsolationLevel,
+                        Postgresql,
+                        Resolver as Resolver_,
+                        Transaction,
+                        UserAccessRefreshTokenInsert,
+                        UserAuthorizationTokenBy,
+                        UserBy4,
+                        UserDeviceInsert,
+                    },
                 },
                 service::{
                     resolver::{
@@ -51,7 +66,7 @@ use {
                     task_spawner::TaskSpawner,
                 },
             },
-        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY
+        },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user::authorize_by_last_step::{
@@ -158,7 +173,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
             .await?
             {
                 Option::Some(user__id_) => user__id_,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User__NotFound))
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::User__NotFound)),
             };
             let user_access_token__obfuscation_value = Generator::<UserAccessToken_ObfuscationValue>::generate();
             let user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
@@ -214,10 +229,7 @@ impl ActionProcessor_ for ActionProcessor<AuthorizeByLastStep> {
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
             let private_key = &inner.environment_configuration.subject.encryption.private_key;
             let sended = Sended_::new(&raw const incoming as *const Self::Incoming<'static>);
-            let (
-                user_access_token_signed,
-                user_access_refresh_token_signed,
-            ) = crate::result_return_runtime!(
+            let (user_access_token_signed, user_access_refresh_token_signed) = crate::result_return_runtime!(
                 TaskSpawner::spawn_rayon_task_processed(
                     move || -> _ {
                         let incoming_ = unsafe { sended.read_() };

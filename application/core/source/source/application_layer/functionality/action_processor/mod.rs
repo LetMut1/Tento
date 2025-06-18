@@ -1,11 +1,11 @@
 mod channel;
 mod channel_publication1;
 mod channel_publication1_commentary;
+mod channel_publication1_commentary_mark;
 mod channel_publication1_mark;
 mod channel_publication1_view;
 mod channel_subscription;
 mod user;
-mod channel_publication1_commentary_mark;
 use {
     super::command_processor::RunServer,
     crate::infrastructure_layer::{

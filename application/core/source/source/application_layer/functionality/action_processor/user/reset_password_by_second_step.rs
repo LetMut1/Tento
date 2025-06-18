@@ -21,11 +21,12 @@ use {
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         Postgresql,
                         UserResetPasswordTokenBy,
                         UserResetPasswordTokenUpdate5,
-                    }, Repository
+                    },
                 },
                 service::resolver::{
                     Resolver,

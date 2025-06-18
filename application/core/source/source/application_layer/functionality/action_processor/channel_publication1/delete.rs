@@ -7,7 +7,14 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel_publication1::ChannelPublication1, channel_publication1_delayed_deletion::{ChannelPublication1DelayedDeletion, ChannelPublication1DelayedDeletion_CanBeDeletedFrom}, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
+                channel_publication1::ChannelPublication1,
+                channel_publication1_delayed_deletion::{
+                    ChannelPublication1DelayedDeletion,
+                    ChannelPublication1DelayedDeletion_CanBeDeletedFrom,
+                },
+                channel_publication1_token::ChannelPublication1Token,
+                channel_token::ChannelToken,
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
                 encoder::Encoder,
@@ -15,17 +22,29 @@ use {
             },
         },
         infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
-                        ChannelPublication1By1, ChannelPublication1DelayedDeletionInsert, IsolationLevel, Postgresql, Resolver as Resolver_, Transaction
-                    }, Repository,
+                        ChannelPublication1By1,
+                        ChannelPublication1DelayedDeletionInsert,
+                        IsolationLevel,
+                        Postgresql,
+                        Resolver as Resolver_,
+                        Transaction,
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, task_spawner::TaskSpawner},
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    task_spawner::TaskSpawner,
+                },
             },
         },
     },
@@ -102,7 +121,7 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                 transaction.get_client(),
                 ChannelPublication1By1 {
                     channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
-                }
+                },
             )
             .await
             {

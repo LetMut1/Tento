@@ -62,7 +62,7 @@ impl Repository<Postgresql<ChannelDelayedDeletion>> {
                 .await
             );
             if rows.is_empty() {
-                return Result::Ok(false)
+                return Result::Ok(false);
             }
             return Result::Ok(true);
         };

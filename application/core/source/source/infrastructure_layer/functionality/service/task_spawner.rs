@@ -5,8 +5,8 @@ use {
     },
     std::future::Future,
     tokio::{
-        task::JoinHandle,
         sync::oneshot::Receiver,
+        task::JoinHandle,
     },
 };
 pub struct TaskSpawner;
@@ -29,7 +29,6 @@ impl TaskSpawner {
     {
         return tokio::spawn(future);
     }
-
     pub fn spawn_rayon_task_processed<T>(closure: impl FnOnce() -> Result<T, AggregateError> + Send + 'static) -> Receiver<Result<T, AggregateError>>
     where
         T: Send + 'static,

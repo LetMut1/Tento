@@ -158,10 +158,7 @@ impl Repository<Postgresql<QuantityLimiter>> {
         };
     }
     // quantity_limiter__owned_channels_quantity: u8,
-    pub fn find<'a>(
-        client_database_3: &'a Client,
-        by: By,
-    ) -> impl Future<Output = Result<Option<u8>, AggregateError>> + Send + use<'a> {
+    pub fn find<'a>(client_database_3: &'a Client, by: By) -> impl Future<Output = Result<Option<u8>, AggregateError>> + Send + use<'a> {
         return async move {
             const QUERY: &'static str = "\
                 SELECT \

@@ -11,11 +11,14 @@ use {
                     ChannelPublication1,
                     ChannelPublication1_ImagesPathes,
                     ChannelPublication1_Text,
-                }, channel_publication1_token::{
+                },
+                channel_publication1_token::{
                     ChannelPublication1Token,
                     ChannelPublication1Token_ExpiresAt,
                     ChannelPublication1Token_ObfuscationValue,
-                }, channel_token::ChannelToken, user_access_token::UserAccessToken
+                },
+                channel_token::ChannelToken,
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
                 encoder::Encoder,
@@ -24,17 +27,25 @@ use {
             },
         },
         infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
-                        ChannelPublication1Insert, Postgresql,
-                    }, Repository,
+                        ChannelPublication1Insert,
+                        Postgresql,
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, task_spawner::TaskSpawner,},
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    task_spawner::TaskSpawner,
+                },
             },
         },
     },

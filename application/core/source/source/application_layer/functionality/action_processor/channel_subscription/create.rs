@@ -7,14 +7,28 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::Channel, channel_subscription::ChannelSubscription, channel_token::{ChannelToken, ChannelToken_ExpiresAt, ChannelToken_ObfuscationValue}, user_access_token::UserAccessToken
+                channel::Channel,
+                channel_subscription::ChannelSubscription,
+                channel_token::{
+                    ChannelToken,
+                    ChannelToken_ExpiresAt,
+                    ChannelToken_ObfuscationValue,
+                },
+                user_access_token::UserAccessToken,
             },
-            functionality::service::{encoder::Encoder, generator::Generator},
+            functionality::service::{
+                encoder::Encoder,
+                generator::Generator,
+            },
         },
         infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelBy1,
                         ChannelSubscriptionInsert,
@@ -22,12 +36,15 @@ use {
                         Postgresql,
                         Resolver as Resolver_,
                         Transaction,
-                    }, Repository
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, task_spawner::TaskSpawner},
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    task_spawner::TaskSpawner,
+                },
             },
         },
     },

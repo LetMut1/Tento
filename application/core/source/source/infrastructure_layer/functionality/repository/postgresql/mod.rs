@@ -1,20 +1,20 @@
 mod channel;
+mod channel_delayed_deletion;
 mod channel_publication1;
 mod channel_publication1_commentary;
+mod channel_publication1_commentary_delayed_deletion;
+mod channel_publication1_commentary_mark;
+mod channel_publication1_delayed_deletion;
 mod channel_publication1_mark;
 mod channel_publication1_view;
 mod channel_subscription;
+mod quantity_limiter;
 mod user;
 mod user_access_refresh_token;
 mod user_authorization_token;
 mod user_device;
 mod user_registration_token;
 mod user_reset_password_token;
-mod channel_publication1_delayed_deletion;
-mod channel_delayed_deletion;
-mod channel_publication1_commentary_delayed_deletion;
-mod quantity_limiter;
-mod channel_publication1_commentary_mark;
 pub use self::{
     channel::{
         By1 as ChannelBy1,
@@ -28,23 +28,18 @@ pub use self::{
         By9 as ChannelBy9,
         Insert as ChannelInsert,
     },
+    channel_delayed_deletion::Insert as ChannelDelayedDeletionInsert,
     channel_publication1::{
         By1 as ChannelPublication1By1,
         By2 as ChannelPublication1By2,
         Insert as ChannelPublication1Insert,
     },
-    quantity_limiter::{
-        By as QuantityLimiterBy,
-        Insert as QuantityLimiterInsert,
-        Update as QuantityLimiterUpdate,
-    },
-    channel_delayed_deletion::Insert as ChannelDelayedDeletionInsert,
-    channel_publication1_delayed_deletion::Insert as ChannelPublication1DelayedDeletionInsert,
-    channel_publication1_commentary_delayed_deletion::Insert as ChannelPublication1CommentaryDelayedDeletionInsert,
     channel_publication1_commentary::{
         By1 as ChannelPublication1CommentaryBy1,
         Insert as ChannelPublication1CommentaryInsert,
     },
+    channel_publication1_commentary_delayed_deletion::Insert as ChannelPublication1CommentaryDelayedDeletionInsert,
+    channel_publication1_delayed_deletion::Insert as ChannelPublication1DelayedDeletionInsert,
     channel_publication1_mark::{
         By as ChannelPublication1MarkBy,
         Insert as ChannelPublication1MarkInsert,
@@ -53,6 +48,11 @@ pub use self::{
     channel_subscription::{
         By as ChannelSubscriptionBy,
         Insert as ChannelSubscriptionInsert,
+    },
+    quantity_limiter::{
+        By as QuantityLimiterBy,
+        Insert as QuantityLimiterInsert,
+        Update as QuantityLimiterUpdate,
     },
     user::{
         By1 as UserBy1,
@@ -182,7 +182,6 @@ impl Resolver<Transaction<'_>> {
                             );
                             query_ = QUERY;
                         }
-
                     } else {
                         if deferrable {
                             const QUERY: &'static str = const_format::concatcp!(

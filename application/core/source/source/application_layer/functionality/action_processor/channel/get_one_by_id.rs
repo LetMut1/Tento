@@ -17,18 +17,25 @@ use {
             functionality::service::encoder::Encoder,
         },
         infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelBy1,
                         Postgresql,
-                    }, Repository
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, task_spawner::TaskSpawner},
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    task_spawner::TaskSpawner,
+                },
             },
         },
     },
@@ -103,13 +110,13 @@ impl ActionProcessor_ for ActionProcessor<GetOneById> {
                 Option::Some(values) => values,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
             };
-            if incoming.channel_token_signed.channel_token__is_user_the_channel_owner
-                && incoming.user_access_token_signed.user__id != channel__owner {
+            if incoming.channel_token_signed.channel_token__is_user_the_channel_owner && incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__InvalidChannelOwnerDefinition));
             }
             if !incoming.channel_token_signed.channel_token__is_user_the_channel_owner
                 && channel__access_modifier == Channel_AccessModifier_::Close as u8
-                && !incoming.channel_token_signed.channel_token__is_user_the_channel_subscriber {
+                && !incoming.channel_token_signed.channel_token__is_user_the_channel_subscriber
+            {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));
             }
             let outcoming = Outcoming {

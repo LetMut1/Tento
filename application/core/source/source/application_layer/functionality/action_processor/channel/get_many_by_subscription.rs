@@ -19,22 +19,31 @@ use {
                 user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, generator::Generator, validator::Validator
+                encoder::Encoder,
+                generator::Generator,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelBy6,
                         Postgresql,
-                    }, Repository
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, task_spawner::TaskSpawner},
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    task_spawner::TaskSpawner,
+                },
             },
         },
     },

@@ -1,24 +1,47 @@
 use {
     crate::{
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        }, domain_layer::{
+        },
+        domain_layer::{
             data::entity::{
-                channel_publication1::ChannelPublication1, channel_publication1_commentary::ChannelPublication1Commentary, channel_publication1_commentary_delayed_deletion::{ChannelPublication1CommentaryDelayedDeletion, ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom}, channel_publication1_commentary_token::ChannelPublication1CommentaryToken, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
+                channel_publication1::ChannelPublication1,
+                channel_publication1_commentary::ChannelPublication1Commentary,
+                channel_publication1_commentary_delayed_deletion::{
+                    ChannelPublication1CommentaryDelayedDeletion,
+                    ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom,
+                },
+                channel_publication1_commentary_token::ChannelPublication1CommentaryToken,
+                channel_publication1_token::ChannelPublication1Token,
+                channel_token::ChannelToken,
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
                 encoder::Encoder,
                 generator::Generator,
             },
-        }, infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+        },
+        infrastructure_layer::{
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
-                        ChannelPublication1By1, ChannelPublication1CommentaryBy1, ChannelPublication1CommentaryDelayedDeletionInsert, IsolationLevel, Postgresql, Resolver as Resolver_, Transaction,
-                    }, Repository
+                        ChannelPublication1By1,
+                        ChannelPublication1CommentaryBy1,
+                        ChannelPublication1CommentaryDelayedDeletionInsert,
+                        IsolationLevel,
+                        Postgresql,
+                        Resolver as Resolver_,
+                        Transaction,
+                    },
                 },
                 service::{
                     resolver::{
@@ -28,7 +51,7 @@ use {
                     task_spawner::TaskSpawner,
                 },
             },
-        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY
+        },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel_publication1_commentary::delete::{
@@ -137,7 +160,9 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                 transaction.get_client(),
                 ChannelPublication1CommentaryDelayedDeletionInsert {
                     channel_publication1_commentary__id: incoming.channel_publication1_commentary_token_signed.channel_publication1_commentary__id,
-                    channel_publication1_commentary_delayed_deletion__can_be_deleted_from: Generator::<ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom>::generate(now)?,
+                    channel_publication1_commentary_delayed_deletion__can_be_deleted_from: Generator::<ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom>::generate(
+                        now,
+                    )?,
                     channel_publication1_commentary_delayed_deletion__created_at: now,
                 },
             )

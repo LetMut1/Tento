@@ -1,23 +1,35 @@
 use {
     crate::{
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        }, domain_layer::{
+        },
+        domain_layer::{
             data::entity::{
-                channel_publication1::ChannelPublication1, channel_publication1_token::ChannelPublication1Token, channel_publication1_view::ChannelPublication1View, channel_token::ChannelToken, user_access_token::UserAccessToken
+                channel_publication1::ChannelPublication1,
+                channel_publication1_token::ChannelPublication1Token,
+                channel_publication1_view::ChannelPublication1View,
+                channel_token::ChannelToken,
+                user_access_token::UserAccessToken,
             },
             functionality::service::encoder::Encoder,
-        }, infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+        },
+        infrastructure_layer::{
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelPublication1By1,
                         ChannelPublication1ViewInsert,
                         Postgresql,
-                    }, Repository
+                    },
                 },
                 service::{
                     resolver::{
@@ -27,7 +39,7 @@ use {
                     task_spawner::TaskSpawner,
                 },
             },
-        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY
+        },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel_publication1_view::create::{

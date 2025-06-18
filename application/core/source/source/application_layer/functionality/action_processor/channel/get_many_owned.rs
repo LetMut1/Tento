@@ -7,28 +7,40 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::Channel, channel_token::{
+                channel::Channel,
+                channel_token::{
                     ChannelToken,
                     ChannelToken_ExpiresAt,
                     ChannelToken_ObfuscationValue,
-                }, quantity_limiter::QuantityLimiter_OwnedChannelsQuantity, user_access_token::UserAccessToken
+                },
+                quantity_limiter::QuantityLimiter_OwnedChannelsQuantity,
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, generator::Generator,
+                encoder::Encoder,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
-                       ChannelBy8, Postgresql
-                    }, Repository
+                        ChannelBy8,
+                        Postgresql,
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, task_spawner::TaskSpawner},
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    task_spawner::TaskSpawner,
+                },
             },
         },
     },

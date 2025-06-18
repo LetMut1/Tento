@@ -1,10 +1,12 @@
-use std::{sync::{atomic::{AtomicBool, AtomicUsize, Ordering}, Arc}, time::Duration};
-use core_affinity::CoreId;
 pub use crate::infrastructure_layer::data::environment_configuration::resolve_incomplite_state::ResolveIncompliteState;
-use crate::infrastructure_layer::functionality::service::resolver::{Resolver, UnixTime};
-use super::{TOKIO_CONFIGURATION_ERROR_MESSAGE_1, TOKIO_CONFIGURATION_ERROR_MESSAGE_2, TOKIO_CONFIGURATION_ERROR_MESSAGE_3, TWO_MIB};
 use {
-    super::CommandProcessor,
+    super::{
+        CommandProcessor,
+        TOKIO_CONFIGURATION_ERROR_MESSAGE_1,
+        TOKIO_CONFIGURATION_ERROR_MESSAGE_2,
+        TOKIO_CONFIGURATION_ERROR_MESSAGE_3,
+        TWO_MIB,
+    },
     crate::infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
@@ -13,9 +15,27 @@ use {
                 resolve_incomplite_state::Tokio,
             },
         },
-        functionality::service::loader::Loader,
+        functionality::service::{
+            loader::Loader,
+            resolver::{
+                Resolver,
+                UnixTime,
+            },
+        },
     },
-    std::future::Future,
+    core_affinity::CoreId,
+    std::{
+        future::Future,
+        sync::{
+            Arc,
+            atomic::{
+                AtomicBool,
+                AtomicUsize,
+                Ordering,
+            },
+        },
+        time::Duration,
+    },
     tokio::runtime::{
         Builder as RuntimeBuilder,
         Runtime,
@@ -40,7 +60,8 @@ impl CommandProcessor<ResolveIncompliteState> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
         let environment_configuration = Self::initialize_environment(environment_configuration_file_path)?;
         if environment_configuration.subject.system.tokio.worker_threads_quantity == 0
-            || environment_configuration.subject.system.tokio.worker_threads_quantity as usize != environment_configuration.subject.system.tokio.affinited_cores.len() {
+            || environment_configuration.subject.system.tokio.worker_threads_quantity as usize != environment_configuration.subject.system.tokio.affinited_cores.len()
+        {
             crate::new_logic!("The vaule of 'system.tokio.worker_threads_quantity' is zero or is not equal to the quantity of elements in the value of 'system.tokio.affinited_cores'.");
         }
         if environment_configuration.subject.system.tokio.worker_thread_stack_size < (1024 * 1024 * 2) {
@@ -56,26 +77,19 @@ impl CommandProcessor<ResolveIncompliteState> {
                 Self::initialize_stdout_logger()
             }
         };
-        Self::initialize_tokio_runtime(&environment_configuration.subject.system.tokio)?
-            .block_on(Self::resolve_incomplite_state(&environment_configuration))?;
+        Self::initialize_tokio_runtime(&environment_configuration.subject.system.tokio)?.block_on(Self::resolve_incomplite_state(&environment_configuration))?;
         return Result::Ok(());
     }
     fn initialize_environment<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<ResolveIncompliteState>, AggregateError> {
         let environment_configuration = Loader::<EnvironmentConfiguration<ResolveIncompliteState>>::load_from_file(environment_configuration_file_path)?;
         if environment_configuration.subject.system.tokio.worker_threads_quantity == 0 {
-            return Result::Err(
-                crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_1)
-            );
+            return Result::Err(crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_1));
         }
         if environment_configuration.subject.system.tokio.worker_threads_quantity as usize != environment_configuration.subject.system.tokio.affinited_cores.len() {
-            return Result::Err(
-                crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_2)
-            );
+            return Result::Err(crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_2));
         }
         if environment_configuration.subject.system.tokio.worker_thread_stack_size < (TWO_MIB) {
-            return Result::Err(
-                crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_3)
-            );
+            return Result::Err(crate::new_logic!(TOKIO_CONFIGURATION_ERROR_MESSAGE_3));
         }
         return Ok(environment_configuration);
     }
@@ -142,9 +156,7 @@ impl CommandProcessor<ResolveIncompliteState> {
         );
         'a: loop {
             if Resolver::<UnixTime>::get_now_in_seconds() > expires_at {
-                return Result::Err(
-                    crate::new_logic_unreachable_state!(),
-                );
+                return Result::Err(crate::new_logic_unreachable_state!());
             }
             if quantity_of_started_tokio_worker_threads.load(Ordering::Acquire) == tokio.worker_threads_quantity as usize {
                 break 'a;
@@ -153,9 +165,7 @@ impl CommandProcessor<ResolveIncompliteState> {
             }
         }
         if !is_all_threads_can_be_affinited.load(Ordering::Acquire) {
-            return Result::Err(
-                crate::new_runtime!("The some values of 'system.tokio.affinited_cores' can not be affinited."),
-            );
+            return Result::Err(crate::new_runtime!("The some values of 'system.tokio.affinited_cores' can not be affinited."));
         }
         return Ok(runtime);
     }

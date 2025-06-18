@@ -791,7 +791,19 @@ impl Repository<Postgresql<Channel>> {
     }
     // channel__owner: i64,
     // is_user_the_channel_subscriber: bool,
-    pub fn find_8<'a>(client_database_3: &'a Client, by: By9) -> impl Future<Output = Result<Option<(i64, bool)>, AggregateError>> + Send + use<'a> {
+    pub fn find_8<'a>(
+        client_database_3: &'a Client,
+        by: By9,
+    ) -> impl Future<
+        Output = Result<
+            Option<(
+                i64,
+                bool,
+            )>,
+            AggregateError,
+        >,
+    > + Send
+    + use<'a> {
         return async move {
             const QUERY: &'static str = "\
                 SELECT \
@@ -845,8 +857,8 @@ impl Repository<Postgresql<Channel>> {
                     (
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, i64>(0)),
                         crate::result_return_logic!(rows[0].try_get::<'_, usize, Option<i64>>(1)).is_some(),
-                    )
-                )
+                    ),
+                ),
             );
         };
     }

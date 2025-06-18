@@ -1,10 +1,13 @@
 use {
     crate::{
+        BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        }, domain_layer::{
+        },
+        domain_layer::{
             data::entity::{
                 user::{
                     User,
@@ -21,16 +24,18 @@ use {
                 generator::Generator,
                 validator::Validator,
             },
-        }, infrastructure_layer::{
+        },
+        infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         Postgresql,
                         UserAuthorizationTokenBy,
                         UserAuthorizationTokenUpdate3,
                         UserBy4,
-                    }, Repository
+                    },
                 },
                 service::{
                     resolver::{
@@ -40,7 +45,7 @@ use {
                     task_spawner::TaskSpawner,
                 },
             },
-        }, BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY
+        },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user::send_email_for_authorize::{

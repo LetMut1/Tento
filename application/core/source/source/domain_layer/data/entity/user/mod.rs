@@ -4,9 +4,9 @@ use self::field::{
     Email,
     Id,
     Nickname,
+    ObfuscatedId,
     Password,
     PasswordHash,
-    ObfuscatedId,
 };
 pub struct User {
     id: Id,

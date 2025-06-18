@@ -2,9 +2,9 @@ mod field;
 use {
     self::field::{
         ExpiresAt,
-        ObfuscationValue,
-        IsUserTheChannelSubscriber,
         IsUserTheChannelOwner,
+        IsUserTheChannelSubscriber,
+        ObfuscationValue,
     },
     super::{
         channel::Channel_Id,

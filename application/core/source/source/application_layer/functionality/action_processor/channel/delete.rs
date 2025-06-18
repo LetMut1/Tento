@@ -7,24 +7,45 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::Channel, channel_delayed_deletion::{ChannelDelayedDeletion, ChannelDelayedDeletion_CanBeDeletedFrom}, channel_token::ChannelToken, quantity_limiter::QuantityLimiter, user_access_token::UserAccessToken
+                channel::Channel,
+                channel_delayed_deletion::{
+                    ChannelDelayedDeletion,
+                    ChannelDelayedDeletion_CanBeDeletedFrom,
+                },
+                channel_token::ChannelToken,
+                quantity_limiter::QuantityLimiter,
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, generator::Generator,
+                encoder::Encoder,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
-                        ChannelBy7, ChannelDelayedDeletionInsert, IsolationLevel, Postgresql, QuantityLimiterBy, Resolver as Resolver_, Transaction
-                    }, Repository
+                        ChannelBy7,
+                        ChannelDelayedDeletionInsert,
+                        IsolationLevel,
+                        Postgresql,
+                        QuantityLimiterBy,
+                        Resolver as Resolver_,
+                        Transaction,
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, task_spawner::TaskSpawner},
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    task_spawner::TaskSpawner,
+                },
             },
         },
     },
@@ -90,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                 transaction.get_client(),
                 QuantityLimiterBy {
                     user__id: incoming.user_access_token_signed.user__id,
-                }
+                },
             )
             .await
             {
@@ -109,7 +130,7 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                 ChannelBy7 {
                     channel__id: incoming.channel_token_signed.channel__id,
                     channel__owner: incoming.user_access_token_signed.user__id,
-                }
+                },
             )
             .await
             {
@@ -145,6 +166,6 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
             }
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
             return Result::Ok(UnifiedReport::target_empty());
-        }
+        };
     }
 }

@@ -10,11 +10,15 @@ use {
                 channel::{
                     Channel,
                     Channel_AccessModifier_,
-                }, channel_publication1::ChannelPublication1, channel_publication1_token::{
+                },
+                channel_publication1::ChannelPublication1,
+                channel_publication1_token::{
                     ChannelPublication1Token,
                     ChannelPublication1Token_ExpiresAt,
                     ChannelPublication1Token_ObfuscationValue,
-                }, channel_token::ChannelToken, user_access_token::UserAccessToken
+                },
+                channel_token::ChannelToken,
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
                 encoder::Encoder,
@@ -22,19 +26,26 @@ use {
             },
         },
         infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelBy1,
                         ChannelPublication1By2,
                         Postgresql,
-                    }, Repository
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, task_spawner::TaskSpawner,},
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    task_spawner::TaskSpawner,
+                },
             },
         },
     },
@@ -100,13 +111,13 @@ impl ActionProcessor_ for ActionProcessor<GetMany> {
                 Option::Some(values) => values,
                 Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
             };
-            if incoming.channel_token_signed.channel_token__is_user_the_channel_owner
-                && incoming.user_access_token_signed.user__id != channel__owner {
+            if incoming.channel_token_signed.channel_token__is_user_the_channel_owner && incoming.user_access_token_signed.user__id != channel__owner {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelToken__InvalidChannelOwnerDefinition));
             }
             if !incoming.channel_token_signed.channel_token__is_user_the_channel_owner
                 && !incoming.channel_token_signed.channel_token__is_user_the_channel_subscriber
-                && Channel_AccessModifier_::Close as u8 == channel__access_modifier {
+                && Channel_AccessModifier_::Close as u8 == channel__access_modifier
+            {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel__IsClose));
             }
             const LIMIT: i16 = 30;

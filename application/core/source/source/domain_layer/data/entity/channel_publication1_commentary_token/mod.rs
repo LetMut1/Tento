@@ -5,10 +5,10 @@ use {
         ObfuscationValue,
     },
     super::{
+        channel::Channel_Id,
         channel_publication1::ChannelPublication1_Id,
         channel_publication1_commentary::ChannelPublication1Commentary_Id,
         user::User_Id,
-        channel::Channel_Id,
     },
 };
 // It is necessary to prevent User from creation of ChannelPublication1CommentaryMark on ChannelPublication1Commentary using

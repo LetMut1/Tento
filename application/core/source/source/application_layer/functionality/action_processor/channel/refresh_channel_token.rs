@@ -7,28 +7,39 @@ use {
         },
         domain_layer::{
             data::entity::{
-                channel::Channel,channel_token::{
+                channel::Channel,
+                channel_token::{
                     ChannelToken,
                     ChannelToken_ExpiresAt,
                     ChannelToken_ObfuscationValue,
-                }, user_access_token::UserAccessToken,
+                },
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, generator::Generator,
+                encoder::Encoder,
+                generator::Generator,
             },
         },
         infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
-                        ChannelBy9, Postgresql,
-                    }, Repository
+                        ChannelBy9,
+                        Postgresql,
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, task_spawner::TaskSpawner},
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    task_spawner::TaskSpawner,
+                },
             },
         },
     },
@@ -81,19 +92,17 @@ impl ActionProcessor_ for ActionProcessor<RefreshChannelToken> {
             )? {
                 return Result::Ok(UnifiedReport::precedent(precedent));
             }
-            let (
-                channel__owner,
-                is_user_the_channel_subscriber,
-            ) = match Repository::<Postgresql<Channel>>::find_8(
+            let (channel__owner, is_user_the_channel_subscriber) = match Repository::<Postgresql<Channel>>::find_8(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),
                 ChannelBy9 {
                     user__id: incoming.user_access_token_signed.user__id,
                     channel__id: incoming.channel_token_signed.channel__id,
-                }
+                },
             )
-            .await? {
+            .await?
+            {
                 Option::Some(values) => values,
-                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound))
+                Option::None => return Result::Ok(UnifiedReport::precedent(Precedent::Channel__NotFound)),
             };
             let private_key = &inner.environment_configuration.subject.encryption.private_key;
             return Result::Ok(

@@ -1,4 +1,3 @@
-use crate::domain_layer::{data::entity::user::User_ObfuscatedId, functionality::service::generator::Generator};
 pub use crate::infrastructure_layer::data::environment_configuration::create_fixtures::CreateFixtures;
 use {
     super::CommandProcessor,
@@ -17,6 +16,7 @@ use {
                     User,
                     User_Email,
                     User_Nickname,
+                    User_ObfuscatedId,
                     User_Password,
                 },
                 user_device::{
@@ -26,6 +26,7 @@ use {
             },
             functionality::service::{
                 encoder::Encoder,
+                generator::Generator,
                 validator::Validator,
             },
         },
@@ -71,8 +72,7 @@ use {
 impl CommandProcessor<CreateFixtures> {
     pub fn process<'a>(environment_configuration_file_path: &'a str) -> Result<(), AggregateError> {
         let environment_configuration = Loader::<EnvironmentConfiguration<CreateFixtures>>::load_from_file(environment_configuration_file_path)?;
-        Self::initialize_tokio_runtime()?
-            .block_on(Self::create_fixtures(&environment_configuration))?;
+        Self::initialize_tokio_runtime()?.block_on(Self::create_fixtures(&environment_configuration))?;
         return Result::Ok(());
     }
     fn initialize_tokio_runtime() -> Result<Runtime, AggregateError> {

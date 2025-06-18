@@ -11,28 +11,52 @@ use {
                     Channel,
                     Channel_LinkedName,
                     Channel_Name,
-                }, channel_token::{
+                },
+                channel_token::{
                     ChannelToken,
                     ChannelToken_ExpiresAt,
                     ChannelToken_ObfuscationValue,
-                }, quantity_limiter::{QuantityLimiter, QuantityLimiter_OwnedChannelsQuantity}, user_access_token::UserAccessToken
+                },
+                quantity_limiter::{
+                    QuantityLimiter,
+                    QuantityLimiter_OwnedChannelsQuantity,
+                },
+                user_access_token::UserAccessToken,
             },
             functionality::service::{
-                encoder::Encoder, generator::Generator, validator::Validator
+                encoder::Encoder,
+                generator::Generator,
+                validator::Validator,
             },
         },
         infrastructure_layer::{
-            data::{aggregate_error::AggregateError, sended::Sended_},
+            data::{
+                aggregate_error::AggregateError,
+                sended::Sended_,
+            },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
-                        ChannelBy2, ChannelBy3, ChannelInsert, IsolationLevel, Postgresql, QuantityLimiterBy, QuantityLimiterInsert, QuantityLimiterUpdate, Resolver as Resolver_, Transaction
-                    }, Repository
+                        ChannelBy2,
+                        ChannelBy3,
+                        ChannelInsert,
+                        IsolationLevel,
+                        Postgresql,
+                        QuantityLimiterBy,
+                        QuantityLimiterInsert,
+                        QuantityLimiterUpdate,
+                        Resolver as Resolver_,
+                        Transaction,
+                    },
                 },
-                service::{resolver::{
-                    Resolver,
-                    UnixTime,
-                }, task_spawner::TaskSpawner},
+                service::{
+                    resolver::{
+                        Resolver,
+                        UnixTime,
+                    },
+                    task_spawner::TaskSpawner,
+                },
             },
         },
     },
@@ -106,7 +130,7 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                 &postgresql_client_database_3,
                 QuantityLimiterBy {
                     user__id: incoming.user_access_token_signed.user__id,
-                }
+                },
             )
             .await?
             {
@@ -126,7 +150,7 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                         },
                         QuantityLimiterBy {
                             user__id: incoming.user_access_token_signed.user__id,
-                        }
+                        },
                     )
                     .await
                     {
@@ -141,7 +165,7 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                         return Result::Ok(UnifiedReport::precedent(Precedent::ParallelExecution));
                     }
                     transaction_
-                },
+                }
                 Option::None => {
                     let transaction_ = Resolver_::<Transaction<'_>>::start(
                         &mut postgresql_client_database_3,
@@ -154,7 +178,7 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                             user__id: incoming.user_access_token_signed.user__id,
                             quantity_limiter__owned_channels_quantity: 1,
                             quantity_limiter__created_at: now,
-                        }
+                        },
                     )
                     .await
                     {

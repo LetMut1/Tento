@@ -1,8 +1,8 @@
 mod field;
 use {
     self::field::{
-        OwnedChannelsQuantity,
         CreatedAt,
+        OwnedChannelsQuantity,
     },
     super::user::User_Id,
 };
