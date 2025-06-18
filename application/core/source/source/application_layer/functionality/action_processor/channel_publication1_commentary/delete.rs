@@ -9,7 +9,7 @@ use {
                 channel_publication1::ChannelPublication1, channel_publication1_commentary::{
                     ChannelPublication1Commentary,
                     ChannelPublication1Commentary_Id,
-                }, channel_publication1_commentary_delayed_deletion::{ChannelPublication1CommentaryDelayedDeletion, ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom}, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
+                }, channel_publication1_commentary_delayed_deletion::{ChannelPublication1CommentaryDelayedDeletion, ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom}, channel_publication1_commentary_token::ChannelPublication1CommentaryToken, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
             },
             functionality::service::{
                 encoder::Encoder,
@@ -91,27 +91,17 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                         if incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at < now {
                             return Result::Ok(Option::Some(Precedent::ChannelPublication1Token__AlreadyExpired));
                         }
-
-
-
-
-
-
-
-
-                        todo!("commentary token, check for commentary author");
-
-
-
-
-
-
-
-
-
-
-                        if !Validator::<ChannelPublication1Commentary_Id>::is_valid(incoming_.channel_publication1_commentary__id) {
+                        if !Encoder::<ChannelPublication1CommentaryToken>::is_valid(
+                            private_key,
+                            incoming_.user_access_token_signed.user__id,
+                            incoming_.channel_token_signed.channel__id,
+                            incoming_.channel_publication1_token_signed.channel_publication1__id,
+                            &incoming_.channel_publication1_commentary_token_signed,
+                        )? {
                             return Result::Err(crate::new_invalid_argument!());
+                        }
+                        if incoming_.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__expires_at < now {
+                            return Result::Ok(Option::Some(Precedent::ChannelPublication1CommentaryToken__AlreadyExpired));
                         }
                         return Result::Ok(Option::None);
                     },
@@ -119,6 +109,17 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
             )? {
                 return Result::Ok(UnifiedReport::precedent(precedent));
             }
+            if incoming.user_access_token_signed.user__id != incoming.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__commentary_author {
+
+
+                todo!("InvalidArg, Delete User__IsNotChannelOwner, User__IsNotCommentaryAuthor");
+
+
+
+            }
+
+
+
             let mut postgresql_client_database_4 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_4.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_client_database_4,
@@ -128,7 +129,7 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
             let is_deleted = match Repository::<Postgresql<ChannelPublication1Commentary>>::delete(
                 transaction.get_client(),
                 ChannelPublication1CommentaryBy1 {
-                    channel_publication1_commentary__id: incoming.channel_publication1_commentary__id,
+                    channel_publication1_commentary__id: incoming.channel_publication1_commentary_token_signed.channel_publication1_commentary__id,
                     channel_publication1_commentary__author: incoming.user_access_token_signed.user__id,
                 },
             )
@@ -147,7 +148,7 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
             let is_created = match Repository::<Postgresql<ChannelPublication1CommentaryDelayedDeletion>>::create(
                 transaction.get_client(),
                 ChannelPublication1CommentaryDelayedDeletionInsert {
-                    channel_publication1_commentary__id: incoming.channel_publication1_commentary__id,
+                    channel_publication1_commentary__id: incoming.channel_publication1_commentary_token_signed.channel_publication1_commentary__id,
                     channel_publication1_commentary_delayed_deletion__can_be_deleted_from: Generator::<ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom>::generate(now)?,
                     channel_publication1_commentary_delayed_deletion__created_at: now,
                 },

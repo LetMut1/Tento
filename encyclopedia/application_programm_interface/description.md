@@ -652,7 +652,7 @@ struct Incoming {
     user_access_token_signed: <Data standards>,
     channel_token_signed: <Data standards>,
     channel_publication1_token_signed: <Data standards>,
-    channel_publication1_commentary__id: i64,
+    channel_publication1_commentary_token_signed: <Data standards>,
 }
 ```
 ```
@@ -660,6 +660,8 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelToken__AlreadyExpired,
     ChannelPublication1Token__AlreadyExpired,
+    ChannelPublication1CommentaryToken__AlreadyExpired,
+    User__IsNotCommentaryAuthor,
     ChannelPublication1Commentary__NotFound,
 }
 ```

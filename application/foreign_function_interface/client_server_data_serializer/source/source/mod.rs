@@ -4518,7 +4518,7 @@ pub struct ChannelPublication1Commentary_Delete_Incoming_ {
     pub user_access_token_signed: UserAccessTokenSigned_,
     pub channel_token_signed: ChannelTokenSigned_,
     pub channel_publication1_token_signed: ChannelPublication1TokenSigned_,
-    pub channel_publication1_commentary__id: i64,
+    pub channel_publication1_commentary_token_signed: ChannelPublication1CommentaryTokenSigned_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_commentary__delete__serialize_allocate(incoming: ChannelPublication1Commentary_Delete_Incoming_) -> Result_<Vec_<c_uchar>> {
@@ -4546,7 +4546,13 @@ pub extern "C-unwind" fn channel_publication1_commentary__delete__serialize_allo
                     channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
                     signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
                 },
-                channel_publication1_commentary__id: incoming_.channel_publication1_commentary__id,
+                channel_publication1_commentary_token_signed: ChannelPublication1CommentaryTokenSigned {
+                    channel_publication1_commentary__id: incoming_.channel_publication1_commentary_token_signed.channel_publication1_commentary__id,
+                    channel_publication1_commentary_token__obfuscation_value: incoming_.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__obfuscation_value,
+                    channel_publication1_commentary_token__expires_at: incoming_.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__expires_at,
+                    channel_publication1_commentary_token__commentary_author: incoming_.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__commentary_author,
+                    signature: incoming_.channel_publication1_commentary_token_signed.signature.clone_as_vec()?,
+                }
             },
         );
     };
@@ -4567,6 +4573,8 @@ pub struct ChannelPublication1Commentary_Delete_Precedent_ {
     pub user_access_token___already_expired: bool,
     pub channel_token___already_expired: bool,
     pub channel_publication1_token___already_expired: bool,
+    pub channel_publication1_commentary_token___already_expired: bool,
+    pub user___is_not_commentary_author: bool,
     pub channel_publication1_commentary___not_found: bool,
 }
 #[unsafe(no_mangle)]
@@ -4590,6 +4598,14 @@ pub extern "C-unwind" fn channel_publication1_commentary__delete__deserialize_al
                     },
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Commentary_Delete_Precedent_ {
                         channel_publication1_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1CommentaryToken__AlreadyExpired => ChannelPublication1Commentary_Delete_Precedent_ {
+                        channel_publication1_commentary_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Commentary_Delete_Precedent::User__IsNotCommentaryAuthor => ChannelPublication1Commentary_Delete_Precedent_ {
+                        user___is_not_commentary_author: true,
                         ..Default::default()
                     },
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Commentary__NotFound => ChannelPublication1Commentary_Delete_Precedent_ {
@@ -5756,7 +5772,13 @@ mod test {
                         channel_publication1_token__expires_at: 0,
                         signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    channel_publication1_commentary__id: 0,
+                    channel_publication1_commentary_token_signed: ChannelPublication1CommentaryTokenSigned_ {
+                        channel_publication1_commentary__id: 0,
+                        channel_publication1_commentary_token__obfuscation_value: 0,
+                        channel_publication1_commentary_token__expires_at: 0,
+                        channel_publication1_commentary_token__commentary_author: 0,
+                        signature: Allocator::<Vec_<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    }
                 };
                 run_by_template(
                     incoming,
@@ -5767,6 +5789,7 @@ mod test {
                 Allocator::<Vec_<_>>::deallocate(incoming.user_access_token_signed.signature);
                 Allocator::<Vec_<_>>::deallocate(incoming.channel_token_signed.signature);
                 Allocator::<Vec_<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
+                Allocator::<Vec_<_>>::deallocate(incoming.channel_publication1_commentary_token_signed.signature);
                 return Result::Ok(());
             }
         }
@@ -7472,12 +7495,16 @@ mod test {
                     ChannelPublication1Commentary_Delete_Precedent::UserAccessToken__AlreadyExpired => {}
                     ChannelPublication1Commentary_Delete_Precedent::ChannelToken__AlreadyExpired => {}
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Token__AlreadyExpired => {}
+                    ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1CommentaryToken__AlreadyExpired => {}
+                    ChannelPublication1Commentary_Delete_Precedent::User__IsNotCommentaryAuthor => {}
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Commentary__NotFound => {}
                 }
                 let precedents: Vec<ChannelPublication1Commentary_Delete_Precedent> = vec![
                     ChannelPublication1Commentary_Delete_Precedent::UserAccessToken__AlreadyExpired,
                     ChannelPublication1Commentary_Delete_Precedent::ChannelToken__AlreadyExpired,
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Token__AlreadyExpired,
+                    ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1CommentaryToken__AlreadyExpired,
+                    ChannelPublication1Commentary_Delete_Precedent::User__IsNotCommentaryAuthor,
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Commentary__NotFound,
                 ];
                 '_a: for precedent in precedents {

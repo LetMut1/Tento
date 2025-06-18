@@ -1288,13 +1288,15 @@ typedef struct ChannelPublication1Commentary_Delete_Incoming_ {
   struct UserAccessTokenSigned_ user_access_token_signed;
   struct ChannelTokenSigned_ channel_token_signed;
   struct ChannelPublication1TokenSigned_ channel_publication1_token_signed;
-  int64_t channel_publication1_commentary__id;
+  struct ChannelPublication1CommentaryTokenSigned_ channel_publication1_commentary_token_signed;
 } ChannelPublication1Commentary_Delete_Incoming_;
 
 typedef struct ChannelPublication1Commentary_Delete_Precedent_ {
   bool user_access_token___already_expired;
   bool channel_token___already_expired;
   bool channel_publication1_token___already_expired;
+  bool channel_publication1_commentary_token___already_expired;
+  bool user___is_not_commentary_author;
   bool channel_publication1_commentary___not_found;
 } ChannelPublication1Commentary_Delete_Precedent_;
 
