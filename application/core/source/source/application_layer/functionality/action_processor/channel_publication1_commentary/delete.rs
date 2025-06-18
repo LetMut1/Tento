@@ -84,7 +84,7 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                         )? {
                             return Result::Err(crate::new_invalid_argument!());
                         }
-                        if incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at < now {
+                        if incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at <= now {
                             return Result::Ok(Option::Some(Precedent::ChannelPublication1Token__AlreadyExpired));
                         }
                         if !Encoder::<ChannelPublication1CommentaryToken>::is_valid(
@@ -96,7 +96,7 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                         )? {
                             return Result::Err(crate::new_invalid_argument!());
                         }
-                        if incoming_.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__expires_at < now {
+                        if incoming_.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__expires_at <= now {
                             return Result::Ok(Option::Some(Precedent::ChannelPublication1CommentaryToken__AlreadyExpired));
                         }
                         return Result::Ok(Option::None);

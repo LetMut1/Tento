@@ -71,14 +71,14 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                         if incoming_.channel_token_signed.channel_token__expires_at <= now {
                             return Result::Ok(Option::Some(Precedent::ChannelToken__AlreadyExpired));
                         }
-                        if !incoming_.channel_token_signed.channel_token__is_user_the_channel_owner {
-                            return Result::Err(crate::new_invalid_argument!());
-                        }
                         return Result::Ok(Option::None);
                     },
                 ).await
             )? {
                 return Result::Ok(UnifiedReport::precedent(precedent));
+            }
+            if !incoming.channel_token_signed.channel_token__is_user_the_channel_owner {
+                return Result::Err(crate::new_invalid_argument!());
             }
             let mut postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(

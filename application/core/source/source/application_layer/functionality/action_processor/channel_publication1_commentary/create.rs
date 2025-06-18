@@ -88,17 +88,17 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                         )? {
                             return Result::Err(crate::new_invalid_argument!());
                         }
-                        if incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at < now {
+                        if incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at <= now {
                             return Result::Ok(Option::Some(Precedent::ChannelPublication1Token__AlreadyExpired));
-                        }
-                        if !Validator::<ChannelPublication1Commentary_Text>::is_valid(incoming_.channel_publication1_commentary__text) {
-                            return Result::Err(crate::new_invalid_argument!());
                         }
                         return Result::Ok(Option::None);
                     },
                 ).await
             )? {
                 return Result::Ok(UnifiedReport::precedent(precedent));
+            }
+            if !Validator::<ChannelPublication1Commentary_Text>::is_valid(incoming.channel_publication1_commentary__text) {
+                return Result::Err(crate::new_invalid_argument!());
             }
             let channel_publication1_commentary__id = match Repository::<Postgresql<ChannelPublication1Commentary>>::create(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_4.get().await),

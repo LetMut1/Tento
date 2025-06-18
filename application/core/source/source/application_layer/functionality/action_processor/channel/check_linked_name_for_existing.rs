@@ -67,14 +67,14 @@ impl ActionProcessor_ for ActionProcessor<CheckLinkedNameForExisting> {
                         if incoming_.user_access_token_signed.user_access_token__expires_at <= now {
                             return Result::Ok(Option::Some(Precedent::UserAccessToken__AlreadyExpired));
                         }
-                        if !Validator::<Channel_LinkedName>::is_valid(incoming_.channel__linked_name) {
-                            return Result::Err(crate::new_invalid_argument!());
-                        }
                         return Result::Ok(Option::None);
                     },
                 ).await
             )? {
                 return Result::Ok(UnifiedReport::precedent(precedent));
+            }
+            if !Validator::<Channel_LinkedName>::is_valid(incoming.channel__linked_name) {
+                return Result::Err(crate::new_invalid_argument!());
             }
             let is_exist = Repository::<Postgresql<Channel>>::is_exist_1(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),

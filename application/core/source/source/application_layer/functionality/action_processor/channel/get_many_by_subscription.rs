@@ -72,16 +72,16 @@ impl ActionProcessor_ for ActionProcessor<GetManyBySubscription> {
                         if incoming_.user_access_token_signed.user_access_token__expires_at <= now {
                             return Result::Ok(Option::Some(Precedent::UserAccessToken__AlreadyExpired));
                         }
-                        if let Option::Some(requery___channel__id_) = incoming_.requery___channel__id {
-                            if !Validator::<Channel_Id>::is_valid(requery___channel__id_) {
-                                return Result::Err(crate::new_invalid_argument!());
-                            }
-                        }
                         return Result::Ok(Option::None);
                     },
                 ).await
             )? {
                 return Result::Ok(UnifiedReport::precedent(precedent));
+            }
+            if let Option::Some(requery___channel__id_) = incoming.requery___channel__id {
+                if !Validator::<Channel_Id>::is_valid(requery___channel__id_) {
+                    return Result::Err(crate::new_invalid_argument!());
+                }
             }
             const LIMIT: i16 = 30;
             let rows = Repository::<Postgresql<Channel>>::find_5(

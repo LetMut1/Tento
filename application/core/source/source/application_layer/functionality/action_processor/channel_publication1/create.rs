@@ -81,27 +81,27 @@ impl ActionProcessor_ for ActionProcessor<Create> {
                         if incoming_.channel_token_signed.channel_token__expires_at <= now {
                             return Result::Ok(Option::Some(Precedent::ChannelToken__AlreadyExpired));
                         }
-                        if incoming_.channel_publication1__text.is_none() && incoming_.channel_publication1__images_pathes.is_empty() {
-                            return Result::Err(crate::new_invalid_argument!());
-                        }
-                        if let Option::Some(channel_publication1__text) = incoming_.channel_publication1__text {
-                            if !Validator::<ChannelPublication1_Text>::is_valid(channel_publication1__text) {
-                                return Result::Err(crate::new_invalid_argument!());
-                            }
-                        }
-                        if !incoming_.channel_publication1__images_pathes.is_empty() {
-                            if !Validator::<ChannelPublication1_ImagesPathes>::is_valid(incoming_.channel_publication1__images_pathes.as_slice()) {
-                                return Result::Err(crate::new_invalid_argument!());
-                            }
-                        }
-                        if !incoming_.channel_token_signed.channel_token__is_user_the_channel_owner {
-                            return Result::Err(crate::new_invalid_argument!());
-                        }
                         return Result::Ok(Option::None);
                     },
                 ).await
             )? {
                 return Result::Ok(UnifiedReport::precedent(precedent));
+            }
+            if incoming.channel_publication1__text.is_none() && incoming.channel_publication1__images_pathes.is_empty() {
+                return Result::Err(crate::new_invalid_argument!());
+            }
+            if let Option::Some(channel_publication1__text) = incoming.channel_publication1__text {
+                if !Validator::<ChannelPublication1_Text>::is_valid(channel_publication1__text) {
+                    return Result::Err(crate::new_invalid_argument!());
+                }
+            }
+            if !incoming.channel_publication1__images_pathes.is_empty() {
+                if !Validator::<ChannelPublication1_ImagesPathes>::is_valid(incoming.channel_publication1__images_pathes.as_slice()) {
+                    return Result::Err(crate::new_invalid_argument!());
+                }
+            }
+            if !incoming.channel_token_signed.channel_token__is_user_the_channel_owner {
+                return Result::Err(crate::new_invalid_argument!());
             }
             let channel_publication1__id = match Repository::<Postgresql<ChannelPublication1>>::create(
                 &crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await),
