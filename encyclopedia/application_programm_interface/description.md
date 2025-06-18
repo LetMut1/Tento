@@ -370,8 +370,8 @@ struct Incoming {
 enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelToken__AlreadyExpired,
-    User__IsNotChannelOwner,
     Channel__NotFound,
+    ParallelExecution,
 }
 ```
  - ## Channel_GetManyOwned POST /channel/get_many_owned
@@ -495,7 +495,6 @@ struct Outcoming {
 enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelToken__AlreadyExpired,
-    User__IsNotChannelOwner,
     ParallelExecution,
 }
 ```
@@ -515,7 +514,6 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelPublication1Token__AlreadyExpired,
     Channel__NotFound,
-    User__IsNotChannelOwner,
     ChannelPublication1__NotFound,
 }
 ```

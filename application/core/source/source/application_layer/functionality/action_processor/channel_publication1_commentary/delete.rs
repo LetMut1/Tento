@@ -8,13 +8,11 @@ use {
             data::entity::{
                 channel_publication1::ChannelPublication1, channel_publication1_commentary::{
                     ChannelPublication1Commentary,
-                    ChannelPublication1Commentary_Id,
                 }, channel_publication1_commentary_delayed_deletion::{ChannelPublication1CommentaryDelayedDeletion, ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom}, channel_publication1_commentary_token::ChannelPublication1CommentaryToken, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
             },
             functionality::service::{
                 encoder::Encoder,
                 generator::Generator,
-                validator::Validator,
             },
         }, infrastructure_layer::{
             data::{aggregate_error::AggregateError, sended::Sended_},

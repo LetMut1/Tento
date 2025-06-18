@@ -866,7 +866,6 @@ typedef struct Channel_Delete_Incoming_ {
 typedef struct Channel_Delete_Precedent_ {
   bool user_access_token___already_expired;
   bool channel_token___already_expired;
-  bool user___is_not_channel_owner;
   bool channel___not_found;
   bool parallel_execution;
 } Channel_Delete_Precedent_;
@@ -1116,7 +1115,6 @@ typedef struct Data__ChannelPublication1_Create_Outcoming_ {
 typedef struct ChannelPublication1_Create_Precedent_ {
   bool user_access_token___already_expired;
   bool channel_token___already_expired;
-  bool user___is_not_channel_owner;
   bool parallel_execution;
 } ChannelPublication1_Create_Precedent_;
 
@@ -1143,7 +1141,6 @@ typedef struct ChannelPublication1_Delete_Precedent_ {
   bool user_access_token___already_expired;
   bool channel_token___already_expired;
   bool channel_publication1_token___already_expired;
-  bool user___is_not_channel_owner;
   bool channel_publication1___not_found;
 } ChannelPublication1_Delete_Precedent_;
 

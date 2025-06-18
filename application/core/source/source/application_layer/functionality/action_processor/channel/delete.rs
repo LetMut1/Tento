@@ -72,7 +72,7 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                             return Result::Ok(Option::Some(Precedent::ChannelToken__AlreadyExpired));
                         }
                         if !incoming_.channel_token_signed.channel_token__is_user_the_channel_owner {
-                            return Result::Ok(Option::Some(Precedent::User__IsNotChannelOwner));
+                            return Result::Err(crate::new_invalid_argument!());
                         }
                         return Result::Ok(Option::None);
                     },
