@@ -25,7 +25,6 @@ crate::common_precedent::enum_from!(
         CommonPrecedent::ChannelToken__AlreadyExpired,
         CommonPrecedent::ChannelPublication1Token__AlreadyExpired,
         CommonPrecedent::ChannelPublication1CommentaryToken__AlreadyExpired,
-        CommonPrecedent::User__IsNotCommentaryAuthor,
         CommonPrecedent::ChannelPublication1Commentary__NotFound,
     }
 );

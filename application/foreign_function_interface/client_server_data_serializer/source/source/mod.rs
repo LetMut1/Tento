@@ -4559,7 +4559,6 @@ pub struct ChannelPublication1Commentary_Delete_Precedent_ {
     pub channel_token___already_expired: bool,
     pub channel_publication1_token___already_expired: bool,
     pub channel_publication1_commentary_token___already_expired: bool,
-    pub user___is_not_commentary_author: bool,
     pub channel_publication1_commentary___not_found: bool,
 }
 #[unsafe(no_mangle)]
@@ -4587,10 +4586,6 @@ pub extern "C-unwind" fn channel_publication1_commentary__delete__deserialize_al
                     },
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1CommentaryToken__AlreadyExpired => ChannelPublication1Commentary_Delete_Precedent_ {
                         channel_publication1_commentary_token___already_expired: true,
-                        ..Default::default()
-                    },
-                    ChannelPublication1Commentary_Delete_Precedent::User__IsNotCommentaryAuthor => ChannelPublication1Commentary_Delete_Precedent_ {
-                        user___is_not_commentary_author: true,
                         ..Default::default()
                     },
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Commentary__NotFound => ChannelPublication1Commentary_Delete_Precedent_ {
@@ -7475,7 +7470,6 @@ mod test {
                     ChannelPublication1Commentary_Delete_Precedent::ChannelToken__AlreadyExpired => {}
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Token__AlreadyExpired => {}
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1CommentaryToken__AlreadyExpired => {}
-                    ChannelPublication1Commentary_Delete_Precedent::User__IsNotCommentaryAuthor => {}
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Commentary__NotFound => {}
                 }
                 let precedents: Vec<ChannelPublication1Commentary_Delete_Precedent> = vec![
@@ -7483,7 +7477,6 @@ mod test {
                     ChannelPublication1Commentary_Delete_Precedent::ChannelToken__AlreadyExpired,
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Token__AlreadyExpired,
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1CommentaryToken__AlreadyExpired,
-                    ChannelPublication1Commentary_Delete_Precedent::User__IsNotCommentaryAuthor,
                     ChannelPublication1Commentary_Delete_Precedent::ChannelPublication1Commentary__NotFound,
                 ];
                 '_a: for precedent in precedents {

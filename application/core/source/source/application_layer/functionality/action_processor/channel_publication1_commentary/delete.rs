@@ -6,9 +6,7 @@ use {
             Inner,
         }, domain_layer::{
             data::entity::{
-                channel_publication1::ChannelPublication1, channel_publication1_commentary::{
-                    ChannelPublication1Commentary,
-                }, channel_publication1_commentary_delayed_deletion::{ChannelPublication1CommentaryDelayedDeletion, ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom}, channel_publication1_commentary_token::ChannelPublication1CommentaryToken, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
+                channel_publication1::ChannelPublication1, channel_publication1_commentary::ChannelPublication1Commentary, channel_publication1_commentary_delayed_deletion::{ChannelPublication1CommentaryDelayedDeletion, ChannelPublication1CommentaryDelayedDeletion_CanBeDeletedFrom}, channel_publication1_commentary_token::ChannelPublication1CommentaryToken, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
             },
             functionality::service::{
                 encoder::Encoder,
@@ -108,16 +106,8 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
                 return Result::Ok(UnifiedReport::precedent(precedent));
             }
             if incoming.user_access_token_signed.user__id != incoming.channel_publication1_commentary_token_signed.channel_publication1_commentary_token__commentary_author {
-
-
-                todo!("InvalidArg, Delete User__IsNotChannelOwner, User__IsNotCommentaryAuthor");
-
-
-
+                return Result::Err(crate::new_invalid_argument!());
             }
-
-
-
             let mut postgresql_client_database_4 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_4.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_client_database_4,

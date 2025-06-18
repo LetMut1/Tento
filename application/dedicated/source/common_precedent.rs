@@ -19,7 +19,6 @@ pub enum CommonPrecedent {
     ParallelExecution,
     QuantityLimiter__ExceededOwnedChannelsQuantity,
     User__EmailAlreadyExist,
-    User__IsNotCommentaryAuthor,
     User__NicknameAlreadyExist,
     User__NotFound,
     User__WrongEmailOrNicknameOrPassword,

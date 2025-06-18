@@ -1293,7 +1293,6 @@ typedef struct ChannelPublication1Commentary_Delete_Precedent_ {
   bool channel_token___already_expired;
   bool channel_publication1_token___already_expired;
   bool channel_publication1_commentary_token___already_expired;
-  bool user___is_not_commentary_author;
   bool channel_publication1_commentary___not_found;
 } ChannelPublication1Commentary_Delete_Precedent_;
 
