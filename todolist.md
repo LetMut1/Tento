@@ -141,6 +141,8 @@ incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b
 
 
 channel_publication1_mark__  -> channel_publication1_marked_view__
-ChannelPublication1Mark__ -> ...
+ChannelPublication1MarkedView__ -> ...
 ChannelPublication1View_ -
 Channel_publication1_view__
+
+В репозиториях дЖоины на channel_publication1_mark

@@ -161,7 +161,7 @@ impl ActionProcessor_ for ActionProcessor<GetMany> {
                                         channel_publication1__marks_quantity: channel_publication1__marks_quantity as u32,
                                         channel_publication1__view_quantity: channel_publication1__view_quantity as u32,
                                         channel_publication1__created_at: crate::result_return_logic!(row.try_get::<'_, usize, i64>(6)),
-                                        channel_publication1_mark__created_at: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7)),
+                                        channel_publication1_marked_view__marked_at: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7)),
                                         channel_publication1_token_signed: Encoder::<ChannelPublication1Token>::encode(
                                             private_key,
                                             incoming.user_access_token_signed.user__id,

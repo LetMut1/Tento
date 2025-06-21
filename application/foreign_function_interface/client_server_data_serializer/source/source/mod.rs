@@ -3686,7 +3686,7 @@ pub struct ChannelPublication1_GetMany_Data_ {
     pub channel_publication1__marks_quantity: c_uint,
     pub channel_publication1__view_quantity: c_uint,
     pub channel_publication1__created_at: c_long,
-    pub channel_publication1_mark__created_at: Option_<c_long>,
+    pub channel_publication1_marked_view__marked_at: Option_<c_long>,
     pub channel_publication1_token_signed: ChannelPublication1TokenSigned_,
 }
 #[repr(C)]
@@ -3727,8 +3727,8 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(ve
                                     Allocator::<String_>::allocate(channel_publication1__image_pathe),
                                 );
                             }
-                            let channel_publication1_mark__created_at = match data___.channel_publication1_mark__created_at {
-                                Option::Some(channel_publication1_mark__created_at_) => Option_::data(channel_publication1_mark__created_at_),
+                            let channel_publication1_marked_view__marked_at = match data___.channel_publication1_marked_view__marked_at {
+                                Option::Some(channel_publication1_marked_view__marked_at_) => Option_::data(channel_publication1_marked_view__marked_at_),
                                 Option::None => Option_::none(),
                             };
                             data_registry.push(
@@ -3739,7 +3739,7 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(ve
                                     channel_publication1__marks_quantity: data___.channel_publication1__marks_quantity,
                                     channel_publication1__view_quantity: data___.channel_publication1__view_quantity,
                                     channel_publication1__created_at: data___.channel_publication1__created_at,
-                                    channel_publication1_mark__created_at,
+                                    channel_publication1_marked_view__marked_at,
                                     channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
                                         channel_publication1__id: data___.channel_publication1_token_signed.channel_publication1__id,
                                         channel_publication1_token__obfuscation_value: data___.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
@@ -4087,7 +4087,7 @@ pub struct ChannelPublication1MarkedView_CreateMark_Precedent_ {
     pub user_access_token___already_expired: bool,
     pub channel_token___already_expired: bool,
     pub channel_publication1_token___already_expired: bool,
-    pub channel_publication1_mark___already_exist: bool,
+    pub channel_publication1_marked_view___already_exist: bool,
     pub channel_publication1__not_found: bool,
 }
 #[unsafe(no_mangle)]
@@ -4113,8 +4113,8 @@ pub extern "C-unwind" fn channel_publication1_marked_view__create_mark__deserial
                         channel_publication1_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Mark__AlreadyExist => ChannelPublication1MarkedView_CreateMark_Precedent_ {
-                        channel_publication1_mark___already_exist: true,
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1MarkedView__AlreadyExist => ChannelPublication1MarkedView_CreateMark_Precedent_ {
+                        channel_publication1_marked_view___already_exist: true,
                         ..Default::default()
                     },
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1__NotFound => ChannelPublication1MarkedView_CreateMark_Precedent_ {
@@ -4289,7 +4289,7 @@ pub struct ChannelPublication1MarkedView_DeleteMark_Precedent_ {
     pub user_access_token___already_expired: bool,
     pub channel_token___already_expired: bool,
     pub channel_publication1_token___already_expired: bool,
-    pub channel_publication1_mark___not_found: bool,
+    pub channel_publication1_marked_view___not_found: bool,
     pub channel_publication1__not_found: bool,
 }
 #[unsafe(no_mangle)]
@@ -4315,8 +4315,8 @@ pub extern "C-unwind" fn channel_publication1_marked_view__delete_mark__deserial
                         channel_publication1_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1Mark__NotFound => ChannelPublication1MarkedView_DeleteMark_Precedent_ {
-                        channel_publication1_mark___not_found: true,
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1MarkedView__NotFound => ChannelPublication1MarkedView_DeleteMark_Precedent_ {
+                        channel_publication1_marked_view___not_found: true,
                         ..Default::default()
                     },
                     ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1__NotFound => ChannelPublication1MarkedView_DeleteMark_Precedent_ {
@@ -7109,7 +7109,7 @@ mod test {
                         channel_publication1__marks_quantity: 0,
                         channel_publication1__view_quantity: 0,
                         channel_publication1__created_at: 0,
-                        channel_publication1_mark__created_at: Option::Some(0),
+                        channel_publication1_marked_view__marked_at: Option::Some(0),
                         channel_publication1_token_signed: ChannelPublication1TokenSigned {
                             channel_publication1__id: 0,
                             channel_publication1_token__obfuscation_value: 0,
@@ -7267,14 +7267,14 @@ mod test {
                     ChannelPublication1MarkedView_CreateMark_Precedent::UserAccessToken__AlreadyExpired => {}
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelToken__AlreadyExpired => {}
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Token__AlreadyExpired => {}
-                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Mark__AlreadyExist => {}
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1MarkedView__AlreadyExist => {}
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1__NotFound => {}
                 }
                 let precedents: Vec<ChannelPublication1MarkedView_CreateMark_Precedent> = vec![
                     ChannelPublication1MarkedView_CreateMark_Precedent::UserAccessToken__AlreadyExpired,
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelToken__AlreadyExpired,
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Token__AlreadyExpired,
-                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Mark__AlreadyExist,
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1MarkedView__AlreadyExist,
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1__NotFound,
                 ];
                 '_a: for precedent in precedents {
@@ -7341,14 +7341,14 @@ mod test {
                     ChannelPublication1MarkedView_DeleteMark_Precedent::UserAccessToken__AlreadyExpired => {}
                     ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelToken__AlreadyExpired => {}
                     ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1Token__AlreadyExpired => {}
-                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1Mark__NotFound => {}
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1MarkedView__NotFound => {}
                     ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1__NotFound => {}
                 }
                 let precedents: Vec<ChannelPublication1MarkedView_DeleteMark_Precedent> = vec![
                     ChannelPublication1MarkedView_DeleteMark_Precedent::UserAccessToken__AlreadyExpired,
                     ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelToken__AlreadyExpired,
                     ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1Token__AlreadyExpired,
-                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1Mark__NotFound,
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1MarkedView__NotFound,
                     ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1__NotFound,
                 ];
                 '_a: for precedent in precedents {

@@ -1056,7 +1056,7 @@ typedef struct ChannelPublication1_GetMany_Data_ {
   unsigned int channel_publication1__marks_quantity;
   unsigned int channel_publication1__view_quantity;
   long channel_publication1__created_at;
-  struct Option__c_long channel_publication1_mark__created_at;
+  struct Option__c_long channel_publication1_marked_view__marked_at;
   struct ChannelPublication1TokenSigned_ channel_publication1_token_signed;
 } ChannelPublication1_GetMany_Data_;
 
@@ -1167,7 +1167,7 @@ typedef struct ChannelPublication1MarkedView_CreateMark_Precedent_ {
   bool user_access_token___already_expired;
   bool channel_token___already_expired;
   bool channel_publication1_token___already_expired;
-  bool channel_publication1_mark___already_exist;
+  bool channel_publication1_marked_view___already_exist;
   bool channel_publication1__not_found;
 } ChannelPublication1MarkedView_CreateMark_Precedent_;
 
@@ -1219,7 +1219,7 @@ typedef struct ChannelPublication1MarkedView_DeleteMark_Precedent_ {
   bool user_access_token___already_expired;
   bool channel_token___already_expired;
   bool channel_publication1_token___already_expired;
-  bool channel_publication1_mark___not_found;
+  bool channel_publication1_marked_view___not_found;
   bool channel_publication1__not_found;
 } ChannelPublication1MarkedView_DeleteMark_Precedent_;
 

@@ -106,7 +106,7 @@
 //             };
 //             if !is_deleted {
 //                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-//                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Mark__NotFound));
+//                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1MarkedView__NotFound));
 //             }
 //             let is_updated = match Repository::<Postgresql<ChannelPublication1>>::update_2(
 //                 transaction.get_client(),

@@ -544,7 +544,7 @@ struct Data {
     channel_publication1__marks_quantity: u32,
     channel_publication1__view_quantity: u32,
     channel_publication1__created_at: i64,
-    channel_publication1_mark__created_at: Option<i64>,
+    channel_publication1_marked_view__marked_at: Option<i64>,
     channel_publication1_token_signed: <Data standards>,
 }
 ```
@@ -573,7 +573,7 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelToken__AlreadyExpired
     ChannelPublication1Token__AlreadyExpired,
-    ChannelPublication1Mark__AlreadyExist,
+    ChannelPublication1MarkedView__AlreadyExist,
     ChannelPublication1__NotFound,
 }
 ```
@@ -611,7 +611,7 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelToken__AlreadyExpired,
     ChannelPublication1Token__AlreadyExpired,
-    ChannelPublication1Mark__NotFound,
+    ChannelPublication1MarkedView__NotFound,
     ChannelPublication1__NotFound,
 }
 ```

@@ -23,7 +23,7 @@
 //     pub enum Precedent {
 //         CommonPrecedent::UserAccessToken__AlreadyExpired,
 //         CommonPrecedent::ChannelPublication1Token__AlreadyExpired,
-//         CommonPrecedent::ChannelPublication1Mark__NotFound,
+//         CommonPrecedent::ChannelPublication1MarkedView__NotFound,
 //         CommonPrecedent::ChannelPublication1__NotFound,
 //     }
 // );

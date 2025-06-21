@@ -94,7 +94,7 @@
 //                 ChannelPublication1MarkInsert {
 //                     user__id: incoming.user_access_token_signed.user__id,
 //                     channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
-//                     channel_publication1_mark__created_at: now,
+//                     channel_publication1_marked_view__marked_at: now,
 //                 },
 //             )
 //             .await
@@ -107,7 +107,7 @@
 //             };
 //             if !is_created {
 //                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-//                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Mark__AlreadyExist));
+//                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1MarkedView__AlreadyExist));
 //             }
 //             let is_updated = match Repository::<Postgresql<ChannelPublication1>>::update_1(
 //                 transaction.get_client(),
