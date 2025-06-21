@@ -220,7 +220,6 @@ impl ActionProcessor_ for ActionProcessor<RegisterByLastStep> {
             let user_access_token__expires_at = Generator::<UserAccessToken_ExpiresAt>::generate(now)?;
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate(now)?;
-            let postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
             let mut postgresql_client_database_2 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_2.get().await);
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_client_database_2,

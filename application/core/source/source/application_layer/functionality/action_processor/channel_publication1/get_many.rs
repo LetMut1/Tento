@@ -157,7 +157,7 @@ impl ActionProcessor_ for ActionProcessor<GetMany> {
                                 let channel_publication1_marked_view__marked_at = crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7));
                                 let channel_publication1_marked_view__created_at = crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(8));
                                 let (is_publication_marked, is_publication_viewed) = match (channel_publication1_marked_view__marked_at, channel_publication1_marked_view__created_at) {
-                                    (Option::Some(channel_publication1_marked_view__marked_at_), Option::Some(channel_publication1_marked_view__created_at_)) => if channel_publication1_marked_view__marked_at_ != ChannelPublication1MarkedView_MarkedAt::VALUE_FOR_INDICATION_OF_MARK_ABSENCE as i64 {
+                                    (Option::Some(channel_publication1_marked_view__marked_at_), Option::Some(_)) => if channel_publication1_marked_view__marked_at_ != ChannelPublication1MarkedView_MarkedAt::VALUE_FOR_INDICATION_OF_MARK_ABSENCE as i64 {
                                         (true, true)
                                     } else {
                                         (false, true)
