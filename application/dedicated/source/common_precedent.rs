@@ -9,7 +9,7 @@ pub enum CommonPrecedent {
     ChannelPublication1Commentary__NotFound,
     ChannelPublication1CommentaryToken__AlreadyExpired,
     ChannelPublication1MarkedView__MarkAlreadyExist,
-    ChannelPublication1MarkedView__NotFound,
+    ChannelPublication1MarkedView__MarkNotFound,
     ChannelPublication1Token__AlreadyExpired,
     ChannelSubscription__AlreadyExist,
     ChannelSubscription__NotFound,

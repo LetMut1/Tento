@@ -611,7 +611,7 @@ enum Precedent {
     UserAccessToken__AlreadyExpired,
     ChannelToken__AlreadyExpired,
     ChannelPublication1Token__AlreadyExpired,
-    ChannelPublication1MarkedView__NotFound,
+    ChannelPublication1MarkedView__MarkNotFound,
     ChannelPublication1__NotFound,
 }
 ```

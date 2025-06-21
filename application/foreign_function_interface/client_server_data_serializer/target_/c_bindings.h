@@ -1219,7 +1219,7 @@ typedef struct ChannelPublication1MarkedView_DeleteMark_Precedent_ {
   bool user_access_token___already_expired;
   bool channel_token___already_expired;
   bool channel_publication1_token___already_expired;
-  bool channel_publication1_marked_view___not_found;
+  bool channel_publication1_marked_view___mark_not_found;
   bool channel_publication1__not_found;
 } ChannelPublication1MarkedView_DeleteMark_Precedent_;
 

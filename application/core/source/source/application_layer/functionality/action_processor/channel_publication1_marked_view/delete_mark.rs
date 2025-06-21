@@ -133,7 +133,7 @@ impl ActionProcessor_ for ActionProcessor<DeleteMark> {
             };
             if !is_updated {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1MarkedView__NotFound));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1MarkedView__MarkNotFound));
             }
             let is_updated = match Repository::<Postgresql<ChannelPublication1>>::update_2(
                 transaction.get_client(),
