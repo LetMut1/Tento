@@ -4087,7 +4087,7 @@ pub struct ChannelPublication1MarkedView_CreateMark_Precedent_ {
     pub user_access_token___already_expired: bool,
     pub channel_token___already_expired: bool,
     pub channel_publication1_token___already_expired: bool,
-    pub channel_publication1_marked_view___already_exist: bool,
+    pub channel_publication1_marked_view___mark_already_exist: bool,
     pub channel_publication1__not_found: bool,
 }
 #[unsafe(no_mangle)]
@@ -4113,8 +4113,8 @@ pub extern "C-unwind" fn channel_publication1_marked_view__create_mark__deserial
                         channel_publication1_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1MarkedView__AlreadyExist => ChannelPublication1MarkedView_CreateMark_Precedent_ {
-                        channel_publication1_marked_view___already_exist: true,
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1MarkedView__MarkAlreadyExist => ChannelPublication1MarkedView_CreateMark_Precedent_ {
+                        channel_publication1_marked_view___mark_already_exist: true,
                         ..Default::default()
                     },
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1__NotFound => ChannelPublication1MarkedView_CreateMark_Precedent_ {
@@ -7267,14 +7267,14 @@ mod test {
                     ChannelPublication1MarkedView_CreateMark_Precedent::UserAccessToken__AlreadyExpired => {}
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelToken__AlreadyExpired => {}
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Token__AlreadyExpired => {}
-                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1MarkedView__AlreadyExist => {}
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1MarkedView__MarkAlreadyExist => {}
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1__NotFound => {}
                 }
                 let precedents: Vec<ChannelPublication1MarkedView_CreateMark_Precedent> = vec![
                     ChannelPublication1MarkedView_CreateMark_Precedent::UserAccessToken__AlreadyExpired,
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelToken__AlreadyExpired,
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Token__AlreadyExpired,
-                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1MarkedView__AlreadyExist,
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1MarkedView__MarkAlreadyExist,
                     ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1__NotFound,
                 ];
                 '_a: for precedent in precedents {

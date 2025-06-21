@@ -134,7 +134,7 @@ impl ActionProcessor_ for ActionProcessor<CreateMark> {
             };
             if !is_created {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1MarkedView__AlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1MarkedView__MarkAlreadyExist));
             }
             let is_updated = match Repository::<Postgresql<ChannelPublication1>>::update_1(
                 transaction.get_client(),
