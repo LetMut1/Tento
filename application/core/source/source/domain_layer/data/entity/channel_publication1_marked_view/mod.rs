@@ -15,3 +15,4 @@ pub struct ChannelPublication1MarkedView {
     marked_at: MarkedAt,
     created_at: CreatedAt,
 }
+pub type ChannelPublication1MarkedView_MarkedAt = MarkedAt;

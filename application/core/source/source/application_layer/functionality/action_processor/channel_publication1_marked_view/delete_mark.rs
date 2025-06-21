@@ -8,7 +8,10 @@ use {
         domain_layer::{
             data::entity::{
                 channel_publication1::ChannelPublication1,
-                channel_publication1_marked_view::ChannelPublication1MarkedView,
+                channel_publication1_marked_view::{
+                    ChannelPublication1MarkedView,
+                    ChannelPublication1MarkedView_MarkedAt,
+                },
                 channel_publication1_token::ChannelPublication1Token,
                 channel_token::ChannelToken,
                 user_access_token::UserAccessToken,
@@ -25,7 +28,8 @@ use {
                     Repository,
                     postgresql::{
                         ChannelPublication1By1,
-                        ChannelPublication1MarkBy,
+                        ChannelPublication1MarkedViewBy2,
+                        ChannelPublication1MarkedViewUpdate,
                         IsolationLevel,
                         Postgresql,
                         Resolver as Resolver_,
@@ -108,11 +112,15 @@ impl ActionProcessor_ for ActionProcessor<DeleteMark> {
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            let is_deleted = match Repository::<Postgresql<ChannelPublication1MarkedView>>::delete(
+            let is_updated = match Repository::<Postgresql<ChannelPublication1MarkedView>>::update(
                 transaction.get_client(),
-                ChannelPublication1MarkBy {
+                ChannelPublication1MarkedViewUpdate {
+                    channel_publication1_marked_view__marked_at: ChannelPublication1MarkedView_MarkedAt::VALUE_FOR_INDICATION_OF_MARK_ABSENCE as i64,
+                },
+                ChannelPublication1MarkedViewBy2 {
                     user__id: incoming.user_access_token_signed.user__id,
                     channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
+                    channel_publication1_marked_view__marked_at: ChannelPublication1MarkedView_MarkedAt::VALUE_FOR_INDICATION_OF_MARK_ABSENCE as i64,
                 },
             )
             .await
@@ -123,7 +131,7 @@ impl ActionProcessor_ for ActionProcessor<DeleteMark> {
                     return Result::Err(aggregate_error);
                 }
             };
-            if !is_deleted {
+            if !is_updated {
                 Resolver_::<Transaction<'_>>::rollback(transaction).await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1MarkedView__NotFound));
             }

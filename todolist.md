@@ -139,10 +139,9 @@ incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b
 Роут ...commentary_get_many
 
 
+'_a: for quantity in 1..=BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {    для вот этого написать отдельный метод спавнера?
 
-channel_publication1_mark__  -> channel_publication1_marked_view__
-ChannelPublication1MarkedView__ -> ...
-ChannelPublication1View_ -
-Channel_publication1_view__
 
 В репозиториях дЖоины на channel_publication1_mark
+
+поменять прецеденты в 3 роутахх, что соответствовало логике.

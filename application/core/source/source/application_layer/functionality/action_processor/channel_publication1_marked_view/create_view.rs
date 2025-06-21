@@ -11,7 +11,10 @@ use {
             data::entity::{
                 channel_publication1::ChannelPublication1,
                 channel_publication1_token::ChannelPublication1Token,
-                channel_publication1_view::ChannelPublication1View,
+                channel_publication1_marked_view::{
+                    ChannelPublication1MarkedView,
+                    ChannelPublication1MarkedView_MarkedAt,
+                },
                 channel_token::ChannelToken,
                 user_access_token::UserAccessToken,
             },
@@ -27,7 +30,7 @@ use {
                     Repository,
                     postgresql::{
                         ChannelPublication1By1,
-                        ChannelPublication1ViewInsert,
+                        ChannelPublication1MarkedViewInsert,
                         Postgresql,
                     },
                 },
@@ -42,7 +45,7 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::channel_publication1_view::create::{
+        action_processor_incoming_outcoming::action_processor::channel_publication1_marked_view::create_view::{
             Incoming,
             Precedent,
         },
@@ -108,12 +111,13 @@ impl ActionProcessor_ for ActionProcessor<CreateView> {
             TaskSpawner::spawn_tokio_non_blocking_task_into_background(
                 async move {
                     '_a: for quantity in 1..=BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
-                        match Repository::<Postgresql<ChannelPublication1View>>::create(
+                        match Repository::<Postgresql<ChannelPublication1MarkedView>>::create_1(
                             &crate::result_return_runtime!(postgresql_connection_pool_database_3.get().await),
-                            ChannelPublication1ViewInsert {
+                            ChannelPublication1MarkedViewInsert {
                                 user__id: incoming.user_access_token_signed.user__id,
                                 channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
-                                channel_publication1_view__created_at: now,
+                                channel_publication1_marked_view__marked_at: ChannelPublication1MarkedView_MarkedAt::VALUE_FOR_INDICATION_OF_MARK_ABSENCE as i64,
+                                channel_publication1_marked_view__created_at: now,
                             },
                         )
                         .await

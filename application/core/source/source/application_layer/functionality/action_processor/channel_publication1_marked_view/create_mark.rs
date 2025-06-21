@@ -8,7 +8,10 @@ use {
         domain_layer::{
             data::entity::{
                 channel_publication1::ChannelPublication1,
-                channel_publication1_marked_view::ChannelPublication1MarkedView,
+                channel_publication1_marked_view::{
+                    ChannelPublication1MarkedView,
+                    ChannelPublication1MarkedView_MarkedAt,
+                },
                 channel_publication1_token::ChannelPublication1Token,
                 channel_token::ChannelToken,
                 user_access_token::UserAccessToken,
@@ -25,7 +28,8 @@ use {
                     Repository,
                     postgresql::{
                         ChannelPublication1By1,
-                        ChannelPublication1MarkInsert,
+                        ChannelPublication1MarkedViewInsert,
+                        ChannelPublication1MarkedViewBy1,
                         IsolationLevel,
                         Postgresql,
                         Resolver as Resolver_,
@@ -108,13 +112,17 @@ impl ActionProcessor_ for ActionProcessor<CreateMark> {
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            let is_created = match Repository::<Postgresql<ChannelPublication1MarkedView>>::create(
+            let is_created = match Repository::<Postgresql<ChannelPublication1MarkedView>>::create_2(
                 transaction.get_client(),
-                ChannelPublication1MarkInsert {
+                ChannelPublication1MarkedViewInsert {
                     user__id: incoming.user_access_token_signed.user__id,
                     channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
                     channel_publication1_marked_view__marked_at: now,
+                    channel_publication1_marked_view__created_at: now,
                 },
+                ChannelPublication1MarkedViewBy1 {
+                    channel_publication1_marked_view__marked_at: ChannelPublication1MarkedView_MarkedAt::VALUE_FOR_INDICATION_OF_MARK_ABSENCE as i64,
+                }
             )
             .await
             {

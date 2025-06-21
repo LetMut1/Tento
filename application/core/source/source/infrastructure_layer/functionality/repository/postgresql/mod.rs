@@ -40,7 +40,9 @@ pub use self::{
     channel_publication1_commentary_delayed_deletion::Insert as ChannelPublication1CommentaryDelayedDeletionInsert,
     channel_publication1_delayed_deletion::Insert as ChannelPublication1DelayedDeletionInsert,
     channel_publication1_marked_view::{
-        By as ChannelPublication1MarkedViewBy,
+        By1 as ChannelPublication1MarkedViewBy1,
+        By2 as ChannelPublication1MarkedViewBy2,
+        Update as ChannelPublication1MarkedViewUpdate,
         Insert as ChannelPublication1MarkedViewInsert,
     },
     channel_subscription::{

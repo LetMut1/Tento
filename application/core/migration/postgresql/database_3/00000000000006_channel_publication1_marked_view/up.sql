@@ -1,7 +1,7 @@
 CREATE TABLE public.channel_publication1_marked_view (
     user__id BIGINT,
     channel_publication1__id BIGINT,
-    marked_at BIGINT
+    marked_at BIGINT,
     created_at BIGINT
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
