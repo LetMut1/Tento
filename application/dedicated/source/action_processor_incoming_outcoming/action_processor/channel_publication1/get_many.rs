@@ -36,7 +36,8 @@ pub struct Data {
     pub channel_publication1__marks_quantity: u32,
     pub channel_publication1__view_quantity: u32,
     pub channel_publication1__created_at: i64,
-    pub channel_publication1_marked_view__marked_at: Option<i64>,
+    pub is_publication_marked: bool,
+    pub is_publication_viewed: bool,
     pub channel_publication1_token_signed: ChannelPublication1TokenSigned,
 }
 #[cfg_attr(

@@ -1056,7 +1056,8 @@ typedef struct ChannelPublication1_GetMany_Data_ {
   unsigned int channel_publication1__marks_quantity;
   unsigned int channel_publication1__view_quantity;
   long channel_publication1__created_at;
-  struct Option__c_long channel_publication1_marked_view__marked_at;
+  bool is_publication_marked;
+  bool is_publication_viewed;
   struct ChannelPublication1TokenSigned_ channel_publication1_token_signed;
 } ChannelPublication1_GetMany_Data_;
 

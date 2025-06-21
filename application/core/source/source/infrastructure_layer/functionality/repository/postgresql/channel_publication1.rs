@@ -373,17 +373,18 @@ impl Repository<Postgresql<ChannelPublication1>> {
                     cp1.marks_quantity AS mq,\
                     cp1.view_quantity AS vq,\
                     cp1.created_at AS ca1,\
-                    cp1m.created_at AS ca2 \
+                    cp1mv.marked_at AS ma,\
+                    cp1mv.created_at AS ca2 \
                 FROM \
                     public.channel_publication1 cp1 \
                 LEFT OUTER JOIN \
-                    public.channel_publication1_mark cp1m \
+                    public.channel_publication1_marked_view cp1mv \
                 ON \
-                    cp1.id = cp1m.channel_publication1__id \
+                    cp1.id = cp1mv.channel_publication1__id \
                 WHERE \
                     cp1.channel__id = $1 \
                     AND cp1.created_at < $2 \
-                    AND cp1m.user__id = $3 \
+                    AND cp1mv.user__id = $3 \
                 ORDER BY \
                     cp1.created_at DESC \
                 LIMIT $4;";

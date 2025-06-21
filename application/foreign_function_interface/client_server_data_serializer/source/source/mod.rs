@@ -3686,7 +3686,8 @@ pub struct ChannelPublication1_GetMany_Data_ {
     pub channel_publication1__marks_quantity: c_uint,
     pub channel_publication1__view_quantity: c_uint,
     pub channel_publication1__created_at: c_long,
-    pub channel_publication1_marked_view__marked_at: Option_<c_long>,
+    pub is_publication_marked: bool,
+    pub is_publication_viewed: bool,
     pub channel_publication1_token_signed: ChannelPublication1TokenSigned_,
 }
 #[repr(C)]
@@ -3727,10 +3728,6 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(ve
                                     Allocator::<String_>::allocate(channel_publication1__image_pathe),
                                 );
                             }
-                            let channel_publication1_marked_view__marked_at = match data___.channel_publication1_marked_view__marked_at {
-                                Option::Some(channel_publication1_marked_view__marked_at_) => Option_::data(channel_publication1_marked_view__marked_at_),
-                                Option::None => Option_::none(),
-                            };
                             data_registry.push(
                                 ChannelPublication1_GetMany_Data_ {
                                     channel_publication1__images_pathes: Allocator::<Vec_<_>>::allocate(channel_publication1__images_pathes),
@@ -3739,7 +3736,8 @@ pub extern "C-unwind" fn channel_publication1__get_many__deserialize_allocate(ve
                                     channel_publication1__marks_quantity: data___.channel_publication1__marks_quantity,
                                     channel_publication1__view_quantity: data___.channel_publication1__view_quantity,
                                     channel_publication1__created_at: data___.channel_publication1__created_at,
-                                    channel_publication1_marked_view__marked_at,
+                                    is_publication_marked: data___.is_publication_marked,
+                                    is_publication_viewed: data___.is_publication_viewed,
                                     channel_publication1_token_signed: ChannelPublication1TokenSigned_ {
                                         channel_publication1__id: data___.channel_publication1_token_signed.channel_publication1__id,
                                         channel_publication1_token__obfuscation_value: data___.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
@@ -7109,7 +7107,8 @@ mod test {
                         channel_publication1__marks_quantity: 0,
                         channel_publication1__view_quantity: 0,
                         channel_publication1__created_at: 0,
-                        channel_publication1_marked_view__marked_at: Option::Some(0),
+                        is_publication_marked: false,
+                        is_publication_viewed: false,
                         channel_publication1_token_signed: ChannelPublication1TokenSigned {
                             channel_publication1__id: 0,
                             channel_publication1_token__obfuscation_value: 0,

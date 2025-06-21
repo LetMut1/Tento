@@ -17,6 +17,7 @@ use {
                     ChannelPublication1Token_ExpiresAt,
                     ChannelPublication1Token_ObfuscationValue,
                 },
+                channel_publication1_marked_view::ChannelPublication1MarkedView_MarkedAt,
                 channel_token::ChannelToken,
                 user_access_token::UserAccessToken,
             },
@@ -153,6 +154,17 @@ impl ActionProcessor_ for ActionProcessor<GetMany> {
                                     return Result::Err(crate::new_logic_unreachable_state!());
                                 }
                                 let channel_publication1__id = crate::result_return_logic!(row.try_get::<'_, usize, i64>(0));
+                                let channel_publication1_marked_view__marked_at = crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7));
+                                let channel_publication1_marked_view__created_at = crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(8));
+                                let (is_publication_marked, is_publication_viewed) = match (channel_publication1_marked_view__marked_at, channel_publication1_marked_view__created_at) {
+                                    (Option::Some(channel_publication1_marked_view__marked_at_), Option::Some(channel_publication1_marked_view__created_at_)) => if channel_publication1_marked_view__marked_at_ != ChannelPublication1MarkedView_MarkedAt::VALUE_FOR_INDICATION_OF_MARK_ABSENCE as i64 {
+                                        (true, true)
+                                    } else {
+                                        (false, true)
+                                    },
+                                    (Option::None, Option::None) => (false, false),
+                                    _ => return Result::Err(crate::new_logic_unreachable_state!()),
+                                };
                                 data_registry.push(
                                     Data {
                                         channel_publication1__images_pathes: crate::result_return_logic!(row.try_get::<'_, usize, Vec<String>>(1)),
@@ -161,7 +173,8 @@ impl ActionProcessor_ for ActionProcessor<GetMany> {
                                         channel_publication1__marks_quantity: channel_publication1__marks_quantity as u32,
                                         channel_publication1__view_quantity: channel_publication1__view_quantity as u32,
                                         channel_publication1__created_at: crate::result_return_logic!(row.try_get::<'_, usize, i64>(6)),
-                                        channel_publication1_marked_view__marked_at: crate::result_return_logic!(row.try_get::<'_, usize, Option<i64>>(7)),
+                                        is_publication_marked,
+                                        is_publication_viewed,
                                         channel_publication1_token_signed: Encoder::<ChannelPublication1Token>::encode(
                                             private_key,
                                             incoming.user_access_token_signed.user__id,

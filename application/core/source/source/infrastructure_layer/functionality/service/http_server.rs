@@ -1363,9 +1363,9 @@ impl HttpServer {
                         }
                     }
                 }
-                ActionRoute::ChannelPublication1MarkedView(ref channel_publication1_mark) => {
+                ActionRoute::ChannelPublication1MarkedView(ref channel_publication1_marked_view) => {
                     match (
-                        channel_publication1_mark,
+                        channel_publication1_marked_view,
                         &parts.method,
                     ) {
                         (&ChannelPublication1MarkedView::CreateMark, &Method::POST) => {
@@ -1393,7 +1393,7 @@ impl HttpServer {
                             #[cfg(feature = "action_for_manual_test")]
                             {
                                 match (
-                                    channel_publication1_mark,
+                                    channel_publication1_marked_view,
                                     &parts.method,
                                 ) {
                                     (&ChannelPublication1MarkedView::CreateMark_, &Method::POST) => {
