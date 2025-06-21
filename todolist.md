@@ -130,10 +130,6 @@ ChannelDelayedDeletion_CanBeDeletedFrom - поменять константу п
 incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b>
 Проблема с определение Лайфтайма компилятором. Попробовать сделать это в edition = 2024.
 
-Может быть, просммотры публикаций создавать прямо во время забора публикаций, а не принимать запрос на Вью. Как на фронте понимать, стоит ли делать запрос на проссмотр, если пользователь листает ленту далеко к меньшей ддате создания?
-Нужен механизм, определяющий, просмотрены ли уже публикации. Лучше сделать по максимальной дате забора публикаций.
-!!!!!!1 можно view и mark держать в одной таблице - так не теряем производительности.
-
 В енкодинге токенов есть сериализация данных. Может быть, ее сделать просто через lebytes ? Проверить скорость
 
 Убрать Сендед_ и сделать через Арк?
@@ -143,4 +139,8 @@ incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b
 Роут ...commentary_get_many
 
 
-после TaskSpawner::spawn_tokio_non_blocking_task_into_background( не должно быть того, что выкинет ошибку.
+
+channel_publication1_mark__  -> channel_publication1_marked_view__
+ChannelPublication1Mark__ -> ...
+ChannelPublication1View_ -
+Channel_publication1_view__

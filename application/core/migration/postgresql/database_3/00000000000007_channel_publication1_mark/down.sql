@@ -1,1 +1,0 @@
-DROP TABLE public.channel_publication1_mark;

@@ -85,19 +85,19 @@ use {
                     Precedent as ChannelPublication1Commentary_Delete_Precedent,
                 },
             },
-            channel_publication1_mark::{
-                create::{
-                    Incoming as ChannelPublication1Mark_Create_Incoming,
-                    Precedent as ChannelPublication1Mark_Create_Precedent,
+            channel_publication1_marked_view::{
+                create_mark::{
+                    Incoming as ChannelPublication1MarkedView_CreateMark_Incoming,
+                    Precedent as ChannelPublication1MarkedView_CreateMark_Precedent,
                 },
-                delete::{
-                    Incoming as ChannelPublication1Mark_Delete_Incoming,
-                    Precedent as ChannelPublication1Mark_Delete_Precedent,
+                delete_mark::{
+                    Incoming as ChannelPublication1MarkedView_DeleteMark_Incoming,
+                    Precedent as ChannelPublication1MarkedView_DeleteMark_Precedent,
                 },
-            },
-            channel_publication1_view::create::{
-                Incoming as ChannelPublication1View_Create_Incoming,
-                Precedent as ChannelPublication1View_Create_Precedent,
+                create_view::{
+                    Incoming as ChannelPublication1MarkedView_CreateView_Incoming,
+                    Precedent as ChannelPublication1MarkedView_CreateView_Precedent,
+                },
             },
             channel_subscription::{
                 create::{
@@ -4036,16 +4036,16 @@ pub extern "C-unwind" fn channel_publication1__delete__deserialize_deallocate(_r
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct ChannelPublication1Mark_Create_Incoming_ {
+pub struct ChannelPublication1MarkedView_CreateMark_Incoming_ {
     pub user_access_token_signed: UserAccessTokenSigned_,
     pub channel_token_signed: ChannelTokenSigned_,
     pub channel_publication1_token_signed: ChannelPublication1TokenSigned_,
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_mark__create__serialize_allocate(incoming: ChannelPublication1Mark_Create_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1Mark_Create_Incoming_| -> Result<ChannelPublication1Mark_Create_Incoming, Box<dyn StdError + 'static>> {
+pub extern "C-unwind" fn channel_publication1_marked_view__create_mark__serialize_allocate(incoming: ChannelPublication1MarkedView_CreateMark_Incoming_) -> Result_<Vec_<c_uchar>> {
+    let converter = move |incoming_: &'_ ChannelPublication1MarkedView_CreateMark_Incoming_| -> Result<ChannelPublication1MarkedView_CreateMark_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            ChannelPublication1Mark_Create_Incoming {
+            ChannelPublication1MarkedView_CreateMark_Incoming {
                 user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
@@ -4076,14 +4076,14 @@ pub extern "C-unwind" fn channel_publication1_mark__create__serialize_allocate(i
     );
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_mark__create__serialize_deallocate(result: Result_<Vec_<c_uchar>>) -> () {
+pub extern "C-unwind" fn channel_publication1_marked_view__create_mark__serialize_deallocate(result: Result_<Vec_<c_uchar>>) -> () {
     Allocator::<Result_<Vec_<c_uchar>>>::deallocate(result);
     return ();
 }
-type ChannelPublication1Mark_Create_Result = Result_<UnifiedReport_<Void_, ChannelPublication1Mark_Create_Precedent_>>;
+type ChannelPublication1MarkedView_CreateMark_Result = Result_<UnifiedReport_<Void_, ChannelPublication1MarkedView_CreateMark_Precedent_>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ChannelPublication1Mark_Create_Precedent_ {
+pub struct ChannelPublication1MarkedView_CreateMark_Precedent_ {
     pub user_access_token___already_expired: bool,
     pub channel_token___already_expired: bool,
     pub channel_publication1_token___already_expired: bool,
@@ -4091,8 +4091,8 @@ pub struct ChannelPublication1Mark_Create_Precedent_ {
     pub channel_publication1__not_found: bool,
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1Mark_Create_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Create_Precedent>| -> Result<UnifiedReport_<Void_, ChannelPublication1Mark_Create_Precedent_>, Box<dyn StdError + 'static>> {
+pub extern "C-unwind" fn channel_publication1_marked_view__create_mark__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1MarkedView_CreateMark_Result {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1MarkedView_CreateMark_Precedent>| -> Result<UnifiedReport_<Void_, ChannelPublication1MarkedView_CreateMark_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -4101,23 +4101,23 @@ pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1Mark_Create_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Create_Precedent_ {
+                    ChannelPublication1MarkedView_CreateMark_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1MarkedView_CreateMark_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Create_Precedent::ChannelToken__AlreadyExpired => ChannelPublication1Mark_Create_Precedent_ {
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelToken__AlreadyExpired => ChannelPublication1MarkedView_CreateMark_Precedent_ {
                         channel_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Mark_Create_Precedent_ {
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1MarkedView_CreateMark_Precedent_ {
                         channel_publication1_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1Mark__AlreadyExist => ChannelPublication1Mark_Create_Precedent_ {
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Mark__AlreadyExist => ChannelPublication1MarkedView_CreateMark_Precedent_ {
                         channel_publication1_mark___already_exist: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1__NotFound => ChannelPublication1Mark_Create_Precedent_ {
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1__NotFound => ChannelPublication1MarkedView_CreateMark_Precedent_ {
                         channel_publication1__not_found: true,
                         ..Default::default()
                     },
@@ -4133,21 +4133,121 @@ pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_allocate
     );
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_mark__create__deserialize_deallocate(_result: ChannelPublication1Mark_Create_Result) -> () {
+pub extern "C-unwind" fn channel_publication1_marked_view__create_mark__deserialize_deallocate(_result: ChannelPublication1MarkedView_CreateMark_Result) -> () {
     return ();
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct ChannelPublication1Mark_Delete_Incoming_ {
+pub struct ChannelPublication1MarkedView_CreateView_Incoming_ {
     pub user_access_token_signed: UserAccessTokenSigned_,
     pub channel_token_signed: ChannelTokenSigned_,
     pub channel_publication1_token_signed: ChannelPublication1TokenSigned_,
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_mark__delete__serialize_allocate(incoming: ChannelPublication1Mark_Delete_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1Mark_Delete_Incoming_| -> Result<ChannelPublication1Mark_Delete_Incoming, Box<dyn StdError + 'static>> {
+pub extern "C-unwind" fn channel_publication1_marked_view__create_view__serialize_allocate(incoming: ChannelPublication1MarkedView_CreateView_Incoming_) -> Result_<Vec_<c_uchar>> {
+    let converter = move |incoming_: &'_ ChannelPublication1MarkedView_CreateView_Incoming_| -> Result<ChannelPublication1MarkedView_CreateView_Incoming, Box<dyn StdError + 'static>> {
         return Result::Ok(
-            ChannelPublication1Mark_Delete_Incoming {
+            ChannelPublication1MarkedView_CreateView_Incoming {
+                user_access_token_signed: UserAccessTokenSigned {
+                    user__id: incoming_.user_access_token_signed.user__id,
+                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
+                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                },
+                channel_token_signed: ChannelTokenSigned {
+                    channel__id: incoming_.channel_token_signed.channel__id,
+                    channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
+                    channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
+                    channel_token__is_user_the_channel_subscriber: incoming_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                    channel_token__is_user_the_channel_owner: incoming_.channel_token_signed.channel_token__is_user_the_channel_owner,
+                    signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
+                },
+                channel_publication1_token_signed: ChannelPublication1TokenSigned {
+                    channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
+                    channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
+                    channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
+                    signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
+                },
+            },
+        );
+    };
+    return Transformer::transform_server_request_data(
+        incoming,
+        converter,
+    );
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel_publication1_marked_view__create_view__serialize_deallocate(result: Result_<Vec_<c_uchar>>) -> () {
+    Allocator::<Result_<Vec_<c_uchar>>>::deallocate(result);
+    return ();
+}
+type ChannelPublication1MarkedView_CreateView_Result = Result_<UnifiedReport_<Void_, ChannelPublication1MarkedView_CreateView_Precedent_>>;
+#[repr(C)]
+#[derive(Default)]
+pub struct ChannelPublication1MarkedView_CreateView_Precedent_ {
+    pub user_access_token___already_expired: bool,
+    pub channel_token___already_expired: bool,
+    pub channel_publication1_token___already_expired: bool,
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel_publication1_marked_view__create_view__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1MarkedView_CreateView_Result {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1MarkedView_CreateView_Precedent>| -> Result<UnifiedReport_<Void_, ChannelPublication1MarkedView_CreateView_Precedent_>, Box<dyn StdError + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport::Target {
+                data: _,
+            } => UnifiedReport_::target(Data_::empty()),
+            UnifiedReport::Precedent {
+                precedent,
+            } => {
+                let precedent_ = match precedent {
+                    ChannelPublication1MarkedView_CreateView_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1MarkedView_CreateView_Precedent_ {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1MarkedView_CreateView_Precedent::ChannelToken__AlreadyExpired => ChannelPublication1MarkedView_CreateView_Precedent_ {
+                        channel_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1MarkedView_CreateView_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1MarkedView_CreateView_Precedent_ {
+                        channel_publication1_token___already_expired: true,
+                        ..Default::default()
+                    },
+                };
+                UnifiedReport_::precedent(precedent_)
+            }
+        };
+        return Result::Ok(unified_report_);
+    };
+    return Transformer::transform_server_response_data(
+        vector_of_bytes,
+        converter,
+    );
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel_publication1_marked_view__create_view__deserialize_deallocate(_result: ChannelPublication1MarkedView_CreateView_Result) -> () {
+    return ();
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ChannelPublication1Commentary_Create_Incoming_ {
+    pub user_access_token_signed: UserAccessTokenSigned_,
+    pub channel_token_signed: ChannelTokenSigned_,
+    pub channel_publication1_token_signed: ChannelPublication1TokenSigned_,
+    pub channel_publication1_commentary__text: String_,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ChannelPublication1MarkedView_DeleteMark_Incoming_ {
+    pub user_access_token_signed: UserAccessTokenSigned_,
+    pub channel_token_signed: ChannelTokenSigned_,
+    pub channel_publication1_token_signed: ChannelPublication1TokenSigned_,
+}
+#[unsafe(no_mangle)]
+pub extern "C-unwind" fn channel_publication1_marked_view__delete_mark__serialize_allocate(incoming: ChannelPublication1MarkedView_DeleteMark_Incoming_) -> Result_<Vec_<c_uchar>> {
+    let converter = move |incoming_: &'_ ChannelPublication1MarkedView_DeleteMark_Incoming_| -> Result<ChannelPublication1MarkedView_DeleteMark_Incoming, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            ChannelPublication1MarkedView_DeleteMark_Incoming {
                 user_access_token_signed: UserAccessTokenSigned {
                     user__id: incoming_.user_access_token_signed.user__id,
                     user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
@@ -4178,14 +4278,14 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__serialize_allocate(i
     );
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_mark__delete__serialize_deallocate(result: Result_<Vec_<c_uchar>>) -> () {
+pub extern "C-unwind" fn channel_publication1_marked_view__delete_mark__serialize_deallocate(result: Result_<Vec_<c_uchar>>) -> () {
     Allocator::<Result_<Vec_<c_uchar>>>::deallocate(result);
     return ();
 }
-type ChannelPublication1Mark_Delete_Result = Result_<UnifiedReport_<Void_, ChannelPublication1Mark_Delete_Precedent_>>;
+type ChannelPublication1MarkedView_DeleteMark_Result = Result_<UnifiedReport_<Void_, ChannelPublication1MarkedView_DeleteMark_Precedent_>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ChannelPublication1Mark_Delete_Precedent_ {
+pub struct ChannelPublication1MarkedView_DeleteMark_Precedent_ {
     pub user_access_token___already_expired: bool,
     pub channel_token___already_expired: bool,
     pub channel_publication1_token___already_expired: bool,
@@ -4193,8 +4293,8 @@ pub struct ChannelPublication1Mark_Delete_Precedent_ {
     pub channel_publication1__not_found: bool,
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1Mark_Delete_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1Mark_Delete_Precedent>| -> Result<UnifiedReport_<Void_, ChannelPublication1Mark_Delete_Precedent_>, Box<dyn StdError + 'static>> {
+pub extern "C-unwind" fn channel_publication1_marked_view__delete_mark__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1MarkedView_DeleteMark_Result {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1MarkedView_DeleteMark_Precedent>| -> Result<UnifiedReport_<Void_, ChannelPublication1MarkedView_DeleteMark_Precedent_>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target {
                 data: _,
@@ -4203,23 +4303,23 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_allocate
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1Mark_Delete_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1Mark_Delete_Precedent_ {
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1MarkedView_DeleteMark_Precedent_ {
                         user_access_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Delete_Precedent::ChannelToken__AlreadyExpired => ChannelPublication1Mark_Delete_Precedent_ {
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelToken__AlreadyExpired => ChannelPublication1MarkedView_DeleteMark_Precedent_ {
                         channel_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Mark_Delete_Precedent_ {
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1MarkedView_DeleteMark_Precedent_ {
                         channel_publication1_token___already_expired: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1Mark__NotFound => ChannelPublication1Mark_Delete_Precedent_ {
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1Mark__NotFound => ChannelPublication1MarkedView_DeleteMark_Precedent_ {
                         channel_publication1_mark___not_found: true,
                         ..Default::default()
                     },
-                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1__NotFound => ChannelPublication1Mark_Delete_Precedent_ {
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1__NotFound => ChannelPublication1MarkedView_DeleteMark_Precedent_ {
                         channel_publication1__not_found: true,
                         ..Default::default()
                     }
@@ -4235,108 +4335,8 @@ pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_allocate
     );
 }
 #[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_mark__delete__deserialize_deallocate(_result: ChannelPublication1Mark_Delete_Result) -> () {
+pub extern "C-unwind" fn channel_publication1_marked_view__delete_mark__deserialize_deallocate(_result: ChannelPublication1MarkedView_DeleteMark_Result) -> () {
     return ();
-}
-#[repr(C)]
-#[derive(Clone, Copy)]
-pub struct ChannelPublication1View_Create_Incoming_ {
-    pub user_access_token_signed: UserAccessTokenSigned_,
-    pub channel_token_signed: ChannelTokenSigned_,
-    pub channel_publication1_token_signed: ChannelPublication1TokenSigned_,
-}
-#[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_view__create__serialize_allocate(incoming: ChannelPublication1View_Create_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1View_Create_Incoming_| -> Result<ChannelPublication1View_Create_Incoming, Box<dyn StdError + 'static>> {
-        return Result::Ok(
-            ChannelPublication1View_Create_Incoming {
-                user_access_token_signed: UserAccessTokenSigned {
-                    user__id: incoming_.user_access_token_signed.user__id,
-                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
-                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
-                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
-                },
-                channel_token_signed: ChannelTokenSigned {
-                    channel__id: incoming_.channel_token_signed.channel__id,
-                    channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
-                    channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
-                    channel_token__is_user_the_channel_subscriber: incoming_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
-                    channel_token__is_user_the_channel_owner: incoming_.channel_token_signed.channel_token__is_user_the_channel_owner,
-                    signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
-                },
-                channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                    channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
-                    channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
-                    channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
-                    signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
-                },
-            },
-        );
-    };
-    return Transformer::transform_server_request_data(
-        incoming,
-        converter,
-    );
-}
-#[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_view__create__serialize_deallocate(result: Result_<Vec_<c_uchar>>) -> () {
-    Allocator::<Result_<Vec_<c_uchar>>>::deallocate(result);
-    return ();
-}
-type ChannelPublication1View_Create_Result = Result_<UnifiedReport_<Void_, ChannelPublication1View_Create_Precedent_>>;
-#[repr(C)]
-#[derive(Default)]
-pub struct ChannelPublication1View_Create_Precedent_ {
-    pub user_access_token___already_expired: bool,
-    pub channel_token___already_expired: bool,
-    pub channel_publication1_token___already_expired: bool,
-}
-#[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_view__create__deserialize_allocate(vector_of_bytes: Vec_<c_uchar>) -> ChannelPublication1View_Create_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ChannelPublication1View_Create_Precedent>| -> Result<UnifiedReport_<Void_, ChannelPublication1View_Create_Precedent_>, Box<dyn StdError + 'static>> {
-        let unified_report_ = match unified_report {
-            UnifiedReport::Target {
-                data: _,
-            } => UnifiedReport_::target(Data_::empty()),
-            UnifiedReport::Precedent {
-                precedent,
-            } => {
-                let precedent_ = match precedent {
-                    ChannelPublication1View_Create_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1View_Create_Precedent_ {
-                        user_access_token___already_expired: true,
-                        ..Default::default()
-                    },
-                    ChannelPublication1View_Create_Precedent::ChannelToken__AlreadyExpired => ChannelPublication1View_Create_Precedent_ {
-                        channel_token___already_expired: true,
-                        ..Default::default()
-                    },
-                    ChannelPublication1View_Create_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1View_Create_Precedent_ {
-                        channel_publication1_token___already_expired: true,
-                        ..Default::default()
-                    },
-                };
-                UnifiedReport_::precedent(precedent_)
-            }
-        };
-        return Result::Ok(unified_report_);
-    };
-    return Transformer::transform_server_response_data(
-        vector_of_bytes,
-        converter,
-    );
-}
-#[unsafe(no_mangle)]
-pub extern "C-unwind" fn channel_publication1_view__create__deserialize_deallocate(_result: ChannelPublication1View_Create_Result) -> () {
-    return ();
-}
-#[repr(C)]
-#[derive(Clone, Copy)]
-pub struct ChannelPublication1Commentary_Create_Incoming_ {
-    pub user_access_token_signed: UserAccessTokenSigned_,
-    pub channel_token_signed: ChannelTokenSigned_,
-    pub channel_publication1_token_signed: ChannelPublication1TokenSigned_,
-    pub channel_publication1_commentary__text: String_,
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_commentary__create__serialize_allocate(incoming: ChannelPublication1Commentary_Create_Incoming_) -> Result_<Vec_<c_uchar>> {
@@ -4826,22 +4826,22 @@ mod test {
                 with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1__delete),
             ],
             vec![
-                with_name!(self::deallocation::server_request_data_serialization::channel_publication1_mark__create),
-                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1_mark__create),
-                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1_mark__create),
-                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1_mark__create),
+                with_name!(self::deallocation::server_request_data_serialization::channel_publication1_marked_view__create_mark),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1_marked_view__create_mark),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1_marked_view__create_mark),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1_marked_view__create_mark),
             ],
             vec![
-                with_name!(self::deallocation::server_request_data_serialization::channel_publication1_mark__delete),
-                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1_mark__delete),
-                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1_mark__delete),
-                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1_mark__delete),
+                with_name!(self::deallocation::server_request_data_serialization::channel_publication1_marked_view__create_view),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1_marked_view__create_view),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1_marked_view__create_view),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1_marked_view__create_view),
             ],
             vec![
-                with_name!(self::deallocation::server_request_data_serialization::channel_publication1_view__create),
-                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1_view__create),
-                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1_view__create),
-                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1_view__create),
+                with_name!(self::deallocation::server_request_data_serialization::channel_publication1_marked_view__delete_mark),
+                with_name!(self::deallocation::server_response_data_deserialization::target_empty__channel_publication1_marked_view__delete_mark),
+                with_name!(self::deallocation::server_response_data_deserialization::target_filled__channel_publication1_marked_view__delete_mark),
+                with_name!(self::deallocation::server_response_data_deserialization::precedent__channel_publication1_marked_view__delete_mark),
             ],
             vec![
                 with_name!(self::deallocation::server_request_data_serialization::channel_publication1_commentary__create),
@@ -5569,8 +5569,8 @@ mod test {
                 Allocator::<Vec_<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
                 return Result::Ok(());
             }
-            pub fn channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ChannelPublication1Mark_Create_Incoming_ {
+            pub fn channel_publication1_marked_view__create_mark() -> Result<(), Box<dyn StdError + 'static>> {
+                let incoming = ChannelPublication1MarkedView_CreateMark_Incoming_ {
                     user_access_token_signed: UserAccessTokenSigned_ {
                         user__id: 0,
                         user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
@@ -5595,8 +5595,8 @@ mod test {
                 };
                 run_by_template(
                     incoming,
-                    channel_publication1_mark__create__serialize_allocate,
-                    channel_publication1_mark__create__serialize_deallocate,
+                    channel_publication1_marked_view__create_mark__serialize_allocate,
+                    channel_publication1_marked_view__create_mark__serialize_deallocate,
                 )?;
                 Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<Vec_<_>>::deallocate(incoming.user_access_token_signed.signature);
@@ -5604,8 +5604,8 @@ mod test {
                 Allocator::<Vec_<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
                 return Result::Ok(());
             }
-            pub fn channel_publication1_mark__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ChannelPublication1Mark_Delete_Incoming_ {
+            pub fn channel_publication1_marked_view__create_view() -> Result<(), Box<dyn StdError + 'static>> {
+                let incoming = ChannelPublication1MarkedView_CreateView_Incoming_ {
                     user_access_token_signed: UserAccessTokenSigned_ {
                         user__id: 0,
                         user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
@@ -5630,8 +5630,8 @@ mod test {
                 };
                 run_by_template(
                     incoming,
-                    channel_publication1_mark__delete__serialize_allocate,
-                    channel_publication1_mark__delete__serialize_deallocate,
+                    channel_publication1_marked_view__create_view__serialize_allocate,
+                    channel_publication1_marked_view__create_view__serialize_deallocate,
                 )?;
                 Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<Vec_<_>>::deallocate(incoming.user_access_token_signed.signature);
@@ -5639,8 +5639,8 @@ mod test {
                 Allocator::<Vec_<_>>::deallocate(incoming.channel_publication1_token_signed.signature);
                 return Result::Ok(());
             }
-            pub fn channel_publication1_view__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ChannelPublication1View_Create_Incoming_ {
+            pub fn channel_publication1_marked_view__delete_mark() -> Result<(), Box<dyn StdError + 'static>> {
+                let incoming = ChannelPublication1MarkedView_DeleteMark_Incoming_ {
                     user_access_token_signed: UserAccessTokenSigned_ {
                         user__id: 0,
                         user_device__id: Allocator::<String_>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
@@ -5665,8 +5665,8 @@ mod test {
                 };
                 run_by_template(
                     incoming,
-                    channel_publication1_view__create__serialize_allocate,
-                    channel_publication1_view__create__serialize_deallocate,
+                    channel_publication1_marked_view__delete_mark__serialize_allocate,
+                    channel_publication1_marked_view__delete_mark__serialize_deallocate,
                 )?;
                 Allocator::<String_>::deallocate(incoming.user_access_token_signed.user_device__id);
                 Allocator::<Vec_<_>>::deallocate(incoming.user_access_token_signed.signature);
@@ -7243,116 +7243,116 @@ mod test {
                 }
                 return Result::Ok(());
             }
-            pub fn target_empty__channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Create_Precedent>::target_empty();
+            pub fn target_empty__channel_publication1_marked_view__create_mark() -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1MarkedView_CreateMark_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
-                    channel_publication1_mark__create__deserialize_allocate,
-                    channel_publication1_mark__create__deserialize_deallocate,
+                    channel_publication1_marked_view__create_mark__deserialize_allocate,
+                    channel_publication1_marked_view__create_mark__deserialize_deallocate,
                 );
             }
-            pub fn target_filled__channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
+            pub fn target_filled__channel_publication1_marked_view__create_mark() -> Result<(), Box<dyn StdError + 'static>> {
                 return Result::Ok(());
             }
-            fn _precedent__channel_publication1_mark__create(precedent: ChannelPublication1Mark_Create_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Create_Precedent>::precedent(precedent);
+            fn _precedent__channel_publication1_marked_view__create_mark(precedent: ChannelPublication1MarkedView_CreateMark_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1MarkedView_CreateMark_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
-                    channel_publication1_mark__create__deserialize_allocate,
-                    channel_publication1_mark__create__deserialize_deallocate,
+                    channel_publication1_marked_view__create_mark__deserialize_allocate,
+                    channel_publication1_marked_view__create_mark__deserialize_deallocate,
                 );
             }
-            pub fn precedent__channel_publication1_mark__create() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1Mark_Create_Precedent::UserAccessToken__AlreadyExpired {
-                    ChannelPublication1Mark_Create_Precedent::UserAccessToken__AlreadyExpired => {}
-                    ChannelPublication1Mark_Create_Precedent::ChannelToken__AlreadyExpired => {}
-                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1Token__AlreadyExpired => {}
-                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1Mark__AlreadyExist => {}
-                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1__NotFound => {}
+            pub fn precedent__channel_publication1_marked_view__create_mark() -> Result<(), Box<dyn StdError + 'static>> {
+                match ChannelPublication1MarkedView_CreateMark_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1MarkedView_CreateMark_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelToken__AlreadyExpired => {}
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Token__AlreadyExpired => {}
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Mark__AlreadyExist => {}
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1__NotFound => {}
                 }
-                let precedents: Vec<ChannelPublication1Mark_Create_Precedent> = vec![
-                    ChannelPublication1Mark_Create_Precedent::UserAccessToken__AlreadyExpired,
-                    ChannelPublication1Mark_Create_Precedent::ChannelToken__AlreadyExpired,
-                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1Token__AlreadyExpired,
-                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1Mark__AlreadyExist,
-                    ChannelPublication1Mark_Create_Precedent::ChannelPublication1__NotFound,
+                let precedents: Vec<ChannelPublication1MarkedView_CreateMark_Precedent> = vec![
+                    ChannelPublication1MarkedView_CreateMark_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelToken__AlreadyExpired,
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Token__AlreadyExpired,
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1Mark__AlreadyExist,
+                    ChannelPublication1MarkedView_CreateMark_Precedent::ChannelPublication1__NotFound,
                 ];
                 '_a: for precedent in precedents {
-                    _precedent__channel_publication1_mark__create(precedent)?;
+                    _precedent__channel_publication1_marked_view__create_mark(precedent)?;
                 }
                 return Result::Ok(());
             }
-            pub fn target_empty__channel_publication1_mark__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Delete_Precedent>::target_empty();
+            pub fn target_empty__channel_publication1_marked_view__create_view() -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1MarkedView_CreateView_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
-                    channel_publication1_mark__delete__deserialize_allocate,
-                    channel_publication1_mark__delete__deserialize_deallocate,
+                    channel_publication1_marked_view__create_view__deserialize_allocate,
+                    channel_publication1_marked_view__create_view__deserialize_deallocate,
                 );
             }
-            pub fn target_filled__channel_publication1_mark__delete() -> Result<(), Box<dyn StdError + 'static>> {
+            pub fn target_filled__channel_publication1_marked_view__create_view() -> Result<(), Box<dyn StdError + 'static>> {
                 return Result::Ok(());
             }
-            fn _precedent__channel_publication1_mark__delete(precedent: ChannelPublication1Mark_Delete_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1Mark_Delete_Precedent>::precedent(precedent);
+            fn _precedent__channel_publication1_marked_view__create_view(precedent: ChannelPublication1MarkedView_CreateView_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1MarkedView_CreateView_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
-                    channel_publication1_mark__delete__deserialize_allocate,
-                    channel_publication1_mark__delete__deserialize_deallocate,
+                    channel_publication1_marked_view__create_view__deserialize_allocate,
+                    channel_publication1_marked_view__create_view__deserialize_deallocate,
                 );
             }
-            pub fn precedent__channel_publication1_mark__delete() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1Mark_Delete_Precedent::UserAccessToken__AlreadyExpired {
-                    ChannelPublication1Mark_Delete_Precedent::UserAccessToken__AlreadyExpired => {}
-                    ChannelPublication1Mark_Delete_Precedent::ChannelToken__AlreadyExpired => {}
-                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1Token__AlreadyExpired => {}
-                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1Mark__NotFound => {}
-                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1__NotFound => {}
+            pub fn precedent__channel_publication1_marked_view__create_view() -> Result<(), Box<dyn StdError + 'static>> {
+                match ChannelPublication1MarkedView_CreateView_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1MarkedView_CreateView_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1MarkedView_CreateView_Precedent::ChannelToken__AlreadyExpired => {}
+                    ChannelPublication1MarkedView_CreateView_Precedent::ChannelPublication1Token__AlreadyExpired => {}
                 }
-                let precedents: Vec<ChannelPublication1Mark_Delete_Precedent> = vec![
-                    ChannelPublication1Mark_Delete_Precedent::UserAccessToken__AlreadyExpired,
-                    ChannelPublication1Mark_Delete_Precedent::ChannelToken__AlreadyExpired,
-                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1Token__AlreadyExpired,
-                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1Mark__NotFound,
-                    ChannelPublication1Mark_Delete_Precedent::ChannelPublication1__NotFound,
+                let precedents: Vec<ChannelPublication1MarkedView_CreateView_Precedent> = vec![
+                    ChannelPublication1MarkedView_CreateView_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1MarkedView_CreateView_Precedent::ChannelToken__AlreadyExpired,
+                    ChannelPublication1MarkedView_CreateView_Precedent::ChannelPublication1Token__AlreadyExpired,
                 ];
                 '_a: for precedent in precedents {
-                    _precedent__channel_publication1_mark__delete(precedent)?;
+                    _precedent__channel_publication1_marked_view__create_view(precedent)?;
                 }
                 return Result::Ok(());
             }
-            pub fn target_empty__channel_publication1_view__create() -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1View_Create_Precedent>::target_empty();
+            pub fn target_empty__channel_publication1_marked_view__delete_mark() -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1MarkedView_DeleteMark_Precedent>::target_empty();
                 return run_by_template(
                     &unified_report,
-                    channel_publication1_view__create__deserialize_allocate,
-                    channel_publication1_view__create__deserialize_deallocate,
+                    channel_publication1_marked_view__delete_mark__deserialize_allocate,
+                    channel_publication1_marked_view__delete_mark__deserialize_deallocate,
                 );
             }
-            pub fn target_filled__channel_publication1_view__create() -> Result<(), Box<dyn StdError + 'static>> {
+            pub fn target_filled__channel_publication1_marked_view__delete_mark() -> Result<(), Box<dyn StdError + 'static>> {
                 return Result::Ok(());
             }
-            fn _precedent__channel_publication1_view__create(precedent: ChannelPublication1View_Create_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
-                let unified_report = UnifiedReport::<Void, ChannelPublication1View_Create_Precedent>::precedent(precedent);
+            fn _precedent__channel_publication1_marked_view__delete_mark(precedent: ChannelPublication1MarkedView_DeleteMark_Precedent) -> Result<(), Box<dyn StdError + 'static>> {
+                let unified_report = UnifiedReport::<Void, ChannelPublication1MarkedView_DeleteMark_Precedent>::precedent(precedent);
                 return run_by_template(
                     &unified_report,
-                    channel_publication1_view__create__deserialize_allocate,
-                    channel_publication1_view__create__deserialize_deallocate,
+                    channel_publication1_marked_view__delete_mark__deserialize_allocate,
+                    channel_publication1_marked_view__delete_mark__deserialize_deallocate,
                 );
             }
-            pub fn precedent__channel_publication1_view__create() -> Result<(), Box<dyn StdError + 'static>> {
-                match ChannelPublication1View_Create_Precedent::UserAccessToken__AlreadyExpired {
-                    ChannelPublication1View_Create_Precedent::UserAccessToken__AlreadyExpired => {}
-                    ChannelPublication1View_Create_Precedent::ChannelToken__AlreadyExpired => {}
-                    ChannelPublication1View_Create_Precedent::ChannelPublication1Token__AlreadyExpired => {}
+            pub fn precedent__channel_publication1_marked_view__delete_mark() -> Result<(), Box<dyn StdError + 'static>> {
+                match ChannelPublication1MarkedView_DeleteMark_Precedent::UserAccessToken__AlreadyExpired {
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::UserAccessToken__AlreadyExpired => {}
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelToken__AlreadyExpired => {}
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1Token__AlreadyExpired => {}
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1Mark__NotFound => {}
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1__NotFound => {}
                 }
-                let precedents: Vec<ChannelPublication1View_Create_Precedent> = vec![
-                    ChannelPublication1View_Create_Precedent::UserAccessToken__AlreadyExpired,
-                    ChannelPublication1View_Create_Precedent::ChannelToken__AlreadyExpired,
-                    ChannelPublication1View_Create_Precedent::ChannelPublication1Token__AlreadyExpired,
+                let precedents: Vec<ChannelPublication1MarkedView_DeleteMark_Precedent> = vec![
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::UserAccessToken__AlreadyExpired,
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelToken__AlreadyExpired,
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1Token__AlreadyExpired,
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1Mark__NotFound,
+                    ChannelPublication1MarkedView_DeleteMark_Precedent::ChannelPublication1__NotFound,
                 ];
                 '_a: for precedent in precedents {
-                    _precedent__channel_publication1_view__create(precedent)?;
+                    _precedent__channel_publication1_marked_view__delete_mark(precedent)?;
                 }
                 return Result::Ok(());
             }

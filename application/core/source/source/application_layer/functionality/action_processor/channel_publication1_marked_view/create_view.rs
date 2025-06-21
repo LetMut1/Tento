@@ -1,5 +1,7 @@
 use {
     crate::{
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
@@ -8,8 +10,8 @@ use {
         domain_layer::{
             data::entity::{
                 channel_publication1::ChannelPublication1,
-                channel_publication1_mark::ChannelPublication1Mark,
                 channel_publication1_token::ChannelPublication1Token,
+                channel_publication1_view::ChannelPublication1View,
                 channel_token::ChannelToken,
                 user_access_token::UserAccessToken,
             },
@@ -25,11 +27,8 @@ use {
                     Repository,
                     postgresql::{
                         ChannelPublication1By1,
-                        ChannelPublication1MarkBy,
-                        IsolationLevel,
+                        ChannelPublication1ViewInsert,
                         Postgresql,
-                        Resolver as Resolver_,
-                        Transaction,
                     },
                 },
                 service::{
@@ -43,17 +42,20 @@ use {
         },
     },
     dedicated::{
-        action_processor_incoming_outcoming::action_processor::channel_publication1_mark::delete::{
+        action_processor_incoming_outcoming::action_processor::channel_publication1_view::create::{
             Incoming,
             Precedent,
         },
         unified_report::UnifiedReport,
         void::Void,
     },
-    std::future::Future,
+    std::{
+        future::Future,
+        time::Duration,
+    },
 };
-pub struct Delete;
-impl ActionProcessor_ for ActionProcessor<Delete> {
+pub struct CreateView;
+impl ActionProcessor_ for ActionProcessor<CreateView> {
     type Incoming<'a> = Incoming<'a>;
     type Outcoming = Void;
     type Precedent = Precedent;
@@ -102,50 +104,56 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
             )? {
                 return Result::Ok(UnifiedReport::precedent(precedent));
             }
-            let mut postgresql_client_database_3 = crate::result_return_runtime!(inner.postgresql_connection_pool_database_3.get().await);
-            let transaction = Resolver_::<Transaction<'_>>::start(
-                &mut postgresql_client_database_3,
-                IsolationLevel::ReadCommitted,
-            )
-            .await?;
-            let is_deleted = match Repository::<Postgresql<ChannelPublication1Mark>>::delete(
-                transaction.get_client(),
-                ChannelPublication1MarkBy {
-                    user__id: incoming.user_access_token_signed.user__id,
-                    channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
+            let mut postgresql_connection_pool_database_3 = inner.postgresql_connection_pool_database_3.clone();
+            TaskSpawner::spawn_tokio_non_blocking_task_into_background(
+                async move {
+                    '_a: for quantity in 1..=BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
+                        match Repository::<Postgresql<ChannelPublication1View>>::create(
+                            &crate::result_return_runtime!(postgresql_connection_pool_database_3.get().await),
+                            ChannelPublication1ViewInsert {
+                                user__id: incoming.user_access_token_signed.user__id,
+                                channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
+                                channel_publication1_view__created_at: now,
+                            },
+                        )
+                        .await
+                        {
+                            Ok(_) => return Result::Ok(()),
+                            Err(aggregate_error) => {
+                                if quantity == BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
+                                    return Err(aggregate_error);
+                                }
+                            }
+                        }
+                        tokio::time::sleep(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY)).await;
+                    }
+                    return Result::Ok(());
                 },
-            )
-            .await
-            {
-                Result::Ok(is_deleted_) => is_deleted_,
-                Result::Err(aggregate_error) => {
-                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                    return Result::Err(aggregate_error);
-                }
-            };
-            if !is_deleted {
-                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1Mark__NotFound));
-            }
-            let is_updated = match Repository::<Postgresql<ChannelPublication1>>::update_2(
-                transaction.get_client(),
-                ChannelPublication1By1 {
-                    channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
+            );
+            postgresql_connection_pool_database_3 = inner.postgresql_connection_pool_database_3.clone();
+            TaskSpawner::spawn_tokio_non_blocking_task_into_background(
+                async move {
+                    '_a: for quantity in 1..=BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
+                        match Repository::<Postgresql<ChannelPublication1>>::update_3(
+                            &crate::result_return_runtime!(postgresql_connection_pool_database_3.get().await),
+                            ChannelPublication1By1 {
+                                channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
+                            },
+                        )
+                        .await
+                        {
+                            Ok(_) => return Result::Ok(()),
+                            Err(aggregate_error) => {
+                                if quantity == BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
+                                    return Err(aggregate_error);
+                                }
+                            }
+                        }
+                        tokio::time::sleep(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY)).await;
+                    }
+                    return Result::Ok(());
                 },
-            )
-            .await
-            {
-                Result::Ok(is_updated_) => is_updated_,
-                Result::Err(aggregate_error) => {
-                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                    return Result::Err(aggregate_error);
-                }
-            };
-            if !is_updated {
-                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ChannelPublication1__NotFound));
-            }
-            Resolver_::<Transaction<'_>>::commit(transaction).await?;
+            );
             return Result::Ok(UnifiedReport::target_empty());
         };
     }

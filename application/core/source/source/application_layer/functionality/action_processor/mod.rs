@@ -2,8 +2,7 @@ mod channel;
 mod channel_publication1;
 mod channel_publication1_commentary;
 mod channel_publication1_commentary_mark;
-mod channel_publication1_mark;
-mod channel_publication1_view;
+mod channel_publication1_marked_view;
 mod channel_subscription;
 mod user;
 use {
@@ -52,9 +51,9 @@ pub type ChannelPublication1_Delete = self::channel_publication1::delete::Delete
 pub type ChannelPublication1_GetMany = self::channel_publication1::get_many::GetMany;
 pub type ChannelPublication1Commentary_Create = self::channel_publication1_commentary::create::Create;
 pub type ChannelPublication1Commentary_Delete = self::channel_publication1_commentary::delete::Delete;
-pub type ChannelPublication1Mark_Create = self::channel_publication1_mark::create::Create;
-pub type ChannelPublication1Mark_Delete = self::channel_publication1_mark::delete::Delete;
-pub type ChannelPublication1View_Create = self::channel_publication1_view::create::Create;
+pub type ChannelPublication1MarkedView_CreateMark = self::channel_publication1_marked_view::create_mark::CreateMark;
+pub type ChannelPublication1MarkedView_DeleteMark = self::channel_publication1_marked_view::delete_mark::DeleteMark;
+pub type ChannelPublication1MarkedView_CreateView = self::channel_publication1_marked_view::create_view::CreateView;
 pub type ChannelSubscription_Create = self::channel_subscription::create::Create;
 pub type ChannelSubscription_Delete = self::channel_subscription::delete::Delete;
 pub type User_AuthorizeByFirstStep = self::user::authorize_by_first_step::AuthorizeByFirstStep;

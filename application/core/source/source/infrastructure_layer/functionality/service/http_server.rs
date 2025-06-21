@@ -22,9 +22,9 @@ use {
                 ChannelPublication1_GetMany,
                 ChannelPublication1Commentary_Create,
                 ChannelPublication1Commentary_Delete,
-                ChannelPublication1Mark_Create,
-                ChannelPublication1Mark_Delete,
-                ChannelPublication1View_Create,
+                ChannelPublication1MarkedView_CreateMark,
+                ChannelPublication1MarkedView_CreateView,
+                ChannelPublication1MarkedView_DeleteMark,
                 ChannelSubscription_Create,
                 ChannelSubscription_Delete,
                 Inner as ActionProcessorInner,
@@ -550,22 +550,22 @@ impl HttpServer {
         crate::result_return_logic!(
             router
             .insert(
-                ChannelPublication1Mark::CREATE,
-                ActionRoute::ChannelPublication1Mark(ChannelPublication1Mark::Create),
+                ChannelPublication1MarkedView::CREATE_MARK,
+                ActionRoute::ChannelPublication1MarkedView(ChannelPublication1MarkedView::CreateMark),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                ChannelPublication1Mark::DELETE,
-                ActionRoute::ChannelPublication1Mark(ChannelPublication1Mark::Delete),
+                ChannelPublication1MarkedView::CREATE_VIEW,
+                ActionRoute::ChannelPublication1MarkedView(ChannelPublication1MarkedView::CreateView),
             )
         );
         crate::result_return_logic!(
             router
             .insert(
-                ChannelPublication1View::CREATE,
-                ActionRoute::ChannelPublication1View(ChannelPublication1View::Create),
+                ChannelPublication1MarkedView::DELETE_MARK,
+                ActionRoute::ChannelPublication1MarkedView(ChannelPublication1MarkedView::DeleteMark),
             )
         );
         crate::result_return_logic!(
@@ -803,22 +803,22 @@ impl HttpServer {
             crate::result_return_logic!(
                 router
                 .insert(
-                    ChannelPublication1Mark::CREATE_,
-                    ActionRoute::ChannelPublication1Mark(ChannelPublication1Mark::Create_),
+                    ChannelPublication1MarkedView::CREATE_MARK_,
+                    ActionRoute::ChannelPublication1MarkedView(ChannelPublication1MarkedView::CreateMark_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    ChannelPublication1Mark::DELETE_,
-                    ActionRoute::ChannelPublication1Mark(ChannelPublication1Mark::Delete_),
+                    ChannelPublication1MarkedView::CREATE_VIEW_,
+                    ActionRoute::ChannelPublication1MarkedView(ChannelPublication1MarkedView::CreateView_),
                 )
             );
             crate::result_return_logic!(
                 router
                 .insert(
-                    ChannelPublication1View::CREATE_,
-                    ActionRoute::ChannelPublication1View(ChannelPublication1View::Create_),
+                    ChannelPublication1MarkedView::DELETE_MARK_,
+                    ActionRoute::ChannelPublication1MarkedView(ChannelPublication1MarkedView::DeleteMark_),
                 )
             );
             crate::result_return_logic!(
@@ -1363,20 +1363,27 @@ impl HttpServer {
                         }
                     }
                 }
-                ActionRoute::ChannelPublication1Mark(ref channel_publication1_mark) => {
+                ActionRoute::ChannelPublication1MarkedView(ref channel_publication1_mark) => {
                     match (
                         channel_publication1_mark,
                         &parts.method,
                     ) {
-                        (&ChannelPublication1Mark::Create, &Method::POST) => {
-                            return Action::<ChannelPublication1Mark_Create>::run(
+                        (&ChannelPublication1MarkedView::CreateMark, &Method::POST) => {
+                            return Action::<ChannelPublication1MarkedView_CreateMark>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ChannelPublication1Mark::Delete, &Method::POST) => {
-                            return Action::<ChannelPublication1Mark_Delete>::run(
+                        (&ChannelPublication1MarkedView::CreateView, &Method::POST) => {
+                            return Action::<ChannelPublication1MarkedView_CreateView>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&ChannelPublication1MarkedView::DeleteMark, &Method::POST) => {
+                            return Action::<ChannelPublication1MarkedView_DeleteMark>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
@@ -1389,47 +1396,22 @@ impl HttpServer {
                                     channel_publication1_mark,
                                     &parts.method,
                                 ) {
-                                    (&ChannelPublication1Mark::Create_, &Method::POST) => {
-                                        return Action::<ChannelPublication1Mark_Create>::run_(
+                                    (&ChannelPublication1MarkedView::CreateMark_, &Method::POST) => {
+                                        return Action::<ChannelPublication1MarkedView_CreateMark>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ChannelPublication1Mark::Delete_, &Method::POST) => {
-                                        return Action::<ChannelPublication1Mark_Delete>::run_(
+                                    (&ChannelPublication1MarkedView::CreateView_, &Method::POST) => {
+                                        return Action::<ChannelPublication1MarkedView_CreateView>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    _ => {}
-                                }
-                            }
-                        }
-                    }
-                }
-                ActionRoute::ChannelPublication1View(ref channel_publication1_view) => {
-                    match (
-                        channel_publication1_view,
-                        &parts.method,
-                    ) {
-                        (&ChannelPublication1View::Create, &Method::POST) => {
-                            return Action::<ChannelPublication1View_Create>::run(
-                                &mut action_inner,
-                                &action_processor_inner,
-                            )
-                            .await;
-                        }
-                        _ => {
-                            #[cfg(feature = "action_for_manual_test")]
-                            {
-                                match (
-                                    channel_publication1_view,
-                                    &parts.method,
-                                ) {
-                                    (&ChannelPublication1View::Create_, &Method::POST) => {
-                                        return Action::<ChannelPublication1View_Create>::run_(
+                                    (&ChannelPublication1MarkedView::DeleteMark_, &Method::POST) => {
+                                        return Action::<ChannelPublication1MarkedView_DeleteMark>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
@@ -1514,8 +1496,7 @@ pub enum ActionRoute {
     Channel(Channel),
     ChannelSubscription(ChannelSubscription),
     ChannelPublication1(ChannelPublication1),
-    ChannelPublication1Mark(ChannelPublication1Mark),
-    ChannelPublication1View(ChannelPublication1View),
+    ChannelPublication1MarkedView(ChannelPublication1MarkedView),
     ChannelPublication1Commentary(ChannelPublication1Commentary),
 }
 #[cfg(feature = "action_for_manual_test")]
@@ -1798,41 +1779,34 @@ impl ChannelPublication1 {
         ActionRoute::PART,
     );
 }
-pub enum ChannelPublication1Mark {
-    Create,
-    Delete,
+pub enum ChannelPublication1MarkedView {
+    CreateMark,
+    CreateView,
+    DeleteMark,
     #[cfg(feature = "action_for_manual_test")]
-    Create_,
+    CreateMark_,
     #[cfg(feature = "action_for_manual_test")]
-    Delete_,
+    CreateView_,
+    #[cfg(feature = "action_for_manual_test")]
+    DeleteMark_,
 }
-impl ChannelPublication1Mark {
-    pub const CREATE: &'static str = "/channel_publication1_mark/create";
-    pub const DELETE: &'static str = "/channel_publication1_mark/delete";
+impl ChannelPublication1MarkedView {
+    pub const CREATE_MARK: &'static str = "/channel_publication1_marked_view/create_mark";
+    pub const CREATE_VIEW: &'static str = "/channel_publication1_marked_view/create_view";
+    pub const DELETE_MARK: &'static str = "/channel_publication1_marked_view/delete_mark";
 }
 #[cfg(feature = "action_for_manual_test")]
-impl ChannelPublication1Mark {
-    pub const CREATE_: &'static str = const_format::concatcp!(
-        ChannelPublication1Mark::CREATE,
+impl ChannelPublication1MarkedView {
+    pub const CREATE_MARK_: &'static str = const_format::concatcp!(
+        ChannelPublication1MarkedView::CREATE_MARK,
         ActionRoute::PART,
     );
-    pub const DELETE_: &'static str = const_format::concatcp!(
-        ChannelPublication1Mark::DELETE,
+    pub const CREATE_VIEW_: &'static str = const_format::concatcp!(
+        ChannelPublication1MarkedView::CREATE_VIEW,
         ActionRoute::PART,
     );
-}
-pub enum ChannelPublication1View {
-    Create,
-    #[cfg(feature = "action_for_manual_test")]
-    Create_,
-}
-impl ChannelPublication1View {
-    pub const CREATE: &'static str = "/channel_publication1_view/create";
-}
-#[cfg(feature = "action_for_manual_test")]
-impl ChannelPublication1View {
-    pub const CREATE_: &'static str = const_format::concatcp!(
-        ChannelPublication1View::CREATE,
+    pub const DELETE_MARK_: &'static str = const_format::concatcp!(
+        ChannelPublication1MarkedView::DELETE_MARK,
         ActionRoute::PART,
     );
 }

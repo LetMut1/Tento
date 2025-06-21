@@ -5,8 +5,7 @@ mod channel_publication1_commentary;
 mod channel_publication1_commentary_delayed_deletion;
 mod channel_publication1_commentary_mark;
 mod channel_publication1_delayed_deletion;
-mod channel_publication1_mark;
-mod channel_publication1_view;
+mod channel_publication1_marked_view;
 mod channel_subscription;
 mod quantity_limiter;
 mod user;
@@ -40,11 +39,10 @@ pub use self::{
     },
     channel_publication1_commentary_delayed_deletion::Insert as ChannelPublication1CommentaryDelayedDeletionInsert,
     channel_publication1_delayed_deletion::Insert as ChannelPublication1DelayedDeletionInsert,
-    channel_publication1_mark::{
-        By as ChannelPublication1MarkBy,
-        Insert as ChannelPublication1MarkInsert,
+    channel_publication1_marked_view::{
+        By as ChannelPublication1MarkedViewBy,
+        Insert as ChannelPublication1MarkedViewInsert,
     },
-    channel_publication1_view::Insert as ChannelPublication1ViewInsert,
     channel_subscription::{
         By as ChannelSubscriptionBy,
         Insert as ChannelSubscriptionInsert,

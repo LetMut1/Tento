@@ -557,7 +557,7 @@ enum Precedent {
     Channel__IsClose,
 }
 ```
- - ## ChannelPublication1Mark_Create POST /channel_publication1_mark/create
+ - ## ChannelPublication1MarkedView_CreateMark POST /channel_publication1_marked_view/create_mark
 ```
 Creates a mark for channel publication1.
 ```
@@ -577,7 +577,25 @@ enum Precedent {
     ChannelPublication1__NotFound,
 }
 ```
- - ## ChannelPublication1Mark_Delete POST /channel_publication1_mark/delete
+ - ## ChannelPublication1MarkedView_CreateView POST /channel_publication1_marked_view/create_view
+```
+Creates a view for channel publication1.
+```
+```
+struct Incoming {
+    user_access_token_signed: <Data standards>,
+    channel_token_signed: <Data standards>,
+    channel_publication1_token_signed: <Data standards>,
+}
+```
+```
+enum Precedent {
+    UserAccessToken__AlreadyExpired,
+    ChannelToken__AlreadyExpired,
+    ChannelPublication1Token__AlreadyExpired,
+}
+```
+ - ## ChannelPublication1MarkedView_DeleteMark POST /channel_publication1_marked_view/delete_mark
 ```
 Deletes a mark from channel publication1.
 ```
@@ -595,24 +613,6 @@ enum Precedent {
     ChannelPublication1Token__AlreadyExpired,
     ChannelPublication1Mark__NotFound,
     ChannelPublication1__NotFound,
-}
-```
- - ## ChannelPublication1View_Create POST /channel_publication1_view/create
-```
-Creates a view for channel publication1.
-```
-```
-struct Incoming {
-    user_access_token_signed: <Data standards>,
-    channel_token_signed: <Data standards>,
-    channel_publication1_token_signed: <Data standards>,
-}
-```
-```
-enum Precedent {
-    UserAccessToken__AlreadyExpired,
-    ChannelToken__AlreadyExpired,
-    ChannelPublication1Token__AlreadyExpired,
 }
 ```
  - ## ChannelPublication1Commentary_Create POST /channel_publication1_commentary/create
