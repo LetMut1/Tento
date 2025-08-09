@@ -38,15 +38,14 @@ impl TaskSpawner {
                 'a: for quantity_ in 1..=quantity {
                     match closure().await {
                         Result::Ok(_) => break 'a,
-                        Result::Err(aggregate_error) => {
+                        Result::Err(aggregate_error) =>
                             if quantity_ < quantity {
                                 tokio::time::sleep(Duration::from_secs(interval_seconds_quantity)).await;
                                 continue 'a;
                             } else {
                                 Logger::<AggregateError>::log(&aggregate_error);
                                 break 'a;
-                            }
-                        }
+                            },
                     }
                 }
                 return ();

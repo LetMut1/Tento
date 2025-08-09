@@ -7,6 +7,7 @@ use std::{
     },
 };
 // Empty type.
+// It is necessary for architecture, because it is impossible to use "! (NeverType)" in Option<!>, for example..
 #[cfg_attr(
     feature = "serde_for_manual_test",
     derive(
