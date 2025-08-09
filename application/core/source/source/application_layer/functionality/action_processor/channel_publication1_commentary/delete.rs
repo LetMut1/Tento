@@ -1,13 +1,10 @@
 use {
     crate::{
-        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
-        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        },
-        domain_layer::{
+        }, domain_layer::{
             data::entity::{
                 channel_publication1::ChannelPublication1,
                 channel_publication1_commentary::ChannelPublication1Commentary,
@@ -24,15 +21,13 @@ use {
                 encoder::Encoder,
                 generator::Generator,
             },
-        },
-        infrastructure_layer::{
+        }, infrastructure_layer::{
             data::{
                 aggregate_error::AggregateError,
                 sended::Sended_,
             },
             functionality::{
                 repository::{
-                    Repository,
                     postgresql::{
                         ChannelPublication1By1,
                         ChannelPublication1CommentaryBy1,
@@ -41,17 +36,17 @@ use {
                         Postgresql,
                         Resolver as Resolver_,
                         Transaction,
-                    },
+                    }, Repository
                 },
                 service::{
                     resolver::{
                         Resolver,
                         UnixTime,
                     },
-                    task_spawner::TaskSpawner,
+                    task_spawner::{RepeatableForError, TaskSpawner},
                 },
             },
-        },
+        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel_publication1_commentary::delete::{
@@ -62,8 +57,7 @@ use {
         void::Void,
     },
     std::{
-        future::Future,
-        time::Duration,
+        future::Future, num::NonZero,
     },
 };
 pub struct Delete;
@@ -180,27 +174,28 @@ impl ActionProcessor_ for ActionProcessor<Delete> {
             }
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
             let postgresql_connection_pool_database_3 = inner.postgresql_connection_pool_database_3.clone();
-            TaskSpawner::spawn_tokio_non_blocking_task_into_background(
-                async move {
-                    '_a: for quantity in 1..=BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
-                        match Repository::<Postgresql<ChannelPublication1>>::update_5(
-                            &crate::result_return_runtime!(postgresql_connection_pool_database_3.get().await),
+            TaskSpawner::spawn_tokio_non_blocking_task_into_background_repeatable(
+                RepeatableForError {
+                    quantity: unsafe {
+                        static_assertions::const_assert!(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY > 0);
+                        NonZero::<usize>::new_unchecked(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY)
+                    },
+                    interval_seconds_quantity: unsafe {
+                        static_assertions::const_assert!(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY > 0);
+                        NonZero::<u64>::new_unchecked(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY)
+                    }
+                },
+                move || -> _ {
+                    let postgresql_connection_pool_database_3_ = postgresql_connection_pool_database_3.clone();
+                    return async move {
+                        Repository::<Postgresql<ChannelPublication1>>::update_5(
+                            &crate::result_return_runtime!(postgresql_connection_pool_database_3_.get().await),
                             ChannelPublication1By1 {
                                 channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
                             },
-                        )
-                        .await
-                        {
-                            Ok(_) => return Result::Ok(()),
-                            Err(aggregate_error) => {
-                                if quantity == BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {
-                                    return Err(aggregate_error);
-                                }
-                            }
-                        }
-                        tokio::time::sleep(Duration::from_secs(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY)).await;
-                    }
-                    return Result::Ok(());
+                        ).await?;
+                        return Result::Ok(());
+                    };
                 },
             );
             return Result::Ok(UnifiedReport::target_empty());

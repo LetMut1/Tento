@@ -44,6 +44,13 @@ pub const BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY: u
 pub const BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY: usize = 5000;
 pub const BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY: u64 = 3;
 pub const BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY: usize = 10;
+const _: () = {
+    static_assertions::const_assert!(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY > 0);
+    static_assertions::const_assert!(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY > 0);
+    static_assertions::const_assert!(BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY > 0);
+    static_assertions::const_assert!(BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY > 0);
+    ()
+};
 // The type is 'Result<(), ()>' but not '()' to return a success/error exit code but not only success exit code.
 fn main() -> Result<(), ()> {
     if let Result::Err(aggregate_error) = Command::process() {

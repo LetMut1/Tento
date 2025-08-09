@@ -139,9 +139,11 @@ incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b
 Роут ...commentary_get_many
 
 
-'_a: for quantity in 1..=BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {    для вот этого написать отдельный метод спавнера?
 
 
+
+
+подумать, где заменит на NonZeroUsize.
 
 
 СДЕЛАТЬ ПРИВАТНВМ РЕПОЗИТОРИИ
