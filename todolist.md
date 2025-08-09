@@ -140,3 +140,8 @@ incoming: Self::Incoming<'a>   Почему не incoming: &'a Self::Incoming<'b
 
 
 '_a: for quantity in 1..=BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY {    для вот этого написать отдельный метод спавнера?
+
+
+
+
+СДЕЛАТЬ ПРИВАТНВМ РЕПОЗИТОРИИ

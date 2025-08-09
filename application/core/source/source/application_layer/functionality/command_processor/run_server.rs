@@ -196,6 +196,9 @@ impl CommandProcessor<RunServer> {
         return Result::Ok(());
     }
     fn initialize_rayon_state(rayon: &'static Rayon) -> Result<(), AggregateError> {
+        if rayon.affinited_cores.len() > rayon::max_num_threads() {
+            return Err(crate::new_runtime!("The length of 'system.rayon.affinited_cores' exceeds the maximum number of threads."));
+        }
         let is_all_threads_can_be_affinited = Arc::new(AtomicBool::new(true));
         let quantity_of_started_rayon_threads = Arc::new(AtomicUsize::new(0));
         let is_all_threads_can_be_affinited_ = Arc::clone(&is_all_threads_can_be_affinited);
