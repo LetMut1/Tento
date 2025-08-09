@@ -3,7 +3,11 @@ use {
         data::aggregate_error::AggregateError,
         functionality::service::logger::Logger,
     },
-    std::{future::Future, num::NonZero, time::Duration},
+    std::{
+        future::Future,
+        num::NonZero,
+        time::Duration,
+    },
     tokio::{
         sync::oneshot::Receiver,
         task::JoinHandle,
@@ -22,13 +26,10 @@ impl TaskSpawner {
         );
         return ();
     }
-    pub fn spawn_tokio_non_blocking_task_into_background_repeatable<T, E>(
-        repeatable_for_error: RepeatableForError,
-        closure: impl Fn() -> T + Send + 'static,
-    ) -> ()
+    pub fn spawn_tokio_non_blocking_task_into_background_repeatable<T, E>(repeatable_for_error: RepeatableForError, closure: impl Fn() -> T + Send + 'static) -> ()
     where
         T: Future<Output = Result<E, AggregateError>> + Send + 'static,
-        E: Send
+        E: Send,
     {
         tokio::spawn(
             async move {

@@ -1,10 +1,13 @@
 use {
     crate::{
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        }, domain_layer::{
+        },
+        domain_layer::{
             data::entity::{
                 user::{
                     User,
@@ -38,13 +41,15 @@ use {
                 generator::Generator,
                 validator::Validator,
             },
-        }, infrastructure_layer::{
+        },
+        infrastructure_layer::{
             data::{
                 aggregate_error::AggregateError,
                 sended::Sended_,
             },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         IsolationLevel,
                         Postgresql,
@@ -57,17 +62,20 @@ use {
                         UserDeviceInsert,
                         UserInsert2,
                         UserRegistrationTokenBy,
-                    }, Repository
+                    },
                 },
                 service::{
                     resolver::{
                         Resolver,
                         UnixTime,
                     },
-                    task_spawner::{RepeatableForError, TaskSpawner},
+                    task_spawner::{
+                        RepeatableForError,
+                        TaskSpawner,
+                    },
                 },
             },
-        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY
+        },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user::register_by_last_step::{
@@ -78,7 +86,8 @@ use {
         unified_report::UnifiedReport,
     },
     std::{
-        future::Future, num::NonZero,
+        future::Future,
+        num::NonZero,
     },
 };
 pub struct RegisterByLastStep;
@@ -338,7 +347,7 @@ impl ActionProcessor_ for ActionProcessor<RegisterByLastStep> {
                     interval_seconds_quantity: unsafe {
                         static_assertions::const_assert!(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY > 0);
                         NonZero::<u64>::new_unchecked(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY)
-                    }
+                    },
                 },
                 move || -> _ {
                     let postgresql_connection_pool_database_1_ = postgresql_connection_pool_database_1.clone();
@@ -350,7 +359,8 @@ impl ActionProcessor_ for ActionProcessor<RegisterByLastStep> {
                                 user_device__id: user_device__id_.as_str(),
                                 user__id,
                             },
-                        ).await?;
+                        )
+                        .await?;
                         return Result::Ok(());
                     };
                 },

@@ -28,8 +28,8 @@ use {
                     Repository,
                     postgresql::{
                         ChannelPublication1By1,
-                        ChannelPublication1MarkedViewInsert,
                         ChannelPublication1MarkedViewBy1,
+                        ChannelPublication1MarkedViewInsert,
                         IsolationLevel,
                         Postgresql,
                         Resolver as Resolver_,
@@ -122,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<CreateMark> {
                 },
                 ChannelPublication1MarkedViewBy1 {
                     channel_publication1_marked_view__marked_at: ChannelPublication1MarkedView_MarkedAt::VALUE_FOR_INDICATION_OF_MARK_ABSENCE as i64,
-                }
+                },
             )
             .await
             {

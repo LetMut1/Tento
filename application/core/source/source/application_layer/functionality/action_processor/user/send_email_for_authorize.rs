@@ -1,10 +1,13 @@
 use {
     crate::{
+        BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        }, domain_layer::{
+        },
+        domain_layer::{
             data::entity::{
                 user::{
                     User,
@@ -21,26 +24,31 @@ use {
                 generator::Generator,
                 validator::Validator,
             },
-        }, infrastructure_layer::{
+        },
+        infrastructure_layer::{
             data::aggregate_error::AggregateError,
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         Postgresql,
                         UserAuthorizationTokenBy,
                         UserAuthorizationTokenUpdate3,
                         UserBy4,
-                    }, Repository
+                    },
                 },
                 service::{
                     resolver::{
                         Resolver,
                         UnixTime,
                     },
-                    task_spawner::{RepeatableForError, TaskSpawner},
+                    task_spawner::{
+                        RepeatableForError,
+                        TaskSpawner,
+                    },
                 },
             },
-        }, BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_QUANTITY
+        },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::user::send_email_for_authorize::{
@@ -51,7 +59,8 @@ use {
         unified_report::UnifiedReport,
     },
     std::{
-        future::Future, num::NonZero,
+        future::Future,
+        num::NonZero,
     },
 };
 pub struct SendEmailForAuthorize;
@@ -136,7 +145,7 @@ impl ActionProcessor_ for ActionProcessor<SendEmailForAuthorize> {
                     interval_seconds_quantity: unsafe {
                         static_assertions::const_assert!(BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY > 0);
                         NonZero::<u64>::new_unchecked(BACKGROUND_COMMON_EMAIL_SENDING_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY)
-                    }
+                    },
                 },
                 move || -> _ {
                     let user__email_ = user__email.clone();
@@ -148,7 +157,8 @@ impl ActionProcessor_ for ActionProcessor<SendEmailForAuthorize> {
                             user_authorization_token__value_.as_str(),
                             user__email_.as_str(),
                             user_device__id_.as_str(),
-                        ).await?;
+                        )
+                        .await?;
                         return Result::Ok(());
                     };
                 },

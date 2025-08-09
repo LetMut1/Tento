@@ -1,39 +1,51 @@
 use {
     crate::{
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY,
+        BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY,
         application_layer::functionality::action_processor::{
             ActionProcessor,
             ActionProcessor_,
             Inner,
-        }, domain_layer::{
+        },
+        domain_layer::{
             data::entity::{
-                channel_publication1::ChannelPublication1, channel_publication1_marked_view::{
+                channel_publication1::ChannelPublication1,
+                channel_publication1_marked_view::{
                     ChannelPublication1MarkedView,
                     ChannelPublication1MarkedView_MarkedAt,
-                }, channel_publication1_token::ChannelPublication1Token, channel_token::ChannelToken, user_access_token::UserAccessToken
+                },
+                channel_publication1_token::ChannelPublication1Token,
+                channel_token::ChannelToken,
+                user_access_token::UserAccessToken,
             },
             functionality::service::encoder::Encoder,
-        }, infrastructure_layer::{
+        },
+        infrastructure_layer::{
             data::{
                 aggregate_error::AggregateError,
                 sended::Sended_,
             },
             functionality::{
                 repository::{
+                    Repository,
                     postgresql::{
                         ChannelPublication1By1,
                         ChannelPublication1MarkedViewInsert,
                         Postgresql,
-                    }, Repository
+                    },
                 },
                 service::{
                     resolver::{
                         Resolver,
                         UnixTime,
                     },
-                    task_spawner::{RepeatableForError, TaskSpawner},
+                    task_spawner::{
+                        RepeatableForError,
+                        TaskSpawner,
+                    },
                 },
             },
-        }, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY, BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_QUANTITY
+        },
     },
     dedicated::{
         action_processor_incoming_outcoming::action_processor::channel_publication1_marked_view::create_view::{
@@ -44,7 +56,8 @@ use {
         void::Void,
     },
     std::{
-        future::Future, num::NonZero,
+        future::Future,
+        num::NonZero,
     },
 };
 pub struct CreateView;
@@ -107,7 +120,7 @@ impl ActionProcessor_ for ActionProcessor<CreateView> {
                     interval_seconds_quantity: unsafe {
                         static_assertions::const_assert!(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY > 0);
                         NonZero::<u64>::new_unchecked(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY)
-                    }
+                    },
                 },
                 move || -> _ {
                     let postgresql_connection_pool_database_3_ = postgresql_connection_pool_database_3.clone();
@@ -120,7 +133,8 @@ impl ActionProcessor_ for ActionProcessor<CreateView> {
                                 channel_publication1_marked_view__marked_at: ChannelPublication1MarkedView_MarkedAt::VALUE_FOR_INDICATION_OF_MARK_ABSENCE as i64,
                                 channel_publication1_marked_view__created_at: now,
                             },
-                        ).await?;
+                        )
+                        .await?;
                         return Result::Ok(());
                     };
                 },
@@ -135,7 +149,7 @@ impl ActionProcessor_ for ActionProcessor<CreateView> {
                     interval_seconds_quantity: unsafe {
                         static_assertions::const_assert!(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY > 0);
                         NonZero::<u64>::new_unchecked(BACKGROUND_COMMON_DATABASE_TASK_EXECUTION_INTERVAL_SECONDS_QUANTITY)
-                    }
+                    },
                 },
                 move || -> _ {
                     let postgresql_connection_pool_database_3_ = postgresql_connection_pool_database_3.clone();
@@ -145,7 +159,8 @@ impl ActionProcessor_ for ActionProcessor<CreateView> {
                             ChannelPublication1By1 {
                                 channel_publication1__id: incoming.channel_publication1_token_signed.channel_publication1__id,
                             },
-                        ).await?;
+                        )
+                        .await?;
                         return Result::Ok(());
                     };
                 },

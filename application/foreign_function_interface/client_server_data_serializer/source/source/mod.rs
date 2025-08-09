@@ -90,13 +90,13 @@ use {
                     Incoming as ChannelPublication1MarkedView_CreateMark_Incoming,
                     Precedent as ChannelPublication1MarkedView_CreateMark_Precedent,
                 },
-                delete_mark::{
-                    Incoming as ChannelPublication1MarkedView_DeleteMark_Incoming,
-                    Precedent as ChannelPublication1MarkedView_DeleteMark_Precedent,
-                },
                 create_view::{
                     Incoming as ChannelPublication1MarkedView_CreateView_Incoming,
                     Precedent as ChannelPublication1MarkedView_CreateView_Precedent,
+                },
+                delete_mark::{
+                    Incoming as ChannelPublication1MarkedView_DeleteMark_Incoming,
+                    Precedent as ChannelPublication1MarkedView_DeleteMark_Precedent,
                 },
             },
             channel_subscription::{
@@ -4041,33 +4041,34 @@ pub struct ChannelPublication1MarkedView_CreateMark_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_marked_view__create_mark__serialize_allocate(incoming: ChannelPublication1MarkedView_CreateMark_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1MarkedView_CreateMark_Incoming_| -> Result<ChannelPublication1MarkedView_CreateMark_Incoming, Box<dyn StdError + 'static>> {
-        return Result::Ok(
-            ChannelPublication1MarkedView_CreateMark_Incoming {
-                user_access_token_signed: UserAccessTokenSigned {
-                    user__id: incoming_.user_access_token_signed.user__id,
-                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
-                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
-                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+    let converter =
+        move |incoming_: &'_ ChannelPublication1MarkedView_CreateMark_Incoming_| -> Result<ChannelPublication1MarkedView_CreateMark_Incoming, Box<dyn StdError + 'static>> {
+            return Result::Ok(
+                ChannelPublication1MarkedView_CreateMark_Incoming {
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user__id: incoming_.user_access_token_signed.user__id,
+                        user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                        user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
+                        user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                        signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    },
+                    channel_token_signed: ChannelTokenSigned {
+                        channel__id: incoming_.channel_token_signed.channel__id,
+                        channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
+                        channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
+                        channel_token__is_user_the_channel_subscriber: incoming_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                        channel_token__is_user_the_channel_owner: incoming_.channel_token_signed.channel_token__is_user_the_channel_owner,
+                        signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
+                    },
+                    channel_publication1_token_signed: ChannelPublication1TokenSigned {
+                        channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
+                        channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
+                        channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
+                        signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
+                    },
                 },
-                channel_token_signed: ChannelTokenSigned {
-                    channel__id: incoming_.channel_token_signed.channel__id,
-                    channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
-                    channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
-                    channel_token__is_user_the_channel_subscriber: incoming_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
-                    channel_token__is_user_the_channel_owner: incoming_.channel_token_signed.channel_token__is_user_the_channel_owner,
-                    signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
-                },
-                channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                    channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
-                    channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
-                    channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
-                    signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
-                },
-            },
-        );
-    };
+            );
+        };
     return Transformer::transform_server_request_data(
         incoming,
         converter,
@@ -4143,33 +4144,34 @@ pub struct ChannelPublication1MarkedView_CreateView_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_marked_view__create_view__serialize_allocate(incoming: ChannelPublication1MarkedView_CreateView_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1MarkedView_CreateView_Incoming_| -> Result<ChannelPublication1MarkedView_CreateView_Incoming, Box<dyn StdError + 'static>> {
-        return Result::Ok(
-            ChannelPublication1MarkedView_CreateView_Incoming {
-                user_access_token_signed: UserAccessTokenSigned {
-                    user__id: incoming_.user_access_token_signed.user__id,
-                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
-                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
-                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+    let converter =
+        move |incoming_: &'_ ChannelPublication1MarkedView_CreateView_Incoming_| -> Result<ChannelPublication1MarkedView_CreateView_Incoming, Box<dyn StdError + 'static>> {
+            return Result::Ok(
+                ChannelPublication1MarkedView_CreateView_Incoming {
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user__id: incoming_.user_access_token_signed.user__id,
+                        user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                        user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                        user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
+                        signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    },
+                    channel_token_signed: ChannelTokenSigned {
+                        channel__id: incoming_.channel_token_signed.channel__id,
+                        channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
+                        channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
+                        channel_token__is_user_the_channel_subscriber: incoming_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                        channel_token__is_user_the_channel_owner: incoming_.channel_token_signed.channel_token__is_user_the_channel_owner,
+                        signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
+                    },
+                    channel_publication1_token_signed: ChannelPublication1TokenSigned {
+                        channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
+                        channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
+                        channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
+                        signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
+                    },
                 },
-                channel_token_signed: ChannelTokenSigned {
-                    channel__id: incoming_.channel_token_signed.channel__id,
-                    channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
-                    channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
-                    channel_token__is_user_the_channel_subscriber: incoming_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
-                    channel_token__is_user_the_channel_owner: incoming_.channel_token_signed.channel_token__is_user_the_channel_owner,
-                    signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
-                },
-                channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                    channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
-                    channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
-                    channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
-                    signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
-                },
-            },
-        );
-    };
+            );
+        };
     return Transformer::transform_server_request_data(
         incoming,
         converter,
@@ -4243,33 +4245,34 @@ pub struct ChannelPublication1MarkedView_DeleteMark_Incoming_ {
 }
 #[unsafe(no_mangle)]
 pub extern "C-unwind" fn channel_publication1_marked_view__delete_mark__serialize_allocate(incoming: ChannelPublication1MarkedView_DeleteMark_Incoming_) -> Result_<Vec_<c_uchar>> {
-    let converter = move |incoming_: &'_ ChannelPublication1MarkedView_DeleteMark_Incoming_| -> Result<ChannelPublication1MarkedView_DeleteMark_Incoming, Box<dyn StdError + 'static>> {
-        return Result::Ok(
-            ChannelPublication1MarkedView_DeleteMark_Incoming {
-                user_access_token_signed: UserAccessTokenSigned {
-                    user__id: incoming_.user_access_token_signed.user__id,
-                    user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
-                    user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
-                    user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
-                    signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+    let converter =
+        move |incoming_: &'_ ChannelPublication1MarkedView_DeleteMark_Incoming_| -> Result<ChannelPublication1MarkedView_DeleteMark_Incoming, Box<dyn StdError + 'static>> {
+            return Result::Ok(
+                ChannelPublication1MarkedView_DeleteMark_Incoming {
+                    user_access_token_signed: UserAccessTokenSigned {
+                        user__id: incoming_.user_access_token_signed.user__id,
+                        user_device__id: incoming_.user_access_token_signed.user_device__id.get_as_str()?,
+                        user_access_token__obfuscation_value: incoming_.user_access_token_signed.user_access_token__obfuscation_value,
+                        user_access_token__expires_at: incoming_.user_access_token_signed.user_access_token__expires_at,
+                        signature: incoming_.user_access_token_signed.signature.clone_as_vec()?,
+                    },
+                    channel_token_signed: ChannelTokenSigned {
+                        channel__id: incoming_.channel_token_signed.channel__id,
+                        channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
+                        channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
+                        channel_token__is_user_the_channel_subscriber: incoming_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
+                        channel_token__is_user_the_channel_owner: incoming_.channel_token_signed.channel_token__is_user_the_channel_owner,
+                        signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
+                    },
+                    channel_publication1_token_signed: ChannelPublication1TokenSigned {
+                        channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
+                        channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
+                        channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
+                        signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
+                    },
                 },
-                channel_token_signed: ChannelTokenSigned {
-                    channel__id: incoming_.channel_token_signed.channel__id,
-                    channel_token__obfuscation_value: incoming_.channel_token_signed.channel_token__obfuscation_value,
-                    channel_token__expires_at: incoming_.channel_token_signed.channel_token__expires_at,
-                    channel_token__is_user_the_channel_subscriber: incoming_.channel_token_signed.channel_token__is_user_the_channel_subscriber,
-                    channel_token__is_user_the_channel_owner: incoming_.channel_token_signed.channel_token__is_user_the_channel_owner,
-                    signature: incoming_.channel_token_signed.signature.clone_as_vec()?,
-                },
-                channel_publication1_token_signed: ChannelPublication1TokenSigned {
-                    channel_publication1__id: incoming_.channel_publication1_token_signed.channel_publication1__id,
-                    channel_publication1_token__obfuscation_value: incoming_.channel_publication1_token_signed.channel_publication1_token__obfuscation_value,
-                    channel_publication1_token__expires_at: incoming_.channel_publication1_token_signed.channel_publication1_token__expires_at,
-                    signature: incoming_.channel_publication1_token_signed.signature.clone_as_vec()?,
-                },
-            },
-        );
-    };
+            );
+        };
     return Transformer::transform_server_request_data(
         incoming,
         converter,
