@@ -33,52 +33,44 @@ impl ServerWorkflowError {
         return match aggregate_error.0.subject {
             AggregateError_::IndefiniteArgument {
                 indefinite_argument_context,
-            } => {
-                Self::Responsive {
-                    responsive_auditor: Auditor {
-                        subject: Responsive::IndefiniteArgument {
-                            indefinite_argument_context,
-                        },
-                        backtrace: aggregate_error.0.backtrace,
+            } => Self::Responsive {
+                responsive_auditor: Auditor {
+                    subject: Responsive::IndefiniteArgument {
+                        indefinite_argument_context,
                     },
-                }
-            }
+                    backtrace: aggregate_error.0.backtrace,
+                },
+            },
             AggregateError_::InvalidArgument {
                 invalid_argument,
-            } => {
-                Self::Responsive {
-                    responsive_auditor: Auditor {
-                        subject: Responsive::InvalidArgument {
-                            invalid_argument,
-                        },
-                        backtrace: aggregate_error.0.backtrace,
+            } => Self::Responsive {
+                responsive_auditor: Auditor {
+                    subject: Responsive::InvalidArgument {
+                        invalid_argument,
                     },
-                }
-            }
+                    backtrace: aggregate_error.0.backtrace,
+                },
+            },
             AggregateError_::Logic {
                 logic_context,
-            } => {
-                Self::Unresponsive {
-                    unresponsive_auditor: Auditor {
-                        subject: Unresponsive::Logic {
-                            logic_context,
-                        },
-                        backtrace: aggregate_error.0.backtrace,
+            } => Self::Unresponsive {
+                unresponsive_auditor: Auditor {
+                    subject: Unresponsive::Logic {
+                        logic_context,
                     },
-                }
-            }
+                    backtrace: aggregate_error.0.backtrace,
+                },
+            },
             AggregateError_::Runtime {
                 runtime_context,
-            } => {
-                Self::Unresponsive {
-                    unresponsive_auditor: Auditor {
-                        subject: Unresponsive::Runtime {
-                            runtime_context,
-                        },
-                        backtrace: aggregate_error.0.backtrace,
+            } => Self::Unresponsive {
+                unresponsive_auditor: Auditor {
+                    subject: Unresponsive::Runtime {
+                        runtime_context,
                     },
-                }
-            }
+                    backtrace: aggregate_error.0.backtrace,
+                },
+            },
         };
     }
 }

@@ -2256,12 +2256,10 @@ pub extern "C-unwind" fn channel__get_many_by_name_in_subscriptions__deserialize
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_GetManyByNameInSubscriptions_Precedent::UserAccessToken__AlreadyExpired => {
-                        Channel_GetManyByNameInSubscriptions_Precedent_ {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
+                    Channel_GetManyByNameInSubscriptions_Precedent::UserAccessToken__AlreadyExpired => Channel_GetManyByNameInSubscriptions_Precedent_ {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
                 };
                 UnifiedReport_::precedent(precedent_)
             }
@@ -3095,30 +3093,22 @@ pub extern "C-unwind" fn channel__delete__deserialize_allocate(vector_of_bytes: 
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel_Delete_Precedent::UserAccessToken__AlreadyExpired => {
-                        Channel_Delete_Precedent_ {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_Delete_Precedent::ChannelToken__AlreadyExpired => {
-                        Channel_Delete_Precedent_ {
-                            channel_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_Delete_Precedent::Channel__NotFound => {
-                        Channel_Delete_Precedent_ {
-                            channel___not_found: true,
-                            ..Default::default()
-                        }
-                    }
-                    Channel_Delete_Precedent::ParallelExecution => {
-                        Channel_Delete_Precedent_ {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
-                    }
+                    Channel_Delete_Precedent::UserAccessToken__AlreadyExpired => Channel_Delete_Precedent_ {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    Channel_Delete_Precedent::ChannelToken__AlreadyExpired => Channel_Delete_Precedent_ {
+                        channel_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    Channel_Delete_Precedent::Channel__NotFound => Channel_Delete_Precedent_ {
+                        channel___not_found: true,
+                        ..Default::default()
+                    },
+                    Channel_Delete_Precedent::ParallelExecution => Channel_Delete_Precedent_ {
+                        parallel_execution: true,
+                        ..Default::default()
+                    },
                 };
                 UnifiedReport_::precedent(precedent_)
             }
@@ -4434,30 +4424,22 @@ pub extern "C-unwind" fn channel_publication1_commentary__create__deserialize_al
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ChannelPublication1Commentary_Create_Precedent::UserAccessToken__AlreadyExpired => {
-                        ChannelPublication1Commentary_Create_Precedent_ {
-                            user_access_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1Commentary_Create_Precedent::ChannelToken__AlreadyExpired => {
-                        ChannelPublication1Commentary_Create_Precedent_ {
-                            channel_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1Commentary_Create_Precedent::ChannelPublication1Token__AlreadyExpired => {
-                        ChannelPublication1Commentary_Create_Precedent_ {
-                            channel_publication1_token___already_expired: true,
-                            ..Default::default()
-                        }
-                    }
-                    ChannelPublication1Commentary_Create_Precedent::ParallelExecution => {
-                        ChannelPublication1Commentary_Create_Precedent_ {
-                            parallel_execution: true,
-                            ..Default::default()
-                        }
-                    }
+                    ChannelPublication1Commentary_Create_Precedent::UserAccessToken__AlreadyExpired => ChannelPublication1Commentary_Create_Precedent_ {
+                        user_access_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Commentary_Create_Precedent::ChannelToken__AlreadyExpired => ChannelPublication1Commentary_Create_Precedent_ {
+                        channel_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Commentary_Create_Precedent::ChannelPublication1Token__AlreadyExpired => ChannelPublication1Commentary_Create_Precedent_ {
+                        channel_publication1_token___already_expired: true,
+                        ..Default::default()
+                    },
+                    ChannelPublication1Commentary_Create_Precedent::ParallelExecution => ChannelPublication1Commentary_Create_Precedent_ {
+                        parallel_execution: true,
+                        ..Default::default()
+                    },
                 };
                 UnifiedReport_::precedent(precedent_)
             }

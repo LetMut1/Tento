@@ -210,11 +210,9 @@ impl HttpServer {
                         http2_builder.enable_connect_protocol();
                     };
                     match environment_configuration.subject.http_server.http.keepalive {
-                        Option::Some(ref keepalive) => {
-                            http2_builder
-                                .keep_alive_interval(Option::Some(Duration::from_secs(keepalive.interval_duration)))
-                                .keep_alive_timeout(Duration::from_secs(keepalive.timeout_duration))
-                        }
+                        Option::Some(ref keepalive) => http2_builder
+                            .keep_alive_interval(Option::Some(Duration::from_secs(keepalive.interval_duration)))
+                            .keep_alive_timeout(Duration::from_secs(keepalive.timeout_duration)),
                         Option::None => http2_builder.keep_alive_interval(Option::None),
                     };
                     match environment_configuration.subject.http_server.http.maximum_pending_accept_reset_streams {
@@ -1473,7 +1471,7 @@ impl HttpServer {
             return Action::<RouteNotFound>::run(&action_inner);
         };
     }
-    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()> + Send + use<>, AggregateError> {
+    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()> + Send, AggregateError> {
         let mut signal = crate::result_return_logic!(
             tokio::signal::unix::signal(signal_kind)
         );
